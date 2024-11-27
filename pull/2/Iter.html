@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html><head title="Doc"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><body><nav class="sidebar"><h3>Modules</h3><ul><li><li><a href="Iter.html">Iter</a></li></li><li><li><a href="Map.html">Map</a></li></li><li><li><a href="Order.html">Order</a></li></li></ul><h3>Declarations</h3><ul><li><li><a href="#type.Iter">Iter</a></li></li></ul></nav><div class="documentation"><h1>Iter</h1><div class="declaration"><h4 class="type-declaration" id="type.Iter"><span class="keyword">type </span><span class="type">Iter</span>&lt;<span class="type">T</span>&gt; = { next : () -&gt; ?<span class="type">T</span> }</h4><p><p>An iterator that produces values of type <code>T</code>. Calling <code>next</code> returns
+<code>null</code> when iteration is finished.</p>
+<p>Iterators are inherently stateful. Calling <code>next</code> &quot;consumes&quot; a value from
+the Iterator that cannot be put back, so keep that in mind when sharing
+iterators between consumers.</p>
+<p>An iterator <code>i</code> can be iterated over using</p>
+<pre><code>for (x in i) {
+  // do something with x...
+}</code></pre></p></div></div></body></html>

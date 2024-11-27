@@ -1,0 +1,73 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  deploy:
+    strategy:
+      matrix:
+        node: [20]
+    concurrency: gh-pages-${{ github.ref }}
+    runs-on: ubuntu-20.04
+    env:
+      PR_PATH: pull/${{github.event.number}}
+    steps:
+      - name: Comment on PR
+        uses: hasura/comment-progress@v2.2.0
+        if: github.ref != 'refs/heads/main'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: deploy-preview
+          message: "⏳ Loading documentation preview..."
+
+      - name: Checkout website repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Setup dfx
+        uses: dfinity/setup-dfx@main
+
+      - run: dfx cache install
+
+      - name: Build docs if main branch
+        if: github.ref == 'refs/heads/main'
+        run: npm run docs
+
+      - name: Deploy if main branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ./docs
+
+      - name: Build PR preview website
+        if: github.ref != 'refs/heads/main'
+        run: npm run docs
+
+      - name: Deploy to PR preview
+        uses: JamesIves/github-pages-deploy-action@v4
+        if: github.ref != 'refs/heads/main'
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ./docs
+          target-folder: ${{ env.PR_PATH }}
+
+      - name: Update comment
+        uses: hasura/comment-progress@v2.2.0
+        if: github.ref != 'refs/heads/main'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: deploy-preview
+          message: "✨ Documentation preview for ${{ github.event.after }}:\n\n> **https://dfinity.github.io/${{ github.event.repository.name }}/${{ env.PR_PATH}}** ([source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/))"

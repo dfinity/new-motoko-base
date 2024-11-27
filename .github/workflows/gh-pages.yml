@@ -39,10 +39,11 @@ jobs:
       - name: Set production base URL
         run: echo "BASE_URL=https://${{ env.DOMAIN }}/${{ github.event.repository.name }}/" >> $GITHUB_ENV
 
-      - name: Build docs
+      - name: Build docs if main branch
+        if: github.ref == 'refs/heads/main'
         run: npm run docs
 
-      - name: Deploy if this is the `main` branch
+      - name: Deploy if main branch
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
         with:
@@ -55,7 +56,7 @@ jobs:
 
       - name: Build PR preview website
         if: github.ref != 'refs/heads/main'
-        run: npm run build
+        run: npm run docs
 
       - name: Deploy to PR preview
         uses: peaceiris/actions-gh-pages@v3

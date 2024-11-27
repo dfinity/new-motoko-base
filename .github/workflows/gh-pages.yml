@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy:
+    concurrency: gh-pages-${{ github.ref }}
     runs-on: ubuntu-20.04
     env:
       PR_PATH: pull/${{github.event.number}}
@@ -20,7 +21,7 @@ jobs:
           repository: ${{ github.repository }}
           number: ${{ github.event.number }}
           id: deploy-preview
-          message: "⏳ Deploying docs preview..."
+          message: ⏳ Deploying docs preview...
 
       - name: Set domain
         run: echo "DOMAIN=dfinity.github.io" >> $GITHUB_ENV
@@ -46,11 +47,11 @@ jobs:
         run: npm run docs
 
       - name: Deploy if main branch
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         if: github.ref == 'refs/heads/main'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ./docs
 
       - name: Set base URL for preview if PR
         if: github.ref != 'refs/heads/main'
@@ -61,12 +62,12 @@ jobs:
         run: npm run docs
 
       - name: Deploy to PR preview
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         if: github.ref != 'refs/heads/main'
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          destination_dir: ${{ env.PR_PATH }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ./docs
+          target-folder: ${{ env.PR_PATH }}
 
       - name: Update comment
         uses: hasura/comment-progress@v2.2.0
@@ -76,4 +77,4 @@ jobs:
           repository: ${{ github.repository }}
           number: ${{ github.event.number }}
           id: deploy-preview
-          message: "✨ Preview (${{ github.event.after }}):\n\n**> ${{ env.BASE_URL }}**\n\n[Source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/)"
+          message: ✨ Preview (${{ github.event.after }}):\n\n> **${{ env.BASE_URL }}**\n\n[Source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/)

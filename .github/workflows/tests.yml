@@ -3,7 +3,7 @@ on:
   pull_request:
 
 jobs:
-  formatting:
+  format:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true

@@ -66,6 +66,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
+          destination_dir: ${{ env.PR_PATH }}
 
       - name: Update comment
         uses: hasura/comment-progress@v2.2.0
@@ -75,4 +76,4 @@ jobs:
           repository: ${{ github.repository }}
           number: ${{ github.event.number }}
           id: deploy-preview
-          message: "A preview of ${{ github.event.after }} is uploaded and can be seen here:\n\n ✨ ${{ env.BASE_URL }} ✨\n\nSource code: https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/"
+          message: "A preview of ${{ github.event.after }} is uploaded and can be seen here:\n\n> **${{ env.BASE_URL }}** \n\n[Source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/)"

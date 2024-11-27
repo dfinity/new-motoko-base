@@ -36,6 +36,8 @@ jobs:
       - name: Setup dfx
         uses: dfinity/setup-dfx@main
 
+      - run: dfx cache install
+
       - name: Set production base URL
         run: echo "BASE_URL=https://${{ env.DOMAIN }}/${{ github.event.repository.name }}/" >> $GITHUB_ENV
 

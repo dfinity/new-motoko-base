@@ -80,4 +80,4 @@ jobs:
           repository: ${{ github.repository }}
           number: ${{ github.event.number }}
           id: deploy-preview
-          message: "✨ Preview (${{ github.event.after }}):\n\n> **${{ env.BASE_URL }}**\n\n[Source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/)"
+          message: "✨ Preview for ${{ github.event.after }}:\n\n> **${{ env.BASE_URL }}**\n\n[Source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/)"

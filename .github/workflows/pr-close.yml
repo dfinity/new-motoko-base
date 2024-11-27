@@ -1,6 +1,5 @@
-name: Delete preview on PR close
+name: Delete preview on PR closed
 
-# only trigger on pull request closed events
 on:
   pull_request:
     types: [closed]
@@ -12,14 +11,14 @@ jobs:
       PR_PATH: pull/${{github.event.number}}
     steps:
       - name: Make empty dir
-        run: mkdir public
+        run: mkdir docs
 
       - name: Delete folder
-        uses: peaceiris/actions-gh-pages@v3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          destination_dir: ${{ env.PR_PATH }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          folder: ./docs
+          target-folder: ${{ env.PR_PATH }}
 
       - name: Comment on PR
         uses: hasura/comment-progress@v2.2.0
@@ -28,4 +27,4 @@ jobs:
           repository: ${{ github.repository }}
           number: ${{ github.event.number }}
           id: deploy-preview
-          message: "PR closed. Deleted preview at https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/"
+          message: null

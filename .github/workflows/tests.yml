@@ -1,9 +1,9 @@
-name: Check Formatting
+name: Tests
 on:
   pull_request:
 
 jobs:
-  test:
+  formatting:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -19,13 +19,3 @@ jobs:
       - run: npm install -g npm
       - run: npm install prettier pretty-quick
       - run: npm run format:check
-
-  aggregate:
-    name: format:required
-    if: ${{ always() }}
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: check e2e test result
-        if: ${{ needs.test.result != 'success' }}
-        run: exit 1

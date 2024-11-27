@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 name: Delete preview on PR closed
 
-=======
-name: Delete preview on PR close
-
-# only trigger on pull request closed events
->>>>>>> d639538d4b110c51c3d5272ab2f939359a52bb54
 on:
   pull_request:
     types: [closed]

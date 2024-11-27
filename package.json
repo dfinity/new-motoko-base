@@ -30,6 +30,6 @@
     "mo-dev": "^0.13.0",
     "prettier": "2",
     "prettier-plugin-motoko": "^0.10.1",
-    "pretty-quick": "^4.0.0"
+    "pretty-quick": "3"
   }
 }

@@ -17,11 +17,11 @@ jobs:
         run: mkdir docs
 
       - name: Delete folder
-        uses: JamesIves/github-pages-deploy-action@v4.7.0 # Regression in 4.7.1
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          folder: ./docs
-          target-folder: ${{ env.PR_PATH }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          destination_dir: ${{ env.PR_PATH }}
 
       - name: Comment on PR
         uses: hasura/comment-progress@v2.2.0

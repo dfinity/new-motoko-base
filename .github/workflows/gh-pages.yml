@@ -44,23 +44,24 @@ jobs:
         run: npm run docs
 
       - name: Deploy if main branch
-        uses: JamesIves/github-pages-deploy-action@v4.7.0 # Regression in 4.7.1
-        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref != 'refs/heads/main'
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          folder: ./docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: ${{ env.PR_PATH }}
 
       - name: Build PR preview website
         if: github.ref != 'refs/heads/main'
         run: npm run docs
 
       - name: Deploy to PR preview
-        uses: JamesIves/github-pages-deploy-action@v4.7.0 # Regression in 4.7.1
+        uses: peaceiris/actions-gh-pages@v3
         if: github.ref != 'refs/heads/main'
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          folder: ./docs
-          target-folder: ${{ env.PR_PATH }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: ${{ env.PR_PATH }}
 
       - name: Update comment
         uses: hasura/comment-progress@v2.2.0

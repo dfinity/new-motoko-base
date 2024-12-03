@@ -56,7 +56,7 @@ assert(iter.next() == ?2);
 assert(iter.next() == ?3);
 assert(iter.next() == null);</code></pre></p></div><div class="declaration"><h4 class="class-declaration" id="type.revRange"><span class="keyword">class </span><span class="classname">revRange</span>(<span class="parameter">x</span> : <span class="type">Int</span>, <span class="parameter">y</span> : <span class="type">Int</span>)</h4><p><p>Like <code>range</code> but produces the values in the opposite
 order.</p>
-</p></div><div class="declaration"><h4 class="function" id="infinite"><code><span class="keyword">public func </span><span class="fnname">infinite</span>&lt;<span class="type">A</span>&gt;(<span class="parameter">x</span> : <span class="type">A</span>) : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">A</span>&gt;</code></h4><p><p>Creates an iterator that produces an infinite sequence of <code>x</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="infinite"><code><span class="keyword">public func </span><span class="fnname">infinite</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">x</span> : <span class="type">T</span>) : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates an iterator that produces an infinite sequence of <code>x</code>.</p>
 <pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
 let iter = Iter.infinite(10);
 assert(?10 == iter.next());

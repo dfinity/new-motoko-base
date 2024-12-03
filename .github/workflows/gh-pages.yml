@@ -16,6 +16,16 @@ jobs:
     env:
       PR_PATH: pull/${{github.event.number}}
     steps:
+      - name: Comment on PR
+        uses: hasura/comment-progress@v2.2.0
+        if: github.ref != 'refs/heads/main'
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          number: ${{ github.event.number }}
+          id: deploy-preview
+          message: "⏳ Loading documentation preview..."
+
       - name: Checkout website repo
         uses: actions/checkout@v4
 
@@ -23,16 +33,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-
-      # - name: Comment on PR
-      #   uses: hasura/comment-progress@v2.2.0
-      #   if: github.ref != 'refs/heads/main'
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     repository: ${{ github.repository }}
-      #     number: ${{ github.event.number }}
-      #     id: deploy-preview
-      #     message: "⏳ Loading documentation preview..."
 
       - name: Setup dfx
         uses: dfinity/setup-dfx@main
@@ -55,7 +55,7 @@ jobs:
         run: npm run docs
 
       - name: Deploy to PR preview
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@v4.7.0
         if: github.ref != 'refs/heads/main'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

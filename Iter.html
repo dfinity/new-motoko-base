@@ -7,7 +7,7 @@ the Iterator that cannot be put back, so keep that in mind when sharing
 iterators between consumers.</p>
 <p>An iterater <code>i</code> can be iterated over using</p>
 <pre><code>for (x in i) {
-  …do something with x…
+  ...do something with x...
 }</code></pre></p></div><div class="declaration"><h4 class="class-declaration" id="type.range"><span class="keyword">class </span><span class="classname">range</span>(<span class="parameter">x</span> : <span class="type">Nat</span>, <span class="parameter">y</span> : <span class="type">Int</span>)</h4><div class="declaration"><h4 class="function" id="range.next"><code><span class="keyword">public func </span><span class="fnname">next</span>() : ?<span class="type">Nat</span></code></h4><p></p></div><p><p>Creates an iterator that produces all <code>Nat</code>s from <code>x</code> to <code>y</code> including
 both of the bounds.</p>
 <pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;

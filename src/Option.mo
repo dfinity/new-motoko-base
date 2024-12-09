@@ -19,7 +19,7 @@ module {
     case (?x_) { ?f(x_) }
   };
 
-  public func iterate<A>(x : ?A, f : A -> ()) = switch x {
+  public func forEach<A>(x : ?A, f : A -> ()) = switch x {
     case null {};
     case (?x_) { f(x_) }
   };

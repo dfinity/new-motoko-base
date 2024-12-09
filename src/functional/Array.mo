@@ -107,5 +107,6 @@ module {
 
   public func take<T>(array : [T], length : Int) : [T] {
     todo()
-  }
+  };
+
 }

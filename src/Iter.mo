@@ -15,7 +15,7 @@ module {
     todo()
   };
 
-  public func iterate<A>(xs : Iter<A>, f : (A, Nat) -> ()) {
+  public func forEach<A>(xs : Iter<A>, f : (A, Nat) -> ()) {
     todo()
   };
 

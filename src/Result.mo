@@ -18,8 +18,6 @@ module {
     todo()
   };
 
-  // Compares two Results. `#ok` is larger than `#err`. This ordering is
-  // arbitrary, but it lets you for example use Results as keys in ordered maps.
   public func compare<Ok, Err>(
     compareOk : (Ok, Ok) -> Order.Order,
     compareErr : (Err, Err) -> Order.Order,
@@ -64,7 +62,7 @@ module {
     todo()
   };
 
-  public func iterate<Ok, Err>(res : Result<Ok, Err>, f : Ok -> ()) {
+  public func forEach<Ok, Err>(res : Result<Ok, Err>, f : Ok -> ()) {
     todo()
   };
 

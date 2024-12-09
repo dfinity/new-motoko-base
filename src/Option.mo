@@ -26,45 +26,30 @@ module {
 
   public func apply<A, B>(x : ?A, f : ?(A -> B)) : ?B {
     switch (f, x) {
-      case (?f_, ?x_) {
-        ?f_(x_)
-      };
-      case (_, _) {
-        null
-      }
+      case (?f_, ?x_) { ?f_(x_) };
+      case (_, _) { null }
     }
   };
 
   public func chain<A, B>(x : ?A, f : A -> ?B) : ?B {
     switch (x) {
-      case (?x_) {
-        f(x_)
-      };
-      case (null) {
-        null
-      }
+      case (?x_) { f(x_) };
+      case (null) { null }
     }
   };
 
   public func flatten<A>(x : ??A) : ?A {
-    chain<?A, A>(
-      x,
-      func(x_ : ?A) : ?A {
-        x_
-      }
-    )
+    chain<?A, A>(x, func(x_ : ?A) : ?A = x_)
   };
 
-  public func make<A>(x : A) : ?A = ?x;
+  public func some<A>(x : A) : ?A = ?x;
 
-  public func isSome(x : ?Any) : Bool = switch x {
-    case null { false };
-    case _ { true }
+  public func isSome(x : ?Any) : Bool {
+    x != null
   };
 
-  public func isNull(x : ?Any) : Bool = switch x {
-    case null { true };
-    case _ { false }
+  public func isNull(x : ?Any) : Bool {
+    x == null
   };
 
   public func equal<A>(x : ?A, y : ?A, eq : (A, A) -> Bool) : Bool = switch (x, y) {

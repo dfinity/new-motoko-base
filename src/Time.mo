@@ -1,6 +1,7 @@
 /// System time
 
 import Prim "mo:⛔";
+import Nat "Nat";
 
 module {
 
@@ -18,8 +19,8 @@ module {
 
   public type TimerId = Nat;
 
-  public func toNanoseconds(duration : Duration) : Nat64 =
-    Prim.fromIntWrap (switch duration {
+  public func toNanoseconds(duration : Duration) : Nat =
+    Nat.fromInt (switch duration {
       case (#days s) s * 86_400_000_000_000;
       case (#hours s) s * 3_600_000_000_000;
       case (#minutes s) s * 60_000_000_000;

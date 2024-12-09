@@ -1,6 +1,7 @@
 /// Iterators
 
 import Order "Order";
+import List "functional/List";
 import { nyi = todo } "Debug";
 
 module {
@@ -46,7 +47,7 @@ module {
     todo()
   };
 
-  // public let fromList = List.toIter;
+  public let fromList = List.toIter;
 
   public func toArray<A>(xs : Iter<A>) : [A] {
     todo()
@@ -56,12 +57,11 @@ module {
     todo()
   };
 
-  // public func toList<A>(xs : Iter<A>) : List.List<A> {
-  //   todo()
-  // };
-
-  public func sort<A>(xs : Iter<A>, compare : (A, A) -> Order.Order) : Iter<A> {
+  public func toList<A>(xs : Iter<A>) : List.List<A> {
     todo()
   };
 
+  public func sort<A>(xs : Iter<A>, compare : (A, A) -> Order.Order) : Iter<A> {
+    todo()
+  }
 }

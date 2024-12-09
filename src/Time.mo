@@ -21,12 +21,12 @@ module {
 
   public func toNanoseconds(duration : Duration) : Nat =
     Nat.fromInt (switch duration {
-      case (#days s) s * 86_400_000_000_000;
-      case (#hours s) s * 3_600_000_000_000;
-      case (#minutes s) s * 60_000_000_000;
-      case (#seconds s) s * 1_000_000_000;
-      case (#milliseconds s) s * 1_000_000;
-      case (#nanoseconds ns) ns });
+      case (#days n) n * 86_400_000_000_000;
+      case (#hours n) n * 3_600_000_000_000;
+      case (#minutes n) n * 60_000_000_000;
+      case (#seconds n) n * 1_000_000_000;
+      case (#milliseconds n) n * 1_000_000;
+      case (#nanoseconds n) n });
 
   public func setTimer<system>(duration : Duration, job : () -> async ()) : TimerId {
     Prim.setTimer<system>(toNanoseconds duration, false, job)

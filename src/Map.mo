@@ -1,4 +1,4 @@
-/// Original: `OrderedSet.mo`
+/// Original: `OrderedMap.mo`
 
 import Order "Order";
 import { nyi = todo } "Debug";

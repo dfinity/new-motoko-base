@@ -1,3 +1,5 @@
+/// Boolean types and operations
+
 import Prim "mo:⛔";
 import { nyi = todo } "Debug";
 

@@ -1,3 +1,5 @@
+/// Iterators
+
 import { nyi = todo } "Debug";
 module {
   public type Iter<T> = { next : () -> ?T };

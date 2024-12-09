@@ -1,3 +1,5 @@
+/// Order
+
 module {
   public type Order = {
     #less;

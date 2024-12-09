@@ -1,3 +1,5 @@
+/// Debug functions
+
 import Prim "mo:⛔";
 
 module {

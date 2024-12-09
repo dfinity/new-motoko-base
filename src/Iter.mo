@@ -1,6 +1,8 @@
 /// Iterators
 
+import Order "Order";
 import { nyi = todo } "Debug";
+
 module {
   public type Iter<T> = { next : () -> ?T };
 
@@ -20,15 +22,15 @@ module {
     todo()
   };
 
-  public func map<A, B>(xs : Iter<A>, f : A -> B) : Iter<B> = object {
+  public func map<A, B>(xs : Iter<A>, f : A -> B) : Iter<B> {
     todo()
   };
 
-  public func filter<A>(xs : Iter<A>, f : A -> Bool) : Iter<A> = object {
+  public func filter<A>(xs : Iter<A>, f : A -> Bool) : Iter<A> {
     todo()
   };
 
-  public func infinite<A>(x : A) : Iter<A> = object {
+  public func infinite<A>(x : A) : Iter<A> {
     todo()
   };
 
@@ -40,7 +42,7 @@ module {
     todo()
   };
 
-  public func fromArrayMut<A>(xs : [var A]) : Iter<A> {
+  public func fromVarArray<A>(xs : [var A]) : Iter<A> {
     todo()
   };
 
@@ -50,7 +52,7 @@ module {
     todo()
   };
 
-  public func toArrayMut<A>(xs : Iter<A>) : [var A] {
+  public func toVarArray<A>(xs : Iter<A>) : [var A] {
     todo()
   };
 

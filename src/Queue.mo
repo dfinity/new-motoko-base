@@ -3,6 +3,7 @@
 import { nyi = todo } "Debug";
 
 module {
+
   type Queue<T> = (); // Placeholder
 
   public func contains<T>(queue : Queue<T>, item : T) : Bool = todo();

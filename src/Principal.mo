@@ -44,4 +44,5 @@ module {
   public func equal(principal1 : Principal, principal2 : Principal) : Bool {
     principal1 == principal2
   };
+
 }

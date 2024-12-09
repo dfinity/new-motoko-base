@@ -22,4 +22,5 @@ module {
   public func compare(b1 : Bool, b2 : Bool) : { #less; #equal; #greater } {
     todo()
   };
+
 }

@@ -3,6 +3,7 @@
 import Prim "mo:⛔";
 
 module {
+
   public let call : (canister : Principal, name : Text, data : Blob) -> async (reply : Blob) = Prim.call_raw;
 
   public func countInstructions(comp : () -> ()) : Nat64 {
@@ -18,4 +19,5 @@ module {
   public let performanceCounter : (counter : Nat32) -> (value: Nat64) = Prim.performanceCounter;
 
   public func replyDeadline() : Nat = Prim.nat64ToNat(Prim.replyDeadline());
+
 }

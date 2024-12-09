@@ -7,6 +7,7 @@ import Prim "mo:⛔";
 import { nyi = todo } "../Debug";
 
 module {
+  
   public func init<X>(size : Nat, initValue : X) : [var X] = Prim.Array_init<X>(size, initValue);
 
   public func tabulate<X>(size : Nat, generator : Nat -> X) : [X] = Prim.Array_tabulate<X>(size, generator);
@@ -34,10 +35,6 @@ module {
   };
 
   public func sort<X>(array : [X], compare : (X, X) -> Order.Order) : [X] {
-    todo()
-  };
-
-  public func sortInPlace<X>(array : [var X], compare : (X, X) -> Order.Order) {
     todo()
   };
 

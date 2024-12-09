@@ -1,6 +1,7 @@
 /// Order
 
 module {
+
   public type Order = {
     #less;
     #equal;
@@ -22,4 +23,5 @@ module {
   public func equal(o1 : Order, o2 : Order) : Bool {
     o1 == o2
   };
+
 }

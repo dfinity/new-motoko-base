@@ -3,6 +3,7 @@
 import Prim "mo:⛔";
 
 module {
+
   public let balance : () -> (amount : Nat) = Prim.cyclesBalance;
 
   public let available : () -> (amount : Nat) = Prim.cyclesAvailable;
@@ -12,4 +13,5 @@ module {
   public let add : <system>(amount : Nat) -> () = Prim.cyclesAdd;
 
   public let refunded : () -> (amount : Nat) = Prim.cyclesRefunded;
+
 }

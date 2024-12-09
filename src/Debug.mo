@@ -3,6 +3,7 @@
 import Prim "mo:⛔";
 
 module {
+
   public func print(text : Text) {
     Prim.debugPrint text
   };

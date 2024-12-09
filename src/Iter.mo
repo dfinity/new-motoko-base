@@ -5,6 +5,7 @@ import List "functional/List";
 import { nyi = todo } "Debug";
 
 module {
+
   public type Iter<T> = { next : () -> ?T };
 
   public class range(x : Nat, y : Int) {
@@ -63,5 +64,6 @@ module {
 
   public func sort<A>(xs : Iter<A>, compare : (A, A) -> Order.Order) : Iter<A> {
     todo()
-  }
+  };
+
 }

@@ -4,6 +4,7 @@ import Order "Order";
 import { nyi = todo } "Debug";
 
 module {
+
   public type Result<Ok, Err> = {
     #ok : Ok;
     #err : Err

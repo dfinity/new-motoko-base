@@ -3,6 +3,7 @@
 import { nyi = todo } "../Debug";
 
 module {
+
   public type Queue<T> = (); // Placeholder
 
   public func empty<T>() : Queue<T> {
@@ -39,5 +40,6 @@ module {
 
   public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) {
     todo()
-  }
+  };
+
 }

@@ -2,12 +2,12 @@
 
 import Array "Array";
 import Iter "../IterType";
-import Option "../Option";
 import Order "../Order";
 import Result "../Result";
 import { nyi = todo } "../Debug";
 
 module {
+
   public type List<T> = ?(T, List<T>);
 
   public func nil<T>() : List<T> = null;
@@ -56,10 +56,6 @@ module {
   };
 
   public func mapResult<T, R, E>(xs : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> {
-    todo()
-  };
-
-  func revAppend<T>(l : List<T>, m : List<T>) : List<T> {
     todo()
   };
 
@@ -173,5 +169,6 @@ module {
       }
     );
     text # "]"
-  }
+  };
+
 }

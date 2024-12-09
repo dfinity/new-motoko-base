@@ -71,5 +71,6 @@ module {
   public func unwrap<T>(x : ?T) : T = switch x {
     case null { Debug.trap("Option.unwrap()") };
     case (?x_) { x_ }
-  }
+  };
+
 }

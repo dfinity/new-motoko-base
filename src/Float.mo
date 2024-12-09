@@ -5,6 +5,7 @@ import Int "Int";
 import { nyi = todo } "Debug";
 
 module {
+
   public type Float = Prim.Types.Float;
 
   public let pi : Float = 3.14159265358979323846; // taken from musl math.h

@@ -28,6 +28,8 @@ module {
         case null { null };
         case (?(h, t)) { stack := t; ?h }
       }
-    }
-  }
+    };
+
+  };
+
 }

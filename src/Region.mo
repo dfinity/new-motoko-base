@@ -3,6 +3,7 @@
 import Prim "mo:⛔";
 
 module {
+
   public type Region = Prim.Types.Region;
 
   public let new : () -> Region = Prim.regionNew;
@@ -12,7 +13,6 @@ module {
   public let size : (region : Region) -> (pages : Nat64) = Prim.regionSize;
 
   public let grow : (region : Region, newPages : Nat64) -> (oldPages : Nat64) = Prim.regionGrow;
-
 
   public let loadNat8 : (region : Region, offset : Nat64) -> Nat8 = Prim.regionLoadNat8;
 
@@ -46,7 +46,6 @@ module {
 
   public let storeInt64 : (region : Region, offset : Nat64, value : Int64) -> () = Prim.regionStoreInt64;
 
-
   public let loadFloat : (region : Region, offset : Nat64) -> Float = Prim.regionLoadFloat;
 
   public let storeFloat : (region: Region, offset : Nat64, value : Float) -> () = Prim.regionStoreFloat;
@@ -54,4 +53,5 @@ module {
   public let loadBlob : (region : Region, offset : Nat64, size : Nat) -> Blob = Prim.regionLoadBlob;
 
   public let storeBlob : (region : Region, offset : Nat64, value : Blob) -> () = Prim.regionStoreBlob;
+
 }

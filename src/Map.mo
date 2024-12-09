@@ -4,6 +4,7 @@ import Order "Order";
 import { nyi = todo } "Debug";
 
 module {
+
   type Map<K, V> = (); // Placeholder
 
   public func containsKey<K, V>(map : Map<K, V>, key : K, compare : (K, K) -> Order.Order) : Bool = todo();

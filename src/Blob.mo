@@ -1,7 +1,9 @@
 /// Module for working with Blobs: immutable sequence of bytes.
+
 import Prim "mo:⛔";
 
 module {
+
   public type Blob = Prim.Types.Blob;
   
   public func fromArray(bytes : [Nat8]) : Blob = Prim.arrayToBlob bytes;
@@ -29,5 +31,6 @@ module {
 
   public func greater(blob1 : Blob, blob2 : Blob) : Bool { blob1 > blob2 };
 
-  public func greaterOrEqual(blob1 : Blob, blob2 : Blob) : Bool { blob1 >= blob2 }
+  public func greaterOrEqual(blob1 : Blob, blob2 : Blob) : Bool { blob1 >= blob2 };
+
 }

@@ -5,9 +5,6 @@ import Blob "Blob";
 import Hash "Hash";
 import Order "Order";
 import Array "functional/Array";
-import Nat8 "Nat8";
-import Nat32 "Nat32";
-import Nat64 "Nat64";
 import Text "Text";
 import { nyi = todo } "Debug";
 

@@ -1,10 +1,10 @@
 /// Purely-functional, singly-linked lists.
 
 import Array "Array";
-import Iter "IterType";
-import Option "Option";
-import Order "Order";
-import Result "Result";
+import Iter "../IterType";
+import Option "../Option";
+import Order "../Order";
+import Result "../Result";
 
 module {
   public type List<T> = ?(T, List<T>);

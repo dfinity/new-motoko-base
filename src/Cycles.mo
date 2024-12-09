@@ -1,6 +1,7 @@
 /// Original: `ExperimentalCycles.mo`
 
 import Prim "mo:⛔";
+
 module {
   public let balance : () -> (amount : Nat) = Prim.cyclesBalance;
 

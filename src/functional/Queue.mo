@@ -1,6 +1,6 @@
 // Original: `Deque.mo`
 
-import { nyi = todo } "Debug";
+import { nyi = todo } "../Debug";
 
 module {
   public type Queue<T> = (); // Placeholder

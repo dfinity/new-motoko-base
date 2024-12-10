@@ -4,6 +4,10 @@
 
 ---
 
+**Work in progress! Please consider providing feedback on the [GitHub issues page](https://github.com/dfinity/new-motoko-base/issues)**. 
+
+---
+
 This repository contains the spec for a revamped [Motoko](https://github.com/dfinity/motoko) base library. 
 
 If you are new to Motoko, the current version of the base library is available [here](https://github.com/dfinity/motoko-base).

@@ -1,4 +1,4 @@
-# Motoko Base Library Revamp
+# New Motoko Base Library
 
 ### [Documentation preview](https://dfinity.github.io/motoko-base-revamp)
 

@@ -1,10 +1,10 @@
 # New Motoko Base Library
 
-### [Documentation preview](https://dfinity.github.io/motoko-base-revamp)
+#### [Documentation preview](https://dfinity.github.io/new-motoko-base)
 
 ---
 
-This repository contains module definitions for a revamped [Motoko](https://github.com/dfinity/motoko) base library. 
+This repository contains the spec for a revamped [Motoko](https://github.com/dfinity/motoko) base library. 
 
 If you are new to Motoko, the current version of the base library is available [here](https://github.com/dfinity/motoko-base).
 
@@ -14,8 +14,8 @@ Run the following commands to configure your local development branch:
 
 ```sh
 # First-time setup
-git clone https://github.com/dfinity/motoko-base-revamp
-cd motoko-base-revamp
+git clone https://github.com/dfinity/new-motoko-base
+cd new-motoko-base
 npm ci
 
 # Run code formatter

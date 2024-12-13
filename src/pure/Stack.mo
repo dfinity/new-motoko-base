@@ -131,6 +131,10 @@ module {
     todo()
   };
 
+  public func vals<T>(stack : Stack<T>) : Iter.Iter<T> {
+    todo()
+  };
+
   public func fromArray<T>(array : [T]) : Stack<T> {
     todo()
   };
@@ -143,9 +147,7 @@ module {
 
   public func toVarArray<T>(stack : Stack<T>) : [var T] = Array.toVarArray<T>(toArray<T>(stack));
 
-  public func toIter<T>(stack : Stack<T>) : Iter.Iter<T> {
-    todo()
-  };
+  public func toIter<T>(stack : Stack<T>) : Iter.Iter<T> = vals(stack);
 
   public func toText<T>(stack : Stack<T>, f : T -> Text) : Text {
     var text = "Stack[";

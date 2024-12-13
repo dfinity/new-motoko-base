@@ -5,7 +5,7 @@ import Result "Result";
 import { nyi = todo } "Debug";
 
 module {
-  type Vec<T> = (); // Placeholder
+  public type Vec<T> = (); // Placeholder
 
   public func new<T>() : Vec<T> {
     todo()
@@ -15,19 +15,15 @@ module {
     todo()
   };
 
-  public func isEmpty<T>(vec : Vec<T>) : Bool {
+  public func isEmpty(vec : Vec<Any>) : Bool {
+    todo()
+  };
+
+  public func size(vec : Vec<Any>) : Bool {
     todo()
   };
 
   public func contains<T>(vec : Vec<T>, element : T, equal : (T, T) -> Bool) : Bool {
-    todo()
-  };
-
-  public func max<T>(vec : Vec<T>, compare : (T, T) -> Order.Order) : ?T {
-    todo()
-  };
-
-  public func min<T>(vec : Vec<T>, compare : (T, T) -> Order.Order) : ?T {
     todo()
   };
 
@@ -39,7 +35,7 @@ module {
     todo()
   };
 
-  public func toText<T>(vec : Vec<T>, toText : T -> Text) : Text {
+  public func toText<T>(vec : Vec<T>, f : T -> Text) : Text {
     todo()
   };
 
@@ -99,6 +95,14 @@ module {
     todo()
   };
 
+  public func max<T>(vec : Vec<T>, compare : (T, T) -> Order.Order) : ?T {
+    todo()
+  };
+
+  public func min<T>(vec : Vec<T>, compare : (T, T) -> Order.Order) : ?T {
+    todo()
+  };
+
   public func forAll<T>(vec : Vec<T>, predicate : T -> Bool) : Bool {
     todo()
   };
@@ -135,27 +139,27 @@ module {
     todo()
   };
 
-  public func map<T, Y>(vec : Vec<T>, f : T -> Y) : Vec<Y> {
+  public func map<T1, T2>(vec : Vec<T1>, f : T1 -> T2) : Vec<T2> {
     todo()
   };
 
-  public func iterate<T>(vec : Vec<T>, f : T -> ()) {
+  public func forEach<T>(vec : Vec<T>, f : T -> ()) {
     todo()
   };
 
-  public func mapEntries<T, Y>(vec : Vec<T>, f : (Nat, T) -> Y) : Vec<Y> {
+  public func filterMap<T1, T2>(vec : Vec<T1>, f : T1 -> ?T2) : Vec<T2> {
     todo()
   };
 
-  public func mapFilter<T, Y>(vec : Vec<T>, f : T -> ?Y) : Vec<Y> {
+  public func mapEntries<T1, T2>(vec : Vec<T1>, f : (Nat, T1) -> T2) : Vec<T2> {
     todo()
   };
 
-  public func mapResult<T, Y, E>(vec : Vec<T>, f : T -> Result.Result<Y, E>) : Result.Result<Vec<Y>, E> {
+  public func mapResult<T, R, E>(vec : Vec<T>, f : T -> Result.Result<R, E>) : Result.Result<Vec<R>, E> {
     todo()
   };
 
-  public func chain<T, Y>(vec : Vec<T>, k : T -> Vec<Y>) : Vec<Y> {
+  public func chain<T1, T2>(vec : Vec<T1>, k : T1 -> Vec<T2>) : Vec<T2> {
     todo()
   };
 
@@ -183,7 +187,7 @@ module {
     todo()
   };
 
-  public func removeDuplicates<T>(vec : Vec<T>, compare : (T, T) -> Order.Order) {
+  public func dedupe<T>(vec : Vec<T>, compare : (T, T) -> Order.Order) {
     todo()
   };
 
@@ -207,11 +211,11 @@ module {
     todo()
   };
 
-  public func zip<T, Y>(vec1 : Vec<T>, vec2 : Vec<Y>) : Vec<(T, Y)> {
+  public func zip<T1, T2>(vec1 : Vec<T1>, vec2 : Vec<T2>) : Vec<(T1, T2)> {
     todo()
   };
 
-  public func zipWith<T, Y, Z>(vec1 : Vec<T>, vec2 : Vec<Y>, zip : (T, Y) -> Z) : Vec<Z> {
+  public func zipWith<T1, T2, Z>(vec1 : Vec<T1>, vec2 : Vec<T2>, zip : (T1, T2) -> Z) : Vec<Z> {
     todo()
   };
 

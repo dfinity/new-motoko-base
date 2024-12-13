@@ -11,13 +11,13 @@ module {
 
   public type Text = Prim.Types.Text;
 
+  public func chars(t : Text) : Iter.Iter<Char> = t.chars();
+
   public let fromChar : (c : Char) -> Text = Prim.charToText;
 
   public func fromArray(a : [Char]) : Text = fromIter(a.vals());
 
   public func fromVarArray(a : [var Char]) : Text = fromIter(a.vals());
-
-  public func toIter(t : Text) : Iter.Iter<Char> = t.chars();
 
   public func toArray(t : Text) : [Char] {
     todo()
@@ -26,6 +26,8 @@ module {
   public func toVarArray(t : Text) : [var Char] {
     todo()
   };
+
+  public func toIter(t : Text) : Iter.Iter<Char> = t.chars();
 
   public func fromIter(cs : Iter.Iter<Char>) : Text {
     todo()

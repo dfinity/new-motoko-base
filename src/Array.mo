@@ -78,6 +78,8 @@ module {
 
   public func singleton<T>(element : T) : [T] = [element];
 
+  public func toIter<T>(array : [T]) : Iter.Iter<T> = array.vals();
+
   public func vals<T>(array : [T]) : Iter.Iter<T> = array.vals();
 
   public func keys<T>(array : [T]) : Iter.Iter<Nat> = array.keys();

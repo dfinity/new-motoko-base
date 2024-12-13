@@ -24,19 +24,23 @@ module {
     todo()
   };
 
-  public func put<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
+  public func insert<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
-  public func delete<T>(s : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
+  public func delete<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
-  public func max<T>(s : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func max<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
     todo()
   };
 
-  public func min<T>(s : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+    todo()
+  };
+
+  public func equal<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
     todo()
   };
 
@@ -44,11 +48,17 @@ module {
     todo()
   };
 
-  public func valsRev<T>(s : Set<T>) : Iter.Iter<T> {
+  public func valsRev<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
+  public func toIter<T>(set : Set<T>) : Iter.Iter<T> = vals(set);
+
   public func fromIter<T>(iter : Iter.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
+    todo()
+  };
+
+  public func isSubset<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
     todo()
   };
 
@@ -64,23 +74,15 @@ module {
     todo()
   };
 
-  public func filter<T>(s : Set<T>, f : T -> Bool) : Set<T> {
+  public func filter<T>(set : Set<T>, f : T -> Bool) : Set<T> {
     todo()
   };
 
-  public func map<T1, T2>(s : Set<T1>, f : T1 -> T2) : Set<T2> {
+  public func map<T1, T2>(set : Set<T1>, f : T1 -> T2) : Set<T2> {
     todo()
   };
 
-  public func filterMap<T1, T2>(s : Set<T1>, f : T1 -> ?T2) : Set<T2> {
-    todo()
-  };
-
-  public func isSubset<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
-    todo()
-  };
-
-  public func equal<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
+  public func filterMap<T1, T2>(set : Set<T1>, f : T1 -> ?T2) : Set<T2> {
     todo()
   };
 
@@ -100,15 +102,15 @@ module {
     todo()
   };
 
-  public func all<T>(s : Set<T>, pred : T -> Bool) : Bool {
+  public func all<T>(set : Set<T>, pred : T -> Bool) : Bool {
     todo()
   };
 
-  public func any<T>(s : Set<T>, pred : T -> Bool) : Bool {
+  public func any<T>(set : Set<T>, pred : T -> Bool) : Bool {
     todo()
   };
 
-  public func assertValid(s : Set<Any>) : () {
+  public func assertValid(set : Set<Any>) : () {
     todo()
   };
 

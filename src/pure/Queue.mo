@@ -10,11 +10,11 @@ module {
     todo()
   };
 
-  public func isEmpty<T>(queue : Queue<T>) : Bool {
+  public func isEmpty(queue : Queue<Any>) : Bool {
     todo()
   };
 
-  public func size<T>(queue : Queue<T>) : Nat {
+  public func size(queue : Queue<Any>) : Nat {
     todo()
   };
 
@@ -40,5 +40,10 @@ module {
 
   public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) {
     todo()
-  }
+  };
+
+  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>) : Bool {
+    todo()
+  };
+
 }

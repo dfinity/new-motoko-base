@@ -29,6 +29,10 @@ module {
     todo()
   };
 
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool {
+    todo()
+  };
+
   public func insert<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
     todo()
   };
@@ -42,10 +46,6 @@ module {
   };
 
   public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
-    todo()
-  };
-
-  public func equal<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
     todo()
   };
 
@@ -65,19 +65,19 @@ module {
     todo()
   };
 
-  public func isSubset<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
+  public func isSubset<T>(set1 : Set<T>, set2 : Set<T>) : Bool {
     todo()
   };
 
-  public func union<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func union<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 
-  public func intersect<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func intersect<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 
-  public func diff<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func diff<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 
@@ -114,6 +114,10 @@ module {
   };
 
   public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order) : () {
+    todo()
+  };
+
+  public func toText<T>(set : Set<T>, f : T -> Text) : Text {
     todo()
   };
 

@@ -12,7 +12,17 @@ module {
 
   public func new<T>() : Stack<T> = null;
 
-  public func isEmpty<T>(stack : Stack<T>) : Bool = todo();
+  public func isEmpty(stack : Stack<Any>) : Bool = todo();
+
+  public func size(stack : Stack<Any>) : Nat = todo();
+
+  public func contains<T>(stack : Stack<T>, item : T) : Bool {
+    todo()
+  };
+
+  public func get<T>(stack : Stack<T>, n : Nat) : ?T {
+    todo()
+  };
 
   public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
 
@@ -21,13 +31,6 @@ module {
   };
 
   public func pop<T>(stack : Stack<T>) : (?T, Stack<T>) {
-    todo()
-  };
-
-  public func size<T>(stack : Stack<T>) : Nat {
-    todo()
-  };
-  public func get<T>(stack : Stack<T>, n : Nat) : ?T {
     todo()
   };
 
@@ -87,11 +90,11 @@ module {
     todo()
   };
 
-  public func some<T>(stack : Stack<T>, f : T -> Bool) : Bool {
+  public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool {
     todo()
   };
 
-  public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool {
+  public func any<T>(stack : Stack<T>, f : T -> Bool) : Bool {
     todo()
   };
 
@@ -148,6 +151,8 @@ module {
   public func toVarArray<T>(stack : Stack<T>) : [var T] = Array.toVarArray<T>(toArray<T>(stack));
 
   public func toIter<T>(stack : Stack<T>) : Iter.Iter<T> = vals(stack);
+
+  public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> = todo();
 
   public func toText<T>(stack : Stack<T>, f : T -> Text) : Text {
     var text = "Stack[";

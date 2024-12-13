@@ -119,4 +119,8 @@ module {
     todo()
   };
 
+  public func toText<K, V>(set : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
+    todo()
+  };
+
 }

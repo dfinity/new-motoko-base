@@ -15,29 +15,43 @@ import Vec "../src/Vec";
 import PureStack "../src/pure/Stack";
 import PureQueue "../src/pure/Queue";
 
-let _ = Array : SeqLike<[Any]>;
-let _ = Queue : SeqLike<Queue.Queue<Any>>;
-let _ = Set : SeqLike<Set.Set<Any>>;
-let _ = Stack : SeqLike<Stack.Stack<Any>>;
-let _ = Vec : SeqLike<Vec.Vec<Any>>;
+type T = Any;
 
-let _ = PureStack : PureSeqLike<PureStack.Stack<Any>>;
-let _ = PureQueue : PureSeqLike<PureQueue.Queue<Any>>;
+// let _ = Array : SeqLike<[T]>;
+let _ = Queue : SeqLike<Queue.Queue<T>>;
+let _ = Set : SeqLike<Set.Set<T>>;
+let _ = Stack : SeqLike<Stack.Stack<T>>;
+let _ = Vec : SeqLike<Vec.Vec<T>>;
 
-type BaseSeqLike<C> = module {
-  clone : (C) -> C;
+let _ = PureStack : PureSeqLike<PureStack.Stack<T>>;
+let _ = PureQueue : PureSeqLike<PureQueue.Queue<T>>;
+
+type SeqLike<C> = module {
+  new : Any; // <T>() -> C;
+  // toPure : Any; // (Any) -> C;
+  // fromPure : Any; // (C) -> Any;
+  clone : Any; // (C) -> C;
+  isEmpty : Any; // (C) -> Bool;
+  size : Any; // (C) -> Nat;
+  contains : Any; // <T>(C, T) -> Bool;
+  // equal : (C, C) -> Bool;
+  toIter : Any; // <T>(C) -> Iter.Iter<T>;
+  // fromIter : (Iter.Iter<T>) -> C;
+  // forEach : <T>(C, T -> ()) -> ();
+  // extend : <T>(C, C) -> ();
+  // concat : <T>([C]) -> C;
+  toText : Any; // <T>(C, T -> Text) -> Text
+};
+type PureSeqLike<C> = module {
   new : <T>() -> C;
   isEmpty : (C) -> Bool;
   size : (C) -> Nat;
-  toIter : (C) -> Iter.Iter<Any>;
+  contains : Any; // <T>(C, T) -> Bool;
+  // equal : (C, C) -> Bool;
+  toIter : Any; // <T>(C) -> Iter.Iter<T>;
   // fromIter : (Iter.Iter<T>) -> C;
   // forEach : <T>(C, T -> ()) -> ();
-  // concat : <T>(C, C) -> C;
-  // concatAll : <T>([C]) -> C;
-  toText : <T>(C, T -> Text) -> Text
-};
-type PureSeqLike<C> = BaseSeqLike<C>;
-type SeqLike<C> = BaseSeqLike<C> and {
-  toPure : (Any) -> C;
-  fromPure : (C) -> Any
+  // concat : <T>([C]) -> C;
+  // extend : <T>(C, C) -> C;
+  toText : Any // <T>(C, T -> Text) -> Text
 }

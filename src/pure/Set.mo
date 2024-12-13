@@ -40,7 +40,7 @@ module {
     todo()
   };
 
-  public func equal<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>) : Bool {
     todo()
   };
 
@@ -58,19 +58,19 @@ module {
     todo()
   };
 
-  public func isSubset<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
+  public func isSubset<T>(set1 : Set<T>, set2 : Set<T>) : Bool {
     todo()
   };
 
-  public func union<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func union<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 
-  public func intersect<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func intersect<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 
-  public func diff<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func diff<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 
@@ -111,6 +111,10 @@ module {
   };
 
   public func assertValid(set : Set<Any>) : () {
+    todo()
+  };
+
+  public func toText<T>(set : Set<T>, f : T -> Text) : Text {
     todo()
   };
 

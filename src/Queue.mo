@@ -26,6 +26,10 @@ module {
     todo()
   };
 
+  public func contains<T>(queue : Queue<T>, item : T) : Bool {
+    todo()
+  };
+
   public func peekFront<T>(queue : Queue<T>) : ?T {
     todo()
   };

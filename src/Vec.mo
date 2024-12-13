@@ -1,5 +1,6 @@
 /// Original: `vector` Mops package?
 
+import Iter "Iter";
 import Order "Order";
 import Result "Result";
 import { nyi = todo } "Debug";
@@ -130,6 +131,12 @@ module {
   public func fromVarArray<T>(array : [var T]) : Vec<T> {
     todo()
   };
+
+  public func vals<T>(vec : Vec<T>) : Iter.Iter<T> {
+    todo()
+  };
+
+  public func toIter<T>(vec : Vec<T>) : Iter.Iter<T> = vals(vec);
 
   public func fromIter<T>(iter : { next : () -> ?T }) : Vec<T> {
     todo()

@@ -20,9 +20,17 @@ module {
 
   public func clone<T>(stack : Stack<T>) : Stack<T> = { var pure = stack.pure };
 
-  public func isEmpty(stack : Stack<Any>) : Bool = todo();
+  public func isEmpty(stack : Stack<Any>) : Bool {
+    todo()
+  };
 
-  public func size(stack : Stack<Any>) : Nat = todo();
+  public func size(stack : Stack<Any>) : Nat {
+    todo()
+  };
+
+  public func contains<T>(stack : Stack<T>, item : T) : Bool {
+    todo()
+  };
 
   public func push<T>(stack : Stack<T>, item : T) : () = todo();
 
@@ -94,11 +102,11 @@ module {
     todo()
   };
 
-  public func some<T>(stack : Stack<T>, f : T -> Bool) : Bool {
+  public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool {
     todo()
   };
 
-  public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool {
+  public func any<T>(stack : Stack<T>, f : T -> Bool) : Bool {
     todo()
   };
 
@@ -110,7 +118,7 @@ module {
     todo()
   };
 
-  public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>, equal : (T, T) -> Bool) : Bool {
+  public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>) : Bool {
     todo()
   };
 

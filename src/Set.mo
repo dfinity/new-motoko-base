@@ -7,17 +7,17 @@ import { nyi = todo } "Debug";
 
 module {
 
-  type Set<T> = { pure : Pure.Set<T> };
+  type Set<T> = { var pure : Pure.Set<T> };
 
   public func toPure<T>(set : Set<T>) : Pure.Set<T> = set.pure;
 
-  public func fromPure<T>(set : Pure.Set<T>) : Queue<T> = { var pure : set };
+  public func fromPure<T>(set : Pure.Set<T>) : Set<T> = { var pure = set };
 
   public func clone<T>(set : Set<T>) : Set<T> = { var pure = set.pure };
 
-  public func new<T>() : Queue<T> = fromPure(Pure.new());
+  public func new<T>() : Set<T> = { var pure = Pure.new() };
 
-  public func isEmpty<T>(queue : Queue<T>) : Bool {
+  public func isEmpty<T>(set : Set<T>) : Bool {
     todo()
   };
 
@@ -33,39 +33,39 @@ module {
     todo()
   };
 
-  public func delete(s : Set<T>, item : T, compare : (T, T) -> Order.Order) : Bool {
+  public func delete<T>(s : Set<T>, item : T, compare : (T, T) -> Order.Order) : Bool {
     todo()
   };
 
-  public func max(s : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func max<T>(s : Set<T>, compare : (T, T) -> Order.Order) : ?T {
     todo()
   };
 
-  public func min(s : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func min<T>(s : Set<T>, compare : (T, T) -> Order.Order) : ?T {
     todo()
   };
 
-  public func toIter(set : Set<T>) : Iter.Iter<T> {
+  public func toIter<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
-  public func toIterRev(s : Set<T>) : Iter.Iter<T> {
+  public func toIterRev<T>(s : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
-  public func fromIter(iter : Iter.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
+  public func fromIter<T>(iter : Iter.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
-  public func union(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func union<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
     todo()
   };
 
-  public func intersect(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func intersect<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
     todo()
   };
 
-  public func diff(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+  public func diff<T>(s1 : Set<T>, s2 : Set<T>) : Set<T> {
     todo()
   };
 
@@ -77,11 +77,11 @@ module {
     todo()
   };
 
-  public func isSubset(s1 : Set<T>, s2 : Set<T>) : Bool {
+  public func isSubset<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
     todo()
   };
 
-  public func equal(s1 : Set<T>, s2 : Set<T>) : Bool {
+  public func equal<T>(s1 : Set<T>, s2 : Set<T>) : Bool {
     todo()
   };
 
@@ -101,15 +101,15 @@ module {
     todo()
   };
 
-  public func all(s : Set<T>, pred : T -> Bool) : Bool {
+  public func all<T>(s : Set<T>, pred : T -> Bool) : Bool {
     todo()
   };
 
-  public func any(s : Set<T>, pred : T -> Bool) : Bool {
+  public func any<T>(s : Set<T>, pred : T -> Bool) : Bool {
     todo()
   };
 
-  public func assertValid(s : Set<T>) : () {
+  public func assertValid(s : Set<Any>) : () {
     todo()
   };
 

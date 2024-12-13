@@ -22,7 +22,7 @@ if (moFiles.length === 0) {
 const source = moFiles
   .map((f) => {
     const name = f.replace(/\.mo$/, "");
-    return `import _${name} "../../src/${name}";\n`;
+    return `import _${name.replace("/", "_")} "../../src/${name}";\n`;
   })
   .join("");
 
@@ -33,7 +33,15 @@ writeFileSync(outFile, source, "utf8");
   const wasmFile = join(outDir, `${baseFilename}.wasm`);
   const { stdout, stderr } = await execa(
     mocPath,
-    [outFile, "-wasi-system-api", "--experimental-stable-memory", "1", "-o", wasmFile],
+    [
+      outFile,
+      "--hide-warnings",
+      "-wasi-system-api",
+      "--experimental-stable-memory",
+      "1",
+      "-o",
+      wasmFile,
+    ],
     {
       stdio: "pipe",
       encoding: "utf8",

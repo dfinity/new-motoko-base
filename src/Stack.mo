@@ -1,6 +1,9 @@
 /// Original: `OrderedSet.mo`
 
 import Pure "pure/Stack";
+import Result "Result";
+import Order "Order";
+import Iter "Iter";
 import { nyi = todo } "Debug";
 
 module {
@@ -10,10 +13,10 @@ module {
   public func toPure<T>(stack : Stack<T>) : Pure.Stack<T> = stack.pure;
 
   public func fromPure<T>(stack : Pure.Stack<T>) : Stack<T> = {
-    var pure : stack
+    var pure = stack
   };
 
-  public func new<T>() : Stack<T> = fromPure(Pure.new());
+  public func new<T>() : Stack<T> = { var pure = Pure.new() };
 
   public func clone<T>(stack : Stack<T>) : Stack<T> = { var pure = stack.pure };
 
@@ -116,7 +119,9 @@ module {
     todo()
   };
 
-  public func singleton<T>(item : T) : Stack<T> = ?(null, item);
+  public func singleton<T>(item : T) : Stack<T> {
+    todo()
+  };
 
   public func repeat<T>(item : T, n : Nat) : Stack<T> {
     todo()
@@ -136,18 +141,6 @@ module {
     todo()
   };
 
-  public func fromArray<T>(array : [T]) : Stack<T> {
-    todo()
-  };
-
-  public func fromVarArray<T>(array : [var T]) : Stack<T> = fromArray<T>(Array.freeze<T>(array));
-
-  public func toArray<T>(stack : Stack<T>) : [T] {
-    todo()
-  };
-
-  public func toVarArray<T>(stack : Stack<T>) : [var T] = Array.thaw<T>(toArray<T>(stack));
-
   public func toIter<T>(stack : Stack<T>) : Iter.Iter<T> {
     todo()
   };
@@ -156,7 +149,7 @@ module {
     var text = "Stack[";
     var first = false;
     forEach(
-      xs,
+      stack,
       func(item : T) {
         if first {
           text #= ", "

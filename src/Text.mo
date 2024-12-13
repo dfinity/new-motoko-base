@@ -3,7 +3,9 @@
 import Char "Char";
 import Hash "Hash";
 import Iter "Iter";
+import Order "Order";
 import Prim "mo:⛔";
+import { nyi = todo } "Debug";
 
 module {
 
@@ -26,12 +28,6 @@ module {
   };
 
   public func fromIter(cs : Iter.Iter<Char>) : Text {
-    todo()
-  };
-
-  public func fromList(cs : List.List<Char>) : Text = fromIter(List.toIter cs);
-
-  public func toList(t : Text) : List.List<Char> {
     todo()
   };
 

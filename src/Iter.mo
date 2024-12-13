@@ -1,7 +1,6 @@
 /// Iterators
 
 import Order "Order";
-import Stack "pure/Stack";
 import { nyi = todo } "Debug";
 
 module {
@@ -16,23 +15,23 @@ module {
     todo()
   };
 
-  public func forEach<T>(xs : Iter<T>, f : (T, Nat) -> ()) {
+  public func forEach<T>(iter : Iter<T>, f : (T, Nat) -> ()) {
     todo()
   };
 
-  public func size<T>(xs : Iter<T>) : Nat {
+  public func size<T>(iter : Iter<T>) : Nat {
     todo()
   };
 
-  public func map<T1, T2>(xs : Iter<T1>, f : T1 -> T2) : Iter<T2> {
+  public func map<T1, T2>(iter : Iter<T1>, f : T1 -> T2) : Iter<T2> {
     todo()
   };
 
-  public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T> {
+  public func filter<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> {
     todo()
   };
 
-  public func filterMap<T1, T2>(xs : Iter<T1>, f : T1 -> ?T2) : Iter<T2> {
+  public func filterMap<T1, T2>(iter : Iter<T1>, f : T1 -> ?T2) : Iter<T2> {
     todo()
   };
 
@@ -52,29 +51,23 @@ module {
     todo()
   };
 
-  public func fromArray<T>(xs : [T]) : Iter<T> {
+  public func fromArray<T>(array : [T]) : Iter<T> {
     todo()
   };
 
-  public func fromVarArray<T>(xs : [var T]) : Iter<T> {
+  public func fromVarArray<T>(array : [var T]) : Iter<T> {
     todo()
   };
 
-  public let fromList = List.vals;
-
-  public func toArray<T>(xs : Iter<T>) : [T] {
+  public func toArray<T>(iter : Iter<T>) : [T] {
     todo()
   };
 
-  public func toVarArray<T>(xs : Iter<T>) : [var T] {
+  public func toVarArray<T>(iter : Iter<T>) : [var T] {
     todo()
   };
 
-  public func toList<T>(xs : Iter<T>) : List.List<T> {
-    todo()
-  };
-
-  public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
+  public func sort<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
     todo()
   };
 

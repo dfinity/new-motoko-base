@@ -4,6 +4,7 @@ import Int "Int";
 import Order "Order";
 import Prim "mo:⛔";
 import Char "Char";
+import { nyi = todo } "Debug";
 
 module {
 
@@ -12,6 +13,10 @@ module {
   public func toText(n : Nat) : Text = Int.toText n;
 
   public func fromText(text : Text) : ?Nat {
+    todo()
+  };
+
+  public func fromInt(i : Int) : ?Nat {
     todo()
   };
 

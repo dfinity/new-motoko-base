@@ -1,6 +1,7 @@
 /// Originally `ExperimentalInternetComputer.mo`
 
 import Prim "mo:⛔";
+import { nyi = todo } "Debug";
 
 module {
 
@@ -18,6 +19,6 @@ module {
 
   public let performanceCounter : (counter : Nat32) -> (value: Nat64) = Prim.performanceCounter;
 
-  public func replyDeadline() : Nat = Prim.nat64ToNat(Prim.replyDeadline());
+  public func replyDeadline() : Nat = todo();
 
 }

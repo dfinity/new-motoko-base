@@ -4,7 +4,7 @@ import Stack "Stack";
 import { nyi = todo } "../Debug";
 
 module {
-  public type Queue<T> = (Stack<T>, Stack<T>);
+  public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);
 
   public func new<T>() : Queue<T> {
     todo()

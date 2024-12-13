@@ -1,7 +1,7 @@
 /// Original: `OrderedMap.mo`
 
-import Order "Order";
-import { nyi = todo } "Debug";
+import Order "../Order";
+import { nyi = todo } "../Debug";
 
 module {
 

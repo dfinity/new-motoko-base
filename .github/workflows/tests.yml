@@ -49,5 +49,5 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npx mops toolchain install
+      - run: npx mops toolchain init
       - run: npm test

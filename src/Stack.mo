@@ -152,6 +152,10 @@ module {
     todo()
   };
 
+  public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> {
+    todo()
+  };
+
   public func toIter<T>(stack : Stack<T>) : Iter.Iter<T> {
     todo()
   };

@@ -78,6 +78,10 @@ module {
 
   public func singleton<T>(element : T) : [T] = [element];
 
+  public func fromIter<T>(iter : Iter.Iter<T>) : [T] {
+    todo()
+  };
+
   public func toIter<T>(array : [T]) : Iter.Iter<T> = array.vals();
 
   public func vals<T>(array : [T]) : Iter.Iter<T> = array.vals();

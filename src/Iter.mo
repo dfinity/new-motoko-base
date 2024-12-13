@@ -1,11 +1,12 @@
 /// Iterators
 
+import Type "IterType";
 import Order "Order";
 import { nyi = todo } "Debug";
 
 module {
 
-  public type Iter<T> = { next : () -> ?T };
+  public type Iter<T> = Type.Iter<T>;
 
   public class range(fromInclusive : Int, toExclusive : Int) {
     todo()
@@ -69,6 +70,10 @@ module {
 
   public func sort<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
     todo()
+  };
+
+  public func convert<A, B, T>(A : module { toIter : A -> Iter<T> }, B : module { fromIter : Iter<T> -> B }, a : A) : B {
+    A.toIter(a) |> B.fromIter(_)
   };
 
 }

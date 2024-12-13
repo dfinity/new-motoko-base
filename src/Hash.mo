@@ -8,7 +8,7 @@ module {
 
   public type Hash = Nat32;
 
-  public let length : Nat = 31; // Why not 32?
+  public let length : Nat = 31;
 
   public func bit(h : Hash, pos : Nat) : Bool {
     todo()

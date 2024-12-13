@@ -1,4 +1,4 @@
-/// Functions on functions, creating functions from simpler inputs
+/// Functions on functions; creating functions from simpler inputs
 
 module {
 

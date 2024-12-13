@@ -11,7 +11,7 @@ module {
     let pre = Prim.performanceCounter(0);
     comp();
     let post = Prim.performanceCounter(0);
-    // performance_counter costs around 200 extra instructions, we perform an empty measurement to decide the overhead
+    // performance_counter costs around 200 extra instructions; we perform an empty measurement to decide the overhead
     let overhead = pre - init;
     post - pre - overhead
   };

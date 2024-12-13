@@ -97,10 +97,6 @@ module {
     todo()
   };
 
-  func isNegative(number : Float) : Bool {
-    copySign(1.0, number) < 0.0
-  };
-
   public func neg(x : Float) : Float { -x };
 
   public func add(x : Float, y : Float) : Float { x + y };

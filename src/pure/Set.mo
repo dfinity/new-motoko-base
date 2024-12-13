@@ -1,21 +1,16 @@
 /// Original: `OrderedSet.mo`
 
-import Pure "pure/Set";
-import Iter "Iter";
-import Order "Order";
-import { nyi = todo } "Debug";
+import Iter "../Iter";
+import Order "../Order";
+import { nyi = todo } "../Debug";
 
 module {
 
-  type Set<T> = { pure : Pure.Set<T> };
+  type Set<T> = (); // Placeholder
 
-  public func toPure<T>(set : Set<T>) : Pure.Set<T> = set.pure;
-
-  public func fromPure<T>(set : Pure.Set<T>) : Queue<T> = { var pure : set };
-
-  public func clone<T>(set : Set<T>) : Set<T> = { var pure = set.pure };
-
-  public func new<T>() : Queue<T> = fromPure(Pure.new());
+  public func new<T>() : Queue<T> {
+    todo()
+  };
 
   public func isEmpty<T>(queue : Queue<T>) : Bool {
     todo()
@@ -29,11 +24,11 @@ module {
     todo()
   };
 
-  public func put<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
+  public func put<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
-  public func delete(s : Set<T>, item : T, compare : (T, T) -> Order.Order) : Bool {
+  public func delete(s : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
@@ -45,11 +40,11 @@ module {
     todo()
   };
 
-  public func toIter(set : Set<T>) : Iter.Iter<T> {
+  public func vals(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
-  public func toIterRev(s : Set<T>) : Iter.Iter<T> {
+  public func valsRev(s : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
@@ -66,6 +61,10 @@ module {
   };
 
   public func diff(s1 : Set<T>, s2 : Set<T>) : Set<T> {
+    todo()
+  };
+
+  public func filter<T>(s : Set<T1>, f : T -> Bool) : Set<T> {
     todo()
   };
 

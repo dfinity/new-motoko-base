@@ -1,12 +1,12 @@
 // Original: `Deque.mo`
 
+import Stack "Stack";
 import { nyi = todo } "../Debug";
 
 module {
+  public type Queue<T> = (Stack<T>, Stack<T>);
 
-  public type Queue<T> = (); // Placeholder
-
-  public func empty<T>() : Queue<T> {
+  public func new<T>() : Queue<T> {
     todo()
   };
 
@@ -14,11 +14,7 @@ module {
     todo()
   };
 
-  func check<T>(queue : Queue<T>) : Queue<T> {
-    todo()
-  };
-
-  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> {
+  public func size<T>(queue : Queue<T>) : Nat {
     todo()
   };
 
@@ -26,7 +22,11 @@ module {
     todo()
   };
 
-  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) {
+  public func peekBack<T>(queue : Queue<T>) : ?T {
+    todo()
+  };
+
+  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> {
     todo()
   };
 
@@ -34,12 +34,11 @@ module {
     todo()
   };
 
-  public func peekBack<T>(queue : Queue<T>) : ?T {
+  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) {
     todo()
   };
 
   public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) {
     todo()
-  };
-
+  }
 }

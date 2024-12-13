@@ -1,68 +1,80 @@
 /// Iterators
 
 import Order "Order";
-import List "functional/List";
+import Stack "pure/Stack";
 import { nyi = todo } "Debug";
 
 module {
 
   public type Iter<T> = { next : () -> ?T };
 
-  public class range(x : Nat, y : Int) {
+  public class range(fromInclusive : Int, toExclusive : Int) {
     todo()
   };
 
-  public class revRange(x : Int, y : Int) {
+  public class rangeRev(fromInclusive : Int, toExclusive : Int) {
     todo()
   };
 
-  public func forEach<A>(xs : Iter<A>, f : (A, Nat) -> ()) {
+  public func forEach<T>(xs : Iter<T>, f : (T, Nat) -> ()) {
     todo()
   };
 
-  public func size<A>(xs : Iter<A>) : Nat {
+  public func size<T>(xs : Iter<T>) : Nat {
     todo()
   };
 
-  public func map<A, B>(xs : Iter<A>, f : A -> B) : Iter<B> {
+  public func map<T1, T2>(xs : Iter<T1>, f : T1 -> T2) : Iter<T2> {
     todo()
   };
 
-  public func filter<A>(xs : Iter<A>, f : A -> Bool) : Iter<A> {
+  public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T> {
     todo()
   };
 
-  public func infinite<A>(x : A) : Iter<A> {
+  public func filterMap<T1, T2>(xs : Iter<T1>, f : T1 -> ?T2) : Iter<T2> {
     todo()
   };
 
-  public func concat<A>(a : Iter<A>, b : Iter<A>) : Iter<A> {
+  public func infinite<T>(x : T) : Iter<T> {
     todo()
   };
 
-  public func fromArray<A>(xs : [A]) : Iter<A> {
+  public func singleton<T>(x : T) : Iter<T> {
     todo()
   };
 
-  public func fromVarArray<A>(xs : [var A]) : Iter<A> {
+  public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T> {
     todo()
   };
 
-  public let fromList = List.toIter;
-
-  public func toArray<A>(xs : Iter<A>) : [A] {
+  public func concatAll<T>(iters : [Iter<T>]) : Iter<T> {
     todo()
   };
 
-  public func toVarArray<A>(xs : Iter<A>) : [var A] {
+  public func fromArray<T>(xs : [T]) : Iter<T> {
     todo()
   };
 
-  public func toList<A>(xs : Iter<A>) : List.List<A> {
+  public func fromVarArray<T>(xs : [var T]) : Iter<T> {
     todo()
   };
 
-  public func sort<A>(xs : Iter<A>, compare : (A, A) -> Order.Order) : Iter<A> {
+  public let fromList = List.vals;
+
+  public func toArray<T>(xs : Iter<T>) : [T] {
+    todo()
+  };
+
+  public func toVarArray<T>(xs : Iter<T>) : [var T] {
+    todo()
+  };
+
+  public func toList<T>(xs : Iter<T>) : List.List<T> {
+    todo()
+  };
+
+  public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
     todo()
   };
 

@@ -5,85 +5,85 @@ import { nyi = todo } "Debug";
 
 module {
 
-  public type Result<Ok, Err> = {
-    #ok : Ok;
-    #err : Err
+  public type Result<R, E> = {
+    #ok : R;
+    #err : E
   };
 
-  public func equal<Ok, Err>(
-    eqOk : (Ok, Ok) -> Bool,
-    eqErr : (Err, Err) -> Bool,
-    r1 : Result<Ok, Err>,
-    r2 : Result<Ok, Err>
+  public func equal<R, E>(
+    eqOk : (R, R) -> Bool,
+    eqErr : (E, E) -> Bool,
+    r1 : Result<R, E>,
+    r2 : Result<R, E>
   ) : Bool {
     todo()
   };
 
-  public func compare<Ok, Err>(
-    compareOk : (Ok, Ok) -> Order.Order,
-    compareErr : (Err, Err) -> Order.Order,
-    r1 : Result<Ok, Err>,
-    r2 : Result<Ok, Err>
+  public func compare<R, E>(
+    compareOk : (R, R) -> Order.Order,
+    compareErr : (E, E) -> Order.Order,
+    r1 : Result<R, E>,
+    r2 : Result<R, E>
   ) : Order.Order {
     todo()
   };
 
   public func chain<R1, R2, Error>(
-    x : Result<R1, Error>,
+    result : Result<R1, Error>,
     y : R1 -> Result<R2, Error>
   ) : Result<R2, Error> {
     todo()
   };
 
-  public func flatten<Ok, Error>(
-    result : Result<Result<Ok, Error>, Error>
-  ) : Result<Ok, Error> {
+  public func flatten<R, E>(
+    result : Result<Result<R, E>, E>
+  ) : Result<R, E> {
     todo()
   };
 
-  public func mapOk<Ok1, Ok2, Error>(
-    x : Result<Ok1, Error>,
-    f : Ok1 -> Ok2
-  ) : Result<Ok2, Error> {
+  public func mapOk<R1, R2, E>(
+    result : Result<R1, E>,
+    f : R1 -> R2
+  ) : Result<R2, E> {
     todo()
   };
 
-  public func mapErr<Ok, Error1, Error2>(
-    x : Result<Ok, Error1>,
-    f : Error1 -> Error2
-  ) : Result<Ok, Error2> {
+  public func mapErr<R, E1, E2>(
+    result : Result<R, E1>,
+    f : E1 -> E2
+  ) : Result<R, E2> {
     todo()
   };
 
-  public func fromOption<R, E>(x : ?R, err : E) : Result<R, E> {
+  public func fromOption<R, E>(ok : ?R, err : E) : Result<R, E> {
     todo()
   };
 
-  public func toOption<R, E>(r : Result<R, E>) : ?R {
+  public func toOption<R, E>(result : Result<R, E>) : ?R {
     todo()
   };
 
-  public func forEach<Ok, Err>(res : Result<Ok, Err>, f : Ok -> ()) {
+  public func forEach<R, E>(result : Result<R, E>, f : R -> ()) {
     todo()
   };
 
-  public func assertOk(r : Result<Any, Any>) {
+  public func assertOk(result : Result<Any, Any>) {
     todo()
   };
 
-  public func assertErr(r : Result<Any, Any>) {
+  public func assertErr(result : Result<Any, Any>) {
     todo()
   };
 
-  public func fromUpper<Ok, Err>(
-    result : { #Ok : Ok; #Err : Err }
-  ) : Result<Ok, Err> {
+  public func fromUpper<R, E>(
+    result : { #Ok : R; #Err : E }
+  ) : Result<R, E> {
     todo()
   };
 
-  public func toUpper<Ok, Err>(
-    result : Result<Ok, Err>
-  ) : { #Ok : Ok; #Err : Err } {
+  public func toUpper<R, E>(
+    result : Result<R, E>
+  ) : { #Ok : R; #Err : E } {
     todo()
   };
 

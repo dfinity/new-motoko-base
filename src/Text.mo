@@ -1,8 +1,6 @@
 /// Utility functions for `Text` values
 
 import Char "Char";
-import List "functional/List";
-import Stack "functional/Stack";
 import Hash "Hash";
 import Iter "Iter";
 import Prim "mo:⛔";
@@ -45,6 +43,8 @@ module {
 
   public func concat(t1 : Text, t2 : Text) : Text = t1 # t2;
 
+  public func concatAll(ts : [Text]) : Text = todo();
+
   public func equal(t1 : Text, t2 : Text) : Bool { t1 == t2 };
 
   public func notEqual(t1 : Text, t2 : Text) : Bool { t1 != t2 };
@@ -69,7 +69,7 @@ module {
     todo()
   };
 
-  public func translate(t : Text, f : Char -> Text) : Text {
+  public func flatMap(t : Text, f : Char -> Text) : Text {
     todo()
   };
 

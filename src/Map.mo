@@ -37,7 +37,7 @@ module {
     todo()
   };
 
-  public func put<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : () {
+  public func add<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : () {
     todo()
   };
 

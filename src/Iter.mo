@@ -72,4 +72,8 @@ module {
     todo()
   };
 
+  public func convert<A, B, T>(A : module { toIter : A -> Iter<T> }, B : module { fromIter : Iter<T> -> B }, a : A) : B {
+    A.toIter(a) |> B.fromIter(_)
+  };
+
 }

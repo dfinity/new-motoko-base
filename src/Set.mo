@@ -33,7 +33,7 @@ module {
     todo()
   };
 
-  public func insert<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
+  public func add<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
     todo()
   };
 

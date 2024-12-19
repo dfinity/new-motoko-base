@@ -1,7 +1,7 @@
 /// Error handling with the Result type
 
 import Order "Order";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

@@ -2,7 +2,7 @@
 
 import Prim "mo:⛔";
 import Int "Int";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

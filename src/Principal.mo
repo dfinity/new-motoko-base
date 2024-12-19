@@ -6,7 +6,7 @@ import Hash "Hash";
 import Order "Order";
 import Array "Array";
 import Text "Text";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

@@ -2,7 +2,7 @@
 
 import Prim "mo:⛔";
 import Hash "Hash";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

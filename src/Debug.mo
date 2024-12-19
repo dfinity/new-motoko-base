@@ -12,8 +12,8 @@ module {
     Prim.trap errorMessage
   };
 
-  public func nyi() : None {
-    trap("Debug.nyi()")
+  public func todo() : None {
+    trap("Debug.todo()")
   };
 
   public func unreachable() : None {

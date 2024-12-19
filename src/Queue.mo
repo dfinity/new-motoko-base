@@ -38,6 +38,14 @@ module {
     todo()
   };
 
+  public func push<T>(queue : Queue<T>, element : T) : () {
+    todo()
+  };
+
+  public func pop<T>(queue : Queue<T>) : ?T {
+    todo()
+  };
+
   public func pushFront<T>(queue : Queue<T>, element : T) : () {
     todo()
   };
@@ -54,11 +62,9 @@ module {
     todo()
   };
 
-  public func vals<T>(queue : Queue<T>) : Iter.Iter<T> {
+  public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
     todo()
   };
-
-  public func toIter<T>(queue : Queue<T>) : Iter.Iter<T> = vals(queue);
 
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
     todo()

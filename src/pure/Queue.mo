@@ -47,9 +47,7 @@ module {
     todo()
   };
 
-  public func toIter<T>(queue : Queue<T>) : Iter.Iter<T> = vals(queue);
-
-  public func vals<T>(queue : Queue<T>) : Iter.Iter<T> {
+  public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
     todo()
   };
 

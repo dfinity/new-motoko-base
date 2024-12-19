@@ -6,7 +6,9 @@ import { nyi = todo } "Debug";
 
 module {
   
-  public func init<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
+  public func new<T>() : [T] = [];
+
+  public func repeat<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
 
   public func generate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
 
@@ -32,15 +34,19 @@ module {
     todo()
   };
 
-  public func sort<T>(array : [var T], compare : (T, T) -> Order.Order) {
+  public func sort<T>(array : [T], compare : (T, T) -> Order.Order) : [T] {
     todo()
   };
 
-  public func sortInPlace<T>(array : [T], compare : (T, T) -> Order.Order) : [T] {
+  public func sortInPlace<T>(array : [var T], compare : (T, T) -> Order.Order) : () {
     todo()
   };
 
   public func reverse<T>(array : [T]) : [T] {
+    todo()
+  };
+
+  public func reverseInPlace<T>(array : [var T]) : () {
     todo()
   };
 
@@ -72,7 +78,7 @@ module {
     todo()
   };
 
-  public func flatten<T>(arrays : [[T]]) : [T] {
+  public func flatten<T>(arrays : Iter.Iter<[T]>) : [T] {
     todo()
   };
 
@@ -82,11 +88,9 @@ module {
     todo()
   };
 
-  public func toIter<T>(array : [T]) : Iter.Iter<T> = array.vals();
-
-  public func vals<T>(array : [T]) : Iter.Iter<T> = array.vals();
-
   public func keys<T>(array : [T]) : Iter.Iter<Nat> = array.keys();
+
+  public func values<T>(array : [T]) : Iter.Iter<T> = array.vals();
 
   public func size<T>(array : [T]) : Nat = array.size();
 

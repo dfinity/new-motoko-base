@@ -27,8 +27,6 @@ module {
     todo()
   };
 
-  public func toIter(t : Text) : Iter.Iter<Char> = t.chars();
-
   public func fromIter(cs : Iter.Iter<Char>) : Text {
     todo()
   };

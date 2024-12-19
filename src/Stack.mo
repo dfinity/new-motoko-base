@@ -78,7 +78,7 @@ module {
     todo()
   };
 
-  public func flatten<T>(stack : Stack<Stack<T>>) : Stack<T> {
+  public func flatten<T>(stack : Iter.Iter<Stack<T>>) : Stack<T> {
     todo()
   };
 
@@ -140,23 +140,19 @@ module {
     todo()
   };
 
-  public func split<T>(n : Nat, stack : Stack<T>) : (Stack<T>, Stack<T>) {
+  public func split<T>(stack : Stack<T>, n : Nat) : (Stack<T>, Stack<T>) {
     todo()
   };
 
-  public func chunks<T>(n : Nat, stack : Stack<T>) : Stack<Stack<T>> {
+  public func chunks<T>(stack : Stack<T>, n : Nat) : Stack<Stack<T>> {
     todo()
   };
 
-  public func vals<T>(stack : Stack<T>) : Iter.Iter<T> {
+  public func values<T>(stack : Stack<T>) : Iter.Iter<T> {
     todo()
   };
 
   public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> {
-    todo()
-  };
-
-  public func toIter<T>(stack : Stack<T>) : Iter.Iter<T> {
     todo()
   };
 

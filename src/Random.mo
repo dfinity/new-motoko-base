@@ -1,7 +1,7 @@
 /// A module for obtaining randomness on the Internet Computer.
 
 import Iter "Iter";
-import Prim "mo:⛔";
+import { nyi = todo } "Debug";
 
 module {
 
@@ -9,7 +9,49 @@ module {
 
   public let blob : shared () -> async Blob = rawRand;
 
-  // Remove `Finite` class?
+  // Opinionated choice of PRNG from a given seed
+  public func new(seed : Blob) : Random {
+    todo()
+  };
 
-  // TODO: `Async` class
+  public class Random(generator : () -> Nat8) {
+
+    public func bool() : Bool {
+      todo()
+    };
+
+    public func byte() : Nat8 {
+      todo()
+    };
+
+    public func intRange(min : Int, maxExclusive : Int) : Int {
+      todo()
+    };
+
+    public func natRange(min : Nat, maxExclusive : Nat) : Nat {
+      todo()
+    };
+
+  };
+
+  public class AsyncRandom(generator : shared () -> async Blob) {
+
+    public func bool() : async Bool {
+      todo()
+    };
+
+    public func byte() : async Nat8 {
+      todo()
+    };
+
+    public func natRange(min : Nat, maxExclusive : Nat) : async Nat {
+      todo()
+    };
+
+    public func intRange(min : Int, maxExclusive : Int) : async Int {
+      todo()
+    };
+
+  };
+
 }

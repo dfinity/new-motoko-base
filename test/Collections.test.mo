@@ -9,7 +9,7 @@ import Text "../src/Text";
 import Queue "../src/Queue";
 import Set "../src/Set";
 import Stack "../src/Stack";
-import Vec "../src/Vec";
+import List "../src/List";
 
 // Purely functional collections
 import PureStack "../src/pure/Stack";
@@ -21,10 +21,10 @@ type T = Any;
 let _ = Queue : SeqLike<Queue.Queue<T>>;
 let _ = Set : SeqLike<Set.Set<T>>;
 let _ = Stack : SeqLike<Stack.Stack<T>>;
-let _ = Vec : SeqLike<Vec.Vec<T>>;
+let _ = List : SeqLike<List.List<T>>;
 
-let _ = PureStack : PureSeqLike<PureStack.Stack<T>>;
-let _ = PureQueue : PureSeqLike<PureQueue.Queue<T>>;
+let _ = PureStack : SeqLike<PureStack.Stack<T>>;
+let _ = PureQueue : SeqLike<PureQueue.Queue<T>>;
 
 type SeqLike<C> = module {
   new : Any; // <T>() -> C;
@@ -34,24 +34,19 @@ type SeqLike<C> = module {
   isEmpty : Any; // (C) -> Bool;
   size : Any; // (C) -> Nat;
   contains : Any; // <T>(C, T) -> Bool;
+  map : Any;
+  filter : Any;
+  filterMap : Any;
+  flatMap : Any;
+  foldLeft : Any;
+  foldRight : Any;
   // equal : (C, C) -> Bool;
-  toIter : Any; // <T>(C) -> Iter.Iter<T>;
-  // fromIter : (Iter.Iter<T>) -> C;
-  // forEach : <T>(C, T -> ()) -> ();
+  values : Any; // <T>(C) -> Iter.Iter<T>;
+  fromValues : Any; // (Iter.Iter<T>) -> C;
+  forEach : <T>(C, T -> ()) -> ();
+  merge : Any;
+  flatten : Any;
   // extend : <T>(C, C) -> ();
-  // concat : <T>([C]) -> C;
+  concat : Any;
   toText : Any; // <T>(C, T -> Text) -> Text
 };
-type PureSeqLike<C> = module {
-  new : <T>() -> C;
-  isEmpty : (C) -> Bool;
-  size : (C) -> Nat;
-  contains : Any; // <T>(C, T) -> Bool;
-  // equal : (C, C) -> Bool;
-  toIter : Any; // <T>(C) -> Iter.Iter<T>;
-  // fromIter : (Iter.Iter<T>) -> C;
-  // forEach : <T>(C, T -> ()) -> ();
-  // concat : <T>([C]) -> C;
-  // extend : <T>(C, C) -> C;
-  toText : Any // <T>(C, T -> Text) -> Text
-}

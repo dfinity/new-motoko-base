@@ -29,6 +29,10 @@ module {
     todo()
   };
 
+  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>) : Bool {
+    todo()
+  };
+
   public func containsKey<K>(map : Map<K, Any>, key : K, compare : (K, K) -> Order.Order) : Bool {
     todo()
   };
@@ -41,15 +45,11 @@ module {
     todo()
   };
 
-  public func insertTake<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : ?V {
+  public func replaceIfExists<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : ?V {
     todo()
   };
 
   public func delete<K, V>(map : Map<K, V>, key : K, compare : (K, K) -> Order.Order) : () {
-    todo()
-  };
-
-  public func take<K, V>(map : Map<K, V>, key : K, compare : (K, K) -> Order.Order) : ?V {
     todo()
   };
 
@@ -65,7 +65,7 @@ module {
     todo()
   };
 
-  public func entriesRev<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)> {
+  public func reverseEntries<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)> {
     todo()
   };
 
@@ -73,13 +73,15 @@ module {
     todo()
   };
 
-  public func vals<V>(map : Map<Any, V>) : Iter.Iter<V> {
+  public func values<V>(map : Map<Any, V>) : Iter.Iter<V> {
     todo()
   };
 
-  public func toIter<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)> = entries(map);
-
   public func fromIter<K, V>(iter : Iter.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V> {
+    todo()
+  };
+
+  public func filter<K, V>(map : Map<K, V>, f : (K, V) -> Bool) : Map<K, V> {
     todo()
   };
 
@@ -119,7 +121,7 @@ module {
     todo()
   };
 
-  public func toText<K, V>(set : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
+  public func toText<K, V>(map : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
     todo()
   };
 

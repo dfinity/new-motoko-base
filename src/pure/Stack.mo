@@ -66,7 +66,7 @@ module {
     todo()
   };
 
-  public func flatten<T>(stack : Stack<Stack<T>>) : Stack<T> {
+  public func flatten<T>(stack : Iter.Iter<Stack<T>>) : Stack<T> {
     todo()
   };
 
@@ -134,7 +134,7 @@ module {
     todo()
   };
 
-  public func vals<T>(stack : Stack<T>) : Iter.Iter<T> {
+  public func values<T>(stack : Stack<T>) : Iter.Iter<T> {
     todo()
   };
 
@@ -149,8 +149,6 @@ module {
   };
 
   public func toVarArray<T>(stack : Stack<T>) : [var T] = Array.toVarArray<T>(toArray<T>(stack));
-
-  public func toIter<T>(stack : Stack<T>) : Iter.Iter<T> = vals(stack);
 
   public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> = todo();
 

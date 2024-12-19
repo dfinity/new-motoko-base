@@ -6,6 +6,8 @@ import { nyi = todo } "Debug";
 
 module {
   
+  public func new<T>() : [T] = [];
+
   public func repeat<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
 
   public func generate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);

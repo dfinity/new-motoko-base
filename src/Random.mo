@@ -9,10 +9,13 @@ module {
 
   public let blob : shared () -> async Blob = rawRand;
 
-  // Opinionated choice of PRNG from a given seed
+  /// Opinionated choice of PRNG from a given seed.
   public func new(seed : Blob) : Random {
     todo()
   };
+
+  /// Uses entropy from the management canister with automatic resupply.
+  public func newAsync() : AsyncRandom = AsyncRandom(rawRand);
 
   public class Random(generator : () -> Nat8) {
 

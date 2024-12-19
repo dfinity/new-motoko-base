@@ -2,7 +2,7 @@
 
 import Iter "../Iter";
 import Stack "Stack";
-import { nyi = todo } "../Debug";
+import { todo } "../Debug";
 
 module {
   public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);

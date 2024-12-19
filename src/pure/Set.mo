@@ -2,7 +2,7 @@
 
 import Iter "../Iter";
 import Order "../Order";
-import { nyi = todo } "../Debug";
+import { todo } "../Debug";
 
 module {
 

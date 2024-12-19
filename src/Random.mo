@@ -19,11 +19,18 @@ module {
 
   public class Random(generator : () -> Nat8) {
 
+    /// Random choice between `true` and `false`.
     public func bool() : Bool {
       todo()
     };
 
+    /// Random `Nat8` value in the range [0, 256).
     public func byte() : Nat8 {
+      todo()
+    };
+
+    /// Random `Float` value in the range [0, 1).
+    public func float() : Float {
       todo()
     };
 
@@ -44,6 +51,10 @@ module {
     };
 
     public func byte() : async Nat8 {
+      todo()
+    };
+
+    public func float() : async Float {
       todo()
     };
 

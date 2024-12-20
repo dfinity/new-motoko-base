@@ -2,6 +2,7 @@
 
 import Prim "mo:⛔";
 import Hash "Hash";
+import Iter "IterType";
 import { nyi = todo } "Debug";
 
 module {
@@ -57,5 +58,11 @@ module {
   public func rem(x : Int, y : Int) : Int { x % y };
 
   public func pow(x : Int, y : Int) : Int { x ** y };
+
+  public class range(fromInclusive : Int, toExclusive : Int) {
+    func next() : Int {
+      todo()
+    }
+  };
 
 }

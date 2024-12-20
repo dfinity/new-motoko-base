@@ -24,7 +24,7 @@ module {
     todo()
   };
 
-  public func insert<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
+  public func add<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
@@ -44,15 +44,13 @@ module {
     todo()
   };
 
-  public func vals<T>(set : Set<T>) : Iter.Iter<T> {
+  public func values<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
-  public func valsRev<T>(set : Set<T>) : Iter.Iter<T> {
+  public func reverseValues<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
-
-  public func toIter<T>(set : Set<T>) : Iter.Iter<T> = vals(set);
 
   public func fromIter<T>(iter : Iter.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
     todo()

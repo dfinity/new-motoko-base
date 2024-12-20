@@ -17,6 +17,10 @@ module {
 
   public func new<T>() : Set<T> = { var pure = Pure.new() };
 
+  public func singleton<T>() : Set<T> {
+    todo()
+  };
+
   public func isEmpty(set : Set<Any>) : Bool {
     todo()
   };
@@ -33,7 +37,7 @@ module {
     todo()
   };
 
-  public func insert<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
+  public func add<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
     todo()
   };
 
@@ -49,15 +53,11 @@ module {
     todo()
   };
 
-  public func toIter<T>(set : Set<T>) : Iter.Iter<T> {
-    vals(set)
-  };
-
-  public func vals<T>(set : Set<T>) : Iter.Iter<T> {
+  public func values<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
-  public func valsRev<T>(set : Set<T>) : Iter.Iter<T> {
+  public func reverseValues<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
@@ -78,6 +78,10 @@ module {
   };
 
   public func diff<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
+    todo()
+  };
+
+  public func filter<T>(set : Set<T>, f : T -> Bool) : Set<T> {
     todo()
   };
 
@@ -102,6 +106,10 @@ module {
     base : A,
     combine : (A, T) -> A
   ) : A {
+    todo()
+  };
+
+  public func flatten<T>(set : Iter.Iter<Set<T>>) : Set<T> {
     todo()
   };
 

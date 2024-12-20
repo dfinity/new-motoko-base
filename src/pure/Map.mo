@@ -28,11 +28,11 @@ module {
     todo()
   };
 
-  public func insert<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : Map<K, V> {
+  public func add<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : Map<K, V> {
     todo()
   };
 
-  public func insertTake<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : (Map<K, V>, ?V) {
+  public func put<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : (Map<K, V>, ?V) {
     todo()
   };
 
@@ -56,7 +56,7 @@ module {
     todo()
   };
 
-  public func entriesRev<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)> {
+  public func reverseEntries<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)> {
     todo()
   };
 
@@ -64,11 +64,9 @@ module {
     todo()
   };
 
-  public func vals<V>(map : Map<Any, V>) : Iter.Iter<V> {
+  public func values<V>(map : Map<Any, V>) : Iter.Iter<V> {
     todo()
   };
-
-  public func toIter<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)> = entries(map);
 
   public func fromIter<K, V>(iter : Iter.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V> {
     todo()

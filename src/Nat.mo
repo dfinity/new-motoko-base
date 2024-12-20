@@ -4,6 +4,7 @@ import Int "Int";
 import Order "Order";
 import Prim "mo:⛔";
 import Char "Char";
+import Iter "IterType";
 import { todo } "Debug";
 
 module {
@@ -59,5 +60,13 @@ module {
   public func bitshiftLeft(x : Nat, y : Nat32) : Nat { Prim.shiftLeft(x, y) };
 
   public func bitshiftRight(x : Nat, y : Nat32) : Nat { Prim.shiftRight(x, y) };
+
+  public class range(fromInclusive : Nat, toExclusive : Nat) {
+    todo()
+  };
+
+  public class rangeInclusive(from : Nat, to : Nat) {
+    todo()
+  };
 
 }

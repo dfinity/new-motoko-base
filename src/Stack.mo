@@ -16,7 +16,7 @@ module {
     var pure = stack
   };
 
-  public func empty<T>() : Stack<T> = { var pure = Pure.new() };
+  public func empty<T>() : Stack<T> = { var pure = Pure.empty() };
 
   public func clone<T>(stack : Stack<T>) : Stack<T> = { var pure = stack.pure };
 

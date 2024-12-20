@@ -3,7 +3,7 @@
 import Prim "mo:⛔";
 import Hash "Hash";
 import Iter "IterType";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 
@@ -60,6 +60,10 @@ module {
   public func pow(x : Int, y : Int) : Int { x ** y };
 
   public class range(fromInclusive : Int, toExclusive : Int) {
+    todo()
+  };
+
+  public class rangeInclusive(from : Nat, to : Nat) {
     todo()
   };
 

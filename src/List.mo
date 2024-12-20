@@ -3,7 +3,7 @@
 import Iter "Iter";
 import Order "Order";
 import Result "Result";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
   public type List<T> = (); // Placeholder

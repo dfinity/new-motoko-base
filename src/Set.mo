@@ -15,7 +15,7 @@ module {
 
   public func clone<T>(set : Set<T>) : Set<T> = { var pure = set.pure };
 
-  public func new<T>() : Set<T> = { var pure = Pure.new() };
+  public func empty<T>() : Set<T> = { var pure = Pure.new() };
 
   public func singleton<T>() : Set<T> {
     todo()

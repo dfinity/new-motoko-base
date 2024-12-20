@@ -7,7 +7,7 @@ import { todo } "../Debug";
 module {
   public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);
 
-  public func new<T>() : Queue<T> {
+  public func empty<T>() : Queue<T> {
     todo()
   };
 

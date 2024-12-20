@@ -8,7 +8,7 @@ import { todo } "Debug";
 module {
   public type List<T> = (); // Placeholder
 
-  public func new<T>() : List<T> {
+  public func empty<T>() : List<T> {
     todo()
   };
 

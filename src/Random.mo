@@ -1,7 +1,7 @@
 /// A module for obtaining randomness on the Internet Computer.
 
 import Iter "Iter";
-import Prim "mo:⛔";
+import { nyi = todo } "Debug";
 
 module {
 
@@ -9,7 +9,63 @@ module {
 
   public let blob : shared () -> async Blob = rawRand;
 
-  // Remove `Finite` class?
+  /// Opinionated choice of PRNG from a given seed.
+  public func new(seed : Blob) : Random {
+    todo()
+  };
 
-  // TODO: `Async` class
+  /// Uses entropy from the management canister with automatic resupply.
+  public func newAsync() : AsyncRandom = AsyncRandom(rawRand);
+
+  public class Random(generator : () -> Nat8) {
+
+    /// Random choice between `true` and `false`.
+    public func bool() : Bool {
+      todo()
+    };
+
+    /// Random `Nat8` value in the range [0, 256).
+    public func byte() : Nat8 {
+      todo()
+    };
+
+    /// Random `Float` value in the range [0, 1).
+    public func float() : Float {
+      todo()
+    };
+
+    public func intRange(min : Int, maxExclusive : Int) : Int {
+      todo()
+    };
+
+    public func natRange(min : Nat, maxExclusive : Nat) : Nat {
+      todo()
+    };
+
+  };
+
+  public class AsyncRandom(generator : shared () -> async Blob) {
+
+    public func bool() : async Bool {
+      todo()
+    };
+
+    public func byte() : async Nat8 {
+      todo()
+    };
+
+    public func float() : async Float {
+      todo()
+    };
+
+    public func natRange(min : Nat, maxExclusive : Nat) : async Nat {
+      todo()
+    };
+
+    public func intRange(min : Int, maxExclusive : Int) : async Int {
+      todo()
+    };
+
+  };
+
 }

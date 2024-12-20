@@ -1,5 +1,9 @@
 /// Characters
+
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
+
 module {
 
   public type Char = Prim.Types.Char;
@@ -40,6 +44,10 @@ module {
 
   public func compare(x : Char, y : Char) : { #less; #equal; #greater } {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
+  };
+
+  public func allValues() : Iter.Iter<Char> {
+    todo()
   };
 
 }

@@ -62,9 +62,7 @@ module {
   public func bitshiftRight(x : Nat, y : Nat32) : Nat { Prim.shiftRight(x, y) };
 
   public class range(fromInclusive : Nat, toExclusive : Nat) {
-    func next() : Nat {
-      todo()
-    }
+    todo()
   };
 
 }

@@ -60,9 +60,7 @@ module {
   public func pow(x : Int, y : Int) : Int { x ** y };
 
   public class range(fromInclusive : Int, toExclusive : Int) {
-    func next() : Int {
-      todo()
-    }
+    todo()
   };
 
 }

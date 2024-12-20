@@ -8,7 +8,7 @@ module {
 
   public type Set<T> = (); // Placeholder
 
-  public func new<T>() : Set<T> {
+  public func empty<T>() : Set<T> {
     todo()
   };
 

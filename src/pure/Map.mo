@@ -8,7 +8,7 @@ module {
 
   public type Map<K, V> = (); // Placeholder
 
-  public func new<K, V>() : Map<K, V> {
+  public func empty<K, V>() : Map<K, V> {
     todo()
   };
 

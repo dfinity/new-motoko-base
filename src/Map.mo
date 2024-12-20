@@ -17,7 +17,7 @@ module {
 
   public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var pure = map.pure };
 
-  public func new<K, V>() : Map<K, V> {
+  public func empty<K, V>() : Map<K, V> {
     todo()
   };
 

@@ -1,6 +1,7 @@
 /// Utility functions on 8-bit unsigned integers
 
 import Nat "Nat";
+import Iter "IterType";
 import Prim "mo:⛔";
 import { todo } "Debug";
 

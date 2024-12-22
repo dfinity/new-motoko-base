@@ -1,6 +1,7 @@
 /// Boolean types and operations
 
 import Prim "mo:⛔";
+import Iter "IterType";
 import { todo } "Debug";
 
 module {
@@ -20,6 +21,10 @@ module {
   };
 
   public func compare(b1 : Bool, b2 : Bool) : { #less; #equal; #greater } {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Bool> {
     todo()
   };
 

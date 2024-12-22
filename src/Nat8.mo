@@ -1,7 +1,9 @@
 /// Utility functions on 8-bit unsigned integers
 
 import Nat "Nat";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
@@ -104,5 +106,9 @@ module {
   public func mulWrap(x : Nat8, y : Nat8) : Nat8 { x *% y };
 
   public func powWrap(x : Nat8, y : Nat8) : Nat8 { x **% y };
+
+  public func allValues() : Iter.Iter<Nat8> {
+    todo()
+  };
 
 }

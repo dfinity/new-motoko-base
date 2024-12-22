@@ -1,7 +1,9 @@
 /// Utility functions on 32-bit unsigned integers
 
 import Nat "Nat";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
@@ -116,5 +118,9 @@ module {
   public func mulWrap(x : Nat32, y : Nat32) : Nat32 { x *% y };
 
   public func powWrap(x : Nat32, y : Nat32) : Nat32 { x **% y };
+
+  public func allValues() : Iter.Iter<Nat32> {
+    todo()
+  };
 
 }

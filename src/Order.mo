@@ -1,5 +1,8 @@
 /// Order
 
+import Iter "IterType";
+import { todo } "Debug";
+
 module {
 
   public type Order = {
@@ -23,5 +26,9 @@ module {
   public func equal(o1 : Order, o2 : Order) : Bool {
     o1 == o2
   };
+
+  public func allValues() : Iter.Iter<Order> {
+    todo()
+  }
 
 }

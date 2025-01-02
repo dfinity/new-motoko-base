@@ -1,4 +1,4 @@
-/// Iterators
+/// Utilities for `Iter` (iterator) values
 
 import Type "IterType";
 import Order "Order";

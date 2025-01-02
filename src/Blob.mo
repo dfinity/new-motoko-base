@@ -1,4 +1,4 @@
-/// Module for working with Blobs: immutable sequence of bytes.
+/// Utilities for `Blob` (immutable sequence of bytes)
 
 import Prim "mo:⛔";
 

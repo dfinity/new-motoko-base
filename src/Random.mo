@@ -1,4 +1,4 @@
-/// A module for obtaining randomness on the Internet Computer.
+/// Random number generation
 
 import Iter "Iter";
 import Prim "mo:⛔";

@@ -1,4 +1,4 @@
-/// Utility functions on 8-bit signed integers
+/// 8-bit signed integers
 
 import Int "Int";
 import Prim "mo:⛔";

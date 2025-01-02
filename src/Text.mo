@@ -1,4 +1,4 @@
-/// Utility functions for `Text` values
+/// `Text` utilities
 
 import Char "Char";
 import Hash "Hash";

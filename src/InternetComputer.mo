@@ -1,4 +1,4 @@
-/// Originally `ExperimentalInternetComputer.mo`
+/// Original: `ExperimentalInternetComputer.mo`
 
 import Prim "mo:⛔";
 import { todo } "Debug";

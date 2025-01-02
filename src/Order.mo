@@ -1,4 +1,4 @@
-/// Order
+/// Utilities for `Order` (comparison between two values)
 
 module {
 

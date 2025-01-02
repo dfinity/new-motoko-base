@@ -1,3 +1,5 @@
+/// `Array` utilities
+
 import Iter "IterType";
 import Order "Order";
 import Result "Result";

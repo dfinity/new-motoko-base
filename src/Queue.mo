@@ -1,4 +1,4 @@
-// Original: `Deque.mo`
+/// Original: `Deque.mo`
 
 import Iter "Iter";
 import Pure "pure/Queue";

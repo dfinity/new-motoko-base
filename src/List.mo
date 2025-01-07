@@ -132,10 +132,6 @@ module {
     todo()
   };
 
-  public func trimToSize<T>(list : List<T>) {
-    todo()
-  };
-
   public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> {
     todo()
   };

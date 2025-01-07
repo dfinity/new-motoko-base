@@ -1,4 +1,4 @@
-/// Original: `OrderedSet.mo`
+/// Mutable stack data structure
 
 import Pure "pure/Stack";
 import Result "Result";

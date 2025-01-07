@@ -6,42 +6,42 @@ module {
 
   public type Char = Prim.Types.Char;
 
-  public let toNat32 : (c : Char) -> Nat32 = Prim.charToNat32;
+  public let toNat32 : (char : Char) -> Nat32 = Prim.charToNat32;
 
-  public let fromNat32 : (w : Nat32) -> Char = Prim.nat32ToChar;
+  public let fromNat32 : (nat32 : Nat32) -> Char = Prim.nat32ToChar;
 
-  public let toText : (c : Char) -> Text = Prim.charToText;
+  public let toText : (char : Char) -> Text = Prim.charToText;
 
-  private let _toUpper : (c : Char) -> Char = Prim.charToUpper;
+  private let _toUpper : (char : Char) -> Char = Prim.charToUpper;
 
-  private let _toLower : (c : Char) -> Char = Prim.charToLower;
+  private let _toLower : (char : Char) -> Char = Prim.charToLower;
 
-  public func isDigit(c : Char) : Bool {
-    Prim.charToNat32(c) -% Prim.charToNat32('0') <= (9 : Nat32)
+  public func isDigit(char : Char) : Bool {
+    Prim.charToNat32(char) -% Prim.charToNat32('0') <= (9 : Nat32)
   };
 
-  public let isWhitespace : (c : Char) -> Bool = Prim.charIsWhitespace;
+  public let isWhitespace : (char : Char) -> Bool = Prim.charIsWhitespace;
 
-  public let isLowercase : (c : Char) -> Bool = Prim.charIsLowercase;
+  public let isLowercase : (char : Char) -> Bool = Prim.charIsLowercase;
 
-  public let isUppercase : (c : Char) -> Bool = Prim.charIsUppercase;
+  public let isUppercase : (char : Char) -> Bool = Prim.charIsUppercase;
 
-  public let isAlphabetic : (c : Char) -> Bool = Prim.charIsAlphabetic;
+  public let isAlphabetic : (char : Char) -> Bool = Prim.charIsAlphabetic;
 
-  public func equal(x : Char, y : Char) : Bool { x == y };
+  public func equal(a : Char, b : Char) : Bool { a == b };
 
-  public func notEqual(x : Char, y : Char) : Bool { x != y };
+  public func notEqual(a : Char, b : Char) : Bool { a != b };
 
-  public func less(x : Char, y : Char) : Bool { x < y };
+  public func less(a : Char, b : Char) : Bool { a < b };
 
-  public func lessOrEqual(x : Char, y : Char) : Bool { x <= y };
+  public func lessOrEqual(a : Char, b : Char) : Bool { a <= b };
 
-  public func greater(x : Char, y : Char) : Bool { x > y };
+  public func greater(a : Char, b : Char) : Bool { a > b };
 
-  public func greaterOrEqual(x : Char, y : Char) : Bool { x >= y };
+  public func greaterOrEqual(a : Char, b : Char) : Bool { a >= b };
 
-  public func compare(x : Char, y : Char) : { #less; #equal; #greater } {
-    if (x < y) { #less } else if (x == y) { #equal } else { #greater }
+  public func compare(a : Char, b : Char) : { #less; #equal; #greater } {
+    if (a < b) { #less } else if (a == b) { #equal } else { #greater }
   };
 
 }

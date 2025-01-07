@@ -1,11 +1,9 @@
-"use strict";
-
 // Generate a test file named `ImportAll.test.mo`
 
-const { join, resolve } = require("path");
-const { existsSync, writeFileSync, mkdirSync } = require("fs");
-const glob = require("fast-glob");
-const execa = require("execa");
+import { join, resolve } from "path";
+import { existsSync, writeFileSync, mkdirSync } from "fs";
+import glob from "fast-glob";
+import execa from "execa";
 
 const outDir = resolve(__dirname, "../generated");
 if (!existsSync(outDir)) {

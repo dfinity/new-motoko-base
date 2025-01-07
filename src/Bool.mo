@@ -7,19 +7,19 @@ module {
 
   public type Bool = Prim.Types.Bool;
 
-  public func logicalAnd(b1 : Bool, b2 : Bool) : Bool { b1 and b2 };
+  public func logicalAnd(a : Bool, b : Bool) : Bool { a and b };
 
-  public func logicalOr(b1 : Bool, b2 : Bool) : Bool { b1 or b2 };
+  public func logicalOr(a : Bool, b : Bool) : Bool { a or b };
 
-  public func logicalXor(b1 : Bool, b2 : Bool) : Bool { b1 != b2 };
+  public func logicalXor(a : Bool, b : Bool) : Bool { a != b };
 
-  public func logicalNot(b : Bool) : Bool { not b };
+  public func logicalNot(bool : Bool) : Bool { not bool };
 
-  public func toText(b : Bool) : Text {
+  public func toText(bool : Bool) : Text {
     todo()
   };
 
-  public func compare(b1 : Bool, b2 : Bool) : { #less; #equal; #greater } {
+  public func compare(a : Bool, b : Bool) : { #less; #equal; #greater } {
     todo()
   };
 

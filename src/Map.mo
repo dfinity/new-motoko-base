@@ -21,6 +21,10 @@ module {
     todo()
   };
 
+  public func singleton<K, V>(key : K, value : V) : Map<K, V> {
+    todo()
+  };
+
   public func isEmpty(map : Map<Any, Any>) : Bool {
     todo()
   };
@@ -44,7 +48,7 @@ module {
   public func add<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : () {
     todo()
   };
-  
+
   public func put<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : ?V {
     todo()
   };

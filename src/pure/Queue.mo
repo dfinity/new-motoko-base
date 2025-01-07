@@ -11,6 +11,10 @@ module {
     todo()
   };
 
+  public func singleton<T>(item : T) : Queue<T> {
+    todo()
+  };
+
   public func isEmpty(queue : Queue<Any>) : Bool {
     todo()
   };
@@ -47,11 +51,23 @@ module {
     todo()
   };
 
+  public func fromIter<T>(iter : Iter<T>) : Queue<T> {
+    todo()
+  };
+
   public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
     todo()
   };
 
   public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>) : Bool {
+    todo()
+  };
+
+  public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
+    todo()
+  };
+
+  public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     todo()
   };
 

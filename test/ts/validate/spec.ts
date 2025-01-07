@@ -1,3 +1,4 @@
+import { error } from "console";
 import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 
@@ -38,7 +39,7 @@ function readModules(dir: string, subdir: string = "") {
   });
 }
 
-// Heuristic regex-based function parser
+// Regex-based module function parser
 function parseFunctions(source: string) {
   const regex = /public\s+func\s+(\w+)([^{=]+)\s*[{=]/g;
   const functions: Func[] = [];
@@ -54,7 +55,7 @@ if (!existsSync(srcDir)) {
   throw new Error(`Directory "${srcDir}" does not exist.`);
 }
 
-let hasError = false;
+const errors: string[] = [];
 
 // Module files
 readModules(srcDir);
@@ -90,58 +91,51 @@ readdirSync(interfaceDir)
         })
       );
     } catch (err) {
-      hasError = true;
       console.error(`Error while reading spec file: ${file}`);
-      // throw err;
+      throw err;
     }
   });
 
-const resolveSpec = (spec: Spec, functions: string[], modules: string[]) => {
+const resolveSpec = (spec: Spec, functions: string[]) => {
   functions.push(
     ...spec.functions.filter((funcName) => !functions.includes(funcName))
-  );
-  modules.push(
-    ...spec.modules.filter((moduleName) => !modules.includes(moduleName))
   );
   spec.extends.forEach((extendName) => {
     const extend = specMap.get(extendName);
     if (!extend) {
-      hasError = true;
-      console.error(
-        `Unknown module: '${extend}' (referenced in '${spec.name}')`
-      );
+      errors.push(`Unknown module: '${extend}' (referenced in '${spec.name}')`);
       return;
     }
-    resolveSpec(extend, functions, modules);
+    resolveSpec(extend, functions);
   });
 };
 specs.forEach((spec) => {
   // Resolve inherited values
   const specFunctions: string[] = [];
-  const specModules: string[] = [];
-  resolveSpec(spec, specFunctions, specModules);
+  resolveSpec(spec, specFunctions);
 
   // Check module functions
-  specModules.forEach((moduleName) => {
+  spec.modules.forEach((moduleName) => {
     const module = moduleMap.get(moduleName);
     if (!module) {
-      hasError = true;
-      console.error(`Unknown module: '${moduleName}'`);
+      errors.push(`Unknown module: '${moduleName}'`);
       return;
     }
     specFunctions.forEach((functionName) => {
       if (
         !module.functions.some((moduleFunc) => functionName == moduleFunc.name)
       ) {
-        hasError = true;
-        console.error(
-          `Missing function: ${module.name}.${functionName}()`
-        );
+        errors.push(`Missing function: ${module.name}.${functionName}()`);
       }
     });
   });
 });
 
-if (hasError) {
+if (errors.length) {
+  errors
+    .filter((err, i) => !errors.slice(0, i).includes(err))
+    .forEach((err) => {
+      console.error(err);
+    });
   process.exit(1);
 }

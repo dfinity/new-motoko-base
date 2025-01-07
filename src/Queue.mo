@@ -10,11 +10,15 @@ module {
 
   public func toPure<T>(queue : Queue<T>) : Pure.Queue<T> = queue.pure;
 
-  public func fromPure<T>(queue : Pure.Queue<T>) : Queue<T> = {
-    var pure = queue
+  public func fromPure<T>(queue : Pure.Queue<T>) : Queue<T> {
+    { var pure = queue }
   };
 
   public func empty<T>() : Queue<T> = { var pure = Pure.empty() };
+
+  public func singleton<T>(item : T) : Queue<T> {
+    { var pure = Pure.singleton(item) }
+  };
 
   public func clone<T>(queue : Queue<T>) : Queue<T> = { var pure = queue.pure };
 
@@ -62,7 +66,19 @@ module {
     todo()
   };
 
+  public func fromIter<T>(iter : Iter<T>) : Queue<T> {
+    todo()
+  };
+
   public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
+    todo()
+  };
+
+  public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
+    todo()
+  };
+
+  public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     todo()
   };
 

@@ -7,19 +7,24 @@
       "isEmpty",
       "singleton",
       "size",
-      "fromIter",
-      "values",
       "all",
       "any",
+      "values",
+      "fromIter",
       "toText"
-    ],
-    "extends": []
+    ]
   },
   {
     "name": "ImperativeCollection",
     "extends": ["Collection"],
     "modules": ["Queue", "Set", "Stack"],
     "functions": ["fromPure", "toPure", "clone"]
+  },
+  {
+    "name": "KeyValueCollection",
+    "extends": ["Collection"],
+    "modules": ["Map"],
+    "functions": ["keys", "entries"]
   },
   {
     "name": "PureCollection",

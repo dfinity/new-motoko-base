@@ -12,6 +12,10 @@ module {
     todo()
   };
 
+  public func singleton<T>(item : T) : Set<T> {
+    todo()
+  };
+
   public func isEmpty<T>(set : Set<T>) : Bool {
     todo()
   };

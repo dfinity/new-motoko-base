@@ -14,9 +14,9 @@ module {
 
   public let toText : (char : Char) -> Text = Prim.charToText;
 
-  public let toUpperCase : (char : Char) -> Char = Prim.charToUpper;
+  public let toUpper : (char : Char) -> Char = Prim.charToUpper;
 
-  public let toLowerCase : (char : Char) -> Char = Prim.charToLower;
+  public let toLower : (char : Char) -> Char = Prim.charToLower;
 
   public func isDigit(char : Char) : Bool {
     Prim.charToNat32(char) -% Prim.charToNat32('0') <= (9 : Nat32)
@@ -24,9 +24,9 @@ module {
 
   public let isWhitespace : (char : Char) -> Bool = Prim.charIsWhitespace;
 
-  public let isLowerCase : (char : Char) -> Bool = Prim.charIsLowercase;
+  public let isLower : (char : Char) -> Bool = Prim.charIsLowercase;
 
-  public let isUpperCase : (char : Char) -> Bool = Prim.charIsUppercase;
+  public let isUpper : (char : Char) -> Bool = Prim.charIsUppercase;
 
   public let isAlphabetic : (char : Char) -> Bool = Prim.charIsAlphabetic;
 

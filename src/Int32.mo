@@ -1,7 +1,9 @@
 /// 32-bit signed integers
 
 import Int "Int";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
@@ -120,5 +122,9 @@ module {
   public func mulWrap(x : Int32, y : Int32) : Int32 { x *% y };
 
   public func powWrap(x : Int32, y : Int32) : Int32 { x **% y };
+
+  public func allValues() : Iter.Iter<Int32> {
+    todo()
+  };
 
 }

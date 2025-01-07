@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Collection",
+    "modules": ["Array", "List"],
+    "functions": [
+      "empty",
+      "isEmpty",
+      "singleton",
+      "size",
+      "fromIter",
+      "values",
+      "all",
+      "any",
+      "toText"
+    ],
+    "extends": []
+  },
+  {
+    "name": "ImperativeCollection",
+    "extends": ["Collection"],
+    "modules": ["Queue", "Set", "Stack"],
+    "functions": ["fromPure", "toPure", "clone"]
+  },
+  {
+    "name": "PureCollection",
+    "extends": ["Collection"],
+    "modules": ["pure/Queue", "pure/Set", "pure/Stack"],
+    "functions": []
+  }
+]

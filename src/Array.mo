@@ -10,7 +10,7 @@ module {
   
   public func empty<T>() : [T] = [];
 
-  public func repeat<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
+  public func init<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
 
   public func generate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
 
@@ -86,6 +86,10 @@ module {
 
   public func singleton<T>(element : T) : [T] = [element];
 
+  public func size<T>(array : [T]) : Nat = array.size();
+
+  public func isEmpty<T>(array : [T]) : Bool = array.size() == 0;
+
   public func fromIter<T>(iter : Iter.Iter<T>) : [T] {
     todo()
   };
@@ -94,7 +98,13 @@ module {
 
   public func values<T>(array : [T]) : Iter.Iter<T> = array.vals();
 
-  public func size<T>(array : [T]) : Nat = array.size();
+  public func all<T>(array : [T], predicate : T -> Bool) : Bool {
+    todo()
+  };
+
+  public func any<T>(array : [T], predicate : T -> Bool) : Bool {
+    todo()
+  };
 
   public func subArray<T>(array : [T], start : Nat, length : Nat) : [T] {
     todo()
@@ -112,11 +122,11 @@ module {
     todo()
   };
 
-  public func slice<T>(array : [T], fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<T> {
+  public func slice<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
     todo()
   };
 
-  public func take<T>(array : [T], length : Int) : [T] {
+  public func toText<T>(array : [T], f : T -> Text) : Text {
     todo()
   };
 

@@ -1,4 +1,4 @@
-/// Purely-functional, singly-linked lists.
+/// Purely-functional, singly-linked list
 
 import Array "../Array";
 import Iter "../IterType";

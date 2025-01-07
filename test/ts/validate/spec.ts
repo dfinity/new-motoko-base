@@ -3,9 +3,10 @@ import { join } from "path";
 
 const rootDir = join(__dirname, "../../..");
 const srcDir = join(rootDir, "src");
-const interfaceDir = join(rootDir, "interface");
+const interfaceDir = join(rootDir, "validation");
 
 interface Module {
+  name: string;
   functions: Func[];
 }
 
@@ -30,16 +31,16 @@ function readModules(dir: string, subdir: string = "") {
     if (entry.isDirectory()) {
       readModules(dir, subPath);
     } else if (entry.isFile() && entry.name.endsWith(".mo")) {
-      const name = entry.name.replace(/\.mo$/, "");
+      const name = subPath.replace(/\.mo$/, "");
       const functions = parseFunctions(readFileSync(fullPath, "utf8"));
-      moduleMap.set(subPath, { functions });
+      moduleMap.set(name, { name, functions });
     }
   });
 }
 
 // Heuristic regex-based function parser
 function parseFunctions(source: string) {
-  const regex = /public\s+func\s+(\w+)([^{]+)\s*{/g;
+  const regex = /public\s+func\s+(\w+)([^{=]+)\s*[{=]/g;
   const functions: Func[] = [];
   let match;
   while ((match = regex.exec(source)) !== null) {
@@ -93,49 +94,48 @@ readdirSync(interfaceDir)
       console.error(`Error while reading spec file: ${file}`);
       // throw err;
     }
-
-    // const content = readFileSync(join(interfaceDir, file), "utf-8");
-    // const lines = content.split("\n");
-    // let spec: Spec | undefined;
-    // for (let line of lines) {
-    //   // Skip comments and trim whitespace
-    //   line = line.replace(/\/\/.*$/, "").trim();
-    //   if (line === "") continue;
-    //   if (line.startsWith(">")) {
-    //     // Beginning of new spec
-    //     spec = {
-    //       names: line
-    //         .substring(1)
-    //         .split(",")
-    //         .map((item) => item.trim()),
-    //       functions: [],
-    //     };
-    //     specs.push(spec);
-    //   } else {
-    //     spec.functions.push(line.trim());
-    //   }
-    // }
   });
 
-const extendSpec=(spec:Spec, extend:Spec)=>
-{
-
-}
+const resolveSpec = (spec: Spec, functions: string[], modules: string[]) => {
+  functions.push(
+    ...spec.functions.filter((funcName) => !functions.includes(funcName))
+  );
+  modules.push(
+    ...spec.modules.filter((moduleName) => !modules.includes(moduleName))
+  );
+  spec.extends.forEach((extendName) => {
+    const extend = specMap.get(extendName);
+    if (!extend) {
+      hasError = true;
+      console.error(
+        `Unknown module: '${extend}' (referenced in '${spec.name}')`
+      );
+      return;
+    }
+    resolveSpec(extend, functions, modules);
+  });
+};
 specs.forEach((spec) => {
-  const specModules=[...spec.modules];
-  const specFunctions = [...spec.functions];
-  spec.extends.forEach(extend=>extendSpec(spec,extend))
+  // Resolve inherited values
+  const specFunctions: string[] = [];
+  const specModules: string[] = [];
+  resolveSpec(spec, specFunctions, specModules);
+
+  // Check module functions
   specModules.forEach((moduleName) => {
     const module = moduleMap.get(moduleName);
     if (!module) {
       hasError = true;
-      console.error(`Unknown module: ${module}`);
+      console.error(`Unknown module: '${moduleName}'`);
+      return;
     }
     specFunctions.forEach((functionName) => {
-      if (!module.functions.some((func) => func.name == functionName)) {
+      if (
+        !module.functions.some((moduleFunc) => functionName == moduleFunc.name)
+      ) {
         hasError = true;
         console.error(
-          `Module '${moduleName}' is missing function '${functionName}'`
+          `Missing function: ${module.name}.${functionName}()`
         );
       }
     });

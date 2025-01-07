@@ -1,4 +1,4 @@
-/// Utility functions on 16-bit unsigned integers
+/// 16-bit unsigned integers
 
 import Nat "Nat";
 import Iter "IterType";

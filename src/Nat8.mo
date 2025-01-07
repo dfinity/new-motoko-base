@@ -1,4 +1,4 @@
-/// Utility functions on 8-bit unsigned integers
+/// 8-bit unsigned integers
 
 import Nat "Nat";
 import Iter "IterType";

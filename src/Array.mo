@@ -1,3 +1,5 @@
+/// `Array` utilities
+
 import Iter "IterType";
 import Order "Order";
 import Result "Result";
@@ -6,7 +8,7 @@ import { todo } "Debug";
 
 module {
   
-  public func new<T>() : [T] = [];
+  public func empty<T>() : [T] = [];
 
   public func repeat<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
 

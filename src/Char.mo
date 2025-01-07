@@ -1,8 +1,8 @@
-/// Characters
+/// Utilities for `Char` (character)
 
 import Iter "IterType";
-import Prim "mo:⛔";
 import { todo } "Debug";
+import Prim "mo:⛔";
 
 module {
 

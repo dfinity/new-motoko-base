@@ -1,4 +1,4 @@
-/// Order
+/// Utilities for `Order` (comparison between two values)
 
 import Iter "IterType";
 import { todo } "Debug";

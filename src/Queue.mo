@@ -1,4 +1,4 @@
-// Original: `Deque.mo`
+/// Original: `Deque.mo`
 
 import Iter "Iter";
 import Pure "pure/Queue";
@@ -14,7 +14,7 @@ module {
     var pure = queue
   };
 
-  public func new<T>() : Queue<T> = { var pure = Pure.new() };
+  public func empty<T>() : Queue<T> = { var pure = Pure.empty() };
 
   public func clone<T>(queue : Queue<T>) : Queue<T> = { var pure = queue.pure };
 

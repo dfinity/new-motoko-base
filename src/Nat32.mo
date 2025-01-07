@@ -1,4 +1,4 @@
-/// Utility functions on 32-bit unsigned integers
+/// 32-bit unsigned integers
 
 import Nat "Nat";
 import Iter "IterType";

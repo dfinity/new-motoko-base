@@ -1,4 +1,4 @@
-/// Hash values
+/// `Hash` utilities
 
 import Prim "mo:⛔";
 import Iter "Iter";

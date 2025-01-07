@@ -1,4 +1,4 @@
-/// Utility functions on 64-bit signed integers
+/// 64-bit signed integers
 
 import Int "Int";
 import Iter "IterType";

@@ -1,4 +1,4 @@
-/// Utility functions on 16-bit signed integers
+/// 16-bit signed integers
 
 import Int "Int";
 import Iter "IterType";

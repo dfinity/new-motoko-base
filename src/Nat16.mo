@@ -2,6 +2,8 @@
 
 import Nat "Nat";
 import Prim "mo:⛔";
+import { todo } "Debug";
+import Iter "Iter";
 
 module {
 
@@ -116,5 +118,17 @@ module {
   public func mulWrap(x : Nat16, y : Nat16) : Nat16 { x *% y };
 
   public func powWrap(x : Nat16, y : Nat16) : Nat16 { x **% y };
+
+  public class range(fromInclusive : Nat16, toExclusive : Nat16) {
+    todo()
+  };
+
+  public class rangeInclusive(from : Nat16, to : Nat16) {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Nat16> {
+    todo()
+  }
 
 }

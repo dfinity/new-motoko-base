@@ -2,6 +2,8 @@
 
 import Int "Int";
 import Prim "mo:⛔";
+import { todo } "Debug";
+import Iter "Iter";
 
 module {
 
@@ -115,5 +117,18 @@ module {
 
   public func mulWrap(x : Int64, y : Int64) : Int64 { x *% y };
 
-  public func powWrap(x : Int64, y : Int64) : Int64 { x **% y }
+  public func powWrap(x : Int64, y : Int64) : Int64 { x **% y };
+
+  public class range(fromInclusive : Int64, toExclusive : Int64) {
+    todo()
+  };
+
+  public class rangeInclusive(from : Int64, to : Int64) {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Int64> {
+    todo()
+  }
+
 }

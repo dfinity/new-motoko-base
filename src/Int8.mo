@@ -1,6 +1,8 @@
 /// 8-bit signed integers
 
 import Int "Int";
+import { todo } "Debug";
+import Iter "Iter";
 import Prim "mo:⛔";
 
 module {
@@ -116,5 +118,17 @@ module {
   public func mulWrap(x : Int8, y : Int8) : Int8 { x *% y };
 
   public func powWrap(x : Int8, y : Int8) : Int8 { x **% y };
+
+  public class range(fromInclusive : Int8, toExclusive : Int8) {
+    todo()
+  };
+
+  public class rangeInclusive(from : Int8, to : Int8) {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Int8> {
+    todo()
+  }
 
 }

@@ -1,35 +1,38 @@
-[
-  {
-    "name": "Collection",
-    "modules": ["Array", "List"],
-    "functions": [
-      "empty",
-      "isEmpty",
-      "singleton",
-      "size",
-      "all",
-      "any",
-      "values",
-      "fromIter",
-      "toText"
-    ]
-  },
-  {
-    "name": "ImperativeCollection",
-    "extends": ["Collection"],
-    "modules": ["Queue", "Set", "Stack"],
-    "functions": ["fromPure", "toPure", "clone"]
-  },
-  {
-    "name": "KeyValueCollection",
-    "extends": ["Collection"],
-    "modules": ["Map"],
-    "functions": ["keys", "entries"]
-  },
-  {
-    "name": "PureCollection",
-    "extends": ["Collection"],
-    "modules": ["pure/Queue", "pure/Set", "pure/Stack"],
-    "functions": []
-  }
-]
+{
+  "$schema": "schema/index.json",
+  "specs": [
+    {
+      "name": "Collection",
+      "modules": ["Array", "List"],
+      "functions": [
+        "empty",
+        "isEmpty",
+        "singleton",
+        "size",
+        "all",
+        "any",
+        "values",
+        "fromIter",
+        "toText"
+      ]
+    },
+    {
+      "name": "ImperativeCollection",
+      "extends": ["Collection"],
+      "modules": ["Queue", "Set", "Stack"],
+      "functions": ["fromPure", "toPure", "clone"]
+    },
+    {
+      "name": "KeyValueCollection",
+      "extends": ["Collection"],
+      "modules": ["Map"],
+      "functions": ["keys", "entries"]
+    },
+    {
+      "name": "PureCollection",
+      "extends": ["Collection"],
+      "modules": ["pure/Queue", "pure/Set", "pure/Stack"],
+      "functions": []
+    }
+  ]
+}

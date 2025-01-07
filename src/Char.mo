@@ -1,6 +1,8 @@
 /// Utilities for `Char` (character)
 
 import Prim "mo:⛔";
+import Iter "IterType";
+import { todo } "Debug";
 
 module {
 
@@ -42,6 +44,10 @@ module {
 
   public func compare(a : Char, b : Char) : { #less; #equal; #greater } {
     if (a < b) { #less } else if (a == b) { #equal } else { #greater }
+  };
+
+  public func allValues() : Iter.Iter<Char> {
+    todo()
   };
 
 }

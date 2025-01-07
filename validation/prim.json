@@ -1,0 +1,45 @@
+{
+  "$schema": "schema/index.json",
+  "specs": [
+    {
+      "name": "Prim",
+      "modules": [
+        "Array",
+        "Blob",
+        "Bool",
+        "Char",
+        "Option",
+        "Principal",
+        "Text"
+      ],
+      "functions": ["equal"]
+    },
+    {
+      "name": "Number",
+      "extends": ["Prim"],
+      "modules": ["Float"],
+      "functions": []
+    },
+    {
+      "name": "IntNat",
+      "extends": ["Number"],
+      "modules": ["Int", "Nat"],
+      "functions": ["range", "rangeInclusive", "min", "max"]
+    },
+    {
+      "name": "FixedSizeIntNat",
+      "extends": ["IntNat"],
+      "modules": [
+        "Int8",
+        "Int16",
+        "Int32",
+        "Int64",
+        "Nat8",
+        "Nat16",
+        "Nat32",
+        "Nat64"
+      ],
+      "functions": ["allValues"]
+    }
+  ]
+}

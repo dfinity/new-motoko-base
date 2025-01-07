@@ -69,4 +69,8 @@ module {
     todo()
   };
 
+  public func allValues() : Iter.Iter<Nat> {
+    todo()
+  }
+
 }

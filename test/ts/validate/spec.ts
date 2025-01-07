@@ -1,4 +1,3 @@
-import { error } from "console";
 import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 
@@ -41,11 +40,11 @@ function readModules(dir: string, subdir: string = "") {
 
 // Regex-based module function parser
 function parseFunctions(source: string) {
-  const regex = /public\s+func\s+(\w+)([^{=]+)\s*[{=]/g;
+  const regex = /public\s+(func|let|class)\s+(\w+)([^{=]+)\s*[{=]/g;
   const functions: Func[] = [];
   let match;
   while ((match = regex.exec(source)) !== null) {
-    const [_, name, type] = match;
+    const [_, _declarationType, name, type] = match;
     functions.push({ name, type: type.replace(/\s+/g, " ") });
   }
   return functions;
@@ -70,7 +69,10 @@ readdirSync(interfaceDir)
       const content = JSON.parse(
         readFileSync(join(interfaceDir, file), "utf-8")
       );
-      const items = Array.isArray(content) ? content : [content];
+      const items = content.specs;
+      if (!Array.isArray(items)) {
+        throw new Error(`Unexpected spec format`);
+      }
       specs.push(
         ...items.map((config: any, index: number) => {
           const name = config.name;
@@ -103,7 +105,7 @@ const resolveSpec = (spec: Spec, functions: string[]) => {
   spec.extends.forEach((extendName) => {
     const extend = specMap.get(extendName);
     if (!extend) {
-      errors.push(`Unknown module: '${extend}' (referenced in '${spec.name}')`);
+      errors.push(`Unknown module: '${extendName}' (referenced in '${spec.name}')`);
       return;
     }
     resolveSpec(extend, functions);

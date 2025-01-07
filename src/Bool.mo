@@ -2,6 +2,7 @@
 
 import Prim "mo:⛔";
 import { todo } "Debug";
+import Iter "IterType";
 
 module {
 
@@ -15,11 +16,19 @@ module {
 
   public func logicalNot(bool : Bool) : Bool { not bool };
 
+  public func equal(a : Bool, b : Bool) : Bool {
+    a == b
+  };
+
+  public func compare(a : Bool, b : Bool) : { #less; #equal; #greater } {
+    todo()
+  };
+
   public func toText(bool : Bool) : Text {
     todo()
   };
 
-  public func compare(a : Bool, b : Bool) : { #less; #equal; #greater } {
+  public func allValues() : Iter.Iter<Bool> {
     todo()
   };
 

@@ -2,6 +2,7 @@
 
 import Iter "../Iter";
 import Stack "Stack";
+import Order "../Order";
 import { todo } "../Debug";
 
 module {

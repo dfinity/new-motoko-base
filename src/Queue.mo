@@ -2,6 +2,7 @@
 
 import Iter "IterType";
 import Pure "pure/Queue";
+import Order "Order";
 import { todo } "Debug";
 
 module {

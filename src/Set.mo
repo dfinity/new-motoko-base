@@ -3,7 +3,7 @@
 import Pure "pure/Set";
 import Iter "Iter";
 import Order "Order";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 
@@ -15,7 +15,11 @@ module {
 
   public func clone<T>(set : Set<T>) : Set<T> = { var pure = set.pure };
 
-  public func new<T>() : Set<T> = { var pure = Pure.new() };
+  public func empty<T>() : Set<T> = { var pure = Pure.empty() };
+
+  public func singleton<T>() : Set<T> {
+    todo()
+  };
 
   public func singleton<T>() : Set<T> {
     todo()
@@ -37,7 +41,7 @@ module {
     todo()
   };
 
-  public func insert<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
+  public func add<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : () {
     todo()
   };
 

@@ -4,13 +4,13 @@ import Array "../Array";
 import Iter "../IterType";
 import Order "../Order";
 import Result "../Result";
-import { nyi = todo } "../Debug";
+import { todo } "../Debug";
 
 module {
 
   public type Stack<T> = ?(Stack<T>, T);
 
-  public func new<T>() : Stack<T> = null;
+  public func empty<T>() : Stack<T> = null;
 
   public func isEmpty(stack : Stack<Any>) : Bool = todo();
 

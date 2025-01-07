@@ -4,7 +4,7 @@ import Int "Int";
 import Order "Order";
 import Prim "mo:⛔";
 import Char "Char";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

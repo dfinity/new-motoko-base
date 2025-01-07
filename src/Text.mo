@@ -1,11 +1,11 @@
-/// Utility functions for `Text` values
+/// `Text` utilities
 
 import Char "Char";
 import Hash "Hash";
 import Iter "Iter";
 import Order "Order";
 import Prim "mo:⛔";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

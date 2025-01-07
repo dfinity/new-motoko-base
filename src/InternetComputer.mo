@@ -1,7 +1,7 @@
-/// Originally `ExperimentalInternetComputer.mo`
+/// Original: `ExperimentalInternetComputer.mo`
 
 import Prim "mo:⛔";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

@@ -3,7 +3,7 @@
 import Pure "pure/Map";
 import Iter "Iter";
 import Order "Order";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 
@@ -17,7 +17,7 @@ module {
 
   public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var pure = map.pure };
 
-  public func new<K, V>() : Map<K, V> {
+  public func empty<K, V>() : Map<K, V> {
     todo()
   };
 
@@ -41,7 +41,11 @@ module {
     todo()
   };
 
-  public func insert<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : () {
+  public func add<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : () {
+    todo()
+  };
+  
+  public func put<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : ?V {
     todo()
   };
 

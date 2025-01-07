@@ -1,8 +1,8 @@
-/// Iterators
+/// Utilities for `Iter` (iterator) values
 
 import Type "IterType";
 import Order "Order";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 

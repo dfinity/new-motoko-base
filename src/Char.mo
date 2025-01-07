@@ -1,5 +1,7 @@
-/// Characters
+/// Utilities for `Char` (character)
+
 import Prim "mo:⛔";
+
 module {
 
   public type Char = Prim.Types.Char;

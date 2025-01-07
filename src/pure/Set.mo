@@ -2,13 +2,13 @@
 
 import Iter "../Iter";
 import Order "../Order";
-import { nyi = todo } "../Debug";
+import { todo } "../Debug";
 
 module {
 
   public type Set<T> = (); // Placeholder
 
-  public func new<T>() : Set<T> {
+  public func empty<T>() : Set<T> {
     todo()
   };
 
@@ -24,7 +24,7 @@ module {
     todo()
   };
 
-  public func insert<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
+  public func add<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 

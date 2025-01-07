@@ -1,13 +1,13 @@
-// Original: `Deque.mo`
+/// Original: `Deque.mo`
 
 import Iter "../Iter";
 import Stack "Stack";
-import { nyi = todo } "../Debug";
+import { todo } "../Debug";
 
 module {
   public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);
 
-  public func new<T>() : Queue<T> {
+  public func empty<T>() : Queue<T> {
     todo()
   };
 

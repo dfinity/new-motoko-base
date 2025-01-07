@@ -1,9 +1,9 @@
 /// 8-bit signed integers
 
 import Int "Int";
-import { todo } "Debug";
-import Iter "Iter";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
@@ -129,6 +129,6 @@ module {
 
   public func allValues() : Iter.Iter<Int8> {
     todo()
-  }
+  };
 
 }

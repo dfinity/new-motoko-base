@@ -1,7 +1,7 @@
 /// 16-bit signed integers
 
 import Int "Int";
-import Iter "Iter";
+import Iter "IterType";
 import Prim "mo:⛔";
 import { todo } "Debug";
 
@@ -133,6 +133,6 @@ module {
 
   public func allValues() : Iter.Iter<Int16> {
     todo()
-  }
+  };
 
 }

@@ -1,7 +1,7 @@
 /// Original: `OrderedMap.mo`
 
 import Pure "pure/Map";
-import Iter "Iter";
+import Iter "IterType";
 import Order "Order";
 import { todo } "Debug";
 

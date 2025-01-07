@@ -3,7 +3,7 @@
 import Pure "pure/Stack";
 import Result "Result";
 import Order "Order";
-import Iter "Iter";
+import Iter "IterType";
 import { todo } "Debug";
 
 module {

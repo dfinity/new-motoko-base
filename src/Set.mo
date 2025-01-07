@@ -1,7 +1,7 @@
 /// Original: `OrderedSet.mo`
 
 import Pure "pure/Set";
-import Iter "Iter";
+import Iter "IterType";
 import Order "Order";
 import { todo } "Debug";
 

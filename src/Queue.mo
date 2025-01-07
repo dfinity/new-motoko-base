@@ -1,6 +1,6 @@
 /// Original: `Deque.mo`
 
-import Iter "Iter";
+import Iter "IterType";
 import Pure "pure/Queue";
 import { todo } "Debug";
 
@@ -66,7 +66,7 @@ module {
     todo()
   };
 
-  public func fromIter<T>(iter : Iter<T>) : Queue<T> {
+  public func fromIter<T>(iter : Iter.Iter<T>) : Queue<T> {
     todo()
   };
 

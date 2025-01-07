@@ -1,9 +1,9 @@
 /// 32-bit signed integers
 
 import Int "Int";
+import Iter "IterType";
 import Prim "mo:⛔";
 import { todo } "Debug";
-import Iter "Iter";
 
 module {
 
@@ -133,6 +133,6 @@ module {
 
   public func allValues() : Iter.Iter<Int32> {
     todo()
-  }
+  };
 
 }

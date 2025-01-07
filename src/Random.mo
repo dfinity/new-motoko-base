@@ -1,6 +1,6 @@
 /// Random number generation
 
-import Iter "Iter";
+import Iter "IterType";
 import Prim "mo:⛔";
 
 module {

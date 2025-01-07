@@ -1,9 +1,9 @@
 /// 8-bit unsigned integers
 
 import Nat "Nat";
+import Iter "IterType";
 import Prim "mo:⛔";
 import { todo } "Debug";
-import Iter "Iter";
 
 module {
 
@@ -117,6 +117,6 @@ module {
 
   public func allValues() : Iter.Iter<Nat8> {
     todo()
-  }
+  };
 
 }

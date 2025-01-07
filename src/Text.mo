@@ -2,7 +2,7 @@
 
 import Char "Char";
 import Hash "Hash";
-import Iter "Iter";
+import Iter "IterType";
 import Order "Order";
 import Prim "mo:⛔";
 import { todo } "Debug";

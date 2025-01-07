@@ -1,7 +1,7 @@
 /// `Hash` utilities
 
 import Prim "mo:⛔";
-import Iter "Iter";
+import Iter "IterType";
 import { todo } "Debug";
 
 module {

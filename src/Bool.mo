@@ -1,8 +1,8 @@
 /// Boolean types and operations
 
 import Prim "mo:⛔";
-import { todo } "Debug";
 import Iter "IterType";
+import { todo } "Debug";
 
 module {
 

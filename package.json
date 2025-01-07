@@ -7,6 +7,7 @@
     "postinstall": "mops install",
     "format:check": "npx -p prettier -p pretty-quick pretty-quick --check",
     "format": "npx -p prettier -p pretty-quick pretty-quick",
+    "test": "run-s test:ts test:mops",
     "test:ts": "cd test/ts && tsx",
     "test:mops": "mops test --reporter files",
     "validate": "cd test/ts && tsx validate",

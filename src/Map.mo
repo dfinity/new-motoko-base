@@ -89,6 +89,10 @@ module {
     todo()
   };
 
+  public func forEach<K, V>(map : Map<K, V>, f : (K, V) -> ()) {
+    todo()
+  };
+
   public func filter<K, V>(map : Map<K, V>, f : (K, V) -> Bool) : Map<K, V> {
     todo()
   };

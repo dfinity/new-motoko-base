@@ -76,6 +76,10 @@ module {
     todo()
   };
 
+  public func forEach<T>(set : Set<T>, f : T -> ()) {
+    todo()
+  };
+
   public func filter<T>(set : Set<T>, f : T -> Bool) : Set<T> {
     todo()
   };

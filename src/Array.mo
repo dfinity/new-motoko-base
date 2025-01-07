@@ -52,6 +52,10 @@ module {
     todo()
   };
 
+  public func forEach<T>(array : [T], f : T -> ()) {
+    todo()
+  };
+
   public func map<T, Y>(array : [T], f : T -> Y) : [Y] = Prim.Array_tabulate<Y>(array.size(), func i = f(array[i]));
 
   public func filter<T>(array : [T], f : T -> Bool) : [T] {

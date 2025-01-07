@@ -71,6 +71,22 @@ module {
     todo()
   };
 
+  public func forEach<T>(queue : Queue<T>, f : T -> ()) {
+    todo()
+  };
+
+  public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
+    todo()
+  };
+
+  public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T> {
+    todo()
+  };
+
+  public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
+    todo()
+  };
+
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
     todo()
   };

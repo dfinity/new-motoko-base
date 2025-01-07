@@ -134,4 +134,8 @@ module {
     todo()
   };
 
+  public func compare<T>(array1 : [T], array2 : [T], compare : (T, T) -> Order.Order) : Order.Order {
+    todo()
+  };
+
 }

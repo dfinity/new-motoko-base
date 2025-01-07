@@ -124,4 +124,8 @@ module {
     todo()
   };
 
+  public func compare<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Order.Order {
+    todo()
+  };
+
 }

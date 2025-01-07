@@ -98,7 +98,15 @@ module {
     todo()
   };
 
+  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>) : Bool {
+    todo()
+  };
+
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
+    todo()
+  };
+
+  public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order {
     todo()
   };
 

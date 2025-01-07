@@ -84,19 +84,11 @@ module {
     todo()
   };
 
-  public func isStrictPrefixOf<T>(list : List<T>, prefix : List<T>, equal : (T, T) -> Bool) : Bool {
-    todo()
-  };
-
   public func suffix<T>(list : List<T>, length : Nat) : List<T> {
     todo()
   };
 
   public func isSuffixOf<T>(list : List<T>, suffix : List<T>, equal : (T, T) -> Bool) : Bool {
-    todo()
-  };
-
-  public func isStrictSuffixOf<T>(list : List<T>, suffix : List<T>, equal : (T, T) -> Bool) : Bool {
     todo()
   };
 

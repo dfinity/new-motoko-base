@@ -137,4 +137,8 @@ module {
     todo()
   };
 
+  public func compare<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compareKey : (K, K) -> Order.Order, compareValue : (V, V) -> Order.Order) : Order.Order {
+    todo()
+  };
+
 }

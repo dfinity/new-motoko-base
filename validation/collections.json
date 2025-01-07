@@ -9,6 +9,8 @@
         "isEmpty",
         "singleton",
         "size",
+        "equal",
+        "compare",
         "forEach",
         "filter",
         "map",

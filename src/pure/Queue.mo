@@ -91,4 +91,8 @@ module {
     todo()
   };
 
+  public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order {
+    todo()
+  };
+
 }

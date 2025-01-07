@@ -1,11 +1,9 @@
 /// Natural numbers with infinite precision
 
 import Int "Int";
-import Order "Order";
-import Prim "mo:⛔";
-import Char "Char";
-import Iter "IterType";
+import Iter "Iter";
 import { todo } "Debug";
+import Prim "mo:⛔";
 
 module {
 
@@ -66,6 +64,10 @@ module {
   };
 
   public class rangeInclusive(from : Nat, to : Nat) {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Nat> {
     todo()
   };
 

@@ -1,7 +1,9 @@
 /// 64-bit signed integers
 
 import Int "Int";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
@@ -115,5 +117,9 @@ module {
 
   public func mulWrap(x : Int64, y : Int64) : Int64 { x *% y };
 
-  public func powWrap(x : Int64, y : Int64) : Int64 { x **% y }
+  public func powWrap(x : Int64, y : Int64) : Int64 { x **% y };
+
+  public func allValues() : Iter.Iter<Bool> {
+    todo()
+  };
 }

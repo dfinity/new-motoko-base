@@ -1,6 +1,6 @@
 /// Mutable stack data structure
 
-import Pure "pure/Stack";
+import Immutable "immutable/Stack";
 import Result "Result";
 import Order "Order";
 import Iter "IterType";
@@ -8,17 +8,17 @@ import { todo } "Debug";
 
 module {
 
-  public type Stack<T> = { var pure : Pure.Stack<T> };
+  public type Stack<T> = { var immutable : Immutable.Stack<T> };
 
-  public func toPure<T>(stack : Stack<T>) : Pure.Stack<T> = stack.pure;
+  public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T> = stack.immutable;
 
-  public func fromPure<T>(stack : Pure.Stack<T>) : Stack<T> = {
-    var pure = stack
+  public func thaw<T>(stack : Immutable.Stack<T>) : Stack<T> = {
+    var immutable = stack
   };
 
-  public func empty<T>() : Stack<T> = { var pure = Pure.empty() };
+  public func empty<T>() : Stack<T> = { var immutable = Immutable.empty() };
 
-  public func clone<T>(stack : Stack<T>) : Stack<T> = { var pure = stack.pure };
+  public func clone<T>(stack : Stack<T>) : Stack<T> = { var immutable = stack.immutable };
 
   public func isEmpty(stack : Stack<Any>) : Bool {
     todo()

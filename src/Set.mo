@@ -1,21 +1,21 @@
 /// Original: `OrderedSet.mo`
 
-import Pure "pure/Set";
+import Immutable "immutable/Set";
 import Iter "IterType";
 import Order "Order";
 import { todo } "Debug";
 
 module {
 
-  public type Set<T> = { var pure : Pure.Set<T> };
+  public type Set<T> = { var immutable : Immutable.Set<T> };
 
-  public func toPure<T>(set : Set<T>) : Pure.Set<T> = set.pure;
+  public func freeze<T>(set : Set<T>) : Immutable.Set<T> = set.immutable;
 
-  public func fromPure<T>(set : Pure.Set<T>) : Set<T> = { var pure = set };
+  public func thaw<T>(set : Immutable.Set<T>) : Set<T> = { var immutable = set };
 
-  public func clone<T>(set : Set<T>) : Set<T> = { var pure = set.pure };
+  public func clone<T>(set : Set<T>) : Set<T> = { var immutable = set.immutable };
 
-  public func empty<T>() : Set<T> = { var pure = Pure.empty() };
+  public func empty<T>() : Set<T> = { var immutable = Immutable.empty() };
 
   public func singleton<T>() : Set<T> {
     todo()

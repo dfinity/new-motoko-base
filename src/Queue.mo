@@ -1,27 +1,27 @@
 /// Original: `Deque.mo`
 
 import Iter "IterType";
-import Pure "pure/Queue";
+import Functional "functional/Queue";
 import Order "Order";
 import { todo } "Debug";
 
 module {
 
-  public type Queue<T> = { var pure : Pure.Queue<T> };
+  public type Queue<T> = { var functional : Functional.Queue<T> };
 
-  public func toPure<T>(queue : Queue<T>) : Pure.Queue<T> = queue.pure;
+  public func toFunctional<T>(queue : Queue<T>) : Functional.Queue<T> = queue.functional;
 
-  public func fromPure<T>(queue : Pure.Queue<T>) : Queue<T> {
-    { var pure = queue }
+  public func fromFunctional<T>(queue : Functional.Queue<T>) : Queue<T> {
+    { var functional = queue }
   };
 
-  public func empty<T>() : Queue<T> = { var pure = Pure.empty() };
+  public func empty<T>() : Queue<T> = { var functional = Functional.empty() };
 
   public func singleton<T>(item : T) : Queue<T> {
-    { var pure = Pure.singleton(item) }
+    { var functional = Functional.singleton(item) }
   };
 
-  public func clone<T>(queue : Queue<T>) : Queue<T> = { var pure = queue.pure };
+  public func clone<T>(queue : Queue<T>) : Queue<T> = { var functional = queue.functional };
 
   public func isEmpty<T>(queue : Queue<T>) : Bool {
     todo()

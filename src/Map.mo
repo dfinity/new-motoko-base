@@ -1,21 +1,21 @@
 /// Original: `OrderedMap.mo`
 
-import Pure "pure/Map";
+import Functional "functional/Map";
 import Iter "IterType";
 import Order "Order";
 import { todo } "Debug";
 
 module {
 
-  type Map<K, V> = { var pure : Pure.Map<K, V> };
+  type Map<K, V> = { var functional : Functional.Map<K, V> };
 
-  public func toPure<K, V>(map : Map<K, V>) : Pure.Map<K, V> = map.pure;
+  public func toFunctional<K, V>(map : Map<K, V>) : Functional.Map<K, V> = map.functional;
 
-  public func fromPure<K, V>(map : Pure.Map<K, V>) : Map<K, V> = {
-    var pure = map
+  public func fromFunctional<K, V>(map : Functional.Map<K, V>) : Map<K, V> = {
+    var functional = map
   };
 
-  public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var pure = map.pure };
+  public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var functional = map.functional };
 
   public func empty<K, V>() : Map<K, V> {
     todo()

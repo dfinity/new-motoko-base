@@ -1,6 +1,6 @@
 /// Mutable stack data structure
 
-import Pure "pure/Stack";
+import Functional "functional/Stack";
 import Result "Result";
 import Order "Order";
 import Iter "IterType";
@@ -8,17 +8,17 @@ import { todo } "Debug";
 
 module {
 
-  public type Stack<T> = { var pure : Pure.Stack<T> };
+  public type Stack<T> = { var functional : Functional.Stack<T> };
 
-  public func toPure<T>(stack : Stack<T>) : Pure.Stack<T> = stack.pure;
+  public func toFunctional<T>(stack : Stack<T>) : Functional.Stack<T> = stack.functional;
 
-  public func fromPure<T>(stack : Pure.Stack<T>) : Stack<T> = {
-    var pure = stack
+  public func fromFunctional<T>(stack : Functional.Stack<T>) : Stack<T> = {
+    var functional = stack
   };
 
-  public func empty<T>() : Stack<T> = { var pure = Pure.empty() };
+  public func empty<T>() : Stack<T> = { var functional = Functional.empty() };
 
-  public func clone<T>(stack : Stack<T>) : Stack<T> = { var pure = stack.pure };
+  public func clone<T>(stack : Stack<T>) : Stack<T> = { var functional = stack.functional };
 
   public func isEmpty(stack : Stack<Any>) : Bool {
     todo()

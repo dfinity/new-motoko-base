@@ -26,7 +26,7 @@
       "name": "ImperativeCollection",
       "extends": ["Collection"],
       "modules": ["Queue", "Set", "Stack"],
-      "functions": ["fromPure", "toPure", "clone"]
+      "functions": ["fromFunctional", "toFunctional", "clone"]
     },
     {
       "name": "KeyValueCollection",

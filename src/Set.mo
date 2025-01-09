@@ -1,21 +1,21 @@
 /// Original: `OrderedSet.mo`
 
-import Pure "pure/Set";
+import Functional "functional/Set";
 import Iter "IterType";
 import Order "Order";
 import { todo } "Debug";
 
 module {
 
-  public type Set<T> = { var pure : Pure.Set<T> };
+  public type Set<T> = { var functional : Functional.Set<T> };
 
-  public func toPure<T>(set : Set<T>) : Pure.Set<T> = set.pure;
+  public func toFunctional<T>(set : Set<T>) : Functional.Set<T> = set.functional;
 
-  public func fromPure<T>(set : Pure.Set<T>) : Set<T> = { var pure = set };
+  public func fromFunctional<T>(set : Functional.Set<T>) : Set<T> = { var functional = set };
 
-  public func clone<T>(set : Set<T>) : Set<T> = { var pure = set.pure };
+  public func clone<T>(set : Set<T>) : Set<T> = { var functional = set.functional };
 
-  public func empty<T>() : Set<T> = { var pure = Pure.empty() };
+  public func empty<T>() : Set<T> = { var functional = Functional.empty() };
 
   public func singleton<T>() : Set<T> {
     todo()

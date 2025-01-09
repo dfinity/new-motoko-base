@@ -35,9 +35,9 @@
       "functions": ["keys", "entries"]
     },
     {
-      "name": "PureCollection",
+      "name": "FunctionalCollection",
       "extends": ["Collection"],
-      "modules": ["pure/Queue", "pure/Set", "pure/Stack"],
+      "modules": ["functional/Queue", "functional/Set", "functional/Stack"],
       "functions": []
     }
   ]

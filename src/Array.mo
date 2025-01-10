@@ -1,4 +1,4 @@
-/// `Array` utilities
+/// Array utilities
 
 import Iter "IterType";
 import Order "Order";
@@ -10,13 +10,9 @@ module {
   
   public func empty<T>() : [T] = [];
 
-  public func init<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
+  public func init<T>(size : Nat, initValue : T) : [T] = todo();
 
   public func generate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
-
-  public func generateVar<T>(size : Nat, generator : Nat -> T) : [var T] {
-    todo()
-  };
 
   public func fromVarArray<T>(varArray : [var T]) : [T] = Prim.Array_tabulate<T>(varArray.size(), func i = varArray[i]);
 
@@ -40,15 +36,7 @@ module {
     todo()
   };
 
-  public func sortInPlace<T>(array : [var T], compare : (T, T) -> Order.Order) : () {
-    todo()
-  };
-
   public func reverse<T>(array : [T]) : [T] {
-    todo()
-  };
-
-  public func reverseInPlace<T>(array : [var T]) : () {
     todo()
   };
 

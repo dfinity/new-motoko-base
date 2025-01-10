@@ -3,7 +3,7 @@
   "specs": [
     {
       "name": "Collection",
-      "modules": ["Array", "List"],
+      "modules": ["Array", "List", "VarArray"],
       "functions": [
         "empty",
         "isEmpty",

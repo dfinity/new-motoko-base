@@ -1,6 +1,6 @@
-/// Typesafe nulls
+/// Type-safe nullable values
 
-import Debug "Debug";
+import Runtime "Runtime";
 
 module {
 
@@ -59,17 +59,17 @@ module {
   };
 
   public func assertSome(x : ?Any) = switch x {
-    case null { Debug.trap("Option.assertSome()") };
+    case null { Runtime.trap("Option.assertSome()") };
     case _ {}
   };
 
   public func assertNull(x : ?Any) = switch x {
     case null {};
-    case _ { Debug.trap("Option.assertNull()") }
+    case _ { Runtime.trap("Option.assertNull()") }
   };
 
   public func unwrap<T>(x : ?T) : T = switch x {
-    case null { Debug.trap("Option.unwrap()") };
+    case null { Runtime.trap("Option.unwrap()") };
     case (?x_) { x_ }
   };
 

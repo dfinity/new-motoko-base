@@ -44,25 +44,25 @@ module {
 
   };
 
-  public class AsyncRandom(generator : shared () -> async Blob) {
+  public class AsyncRandom(generator : () -> async* Nat8) {
 
-    public func bool() : async Bool {
+    public func bool() : async* Bool {
       todo()
     };
 
-    public func byte() : async Nat8 {
+    public func byte() : async* Nat8 {
       todo()
     };
 
-    public func float() : async Float {
+    public func float() : async* Float {
       todo()
     };
 
-    public func natRange(min : Nat, maxExclusive : Nat) : async Nat {
+    public func natRange(min : Nat, maxExclusive : Nat) : async* Nat {
       todo()
     };
 
-    public func intRange(min : Int, maxExclusive : Int) : async Int {
+    public func intRange(min : Int, maxExclusive : Int) : async* Int {
       todo()
     };
 

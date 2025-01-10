@@ -15,7 +15,23 @@ module {
   };
 
   /// Uses entropy from the management canister with automatic resupply.
-  public func newAsync() : AsyncRandom = AsyncRandom(rawRand);
+  public func newAsync() : AsyncRandom {
+    var iter = Iter.empty<Nat8>();
+    AsyncRandom(
+      func() {
+        switch (iter.next()) {
+          case (?n) n;
+          case null {
+            iter := (await blob()).vals();
+            switch (iter.next()) {
+              case (?n) n;
+              case null Debug.unreachable()
+            }
+          }
+        }
+      }
+    )
+  };
 
   public class Random(generator : () -> Nat8) {
 

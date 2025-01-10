@@ -84,7 +84,7 @@ module {
     todo()
   };
 
-  public func singleton<T>(element : T) : [var T] = [element];
+  public func singleton<T>(element : T) : [var T] = [var element];
 
   public func size<T>(array : [var T]) : Nat = array.size();
 

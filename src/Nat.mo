@@ -59,11 +59,11 @@ module {
 
   public func bitshiftRight(x : Nat, y : Nat32) : Nat { Prim.shiftRight(x, y) };
 
-  public class range(fromInclusive : Nat, toExclusive : Nat) {
+  public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat> {
     todo()
   };
 
-  public class rangeInclusive(from : Nat, to : Nat) {
+  public func rangeInclusive(from : Nat, to : Nat) : Iter.Iter<Nat> {
     todo()
   };
 

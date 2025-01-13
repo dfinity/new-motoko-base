@@ -107,11 +107,11 @@ module {
 
   public func powWrap(x : Nat8, y : Nat8) : Nat8 { x **% y };
 
-  public class range(fromInclusive : Nat8, toExclusive : Nat8) {
+  public func range(fromInclusive : Nat8, toExclusive : Nat8) : Iter.Iter<Nat8> {
     todo()
   };
 
-  public class rangeInclusive(from : Nat8, to : Nat8) {
+  public func rangeInclusive(from : Nat8, to : Nat8) : Iter.Iter<Nat8> {
     todo()
   };
 

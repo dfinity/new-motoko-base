@@ -59,11 +59,11 @@ module {
 
   public func pow(x : Int, y : Int) : Int { x ** y };
 
-  public class range(fromInclusive : Int, toExclusive : Int) {
+  public func range(fromInclusive : Int, toExclusive : Int) : Iter.Iter<Int> {
     todo()
   };
 
-  public class rangeInclusive(from : Nat, to : Nat) {
+  public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int> {
     todo()
   };
 

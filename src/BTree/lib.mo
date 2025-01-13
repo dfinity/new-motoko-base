@@ -1,4 +1,5 @@
 /// The BTree module collection of functions and types
+// Contributed by Byron Becker - https://github.com/canscale/StableHeapBTreeMap/
 
 import Types "./Types";
 import AU "./ArrayUtil";

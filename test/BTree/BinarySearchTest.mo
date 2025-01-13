@@ -4,7 +4,7 @@ import T "mo:matchers/Testable";
 
 import Nat "mo:base/Nat";
 
-import B "../src/BinarySearch";
+import B "../../src/BTree/BinarySearch";
 
 func testableSearchResult(r: B.SearchResult): T.TestableItem<B.SearchResult> = {
   display = func(r: B.SearchResult): Text = debug_show(r);

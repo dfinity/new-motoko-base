@@ -1,4 +1,4 @@
-import BT "../src/BTree";
+import BT "../../src/BTree";
 import T "mo:matchers/Testable";
 import Nat "mo:base/Nat";
 

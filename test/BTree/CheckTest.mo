@@ -4,9 +4,9 @@ import T "mo:matchers/Testable";
 
 import Nat "mo:base/Nat";
 
-import Check "../src/Check";
-import BT "../src/BTree";
-import Types "../src/Types";
+import Check "../../src/BTree/Check";
+import BT "../../src/BTree";
+import Types "../../src/BTree/Types";
 
 let orderResultTestableItem = func(result: Check.CheckOrderResult): T.TestableItem<Check.CheckOrderResult> = {
   display = func(r: Check.CheckOrderResult): Text = switch(r) { 

@@ -4,9 +4,9 @@ import T "mo:matchers/Testable";
 
 import Nat "mo:base/Nat";
 
-import BT "../src/BTree";
+import BT "../../src/BTree";
 import BTM "./BTreeMatchers";
-import Check "../src/Check";
+import Check "../../src/BTree/Check";
 import Rand3000 "./rand3000";
 
 func testableNatBTree(t: BT.BTree<Nat, Nat>): T.TestableItem<BT.BTree<Nat, Nat>> {

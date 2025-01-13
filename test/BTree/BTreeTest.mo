@@ -6,7 +6,7 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 
-import BT "../src/BTree";
+import BT "../../src/BTree";
 import BTM "./BTreeMatchers";
 
 func testableNatBTree(t: BT.BTree<Nat, Nat>): T.TestableItem<BT.BTree<Nat, Nat>> {

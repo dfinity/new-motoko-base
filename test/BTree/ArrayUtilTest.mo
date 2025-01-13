@@ -2,7 +2,7 @@ import M "mo:matchers/Matchers";
 import S "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 
-import AU "../src/ArrayUtil";
+import AU "../../src/BTree/ArrayUtil";
 import AUM "./ArrayUtilMatchers";
 
 

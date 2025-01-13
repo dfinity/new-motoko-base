@@ -8,7 +8,7 @@ module {
 
   public type Iter<T> = Type.Iter<T>;
 
-  public func empty<T>() : Iter<T> = { next = func() { null } };
+  public func empty<T>() : Iter<T> = { next = func _ = null };
 
   public class range(fromInclusive : Int, toExclusive : Int) {
     todo()

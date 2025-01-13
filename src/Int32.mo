@@ -123,11 +123,11 @@ module {
 
   public func powWrap(x : Int32, y : Int32) : Int32 { x **% y };
 
-  public class range(fromInclusive : Int32, toExclusive : Int32) {
+  public func range(fromInclusive : Int32, toExclusive : Int32) : Iter.Iter<Int32> {
     todo()
   };
 
-  public class rangeInclusive(from : Int32, to : Int32) {
+  public func rangeInclusive(from : Int32, to : Int32) : Iter.Iter<Int32> {
     todo()
   };
 

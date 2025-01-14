@@ -8,12 +8,12 @@ module {
 
   public type Time = Int;
   public type Duration = {
-    #days : Nat;
-    #hours : Nat;
-    #minutes : Nat;
-    #seconds : Nat;
-    #milliseconds : Nat;
-    #nanoseconds : Nat;
+    #Days : Nat;
+    #Hours : Nat;
+    #Minutes : Nat;
+    #Seconds : Nat;
+    #Milliseconds : Nat;
+    #Nanoseconds : Nat;
   };
 
   public let now : () -> Time = func() : Int = Prim.nat64ToNat(Prim.time());
@@ -22,12 +22,12 @@ module {
 
   public func toNanoseconds(duration : Duration) : Nat {
     switch duration {
-      case (#days n) n * 86_400_000_000_000;
-      case (#hours n) n * 3_600_000_000_000;
-      case (#minutes n) n * 60_000_000_000;
-      case (#seconds n) n * 1_000_000_000;
-      case (#milliseconds n) n * 1_000_000;
-      case (#nanoseconds n) n
+      case (#Days n) n * 86_400_000_000_000;
+      case (#Hours n) n * 3_600_000_000_000;
+      case (#Minutes n) n * 60_000_000_000;
+      case (#Seconds n) n * 1_000_000_000;
+      case (#Milliseconds n) n * 1_000_000;
+      case (#Nanoseconds n) n
     };
   };
 

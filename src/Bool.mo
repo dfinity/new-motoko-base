@@ -20,7 +20,7 @@ module {
     a == b
   };
 
-  public func compare(a : Bool, b : Bool) : { #less; #equal; #greater } {
+  public func compare(a : Bool, b : Bool) : { #Less; #Equal; #Greater } {
     todo()
   };
 

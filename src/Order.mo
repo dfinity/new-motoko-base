@@ -6,9 +6,9 @@ import Iter "IterType";
 module {
 
   public type Order = {
-    #less;
-    #equal;
-    #greater
+    #Less;
+    #Equal;
+    #Greater
   };
 
   public func equal(o1 : Order, o2 : Order) : Bool {

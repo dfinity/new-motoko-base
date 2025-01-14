@@ -21,9 +21,9 @@ module {
 
   public func hash(blob : Blob) : Nat32 = Prim.hashBlob blob;
 
-  public func compare(b1 : Blob, b2 : Blob) : { #less; #equal; #greater } {
+  public func compare(b1 : Blob, b2 : Blob) : { #Less; #Equal; #Greater } {
     let c = Prim.blobCompare(b1, b2);
-    if (c < 0) #less else if (c == 0) #equal else #greater
+    if (c < 0) #Less else if (c == 0) #Equal else #Greater
   };
 
   public func equal(blob1 : Blob, blob2 : Blob) : Bool { blob1 == blob2 };

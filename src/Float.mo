@@ -52,11 +52,11 @@ module {
 
   public let log : (x : Float) -> Float = Prim.log;
 
-  public func format(fmt : { #fix : Nat8; #exp : Nat8; #gen : Nat8; #exact }, x : Float) : Text = switch fmt {
-    case (#fix(prec)) { Prim.floatToFormattedText(x, prec, 0) };
-    case (#exp(prec)) { Prim.floatToFormattedText(x, prec, 1) };
-    case (#gen(prec)) { Prim.floatToFormattedText(x, prec, 2) };
-    case (#exact) { Prim.floatToFormattedText(x, 17, 2) }
+  public func format(fmt : { #Fix : Nat8; #Exp : Nat8; #Gen : Nat8; #Exact }, x : Float) : Text = switch fmt {
+    case (#Fix(prec)) { Prim.floatToFormattedText(x, prec, 0) };
+    case (#Exp(prec)) { Prim.floatToFormattedText(x, prec, 1) };
+    case (#Gen(prec)) { Prim.floatToFormattedText(x, prec, 2) };
+    case (#Exact) { Prim.floatToFormattedText(x, 17, 2) }
   };
 
   public let toText : Float -> Text = Prim.floatToText;
@@ -93,7 +93,7 @@ module {
 
   public func greaterOrEqual(x : Float, y : Float) : Bool { x >= y };
 
-  public func compare(x : Float, y : Float) : { #less; #equal; #greater } {
+  public func compare(x : Float, y : Float) : { #Less; #Equal; #Greater } {
     todo()
   };
 

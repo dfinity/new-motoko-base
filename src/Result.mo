@@ -6,8 +6,8 @@ import { todo } "Debug";
 module {
 
   public type Result<R, E> = {
-    #ok : R;
-    #err : E
+    #Ok : R;
+    #Err : E
   };
 
   public func equal<R, E>(
@@ -72,18 +72,6 @@ module {
   };
 
   public func assertErr(result : Result<Any, Any>) {
-    todo()
-  };
-
-  public func fromUpper<R, E>(
-    result : { #Ok : R; #Err : E }
-  ) : Result<R, E> {
-    todo()
-  };
-
-  public func toUpper<R, E>(
-    result : Result<R, E>
-  ) : { #Ok : R; #Err : E } {
     todo()
   };
 

@@ -49,8 +49,8 @@ module {
 
   public func greaterOrEqual(x : Nat64, y : Nat64) : Bool { x >= y };
 
-  public func compare(x : Nat64, y : Nat64) : { #less; #equal; #greater } {
-    if (x < y) { #less } else if (x == y) { #equal } else { #greater }
+  public func compare(x : Nat64, y : Nat64) : { #Less; #Equal; #Greater } {
+    if (x < y) { #Less } else if (x == y) { #Equal } else { #Greater }
   };
 
   public func add(x : Nat64, y : Nat64) : Nat64 { x + y };

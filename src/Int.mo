@@ -41,8 +41,8 @@ module {
 
   public func greaterOrEqual(x : Int, y : Int) : Bool { x >= y };
 
-  public func compare(x : Int, y : Int) : { #less; #equal; #greater } {
-    if (x < y) { #less } else if (x == y) { #equal } else { #greater }
+  public func compare(x : Int, y : Int) : { #Less; #Equal; #Greater } {
+    if (x < y) { #Less } else if (x == y) { #Equal } else { #Greater }
   };
 
   public func neg(x : Int) : Int { -x };

@@ -70,9 +70,9 @@ module {
   };
 
   public type Pattern = {
-    #char : Char;
-    #text : Text;
-    #predicate : (Char -> Bool)
+    #Char : Char;
+    #Text : Text;
+    #Predicate : (Char -> Bool)
   };
 
   public func split(t : Text, p : Pattern) : Iter.Iter<Text> {

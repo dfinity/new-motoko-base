@@ -42,8 +42,8 @@ module {
 
   public func greaterOrEqual(a : Char, b : Char) : Bool { a >= b };
 
-  public func compare(a : Char, b : Char) : { #less; #equal; #greater } {
-    if (a < b) { #less } else if (a == b) { #equal } else { #greater }
+  public func compare(a : Char, b : Char) : { #Less; #Equal; #Greater } {
+    if (a < b) { #Less } else if (a == b) { #Equal } else { #Greater }
   };
 
   public func allValues() : Iter.Iter<Char> {

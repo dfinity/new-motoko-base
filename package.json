@@ -29,7 +29,7 @@
     "ic-mops": "^1.1.1",
     "mo-dev": "^0.13.0",
     "prettier": "2",
-    "prettier-plugin-motoko": "^0.10.1",
+    "prettier-plugin-motoko": "^0.10.3",
     "pretty-quick": "3"
   }
 }

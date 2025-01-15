@@ -16,24 +16,10 @@ module {
 
   /// Uses entropy from the management canister with automatic resupply.
   public func newAsync() : AsyncRandom {
-    var iter = Iter.empty<Nat8>();
-    AsyncRandom(
-      func() : async* Nat8 {
-        switch (iter.next()) {
-          case (?n) n;
-          case null {
-            iter := (await blob()).vals();
-            switch (iter.next()) {
-              case (?n) n;
-              case null unreachable()
-            }
-          }
-        }
-      }
-    )
+    todo()
   };
 
-  public class Random(generator : () -> Nat8) {
+  public class Random(generator : () -> Blob) {
 
     /// Random choice between `true` and `false`.
     public func bool() : Bool {
@@ -61,7 +47,7 @@ module {
 
   };
 
-  public class AsyncRandom(generator : () -> async* Nat8) {
+  public class AsyncRandom(generator : () -> async* Blob) {
 
     public func bool() : async* Bool {
       todo()

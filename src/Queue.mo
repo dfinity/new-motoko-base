@@ -1,27 +1,27 @@
 /// Original: `Deque.mo`
 
 import Iter "IterType";
-import Pure "pure/Queue";
+import Immutable "immutable/Queue";
 import Order "Order";
 import { todo } "Debug";
 
 module {
 
-  public type Queue<T> = { var pure : Pure.Queue<T> };
+  public type Queue<T> = { var immutable : Immutable.Queue<T> };
 
-  public func toPure<T>(queue : Queue<T>) : Pure.Queue<T> = queue.pure;
+  public func freeze<T>(queue : Queue<T>) : Immutable.Queue<T> = queue.immutable;
 
-  public func fromPure<T>(queue : Pure.Queue<T>) : Queue<T> {
-    { var pure = queue }
+  public func thaw<T>(queue : Immutable.Queue<T>) : Queue<T> {
+    { var immutable = queue }
   };
 
-  public func empty<T>() : Queue<T> = { var pure = Pure.empty() };
+  public func empty<T>() : Queue<T> = { var immutable = Immutable.empty() };
 
   public func singleton<T>(item : T) : Queue<T> {
-    { var pure = Pure.singleton(item) }
+    { var immutable = Immutable.singleton(item) }
   };
 
-  public func clone<T>(queue : Queue<T>) : Queue<T> = { var pure = queue.pure };
+  public func clone<T>(queue : Queue<T>) : Queue<T> = { var immutable = queue.immutable };
 
   public func isEmpty<T>(queue : Queue<T>) : Bool {
     todo()

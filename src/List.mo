@@ -40,11 +40,15 @@ module {
     todo()
   };
 
-  public func push<T>(list : List<T>, item : T) : () {
+  public func add<T>(list : List<T>, item : T) : () {
     todo()
   };
 
-  public func pop<T>(list : List<T>) : ?T {
+  public func put<T>(list : List<T>, index : Nat, item : T) : () {
+    todo()
+  };
+
+  public func removeLast<T>(list : List<T>) : ?T {
     todo()
   };
 

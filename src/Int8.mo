@@ -631,4 +631,16 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Int8, y : Int8) : Int8 { x **% y };
 
+  public func range(fromInclusive : Int8, toExclusive : Int8) : Iter.Iter<Int8> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Int8, to : Int8) : Iter.Iter<Int8> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Int8> {
+    todo()
+  };
+
 }

@@ -7,7 +7,7 @@ import Prim "mo:⛔";
 import { todo } "Debug";
 
 module {
-  
+
   public func empty<T>() : [T] = [];
 
   public func init<T>(size : Nat, initValue : T) : [T] = todo();

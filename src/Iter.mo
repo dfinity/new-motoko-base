@@ -8,6 +8,16 @@ module {
 
   public type Iter<T> = Type.Iter<T>;
 
+  public func empty<T>() : Iter<T> = { next = func _ = null };
+
+  public class range(fromInclusive : Int, toExclusive : Int) {
+    todo()
+  };
+
+  public class rangeRev(fromInclusive : Int, toExclusive : Int) {
+    todo()
+  };
+
   public func forEach<T>(iter : Iter<T>, f : (T, Nat) -> ()) {
     todo()
   };

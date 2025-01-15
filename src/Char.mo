@@ -1,49 +1,69 @@
 /// Utilities for `Char` (character)
 
-import Iter "IterType";
-import { todo } "Debug";
 import Prim "mo:⛔";
+import Iter "Iter";
+import { todo } "Debug";
 
 module {
 
+  /// Characters represented as Unicode code points.
   public type Char = Prim.Types.Char;
 
-  public let toNat32 : (char : Char) -> Nat32 = Prim.charToNat32;
+  /// Convert character `c` to a word containing its Unicode scalar value.
+  public let toNat32 : (c : Char) -> Nat32 = Prim.charToNat32;
 
-  public let fromNat32 : (nat32 : Nat32) -> Char = Prim.nat32ToChar;
+  /// Convert `w` to a character.
+  /// Traps if `w` is not a valid Unicode scalar value.
+  /// Value `w` is valid if, and only if, `w < 0xD800 or (0xE000 <= w and w <= 0x10FFFF)`.
+  public let fromNat32 : (w : Nat32) -> Char = Prim.nat32ToChar;
 
-  public let toText : (char : Char) -> Text = Prim.charToText;
+  /// Convert character `c` to single character text.
+  public let toText : (c : Char) -> Text = Prim.charToText;
 
-  public let toUpper : (char : Char) -> Char = Prim.charToUpper;
+  // Not exposed pending multi-char implementation.
+  private let _toUpper : (c : Char) -> Char = Prim.charToUpper;
 
-  public let toLower : (char : Char) -> Char = Prim.charToLower;
+  // Not exposed pending multi-char implementation.
+  private let _toLower : (c : Char) -> Char = Prim.charToLower;
 
-  public func isDigit(char : Char) : Bool {
-    Prim.charToNat32(char) -% Prim.charToNat32('0') <= (9 : Nat32)
+  /// Returns `true` when `c` is a decimal digit between `0` and `9`, otherwise `false`.
+  public func isDigit(c : Char) : Bool {
+    Prim.charToNat32(c) -% Prim.charToNat32('0') <= (9 : Nat32)
   };
 
-  public let isWhitespace : (char : Char) -> Bool = Prim.charIsWhitespace;
+  /// Returns the Unicode _White_Space_ property of `c`.
+  public let isWhitespace : (c : Char) -> Bool = Prim.charIsWhitespace;
 
-  public let isLower : (char : Char) -> Bool = Prim.charIsLowercase;
+  /// Returns the Unicode _Lowercase_ property of `c`.
+  public let isLowercase : (c : Char) -> Bool = Prim.charIsLowercase;
 
-  public let isUpper : (char : Char) -> Bool = Prim.charIsUppercase;
+  /// Returns the Unicode _Uppercase_ property of `c`.
+  public let isUppercase : (c : Char) -> Bool = Prim.charIsUppercase;
 
-  public let isAlphabetic : (char : Char) -> Bool = Prim.charIsAlphabetic;
+  /// Returns the Unicode _Alphabetic_ property of `c`.
+  public let isAlphabetic : (c : Char) -> Bool = Prim.charIsAlphabetic;
 
-  public func equal(a : Char, b : Char) : Bool { a == b };
+  /// Returns `x == y`.
+  public func equal(x : Char, y : Char) : Bool { x == y };
 
-  public func notEqual(a : Char, b : Char) : Bool { a != b };
+  /// Returns `x != y`.
+  public func notEqual(x : Char, y : Char) : Bool { x != y };
 
-  public func less(a : Char, b : Char) : Bool { a < b };
+  /// Returns `x < y`.
+  public func less(x : Char, y : Char) : Bool { x < y };
 
-  public func lessOrEqual(a : Char, b : Char) : Bool { a <= b };
+  /// Returns `x <= y`.
+  public func lessOrEqual(x : Char, y : Char) : Bool { x <= y };
 
-  public func greater(a : Char, b : Char) : Bool { a > b };
+  /// Returns `x > y`.
+  public func greater(x : Char, y : Char) : Bool { x > y };
 
-  public func greaterOrEqual(a : Char, b : Char) : Bool { a >= b };
+  /// Returns `x >= y`.
+  public func greaterOrEqual(x : Char, y : Char) : Bool { x >= y };
 
-  public func compare(a : Char, b : Char) : { #less; #equal; #greater } {
-    if (a < b) { #less } else if (a == b) { #equal } else { #greater }
+  /// Returns the order of `x` and `y`.
+  public func compare(x : Char, y : Char) : { #less; #equal; #greater } {
+    if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 
   public func allValues() : Iter.Iter<Char> {

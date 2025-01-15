@@ -24,15 +24,15 @@ module {
     todo()
   };
 
-  public func contains<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Bool {
+  public func contains<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Bool {
     todo()
   };
 
-  public func add<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
+  public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Set<T> {
     todo()
   };
 
-  public func delete<T>(set : Set<T>, item : T, compare : (T, T) -> Order.Order) : Set<T> {
+  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Set<T> {
     todo()
   };
 

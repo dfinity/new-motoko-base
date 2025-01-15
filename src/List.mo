@@ -72,7 +72,7 @@ module {
     todo()
   };
 
-  public func binarySearch<T>(list : List<T>, element : T, compare : (T, T) -> Order.Order) : ?Nat {
+  public func binarySearch<T>(list : List<T>, compare : (T, T) -> Order.Order, element : T) : ?Nat {
     todo()
   };
 

@@ -9,8 +9,8 @@
 /// ```
 
 import Prim "mo:⛔";
-import Prelude "Prelude";
 import Hash "Hash";
+import Runtime "Runtime";
 
 module {
 
@@ -59,7 +59,7 @@ module {
           case 7 { "7" };
           case 8 { "8" };
           case 9 { "9" };
-          case _ { Prelude.unreachable() }
+          case _ { Runtime.unreachable() }
         }
       ) # text;
       int := int / base

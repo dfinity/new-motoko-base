@@ -11,6 +11,10 @@ module {
     todo()
   };
 
+  public func singleton<T>(item : T) : Queue<T> {
+    todo()
+  };
+
   public func isEmpty(queue : Queue<Any>) : Bool {
     todo()
   };

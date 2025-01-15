@@ -37,27 +37,27 @@ module {
     todo()
   };
 
-  public func containsKey<K>(map : Map<K, Any>, key : K, compare : (K, K) -> Order.Order) : Bool {
+  public func containsKey<K>(map : Map<K, Any>, compare : (K, K) -> Order.Order, key : K) : Bool {
     todo()
   };
 
-  public func get<K, V>(map : Map<K, V>, key : K, compare : (K, K) -> Order.Order) : ?V {
+  public func get<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V {
     todo()
   };
 
-  public func add<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : () {
+  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : () {
     todo()
   };
 
-  public func put<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : ?V {
+  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
     todo()
   };
 
-  public func replaceIfExists<K, V>(map : Map<K, V>, key : K, value : V, compare : (K, K) -> Order.Order) : ?V {
+  public func replaceIfExists<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
     todo()
   };
 
-  public func delete<K, V>(map : Map<K, V>, key : K, compare : (K, K) -> Order.Order) : () {
+  public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : () {
     todo()
   };
 

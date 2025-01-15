@@ -26,7 +26,7 @@
       "name": "ImperativeCollection",
       "extends": ["Collection"],
       "modules": ["Queue", "Set", "Stack"],
-      "functions": ["fromPure", "toPure", "clone"]
+      "functions": ["thaw", "freeze", "clone"]
     },
     {
       "name": "KeyValueCollection",
@@ -35,9 +35,9 @@
       "functions": ["keys", "entries"]
     },
     {
-      "name": "PureCollection",
+      "name": "ImmutableCollection",
       "extends": ["Collection"],
-      "modules": ["pure/Queue", "pure/Set", "pure/Stack"],
+      "modules": ["immutable/Queue", "immutable/Set", "immutable/Stack"],
       "functions": []
     }
   ]

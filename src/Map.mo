@@ -1,21 +1,21 @@
 /// Original: `OrderedMap.mo`
 
-import Pure "pure/Map";
-import Iter "Iter";
+import Immutable "immutable/Map";
+import Iter "IterType";
 import Order "Order";
 import { todo } "Debug";
 
 module {
 
-  type Map<K, V> = { var pure : Pure.Map<K, V> };
+  type Map<K, V> = { var immutable : Immutable.Map<K, V> };
 
-  public func toPure<K, V>(map : Map<K, V>) : Pure.Map<K, V> = map.pure;
+  public func freeze<K, V>(map : Map<K, V>) : Immutable.Map<K, V> = map.immutable;
 
-  public func fromPure<K, V>(map : Pure.Map<K, V>) : Map<K, V> = {
-    var pure = map
+  public func thaw<K, V>(map : Immutable.Map<K, V>) : Map<K, V> = {
+    var immutable = map
   };
 
-  public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var pure = map.pure };
+  public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var immutable = map.immutable };
 
   public func empty<K, V>() : Map<K, V> {
     todo()

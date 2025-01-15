@@ -1,44 +1,22 @@
-/// Original: `OrderedSet.mo`
+/// Immutable singly-linked list
 
-import Immutable "immutable/Stack";
-import Result "Result";
-import Order "Order";
-import Iter "Iter";
-import { todo } "Debug";
+import Array "../Array";
+import Iter "../IterType";
+import Order "../Order";
+import Result "../Result";
+import { todo } "../Debug";
 
 module {
 
-  public type Stack<T> = { var immutable : Immutable.Stack<T> };
+  public type Stack<T> = ?(Stack<T>, T);
 
-  public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T> = stack.immutable;
+  public func empty<T>() : Stack<T> = null;
 
-  public func thaw<T>(stack : Immutable.Stack<T>) : Stack<T> = {
-    var immutable = stack
-  };
+  public func isEmpty(stack : Stack<Any>) : Bool = todo();
 
-  public func empty<T>() : Stack<T> = { var immutable = Immutable.empty() };
-
-  public func clone<T>(stack : Stack<T>) : Stack<T> = { var immutable = stack.immutable };
-
-  public func isEmpty(stack : Stack<Any>) : Bool {
-    todo()
-  };
-
-  public func size(stack : Stack<Any>) : Nat {
-    todo()
-  };
+  public func size(stack : Stack<Any>) : Nat = todo();
 
   public func contains<T>(stack : Stack<T>, item : T) : Bool {
-    todo()
-  };
-
-  public func push<T>(stack : Stack<T>, item : T) : () = todo();
-
-  public func last<T>(stack : Stack<T>) : ?T {
-    todo()
-  };
-
-  public func pop<T>(stack : Stack<T>) : ?T {
     todo()
   };
 
@@ -46,7 +24,17 @@ module {
     todo()
   };
 
-  public func reverse<T>(stack : Stack<T>) : () {
+  public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
+
+  public func last<T>(stack : Stack<T>) : ?T {
+    todo()
+  };
+
+  public func pop<T>(stack : Stack<T>) : (?T, Stack<T>) {
+    todo()
+  };
+
+  public func reverse<T>(stack : Stack<T>) : Stack<T> {
     todo()
   };
 
@@ -118,7 +106,7 @@ module {
     todo()
   };
 
-  public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>) : Bool {
+  public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>, equal : (T, T) -> Bool) : Bool {
     todo()
   };
 
@@ -126,9 +114,7 @@ module {
     todo()
   };
 
-  public func singleton<T>(item : T) : Stack<T> {
-    todo()
-  };
+  public func singleton<T>(item : T) : Stack<T> = ?(null, item);
 
   public func repeat<T>(item : T, n : Nat) : Stack<T> {
     todo()
@@ -152,9 +138,19 @@ module {
     todo()
   };
 
-  public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> {
+  public func fromArray<T>(array : [T]) : Stack<T> {
     todo()
   };
+
+  public func fromVarArray<T>(array : [var T]) : Stack<T> = fromArray<T>(Array.fromVarArray<T>(array));
+
+  public func toArray<T>(stack : Stack<T>) : [T] {
+    todo()
+  };
+
+  public func toVarArray<T>(stack : Stack<T>) : [var T] = Array.toVarArray<T>(toArray<T>(stack));
+
+  public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> = todo();
 
   public func toText<T>(stack : Stack<T>, f : T -> Text) : Text {
     var text = "Stack[";
@@ -171,5 +167,6 @@ module {
       }
     );
     text # "]"
-  }
+  };
+
 }

@@ -22,7 +22,7 @@ jobs:
       - run: npm run validate
       - name: Check for API changes
         run: |
-          DIFF=$(git diff HEAD^ HEAD -- validation/api)
+          DIFF=$(git diff origin/main -- validation/api)
           if [ -n "$DIFF" ]; then
             echo "API changes:"
             echo "$DIFF"

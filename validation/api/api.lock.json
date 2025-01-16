@@ -912,19 +912,19 @@
     "exports": [
       "public func assertErr(result : Result<Any, Any>)",
       "public func assertOk(result : Result<Any, Any>)",
-      "public func chain<R1, R2, Error>( result : Result<R1, Error>, f : R1 -> Result<R2, Error> ) : Result<R2, Error>",
-      "public func compare<Ok, Err>( compareOk : (Ok, Ok) -> Order.Order, compareErr : (Err, Err) -> Order.Order, r1 : Result<Ok, Err>, r2 : Result<Ok, Err> ) : Order.Order",
+      "public func chain<Ok1, Ok2, Err>( result : Result<Ok1, Err>, f : Ok1 -> Result<Ok2, Err> ) : Result<Ok2, Err>",
+      "public func compare<Ok, Err>( compareOk : (Ok, Ok) -> Order.Order, compareErr : (Err, Err) -> Order.Order, result1 : Result<Ok, Err>, result2 : Result<Ok, Err> ) : Order.Order",
       "public func equal<Ok, Err>( eqOk : (Ok, Ok) -> Bool, eqErr : (Err, Err) -> Bool, r1 : Result<Ok, Err>, r2 : Result<Ok, Err> ) : Bool",
-      "public func flatten<Ok, Error>( result : Result<Result<Ok, Error>, Error> ) : Result<Ok, Error>",
-      "public func fromOption<R, E>(x : ?R, err : E) : Result<R, E>",
-      "public func fromUpper<Ok, Err>( result : { #Ok: Ok; #Err: Err } ) : Result<Ok, Err>",
+      "public func flatten<Ok, Err>( result : Result<Result<Ok, Err>, Err> ) : Result<Ok, Err>",
+      "public func fromOption<Ok, Err>(x : ?Ok, err : Err) : Result<Ok, Err>",
+      "public func fromUpper<Ok, Err>( result : { #Ok : Ok; #Err : Err } ) : Result<Ok, Err>",
       "public func isErr(result : Result<Any, Any>) : Bool",
       "public func isOk(result : Result<Any, Any>) : Bool",
       "public func iterate<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ())",
-      "public func mapErr<Ok, Error1, Error2>( result : Result<Ok, Error1>, f : Error1 -> Error2 ) : Result<Ok, Error2>",
-      "public func mapOk<R1, R2, Error>( result : Result<R1, Error>, f : R1 -> R2 ) : Result<R2, Error>",
-      "public func toOption<R, E>(result : Result<R, E>) : ?R",
-      "public func toUpper<Ok, Err>( result : Result<Ok, Err> ) : { #Ok: Ok; #Err: Err }"
+      "public func mapErr<Ok, Err1, Err2>( result : Result<Ok, Err1>, f : Err1 -> Err2 ) : Result<Ok, Err2>",
+      "public func mapOk<Ok1, Ok2, Err>( result : Result<Ok1, Err>, f : Ok1 -> Ok2 ) : Result<Ok2, Err>",
+      "public func toOption<Ok, Err>(result : Result<Ok, Err>) : ?Ok",
+      "public func toUpper<Ok, Err>( result : Result<Ok, Err> ) : { #Ok : Ok; #Err : Err }"
     ]
   },
   {

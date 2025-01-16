@@ -46,10 +46,10 @@ module {
   public func compare<Ok, Err>(
     compareOk : (Ok, Ok) -> Order.Order,
     compareErr : (Err, Err) -> Order.Order,
-    r1 : Result<Ok, Err>,
-    r2 : Result<Ok, Err>
+    result1 : Result<Ok, Err>,
+    result2 : Result<Ok, Err>
   ) : Order.Order {
-    switch (r1, r2) {
+    switch (result1, result2) {
       case (#ok(ok1), #ok(ok2)) {
         compareOk(ok1, ok2)
       };
@@ -65,7 +65,7 @@ module {
   /// `Result`'s themselves.
   /// ```motoko
   /// import Result "mo:base/Result";
-  /// type Result<T,E> = Result.Result<T, E>;
+  /// type Result<Ok,Err> = Result.Result<Ok, Err>;
   /// func largerThan10(x : Nat) : Result<Nat, Text> =
   ///   if (x > 10) { #ok(x) } else { #err("Not larger than 10.") };
   ///
@@ -79,10 +79,10 @@ module {
   /// assert(between10And20(9) == #err("Not larger than 10."));
   /// assert(between10And20(21) == #err("Not smaller than 20."));
   /// ```
-  public func chain<R1, R2, Error>(
-    result : Result<R1, Error>,
-    f : R1 -> Result<R2, Error>
-  ) : Result<R2, Error> {
+  public func chain<Ok1, Ok2, Err>(
+    result : Result<Ok1, Err>,
+    f : Ok1 -> Result<Ok2, Err>
+  ) : Result<Ok2, Err> {
     switch result {
       case (#err(e)) { #err(e) };
       case (#ok(r)) { f(r) }
@@ -97,20 +97,20 @@ module {
   /// assert(Result.flatten<Nat, Text>(#err("Wrong")) == #err("Wrong"));
   /// assert(Result.flatten<Nat, Text>(#ok(#err("Wrong"))) == #err("Wrong"));
   /// ```
-  public func flatten<Ok, Error>(
-    result : Result<Result<Ok, Error>, Error>
-  ) : Result<Ok, Error> {
+  public func flatten<Ok, Err>(
+    result : Result<Result<Ok, Err>, Err>
+  ) : Result<Ok, Err> {
     switch result {
       case (#ok(ok)) { ok };
       case (#err(err)) { #err(err) }
     }
   };
 
-  /// Maps the `Ok` type/value, leaving any `Error` type/value unchanged.
-  public func mapOk<R1, R2, Error>(
-    result : Result<R1, Error>,
-    f : R1 -> R2
-  ) : Result<R2, Error> {
+  /// Maps the `Ok` type/value, leaving any `Err` type/value unchanged.
+  public func mapOk<Ok1, Ok2, Err>(
+    result : Result<Ok1, Err>,
+    f : Ok1 -> Ok2
+  ) : Result<Ok2, Err> {
     switch result {
       case (#err(e)) { #err(e) };
       case (#ok(r)) { #ok(f(r)) }
@@ -118,10 +118,10 @@ module {
   };
 
   /// Maps the `Err` type/value, leaving any `Ok` type/value unchanged.
-  public func mapErr<Ok, Error1, Error2>(
-    result : Result<Ok, Error1>,
-    f : Error1 -> Error2
-  ) : Result<Ok, Error2> {
+  public func mapErr<Ok, Err1, Err2>(
+    result : Result<Ok, Err1>,
+    f : Err1 -> Err2
+  ) : Result<Ok, Err2> {
     switch result {
       case (#err(e)) { #err(f(e)) };
       case (#ok(r)) { #ok(r) }
@@ -134,7 +134,7 @@ module {
   /// assert(Result.fromOption(?42, "err") == #ok(42));
   /// assert(Result.fromOption(null, "err") == #err("err"));
   /// ```
-  public func fromOption<R, E>(x : ?R, err : E) : Result<R, E> {
+  public func fromOption<Ok, Err>(x : ?Ok, err : Err) : Result<Ok, Err> {
     switch x {
       case (?x) { #ok(x) };
       case null { #err(err) }
@@ -147,7 +147,7 @@ module {
   /// assert(Result.toOption(#ok(42)) == ?42);
   /// assert(Result.toOption(#err("err")) == null);
   /// ```
-  public func toOption<R, E>(result : Result<R, E>) : ?R {
+  public func toOption<Ok, Err>(result : Result<Ok, Err>) : ?Ok {
     switch result {
       case (#ok(x)) { ?x };
       case (#err(_)) { null }
@@ -208,7 +208,7 @@ module {
   /// On the IC, a common convention is to use `#Ok` and `#Err` as the variants of a result type,
   /// but in Motoko, we use `#ok` and `#err` instead.
   public func fromUpper<Ok, Err>(
-    result : { #Ok: Ok; #Err: Err }
+    result : { #Ok : Ok; #Err : Err }
   ) : Result<Ok, Err> {
     switch result {
       case (#Ok(ok)) { #ok(ok) };
@@ -221,7 +221,7 @@ module {
   /// but in Motoko, we use `#ok` and `#err` instead.
   public func toUpper<Ok, Err>(
     result : Result<Ok, Err>
-  ) : { #Ok: Ok; #Err: Err } {
+  ) : { #Ok : Ok; #Err : Err } {
     switch result {
       case (#ok(ok)) { #Ok(ok) };
       case (#err(err)) { #Err(err) }

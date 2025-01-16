@@ -26,7 +26,7 @@ jobs:
           if [ -n "$DIFF" ]; then
             echo "API changes:"
             echo "$DIFF"
-            echo If this seems correct, please run the `npm run validate` command and then commit the output.
+            echo 'If this looks correct, please run the command `npm run validate` and commit the output.'
             exit 1
           fi
 

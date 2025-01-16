@@ -13,7 +13,7 @@ interface Module {
 
 interface Func {
   name: string;
-  type: string;
+  declaration: string;
 }
 
 interface Spec {
@@ -42,22 +42,22 @@ function readModules(dir: string, subdir: string = "") {
 // Regex-based module function parser
 function parseFunctions(moduleName: string, source: string) {
   const regex =
-    /public\s+(func|let|class)\s+(\w+)([^{:=]+(?::\s*\{?[^{:=]*)*)\s*[{=]/g;
+    /(public\s+(?:func|let|class)\s+(\w+)?([^{:=]+(?::\s*\{?[^{:=]*)*))\s*[{=]/g;
   const functions: Func[] = [];
   let match;
   while ((match = regex.exec(source)) !== null) {
-    const [_, _declarationType, name, type] = match;
-    const resolvedType = type.replace(/\s+/g, " ").trim();
+    const [_, declaration, name, type] = match;
+    const parsedDeclaration = declaration.replace(/\s+/g, " ").trim();
     if (
-      !resolvedType ||
-      resolvedType.endsWith(":") ||
-      resolvedType.endsWith("{")
+      !parsedDeclaration ||
+      parsedDeclaration.endsWith(":") ||
+      parsedDeclaration.endsWith("{")
     ) {
       throw new Error(
-        `Validation regex was unable to correctly parse the type of ${moduleName}.${name}: ${resolvedType}`
+        `Validation regex was unable to correctly parse a declaration in ${moduleName}: ${parsedDeclaration}`
       );
     }
-    functions.push({ name, type: resolvedType });
+    functions.push({ name, declaration: parsedDeclaration });
   }
   functions.sort((a, b) => a.name.localeCompare(b.name));
   return functions;
@@ -115,7 +115,13 @@ readdirSync(validationDir)
 writeFileSync(
   join(apiDir, "api.lock.json"),
   JSON.stringify(
-    [...moduleMap.keys()].sort().map((key) => moduleMap.get(key)),
+    [...moduleMap.keys()].sort().map((key) => {
+      const module = moduleMap.get(key);
+      return {
+        name: module.name,
+        exports: module.functions.map((f) => f.declaration),
+      };
+    }),
     null,
     2
   ),

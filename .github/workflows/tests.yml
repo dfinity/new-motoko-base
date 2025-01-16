@@ -20,6 +20,17 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm run validate
+      - name: Check for API changes
+        run: |
+          DIFF=$(git diff -- validation/api)
+          if [ -n "$DIFF" ]; then
+            echo "API changes:"
+            echo "$DIFF"
+            echo
+            echo '>>> If this looks correct, please run the command `npm run validate` and commit the output.'
+            echo
+            exit 1
+          fi
 
   format:
     runs-on: ${{ matrix.os }}

@@ -28,7 +28,7 @@ module {
 
   /// Returns `true` when `char` is a decimal digit between `0` and `9`, otherwise `false`.
   public func isDigit(char : Char) : Bool {
-    Prim.charToNat32(c) -% Prim.charToNat32('0') <= (9 : Nat32)
+    Prim.charToNat32(char) -% Prim.charToNat32('0') <= (9 : Nat32)
   };
 
   /// Returns whether `char` is a whitespace character.

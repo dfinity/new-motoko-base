@@ -71,8 +71,8 @@ module {
   /// assert(?6 == mappedIter.next());
   /// assert(null == mappedIter.next());
   /// ```
-  public func map<A, B>(xs : Iter<T>, f : A -> B) : Iter<R> = object {
-    public func next() : ?B {
+  public func map<T, R>(xs : Iter<T>, f : T -> R) : Iter<R> = object {
+    public func next() : ?R {
       switch (xs.next()) {
         case (?next) {
           ?f(next)
@@ -94,8 +94,8 @@ module {
   /// assert(?3 == mappedIter.next());
   /// assert(null == mappedIter.next());
   /// ```
-  public func filter<T>(xs : Iter<T>, f : A -> Bool) : Iter<T> = object {
-    public func next() : ?A {
+  public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T> = object {
+    public func next() : ?T {
       loop {
         switch (xs.next()) {
           case (null) {
@@ -121,8 +121,8 @@ module {
   /// assert(?10 == iter.next());
   /// // ...
   /// ```
-  public func make<T>(x : A) : Iter<T> = object {
-    public func next() : ?A {
+  public func make<T>(x : T) : Iter<T> = object {
+    public func next() : ?T {
       ?x
     }
   };
@@ -143,7 +143,7 @@ module {
   public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T> {
     var aEnded : Bool = false;
     object {
-      public func next() : ?A {
+      public func next() : ?T {
         if (aEnded) {
           return b.next()
         };
@@ -167,11 +167,11 @@ module {
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
   /// ```
-  public func fromArray<T>(xs : [A]) : Iter<T> {
+  public func fromArray<T>(xs : [T]) : Iter<T> {
     var ix : Nat = 0;
     let size = xs.size();
     object {
-      public func next() : ?A {
+      public func next() : ?T {
         if (ix >= size) {
           return null
         } else {
@@ -186,7 +186,7 @@ module {
   /// Like `fromArray` but for Arrays with mutable elements. Captures
   /// the elements of the Array at the time the iterator is created, so
   /// further modifications won't be reflected in the iterator.
-  public func fromArrayMut<T>(xs : [var A]) : Iter<T> {
+  public func fromArrayMut<T>(xs : [var T]) : Iter<T> {
     fromArray<T>(Array.fromVarArray<T>(xs))
   };
 
@@ -196,17 +196,17 @@ module {
   /// let iter = Iter.range(1, 3);
   /// assert([1, 2, 3] == Iter.toArray(iter));
   /// ```
-  public func toArray<T>(xs : Iter<T>) : [A] {
+  public func toArray<T>(xs : Iter<T>) : [T] {
     todo()
   };
 
   /// Like `toArray` but for Arrays with mutable elements.
-  public func toVarArray<T>(xs : Iter<T>) : [var A] {
+  public func toVarArray<T>(xs : Iter<T>) : [var T] {
     Array.toVarArray<T>(toArray<T>(xs))
   };
 
   /// Sorted iterator.  Will iterate over *all* elements to sort them, necessarily.
-  public func sort<T>(xs : Iter<T>, compare : (A, A) -> Order.Order) : Iter<T> {
+  public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
     let a = toVarArray<T>(xs);
     VarArray.sortInPlace<T>(a, compare);
     fromArrayMut<T>(a)

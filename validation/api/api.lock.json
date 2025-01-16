@@ -449,16 +449,16 @@
     "name": "Iter",
     "exports": [
       "public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T>",
-      "public func filter<T>(xs : Iter<T>, f : A -> Bool) : Iter<T>",
-      "public func fromArray<T>(xs : [A]) : Iter<T>",
-      "public func fromArrayMut<T>(xs : [var A]) : Iter<T>",
-      "public func iterate<T>( xs : Iter<T>, f : (A, Nat) -> () )",
-      "public func make<T>(x : A) : Iter<T>",
-      "public func map<A, B>(xs : Iter<T>, f : A -> B) : Iter<R>",
+      "public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T>",
+      "public func fromArray<T>(xs : [T]) : Iter<T>",
+      "public func fromArrayMut<T>(xs : [var T]) : Iter<T>",
+      "public func iterate<T>( xs : Iter<T>, f : (T, Nat) -> () )",
+      "public func make<T>(x : T) : Iter<T>",
+      "public func map<T, R>(xs : Iter<T>, f : T -> R) : Iter<R>",
       "public func size<T>(xs : Iter<T>) : Nat",
-      "public func sort<T>(xs : Iter<T>, compare : (A, A) -> Order.Order) : Iter<T>",
-      "public func toArray<T>(xs : Iter<T>) : [A]",
-      "public func toVarArray<T>(xs : Iter<T>) : [var A]"
+      "public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T>",
+      "public func toArray<T>(xs : Iter<T>) : [T]",
+      "public func toVarArray<T>(xs : Iter<T>) : [var T]"
     ]
   },
   {

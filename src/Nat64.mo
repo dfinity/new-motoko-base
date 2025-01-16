@@ -9,7 +9,7 @@ module {
 
   public type Nat64 = Prim.Types.Nat64;
 
-  public let maximumValue = 18446744073709551615 : Nat64;
+  public let maxValue : Nat64 = 18446744073709551615;
 
   public let toNat : Nat64 -> Nat = Prim.nat64ToNat;
 

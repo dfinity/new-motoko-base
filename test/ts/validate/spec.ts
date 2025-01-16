@@ -1,9 +1,10 @@
-import { existsSync, readdirSync, readFileSync } from "fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
 const rootDir = join(__dirname, "../../..");
 const srcDir = join(rootDir, "src");
-const interfaceDir = join(rootDir, "validation");
+const validationDir = join(rootDir, "validation");
+const apiDir = join(validationDir, "api");
 
 interface Module {
   name: string;
@@ -32,21 +33,33 @@ function readModules(dir: string, subdir: string = "") {
       readModules(dir, subPath);
     } else if (entry.isFile() && entry.name.endsWith(".mo")) {
       const name = subPath.replace(/\.mo$/, "");
-      const functions = parseFunctions(readFileSync(fullPath, "utf8"));
+      const functions = parseFunctions(name, readFileSync(fullPath, "utf8"));
       moduleMap.set(name, { name, functions });
     }
   });
 }
 
 // Regex-based module function parser
-function parseFunctions(source: string) {
-  const regex = /public\s+(func|let|class)\s+(\w+)([^{=]+)\s*[{=]/g;
+function parseFunctions(moduleName: string, source: string) {
+  const regex =
+    /public\s+(func|let|class)\s+(\w+)([^{:=]+(?::\s*\{?[^{:=]*)*)\s*[{=]/g;
   const functions: Func[] = [];
   let match;
   while ((match = regex.exec(source)) !== null) {
     const [_, _declarationType, name, type] = match;
-    functions.push({ name, type: type.replace(/\s+/g, " ") });
+    const resolvedType = type.replace(/\s+/g, " ").trim();
+    if (
+      !resolvedType ||
+      resolvedType.endsWith(":") ||
+      resolvedType.endsWith("{")
+    ) {
+      throw new Error(
+        `Validation regex was unable to correctly parse the type of ${moduleName}.${name}: ${resolvedType}`
+      );
+    }
+    functions.push({ name, type: resolvedType });
   }
+  functions.sort((a, b) => a.name.localeCompare(b.name));
   return functions;
 }
 
@@ -56,18 +69,18 @@ if (!existsSync(srcDir)) {
 
 const errors: string[] = [];
 
-// Module files
+// Read module files
 readModules(srcDir);
 
-// Spec files
+// Read spec files
 const specs: Spec[] = [];
 const specMap = new Map<string, Spec>();
-readdirSync(interfaceDir)
+readdirSync(validationDir)
   .filter((file) => file.endsWith(".json"))
   .forEach((file) => {
     try {
       const content = JSON.parse(
-        readFileSync(join(interfaceDir, file), "utf-8")
+        readFileSync(join(validationDir, file), "utf-8")
       );
       const items = content.specs;
       if (!Array.isArray(items)) {
@@ -98,6 +111,18 @@ readdirSync(interfaceDir)
     }
   });
 
+// Update lockfile
+writeFileSync(
+  join(apiDir, "api.lock.json"),
+  JSON.stringify(
+    [...moduleMap.keys()].sort().map((key) => moduleMap.get(key)),
+    null,
+    2
+  ),
+  "utf8"
+);
+
+// Validate spec files
 const resolveSpec = (spec: Spec, functions: string[]) => {
   functions.push(
     ...spec.functions.filter((funcName) => !functions.includes(funcName))
@@ -105,7 +130,9 @@ const resolveSpec = (spec: Spec, functions: string[]) => {
   spec.extends.forEach((extendName) => {
     const extend = specMap.get(extendName);
     if (!extend) {
-      errors.push(`Unknown module: '${extendName}' (referenced in '${spec.name}')`);
+      errors.push(
+        `Unknown module: '${extendName}' (referenced in '${spec.name}')`
+      );
       return;
     }
     resolveSpec(extend, functions);

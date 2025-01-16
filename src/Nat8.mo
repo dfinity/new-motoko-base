@@ -9,7 +9,7 @@ module {
 
   public type Nat8 = Prim.Types.Nat8;
 
-  public let maximumValue = 255 : Nat8;
+  public let maxValue : Nat8 = 255;
 
   public let toNat : Nat8 -> Nat = Prim.nat8ToNat;
 

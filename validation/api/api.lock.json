@@ -85,7 +85,7 @@
       "public func allValues() : Iter.Iter<Char>",
       "public func compare(a : Char, b : Char) : { #less; #equal; #greater }",
       "public func equal(a : Char, b : Char) : Bool",
-      "public let fromNat32 : (w : Nat32) -> Char",
+      "public let fromNat32 : (nat32 : Nat32) -> Char",
       "public func greater(a : Char, b : Char) : Bool",
       "public func greaterOrEqual(a : Char, b : Char) : Bool",
       "public let isAlphabetic : (char : Char) -> Bool",
@@ -912,7 +912,7 @@
     "exports": [
       "public func assertErr(result : Result<Any, Any>)",
       "public func assertOk(result : Result<Any, Any>)",
-      "public func chain<R1, R2, Error>( x : Result<R1, Error>, y : R1 -> Result<R2, Error> ) : Result<R2, Error>",
+      "public func chain<R1, R2, Error>( result : Result<R1, Error>, f : R1 -> Result<R2, Error> ) : Result<R2, Error>",
       "public func compare<Ok, Err>( compareOk : (Ok, Ok) -> Order.Order, compareErr : (Err, Err) -> Order.Order, r1 : Result<Ok, Err>, r2 : Result<Ok, Err> ) : Order.Order",
       "public func equal<Ok, Err>( eqOk : (Ok, Ok) -> Bool, eqErr : (Err, Err) -> Bool, r1 : Result<Ok, Err>, r2 : Result<Ok, Err> ) : Bool",
       "public func flatten<Ok, Error>( result : Result<Result<Ok, Error>, Error> ) : Result<Ok, Error>",
@@ -921,8 +921,8 @@
       "public func isErr(result : Result<Any, Any>) : Bool",
       "public func isOk(result : Result<Any, Any>) : Bool",
       "public func iterate<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ())",
-      "public func mapErr<Ok, Error1, Error2>( x : Result<Ok, Error1>, f : Error1 -> Error2 ) : Result<Ok, Error2>",
-      "public func mapOk<Ok1, Ok2, Error>( x : Result<Ok1, Error>, f : Ok1 -> Ok2 ) : Result<Ok2, Error>",
+      "public func mapErr<Ok, Error1, Error2>( result : Result<Ok, Error1>, f : Error1 -> Error2 ) : Result<Ok, Error2>",
+      "public func mapOk<R1, R2, Error>( result : Result<R1, Error>, f : R1 -> R2 ) : Result<R2, Error>",
       "public func toOption<R, E>(result : Result<R, E>) : ?R",
       "public func toUpper<Ok, Err>( result : Result<Ok, Err> ) : { #Ok: Ok; #Err: Err }"
     ]

@@ -80,12 +80,12 @@ module {
   /// assert(between10And20(21) == #err("Not smaller than 20."));
   /// ```
   public func chain<R1, R2, Error>(
-    x : Result<R1, Error>,
-    y : R1 -> Result<R2, Error>
+    result : Result<R1, Error>,
+    f : R1 -> Result<R2, Error>
   ) : Result<R2, Error> {
-    switch x {
+    switch result {
       case (#err(e)) { #err(e) };
-      case (#ok(r)) { y(r) }
+      case (#ok(r)) { f(r) }
     }
   };
 
@@ -107,11 +107,11 @@ module {
   };
 
   /// Maps the `Ok` type/value, leaving any `Error` type/value unchanged.
-  public func mapOk<Ok1, Ok2, Error>(
-    x : Result<Ok1, Error>,
-    f : Ok1 -> Ok2
-  ) : Result<Ok2, Error> {
-    switch x {
+  public func mapOk<R1, R2, Error>(
+    result : Result<R1, Error>,
+    f : R1 -> R2
+  ) : Result<R2, Error> {
+    switch result {
       case (#err(e)) { #err(e) };
       case (#ok(r)) { #ok(f(r)) }
     }
@@ -119,10 +119,10 @@ module {
 
   /// Maps the `Err` type/value, leaving any `Ok` type/value unchanged.
   public func mapErr<Ok, Error1, Error2>(
-    x : Result<Ok, Error1>,
+    result : Result<Ok, Error1>,
     f : Error1 -> Error2
   ) : Result<Ok, Error2> {
-    switch x {
+    switch result {
       case (#err(e)) { #err(f(e)) };
       case (#ok(r)) { #ok(r) }
     }

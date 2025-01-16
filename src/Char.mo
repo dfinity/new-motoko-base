@@ -15,7 +15,7 @@ module {
   /// Convert `w` to a character.
   /// Traps if `w` is not a valid Unicode scalar value.
   /// Value `w` is valid if, and only if, `w < 0xD800 or (0xE000 <= w and w <= 0x10FFFF)`.
-  public let fromNat32 : (w : Nat32) -> Char = Prim.nat32ToChar;
+  public let fromNat32 : (nat32 : Nat32) -> Char = Prim.nat32ToChar;
 
   /// Convert character `char` to single character text.
   public let toText : (char : Char) -> Text = Prim.charToText;

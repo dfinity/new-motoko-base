@@ -11,7 +11,6 @@ import Int "Int";
 import Iter "Iter";
 import { todo } "Debug";
 import Prim "mo:⛔";
-import Int16 "Int16";
 
 module {
 

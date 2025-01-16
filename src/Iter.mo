@@ -1,8 +1,8 @@
 /// Utilities for `Iter` (iterator) values
 
-import Array "Array";
-import List "List";
 import Order "Order";
+import Array "Array";
+import VarArray "VarArray";
 import { todo } "Debug";
 
 module {
@@ -21,32 +21,6 @@ module {
   /// }
   /// ```
   public type Iter<T> = { next : () -> ?T };
-
-  /// Creates an iterator that produces all `Nat`s from `x` to `y` including
-  /// both of the bounds.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
-  /// ```
-  public class range(x : Nat, y : Int) {
-    var i = x;
-    public func next() : ?Nat {
-      if (i > y) { null } else { let j = i; i += 1; ?j }
-    }
-  };
-
-  /// Like `range` but produces the values in the opposite
-  /// order.
-  public class revRange(x : Int, y : Int) {
-    var i = x;
-    public func next() : ?Int {
-      if (i < y) { null } else { let j = i; i -= 1; ?j }
-    }
-  };
 
   /// Calls a function `f` on every value produced by an iterator and discards
   /// the results. If you're looking to keep these results use `map` instead.
@@ -213,11 +187,8 @@ module {
   /// the elements of the Array at the time the iterator is created, so
   /// further modifications won't be reflected in the iterator.
   public func fromArrayMut<A>(xs : [var A]) : Iter<A> {
-    fromArray<A>(Array.freeze<A>(xs))
+    fromArray<A>(Array.fromVarArray<A>(xs))
   };
-
-  /// Like `fromArray` but for Lists.
-  public let fromList = List.toIter;
 
   /// Consumes an iterator and collects its produced elements in an Array.
   /// ```motoko
@@ -230,26 +201,14 @@ module {
   };
 
   /// Like `toArray` but for Arrays with mutable elements.
-  public func toArrayMut<A>(xs : Iter<A>) : [var A] {
-    Array.thaw<A>(toArray<A>(xs))
-  };
-
-  /// Like `toArray` but for Lists.
-  public func toList<A>(xs : Iter<A>) : List.List<A> {
-    var result = List.nil<A>();
-    iterate<A>(
-      xs,
-      func(x, _i) {
-        result := List.push<A>(x, result)
-      }
-    );
-    List.reverse<A>(result)
+  public func toVarArray<A>(xs : Iter<A>) : [var A] {
+    Array.toVarArray<A>(toArray<A>(xs))
   };
 
   /// Sorted iterator.  Will iterate over *all* elements to sort them, necessarily.
   public func sort<A>(xs : Iter<A>, compare : (A, A) -> Order.Order) : Iter<A> {
-    let a = toArrayMut<A>(xs);
-    Array.sortInPlace<A>(a, compare);
+    let a = toVarArray<A>(xs);
+    VarArray.sortInPlace<A>(a, compare);
     fromArrayMut<A>(a)
   };
 

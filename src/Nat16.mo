@@ -1,4 +1,4 @@
-/// Provides utility functions on 16-bit unsigned integers.
+/// Utility functions on 16-bit unsigned integers.
 ///
 /// Note that most operations are available as built-in operators (e.g. `1 + 1`).
 ///
@@ -7,6 +7,8 @@
 /// import Nat16 "mo:base/Nat16";
 /// ```
 import Nat "Nat";
+import Iter "Iter";
+import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {

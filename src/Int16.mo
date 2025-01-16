@@ -1,4 +1,4 @@
-/// Provides utility functions on 16-bit signed integers.
+/// Utility functions on 16-bit signed integers.
 ///
 /// Note that most operations are available as built-in operators (e.g. `1 + 1`).
 ///
@@ -6,7 +6,10 @@
 /// ```motoko name=import
 /// import Int16 "mo:base/Int16";
 /// ```
+
 import Int "Int";
+import Iter "Iter";
+import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {

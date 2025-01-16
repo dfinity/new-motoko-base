@@ -1,4 +1,4 @@
-/// Provides utility functions on 64-bit signed integers.
+/// Utility functions on 64-bit signed integers.
 ///
 /// Note that most operations are available as built-in operators (e.g. `1 + 1`).
 ///
@@ -8,6 +8,8 @@
 /// ```
 
 import Int "Int";
+import Iter "Iter";
+import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {

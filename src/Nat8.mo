@@ -1,4 +1,4 @@
-/// Provides utility functions on 8-bit unsigned integers.
+/// Utility functions on 8-bit unsigned integers.
 ///
 /// Note that most operations are available as built-in operators (e.g. `1 + 1`).
 ///
@@ -7,6 +7,8 @@
 /// import Nat8 "mo:base/Nat8";
 /// ```
 import Nat "Nat";
+import Iter "Iter";
+import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {

@@ -35,7 +35,7 @@ module {
   /// ```
   public func iterate<T>(
     xs : Iter<T>,
-    f : (A, Nat) -> ()
+    f : (T, Nat) -> ()
   ) {
     var i = 0;
     label l loop {

@@ -20,17 +20,17 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.minimumValue // => -128
+  /// Int8.minValue // => -128
   /// ```
-  public let minimumValue = -128 : Int8;
+  public let minValue : Int8 = -128;
 
   /// Maximum 8-bit integer value, `+2 ** 7 - 1`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.maximumValue // => +127
+  /// Int8.maxValue // => +127
   /// ```
-  public let maximumValue = 127 : Int8;
+  public let maxValue : Int8 = 127;
 
   /// Converts an 8-bit signed integer to a signed integer with infinite precision.
   ///

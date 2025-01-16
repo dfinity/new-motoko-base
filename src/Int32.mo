@@ -20,17 +20,17 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int32.minimumValue // => -2_147_483_648
+  /// Int32.minValue // => -2_147_483_648
   /// ```
-  public let minimumValue = -2_147_483_648 : Int32;
+  public let minValue : Int32 = -2_147_483_648;
 
   /// Maximum 32-bit integer value, `+2 ** 31 - 1`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int32.maximumValue // => +2_147_483_647
+  /// Int32.maxValue // => +2_147_483_647
   /// ```
-  public let maximumValue = 2_147_483_647 : Int32;
+  public let maxValue : Int32 = 2_147_483_647;
 
   /// Converts a 32-bit signed integer to a signed integer with infinite precision.
   ///

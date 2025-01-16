@@ -20,9 +20,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat16.maximumValue; // => 65536 : Nat16
+  /// Nat16.maxValue; // => 65536 : Nat16
   /// ```
-  public let maximumValue = 65535 : Nat16;
+  public let maxValue : Nat16 = 65535;
 
   /// Converts a 16-bit unsigned integer to an unsigned integer with infinite precision.
   ///

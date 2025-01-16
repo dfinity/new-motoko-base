@@ -21,17 +21,17 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int64.minimumValue // => -9_223_372_036_854_775_808
+  /// Int64.minValue // => -9_223_372_036_854_775_808
   /// ```
-  public let minimumValue = -9_223_372_036_854_775_808 : Int64;
+  public let minValue : Int64 = -9_223_372_036_854_775_808;
 
   /// Maximum 64-bit integer value, `+2 ** 63 - 1`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int64.maximumValue // => +9_223_372_036_854_775_807
+  /// Int64.maxValue // => +9_223_372_036_854_775_807
   /// ```
-  public let maximumValue = 9_223_372_036_854_775_807 : Int64;
+  public let maxValue : Int64 = 9_223_372_036_854_775_807;
 
   /// Converts a 64-bit signed integer to a signed integer with infinite precision.
   ///

@@ -20,9 +20,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.maximumValue; // => 4294967295 : Nat32
+  /// Nat32.maxValue; // => 4294967295 : Nat32
   /// ```
-  public let maximumValue = 4294967295 : Nat32;
+  public let maxValue : Nat32 = 4294967295;
 
   /// Converts a 32-bit unsigned integer to an unsigned integer with infinite precision.
   ///

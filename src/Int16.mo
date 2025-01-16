@@ -11,6 +11,7 @@ import Int "Int";
 import Iter "Iter";
 import { todo } "Debug";
 import Prim "mo:⛔";
+import Int16 "Int16";
 
 module {
 
@@ -21,17 +22,17 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int16.minimumValue // => -32_768 : Int16
+  /// Int16.minValue // => -32_768 : Int16
   /// ```
-  public let minimumValue = -32_768 : Int16;
+  public let minValue : Int16 = -32_768;
 
   /// Maximum 16-bit integer value, `+2 ** 15 - 1`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int16.maximumValue // => +32_767 : Int16
+  /// Int16.maxValue // => +32_767 : Int16
   /// ```
-  public let maximumValue = 32_767 : Int16;
+  public let maxValue : Int16 = 32_767;
 
   /// Converts a 16-bit signed integer to a signed integer with infinite precision.
   ///

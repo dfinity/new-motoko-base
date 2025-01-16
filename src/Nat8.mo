@@ -20,9 +20,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat8.maximumValue; // => 255 : Nat8
+  /// Nat8.maxValue; // => 255 : Nat8
   /// ```
-  public let maximumValue = 255 : Nat8;
+  public let maxValue : Nat8 = 255;
 
   /// Converts an 8-bit unsigned integer to an unsigned integer with infinite precision.
   ///

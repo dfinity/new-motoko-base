@@ -20,10 +20,10 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.maximumValue; // => 18446744073709551615 : Nat64
+  /// Nat64.maxValue; // => 18446744073709551615 : Nat64
   /// ```
 
-  public let maximumValue = 18446744073709551615 : Nat64;
+  public let maxValue : Nat64 = 18446744073709551615;
 
   /// Converts a 64-bit unsigned integer to an unsigned integer with infinite precision.
   ///
@@ -512,8 +512,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.addWrap(Nat64.maximumValue, 1); // => 0
-  /// Nat64.maximumValue +% (1 : Nat64) // => 0
+  /// ignore Nat64.addWrap(Nat64.maxValue, 1); // => 0
+  /// Nat64.maxValue +% (1 : Nat64) // => 0
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition

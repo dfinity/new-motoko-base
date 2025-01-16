@@ -83,21 +83,21 @@
     "name": "Char",
     "exports": [
       "public func allValues() : Iter.Iter<Char>",
-      "public func compare(x : Char, y : Char) : { #less; #equal; #greater }",
-      "public func equal(x : Char, y : Char) : Bool",
+      "public func compare(a : Char, b : Char) : { #less; #equal; #greater }",
+      "public func equal(a : Char, b : Char) : Bool",
       "public let fromNat32 : (w : Nat32) -> Char",
-      "public func greater(x : Char, y : Char) : Bool",
-      "public func greaterOrEqual(x : Char, y : Char) : Bool",
-      "public let isAlphabetic : (c : Char) -> Bool",
-      "public func isDigit(c : Char) : Bool",
-      "public let isLowercase : (c : Char) -> Bool",
-      "public let isUppercase : (c : Char) -> Bool",
-      "public let isWhitespace : (c : Char) -> Bool",
-      "public func less(x : Char, y : Char) : Bool",
-      "public func lessOrEqual(x : Char, y : Char) : Bool",
-      "public func notEqual(x : Char, y : Char) : Bool",
-      "public let toNat32 : (c : Char) -> Nat32",
-      "public let toText : (c : Char) -> Text"
+      "public func greater(a : Char, b : Char) : Bool",
+      "public func greaterOrEqual(a : Char, b : Char) : Bool",
+      "public let isAlphabetic : (char : Char) -> Bool",
+      "public func isDigit(char : Char) : Bool",
+      "public let isLowercase : (char : Char) -> Bool",
+      "public let isUppercase : (char : Char) -> Bool",
+      "public let isWhitespace : (char : Char) -> Bool",
+      "public func less(a : Char, b : Char) : Bool",
+      "public func lessOrEqual(a : Char, b : Char) : Bool",
+      "public func notEqual(a : Char, b : Char) : Bool",
+      "public let toNat32 : (char : Char) -> Nat32",
+      "public let toText : (char : Char) -> Text"
     ]
   },
   {
@@ -107,12 +107,6 @@
       "public let add : <system>(amount : Nat) -> ()",
       "public let available : () -> (amount : Nat)",
       "public let balance : () -> (amount : Nat)",
-      "public func main() : async()",
-      "public func main() : async()",
-      "public func main() : async()",
-      "public func main() : async()",
-      "public func main() : async()",
-      "public func main() : async()",
       "public let refunded : () -> (amount : Nat)"
     ]
   },
@@ -462,11 +456,6 @@
       "public func iterate<A>( xs : Iter<A>, f : (A, Nat) -> () )",
       "public func make<A>(x : A) : Iter<A>",
       "public func map<A, B>(xs : Iter<A>, f : A -> B) : Iter<B>",
-      "public func next() : ?B",
-      "public func next() : ?A",
-      "public func next() : ?A",
-      "public func next() : ?A",
-      "public func next() : ?A",
       "public func size<A>(xs : Iter<A>) : Nat",
       "public func sort<A>(xs : Iter<A>, compare : (A, A) -> Order.Order) : Iter<A>",
       "public func toArray<A>(xs : Iter<A>) : [A]",
@@ -843,14 +832,9 @@
       "public func less(principal1 : Principal, principal2 : Principal) : Bool",
       "public func lessOrEqual(principal1 : Principal, principal2 : Principal) : Bool",
       "public func notEqual(principal1 : Principal, principal2 : Principal) : Bool",
-      "public func reset()",
-      "public func sum() : Blob",
       "public func toBlob(p : Principal) : Blob",
       "public func toLedgerAccount(principal : Principal, subAccount : ?Blob) : Blob",
-      "public func toText(p : Principal) : Text",
-      "public func writeArray(arr : [Nat8]) : ()",
-      "public func writeBlob(blob : Blob) : ()",
-      "public func writeIter(iter : { next() : ?Nat8 }) : ()"
+      "public func toText(p : Principal) : Text"
     ]
   },
   {
@@ -947,7 +931,6 @@
   {
     "name": "Runtime",
     "exports": [
-      "public func foo() : async ()",
       "public func trap(errorMessage : Text) : None",
       "public func unreachable() : None"
     ]
@@ -1057,13 +1040,7 @@
       "public func less(t1 : Text, t2 : Text) : Bool",
       "public func lessOrEqual(t1 : Text, t2 : Text) : Bool",
       "public func map(t : Text, f : Char -> Char) : Text",
-      "public func next() : ?Char",
-      "public func next() : ?Char",
-      "public func next() : ?Char",
-      "public func next() : ?Text",
-      "public func next() : ?Text",
       "public func notEqual(t1 : Text, t2 : Text) : Bool",
-      "public func pushBack(cs0 : Iter.Iter<Char>, c : Char)",
       "public func replace(t : Text, p : Pattern, r : Text) : Text",
       "public func size(t : Text) : Nat",
       "public func split(t : Text, p : Pattern) : Iter.Iter<Text>",
@@ -1086,7 +1063,6 @@
   {
     "name": "Time",
     "exports": [
-      "public func greet(name : Text) : async Text",
       "public let now : () -> Time",
       "public func toNanoseconds(duration : Duration) : Nat"
     ]

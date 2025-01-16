@@ -30,7 +30,6 @@
 /// }
 /// ```
 
-import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {

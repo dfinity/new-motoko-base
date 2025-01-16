@@ -26,7 +26,7 @@ module {
 
   public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
 
-  public func last<T>(stack : Stack<T>) : ?T {
+  public func peek<T>(stack : Stack<T>) : ?T {
     todo()
   };
 

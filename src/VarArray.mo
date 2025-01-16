@@ -1,4 +1,4 @@
-/// Mutable array utilities
+/// Mutable array utilities.
 
 import Iter "IterType";
 import Order "Order";

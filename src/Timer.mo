@@ -7,6 +7,7 @@
 
 import { setTimer = setTimerNano; cancelTimer = cancel } = "mo:⛔";
 import Time "Time";
+import Nat64 "Nat64";
 
 module {
 

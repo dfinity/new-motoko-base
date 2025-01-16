@@ -28,6 +28,7 @@ import Prim "mo:⛔";
 import Blob "Blob";
 import Hash "Hash";
 import Array "Array";
+import VarArray "VarArray";
 import Nat8 "Nat8";
 import Nat32 "Nat32";
 import Nat64 "Nat64";
@@ -67,7 +68,7 @@ module {
         sha224.writeBlob(subAccount)
       };
       case (null) {
-        let defaultSubAccount = Array.tabulate<Nat8>(32, func _ = 0);
+        let defaultSubAccount = Array.generate<Nat8>(32, func _ = 0);
         sha224.writeArray(defaultSubAccount)
       }
     };
@@ -77,7 +78,7 @@ module {
     // hashBlob is a CRC32 implementation
     let crc32Bytes = nat32ToByteArray(Prim.hashBlob hashSum);
 
-    Blob.fromArray(Array.append(crc32Bytes, Blob.toArray(hashSum)))
+    Blob.fromArray(Array.concat(crc32Bytes, Blob.toArray(hashSum)))
   };
 
   /// Convert a `Principal` to its `Blob` (bytes) representation.
@@ -129,7 +130,7 @@ module {
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
   /// Principal.isAnonymous(principal) // => false
   /// ```
-  public func isAnonymous(p : Principal) : Bool = Prim.blobOfPrincipal p == anonymousPrincipal;
+  public func isAnonymous(p : Principal) : Bool = Prim.blobOfPrincipal p == anonymousBlob;
 
   /// Checks if the given principal can control this canister.
   ///
@@ -405,8 +406,8 @@ module {
     var s6 : Nat32 = 0;
     var s7 : Nat32 = 0;
 
-    let msg : [var Nat32] = Array.init<Nat32>(16, 0);
-    let digest = Array.init<Nat8>(sum_bytes, 0);
+    let msg : [var Nat32] = VarArray.init<Nat32>(16, 0);
+    let digest = VarArray.init<Nat8>(sum_bytes, 0);
     var word : Nat32 = 0;
 
     var i_msg : Nat8 = 0;
@@ -1212,7 +1213,7 @@ module {
       digest[26] := Nat8.fromIntWrap(Nat32.toNat((s6 >> 8) & 0xff));
       digest[27] := Nat8.fromIntWrap(Nat32.toNat(s6 & 0xff));
 
-      return Blob.fromArrayMut(digest)
+      return Blob.fromVarArray(digest)
     }
   }; // class SHA224
 

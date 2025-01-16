@@ -1,5 +1,8 @@
 /// Utilities for `Order` (comparison between two values).
 
+import Iter "IterType";
+import { todo } "Debug";
+
 module {
 
   /// A type to represent an order.
@@ -42,5 +45,9 @@ module {
       case _ { false }
     }
   };
+
+  public func allValues() : Iter.Iter<Order> {
+    todo()
+  }
 
 }

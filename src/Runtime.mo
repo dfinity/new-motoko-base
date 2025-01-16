@@ -1,4 +1,4 @@
-// Runtime utilities
+// Runtime utilities.
 
 import Prim "mo:⛔";
 

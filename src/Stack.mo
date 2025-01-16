@@ -1,4 +1,4 @@
-/// Mutable stack data structure
+/// Mutable stack data structure.
 
 import Immutable "immutable/Stack";
 import Result "Result";
@@ -34,7 +34,7 @@ module {
 
   public func push<T>(stack : Stack<T>, item : T) : () = todo();
 
-  public func last<T>(stack : Stack<T>) : ?T {
+  public func peek<T>(stack : Stack<T>) : ?T {
     todo()
   };
 

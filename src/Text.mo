@@ -26,6 +26,7 @@ import Hash "Hash";
 import List "List";
 import Stack "Stack";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
@@ -97,8 +98,8 @@ module {
       func _ {
         switch (cs.next()) {
           case (?c) { c };
-          case null { Prim.trap("Text.toArray") };
-        };
+          case null { Prim.trap("Text.toArray") }
+        }
       }
     )
   };
@@ -116,13 +117,13 @@ module {
   public func toVarArray(t : Text) : [var Char] {
     let n = t.size();
     if (n == 0) {
-      return [var];
+      return [var]
     };
     let array = Prim.Array_init<Char>(n, ' ');
     var i = 0;
     for (c in t.chars()) {
       array[i] := c;
-      i += 1;
+      i += 1
     };
     array
   };
@@ -149,7 +150,7 @@ module {
   ///
   /// Runtime: O(size cs)
   /// Space: O(size cs)
-  public func fromList(cs : List.List<Char>) : Text = fromIter(List.toIter cs);
+  public func fromList(cs : List.List<Char>) : Text = fromIter(List.values cs);
 
   /// Create a character list from a text.
   /// Example:
@@ -161,11 +162,7 @@ module {
   /// Runtime: O(t.size())
   /// Space: O(t.size())
   public func toList(t : Text) : List.List<Char> {
-    var acc : List.List<Char> = null;
-    for (c in t.chars()) {
-        acc := ?(c, acc)
-    };
-    List.reverse acc
+    todo()
   };
 
   /// Returns the number of characters in the given `Text`.
@@ -434,18 +431,18 @@ module {
 
   private class CharBuffer(cs : Iter.Iter<Char>) : Iter.Iter<Char> = {
 
-    var stack : Stack.Stack<(Iter.Iter<Char>, Char)> = Stack.Stack();
+    var stack : Stack.Stack<(Iter.Iter<Char>, Char)> = Stack.empty();
 
     public func pushBack(cs0 : Iter.Iter<Char>, c : Char) {
-      stack.push((cs0, c))
+      Stack.push(stack, (cs0, c))
     };
 
     public func next() : ?Char {
-      switch (stack.peek()) {
+      switch (Stack.peek(stack)) {
         case (?(buff, c)) {
           switch (buff.next()) {
             case null {
-              ignore stack.pop();
+              ignore Stack.pop(stack);
               return ?c
             };
             case oc {
@@ -461,7 +458,7 @@ module {
   };
 
   /// Splits the input `Text` with the specified `Pattern`.
-  /// 
+  ///
   /// Two fields are separated by exactly one match.
   ///
   /// ```motoko include=import
@@ -871,5 +868,5 @@ module {
   /// ```motoko include=import
   /// let text = Text.toUppercase("Good Day"); // ?"GOOD DAY"
   /// ```
-  public let toUppercase : Text -> Text = Prim.textUppercase;
+  public let toUppercase : Text -> Text = Prim.textUppercase
 }

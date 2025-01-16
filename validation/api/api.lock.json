@@ -878,16 +878,6 @@
     "exports": [
       "public class AsyncRandom(generator : () -> async* Blob)",
       "public let blob : shared () -> async Blob",
-      "public func bool() : Bool",
-      "public func bool() : async* Bool",
-      "public func byte() : Nat8",
-      "public func byte() : async* Nat8",
-      "public func float() : Float",
-      "public func float() : async* Float",
-      "public func intRange(min : Int, maxExclusive : Int) : Int",
-      "public func intRange(min : Int, maxExclusive : Int) : async* Int",
-      "public func natRange(min : Nat, maxExclusive : Nat) : Nat",
-      "public func natRange(min : Nat, maxExclusive : Nat) : async* Nat",
       "public func new(seed : Blob) : Random",
       "public func newAsync() : AsyncRandom",
       "public class Random(generator : () -> Blob)"

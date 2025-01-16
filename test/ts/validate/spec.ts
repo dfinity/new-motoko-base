@@ -42,7 +42,7 @@ function readModules(dir: string, subdir: string = "") {
 // Regex-based module function parser
 function parseFunctions(moduleName: string, source: string) {
   const regex =
-    /(public\s+(?:func|let|class)\s+(\w+)?([^{:=]+(?::\s*\{?[^{:=]*)*))\s*[{=]/g;
+    /^ {2}(public\s+(?:func|let|class)\s+(\w+)?([^{:=]+(?::\s*\{?[^{:=]*)*))\s*[{=]/gm;
   const functions: Func[] = [];
   let match;
   while ((match = regex.exec(source)) !== null) {

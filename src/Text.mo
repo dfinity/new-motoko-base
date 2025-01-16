@@ -307,12 +307,12 @@ module {
   ///
   /// ```motoko include=import
   /// // Replace all occurrences of '?' with "!!"
-  /// let result = Text.translate("Motoko?", func(c) {
+  /// let result = Text.flatMap("Motoko?", func(c) {
   ///   if (c == '?') "!!"
   ///   else Text.fromChar(c)
   /// }); // "Motoko!!"
   /// ```
-  public func translate(t : Text, f : Char -> Text) : Text {
+  public func flatMap(t : Text, f : Char -> Text) : Text {
     var r = "";
     for (c in t.chars()) {
       r #= f(c)
@@ -858,15 +858,15 @@ module {
   /// WARNING: Unicode compliant only when compiled, not interpreted.
   ///
   /// ```motoko include=import
-  /// let text = Text.toLowercase("Good Day"); // ?"good day"
+  /// let text = Text.toLower("Good Day"); // ?"good day"
   /// ```
-  public let toLowercase : Text -> Text = Prim.textLowercase;
+  public let toLower : Text -> Text = Prim.textLowercase;
 
   /// Returns the text argument in uppercase. Unicode compliant.
   /// WARNING: Unicode compliant only when compiled, not interpreted.
   ///
   /// ```motoko include=import
-  /// let text = Text.toUppercase("Good Day"); // ?"GOOD DAY"
+  /// let text = Text.toUpper("Good Day"); // ?"GOOD DAY"
   /// ```
-  public let toUppercase : Text -> Text = Prim.textUppercase
+  public let toUpper : Text -> Text = Prim.textUppercase
 }

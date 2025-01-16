@@ -33,8 +33,8 @@ module {
   /// });
   /// assert(6 == sum)
   /// ```
-  public func iterate<A>(
-    xs : Iter<A>,
+  public func iterate<T>(
+    xs : Iter<T>,
     f : (A, Nat) -> ()
   ) {
     var i = 0;
@@ -54,9 +54,9 @@ module {
 
   /// Consumes an iterator and counts how many elements were produced
   /// (discarding them in the process).
-  public func size<A>(xs : Iter<A>) : Nat {
+  public func size<T>(xs : Iter<T>) : Nat {
     var len = 0;
-    iterate<A>(xs, func(x, i) { len += 1 });
+    iterate<T>(xs, func(x, i) { len += 1 });
     len
   };
 
@@ -71,7 +71,7 @@ module {
   /// assert(?6 == mappedIter.next());
   /// assert(null == mappedIter.next());
   /// ```
-  public func map<A, B>(xs : Iter<A>, f : A -> B) : Iter<B> = object {
+  public func map<A, B>(xs : Iter<T>, f : A -> B) : Iter<R> = object {
     public func next() : ?B {
       switch (xs.next()) {
         case (?next) {
@@ -94,7 +94,7 @@ module {
   /// assert(?3 == mappedIter.next());
   /// assert(null == mappedIter.next());
   /// ```
-  public func filter<A>(xs : Iter<A>, f : A -> Bool) : Iter<A> = object {
+  public func filter<T>(xs : Iter<T>, f : A -> Bool) : Iter<T> = object {
     public func next() : ?A {
       loop {
         switch (xs.next()) {
@@ -121,7 +121,7 @@ module {
   /// assert(?10 == iter.next());
   /// // ...
   /// ```
-  public func make<A>(x : A) : Iter<A> = object {
+  public func make<T>(x : A) : Iter<T> = object {
     public func next() : ?A {
       ?x
     }
@@ -140,7 +140,7 @@ module {
   /// assert(?6 == concatenatedIter.next());
   /// assert(null == concatenatedIter.next());
   /// ```
-  public func concat<A>(a : Iter<A>, b : Iter<A>) : Iter<A> {
+  public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T> {
     var aEnded : Bool = false;
     object {
       public func next() : ?A {
@@ -167,7 +167,7 @@ module {
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
   /// ```
-  public func fromArray<A>(xs : [A]) : Iter<A> {
+  public func fromArray<T>(xs : [A]) : Iter<T> {
     var ix : Nat = 0;
     let size = xs.size();
     object {
@@ -186,8 +186,8 @@ module {
   /// Like `fromArray` but for Arrays with mutable elements. Captures
   /// the elements of the Array at the time the iterator is created, so
   /// further modifications won't be reflected in the iterator.
-  public func fromArrayMut<A>(xs : [var A]) : Iter<A> {
-    fromArray<A>(Array.fromVarArray<A>(xs))
+  public func fromArrayMut<T>(xs : [var A]) : Iter<T> {
+    fromArray<T>(Array.fromVarArray<T>(xs))
   };
 
   /// Consumes an iterator and collects its produced elements in an Array.
@@ -196,20 +196,20 @@ module {
   /// let iter = Iter.range(1, 3);
   /// assert([1, 2, 3] == Iter.toArray(iter));
   /// ```
-  public func toArray<A>(xs : Iter<A>) : [A] {
+  public func toArray<T>(xs : Iter<T>) : [A] {
     todo()
   };
 
   /// Like `toArray` but for Arrays with mutable elements.
-  public func toVarArray<A>(xs : Iter<A>) : [var A] {
-    Array.toVarArray<A>(toArray<A>(xs))
+  public func toVarArray<T>(xs : Iter<T>) : [var A] {
+    Array.toVarArray<T>(toArray<T>(xs))
   };
 
   /// Sorted iterator.  Will iterate over *all* elements to sort them, necessarily.
-  public func sort<A>(xs : Iter<A>, compare : (A, A) -> Order.Order) : Iter<A> {
-    let a = toVarArray<A>(xs);
-    VarArray.sortInPlace<A>(a, compare);
-    fromArrayMut<A>(a)
+  public func sort<T>(xs : Iter<T>, compare : (A, A) -> Order.Order) : Iter<T> {
+    let a = toVarArray<T>(xs);
+    VarArray.sortInPlace<T>(a, compare);
+    fromArrayMut<T>(a)
   };
 
 }

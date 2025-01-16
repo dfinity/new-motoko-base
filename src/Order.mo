@@ -36,9 +36,9 @@ module {
     }
   };
 
-  /// Returns true if only if  `o1` and `o2` are the same ordering.
-  public func equal(o1 : Order, o2 : Order) : Bool {
-    switch (o1, o2) {
+  /// Returns true if only if  `order1` and `order2` are the same.
+  public func equal(order1 : Order, order2 : Order) : Bool {
+    switch (order1, order2) {
       case (#less, #less) { true };
       case (#equal, #equal) { true };
       case (#greater, #greater) { true };

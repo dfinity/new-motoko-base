@@ -31,16 +31,16 @@ module {
     Prim.charToNat32(c) -% Prim.charToNat32('0') <= (9 : Nat32)
   };
 
-  /// Returns the Unicode _White_Space_ property of `char`.
+  /// Returns whether `char` is a whitespace character.
   public let isWhitespace : (char : Char) -> Bool = Prim.charIsWhitespace;
 
-  /// Returns the Unicode _Lowercase_ property of `char`.
-  public let isLowercase : (char : Char) -> Bool = Prim.charIsLowercase;
+  /// Returns whether `char` is a lowercase character.
+  public let isLower : (char : Char) -> Bool = Prim.charIsLowercase;
 
-  /// Returns the Unicode _Uppercase_ property of `char`.
-  public let isUppercase : (char : Char) -> Bool = Prim.charIsUppercase;
+  /// Returns whether `char` is an uppercase character.
+  public let isUpper : (char : Char) -> Bool = Prim.charIsUppercase;
 
-  /// Returns the Unicode _Alphabetic_ property of `char`.
+  /// Returns whether `char` is an alphanumeric character.
   public let isAlphabetic : (char : Char) -> Bool = Prim.charIsAlphabetic;
 
   /// Returns `a == b`.

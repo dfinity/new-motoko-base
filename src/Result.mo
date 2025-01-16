@@ -147,8 +147,8 @@ module {
   /// assert(Result.toOption(#ok(42)) == ?42);
   /// assert(Result.toOption(#err("err")) == null);
   /// ```
-  public func toOption<R, E>(r : Result<R, E>) : ?R {
-    switch r {
+  public func toOption<R, E>(result : Result<R, E>) : ?R {
+    switch result {
       case (#ok(x)) { ?x };
       case (#err(_)) { null }
     }
@@ -165,40 +165,40 @@ module {
   /// Result.iterate<Nat, Text>(#err("Wrong"), func (x : Nat) { counter += x });
   /// assert(counter == 5);
   /// ```
-  public func iterate<Ok, Err>(res : Result<Ok, Err>, f : Ok -> ()) {
-    switch res {
+  public func iterate<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ()) {
+    switch result {
       case (#ok(ok)) { f(ok) };
       case _ {}
     }
   };
 
   // Whether this Result is an `#ok`
-  public func isOk(r : Result<Any, Any>) : Bool {
-    switch r {
+  public func isOk(result : Result<Any, Any>) : Bool {
+    switch result {
       case (#ok(_)) { true };
       case (#err(_)) { false }
     }
   };
 
   // Whether this Result is an `#err`
-  public func isErr(r : Result<Any, Any>) : Bool {
-    switch r {
+  public func isErr(result : Result<Any, Any>) : Bool {
+    switch result {
       case (#ok(_)) { false };
       case (#err(_)) { true }
     }
   };
 
   /// Asserts that its argument is an `#ok` result, traps otherwise.
-  public func assertOk(r : Result<Any, Any>) {
-    switch (r) {
+  public func assertOk(result : Result<Any, Any>) {
+    switch result {
       case (#err(_)) { assert false };
       case (#ok(_)) {}
     }
   };
 
   /// Asserts that its argument is an `#err` result, traps otherwise.
-  public func assertErr(r : Result<Any, Any>) {
-    switch (r) {
+  public func assertErr(result : Result<Any, Any>) {
+    switch result {
       case (#err(_)) {};
       case (#ok(_)) assert false
     }

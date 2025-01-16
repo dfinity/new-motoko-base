@@ -276,7 +276,21 @@ Note: The resolution of the timers is in the order of the block rate,</p>
 <pre><code>  so durations should be chosen well above that. For frequent
   canister wake-ups the heatbeat mechanism should be considered.</code></pre></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Map.html">immutable/Map</a><div class="index-item-comment"><p>Original: <code>OrderedMap.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Queue.html">immutable/Queue</a><div class="index-item-comment"><p>Original: <code>Deque.mo</code></p>
+</div></li><li class="index-item"><a class="index-item-link" href="immutable/Queue.html">immutable/Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
+<p>The interface is purely functional, not imperative, and queues are immutable values.
+In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
+value of the modified Queue, alongside any other data.
+The input queue is left unchanged.</p>
+<p>Examples of use-cases:
+Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.
+Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</p>
+<p>A Queue is internally implemented as two lists, a head access list and a (reversed) tail access list,
+that are dynamically size-balanced by splitting.</p>
+<p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
+<p>Note on the costs of push and pop functions:</p>
+<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
+
+<p><code>n</code> denotes the number of elements stored in the queue.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Set.html">immutable/Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Stack.html">immutable/Stack</a><div class="index-item-comment"><p>Immutable singly-linked list</p>
 </div></li></ul></div></html>

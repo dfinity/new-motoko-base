@@ -13,29 +13,29 @@ module {
   /// Booleans with constants `true` and `false`.
   public type Bool = Prim.Types.Bool;
 
-  /// Returns `x and y`.
+  /// Returns `a and b`.
   public func logicalAnd(a : Bool, b : Bool) : Bool { a and b };
 
-  /// Returns `x or y`.
+  /// Returns `a or b`.
   public func logicalOr(a : Bool, b : Bool) : Bool { a or b };
 
-  /// Returns exclusive or of `x` and `y`, `x != y`.
+  /// Returns exclusive or of `a` and `y`, `a != b`.
   public func logicalXor(a : Bool, b : Bool) : Bool { a != b };
 
-  /// Returns `not x`.
+  /// Returns `not bool`.
   public func logicalNot(bool : Bool) : Bool { not bool };
 
-  /// Returns `x == y`.
+  /// Returns `a == b`.
   public func equal(a : Bool, b : Bool) : Bool {
     a == b
   };
 
-  /// Returns `x != y`.
+  /// Returns `a != b`.
   public func compare(a : Bool, b : Bool) : { #less; #equal; #greater } {
     if (a == b) { #equal } else if (a) { #greater } else { #less }
   };
 
-  // Returns either `"true"` or `"false"` corresponding to the input value.
+  // Returns a text value which is either `"true"` or `"false"` depending on the input value.
   public func toText(bool : Bool) : Text {
     if bool "true" else "false"
   };

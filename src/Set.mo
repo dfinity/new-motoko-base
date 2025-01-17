@@ -9,9 +9,13 @@ module {
 
   public type Set<T> = { var immutable : Immutable.Set<T> };
 
-  public func freeze<T>(set : Set<T>) : Immutable.Set<T> = set.immutable;
+  public func freeze<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Immutable.Set<T> = set.immutable;
 
-  public func thaw<T>(set : Immutable.Set<T>) : Set<T> = { var immutable = set };
+  public func thaw<T>(set : Immutable.Set<T>, compare : (T, T) -> Order.Order) : Set<T> = { var immutable = set };
+
+  public func clear(set : Set<Any>) {
+    set.immutable := Immutable.empty();
+  };
 
   public func clone<T>(set : Set<T>) : Set<T> = { var immutable = set.immutable };
 

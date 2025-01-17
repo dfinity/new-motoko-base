@@ -18,6 +18,10 @@ module {
 
   public func empty<T>() : Stack<T> = { var immutable = Immutable.empty() };
 
+  public func clear(stack : Stack<Any>) {
+    stack.immutable := Immutable.empty();
+  };
+
   public func clone<T>(stack : Stack<T>) : Stack<T> = { var immutable = stack.immutable };
 
   public func isEmpty(stack : Stack<Any>) : Bool {

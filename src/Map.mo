@@ -9,23 +9,27 @@ module {
 
   type Map<K, V> = { var immutable : Immutable.Map<K, V> };
 
-  public func freeze<K, V>(map : Map<K, V>) : Immutable.Map<K, V> = map.immutable;
+  public func freeze<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : Immutable.Map<K, V> = map.immutable;
 
-  public func thaw<K, V>(map : Immutable.Map<K, V>) : Map<K, V> = {
+  public func thaw<K, V>(map : Immutable.Map<K, V>, compare : (K, K) -> Order.Order) : Map<K, V> = {
     var immutable = map
   };
-
-  public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var immutable = map.immutable };
 
   public func empty<K, V>() : Map<K, V> {
     todo()
   };
 
-  public func singleton<K, V>(key : K, value : V) : Map<K, V> {
+  public func isEmpty(map : Map<Any, Any>) : Bool {
     todo()
   };
 
-  public func isEmpty(map : Map<Any, Any>) : Bool {
+  public func clear(map : Map<Any, Any>) {
+    todo()
+  };
+
+  public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var immutable = map.immutable };
+
+  public func singleton<K, V>(key : K, value : V) : Map<K, V> {
     todo()
   };
 

@@ -12,11 +12,15 @@ module {
     todo()
   };
 
-  public func clone<T>(list : List<T>) : List<T> {
+  public func isEmpty(list : List<Any>) : Bool {
     todo()
   };
 
-  public func isEmpty(list : List<Any>) : Bool {
+  public func clear(list : List<Any>) {
+    todo()
+  };
+
+  public func clone<T>(list : List<T>) : List<T> {
     todo()
   };
 

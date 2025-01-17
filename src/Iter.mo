@@ -121,9 +121,9 @@ module {
   /// assert(?10 == iter.next());
   /// // ...
   /// ```
-  public func make<T>(x : T) : Iter<T> = object {
+  public func infinite<T>(item : T) : Iter<T> = object {
     public func next() : ?T {
-      ?x
+      ?item
     }
   };
 
@@ -186,7 +186,7 @@ module {
   /// Like `fromArray` but for Arrays with mutable elements. Captures
   /// the elements of the Array at the time the iterator is created, so
   /// further modifications won't be reflected in the iterator.
-  public func fromArrayMut<T>(xs : [var T]) : Iter<T> {
+  public func fromVarArray<T>(xs : [var T]) : Iter<T> {
     fromArray<T>(Array.fromVarArray<T>(xs))
   };
 
@@ -209,7 +209,7 @@ module {
   public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
     let a = toVarArray<T>(xs);
     VarArray.sortInPlace<T>(a, compare);
-    fromArrayMut<T>(a)
+    fromVarArray<T>(a)
   };
 
 }

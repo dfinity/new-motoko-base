@@ -7,7 +7,6 @@
 
 import Prim "mo:⛔";
 import Iter "IterType";
-import { todo } "Debug";
 
 module {
 
@@ -33,17 +32,24 @@ module {
 
   /// Returns `x != y`.
   public func compare(a : Bool, b : Bool) : { #less; #equal; #greater } {
-    todo()
+    if (a == b) { #equal } else if (a) { #greater } else { #less }
   };
 
   // Returns either `"true"` or `"false"` corresponding to the input value.
   public func toText(bool : Bool) : Text {
-    todo()
+    if bool "true" else "false"
   };
 
   // Returns an iterator over all possible boolean values (`true` and `false`).
-  public func allValues() : Iter.Iter<Bool> {
-    todo()
+  public func allValues() : Iter.Iter<Bool> = object {
+    var state : ?Bool = ?true;
+    public func next() : ?Bool {
+      switch state {
+        case (?true) { state := ?false; ?true };
+        case (?false) { state := null; ?false };
+        case null { null }
+      }
+    }
   };
 
 }

@@ -55,7 +55,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let bytes : [var Nat8] = [var 0, 255, 0];
-  /// let blob = Blob.fromArrayMut(bytes); // => "\00\FF\00"
+  /// let blob = Blob.fromVarArray(bytes); // => "\00\FF\00"
   /// ```
   public func fromVarArray(bytes : [var Nat8]) : Blob = Prim.arrayMutToBlob bytes;
 

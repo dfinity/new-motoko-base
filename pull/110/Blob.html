@@ -30,7 +30,7 @@ let blob = Blob.fromArray(bytes); // =&gt; &quot;\00\FF\00&quot;</code></pre></p
 <p>Example:</p>
 <pre><code>motoko include=import
 let bytes : [var Nat8] = [var 0, 255, 0];
-let blob = Blob.fromArrayMut(bytes); // =&gt; &quot;\00\FF\00&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : [<span class="type">Nat8</span>]</code></h4><p><p>Converts a <code>Blob</code> to an array of bytes (<code>[Nat8]</code>), by copying each element.</p>
+let blob = Blob.fromVarArray(bytes); // =&gt; &quot;\00\FF\00&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : [<span class="type">Nat8</span>]</code></h4><p><p>Converts a <code>Blob</code> to an array of bytes (<code>[Nat8]</code>), by copying each element.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob = &quot;\00\FF\00&quot; : Blob;

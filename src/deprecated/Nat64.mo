@@ -1,4 +1,4 @@
-/// Utility functions on 64-bit unsigned integers.
+/// Provides utility functions on 64-bit unsigned integers.
 ///
 /// Note that most operations are available as built-in operators (e.g. `1 + 1`).
 ///
@@ -7,8 +7,6 @@
 /// import Nat64 "mo:base/Nat64";
 /// ```
 import Nat "Nat";
-import Iter "Iter";
-import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {
@@ -20,9 +18,10 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.maxValue; // => 18446744073709551615 : Nat64
+  /// Nat64.maximumValue; // => 18446744073709551615 : Nat64
   /// ```
-  public let maxValue : Nat64 = 18446744073709551615;
+
+  public let maximumValue = 18446744073709551615 : Nat64;
 
   /// Converts a 64-bit unsigned integer to an unsigned integer with infinite precision.
   ///
@@ -511,8 +510,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.addWrap(Nat64.maxValue, 1); // => 0
-  /// Nat64.maxValue +% (1 : Nat64) // => 0
+  /// ignore Nat64.addWrap(Nat64.maximumValue, 1); // => 0
+  /// Nat64.maximumValue +% (1 : Nat64) // => 0
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -562,17 +561,5 @@ module {
   /// value to pass to a higher order function. It is not possible to use `**%`
   /// as a function value at the moment.
   public func powWrap(x : Nat64, y : Nat64) : Nat64 { x **% y };
-
-  public func range(fromInclusive : Nat64, toExclusive : Nat64) : Iter.Iter<Nat64> {
-    todo()
-  };
-
-  public func rangeInclusive(from : Nat64, to : Nat64) : Iter.Iter<Nat64> {
-    todo()
-  };
-
-  public func allValues() : Iter.Iter<Nat64> {
-    todo()
-  };
 
 }

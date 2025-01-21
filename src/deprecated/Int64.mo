@@ -1,97 +1,135 @@
-/// Utility functions on 64-bit unsigned integers.
+/// Provides utility functions on 64-bit signed integers.
 ///
 /// Note that most operations are available as built-in operators (e.g. `1 + 1`).
 ///
 /// Import from the base library to use this module.
 /// ```motoko name=import
-/// import Nat64 "mo:base/Nat64";
+/// import Int64 "mo:base/Int64";
 /// ```
-import Nat "Nat";
-import Iter "Iter";
-import { todo } "Debug";
+
+import Int "Int";
 import Prim "mo:⛔";
 
 module {
 
-  /// 64-bit natural numbers.
-  public type Nat64 = Prim.Types.Nat64;
+  /// 64-bit signed integers.
+  public type Int64 = Prim.Types.Int64;
 
-  /// Maximum 64-bit natural number. `2 ** 64 - 1`.
+  /// Minimum 64-bit integer value, `-2 ** 63`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.maxValue; // => 18446744073709551615 : Nat64
+  /// Int64.minimumValue // => -9_223_372_036_854_775_808
   /// ```
-  public let maxValue : Nat64 = 18446744073709551615;
+  public let minimumValue = -9_223_372_036_854_775_808 : Int64;
 
-  /// Converts a 64-bit unsigned integer to an unsigned integer with infinite precision.
+  /// Maximum 64-bit integer value, `+2 ** 63 - 1`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.toNat(123); // => 123 : Nat
+  /// Int64.maximumValue // => +9_223_372_036_854_775_807
   /// ```
-  public let toNat : Nat64 -> Nat = Prim.nat64ToNat;
+  public let maximumValue = 9_223_372_036_854_775_807 : Int64;
 
-  /// Converts an unsigned integer with infinite precision to a 64-bit unsigned integer.
-  ///
-  /// Traps on overflow.
+  /// Converts a 64-bit signed integer to a signed integer with infinite precision.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.fromNat(123); // => 123 : Nat64
+  /// Int64.toInt(123_456) // => 123_456 : Int
   /// ```
-  public let fromNat : Nat -> Nat64 = Prim.natToNat64;
+  public let toInt : Int64 -> Int = Prim.int64ToInt;
 
-  /// Converts a 32-bit unsigned integer to a 64-bit unsigned integer.
-  ///
-  /// Example:
-  /// ```motoko include=import
-  /// Nat64.fromNat32(123); // => 123 : Nat64
-  /// ```
-  public func fromNat32(x : Nat32) : Nat64 {
-    Prim.nat32ToNat64(x)
-  };
-
-  /// Converts a 64-bit unsigned integer to a 32-bit unsigned integer.
-  ///
-  /// Traps on overflow.
-  ///
-  /// Example:
-  /// ```motoko include=import
-  /// Nat64.toNat32(123); // => 123 : Nat32
-  /// ```
-  public func toNat32(x : Nat64) : Nat32 {
-    Prim.nat64ToNat32(x)
-  };
-
-  /// Converts a signed integer with infinite precision to a 64-bit unsigned integer.
+  /// Converts a signed integer with infinite precision to a 64-bit signed integer.
   ///
   /// Traps on overflow/underflow.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.fromIntWrap(123); // => 123 : Nat64
+  /// Int64.fromInt(123_456) // => +123_456 : Int64
   /// ```
-  public let fromIntWrap : Int -> Nat64 = Prim.intToNat64Wrap;
+  public let fromInt : Int -> Int64 = Prim.intToInt64;
 
-  /// Converts `x` to its textual representation. Textual representation _do not_
-  /// contain underscores to represent commas.
+  /// Converts a 32-bit signed integer to a 64-bit signed integer.
+  ///
+  /// Traps on overflow/underflow.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.toText(1234); // => "1234" : Text
+  /// Int64.fromInt32(-123_456) // => -123_456 : Int64
   /// ```
-  public func toText(x : Nat64) : Text {
-    Nat.toText(toNat(x))
+  public let fromInt32 : Int32 -> Int64 = Prim.int32ToInt64;
+
+  /// Converts a 64-bit signed integer to a 32-bit signed integer.
+  ///
+  /// Wraps on overflow/underflow.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Int64.toInt32(-123_456) // => -123_456 : Int32
+  /// ```
+  public let toInt32 : Int64 -> Int32 = Prim.int64ToInt32;
+
+  /// Converts a signed integer with infinite precision to a 64-bit signed integer.
+  ///
+  /// Wraps on overflow/underflow.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Int64.fromIntWrap(-123_456) // => -123_456 : Int64
+  /// ```
+  public let fromIntWrap : Int -> Int64 = Prim.intToInt64Wrap;
+
+  /// Converts an unsigned 64-bit integer to a signed 64-bit integer.
+  ///
+  /// Wraps on overflow/underflow.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Int64.fromNat64(123_456) // => +123_456 : Int64
+  /// ```
+  public let fromNat64 : Nat64 -> Int64 = Prim.nat64ToInt64;
+
+  /// Converts a signed 64-bit integer to an unsigned 64-bit integer.
+  ///
+  /// Wraps on overflow/underflow.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Int64.toNat64(-1) // => 18_446_744_073_709_551_615 : Nat64 // underflow
+  /// ```
+  public let toNat64 : Int64 -> Nat64 = Prim.int64ToNat64;
+
+  /// Returns the Text representation of `x`. Textual representation _do not_
+  /// contain underscores to represent commas.
+  ///
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Int64.toText(-123456) // => "-123456"
+  /// ```
+  public func toText(x : Int64) : Text {
+    Int.toText(toInt(x))
+  };
+
+  /// Returns the absolute value of `x`.
+  ///
+  /// Traps when `x == -2 ** 63` (the minimum `Int64` value).
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Int64.abs(-123456) // => +123_456
+  /// ```
+  public func abs(x : Int64) : Int64 {
+    fromInt(Int.abs(toInt(x)))
   };
 
   /// Returns the minimum of `x` and `y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.min(123, 456); // => 123 : Nat64
+  /// Int64.min(+2, -3) // => -3
   /// ```
-  public func min(x : Nat64, y : Nat64) : Nat64 {
+  public func min(x : Int64, y : Int64) : Int64 {
     if (x < y) { x } else { y }
   };
 
@@ -99,19 +137,18 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.max(123, 456); // => 456 : Nat64
+  /// Int64.max(+2, -3) // => +2
   /// ```
-  public func max(x : Nat64, y : Nat64) : Nat64 {
+  public func max(x : Int64, y : Int64) : Int64 {
     if (x < y) { y } else { x }
   };
 
-  /// Equality function for Nat64 types.
+  /// Equality function for Int64 types.
   /// This is equivalent to `x == y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.equal(1, 1); // => true
-  /// (1 : Nat64) == (1 : Nat64) // => true
+  /// Int64.equal(-1, -1); // => true
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -123,93 +160,90 @@ module {
   /// ```motoko include=import
   /// import Buffer "mo:base/Buffer";
   ///
-  /// let buffer1 = Buffer.Buffer<Nat64>(3);
-  /// let buffer2 = Buffer.Buffer<Nat64>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat64.equal) // => true
+  /// let buffer1 = Buffer.Buffer<Int64>(1);
+  /// buffer1.add(-3);
+  /// let buffer2 = Buffer.Buffer<Int64>(1);
+  /// buffer2.add(-3);
+  /// Buffer.equal(buffer1, buffer2, Int64.equal) // => true
   /// ```
-  public func equal(x : Nat64, y : Nat64) : Bool { x == y };
+  public func equal(x : Int64, y : Int64) : Bool { x == y };
 
-  /// Inequality function for Nat64 types.
+  /// Inequality function for Int64 types.
   /// This is equivalent to `x != y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.notEqual(1, 2); // => true
-  /// (1 : Nat64) != (2 : Nat64) // => true
+  /// Int64.notEqual(-1, -2); // => true
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `!=` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `!=`
   /// as a function value at the moment.
-  public func notEqual(x : Nat64, y : Nat64) : Bool { x != y };
+  public func notEqual(x : Int64, y : Int64) : Bool { x != y };
 
-  /// "Less than" function for Nat64 types.
+  /// "Less than" function for Int64 types.
   /// This is equivalent to `x < y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.less(1, 2); // => true
-  /// (1 : Nat64) < (2 : Nat64) // => true
+  /// Int64.less(-2, 1); // => true
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `<` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `<`
   /// as a function value at the moment.
-  public func less(x : Nat64, y : Nat64) : Bool { x < y };
+  public func less(x : Int64, y : Int64) : Bool { x < y };
 
-  /// "Less than or equal" function for Nat64 types.
+  /// "Less than or equal" function for Int64 types.
   /// This is equivalent to `x <= y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.lessOrEqual(1, 2); // => true
-  /// (1 : Nat64) <= (2 : Nat64) // => true
+  /// Int64.lessOrEqual(-2, -2); // => true
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `<=` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `<=`
   /// as a function value at the moment.
-  public func lessOrEqual(x : Nat64, y : Nat64) : Bool { x <= y };
+  public func lessOrEqual(x : Int64, y : Int64) : Bool { x <= y };
 
-  /// "Greater than" function for Nat64 types.
+  /// "Greater than" function for Int64 types.
   /// This is equivalent to `x > y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.greater(2, 1); // => true
-  /// (2 : Nat64) > (1 : Nat64) // => true
+  /// Int64.greater(-2, -3); // => true
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `>` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `>`
   /// as a function value at the moment.
-  public func greater(x : Nat64, y : Nat64) : Bool { x > y };
+  public func greater(x : Int64, y : Int64) : Bool { x > y };
 
-  /// "Greater than or equal" function for Nat64 types.
+  /// "Greater than or equal" function for Int64 types.
   /// This is equivalent to `x >= y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.greaterOrEqual(2, 1); // => true
-  /// (2 : Nat64) >= (1 : Nat64) // => true
+  /// Int64.greaterOrEqual(-2, -2); // => true
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `>=` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `>=`
   /// as a function value at the moment.
-  public func greaterOrEqual(x : Nat64, y : Nat64) : Bool { x >= y };
+  public func greaterOrEqual(x : Int64, y : Int64) : Bool { x >= y };
 
-  /// General purpose comparison function for `Nat64`. Returns the `Order` (
+  /// General-purpose comparison function for `Int64`. Returns the `Order` (
   /// either `#less`, `#equal`, or `#greater`) of comparing `x` with `y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.compare(2, 3) // => #less
+  /// Int64.compare(-3, 2) // => #less
   /// ```
   ///
   /// This function can be used as value for a high order function, such as a sort function.
@@ -217,19 +251,34 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.sort([2, 3, 1] : [Nat64], Nat64.compare) // => [1, 2, 3]
+  /// Array.sort([1, -2, -3] : [Int64], Int64.compare) // => [-3, -2, 1]
   /// ```
-  public func compare(x : Nat64, y : Nat64) : { #less; #equal; #greater } {
+  public func compare(x : Int64, y : Int64) : { #less; #equal; #greater } {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 
-  /// Returns the sum of `x` and `y`, `x + y`.
-  /// Traps on overflow.
+  /// Returns the negation of `x`, `-x`.
+  ///
+  /// Traps on overflow, i.e. for `neg(-2 ** 63)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.add(1, 2); // => 3
-  /// (1 : Nat64) + (2 : Nat64) // => 3
+  /// Int64.neg(123) // => -123
+  /// ```
+  ///
+  /// Note: The reason why this function is defined in this library (in addition
+  /// to the existing `-` operator) is so that you can use it as a function
+  /// value to pass to a higher order function. It is not possible to use `-`
+  /// as a function value at the moment.
+  public func neg(x : Int64) : Int64 { -x };
+
+  /// Returns the sum of `x` and `y`, `x + y`.
+  ///
+  /// Traps on overflow/underflow.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Int64.add(1234, 123) // => +1_357
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -240,17 +289,17 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat64, Nat64>([2, 3, 1], 0, Nat64.add) // => 6
+  /// Array.foldLeft<Int64, Int64>([1, -2, -3], 0, Int64.add) // => -4
   /// ```
-  public func add(x : Nat64, y : Nat64) : Nat64 { x + y };
+  public func add(x : Int64, y : Int64) : Int64 { x + y };
 
   /// Returns the difference of `x` and `y`, `x - y`.
-  /// Traps on underflow.
+  ///
+  /// Traps on overflow/underflow.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.sub(3, 1); // => 2
-  /// (3 : Nat64) - (1 : Nat64) // => 2
+  /// Int64.sub(123, 100) // => +23
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -261,17 +310,17 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat64, Nat64>([2, 3, 1], 10, Nat64.sub) // => 4
+  /// Array.foldLeft<Int64, Int64>([1, -2, -3], 0, Int64.sub) // => 4
   /// ```
-  public func sub(x : Nat64, y : Nat64) : Nat64 { x - y };
+  public func sub(x : Int64, y : Int64) : Int64 { x - y };
 
   /// Returns the product of `x` and `y`, `x * y`.
-  /// Traps on overflow.
+  ///
+  /// Traps on overflow/underflow.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.mul(2, 3); // => 6
-  /// (2 : Nat64) * (3 : Nat64) // => 6
+  /// Int64.mul(123, 10) // => +1_230
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -282,297 +331,309 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat64, Nat64>([2, 3, 1], 1, Nat64.mul) // => 6
+  /// Array.foldLeft<Int64, Int64>([1, -2, -3], 1, Int64.mul) // => 6
   /// ```
-  public func mul(x : Nat64, y : Nat64) : Nat64 { x * y };
+  public func mul(x : Int64, y : Int64) : Int64 { x * y };
 
-  /// Returns the quotient of `x` divided by `y`, `x / y`.
+  /// Returns the signed integer division of `x` by `y`, `x / y`.
+  /// Rounds the quotient towards zero, which is the same as truncating the decimal places of the quotient.
+  ///
   /// Traps when `y` is zero.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.div(6, 2); // => 3
-  /// (6 : Nat64) / (2 : Nat64) // => 3
+  /// Int64.div(123, 10) // => +12
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `/` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `/`
   /// as a function value at the moment.
-  public func div(x : Nat64, y : Nat64) : Nat64 { x / y };
+  public func div(x : Int64, y : Int64) : Int64 { x / y };
 
-  /// Returns the remainder of `x` divided by `y`, `x % y`.
+  /// Returns the remainder of the signed integer division of `x` by `y`, `x % y`,
+  /// which is defined as `x - x / y * y`.
+  ///
   /// Traps when `y` is zero.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.rem(6, 4); // => 2
-  /// (6 : Nat64) % (4 : Nat64) // => 2
+  /// Int64.rem(123, 10) // => +3
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `%` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `%`
   /// as a function value at the moment.
-  public func rem(x : Nat64, y : Nat64) : Nat64 { x % y };
+  public func rem(x : Int64, y : Int64) : Int64 { x % y };
 
-  /// Returns `x` to the power of `y`, `x ** y`. Traps on overflow.
+  /// Returns `x` to the power of `y`, `x ** y`.
+  ///
+  /// Traps on overflow/underflow and when `y < 0 or y >= 64`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.pow(2, 3); // => 8
-  /// (2 : Nat64) ** (3 : Nat64) // => 8
+  /// Int64.pow(2, 10) // => +1_024
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `**` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `**`
   /// as a function value at the moment.
-  public func pow(x : Nat64, y : Nat64) : Nat64 { x ** y };
+  public func pow(x : Int64, y : Int64) : Int64 { x ** y };
 
   /// Returns the bitwise negation of `x`, `^x`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitnot(0); // => 18446744073709551615
-  /// ^(0 : Nat64) // => 18446744073709551615
+  /// Int64.bitnot(-256 /* 0xffff_ffff_ffff_ff00 */) // => +255 // 0xff
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `^` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `^`
   /// as a function value at the moment.
-  public func bitnot(x : Nat64) : Nat64 { ^x };
+  public func bitnot(x : Int64) : Int64 { ^x };
 
-  /// Returns the bitwise and of `x` and `y`, `x & y`.
+  /// Returns the bitwise "and" of `x` and `y`, `x & y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitand(1, 3); // => 1
-  /// (1 : Nat64) & (3 : Nat64) // => 1
+  /// Int64.bitand(0xffff, 0x00f0) // => +240 // 0xf0
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `&` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `&`
   /// as a function value at the moment.
-  public func bitand(x : Nat64, y : Nat64) : Nat64 { x & y };
+  public func bitand(x : Int64, y : Int64) : Int64 { x & y };
 
-  /// Returns the bitwise or of `x` and `y`, `x | y`.
+  /// Returns the bitwise "or" of `x` and `y`, `x | y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitor(1, 3); // => 3
-  /// (1 : Nat64) | (3 : Nat64) // => 3
+  /// Int64.bitor(0xffff, 0x00f0) // => +65_535 // 0xffff
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `|` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `|`
   /// as a function value at the moment.
-  public func bitor(x : Nat64, y : Nat64) : Nat64 { x | y };
+  public func bitor(x : Int64, y : Int64) : Int64 { x | y };
 
-  /// Returns the bitwise exclusive or of `x` and `y`, `x ^ y`.
+  /// Returns the bitwise "exclusive or" of `x` and `y`, `x ^ y`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitxor(1, 3); // => 2
-  /// (1 : Nat64) ^ (3 : Nat64) // => 2
+  /// Int64.bitxor(0xffff, 0x00f0) // => +65_295 // 0xff0f
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `^` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `^`
   /// as a function value at the moment.
-  public func bitxor(x : Nat64, y : Nat64) : Nat64 { x ^ y };
+  public func bitxor(x : Int64, y : Int64) : Int64 { x ^ y };
 
-  /// Returns the bitwise shift left of `x` by `y`, `x << y`.
+  /// Returns the bitwise left shift of `x` by `y`, `x << y`.
+  /// The right bits of the shift filled with zeros.
+  /// Left-overflowing bits, including the sign bit, are discarded.
+  ///
+  /// For `y >= 64`, the semantics is the same as for `bitshiftLeft(x, y % 64)`.
+  /// For `y < 0`,  the semantics is the same as for `bitshiftLeft(x, y + y % 64)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitshiftLeft(1, 3); // => 8
-  /// (1 : Nat64) << (3 : Nat64) // => 8
+  /// Int64.bitshiftLeft(1, 8) // => +256 // 0x100 equivalent to `2 ** 8`.
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `<<` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `<<`
   /// as a function value at the moment.
-  public func bitshiftLeft(x : Nat64, y : Nat64) : Nat64 { x << y };
+  public func bitshiftLeft(x : Int64, y : Int64) : Int64 { x << y };
 
-  /// Returns the bitwise shift right of `x` by `y`, `x >> y`.
+  /// Returns the signed bitwise right shift of `x` by `y`, `x >> y`.
+  /// The sign bit is retained and the left side is filled with the sign bit.
+  /// Right-underflowing bits are discarded, i.e. not rotated to the left side.
+  ///
+  /// For `y >= 64`, the semantics is the same as for `bitshiftRight(x, y % 64)`.
+  /// For `y < 0`,  the semantics is the same as for `bitshiftRight (x, y + y % 64)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitshiftRight(8, 3); // => 1
-  /// (8 : Nat64) >> (3 : Nat64) // => 1
+  /// Int64.bitshiftRight(1024, 8) // => +4 // equivalent to `1024 / (2 ** 8)`
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `>>` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `>>`
   /// as a function value at the moment.
-  public func bitshiftRight(x : Nat64, y : Nat64) : Nat64 { x >> y };
+  public func bitshiftRight(x : Int64, y : Int64) : Int64 { x >> y };
 
-  /// Returns the bitwise rotate left of `x` by `y`, `x <<> y`.
+  /// Returns the bitwise left rotatation of `x` by `y`, `x <<> y`.
+  /// Each left-overflowing bit is inserted again on the right side.
+  /// The sign bit is rotated like other bits, i.e. the rotation interprets the number as unsigned.
+  ///
+  /// Changes the direction of rotation for negative `y`.
+  /// For `y >= 64`, the semantics is the same as for `bitrotLeft(x, y % 64)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitrotLeft(1, 3); // => 8
-  /// (1 : Nat64) <<> (3 : Nat64) // => 8
+  ///
+  /// Int64.bitrotLeft(0x2000_0000_0000_0001, 4) // => +18 // 0x12.
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `<<>` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `<<>`
   /// as a function value at the moment.
-  public func bitrotLeft(x : Nat64, y : Nat64) : Nat64 { x <<> y };
+  public func bitrotLeft(x : Int64, y : Int64) : Int64 { x <<> y };
 
-  /// Returns the bitwise rotate right of `x` by `y`, `x <>> y`.
+  /// Returns the bitwise right rotation of `x` by `y`, `x <>> y`.
+  /// Each right-underflowing bit is inserted again on the right side.
+  /// The sign bit is rotated like other bits, i.e. the rotation interprets the number as unsigned.
+  ///
+  /// Changes the direction of rotation for negative `y`.
+  /// For `y >= 64`, the semantics is the same as for `bitrotRight(x, y % 64)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitrotRight(8, 3); // => 1
-  /// (8 : Nat64) <>> (3 : Nat64) // => 1
+  /// Int64.bitrotRight(0x0002_0000_0000_0001, 48) // => +65538 // 0x1_0002.
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `<>>` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `<>>`
   /// as a function value at the moment.
-  public func bitrotRight(x : Nat64, y : Nat64) : Nat64 { x <>> y };
+  public func bitrotRight(x : Int64, y : Int64) : Int64 { x <>> y };
 
-  /// Returns the value of bit `p mod 64` in `x`, `(x & 2^(p mod 64)) == 2^(p mod 64)`.
+  /// Returns the value of bit `p` in `x`, `x & 2**p == 2**p`.
+  /// If `p >= 64`, the semantics is the same as for `bittest(x, p % 64)`.
   /// This is equivalent to checking if the `p`-th bit is set in `x`, using 0 indexing.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bittest(5, 2); // => true
+  /// Int64.bittest(128, 7) // => true
   /// ```
-  public func bittest(x : Nat64, p : Nat) : Bool {
-    Prim.btstNat64(x, Prim.natToNat64(p))
+  public func bittest(x : Int64, p : Nat) : Bool {
+    Prim.btstInt64(x, Prim.intToInt64(p))
   };
 
-  /// Returns the value of setting bit `p mod 64` in `x` to `1`.
+  /// Returns the value of setting bit `p` in `x` to `1`.
+  /// If `p >= 64`, the semantics is the same as for `bitset(x, p % 64)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitset(5, 1); // => 7
+  /// Int64.bitset(0, 7) // => +128
   /// ```
-  public func bitset(x : Nat64, p : Nat) : Nat64 {
-    x | (1 << Prim.natToNat64(p))
+  public func bitset(x : Int64, p : Nat) : Int64 {
+    x | (1 << Prim.intToInt64(p))
   };
 
-  /// Returns the value of clearing bit `p mod 64` in `x` to `0`.
+  /// Returns the value of clearing bit `p` in `x` to `0`.
+  /// If `p >= 64`, the semantics is the same as for `bitclear(x, p % 64)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitclear(5, 2); // => 1
+  /// Int64.bitclear(-1, 7) // => -129
   /// ```
-  public func bitclear(x : Nat64, p : Nat) : Nat64 {
-    x & ^(1 << Prim.natToNat64(p))
+  public func bitclear(x : Int64, p : Nat) : Int64 {
+    x & ^(1 << Prim.intToInt64(p))
   };
 
-  /// Returns the value of flipping bit `p mod 64` in `x`.
+  /// Returns the value of flipping bit `p` in `x`.
+  /// If `p >= 64`, the semantics is the same as for `bitclear(x, p % 64)`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitflip(5, 2); // => 1
+  /// Int64.bitflip(255, 7) // => +127
   /// ```
-  public func bitflip(x : Nat64, p : Nat) : Nat64 {
-    x ^ (1 << Prim.natToNat64(p))
+  public func bitflip(x : Int64, p : Nat) : Int64 {
+    x ^ (1 << Prim.intToInt64(p))
   };
 
   /// Returns the count of non-zero bits in `x`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitcountNonZero(5); // => 2
+  /// Int64.bitcountNonZero(0xffff) // => +16
   /// ```
-  public let bitcountNonZero : (x : Nat64) -> Nat64 = Prim.popcntNat64;
+  public let bitcountNonZero : (x : Int64) -> Int64 = Prim.popcntInt64;
 
   /// Returns the count of leading zero bits in `x`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitcountLeadingZero(5); // => 61
+  /// Int64.bitcountLeadingZero(0x8000_0000) // => +32
   /// ```
-  public let bitcountLeadingZero : (x : Nat64) -> Nat64 = Prim.clzNat64;
+  public let bitcountLeadingZero : (x : Int64) -> Int64 = Prim.clzInt64;
 
   /// Returns the count of trailing zero bits in `x`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitcountTrailingZero(16); // => 4
+  /// Int64.bitcountTrailingZero(0x0201_0000) // => +16
   /// ```
-  public let bitcountTrailingZero : (x : Nat64) -> Nat64 = Prim.ctzNat64;
+  public let bitcountTrailingZero : (x : Int64) -> Int64 = Prim.ctzInt64;
 
-  /// Returns the sum of `x` and `y`, `x +% y`. Wraps on overflow.
+  /// Returns the sum of `x` and `y`, `x +% y`.
+  ///
+  /// Wraps on overflow/underflow.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.addWrap(Nat64.maxValue, 1); // => 0
-  /// Nat64.maxValue +% (1 : Nat64) // => 0
+  /// Int64.addWrap(2 ** 62, 2 ** 62) // => -9_223_372_036_854_775_808 // overflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `+%` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `+%`
   /// as a function value at the moment.
-  public func addWrap(x : Nat64, y : Nat64) : Nat64 { x +% y };
+  public func addWrap(x : Int64, y : Int64) : Int64 { x +% y };
 
-  /// Returns the difference of `x` and `y`, `x -% y`. Wraps on underflow.
+  /// Returns the difference of `x` and `y`, `x -% y`.
+  ///
+  /// Wraps on overflow/underflow.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.subWrap(0, 1); // => 18446744073709551615
-  /// (0 : Nat64) -% (1 : Nat64) // => 18446744073709551615
+  /// Int64.subWrap(-2 ** 63, 1) // => +9_223_372_036_854_775_807 // underflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `-%` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `-%`
   /// as a function value at the moment.
-  public func subWrap(x : Nat64, y : Nat64) : Nat64 { x -% y };
+  public func subWrap(x : Int64, y : Int64) : Int64 { x -% y };
 
   /// Returns the product of `x` and `y`, `x *% y`. Wraps on overflow.
   ///
+  /// Wraps on overflow/underflow.
+  ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.mulWrap(4294967296, 4294967296); // => 0
-  /// (4294967296 : Nat64) *% (4294967296 : Nat64) // => 0
+  /// Int64.mulWrap(2 ** 32, 2 ** 32) // => 0 // overflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `*%` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `*%`
   /// as a function value at the moment.
-  public func mulWrap(x : Nat64, y : Nat64) : Nat64 { x *% y };
+  public func mulWrap(x : Int64, y : Int64) : Int64 { x *% y };
 
-  /// Returns `x` to the power of `y`, `x **% y`. Wraps on overflow.
+  /// Returns `x` to the power of `y`, `x **% y`.
+  ///
+  /// Wraps on overflow/underflow.
+  /// Traps if `y < 0 or y >= 64`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.powWrap(2, 64); // => 0
-  /// (2 : Nat64) **% (64 : Nat64) // => 0
+  /// Int64.powWrap(2, 63) // => -9_223_372_036_854_775_808 // overflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
   /// to the existing `**%` operator) is so that you can use it as a function
   /// value to pass to a higher order function. It is not possible to use `**%`
   /// as a function value at the moment.
-  public func powWrap(x : Nat64, y : Nat64) : Nat64 { x **% y };
-
-  public func range(fromInclusive : Nat64, toExclusive : Nat64) : Iter.Iter<Nat64> {
-    todo()
-  };
-
-  public func rangeInclusive(from : Nat64, to : Nat64) : Iter.Iter<Nat64> {
-    todo()
-  };
-
-  public func allValues() : Iter.Iter<Nat64> {
-    todo()
-  };
-
+  public func powWrap(x : Int64, y : Int64) : Int64 { x **% y }
 }

@@ -21,7 +21,7 @@ module {
     { var immutable = Immutable.singleton(item) }
   };
 
-  public func clear(queue : Queue<Any>) {
+  public func clear<T>(queue : Queue<T>) {
     queue.immutable := Immutable.empty();
   };
 

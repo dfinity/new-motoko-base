@@ -12,11 +12,11 @@ module {
     todo()
   };
 
-  public func isEmpty(list : List<Any>) : Bool {
+  public func isEmpty<T>(list : List<T>) : Bool {
     todo()
   };
 
-  public func clear(list : List<Any>) {
+  public func clear<T>(list : List<T>) {
     todo()
   };
 

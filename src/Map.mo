@@ -23,7 +23,7 @@ module {
     todo()
   };
 
-  public func clear(map : Map<Any, Any>) {
+  public func clear<K, V>(map : Map<K,  V>) {
     todo()
   };
 

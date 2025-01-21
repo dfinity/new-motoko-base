@@ -22,7 +22,6 @@ module {
   /// ```motoko include=import
   /// Nat64.maxValue; // => 18446744073709551615 : Nat64
   /// ```
-
   public let maxValue : Nat64 = 18446744073709551615;
 
   /// Converts a 64-bit unsigned integer to an unsigned integer with infinite precision.

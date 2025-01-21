@@ -9,7 +9,7 @@ module {
 
   public type Nat16 = Prim.Types.Nat16;
 
-  public let maximumValue = 65535 : Nat16;
+  public let maxValue : Nat16 = 65535;
 
   public let toNat : Nat16 -> Nat = Prim.nat16ToNat;
 

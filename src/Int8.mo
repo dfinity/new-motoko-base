@@ -9,9 +9,9 @@ module {
 
   public type Int8 = Prim.Types.Int8;
 
-  public let minimumValue = -128 : Int8;
+  public let minValue : Int8 = -128;
 
-  public let maximumValue = 127 : Int8;
+  public let maxValue : Int8 = 127;
 
   public let toInt : Int8 -> Int = Prim.int8ToInt;
 

@@ -9,9 +9,9 @@ module {
 
   public type Int32 = Prim.Types.Int32;
 
-  public let minimumValue = -2_147_483_648 : Int32;
+  public let minValue : Int32 = -2_147_483_648;
 
-  public let maximumValue = 2_147_483_647 : Int32;
+  public let maxValue : Int32 = 2_147_483_647;
 
   public let toInt : Int32 -> Int = Prim.int32ToInt;
 

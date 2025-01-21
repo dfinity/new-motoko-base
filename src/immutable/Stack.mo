@@ -12,9 +12,9 @@ module {
 
   public func empty<T>() : Stack<T> = null;
 
-  public func isEmpty(stack : Stack<Any>) : Bool = todo();
+  public func isEmpty<T>(stack : Stack<T>) : Bool = todo();
 
-  public func size(stack : Stack<Any>) : Nat = todo();
+  public func size<T>(stack : Stack<T>) : Nat = todo();
 
   public func contains<T>(stack : Stack<T>, item : T) : Bool {
     todo()

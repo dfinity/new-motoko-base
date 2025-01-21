@@ -67,11 +67,11 @@ module {
     todo()
   };
 
-  public func assertOk(result : Result<Any, Any>) {
+  public func assertOk<K, V>(result : Result<K, V>) {
     todo()
   };
 
-  public func assertErr(result : Result<Any, Any>) {
+  public func assertErr<K, V>(result : Result<K, V>) {
     todo()
   };
 

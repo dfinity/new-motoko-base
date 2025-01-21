@@ -116,7 +116,7 @@ module {
     todo()
   };
 
-  public func assertValid(set : Set<Any>) : () {
+  public func assertValid<T>(set : Set<T>) : () {
     todo()
   };
 

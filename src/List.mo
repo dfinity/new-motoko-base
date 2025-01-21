@@ -24,7 +24,7 @@ module {
     todo()
   };
 
-  public func size(list : List<Any>) : Bool {
+  public func size<T>(list : List<T>) : Bool {
     todo()
   };
 

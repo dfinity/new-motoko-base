@@ -25,11 +25,11 @@ module {
     todo()
   };
 
-  public func isEmpty(set : Set<Any>) : Bool {
+  public func isEmpty<T>(set : Set<T>) : Bool {
     todo()
   };
 
-  public func size(set : Set<Any>) : Nat {
+  public func size<T>(set : Set<T>) : Nat {
     todo()
   };
 

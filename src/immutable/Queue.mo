@@ -16,11 +16,11 @@ module {
     todo()
   };
 
-  public func isEmpty(queue : Queue<Any>) : Bool {
+  public func isEmpty<T>(queue : Queue<T>) : Bool {
     todo()
   };
 
-  public func size(queue : Queue<Any>) : Nat {
+  public func size<T>(queue : Queue<T>) : Nat {
     todo()
   };
 

@@ -1,15 +1,17 @@
-/// Utility functions on 64-bit signed integers
+/// 64-bit signed integers
 
 import Int "Int";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
   public type Int64 = Prim.Types.Int64;
 
-  public let minimumValue = -9_223_372_036_854_775_808 : Int64;
+  public let minValue : Int64 = -9_223_372_036_854_775_808;
 
-  public let maximumValue = 9_223_372_036_854_775_807 : Int64;
+  public let maxValue : Int64 = 9_223_372_036_854_775_807;
 
   public let toInt : Int64 -> Int = Prim.int64ToInt;
 
@@ -115,5 +117,18 @@ module {
 
   public func mulWrap(x : Int64, y : Int64) : Int64 { x *% y };
 
-  public func powWrap(x : Int64, y : Int64) : Int64 { x **% y }
+  public func powWrap(x : Int64, y : Int64) : Int64 { x **% y };
+
+  public func range(fromInclusive : Int64, toExclusive : Int64) : Iter.Iter<Int64> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Int64, to : Int64) : Iter.Iter<Int64> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Int64> {
+    todo()
+  };
+
 }

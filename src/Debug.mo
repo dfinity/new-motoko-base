@@ -1,6 +1,7 @@
 /// Debug functions
 
 import Prim "mo:⛔";
+import Runtime "Runtime";
 
 module {
 
@@ -8,16 +9,8 @@ module {
     Prim.debugPrint text
   };
 
-  public func trap(errorMessage : Text) : None {
-    Prim.trap errorMessage
-  };
-
-  public func nyi() : None {
-    trap("Debug.nyi()")
-  };
-
-  public func unreachable() : None {
-    trap("Debug.unreachable()")
+  public func todo() : None {
+    Runtime.trap("Debug.todo()")
   };
 
 }

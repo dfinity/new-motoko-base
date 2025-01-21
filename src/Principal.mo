@@ -4,9 +4,9 @@ import Prim "mo:⛔";
 import Blob "Blob";
 import Hash "Hash";
 import Order "Order";
-import Array "functional/Array";
+import Array "Array";
 import Text "Text";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 
@@ -26,9 +26,11 @@ module {
 
   public func fromText(t : Text) : Principal = fromActor(actor (t));
 
-  private let anonymous : Blob = "\04";
+  let anonymousBlob : Blob = "\04";
 
-  public func isAnonymous(p : Principal) : Bool = Prim.blobOfPrincipal p == anonymousPrincipal;
+  public func anonymous() : Principal = Prim.principalOfBlob(anonymousBlob);
+
+  public func isAnonymous(p : Principal) : Bool = p == anonymous;
 
   public func isController(p : Principal) : Bool = Prim.isController p;
 

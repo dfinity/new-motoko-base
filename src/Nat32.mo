@@ -1,13 +1,15 @@
-/// Utility functions on 32-bit unsigned integers
+/// 32-bit unsigned integers
 
 import Nat "Nat";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
   public type Nat32 = Prim.Types.Nat32;
 
-  public let maximumValue = 4294967295 : Nat32;
+  public let maxValue : Nat32 = 4294967295;
 
   public let toNat : Nat32 -> Nat = Prim.nat32ToNat;
 
@@ -116,5 +118,17 @@ module {
   public func mulWrap(x : Nat32, y : Nat32) : Nat32 { x *% y };
 
   public func powWrap(x : Nat32, y : Nat32) : Nat32 { x **% y };
+
+  public func range(fromInclusive : Nat32, toExclusive : Nat32) : Iter.Iter<Nat32> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Nat32, to : Nat32) : Iter.Iter<Nat32> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Nat32> {
+    todo()
+  };
 
 }

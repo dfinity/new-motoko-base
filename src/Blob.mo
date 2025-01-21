@@ -1,10 +1,15 @@
-/// Module for working with Blobs: immutable sequence of bytes.
+/// Utilities for `Blob` (immutable sequence of bytes)
 
+import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {
 
   public type Blob = Prim.Types.Blob;
+
+  public func empty() : Blob = "";
+
+  public func size(blob : Blob) : Nat = blob.size();
   
   public func fromArray(bytes : [Nat8]) : Blob = Prim.arrayToBlob bytes;
 

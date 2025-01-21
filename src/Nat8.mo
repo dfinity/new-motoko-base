@@ -1,13 +1,15 @@
-/// Utility functions on 8-bit unsigned integers
+/// 8-bit unsigned integers
 
 import Nat "Nat";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
   public type Nat8 = Prim.Types.Nat8;
 
-  public let maximumValue = 255 : Nat8;
+  public let maxValue : Nat8 = 255;
 
   public let toNat : Nat8 -> Nat = Prim.nat8ToNat;
 
@@ -104,5 +106,17 @@ module {
   public func mulWrap(x : Nat8, y : Nat8) : Nat8 { x *% y };
 
   public func powWrap(x : Nat8, y : Nat8) : Nat8 { x **% y };
+
+  public func range(fromInclusive : Nat8, toExclusive : Nat8) : Iter.Iter<Nat8> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Nat8, to : Nat8) : Iter.Iter<Nat8> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Nat8> {
+    todo()
+  };
 
 }

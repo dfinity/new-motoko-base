@@ -2,6 +2,8 @@
 
 import Prim "mo:⛔";
 import Hash "Hash";
+import Iter "IterType";
+import { todo } "Debug";
 
 module {
 
@@ -56,5 +58,13 @@ module {
   public func rem(x : Int, y : Int) : Int { x % y };
 
   public func pow(x : Int, y : Int) : Int { x ** y };
+
+  public func range(fromInclusive : Int, toExclusive : Int) : Iter.Iter<Int> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int> {
+    todo()
+  };
 
 }

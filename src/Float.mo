@@ -2,7 +2,7 @@
 
 import Prim "mo:⛔";
 import Int "Int";
-import { nyi = todo } "Debug";
+import { todo } "Debug";
 
 module {
 
@@ -95,10 +95,6 @@ module {
 
   public func compare(x : Float, y : Float) : { #less; #equal; #greater } {
     todo()
-  };
-
-  func isNegative(number : Float) : Bool {
-    copySign(1.0, number) < 0.0
   };
 
   public func neg(x : Float) : Float { -x };

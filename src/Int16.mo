@@ -1,15 +1,17 @@
-/// Utility functions on 16-bit signed integers
+/// 16-bit signed integers
 
 import Int "Int";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
   public type Int16 = Prim.Types.Int16;
 
-  public let minimumValue = -32_768 : Int16;
+  public let minValue : Int16 = -32_768;
 
-  public let maximumValue = 32_767 : Int16;
+  public let maxValue : Int16 = 32_767;
 
   public let toInt : Int16 -> Int = Prim.int16ToInt;
 
@@ -119,6 +121,18 @@ module {
 
   public func mulWrap(x : Int16, y : Int16) : Int16 { x *% y };
 
-  public func powWrap(x : Int16, y : Int16) : Int16 { x **% y }
+  public func powWrap(x : Int16, y : Int16) : Int16 { x **% y };
+
+  public func range(fromInclusive : Int16, toExclusive : Int16) : Iter.Iter<Int16> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Int16, to : Int16) : Iter.Iter<Int16> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Int16> {
+    todo()
+  };
 
 }

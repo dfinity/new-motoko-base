@@ -1,10 +1,8 @@
-"use strict";
-
 // Detect "mo:base/..." imports within the base library itself (https://github.com/dfinity/motoko-base/pull/487)
 
-const { join } = require("path");
-const { readFileSync } = require("fs");
-const glob = require("fast-glob");
+import { join } from "path";
+import { readFileSync } from "fs";
+import glob from "fast-glob";
 
 const srcDirectory = join(__dirname, "../../../src");
 

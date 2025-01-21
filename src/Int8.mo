@@ -1,15 +1,17 @@
-/// Utility functions on 8-bit signed integers
+/// 8-bit signed integers
 
 import Int "Int";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
   public type Int8 = Prim.Types.Int8;
 
-  public let minimumValue = -128 : Int8;
+  public let minValue : Int8 = -128;
 
-  public let maximumValue = 127 : Int8;
+  public let maxValue : Int8 = 127;
 
   public let toInt : Int8 -> Int = Prim.int8ToInt;
 
@@ -116,5 +118,17 @@ module {
   public func mulWrap(x : Int8, y : Int8) : Int8 { x *% y };
 
   public func powWrap(x : Int8, y : Int8) : Int8 { x **% y };
+
+  public func range(fromInclusive : Int8, toExclusive : Int8) : Iter.Iter<Int8> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Int8, to : Int8) : Iter.Iter<Int8> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Int8> {
+    todo()
+  };
 
 }

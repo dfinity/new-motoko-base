@@ -1,8 +1,8 @@
 # New Motoko Base Library
 
-> **Work in progress! Please consider providing feedback on the [GitHub issues page](https://github.com/dfinity/new-motoko-base/issues)**. 
+> **Work in progress! Please consider providing feedback on the [GitHub discussions page](https://github.com/dfinity/new-motoko-base/discussions)**. 
 
-#### [Documentation preview](https://dfinity.github.io/new-motoko-base)
+#### ✨ [Documentation preview](https://dfinity.github.io/new-motoko-base)
 
 ---
 

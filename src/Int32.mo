@@ -1,15 +1,17 @@
-/// Utility functions on 32-bit signed integers
+/// 32-bit signed integers
 
 import Int "Int";
+import Iter "IterType";
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
   public type Int32 = Prim.Types.Int32;
 
-  public let minimumValue = -2_147_483_648 : Int32;
+  public let minValue : Int32 = -2_147_483_648;
 
-  public let maximumValue = 2_147_483_647 : Int32;
+  public let maxValue : Int32 = 2_147_483_647;
 
   public let toInt : Int32 -> Int = Prim.int32ToInt;
 
@@ -120,5 +122,17 @@ module {
   public func mulWrap(x : Int32, y : Int32) : Int32 { x *% y };
 
   public func powWrap(x : Int32, y : Int32) : Int32 { x **% y };
+
+  public func range(fromInclusive : Int32, toExclusive : Int32) : Iter.Iter<Int32> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Int32, to : Int32) : Iter.Iter<Int32> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Int32> {
+    todo()
+  };
 
 }

@@ -1,9 +1,9 @@
 /// Natural numbers with infinite precision
 
 import Int "Int";
-import Order "Order";
 import Prim "mo:⛔";
-import Char "Char";
+import Iter "IterType";
+import { todo } "Debug";
 
 module {
 
@@ -12,6 +12,10 @@ module {
   public func toText(n : Nat) : Text = Int.toText n;
 
   public func fromText(text : Text) : ?Nat {
+    todo()
+  };
+
+  public func fromInt(i : Int) : ?Nat {
     todo()
   };
 
@@ -54,5 +58,17 @@ module {
   public func bitshiftLeft(x : Nat, y : Nat32) : Nat { Prim.shiftLeft(x, y) };
 
   public func bitshiftRight(x : Nat, y : Nat32) : Nat { Prim.shiftRight(x, y) };
+
+  public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat> {
+    todo()
+  };
+
+  public func rangeInclusive(from : Nat, to : Nat) : Iter.Iter<Nat> {
+    todo()
+  };
+
+  public func allValues() : Iter.Iter<Nat> {
+    todo()
+  };
 
 }

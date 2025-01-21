@@ -1,6 +1,7 @@
-/// Originally `ExperimentalInternetComputer.mo`
+/// Original: `ExperimentalInternetComputer.mo`
 
 import Prim "mo:⛔";
+import { todo } "Debug";
 
 module {
 
@@ -11,13 +12,13 @@ module {
     let pre = Prim.performanceCounter(0);
     comp();
     let post = Prim.performanceCounter(0);
-    // performance_counter costs around 200 extra instructions, we perform an empty measurement to decide the overhead
+    // performance_counter costs around 200 extra instructions; we perform an empty measurement to decide the overhead
     let overhead = pre - init;
     post - pre - overhead
   };
 
   public let performanceCounter : (counter : Nat32) -> (value: Nat64) = Prim.performanceCounter;
 
-  public func replyDeadline() : Nat = Prim.nat64ToNat(Prim.replyDeadline());
+  public func replyDeadline() : Nat = todo();
 
 }

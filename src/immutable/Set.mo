@@ -1,31 +1,26 @@
 /// Original: `OrderedSet.mo`
 
-import Immutable "immutable/Set";
-import Iter "IterType";
-import Order "Order";
-import { todo } "Debug";
+import Iter "../Iter";
+import Order "../Order";
+import { todo } "../Debug";
 
 module {
 
-  public type Set<T> = { var immutable : Immutable.Set<T> };
+  public type Set<T> = (); // Placeholder
 
-  public func freeze<T>(set : Set<T>) : Immutable.Set<T> = set.immutable;
-
-  public func thaw<T>(set : Immutable.Set<T>) : Set<T> = { var immutable = set };
-
-  public func clone<T>(set : Set<T>) : Set<T> = { var immutable = set.immutable };
-
-  public func empty<T>() : Set<T> = { var immutable = Immutable.empty() };
-
-  public func singleton<T>() : Set<T> {
+  public func empty<T>() : Set<T> {
     todo()
   };
 
-  public func isEmpty(set : Set<Any>) : Bool {
+  public func singleton<T>(item : T) : Set<T> {
     todo()
   };
 
-  public func size(set : Set<Any>) : Nat {
+  public func isEmpty<T>(set : Set<T>) : Bool {
+    todo()
+  };
+
+  public func size<T>(set : Set<T>) : Nat {
     todo()
   };
 
@@ -33,15 +28,11 @@ module {
     todo()
   };
 
-  public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool {
+  public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Set<T> {
     todo()
   };
 
-  public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : () {
-    todo()
-  };
-
-  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Bool {
+  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Set<T> {
     todo()
   };
 
@@ -50,6 +41,10 @@ module {
   };
 
   public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+    todo()
+  };
+
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>) : Bool {
     todo()
   };
 
@@ -113,10 +108,6 @@ module {
     todo()
   };
 
-  public func flatten<T>(set : Iter.Iter<Set<T>>) : Set<T> {
-    todo()
-  };
-
   public func all<T>(set : Set<T>, pred : T -> Bool) : Bool {
     todo()
   };
@@ -125,7 +116,7 @@ module {
     todo()
   };
 
-  public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order) : () {
+  public func assertValid(set : Set<Any>) : () {
     todo()
   };
 

@@ -1,27 +1,14 @@
 /// Original: `OrderedMap.mo`
 
-import Immutable "immutable/Map";
-import Iter "IterType";
-import Order "Order";
-import { todo } "Debug";
+import Order "../Order";
+import Iter "../Iter";
+import { todo } "../Debug";
 
 module {
 
-  type Map<K, V> = { var immutable : Immutable.Map<K, V> };
-
-  public func freeze<K, V>(map : Map<K, V>) : Immutable.Map<K, V> = map.immutable;
-
-  public func thaw<K, V>(map : Immutable.Map<K, V>) : Map<K, V> = {
-    var immutable = map
-  };
-
-  public func clone<K, V>(map : Map<K, V>) : Map<K, V> = { var immutable = map.immutable };
+  public type Map<K, V> = (); // Placeholder
 
   public func empty<K, V>() : Map<K, V> {
-    todo()
-  };
-
-  public func singleton<K, V>(key : K, value : V) : Map<K, V> {
     todo()
   };
 
@@ -33,10 +20,6 @@ module {
     todo()
   };
 
-  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>) : Bool {
-    todo()
-  };
-
   public func containsKey<K>(map : Map<K, Any>, compare : (K, K) -> Order.Order, key : K) : Bool {
     todo()
   };
@@ -45,19 +28,19 @@ module {
     todo()
   };
 
-  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : () {
+  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V> {
     todo()
   };
 
-  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
+  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V) {
     todo()
   };
 
-  public func replaceIfExists<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
+  public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Map<K, V> {
     todo()
   };
 
-  public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : () {
+  public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : (Map<K, V>, ?V) {
     todo()
   };
 
@@ -86,14 +69,6 @@ module {
   };
 
   public func fromIter<K, V>(iter : Iter.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V> {
-    todo()
-  };
-
-  public func forEach<K, V>(map : Map<K, V>, f : (K, V) -> ()) {
-    todo()
-  };
-
-  public func filter<K, V>(map : Map<K, V>, f : (K, V) -> Bool) : Map<K, V> {
     todo()
   };
 
@@ -133,11 +108,7 @@ module {
     todo()
   };
 
-  public func toText<K, V>(map : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
-    todo()
-  };
-
-  public func compare<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compareKey : (K, K) -> Order.Order, compareValue : (V, V) -> Order.Order) : Order.Order {
+  public func toText<K, V>(set : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
     todo()
   };
 

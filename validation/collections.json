@@ -1,0 +1,44 @@
+{
+  "$schema": "schema/index.json",
+  "specs": [
+    {
+      "name": "Collection",
+      "modules": ["Array", "List", "VarArray"],
+      "functions": [
+        "empty",
+        "isEmpty",
+        "singleton",
+        "size",
+        "equal",
+        "compare",
+        "forEach",
+        "filter",
+        "map",
+        "filterMap",
+        "all",
+        "any",
+        "values",
+        "fromIter",
+        "toText"
+      ]
+    },
+    {
+      "name": "ImperativeCollection",
+      "extends": ["Collection"],
+      "modules": ["Queue", "Set", "Stack"],
+      "functions": ["thaw", "freeze", "clone"]
+    },
+    {
+      "name": "KeyValueCollection",
+      "extends": ["Collection"],
+      "modules": ["Map"],
+      "functions": ["keys", "entries"]
+    },
+    {
+      "name": "ImmutableCollection",
+      "extends": ["Collection"],
+      "modules": ["immutable/Queue", "immutable/Set", "immutable/Stack"],
+      "functions": []
+    }
+  ]
+}

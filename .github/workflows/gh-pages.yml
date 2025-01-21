@@ -65,4 +65,4 @@ jobs:
           repository: ${{ github.repository }}
           number: ${{ github.event.number }}
           id: deploy-preview
-          message: "✨ Documentation preview for ${{ github.event.after }}:\n\n> **https://dfinity.github.io/${{ github.event.repository.name }}/${{ env.PR_PATH}}** ([source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/))"
+          message: "✨ Documentation preview for ${{ github.event.after || github.event.pull_request.head.sha }}:\n\n> **https://dfinity.github.io/${{ github.event.repository.name }}/${{ env.PR_PATH}}** ([source code](https://github.com/${{ github.repository }}/tree/gh-pages/${{ env.PR_PATH }}/))"

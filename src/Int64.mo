@@ -9,9 +9,9 @@ module {
 
   public type Int64 = Prim.Types.Int64;
 
-  public let minimumValue = -9_223_372_036_854_775_808 : Int64;
+  public let minValue : Int64 = -9_223_372_036_854_775_808;
 
-  public let maximumValue = 9_223_372_036_854_775_807 : Int64;
+  public let maxValue : Int64 = 9_223_372_036_854_775_807;
 
   public let toInt : Int64 -> Int = Prim.int64ToInt;
 

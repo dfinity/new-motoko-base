@@ -39,7 +39,7 @@ module {
   /// is created by applying `generator` to i.
   ///
   /// ```motoko include=import
-  /// let array : [Nat] = Array.generate<Nat>(4, func i = i * 2);
+  /// let array : [Nat] = Array.tabulate<Nat>(4, func i = i * 2);
   /// ```
   ///
   /// Runtime: O(size)
@@ -47,7 +47,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `generator` runs in O(1) time and space.
-  public func generate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
+  public func tabulate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
 
   /// Transforms a mutable array into an immutable array.
   ///

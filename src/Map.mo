@@ -19,7 +19,7 @@ module {
     todo()
   };
 
-  public func isEmpty(map : Map<Any, Any>) : Bool {
+  public func isEmpty<K, V>(map : Map<K, V>) : Bool {
     todo()
   };
 

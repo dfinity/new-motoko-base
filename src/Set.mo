@@ -13,7 +13,7 @@ module {
 
   public func thaw<T>(set : Immutable.Set<T>, compare : (T, T) -> Order.Order) : Set<T> = { var immutable = set };
 
-  public func clear(set : Set<Any>) {
+  public func clear<T>(set : Set<T>) {
     set.immutable := Immutable.empty();
   };
 

@@ -89,15 +89,15 @@ module {
     todo()
   };
 
-  public func filter<T>(set : Set<T>, f : T -> Bool) : Set<T> {
+  public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, f : T -> Bool) : Set<T> {
     todo()
   };
 
-  public func map<T1, T2>(set : Set<T1>, f : T1 -> T2) : Set<T2> {
+  public func map<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> T2) : Set<T2> {
     todo()
   };
 
-  public func filterMap<T1, T2>(set : Set<T1>, f : T1 -> ?T2) : Set<T2> {
+  public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> ?T2) : Set<T2> {
     todo()
   };
 

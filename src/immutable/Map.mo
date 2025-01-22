@@ -44,11 +44,11 @@ module {
     todo()
   };
 
-  public func maxEntry<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ?(K, V) {
+  public func maxEntry<K, V>(map : Map<K, V>) : ?(K, V) {
     todo()
   };
 
-  public func minEntry<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ?(K, V) {
+  public func minEntry<K, V>(map : Map<K, V>) : ?(K, V) {
     todo()
   };
 

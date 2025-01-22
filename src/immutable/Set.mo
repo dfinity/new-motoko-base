@@ -36,11 +36,11 @@ module {
     todo()
   };
 
-  public func max<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func max<T>(set : Set<T>) : ?T {
     todo()
   };
 
-  public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func min<T>(set : Set<T>) : ?T {
     todo()
   };
 

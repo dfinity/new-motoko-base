@@ -198,7 +198,20 @@ shared(msg) func foo() {
 <p>Then, you can use this module to work with the <code>Principal</code>.</p>
 <p>Import from the base library to use this module.</p>
 <pre><code>motoko name=import
-import Principal &quot;mo:base/Principal&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Queue.html">Queue</a><div class="index-item-comment"><p>Original: <code>Deque.mo</code></p>
+import Principal &quot;mo:base/Principal&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Queue.html">Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
+<p>The interface is imperative, not purely functional.
+In particular, Queue operations such as push and pop update their input queue instead of returning the
+value of the modified Queue.</p>
+<p>Examples of use-cases:
+Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.
+Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</p>
+<p>A Queue is internally implemented as two lists, a head access list and a (reversed) tail access list,
+that are dynamically size-balanced by splitting.</p>
+<p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
+<p>Note on the costs of push and pop functions:</p>
+<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
+
+<p><code>n</code> denotes the number of elements stored in the queue.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Random.html">Random</a><div class="index-item-comment"><p>Random number generation.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Region.html">Region</a><div class="index-item-comment"><p>Byte-level access to isolated, virtual stable memory regions.</p>
 <p>This is a moderately lightweight abstraction over IC <em>stable memory</em> and supports persisting
@@ -830,6 +843,21 @@ i.e., the partial map represents the set with its domain.</p>
 attempts to insert more than MAX_LEAF_SIZE elements (whether directly via <code>put</code> or indirectly via other operations) with the same hash value will trap.
 This limitation is inherited from the underlying <code>Trie</code> data structure.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Map.html">immutable/Map</a><div class="index-item-comment"><p>Original: <code>OrderedMap.mo</code></p>
+</div></li><li class="index-item"><a class="index-item-link" href="immutable/Queue.html">immutable/Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
+<p>The interface is purely functional, not imperative, and queues are immutable values.
+In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
+value of the modified Queue, alongside any other data.
+The input queue is left unchanged.</p>
+<p>Examples of use-cases:
+Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.
+Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</p>
+<p>A Queue is internally implemented as two lists, a head access list and a (reversed) tail access list,
+that are dynamically size-balanced by splitting.</p>
+<p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
+<p>Note on the costs of push and pop functions:</p>
+<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
+
+<p><code>n</code> denotes the number of elements stored in the queue.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Set.html">immutable/Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Stack.html">immutable/Stack</a><div class="index-item-comment"><p>Immutable singly-linked list</p>
 </div></li></ul></div></html>

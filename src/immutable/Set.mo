@@ -44,6 +44,10 @@ module {
     todo()
   };
 
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool {
+    todo()
+  };
+
   public func values<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };

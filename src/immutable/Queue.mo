@@ -59,15 +59,11 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func isEmpty(queue : Queue<Any>) : Bool {
+  public func isEmpty<T>(queue : Queue<T>) : Bool {
     todo()
   };
 
-<<<<<<< HEAD
-  public func isEmpty<T>(queue : Queue<T>) : Bool {
-=======
   public func singleton<T>(item : T) : Queue<T> {
->>>>>>> 1d3f66cd5e1de3e427246bae75c248ba6263231f
     todo()
   };
 

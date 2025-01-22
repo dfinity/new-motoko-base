@@ -37,10 +37,6 @@ module {
     todo()
   };
 
-  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>) : Bool {
-    todo()
-  };
-
   public func containsKey<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Bool {
     todo()
   };

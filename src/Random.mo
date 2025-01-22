@@ -1,4 +1,4 @@
-/// Random number generation
+/// Random number generation.
 
 import { todo } "Debug";
 

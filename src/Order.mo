@@ -1,22 +1,53 @@
-/// Utilities for `Order` (comparison between two values)
+/// Utilities for `Order` (comparison between two values).
 
-import { todo } "Debug";
 import Iter "IterType";
+import { todo } "Debug";
 
 module {
 
+  /// A type to represent an order.
   public type Order = {
     #less;
     #equal;
     #greater
   };
 
-  public func equal(o1 : Order, o2 : Order) : Bool {
-    o1 == o2
+  /// Check if an order is #less.
+  public func isLess(order : Order) : Bool {
+    switch order {
+      case (#less) { true };
+      case _ { false }
+    }
+  };
+
+  /// Check if an order is #equal.
+  public func isEqual(order : Order) : Bool {
+    switch order {
+      case (#equal) { true };
+      case _ { false }
+    }
+  };
+
+  /// Check if an order is #greater.
+  public func isGreater(order : Order) : Bool {
+    switch order {
+      case (#greater) { true };
+      case _ { false }
+    }
+  };
+
+  /// Returns true if only if  `order1` and `order2` are the same.
+  public func equal(order1 : Order, order2 : Order) : Bool {
+    switch (order1, order2) {
+      case (#less, #less) { true };
+      case (#equal, #equal) { true };
+      case (#greater, #greater) { true };
+      case _ { false }
+    }
   };
 
   public func allValues() : Iter.Iter<Order> {
     todo()
-  };
+  }
 
 }

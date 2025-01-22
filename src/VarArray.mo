@@ -1,4 +1,4 @@
-/// Mutable array utilities
+/// Mutable array utilities.
 
 import Iter "IterType";
 import Order "Order";
@@ -7,7 +7,7 @@ import Prim "mo:⛔";
 import { todo } "Debug";
 
 module {
-  
+
   public func empty<T>() : [var T] = [var];
 
   public func init<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
@@ -33,7 +33,67 @@ module {
   };
 
   public func sortInPlace<T>(array : [var T], compare : (T, T) -> Order.Order) : () {
-    todo()
+    // Stable merge sort in a bottom-up iterative style. Same algorithm as the sort in Buffer.
+    let size = array.size();
+    if (size == 0) {
+      return
+    };
+    let scratchSpace = Prim.Array_init<T>(size, array[0]);
+
+    let sizeDec = size - 1 : Nat;
+    var currSize = 1; // current size of the subarrays being merged
+    // when the current size == size, the array has been merged into a single sorted array
+    while (currSize < size) {
+      var leftStart = 0; // selects the current left subarray being merged
+      while (leftStart < sizeDec) {
+        let mid : Nat = if (leftStart + currSize - 1 : Nat < sizeDec) {
+          leftStart + currSize - 1
+        } else { sizeDec };
+        let rightEnd : Nat = if (leftStart + (2 * currSize) - 1 : Nat < sizeDec) {
+          leftStart + (2 * currSize) - 1
+        } else { sizeDec };
+
+        // Merge subarrays elements[leftStart...mid] and elements[mid+1...rightEnd]
+        var left = leftStart;
+        var right = mid + 1;
+        var nextSorted = leftStart;
+        while (left < mid + 1 and right < rightEnd + 1) {
+          let leftElement = array[left];
+          let rightElement = array[right];
+          switch (compare(leftElement, rightElement)) {
+            case (#less or #equal) {
+              scratchSpace[nextSorted] := leftElement;
+              left += 1
+            };
+            case (#greater) {
+              scratchSpace[nextSorted] := rightElement;
+              right += 1
+            }
+          };
+          nextSorted += 1
+        };
+        while (left < mid + 1) {
+          scratchSpace[nextSorted] := array[left];
+          nextSorted += 1;
+          left += 1
+        };
+        while (right < rightEnd + 1) {
+          scratchSpace[nextSorted] := array[right];
+          nextSorted += 1;
+          right += 1
+        };
+
+        // Copy over merged elements
+        var i = leftStart;
+        while (i < rightEnd + 1) {
+          array[i] := scratchSpace[i];
+          i += 1
+        };
+
+        leftStart += 2 * currSize
+      };
+      currSize *= 2
+    }
   };
 
   public func reverse<T>(array : [var T]) : [var T] {
@@ -68,7 +128,7 @@ module {
     todo()
   };
 
-  public func chain<T, Y>(array : [var T], k : T -> [var Y]) : [var Y] {
+  public func flatMap<T, R>(array : [var T], k : T -> [var R]) : [var R] {
     todo()
   };
 

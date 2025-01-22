@@ -106,10 +106,6 @@ module {
     todo()
   };
 
-  public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>, equal : (T, T) -> Bool) : Bool {
-    todo()
-  };
-
   public func generate<T>(n : Nat, f : Nat -> T) : Stack<T> {
     todo()
   };

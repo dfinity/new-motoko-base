@@ -16,7 +16,7 @@ module {
   /// 8-bit signed integers.
   public type Int8 = Prim.Types.Int8;
 
-  /// Minimum 8-bit integer value, `-2 ** 7`.
+  /// Minimm 8-bit integer value, `-2 ** 7`.
   ///
   /// Example:
   /// ```motoko include=import
@@ -633,16 +633,70 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Int8, y : Int8) : Int8 { x **% y };
 
+  /// Returns an iterator over `Int8` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
   public func range(fromInclusive : Int8, toExclusive : Int8) : Iter.Iter<Int8> {
-    todo()
+    object {
+      var n = fromInclusive;
+      public func next() : ?Int8 {
+        if (n >= toExclusive) {
+          null
+        } else {
+          let result = n;
+          n := addWrap(n, 1);
+          ?result
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over `Int8` values from the first to second argument, inclusive.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
   public func rangeInclusive(from : Int8, to : Int8) : Iter.Iter<Int8> {
-    todo()
+    object {
+      var n = from;
+      public func next() : ?Int8 {
+        if (n > to) {
+          null
+        } else {
+          let result = n;
+          n := addWrap(n, 1);
+          ?result
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over all Int8 values, from minValue to maxValue.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.allValues();
+  /// assert(?-128 == iter.next());
+  /// assert(?-127 == iter.next());
+  /// // ... and so on until
+  /// assert(?126 == iter.next());
+  /// assert(?127 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
   public func allValues() : Iter.Iter<Int8> {
-    todo()
+    rangeInclusive(minValue, maxValue)
   };
 
 }

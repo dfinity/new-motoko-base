@@ -355,12 +355,54 @@ module {
   /// as a function value at the moment.
   public func pow(x : Int, y : Int) : Int { x ** y };
 
+  /// Returns an iterator over the integers from the first to second argument with an exclusive upper bound.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
   public func range(fromInclusive : Int, toExclusive : Int) : Iter.Iter<Int> {
-    todo()
+    object {
+      var n = fromInclusive;
+      public func next() : ?Int {
+        if (n >= toExclusive) {
+          null
+        } else {
+          let result = n;
+          n += 1;
+          ?result
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over the integers from the first to second argument, inclusive.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
   public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int> {
-    todo()
+    object {
+      var n = from;
+      public func next() : ?Int {
+        if (n > to) {
+          null
+        } else {
+          let result = n;
+          n += 1;
+          ?result
+        }
+      }
+    }
   };
 
 }

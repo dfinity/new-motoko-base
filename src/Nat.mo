@@ -335,7 +335,17 @@ module {
   public func bitshiftRight(x : Nat, y : Nat32) : Nat { Prim.shiftRight(x, y) };
 
   public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat> {
-    todo()
+    var number = fromInclusive;
+    object {
+      public func next(): ?Nat {
+        if (number >= toExclusive) {
+          return null;
+        };
+        let current = number;
+        number += 1;
+        ?current
+      }
+    }
   };
 
   public func rangeInclusive(from : Nat, to : Nat) : Iter.Iter<Nat> {

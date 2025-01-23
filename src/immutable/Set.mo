@@ -36,15 +36,15 @@ module {
     todo()
   };
 
-  public func max<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func max<T>(set : Set<T>) : ?T {
     todo()
   };
 
-  public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func min<T>(set : Set<T>) : ?T {
     todo()
   };
 
-  public func equal<T>(set1 : Set<T>, set2 : Set<T>) : Bool {
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool {
     todo()
   };
 
@@ -80,15 +80,15 @@ module {
     todo()
   };
 
-  public func filter<T>(set : Set<T>, f : T -> Bool) : Set<T> {
+  public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, f : T -> Bool) : Set<T> {
     todo()
   };
 
-  public func map<T1, T2>(set : Set<T1>, f : T1 -> T2) : Set<T2> {
+  public func map<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> T2) : Set<T2> {
     todo()
   };
 
-  public func filterMap<T1, T2>(set : Set<T1>, f : T1 -> ?T2) : Set<T2> {
+  public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> ?T2) : Set<T2> {
     todo()
   };
 
@@ -116,7 +116,7 @@ module {
     todo()
   };
 
-  public func assertValid(set : Set<Any>) : () {
+  public func assertValid<T>(set : Set<T>) : () {
     todo()
   };
 

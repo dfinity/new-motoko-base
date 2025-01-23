@@ -12,15 +12,15 @@ module {
     todo()
   };
 
-  public func isEmpty(map : Map<Any, Any>) : Bool {
+  public func isEmpty<K, V>(map : Map<K, V>) : Bool {
     todo()
   };
 
-  public func size(map : Map<Any, Any>) : Nat {
+  public func size<K, V>(map : Map<K, V>) : Nat {
     todo()
   };
 
-  public func containsKey<K>(map : Map<K, Any>, compare : (K, K) -> Order.Order, key : K) : Bool {
+  public func containsKey<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Bool {
     todo()
   };
 
@@ -44,11 +44,11 @@ module {
     todo()
   };
 
-  public func maxEntry<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ?(K, V) {
+  public func maxEntry<K, V>(map : Map<K, V>) : ?(K, V) {
     todo()
   };
 
-  public func minEntry<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ?(K, V) {
+  public func minEntry<K, V>(map : Map<K, V>) : ?(K, V) {
     todo()
   };
 
@@ -60,11 +60,11 @@ module {
     todo()
   };
 
-  public func keys<K>(map : Map<K, Any>) : Iter.Iter<K> {
+  public func keys<K, V>(map : Map<K, V>) : Iter.Iter<K> {
     todo()
   };
 
-  public func values<V>(map : Map<Any, V>) : Iter.Iter<V> {
+  public func values<K, V>(map : Map<K, V>) : Iter.Iter<V> {
     todo()
   };
 
@@ -104,7 +104,7 @@ module {
     todo()
   };
 
-  public func assertValid<K>(map : Map<K, Any>, compare : (K, K) -> Order.Order) : () {
+  public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : () {
     todo()
   };
 

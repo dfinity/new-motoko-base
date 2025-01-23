@@ -1,4 +1,23 @@
-/// Original: `Deque.mo`
+/// Double-ended queue of a generic element type `T`.
+///
+/// The interface is imperative, not purely functional.
+/// In particular, Queue operations such as push and pop update their input queue instead of returning the
+/// value of the modified Queue.
+///
+/// Examples of use-cases:
+/// Queue (FIFO) by using `pushBack()` and `popFront()`.
+/// Stack (LIFO) by using `pushFront()` and `popFront()`.
+///
+/// A Queue is internally implemented as two lists, a head access list and a (reversed) tail access list,
+/// that are dynamically size-balanced by splitting.
+///
+/// Construction: Create a new queue with the `empty<T>()` function.
+///
+/// Note on the costs of push and pop functions:
+/// * Runtime: `O(1)` amortized costs, `O(n)` worst case cost per single call.
+/// * Space: `O(1)` amortized costs, `O(n)` worst case cost per single call.
+///
+/// `n` denotes the number of elements stored in the queue.
 
 import Iter "IterType";
 import Immutable "immutable/Queue";
@@ -19,6 +38,10 @@ module {
 
   public func singleton<T>(item : T) : Queue<T> {
     { var immutable = Immutable.singleton(item) }
+  };
+
+  public func clear<T>(queue : Queue<T>) {
+    queue.immutable := Immutable.empty();
   };
 
   public func clone<T>(queue : Queue<T>) : Queue<T> = { var immutable = queue.immutable };

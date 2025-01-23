@@ -1,45 +1,76 @@
 /// Mutable stack data structure.
 
 import Immutable "immutable/Stack";
-import Result "Result";
+import IterType "IterType";
 import Order "Order";
-import Iter "IterType";
 import { todo } "Debug";
 
 module {
-
-  public type Stack<T> = { var immutable : Immutable.Stack<T> };
-
-  public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T> = stack.immutable;
-
-  public func thaw<T>(stack : Immutable.Stack<T>) : Stack<T> = {
-    var immutable = stack
+  type StackNode<T> = {
+    value : T;
+    next : ?StackNode<T>
   };
 
-  public func empty<T>() : Stack<T> = { var immutable = Immutable.empty() };
+  public type Stack<T> = {
+    var top : ?StackNode<T>;
+    var size : Nat
+  };
 
-  public func clone<T>(stack : Stack<T>) : Stack<T> = { var immutable = stack.immutable };
-
-  public func isEmpty(stack : Stack<Any>) : Bool {
+  public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T> {
     todo()
   };
 
-  public func size(stack : Stack<Any>) : Nat {
+  public func thaw<T>(stack : Immutable.Stack<T>) : Stack<T> {
     todo()
+  };
+
+  public func empty<T>() : Stack<T> {
+    {
+      var top = null;
+      var size = 0
+    }
+  };
+
+  public func clear<T>(stack : Stack<T>) {
+    todo();
+  };
+
+  public func clone<T>(stack : Stack<T>) : Stack<T> { todo() };
+
+  public func isEmpty<T>(stack : Stack<T>) : Bool {
+    todo()
+  };
+
+  public func size<T>(stack : Stack<T>) : Nat {
+    stack.size
   };
 
   public func contains<T>(stack : Stack<T>, item : T) : Bool {
     todo()
   };
 
-  public func push<T>(stack : Stack<T>, item : T) : () = todo();
+  public func push<T>(stack : Stack<T>, value : T) {
+    let node = {
+      value;
+      next = stack.top
+    };
+    stack.top := ?node;
+    stack.size += 1
+  };
 
   public func peek<T>(stack : Stack<T>) : ?T {
     todo()
   };
 
   public func pop<T>(stack : Stack<T>) : ?T {
-    todo()
+    switch (stack.top) {
+      case null null;
+      case (?node) {
+        stack.top := node.next;
+        stack.size -= 1;
+        ?node.value
+      }
+    }
   };
 
   public func get<T>(stack : Stack<T>, n : Nat) : ?T {
@@ -66,9 +97,9 @@ module {
     todo()
   };
 
-  public func mapResult<T, R, E>(stack : Stack<T>, f : T -> Result.Result<R, E>) : Result.Result<Stack<R>, E> {
-    todo()
-  };
+  // public func mapResult<T, R, E>(stack : Stack<T>, f : T -> Result.Result<R, E>) : Result.Result<Stack<R>, E> {
+  //   todo()
+  // };
 
   public func partition<T>(stack : Stack<T>, f : T -> Bool) : (Stack<T>, Stack<T>) {
     todo()
@@ -78,9 +109,9 @@ module {
     todo()
   };
 
-  public func flatten<T>(stack : Iter.Iter<Stack<T>>) : Stack<T> {
-    todo()
-  };
+  // public func flatten<T>(stack : Iter.Iter<Stack<T>>) : Stack<T> {
+  //   todo()
+  // };
 
   public func take<T>(stack : Stack<T>, n : Nat) : Stack<T> {
     todo()
@@ -148,28 +179,15 @@ module {
     todo()
   };
 
-  public func values<T>(stack : Stack<T>) : Iter.Iter<T> {
+  public func values<T>(stack : Stack<T>) : IterType.Iter<T> {
     todo()
   };
 
-  public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> {
+  public func fromIter<T>(iter : IterType.Iter<T>) : Stack<T> {
     todo()
   };
 
   public func toText<T>(stack : Stack<T>, f : T -> Text) : Text {
-    var text = "Stack[";
-    var first = false;
-    forEach(
-      stack,
-      func(item : T) {
-        if first {
-          text #= ", "
-        } else {
-          first := true
-        };
-        text #= f(item)
-      }
-    );
-    text # "]"
+    todo()
   }
 }

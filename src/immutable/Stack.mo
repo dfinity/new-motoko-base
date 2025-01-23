@@ -12,9 +12,9 @@ module {
 
   public func empty<T>() : Stack<T> = null;
 
-  public func isEmpty(stack : Stack<Any>) : Bool = todo();
+  public func isEmpty<T>(stack : Stack<T>) : Bool = todo();
 
-  public func size(stack : Stack<Any>) : Nat = todo();
+  public func size<T>(stack : Stack<T>) : Nat = todo();
 
   public func contains<T>(stack : Stack<T>, item : T) : Bool {
     todo()
@@ -26,7 +26,7 @@ module {
 
   public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
 
-  public func peek<T>(stack : Stack<T>) : ?T {
+  public func last<T>(stack : Stack<T>) : ?T {
     todo()
   };
 
@@ -103,10 +103,6 @@ module {
   };
 
   public func compare<T>(stack1 : Stack<T>, stack2 : Stack<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    todo()
-  };
-
-  public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>, equal : (T, T) -> Bool) : Bool {
     todo()
   };
 

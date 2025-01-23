@@ -365,6 +365,14 @@ module {
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
   /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func range(fromInclusive : Int, toExclusive : Int) : Iter.Iter<Int> {
     object {
       var n = fromInclusive;
@@ -389,6 +397,14 @@ module {
   /// assert(?2 == iter.next());
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int.rangeInclusive(3, 1);
+  /// assert(null == iter.next()); // empty iterator
   /// ```
   public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int> {
     object {

@@ -643,6 +643,17 @@ module {
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
   /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function wraps from the maximum value to the minimum value.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.range(127, -127);
+  /// assert(?127 == iter.next());
+  /// assert(?-128 == iter.next()); // wraps to minimum value
+  /// assert(?-127 == iter.next());
+  /// // ... continues until reaching -127
+  /// ```
   public func range(fromInclusive : Int8, toExclusive : Int8) : Iter.Iter<Int8> {
     object {
       var n = fromInclusive;
@@ -666,6 +677,17 @@ module {
   /// assert(?1 == iter.next());
   /// assert(?2 == iter.next());
   /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function wraps from the maximum value to the minimum value.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.rangeInclusive(127, -127);
+  /// assert(?127 == iter.next());
+  /// assert(?-128 == iter.next()); // wraps to minimum value
+  /// assert(?-127 == iter.next());
   /// assert(null == iter.next());
   /// ```
   public func rangeInclusive(from : Int8, to : Int8) : Iter.Iter<Int8> {

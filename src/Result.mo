@@ -154,20 +154,38 @@ module {
     }
   };
 
-  /// Applies a function to a successful value, but discards the result. Use
-  /// `iterate` if you're only interested in the side effect `f` produces.
+  /// Applies a function to a successful value and discards the result. Use
+  /// `forOk` if you're only interested in the side effect `f` produces.
   ///
   /// ```motoko
   /// import Result "mo:base/Result";
   /// var counter : Nat = 0;
-  /// Result.iterate<Nat, Text>(#ok(5), func (x : Nat) { counter += x });
+  /// Result.forOk<Nat, Text>(#ok(5), func (x : Nat) { counter += x });
   /// assert(counter == 5);
-  /// Result.iterate<Nat, Text>(#err("Wrong"), func (x : Nat) { counter += x });
+  /// Result.forOk<Nat, Text>(#err("Error"), func (x : Nat) { counter += x });
   /// assert(counter == 5);
   /// ```
-  public func iterate<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ()) {
+  public func forOk<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ()) {
     switch result {
       case (#ok(ok)) { f(ok) };
+      case _ {}
+    }
+  };
+
+  /// Applies a function to an error value and discards the result. Use
+  /// `forErr` if you're only interested in the side effect `f` produces.
+  ///
+  /// ```motoko
+  /// import Result "mo:base/Result";
+  /// var counter : Nat = 0;
+  /// Result.forErr<Nat, Text>(#err("Error"), func (x : Text) { counter += 1 });
+  /// assert(counter == 1);
+  /// Result.forErr<Nat, Text>(#ok(5), func (x : Text) { counter += 1 });
+  /// assert(counter == 1);
+  /// ```
+  public func forErr<Ok, Err>(result : Result<Ok, Err>, f : Err -> ()) {
+    switch result {
+      case (#err(err)) { f(err) };
       case _ {}
     }
   };

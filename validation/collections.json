@@ -9,7 +9,6 @@
         "isEmpty",
         "singleton",
         "size",
-        "equal",
         "compare",
         "forEach",
         "filter",
@@ -26,7 +25,7 @@
       "name": "ImperativeCollection",
       "extends": ["Collection"],
       "modules": ["Queue", "Set", "Stack"],
-      "functions": ["thaw", "freeze", "clone"]
+      "functions": ["thaw", "freeze", "clear", "clone"]
     },
     {
       "name": "KeyValueCollection",

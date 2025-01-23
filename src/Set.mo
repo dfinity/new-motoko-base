@@ -9,9 +9,13 @@ module {
 
   public type Set<T> = { var immutable : Immutable.Set<T> };
 
-  public func freeze<T>(set : Set<T>) : Immutable.Set<T> = set.immutable;
+  public func freeze<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Immutable.Set<T> = set.immutable;
 
-  public func thaw<T>(set : Immutable.Set<T>) : Set<T> = { var immutable = set };
+  public func thaw<T>(set : Immutable.Set<T>, compare : (T, T) -> Order.Order) : Set<T> = { var immutable = set };
+
+  public func clear<T>(set : Set<T>) {
+    set.immutable := Immutable.empty();
+  };
 
   public func clone<T>(set : Set<T>) : Set<T> = { var immutable = set.immutable };
 
@@ -21,11 +25,11 @@ module {
     todo()
   };
 
-  public func isEmpty(set : Set<Any>) : Bool {
+  public func isEmpty<T>(set : Set<T>) : Bool {
     todo()
   };
 
-  public func size(set : Set<Any>) : Nat {
+  public func size<T>(set : Set<T>) : Nat {
     todo()
   };
 
@@ -45,11 +49,11 @@ module {
     todo()
   };
 
-  public func max<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func max<T>(set : Set<T>) : ?T {
     todo()
   };
 
-  public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T {
+  public func min<T>(set : Set<T>) : ?T {
     todo()
   };
 
@@ -85,15 +89,15 @@ module {
     todo()
   };
 
-  public func filter<T>(set : Set<T>, f : T -> Bool) : Set<T> {
+  public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, f : T -> Bool) : Set<T> {
     todo()
   };
 
-  public func map<T1, T2>(set : Set<T1>, f : T1 -> T2) : Set<T2> {
+  public func map<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> T2) : Set<T2> {
     todo()
   };
 
-  public func filterMap<T1, T2>(set : Set<T1>, f : T1 -> ?T2) : Set<T2> {
+  public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> ?T2) : Set<T2> {
     todo()
   };
 

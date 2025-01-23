@@ -13,7 +13,18 @@ module {
   public func init<T>(size : Nat, initValue : T) : [var T] = Prim.Array_init<T>(size, initValue);
 
   public func generate<T>(size : Nat, generator : Nat -> T) : [var T] {
-    todo()
+    if (size == 0) {
+      return [var];
+    };
+    let first = generator(0);
+    let array = Prim.Array_init<T>(size, first);
+    array[0] := first;
+    var index = 1;
+    while (index < size) {
+      array[index] := generator(index);
+      index += 1;
+    };
+    array;
   };
 
   public func equal<T>(array1 : [var T], array2 : [var T], equal : (T, T) -> Bool) : Bool {
@@ -109,7 +120,9 @@ module {
   };
 
   public func map<T, Y>(array : [var T], f : T -> Y) : [var Y] {
-    todo()
+    generate<Y>(array.size(), func (index) {
+      f(array[index])
+    })
   };
 
   public func filter<T>(array : [var T], f : T -> Bool) : [var T] {

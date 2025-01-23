@@ -2,7 +2,7 @@
 
 import Int8 "../src/Int8";
 import Order "../src/Order";
-import Iter "../src/Iter";
+import Nat "../src/Nat";
 
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
@@ -57,12 +57,12 @@ run(
         [
             test(
                 "minimum value",
-                Int8.minimumValue,
+                Int8.minValue,
                 M.equals(Int8Testable(Int8.fromInt(-2 ** 7)))
             ),
             test(
                 "maximum value",
-                Int8.maximumValue,
+                Int8.maxValue,
                 M.equals(Int8Testable(Int8.fromInt(+2 ** 7 - 1)))
             ),
         ]
@@ -77,12 +77,12 @@ run(
         [
             test(
                 "maximum number",
-                Int8.toInt(Int8.maximumValue),
+                Int8.toInt(Int8.maxValue),
                 M.equals(T.int(maximumInt8asInt))
             ),
             test(
                 "minimum number",
-                Int8.toInt(Int8.minimumValue),
+                Int8.toInt(Int8.minValue),
                 M.equals(T.int(minimumInt8asInt))
             ),
             test(
@@ -113,12 +113,12 @@ run(
             test(
                 "maximum number",
                 Int8.fromInt(maximumInt8asInt),
-                M.equals(Int8Testable(Int8.maximumValue))
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "minimum number",
                 Int8.fromInt(minimumInt8asInt),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "one",
@@ -148,12 +148,12 @@ run(
             test(
                 "maximum number",
                 Int8.fromIntWrap(maximumInt8asInt),
-                M.equals(Int8Testable(Int8.maximumValue))
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "minimum number",
                 Int8.fromIntWrap(minimumInt8asInt),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "one",
@@ -173,12 +173,12 @@ run(
             test(
                 "overflow",
                 Int8.fromIntWrap(maximumInt8asInt + 1),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "underflow",
                 Int8.fromIntWrap(minimumInt8asInt - 1),
-                M.equals(Int8Testable(Int8.maximumValue))
+                M.equals(Int8Testable(Int8.maxValue))
             )
         ]
     )
@@ -193,7 +193,7 @@ run(
             test(
                 "maximum number",
                 Int8.fromNat8(maximumInt8asNat8),
-                M.equals(Int8Testable(Int8.maximumValue))
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "one",
@@ -208,7 +208,7 @@ run(
             test(
                 "overflow",
                 Int8.fromNat8(maximumInt8asNat8 + 1),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             )
         ]
     )
@@ -222,7 +222,7 @@ run(
         [
             test(
                 "maximum number",
-                Int8.toNat8(Int8.maximumValue),
+                Int8.toNat8(Int8.maxValue),
                 M.equals(Nat8Testable(maximumInt8asNat8))
             ),
             test(
@@ -268,12 +268,12 @@ run(
             ),
             test(
                 "maximum number",
-                Int8.toText(Int8.maximumValue),
+                Int8.toText(Int8.maxValue),
                 M.equals(T.text("127"))
             ),
             test(
                 "minimum number",
-                Int8.toText(Int8.minimumValue),
+                Int8.toText(Int8.minValue),
                 M.equals(T.text("-128"))
             )
         ]
@@ -304,13 +304,13 @@ run(
             ),
             test(
                 "maximum number",
-                Int8.abs(Int8.maximumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.abs(Int8.maxValue),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "smallest possible",
-                Int8.abs(-Int8.maximumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.abs(-Int8.maxValue),
+                M.equals(Int8Testable(Int8.maxValue))
             )
         ]
     )
@@ -349,8 +349,8 @@ run(
             ),
             test(
                 "maximum and minimum number",
-                Int8.min(Int8.maximumValue, Int8.minimumValue),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.min(Int8.maxValue, Int8.minValue),
+                M.equals(Int8Testable(Int8.minValue))
             )
         ]
     )
@@ -389,8 +389,8 @@ run(
             ),
             test(
                 "maximum and minimum number",
-                Int8.max(Int8.maximumValue, Int8.minimumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.max(Int8.maxValue, Int8.minValue),
+                M.equals(Int8Testable(Int8.maxValue))
             )
         ]
     )
@@ -434,17 +434,17 @@ run(
             ),
             test(
                 "maxmimum equal",
-                Int8.equal(Int8.maximumValue, Int8.maximumValue),
+                Int8.equal(Int8.maxValue, Int8.maxValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "minimum equal",
-                Int8.equal(Int8.minimumValue, Int8.minimumValue),
+                Int8.equal(Int8.minValue, Int8.minValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "minimum and maximum",
-                Int8.equal(Int8.minimumValue, Int8.maximumValue),
+                Int8.equal(Int8.minValue, Int8.maxValue),
                 M.equals(T.bool(false))
             )
         ]
@@ -489,17 +489,17 @@ run(
             ),
             test(
                 "maxmimum equal",
-                Int8.notEqual(Int8.maximumValue, Int8.maximumValue),
+                Int8.notEqual(Int8.maxValue, Int8.maxValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "minimum equal",
-                Int8.notEqual(Int8.minimumValue, Int8.minimumValue),
+                Int8.notEqual(Int8.minValue, Int8.minValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "minimum and maximum",
-                Int8.notEqual(Int8.minimumValue, Int8.maximumValue),
+                Int8.notEqual(Int8.minValue, Int8.maxValue),
                 M.equals(T.bool(true))
             )
         ]
@@ -559,22 +559,22 @@ run(
             ),
             test(
                 "minimum and maximum",
-                Int8.less(Int8.minimumValue, Int8.maximumValue),
+                Int8.less(Int8.minValue, Int8.maxValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "maximum and minimum",
-                Int8.less(Int8.maximumValue, Int8.minimumValue),
+                Int8.less(Int8.maxValue, Int8.minValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "maximum and maximum",
-                Int8.less(Int8.maximumValue, Int8.maximumValue),
+                Int8.less(Int8.maxValue, Int8.maxValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "minimum and minimum",
-                Int8.less(Int8.minimumValue, Int8.minimumValue),
+                Int8.less(Int8.minValue, Int8.minValue),
                 M.equals(T.bool(false))
             )
         ]
@@ -634,22 +634,22 @@ run(
             ),
             test(
                 "minimum and maximum",
-                Int8.lessOrEqual(Int8.minimumValue, Int8.maximumValue),
+                Int8.lessOrEqual(Int8.minValue, Int8.maxValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "maximum and minimum",
-                Int8.lessOrEqual(Int8.maximumValue, Int8.minimumValue),
+                Int8.lessOrEqual(Int8.maxValue, Int8.minValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "maximum and maximum",
-                Int8.lessOrEqual(Int8.maximumValue, Int8.maximumValue),
+                Int8.lessOrEqual(Int8.maxValue, Int8.maxValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "minimum and minimum",
-                Int8.lessOrEqual(Int8.minimumValue, Int8.minimumValue),
+                Int8.lessOrEqual(Int8.minValue, Int8.minValue),
                 M.equals(T.bool(true))
             )
         ]
@@ -709,22 +709,22 @@ run(
             ),
             test(
                 "minimum and maximum",
-                Int8.greater(Int8.minimumValue, Int8.maximumValue),
+                Int8.greater(Int8.minValue, Int8.maxValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "maximum and minimum",
-                Int8.greater(Int8.maximumValue, Int8.minimumValue),
+                Int8.greater(Int8.maxValue, Int8.minValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "maximum and maximum",
-                Int8.greater(Int8.maximumValue, Int8.maximumValue),
+                Int8.greater(Int8.maxValue, Int8.maxValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "minimum and minimum",
-                Int8.greater(Int8.minimumValue, Int8.minimumValue),
+                Int8.greater(Int8.minValue, Int8.minValue),
                 M.equals(T.bool(false))
             )
         ]
@@ -784,22 +784,22 @@ run(
             ),
             test(
                 "minimum and maximum",
-                Int8.greaterOrEqual(Int8.minimumValue, Int8.maximumValue),
+                Int8.greaterOrEqual(Int8.minValue, Int8.maxValue),
                 M.equals(T.bool(false))
             ),
             test(
                 "maximum and minimum",
-                Int8.greaterOrEqual(Int8.maximumValue, Int8.minimumValue),
+                Int8.greaterOrEqual(Int8.maxValue, Int8.minValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "maximum and maximum",
-                Int8.greaterOrEqual(Int8.maximumValue, Int8.maximumValue),
+                Int8.greaterOrEqual(Int8.maxValue, Int8.maxValue),
                 M.equals(T.bool(true))
             ),
             test(
                 "minimum and minimum",
-                Int8.greaterOrEqual(Int8.minimumValue, Int8.minimumValue),
+                Int8.greaterOrEqual(Int8.minValue, Int8.minValue),
                 M.equals(T.bool(true))
             )
         ]
@@ -859,22 +859,22 @@ run(
             ),
             test(
                 "minimum and maximum",
-                Int8.compare(Int8.minimumValue, Int8.maximumValue),
+                Int8.compare(Int8.minValue, Int8.maxValue),
                 M.equals(OrderTestable(#less))
             ),
             test(
                 "maximum and minimum",
-                Int8.compare(Int8.maximumValue, Int8.minimumValue),
+                Int8.compare(Int8.maxValue, Int8.minValue),
                 M.equals(OrderTestable(#greater))
             ),
             test(
                 "maximum and maximum",
-                Int8.compare(Int8.maximumValue, Int8.maximumValue),
+                Int8.compare(Int8.maxValue, Int8.maxValue),
                 M.equals(OrderTestable(#equal))
             ),
             test(
                 "minimum and minimum",
-                Int8.compare(Int8.minimumValue, Int8.minimumValue),
+                Int8.compare(Int8.minValue, Int8.minValue),
                 M.equals(OrderTestable(#equal))
             )
         ]
@@ -904,13 +904,13 @@ run(
             ),
             test(
                 "maximum number",
-                Int8.neg(Int8.maximumValue),
-                M.equals(Int8Testable(-Int8.maximumValue))
+                Int8.neg(Int8.maxValue),
+                M.equals(Int8Testable(-Int8.maxValue))
             ),
             test(
                 "smallest possible",
-                Int8.neg(-Int8.maximumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.neg(-Int8.maxValue),
+                M.equals(Int8Testable(Int8.maxValue))
             )
         ]
     )
@@ -944,7 +944,7 @@ run(
             ),
             test(
                 "minimum and maximum",
-                Int8.add(Int8.minimumValue, Int8.maximumValue),
+                Int8.add(Int8.minValue, Int8.maxValue),
                 M.equals(Int8Testable(-1))
             )
         ]
@@ -979,7 +979,7 @@ run(
             ),
             test(
                 "maximum and maximum",
-                Int8.sub(Int8.maximumValue, Int8.maximumValue),
+                Int8.sub(Int8.maxValue, Int8.maxValue),
                 M.equals(Int8Testable(0))
             )
         ]
@@ -1014,23 +1014,23 @@ run(
             ),
             test(
                 "zero and maximum",
-                Int8.mul(0, Int8.maximumValue),
+                Int8.mul(0, Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "minimum and zero",
-                Int8.mul(Int8.minimumValue, 0),
+                Int8.mul(Int8.minValue, 0),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "one and maximum",
-                Int8.mul(1, Int8.maximumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.mul(1, Int8.maxValue),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "minimum and one",
-                Int8.mul(Int8.minimumValue, 1),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.mul(Int8.minValue, 1),
+                M.equals(Int8Testable(Int8.minValue))
             )
         ]
     )
@@ -1074,22 +1074,22 @@ run(
             ),
             test(
                 "zero and maximum",
-                Int8.div(0, Int8.maximumValue),
+                Int8.div(0, Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "zero and minimum",
-                Int8.div(0, Int8.minimumValue),
+                Int8.div(0, Int8.minValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "maximum and maximum",
-                Int8.div(Int8.maximumValue, Int8.maximumValue),
+                Int8.div(Int8.maxValue, Int8.maxValue),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "minimum and minimum",
-                Int8.div(Int8.minimumValue, Int8.minimumValue),
+                Int8.div(Int8.minValue, Int8.minValue),
                 M.equals(Int8Testable(1))
             )
         ]
@@ -1134,22 +1134,22 @@ run(
             ),
             test(
                 "zero and maximum",
-                Int8.rem(0, Int8.maximumValue),
+                Int8.rem(0, Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "zero and minimum",
-                Int8.rem(0, Int8.minimumValue),
+                Int8.rem(0, Int8.minValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "maximum and maximum",
-                Int8.rem(Int8.maximumValue, Int8.maximumValue),
+                Int8.rem(Int8.maxValue, Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "minimum and minimum",
-                Int8.rem(Int8.minimumValue, Int8.minimumValue),
+                Int8.rem(Int8.minValue, Int8.minValue),
                 M.equals(Int8Testable(0))
             )
         ]
@@ -1189,22 +1189,22 @@ run(
             ),
             test(
                 "maximum and zero",
-                Int8.pow(Int8.maximumValue, 0),
+                Int8.pow(Int8.maxValue, 0),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "minimum and zero",
-                Int8.pow(Int8.minimumValue, 0),
+                Int8.pow(Int8.minValue, 0),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "plus one and maximum",
-                Int8.pow(1, Int8.maximumValue),
+                Int8.pow(1, Int8.maxValue),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "minus one and maximum",
-                Int8.pow(-1, Int8.maximumValue),
+                Int8.pow(-1, Int8.maxValue),
                 M.equals(Int8Testable(-1))
             )
         ]
@@ -1229,13 +1229,13 @@ run(
             ),
             test(
                 "maximum",
-                Int8.bitnot(Int8.maximumValue),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.bitnot(Int8.maxValue),
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "minimum",
-                Int8.bitnot(Int8.minimumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.bitnot(Int8.minValue),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "arbitrary",
@@ -1284,17 +1284,17 @@ run(
             ),
             test(
                 "zero and maximum",
-                Int8.bitand(0, Int8.maximumValue),
+                Int8.bitand(0, Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "minimum and zero",
-                Int8.bitand(Int8.minimumValue, 0),
+                Int8.bitand(Int8.minValue, 0),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "minimum and maximum",
-                Int8.bitand(Int8.minimumValue, Int8.maximumValue),
+                Int8.bitand(Int8.minValue, Int8.maxValue),
                 M.equals(Int8Testable(0))
             )
         ]
@@ -1339,17 +1339,17 @@ run(
             ),
             test(
                 "zero and maximum",
-                Int8.bitor(0, Int8.maximumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.bitor(0, Int8.maxValue),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "minimum and zero",
-                Int8.bitor(Int8.minimumValue, 0),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.bitor(Int8.minValue, 0),
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "minimum and maximum",
-                Int8.bitor(Int8.minimumValue, Int8.maximumValue),
+                Int8.bitor(Int8.minValue, Int8.maxValue),
                 M.equals(Int8Testable(-1))
             )
         ]
@@ -1394,17 +1394,17 @@ run(
             ),
             test(
                 "zero and maximum",
-                Int8.bitxor(0, Int8.maximumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.bitxor(0, Int8.maxValue),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "minimum and zero",
-                Int8.bitxor(Int8.minimumValue, 0),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.bitxor(Int8.minValue, 0),
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "minimum and maximum",
-                Int8.bitxor(Int8.minimumValue, Int8.maximumValue),
+                Int8.bitxor(Int8.minValue, Int8.maxValue),
                 M.equals(Int8Testable(-1))
             )
         ]
@@ -1440,12 +1440,12 @@ run(
             test(
                 "one maximum shift",
                 Int8.bitshiftLeft(1, 7),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "minimum number",
                 Int8.bitshiftLeft(-1, 7),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "discard overflow",
@@ -1504,7 +1504,7 @@ run(
             ),
             test(
                 "minimum number",
-                Int8.bitshiftRight(Int8.minimumValue, 7),
+                Int8.bitshiftRight(Int8.minValue, 7),
                 M.equals(Int8Testable(-1))
             ),
             test(
@@ -1569,13 +1569,13 @@ run(
             ),
             test(
                 "maximum number",
-                Int8.bitrotLeft(Int8.maximumValue, 1),
+                Int8.bitrotLeft(Int8.maxValue, 1),
                 M.equals(Int8Testable(-2))
             ),
             test(
                 "minimum number",
                 Int8.bitrotLeft(1, 7),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "opposite rotation",
@@ -1630,11 +1630,11 @@ run(
             test(
                 "maximum number",
                 Int8.bitrotRight(-2, 1),
-                M.equals(Int8Testable(Int8.maximumValue))
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "minimum number",
-                Int8.bitrotRight(Int8.minimumValue, 7),
+                Int8.bitrotRight(Int8.minValue, 7),
                 M.equals(Int8Testable(1))
             ),
             test(
@@ -1672,7 +1672,7 @@ run(
                 do {
                     let number = 0 : Int8;
                     var count = 0;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         if (Int8.bittest(number, index)) {
                             count += 1
                         }
@@ -1686,7 +1686,7 @@ run(
                 do {
                     let number = -1 : Int8;
                     var count = 0;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         if (Int8.bittest(number, index)) {
                             count += 1
                         }
@@ -1734,7 +1734,7 @@ run(
                 "set all",
                 do {
                     var number = 0 : Int8;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         number := Int8.bitset(number, index)
                     };
                     number
@@ -1745,7 +1745,7 @@ run(
                 "all no effect",
                 do {
                     var number = -1 : Int8;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         number := Int8.bitset(number, index)
                     };
                     number
@@ -1791,7 +1791,7 @@ run(
                 "clear all",
                 do {
                     var number = -1 : Int8;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         number := Int8.bitclear(number, index)
                     };
                     number
@@ -1802,7 +1802,7 @@ run(
                 "all no effect",
                 do {
                     var number = 0 : Int8;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         number := Int8.bitclear(number, index)
                     };
                     number
@@ -1848,7 +1848,7 @@ run(
                 "clear all",
                 do {
                     var number = -1 : Int8;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         number := Int8.bitflip(number, index)
                     };
                     number
@@ -1859,7 +1859,7 @@ run(
                 "set all",
                 do {
                     var number = 0 : Int8;
-                    for (index in Iter.range(0, 7)) {
+                    for (index in Nat.range(0, 7)) {
                         number := Int8.bitflip(number, index)
                     };
                     number
@@ -1908,12 +1908,12 @@ run(
             ),
             test(
                 "minimum value",
-                Int8.bitcountNonZero(Int8.minimumValue),
+                Int8.bitcountNonZero(Int8.minValue),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "maximum value",
-                Int8.bitcountNonZero(Int8.maximumValue),
+                Int8.bitcountNonZero(Int8.maxValue),
                 M.equals(Int8Testable(7))
             ),
             test(
@@ -1968,12 +1968,12 @@ run(
             ),
             test(
                 "minimum value",
-                Int8.bitcountLeadingZero(Int8.minimumValue),
+                Int8.bitcountLeadingZero(Int8.minValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "maximum value",
-                Int8.bitcountLeadingZero(Int8.maximumValue),
+                Int8.bitcountLeadingZero(Int8.maxValue),
                 M.equals(Int8Testable(1))
             ),
             test(
@@ -2028,12 +2028,12 @@ run(
             ),
             test(
                 "minimum value",
-                Int8.bitcountTrailingZero(Int8.minimumValue),
+                Int8.bitcountTrailingZero(Int8.minValue),
                 M.equals(Int8Testable(7))
             ),
             test(
                 "maximum value",
-                Int8.bitcountTrailingZero(Int8.maximumValue),
+                Int8.bitcountTrailingZero(Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
@@ -2078,27 +2078,27 @@ run(
             ),
             test(
                 "minimum and maximum",
-                Int8.addWrap(Int8.minimumValue, Int8.maximumValue),
+                Int8.addWrap(Int8.minValue, Int8.maxValue),
                 M.equals(Int8Testable(-1))
             ),
             test(
                 "small overflow",
-                Int8.addWrap(Int8.maximumValue, 1),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.addWrap(Int8.maxValue, 1),
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "large overflow",
-                Int8.addWrap(Int8.maximumValue, Int8.maximumValue),
+                Int8.addWrap(Int8.maxValue, Int8.maxValue),
                 M.equals(Int8Testable(-2))
             ),
             test(
                 "small underflow",
-                Int8.addWrap(Int8.minimumValue, -1),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.addWrap(Int8.minValue, -1),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "large underflow",
-                Int8.addWrap(Int8.minimumValue, Int8.minimumValue),
+                Int8.addWrap(Int8.minValue, Int8.minValue),
                 M.equals(Int8Testable(0))
             ),
         ]
@@ -2133,27 +2133,27 @@ run(
             ),
             test(
                 "maximum and maximum",
-                Int8.subWrap(Int8.maximumValue, Int8.maximumValue),
+                Int8.subWrap(Int8.maxValue, Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "small overflow",
-                Int8.subWrap(Int8.maximumValue, -1),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.subWrap(Int8.maxValue, -1),
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "large overflow",
-                Int8.subWrap(Int8.maximumValue, Int8.minimumValue),
+                Int8.subWrap(Int8.maxValue, Int8.minValue),
                 M.equals(Int8Testable(-1))
             ),
             test(
                 "small underflow",
-                Int8.subWrap(Int8.minimumValue, 1),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.subWrap(Int8.minValue, 1),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "large underflow",
-                Int8.subWrap(Int8.minimumValue, Int8.maximumValue),
+                Int8.subWrap(Int8.minValue, Int8.maxValue),
                 M.equals(Int8Testable(1))
             ),
         ]
@@ -2188,42 +2188,42 @@ run(
             ),
             test(
                 "zero and maximum",
-                Int8.mulWrap(0, Int8.maximumValue),
+                Int8.mulWrap(0, Int8.maxValue),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "minimum and zero",
-                Int8.mulWrap(Int8.minimumValue, 0),
+                Int8.mulWrap(Int8.minValue, 0),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "one and maximum",
-                Int8.mulWrap(1, Int8.maximumValue),
-                M.equals(Int8Testable(Int8.maximumValue))
+                Int8.mulWrap(1, Int8.maxValue),
+                M.equals(Int8Testable(Int8.maxValue))
             ),
             test(
                 "minimum and one",
-                Int8.mulWrap(Int8.minimumValue, 1),
-                M.equals(Int8Testable(Int8.minimumValue))
+                Int8.mulWrap(Int8.minValue, 1),
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "small overflow",
-                Int8.mulWrap(2, Int8.maximumValue),
+                Int8.mulWrap(2, Int8.maxValue),
                 M.equals(Int8Testable(-2))
             ),
             test(
                 "large overflow",
-                Int8.mulWrap(Int8.maximumValue, Int8.maximumValue),
+                Int8.mulWrap(Int8.maxValue, Int8.maxValue),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "small underflow",
-                Int8.mulWrap(Int8.minimumValue, 2),
+                Int8.mulWrap(Int8.minValue, 2),
                 M.equals(Int8Testable(0))
             ),
             test(
                 "large underflow",
-                Int8.mulWrap(Int8.minimumValue, Int8.minimumValue),
+                Int8.mulWrap(Int8.minValue, Int8.minValue),
                 M.equals(Int8Testable(0))
             ),
         ]
@@ -2258,37 +2258,37 @@ run(
             ),
             test(
                 "maximum and zero",
-                Int8.powWrap(Int8.maximumValue, 0),
+                Int8.powWrap(Int8.maxValue, 0),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "minimum and zero",
-                Int8.powWrap(Int8.minimumValue, 0),
+                Int8.powWrap(Int8.minValue, 0),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "plus one and maximum",
-                Int8.powWrap(1, Int8.maximumValue),
+                Int8.powWrap(1, Int8.maxValue),
                 M.equals(Int8Testable(1))
             ),
             test(
                 "minus one and maximum",
-                Int8.powWrap(-1, Int8.maximumValue),
+                Int8.powWrap(-1, Int8.maxValue),
                 M.equals(Int8Testable(-1))
             ),
             test(
                 "minimum value",
                 Int8.powWrap(-2, 7),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "small overflow",
                 Int8.powWrap(2, 7),
-                M.equals(Int8Testable(Int8.minimumValue))
+                M.equals(Int8Testable(Int8.minValue))
             ),
             test(
                 "large overflow",
-                Int8.powWrap(Int8.maximumValue, 2),
+                Int8.powWrap(Int8.maxValue, 2),
                 M.equals(Int8Testable(1))
             ),
             test(
@@ -2298,7 +2298,7 @@ run(
             ),
             test(
                 "large underflow",
-                Int8.powWrap(Int8.minimumValue, 2),
+                Int8.powWrap(Int8.minValue, 2),
                 M.equals(Int8Testable(0))
             ),
         ]

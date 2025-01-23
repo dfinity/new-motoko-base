@@ -68,7 +68,7 @@ module {
         sha224.writeBlob(subAccount)
       };
       case (null) {
-        let defaultSubAccount = Array.generate<Nat8>(32, func _ = 0);
+        let defaultSubAccount = Array.tabulate<Nat8>(32, func _ = 0);
         sha224.writeArray(defaultSubAccount)
       }
     };

@@ -1,8 +1,8 @@
 import Prim "mo:prim";
-import Deque "../src/Deque";
-import Array "../src/Array";
-import Nat "../src/Nat";
-import Iter "../src/Iter";
+import Queue "../../src/immutable/Queue";
+import Array "../../src/Array";
+import Nat "../../src/Nat";
+import Iter "../../src/Iter";
 
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";

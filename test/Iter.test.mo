@@ -8,32 +8,14 @@ import Debug "../src/Debug";
 Debug.print("Iter");
 
 do {
-  Debug.print("  range");
-
-  let tests = [((0, -1), "", "0-1"), ((0, 0), "0", "0"), ((0, 5), "012345", ""), ((5, 0), "", "543210")];
-  for ((range, expected, revExpected) in tests.vals()) {
-    var x = "";
-    for (i in Iter.range(range)) {
-      x := x # Nat.toText(i)
-    };
-    assert (x == expected);
-    x := "";
-    for (i in Iter.revRange(range)) {
-      x := x # Int.toText(i)
-    };
-    assert (x == revExpected)
-  }
-};
-
-do {
-  Debug.print("  iterate");
+  Debug.print("  forEach");
 
   let xs = ["a", "b", "c", "d", "e", "f"];
 
   var y = "";
   var z = 0;
 
-  Iter.iterate<Text>(
+  Iter.forEach<Text>(
     xs.vals(),
     func(x : Text, i : Nat) {
       y := y # x;

@@ -41,18 +41,18 @@ assert (Char.isWhitespace(Prim.nat32ToChar(0x0C)));
 assert (Char.isWhitespace('\r'));
 
 //
-// Char.isLowercase
+// Char.isLower
 //
 
-assert (Char.isLowercase('x'));
-assert (not Char.isLowercase('X'));
+assert (Char.isLower('x'));
+assert (not Char.isLower('X'));
 
 //
-// Char.isUppercase
+// Char.isUpper
 //
 
-assert (Char.isUppercase('X'));
-assert (not Char.isUppercase('x'));
+assert (Char.isUpper('X'));
+assert (not Char.isUpper('x'));
 
 //
 // Char.isAlphabetic

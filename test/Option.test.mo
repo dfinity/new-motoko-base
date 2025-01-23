@@ -239,13 +239,13 @@ do {
 
 };
 do {
-  Debug.print("  iterate");
+  Debug.print("  forEach");
 
   do {
     var witness = 0;
-    Option.iterate<Nat>(?(1), func(x : Nat) { witness += 1 });
+    Option.forEach<Nat>(?(1), func(x : Nat) { witness += 1 });
     assert (witness == 1);
-    Option.iterate<Nat>(null, func(x : Nat) { witness += 1 });
+    Option.forEach<Nat>(null, func(x : Nat) { witness += 1 });
     assert (witness == 1)
   }
 };

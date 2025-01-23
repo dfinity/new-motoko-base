@@ -449,11 +449,12 @@
     "name": "Iter",
     "exports": [
       "public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T>",
+      "public func enumerate<T>(xs : Iter<T>) : Iter<(Nat, T)>",
       "public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T>",
+      "public func forEach<T>( xs : Iter<T>, f : (T) -> () )",
       "public func fromArray<T>(xs : [T]) : Iter<T>",
       "public func fromVarArray<T>(xs : [var T]) : Iter<T>",
       "public func infinite<T>(item : T) : Iter<T>",
-      "public func iterate<T>( xs : Iter<T>, f : (T, Nat) -> () )",
       "public func map<T, R>(xs : Iter<T>, f : T -> R) : Iter<R>",
       "public func size<T>(xs : Iter<T>) : Nat",
       "public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T>",

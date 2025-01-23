@@ -138,8 +138,23 @@ import Int8 &quot;mo:base/Int8&quot;;</code></pre></div></li><li class="index-it
 </div></li><li class="index-item"><a class="index-item-link" href="Iter.html">Iter</a><div class="index-item-comment"><p>Utilities for <code>Iter</code> (iterator) values</p>
 </div></li><li class="index-item"><a class="index-item-link" href="IterType.html">IterType</a><div class="index-item-comment"><p>The built-in iterator type</p>
 </div></li><li class="index-item"><a class="index-item-link" href="List.html">List</a><div class="index-item-comment"><p>Original: <code>vector</code> Mops package?</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Map.html">Map</a><div class="index-item-comment"><p>Original: <code>OrderedMap.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="Nat.html">Nat</a><div class="index-item-comment"><p>Natural numbers with infinite precision.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Map.html">Map</a><div class="index-item-comment"><p>An imperative key-value map based on order/comparison of the keys.
+The map data structure type is stable and can be used for orthogonal persistence.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let numberNames = Map.empty&lt;Nat, Text&gt;();
+  Map.add(numberNames, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(numberNames, Nat.compare, 1, &quot;One&quot;);
+  Map.add(numberNames, Nat.compare, 2, &quot;Two&quot;);
+}</code></pre>
+
+<p>The internal implementation is a B-tree with order 32.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree.
+<code>n</code> denotes the number of key-value entries stored in the map.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Nat.html">Nat</a><div class="index-item-comment"><p>Natural numbers with infinite precision.</p>
 <p>Most operations on natural numbers (e.g. addition) are available as built-in operators (e.g. <code>1 + 1</code>).
 This module provides equivalent functions and <code>Text</code> conversion.</p>
 <p>Import from the base library to use this module.</p>

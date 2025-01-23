@@ -372,14 +372,11 @@ assert(?2 == iter.next());
 assert(?3 == iter.next());
 assert(null == iter.next());</code></pre>
 
-<p>If the first argument is greater than the second argument, the function wraps from the maximum value to the minimum value.</p>
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
 <pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
 
-let iter = Int8.range(127, -127);
-assert(?127 == iter.next());
-assert(?-128 == iter.next()); // wraps to minimum value
-assert(?-127 == iter.next());
-// ... continues until reaching -127</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Int8"><span class="type">Int8</span></a>, <span class="parameter">to</span> : <a href="#type.Int8"><span class="type">Int8</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int8"><span class="type">Int8</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Int8</code> values from the first to second argument, inclusive.</p>
+let iter = Int8.range(4, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Int8"><span class="type">Int8</span></a>, <span class="parameter">to</span> : <a href="#type.Int8"><span class="type">Int8</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int8"><span class="type">Int8</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Int8</code> values from the first to second argument, inclusive.</p>
 <pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Int8.rangeInclusive(1, 3);
@@ -388,14 +385,11 @@ assert(?2 == iter.next());
 assert(?3 == iter.next());
 assert(null == iter.next());</code></pre>
 
-<p>If the first argument is greater than the second argument, the function wraps from the maximum value to the minimum value.</p>
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
 <pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
 
-let iter = Int8.rangeInclusive(127, -127);
-assert(?127 == iter.next());
-assert(?-128 == iter.next()); // wraps to minimum value
-assert(?-127 == iter.next());
-assert(null == iter.next());</code></pre></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int8"><span class="type">Int8</span></a>&gt;</code></h4><p><p>Returns an iterator over all Int8 values, from minValue to maxValue.</p>
+let iter = Int8.rangeInclusive(4, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int8"><span class="type">Int8</span></a>&gt;</code></h4><p><p>Returns an iterator over all Int8 values, from minValue to maxValue.</p>
 <pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Int8.allValues();

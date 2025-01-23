@@ -3,7 +3,7 @@
 import Immutable "immutable/Stack";
 import Result "Result";
 import Order "Order";
-import Iter "IterType";
+import Iter "Iter";
 import { todo } "Debug";
 
 module {

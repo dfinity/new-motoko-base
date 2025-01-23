@@ -43,6 +43,7 @@
   {
     "name": "Blob",
     "exports": [
+      "public type Blob",
       "public func compare(b1 : Blob, b2 : Blob) : { #less; #equal; #greater }",
       "public func empty() : Blob",
       "public func equal(blob1 : Blob, blob2 : Blob) : Bool",
@@ -63,6 +64,7 @@
     "name": "Bool",
     "exports": [
       "public func allValues() : Iter.Iter<Bool>",
+      "public type Bool",
       "public func compare(a : Bool, b : Bool) : { #less; #equal; #greater }",
       "public func equal(a : Bool, b : Bool) : Bool",
       "public func logicalAnd(a : Bool, b : Bool) : Bool",
@@ -83,6 +85,7 @@
     "name": "Char",
     "exports": [
       "public func allValues() : Iter.Iter<Char>",
+      "public type Char",
       "public func compare(a : Char, b : Char) : { #less; #equal; #greater }",
       "public func equal(a : Char, b : Char) : Bool",
       "public let fromNat32 : (nat32 : Nat32) -> Char",
@@ -121,6 +124,8 @@
     "name": "Error",
     "exports": [
       "public let code : (error : Error) -> ErrorCode",
+      "public type Error",
+      "public type ErrorCode",
       "public let message : (error : Error) -> Text",
       "public let reject : (message : Text) -> Error"
     ]
@@ -143,6 +148,7 @@
       "public func equal(x : Float, y : Float) : Bool",
       "public func equalWithin(x : Float, y : Float, epsilon : Float) : Bool",
       "public let exp : (x : Float) -> Float",
+      "public type Float",
       "public let floor : (x : Float) -> Float",
       "public func format(fmt : { #fix : Nat8; #exp : Nat8; #gen : Nat8; #exact }, x : Float) : Text",
       "public let fromInt : Int -> Float",
@@ -187,6 +193,7 @@
       "public func bit(h : Hash, pos : Nat) : Bool",
       "public func equal(ha : Hash, hb : Hash) : Bool",
       "public func hash(n : Nat) : Hash",
+      "public type Hash",
       "public let length : Nat"
     ]
   },
@@ -201,6 +208,7 @@
       "public func greater(x : Int, y : Int) : Bool",
       "public func greaterOrEqual(x : Int, y : Int) : Bool",
       "public func hash(i : Int) : Hash.Hash",
+      "public type Int",
       "public func less(x : Int, y : Int) : Bool",
       "public func lessOrEqual(x : Int, y : Int) : Bool",
       "public func max(x : Int, y : Int) : Int",
@@ -248,6 +256,7 @@
       "public let fromNat16 : Nat16 -> Int16",
       "public func greater(x : Int16, y : Int16) : Bool",
       "public func greaterOrEqual(x : Int16, y : Int16) : Bool",
+      "public type Int16",
       "public func less(x : Int16, y : Int16) : Bool",
       "public func lessOrEqual(x : Int16, y : Int16) : Bool",
       "public func max(x : Int16, y : Int16) : Int16",
@@ -304,6 +313,7 @@
       "public let fromNat32 : Nat32 -> Int32",
       "public func greater(x : Int32, y : Int32) : Bool",
       "public func greaterOrEqual(x : Int32, y : Int32) : Bool",
+      "public type Int32",
       "public func less(x : Int32, y : Int32) : Bool",
       "public func lessOrEqual(x : Int32, y : Int32) : Bool",
       "public func max(x : Int32, y : Int32) : Int32",
@@ -359,6 +369,7 @@
       "public let fromNat64 : Nat64 -> Int64",
       "public func greater(x : Int64, y : Int64) : Bool",
       "public func greaterOrEqual(x : Int64, y : Int64) : Bool",
+      "public type Int64",
       "public func less(x : Int64, y : Int64) : Bool",
       "public func lessOrEqual(x : Int64, y : Int64) : Bool",
       "public func max(x : Int64, y : Int64) : Int64",
@@ -413,6 +424,7 @@
       "public let fromNat8 : Nat8 -> Int8",
       "public func greater(x : Int8, y : Int8) : Bool",
       "public func greaterOrEqual(x : Int8, y : Int8) : Bool",
+      "public type Int8",
       "public func less(x : Int8, y : Int8) : Bool",
       "public func lessOrEqual(x : Int8, y : Int8) : Bool",
       "public func max(x : Int8, y : Int8) : Int8",
@@ -453,6 +465,7 @@
       "public func fromArray<T>(xs : [T]) : Iter<T>",
       "public func fromVarArray<T>(xs : [var T]) : Iter<T>",
       "public func infinite<T>(item : T) : Iter<T>",
+      "public type Iter<T>",
       "public func iterate<T>( xs : Iter<T>, f : (T, Nat) -> () )",
       "public func map<T, R>(xs : Iter<T>, f : T -> R) : Iter<R>",
       "public func size<T>(xs : Iter<T>) : Nat",
@@ -460,10 +473,6 @@
       "public func toArray<T>(xs : Iter<T>) : [T]",
       "public func toVarArray<T>(xs : Iter<T>) : [var T]"
     ]
-  },
-  {
-    "name": "IterType",
-    "exports": []
   },
   {
     "name": "List",
@@ -499,6 +508,7 @@
       "public func isSuffixOf<T>(list : List<T>, suffix : List<T>, equal : (T, T) -> Bool) : Bool",
       "public func last<T>(list : List<T>) : T",
       "public func lastIndexOf<T>(list : List<T>, element : T, equal : (T, T) -> Bool) : ?Nat",
+      "public type List<T>",
       "public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2>",
       "public func mapEntries<T1, T2>(list : List<T1>, f : (Nat, T1) -> T2) : List<T2>",
       "public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E>",
@@ -578,6 +588,7 @@
       "public func max(x : Nat, y : Nat) : Nat",
       "public func min(x : Nat, y : Nat) : Nat",
       "public func mul(x : Nat, y : Nat) : Nat",
+      "public type Nat",
       "public func notEqual(x : Nat, y : Nat) : Bool",
       "public func pow(x : Nat, y : Nat) : Nat",
       "public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat>",
@@ -624,6 +635,7 @@
       "public func min(x : Nat16, y : Nat16) : Nat16",
       "public func mul(x : Nat16, y : Nat16) : Nat16",
       "public func mulWrap(x : Nat16, y : Nat16) : Nat16",
+      "public type Nat16",
       "public func notEqual(x : Nat16, y : Nat16) : Bool",
       "public func pow(x : Nat16, y : Nat16) : Nat16",
       "public func powWrap(x : Nat16, y : Nat16) : Nat16",
@@ -675,6 +687,7 @@
       "public func min(x : Nat32, y : Nat32) : Nat32",
       "public func mul(x : Nat32, y : Nat32) : Nat32",
       "public func mulWrap(x : Nat32, y : Nat32) : Nat32",
+      "public type Nat32",
       "public func notEqual(x : Nat32, y : Nat32) : Bool",
       "public func pow(x : Nat32, y : Nat32) : Nat32",
       "public func powWrap(x : Nat32, y : Nat32) : Nat32",
@@ -725,6 +738,7 @@
       "public func min(x : Nat64, y : Nat64) : Nat64",
       "public func mul(x : Nat64, y : Nat64) : Nat64",
       "public func mulWrap(x : Nat64, y : Nat64) : Nat64",
+      "public type Nat64",
       "public func notEqual(x : Nat64, y : Nat64) : Bool",
       "public func pow(x : Nat64, y : Nat64) : Nat64",
       "public func powWrap(x : Nat64, y : Nat64) : Nat64",
@@ -774,6 +788,7 @@
       "public func min(x : Nat8, y : Nat8) : Nat8",
       "public func mul(x : Nat8, y : Nat8) : Nat8",
       "public func mulWrap(x : Nat8, y : Nat8) : Nat8",
+      "public type Nat8",
       "public func notEqual(x : Nat8, y : Nat8) : Bool",
       "public func pow(x : Nat8, y : Nat8) : Nat8",
       "public func powWrap(x : Nat8, y : Nat8) : Nat8",
@@ -811,7 +826,8 @@
       "public func equal(order1 : Order, order2 : Order) : Bool",
       "public func isEqual(order : Order) : Bool",
       "public func isGreater(order : Order) : Bool",
-      "public func isLess(order : Order) : Bool"
+      "public func isLess(order : Order) : Bool",
+      "public type Order"
     ]
   },
   {
@@ -831,6 +847,7 @@
       "public func less(principal1 : Principal, principal2 : Principal) : Bool",
       "public func lessOrEqual(principal1 : Principal, principal2 : Principal) : Bool",
       "public func notEqual(principal1 : Principal, principal2 : Principal) : Bool",
+      "public type Principal",
       "public func toBlob(p : Principal) : Blob",
       "public func toLedgerAccount(principal : Principal, subAccount : ?Blob) : Blob",
       "public func toText(p : Principal) : Text"
@@ -861,6 +878,7 @@
       "public func push<T>(queue : Queue<T>, element : T) : ()",
       "public func pushBack<T>(queue : Queue<T>, element : T) : ()",
       "public func pushFront<T>(queue : Queue<T>, element : T) : ()",
+      "public type Queue<T>",
       "public func singleton<T>(item : T) : Queue<T>",
       "public func size<T>(queue : Queue<T>) : Nat",
       "public func thaw<T>(queue : Immutable.Queue<T>) : Queue<T>",
@@ -894,6 +912,7 @@
       "public let loadNat64 : (region : Region, offset : Nat64) -> Nat64",
       "public let loadNat8 : (region : Region, offset : Nat64) -> Nat8",
       "public let new : () -> Region",
+      "public type Region",
       "public let size : (region : Region) -> (pages : Nat64)",
       "public let storeBlob : (region : Region, offset : Nat64, value : Blob) -> ()",
       "public let storeFloat : (region: Region, offset : Nat64, value : Float) -> ()",
@@ -923,6 +942,7 @@
       "public func iterate<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ())",
       "public func mapErr<Ok, Err1, Err2>( result : Result<Ok, Err1>, f : Err1 -> Err2 ) : Result<Ok, Err2>",
       "public func mapOk<Ok1, Ok2, Err>( result : Result<Ok1, Err>, f : Ok1 -> Ok2 ) : Result<Ok2, Err>",
+      "public type Result<Ok, Err>",
       "public func toOption<Ok, Err>(result : Result<Ok, Err>) : ?Ok",
       "public func toUpper<Ok, Err>( result : Result<Ok, Err> ) : { #Ok : Ok; #Err : Err }"
     ]
@@ -963,6 +983,7 @@
       "public func max<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T",
       "public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T",
       "public func reverseValues<T>(set : Set<T>) : Iter.Iter<T>",
+      "public type Set<T>",
       "public func singleton<T>() : Set<T>",
       "public func size(set : Set<Any>) : Nat",
       "public func thaw<T>(set : Immutable.Set<T>) : Set<T>",
@@ -1008,6 +1029,7 @@
       "public func singleton<T>(item : T) : Stack<T>",
       "public func size(stack : Stack<Any>) : Nat",
       "public func split<T>(stack : Stack<T>, n : Nat) : (Stack<T>, Stack<T>)",
+      "public type Stack<T>",
       "public func take<T>(stack : Stack<T>, n : Nat) : Stack<T>",
       "public func thaw<T>(stack : Immutable.Stack<T>) : Stack<T>",
       "public func toText<T>(stack : Stack<T>, f : T -> Text) : Text",
@@ -1041,12 +1063,14 @@
       "public func lessOrEqual(t1 : Text, t2 : Text) : Bool",
       "public func map(t : Text, f : Char -> Char) : Text",
       "public func notEqual(t1 : Text, t2 : Text) : Bool",
+      "public type Pattern",
       "public func replace(t : Text, p : Pattern, r : Text) : Text",
       "public func size(t : Text) : Nat",
       "public func split(t : Text, p : Pattern) : Iter.Iter<Text>",
       "public func startsWith(t : Text, p : Pattern) : Bool",
       "public func stripEnd(t : Text, p : Pattern) : ?Text",
       "public func stripStart(t : Text, p : Pattern) : ?Text",
+      "public type Text",
       "public func toArray(t : Text) : [Char]",
       "public func toIter(t : Text) : Iter.Iter<Char>",
       "public func tokens(t : Text, p : Pattern) : Iter.Iter<Text>",
@@ -1062,7 +1086,10 @@
   {
     "name": "Time",
     "exports": [
+      "public type Duration",
       "public let now : () -> Time",
+      "public type Time",
+      "public type TimerId",
       "public func toNanoseconds(duration : Duration) : Nat"
     ]
   },
@@ -1070,8 +1097,10 @@
     "name": "Timer",
     "exports": [
       "public let cancelTimer : TimerId -> ()",
+      "public type Duration",
       "public func recurringTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId",
-      "public func setTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId"
+      "public func setTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId",
+      "public type TimerId"
     ]
   },
   {
@@ -1129,7 +1158,7 @@
       "public func freeze<X>(varArray : [var X]) : [X]",
       "public func indexOf<X>(element : X, array : [X], equal : (X, X) -> Bool) : ?Nat",
       "public func init<X>(size : Nat, initValue : X) : [var X]",
-      "public func keys<X>(array : [X]) : I.Iter<Nat>",
+      "public func keys<X>(array : [X]) : Iter.Iter<Nat>",
       "public func lastIndexOf<X>(element : X, array : [X], equal : (X, X) -> Bool) : ?Nat",
       "public func make<X>(element : X) : [X]",
       "public func map<X, Y>(array : [X], f : X -> Y) : [Y]",
@@ -1140,7 +1169,7 @@
       "public func prevIndexOf<T>(element : T, array : [T], fromExclusive : Nat, equal : (T, T) -> Bool) : ?Nat",
       "public func reverse<X>(array : [X]) : [X]",
       "public func size<X>(array : [X]) : Nat",
-      "public func slice<X>(array : [X], fromInclusive : Nat, toExclusive : Nat) : I.Iter<X>",
+      "public func slice<X>(array : [X], fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<X>",
       "public func sort<X>(array : [X], compare : (X, X) -> Order.Order) : [X]",
       "public func sortInPlace<X>(array : [var X], compare : (X, X) -> Order.Order)",
       "public func subArray<X>(array : [X], start : Nat, length : Nat) : [X]",
@@ -1148,12 +1177,13 @@
       "public func tabulateVar<X>(size : Nat, generator : Nat -> X) : [var X]",
       "public func take<T>(array : [T], length : Int) : [T]",
       "public func thaw<A>(array : [A]) : [var A]",
-      "public func vals<X>(array : [X]) : I.Iter<X>"
+      "public func vals<X>(array : [X]) : Iter.Iter<X>"
     ]
   },
   {
     "name": "deprecated/AssocList",
     "exports": [
+      "public type AssocList<K, V>",
       "public func diff<K, V, W>( map1 : AssocList<K, V>, map2 : AssocList<K, W>, equal : (K, K) -> Bool ) : AssocList<K, V>",
       "public func disj<K, V, W, X>( map1 : AssocList<K, V>, map2 : AssocList<K, W>, equal : (K, K) -> Bool, combine : (?V, ?W) -> X ) : AssocList<K, X>",
       "public func disjDisjoint<K, V, W, X>( map1 : AssocList<K, V>, map2 : AssocList<K, W>, f : (?V, ?W) -> X ) : AssocList<K, X>",
@@ -1167,6 +1197,7 @@
   {
     "name": "deprecated/Blob",
     "exports": [
+      "public type Blob",
       "public func compare(b1 : Blob, b2 : Blob) : { #less; #equal; #greater }",
       "public func equal(blob1 : Blob, blob2 : Blob) : Bool",
       "public func fromArray(bytes : [Nat8]) : Blob",
@@ -1184,6 +1215,7 @@
   {
     "name": "deprecated/Bool",
     "exports": [
+      "public type Bool",
       "public func compare(x : Bool, y : Bool) : { #less; #equal; #greater }",
       "public func equal(x : Bool, y : Bool) : Bool",
       "public func logand(x : Bool, y : Bool) : Bool",
@@ -1264,6 +1296,7 @@
   {
     "name": "deprecated/Char",
     "exports": [
+      "public type Char",
       "public func compare(x : Char, y : Char) : { #less; #equal; #greater }",
       "public func equal(x : Char, y : Char) : Bool",
       "public let fromNat32 : (w : Nat32) -> Char",
@@ -1291,6 +1324,7 @@
   {
     "name": "deprecated/Deque",
     "exports": [
+      "public type Deque<T>",
       "public func empty<T>() : Deque<T>",
       "public func isEmpty<T>(deque : Deque<T>) : Bool",
       "public func peekBack<T>(deque : Deque<T>) : ?T",
@@ -1305,6 +1339,8 @@
     "name": "deprecated/Error",
     "exports": [
       "public let code : (error : Error) -> ErrorCode",
+      "public type Error",
+      "public type ErrorCode",
       "public let message : (error : Error) -> Text",
       "public let reject : (message : Text) -> Error"
     ]
@@ -1373,6 +1409,7 @@
       "public func equal(x : Float, y : Float) : Bool",
       "public func equalWithin(x : Float, y : Float, epsilon : Float) : Bool",
       "public let exp : (x : Float) -> Float",
+      "public type Float",
       "public let floor : (x : Float) -> Float",
       "public func format(fmt : { #fix : Nat8; #exp : Nat8; #gen : Nat8; #hex : Nat8; #exact }, x : Float) : Text",
       "public let fromInt : Int -> Float",
@@ -1419,6 +1456,7 @@
       "public func debugPrintBitsRev(bits : Hash)",
       "public func equal(ha : Hash, hb : Hash) : Bool",
       "public func hash(n : Nat) : Hash",
+      "public type Hash",
       "public func hashNat8(key : [Hash]) : Hash",
       "public let length : Nat"
     ]
@@ -1437,7 +1475,8 @@
     "name": "deprecated/Heap",
     "exports": [
       "public func fromIter<X>(iter : I.Iter<X>, compare : (X, X) -> O.Order) : Heap<X>",
-      "public class Heap<X>(compare : (X, X) -> O.Order)"
+      "public class Heap<X>(compare : (X, X) -> O.Order)",
+      "public type Tree<X>"
     ]
   },
   {
@@ -1452,6 +1491,7 @@
       "public func greaterOrEqual(x : Int, y : Int) : Bool",
       "public func hash(i : Int) : Hash.Hash",
       "public func hashAcc(h1 : Hash.Hash, i : Int) : Hash.Hash",
+      "public type Int",
       "public func less(x : Int, y : Int) : Bool",
       "public func lessOrEqual(x : Int, y : Int) : Bool",
       "public func max(x : Int, y : Int) : Int",
@@ -1496,6 +1536,7 @@
       "public let fromNat16 : Nat16 -> Int16",
       "public func greater(x : Int16, y : Int16) : Bool",
       "public func greaterOrEqual(x : Int16, y : Int16) : Bool",
+      "public type Int16",
       "public func less(x : Int16, y : Int16) : Bool",
       "public func lessOrEqual(x : Int16, y : Int16) : Bool",
       "public func max(x : Int16, y : Int16) : Int16",
@@ -1549,6 +1590,7 @@
       "public let fromNat32 : Nat32 -> Int32",
       "public func greater(x : Int32, y : Int32) : Bool",
       "public func greaterOrEqual(x : Int32, y : Int32) : Bool",
+      "public type Int32",
       "public func less(x : Int32, y : Int32) : Bool",
       "public func lessOrEqual(x : Int32, y : Int32) : Bool",
       "public func max(x : Int32, y : Int32) : Int32",
@@ -1601,6 +1643,7 @@
       "public let fromNat64 : Nat64 -> Int64",
       "public func greater(x : Int64, y : Int64) : Bool",
       "public func greaterOrEqual(x : Int64, y : Int64) : Bool",
+      "public type Int64",
       "public func less(x : Int64, y : Int64) : Bool",
       "public func lessOrEqual(x : Int64, y : Int64) : Bool",
       "public func max(x : Int64, y : Int64) : Int64",
@@ -1652,6 +1695,7 @@
       "public let fromNat8 : Nat8 -> Int8",
       "public func greater(x : Int8, y : Int8) : Bool",
       "public func greaterOrEqual(x : Int8, y : Int8) : Bool",
+      "public type Int8",
       "public func less(x : Int8, y : Int8) : Bool",
       "public func lessOrEqual(x : Int8, y : Int8) : Bool",
       "public func max(x : Int8, y : Int8) : Int8",
@@ -1681,6 +1725,7 @@
       "public func fromArray<A>(xs : [A]) : Iter<A>",
       "public func fromArrayMut<A>(xs : [var A]) : Iter<A>",
       "public let fromList",
+      "public type Iter<T>",
       "public func iterate<A>( xs : Iter<A>, f : (A, Nat) -> () )",
       "public func make<A>(x : A) : Iter<A>",
       "public func map<A, B>(xs : Iter<A>, f : A -> B) : Iter<B>",
@@ -1695,7 +1740,9 @@
   },
   {
     "name": "deprecated/IterType",
-    "exports": []
+    "exports": [
+      "public type Iter<T>"
+    ]
   },
   {
     "name": "deprecated/List",
@@ -1717,6 +1764,7 @@
       "public func isNil<T>(l : List<T>) : Bool",
       "public func iterate<T>(l : List<T>, f : T -> ())",
       "public func last<T>(l : List<T>) : ?T",
+      "public type List<T>",
       "public func make<T>(x : T) : List<T>",
       "public func map<T, U>(l : List<T>, f : T -> U) : List<U>",
       "public func mapFilter<T, U>(l : List<T>, f : T -> ?U) : List<U>",
@@ -1757,6 +1805,7 @@
       "public func max(x : Nat, y : Nat) : Nat",
       "public func min(x : Nat, y : Nat) : Nat",
       "public func mul(x : Nat, y : Nat) : Nat",
+      "public type Nat",
       "public func notEqual(x : Nat, y : Nat) : Bool",
       "public func pow(x : Nat, y : Nat) : Nat",
       "public func rem(x : Nat, y : Nat) : Nat",
@@ -1800,6 +1849,7 @@
       "public func min(x : Nat16, y : Nat16) : Nat16",
       "public func mul(x : Nat16, y : Nat16) : Nat16",
       "public func mulWrap(x : Nat16, y : Nat16) : Nat16",
+      "public type Nat16",
       "public func notEqual(x : Nat16, y : Nat16) : Bool",
       "public func pow(x : Nat16, y : Nat16) : Nat16",
       "public func powWrap(x : Nat16, y : Nat16) : Nat16",
@@ -1848,6 +1898,7 @@
       "public func min(x : Nat32, y : Nat32) : Nat32",
       "public func mul(x : Nat32, y : Nat32) : Nat32",
       "public func mulWrap(x : Nat32, y : Nat32) : Nat32",
+      "public type Nat32",
       "public func notEqual(x : Nat32, y : Nat32) : Bool",
       "public func pow(x : Nat32, y : Nat32) : Nat32",
       "public func powWrap(x : Nat32, y : Nat32) : Nat32",
@@ -1895,6 +1946,7 @@
       "public func min(x : Nat64, y : Nat64) : Nat64",
       "public func mul(x : Nat64, y : Nat64) : Nat64",
       "public func mulWrap(x : Nat64, y : Nat64) : Nat64",
+      "public type Nat64",
       "public func notEqual(x : Nat64, y : Nat64) : Bool",
       "public func pow(x : Nat64, y : Nat64) : Nat64",
       "public func powWrap(x : Nat64, y : Nat64) : Nat64",
@@ -1941,6 +1993,7 @@
       "public func min(x : Nat8, y : Nat8) : Nat8",
       "public func mul(x : Nat8, y : Nat8) : Nat8",
       "public func mulWrap(x : Nat8, y : Nat8) : Nat8",
+      "public type Nat8",
       "public func notEqual(x : Nat8, y : Nat8) : Bool",
       "public func pow(x : Nat8, y : Nat8) : Nat8",
       "public func powWrap(x : Nat8, y : Nat8) : Nat8",
@@ -1955,7 +2008,8 @@
   {
     "name": "deprecated/None",
     "exports": [
-      "public let impossible : <A> None -> A"
+      "public let impossible : <A> None -> A",
+      "public type None"
     ]
   },
   {
@@ -1983,7 +2037,8 @@
       "public func equal(o1 : Order, o2 : Order) : Bool",
       "public func isEqual(order : Order) : Bool",
       "public func isGreater(order : Order) : Bool",
-      "public func isLess(order : Order) : Bool"
+      "public func isLess(order : Order) : Bool",
+      "public type Order"
     ]
   },
   {
@@ -2010,6 +2065,7 @@
       "public func less(principal1 : Principal, principal2 : Principal) : Bool",
       "public func lessOrEqual(principal1 : Principal, principal2 : Principal) : Bool",
       "public func notEqual(principal1 : Principal, principal2 : Principal) : Bool",
+      "public type Principal",
       "public func toBlob(p : Principal) : Blob",
       "public func toLedgerAccount(principal : Principal, subAccount : ?Blob) : Blob",
       "public func toText(p : Principal) : Text"
@@ -2018,9 +2074,11 @@
   {
     "name": "deprecated/RBTree",
     "exports": [
+      "public type Color",
       "public func iter<X, Y>(tree : Tree<X, Y>, direction : { #fwd; #bwd }) : I.Iter<(X, Y)>",
       "public class RBTree<K, V>(compare : (K, K) -> O.Order)",
-      "public func size<X, Y>(t : Tree<X, Y>) : Nat"
+      "public func size<X, Y>(t : Tree<X, Y>) : Nat",
+      "public type Tree<K, V>"
     ]
   },
   {
@@ -2050,6 +2108,7 @@
       "public let loadNat64 : (region : Region, offset : Nat64) -> Nat64",
       "public let loadNat8 : (region : Region, offset : Nat64) -> Nat8",
       "public let new : () -> Region",
+      "public type Region",
       "public let size : (region : Region) -> (pages : Nat64)",
       "public let storeBlob : (region : Region, offset : Nat64, value : Blob) -> ()",
       "public let storeFloat : (region: Region, offset : Nat64, value : Float) -> ()",
@@ -2079,6 +2138,7 @@
       "public func iterate<Ok, Err>(res : Result<Ok, Err>, f : Ok -> ())",
       "public func mapErr<Ok, Error1, Error2>( x : Result<Ok, Error1>, f : Error1 -> Error2 ) : Result<Ok, Error2>",
       "public func mapOk<Ok1, Ok2, Error>( x : Result<Ok1, Error>, f : Ok1 -> Ok2 ) : Result<Ok2, Error>",
+      "public type Result<Ok, Err>",
       "public func toOption<R, E>(r : Result<R, E>) : ?R",
       "public func toUpper<Ok, Err>( result : Result<Ok, Err> ) : { #Ok: Ok; #Err: Err }"
     ]
@@ -2110,12 +2170,14 @@
       "public func lessOrEqual(t1 : Text, t2 : Text) : Bool",
       "public func map(t : Text, f : Char -> Char) : Text",
       "public func notEqual(t1 : Text, t2 : Text) : Bool",
+      "public type Pattern",
       "public func replace(t : Text, p : Pattern, r : Text) : Text",
       "public func size(t : Text) : Nat",
       "public func split(t : Text, p : Pattern) : Iter.Iter<Text>",
       "public func startsWith(t : Text, p : Pattern) : Bool",
       "public func stripEnd(t : Text, p : Pattern) : ?Text",
       "public func stripStart(t : Text, p : Pattern) : ?Text",
+      "public type Text",
       "public func toArray(t : Text) : [Char]",
       "public func toIter(t : Text) : Iter.Iter<Char>",
       "public func tokens(t : Text, p : Pattern) : Iter.Iter<Text>",
@@ -2131,22 +2193,27 @@
   {
     "name": "deprecated/Time",
     "exports": [
-      "public let now : () -> Time"
+      "public let now : () -> Time",
+      "public type Time"
     ]
   },
   {
     "name": "deprecated/Timer",
     "exports": [
       "public let cancelTimer : TimerId -> ()",
+      "public type Duration",
       "public func recurringTimer<system>(d : Duration, job : () -> async ()) : TimerId",
-      "public func setTimer<system>(d : Duration, job : () -> async ()) : TimerId"
+      "public func setTimer<system>(d : Duration, job : () -> async ()) : TimerId",
+      "public type TimerId"
     ]
   },
   {
     "name": "deprecated/Trie",
     "exports": [
       "public func all<K, V>(t : Trie<K, V>, f : (K, V) -> Bool) : Bool",
+      "public type AssocList<K, V>",
       "public func branch<K, V>(l : Trie<K, V>, r : Trie<K, V>) : Trie<K, V>",
+      "public type Branch<K, V>",
       "public func clone<K, V>(t : Trie<K, V>) : Trie<K, V>",
       "public func diff<K, V, W>(tl : Trie<K, V>, tr : Trie<K, W>, k_eq : (K, K) -> Bool) : Trie<K, V>",
       "public func disj<K, V, W, X>( tl : Trie<K, V>, tr : Trie<K, W>, k_eq : (K, K) -> Bool, vbin : (?V, ?W) -> X ) : Trie<K, X>",
@@ -2163,7 +2230,9 @@
       "public func isValid<K, V>(t : Trie<K, V>, _enforceNormal : Bool) : Bool",
       "public func iter<K, V>(t : Trie<K, V>) : I.Iter<(K, V)>",
       "public func join<K, V, W, X>( tl : Trie<K, V>, tr : Trie<K, W>, k_eq : (K, K) -> Bool, vbin : (V, W) -> X ) : Trie<K, X>",
+      "public type Key<K>",
       "public func leaf<K, V>(kvs : AssocList<Key<K>, V>, bitpos : Nat) : Trie<K, V>",
+      "public type Leaf<K, V>",
       "public func mapFilter<K, V, W>(t : Trie<K, V>, f : (K, V) -> ?W) : Trie<K, W>",
       "public func merge<K, V>(tl : Trie<K, V>, tr : Trie<K, V>, k_eq : (K, K) -> Bool) : Trie<K, V>",
       "public func mergeDisjoint<K, V>(tl : Trie<K, V>, tr : Trie<K, V>, k_eq : (K, K) -> Bool) : Trie<K, V>",
@@ -2182,7 +2251,10 @@
       "public func replaceThen<K, V, X>( t : Trie<K, V>, k : Key<K>, k_eq : (K, K) -> Bool, v2 : V, success : (Trie<K, V>, V) -> X, fail : () -> X ) : X",
       "public func size<K, V>(t : Trie<K, V>) : Nat",
       "public func some<K, V>(t : Trie<K, V>, f : (K, V) -> Bool) : Bool",
-      "public func toArray<K, V, W>(t : Trie<K, V>, f : (K, V) -> W) : [W]"
+      "public func toArray<K, V, W>(t : Trie<K, V>, f : (K, V) -> W) : [W]",
+      "public type Trie<K, V>",
+      "public type Trie2D<K1, K2, V>",
+      "public type Trie3D<K1, K2, K3, V>"
     ]
   },
   {
@@ -2204,11 +2276,13 @@
       "public func empty<T>() : Set<T>",
       "public func equal<T>(s1 : Set<T>, s2 : Set<T>, eq : (T, T) -> Bool) : Bool",
       "public func fromArray<T>(arr : [T], elemHash : T -> Hash, eq : (T, T) -> Bool) : Set<T>",
+      "public type Hash",
       "public func intersect<T>(s1 : Set<T>, s2 : Set<T>, eq : (T, T) -> Bool) : Set<T>",
       "public func isEmpty<T>(s : Set<T>) : Bool",
       "public func isSubset<T>(s1 : Set<T>, s2 : Set<T>, eq : (T, T) -> Bool) : Bool",
       "public func mem<T>(s : Set<T>, x : T, xh : Hash, eq : (T, T) -> Bool) : Bool",
       "public func put<T>(s : Set<T>, x : T, xh : Hash, eq : (T, T) -> Bool) : Set<T>",
+      "public type Set<T>",
       "public func size<T>(s : Set<T>) : Nat",
       "public func toArray<T>(s : Set<T>) : [T]",
       "public func union<T>(s1 : Set<T>, s2 : Set<T>, eq : (T, T) -> Bool) : Set<T>"
@@ -2233,6 +2307,7 @@
       "public func isEmpty(map : Map<Any, Any>) : Bool",
       "public func keys<K>(map : Map<K, Any>) : Iter.Iter<K>",
       "public func map<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> V2) : Map<K, V2>",
+      "public type Map<K, V>",
       "public func maxEntry<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ?(K, V)",
       "public func minEntry<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ?(K, V)",
       "public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V)",
@@ -2264,6 +2339,7 @@
       "public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>)",
       "public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T>",
       "public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T>",
+      "public type Queue<T>",
       "public func singleton<T>(item : T) : Queue<T>",
       "public func size(queue : Queue<Any>) : Nat",
       "public func toText<T>(queue : Queue<T>, f : T -> Text) : Text",
@@ -2296,6 +2372,7 @@
       "public func max<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T",
       "public func min<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ?T",
       "public func reverseValues<T>(set : Set<T>) : Iter.Iter<T>",
+      "public type Set<T>",
       "public func singleton<T>(item : T) : Set<T>",
       "public func size<T>(set : Set<T>) : Nat",
       "public func toText<T>(set : Set<T>, f : T -> Text) : Text",
@@ -2340,6 +2417,7 @@
       "public func singleton<T>(item : T) : Stack<T>",
       "public func size(stack : Stack<Any>) : Nat",
       "public func split<T>(stack : Stack<T>, n : Nat) : (Stack<T>, Stack<T>)",
+      "public type Stack<T>",
       "public func take<T>(stack : Stack<T>, n : Nat) : Stack<T>",
       "public func toArray<T>(stack : Stack<T>) : [T]",
       "public func toText<T>(stack : Stack<T>, f : T -> Text) : Text",
@@ -2347,6 +2425,12 @@
       "public func values<T>(stack : Stack<T>) : Iter.Iter<T>",
       "public func zip<T, U>(stack1 : Stack<T>, stack2 : Stack<U>) : Stack<(T, U)>",
       "public func zipWith<T, U, V>(stack1 : Stack<T>, stack2 : Stack<U>, f : (T, U) -> V) : Stack<V>"
+    ]
+  },
+  {
+    "name": "type/Iter",
+    "exports": [
+      "public type Iter<T>"
     ]
   }
 ]

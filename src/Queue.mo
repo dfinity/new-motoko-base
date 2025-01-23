@@ -1,6 +1,6 @@
 /// Original: `Deque.mo`
 
-import Iter "IterType";
+import Iter "Iter";
 import Immutable "immutable/Queue";
 import Order "Order";
 import { todo } "Debug";

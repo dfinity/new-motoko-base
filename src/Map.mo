@@ -1,7 +1,7 @@
 /// Original: `OrderedMap.mo`
 
 import Immutable "immutable/Map";
-import Iter "IterType";
+import Iter "Iter";
 import Order "Order";
 import { todo } "Debug";
 

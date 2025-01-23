@@ -4,6 +4,8 @@ import Order "Order";
 import Array "Array";
 import VarArray "VarArray";
 import { todo } "Debug";
+import Prim "mo:prim";
+import Runtime "Runtime";
 
 module {
 
@@ -204,8 +206,43 @@ module {
   /// let iter = Iter.range(1, 3);
   /// assert([1, 2, 3] == Iter.toArray(iter));
   /// ```
-  public func toArray<T>(xs : Iter<T>) : [T] {
-    todo()
+  public func toArray<T>(iter : Iter<T>) : [T] {
+    // TODO: Replace implementation. This is just temporay.
+    type Node<T> = { value: T; var next: ?Node<T>};
+    var first: ?Node<T> = null;
+    var last: ?Node<T> = null;
+    var count = 0;
+
+    func add(value: T) {
+      let node : Node<T> = { value; var next = null };
+      switch (last) {
+        case null {
+          first := ?node;
+        };
+        case (?previous) {
+          previous.next := ?node;
+        }
+      };
+      last := ?node;
+      count += 1;
+    };
+
+    for (value in iter) {
+      add(value);
+    };
+    if (count == 0) {
+      return [];
+    };
+    var current = first;
+    Prim.Array_tabulate<T>(count, func (_) {
+      switch (current) {
+        case null Runtime.trap("Node must not be null");
+        case (?node) {
+          current := node.next;
+          node.value
+        }
+      }
+    });
   };
 
   /// Like `toArray` but for Arrays with mutable elements.

@@ -22,6 +22,14 @@ module {
   /// ```
   public type Iter<T> = { next : () -> ?T };
 
+  public func empty<T>() : Iter<T> {
+    object {
+      public func next() : ?T {
+        null
+      }
+    }
+  };
+
   /// Calls a function `f` on every value produced by an iterator and discards
   /// the results. If you're looking to keep these results use `map` instead.
   ///

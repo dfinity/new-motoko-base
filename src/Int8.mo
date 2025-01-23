@@ -644,26 +644,27 @@ module {
   /// assert(null == iter.next());
   /// ```
   ///
-  /// If the first argument is greater than the second argument, the function wraps from the maximum value to the minimum value.
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
   /// ```motoko
   /// import Iter "mo:base/Iter";
   ///
-  /// let iter = Int8.range(127, -127);
-  /// assert(?127 == iter.next());
-  /// assert(?-128 == iter.next()); // wraps to minimum value
-  /// assert(?-127 == iter.next());
-  /// // ... continues until reaching -127
+  /// let iter = Int8.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
   /// ```
   public func range(fromInclusive : Int8, toExclusive : Int8) : Iter.Iter<Int8> {
-    object {
-      var n = fromInclusive;
-      public func next() : ?Int8 {
-        if (n >= toExclusive) {
-          null
-        } else {
-          let result = n;
-          n := addWrap(n, 1);
-          ?result
+    if (fromInclusive >= toExclusive) {
+      Iter.empty()
+    } else {
+      object {
+        var n = fromInclusive;
+        public func next() : ?Int8 {
+          if (n == toExclusive) {
+            null
+          } else {
+            let result = n;
+            n := n + 1;
+            ?result
+          }
         }
       }
     }
@@ -680,26 +681,32 @@ module {
   /// assert(null == iter.next());
   /// ```
   ///
-  /// If the first argument is greater than the second argument, the function wraps from the maximum value to the minimum value.
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
   /// ```motoko
   /// import Iter "mo:base/Iter";
   ///
-  /// let iter = Int8.rangeInclusive(127, -127);
-  /// assert(?127 == iter.next());
-  /// assert(?-128 == iter.next()); // wraps to minimum value
-  /// assert(?-127 == iter.next());
-  /// assert(null == iter.next());
+  /// let iter = Int8.rangeInclusive(4, 1);
+  /// assert(null == iter.next()); // empty iterator
   /// ```
   public func rangeInclusive(from : Int8, to : Int8) : Iter.Iter<Int8> {
-    object {
-      var n = from;
-      public func next() : ?Int8 {
-        if (n > to) {
-          null
-        } else {
-          let result = n;
-          n := addWrap(n, 1);
-          ?result
+    if (from > to) {
+      Iter.empty()
+    } else {
+      object {
+        var n = from;
+        var done = false;
+        public func next() : ?Int8 {
+          if (done) {
+            null
+          } else {
+            let result = n;
+            if (n == to) {
+              done := true;
+            } else {
+              n := n + 1;
+            };
+            ?result
+          }
         }
       }
     }

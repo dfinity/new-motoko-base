@@ -449,6 +449,7 @@
     "name": "Iter",
     "exports": [
       "public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T>",
+      "public func empty<T>() : Iter<T>",
       "public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T>",
       "public func fromArray<T>(xs : [T]) : Iter<T>",
       "public func fromVarArray<T>(xs : [var T]) : Iter<T>",

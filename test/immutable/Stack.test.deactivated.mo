@@ -208,14 +208,14 @@ let replicate = Suite.suite(
   [
     Suite.test(
       "empty-list",
-      Stack.replicate<Nat>(0, 0),
+      Stack.repeat<Nat>(0, 0),
       M.equals(
         T.list(T.natTestable, Stack.empty<Nat>())
       )
     ),
     Suite.test(
       "small-list",
-      Stack.replicate(3, 0),
+      Stack.repeat(3, 0),
       M.equals(
         T.list<Nat>(T.natTestable, ?(0, ?(0, ?(0, null))))
       )
@@ -244,7 +244,7 @@ let tabulate = Suite.suite(
       "large-list",
       Stack.tabulate<Nat>(10000, func i { 0 }),
       M.equals(
-        T.list<Nat>(T.natTestable, Stack.replicate(10000, 0))
+        T.list<Nat>(T.natTestable, Stack.repeat(10000, 0))
       )
     )
   ]
@@ -255,7 +255,7 @@ let append = Suite.suite(
   [
     Suite.test(
       "small-list",
-      Stack.append(
+      Stack.concat(
         Stack.tabulate<Nat>(10, func i { i }),
         Stack.tabulate<Nat>(10, func i { i + 10 })
       ),
@@ -265,7 +265,7 @@ let append = Suite.suite(
     ),
     Suite.test(
       "large-list",
-      Stack.append(
+      Stack.concat(
         Stack.tabulate<Nat>(10000, func i { i }),
         Stack.tabulate<Nat>(10000, func i { i + 10000 })
       ),
@@ -302,17 +302,17 @@ let push = Suite.suite(
   [
     Suite.test(
       "empty",
-      Stack.add(0, Stack.empty<Nat>()),
+      Stack.push(0, Stack.empty<Nat>()),
       M.equals(T.list(T.natTestable, ?(0, null)))
     ),
     Suite.test(
       "singleton",
-      Stack.add(1, Stack.add(0, Stack.empty<Nat>())),
+      Stack.push(1, Stack.push(0, Stack.empty<Nat>())),
       M.equals(T.list(T.natTestable, ?(1, ?(0, null))))
     ),
     Suite.test(
       "nary",
-      Stack.add(2, Stack.add(1, Stack.add(0, Stack.empty<Nat>()))),
+      Stack.push(2, Stack.push(1, Stack.push(0, Stack.empty<Nat>()))),
       M.equals(T.list(T.natTestable, ?(2, ?(1, ?(0, null)))))
     )
   ]
@@ -707,12 +707,12 @@ let flatten = Suite.suite(
   ]
 );
 
-let make = Suite.suite(
-  "make",
+let singleton = Suite.suite(
+  "singleton",
   [
     Suite.test(
-      "make",
-      Stack.make<Int>(0),
+      "singleton",
+      Stack.singleton<Int>(0),
       M.equals(T.list<Int>(T.intTestable, ?(0, null)))
     ),
   ]
@@ -885,21 +885,21 @@ let all = Suite.suite(
   ]
 );
 
-let some = Suite.suite(
-  "some", [
+let any = Suite.suite(
+  "any", [
     Suite.test(
       "non-empty true",
-      Stack.some<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x = x >= 8),
+      Stack.any<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x = x >= 8),
       M.equals(T.bool(true))
     ),
     Suite.test(
       "non-empty false",
-      Stack.some<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x =  x > 9),
+      Stack.any<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x =  x > 9),
       M.equals(T.bool(false))
     ),
     Suite.test(
       "empty",
-      Stack.some<Nat>(null, func x = true),
+      Stack.any<Nat>(null, func x = true),
       M.equals(T.bool(false))
     ),
   ]
@@ -1377,14 +1377,14 @@ Suite.run(Suite.suite("Stack", [
   partition,
   mapFilter,
   flatten,
-  make,
+  singleton,
   take,
   drop,
   foldLeft,
   foldRight,
   find,
   all,
-  some,
+  any,
   merge,
   compare,
   equal,

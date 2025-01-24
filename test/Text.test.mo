@@ -1036,7 +1036,7 @@ run(
       ),
       test(
         "toArray-example",
-        Array.freeze(Text.toVarArray("Café")),
+        Array.fromVarArray(Text.toVarArray("Café")),
         M.equals(T.array<Char>(T.charTestable, ['C', 'a', 'f', 'é']))
       ),
       test(
@@ -1073,16 +1073,16 @@ run(
 
 run(
   suite(
-    "text-toLowercase",
+    "text-toLower",
     [
       test(
         "empty",
-        Text.toLowercase(""),
+        Text.toLower(""),
         M.equals(T.text "")
       ),
       test(
         "printable ascii",
-        Text.toLowercase(
+        Text.toLower(
           "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
         ),
         M.equals(T.text
@@ -1091,12 +1091,12 @@ run(
       ),
       test(
         "ὈDYSSEUS",
-        Text.toLowercase("ὈΔΥΣΣΕΎΣ"),
+        Text.toLower("ὈΔΥΣΣΕΎΣ"),
         M.equals(T.text "ὀδυσσεύς")
       ),
       test(
         "new year",
-        Text.toLowercase("农历新年"),
+        Text.toLower("农历新年"),
         M.equals(T.text "农历新年")
       )
     ]
@@ -1105,16 +1105,16 @@ run(
 
 run(
   suite(
-    "text-toUppercase",
+    "text-toUpper",
     [
       test(
         "empty",
-        Text.toUppercase(""),
+        Text.toUpper(""),
         M.equals(T.text "")
       ),
       test(
         "printable ascii",
-        Text.toUppercase(
+        Text.toUpper(
           "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
         ),
         M.equals(T.text
@@ -1123,12 +1123,12 @@ run(
       ),
       test(
         "odysseus",
-        Text.toUppercase("ὀδυσσεύς"),
+        Text.toUpper("ὀδυσσεύς"),
         M.equals(T.text "ὈΔΥΣΣΕΎΣ")
       ),
       test(
         "new year",
-        Text.toUppercase("农历新年"),
+        Text.toUpper("农历新年"),
         M.equals(T.text "农历新年")
       )
     ]

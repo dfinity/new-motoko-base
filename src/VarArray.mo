@@ -145,6 +145,20 @@ module {
     newArray
   };
 
+  /// Sorts the elements in a mutable array in place according to `compare`.
+  /// Sort is deterministic and stable.
+  ///
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  ///
+  /// let array = [var 4, 2, 6];
+  /// VarArray.sortInPlace(array, Nat.compare);
+  /// assert array == [var 2, 4, 6];
+  /// ```
+  /// Runtime: O(size * log(size))
+  ///
+  /// Space: O(size)
+  /// *Runtime and space assumes that `compare` runs in O(1) time and space.
   public func sortInPlace<T>(array : [var T], compare : (T, T) -> Order.Order) : () {
     // Stable merge sort in a bottom-up iterative style. Same algorithm as the sort in Buffer.
     let size = array.size();
@@ -226,6 +240,17 @@ module {
     tabulate<T>(size, func i = array[size - i - 1])
   };
 
+  /// Reverses the order of elements in a mutable array in place.
+  ///
+  /// ```motoko include=import
+  /// let array = [var 10, 11, 12];
+  /// VarArray.reverseInPlace(array);
+  /// assert array == [var 12, 11, 10];
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
   public func reverseInPlace<T>(array : [var T]) : () {
     todo()
   };
@@ -641,6 +666,18 @@ module {
   /// Space: O(1)
   public func values<T>(array : [var T]) : Iter.Iter<T> = array.vals();
 
+  /// Returns true if all elements in `array` satisfy the predicate function.
+  ///
+  /// ```motoko include=import
+  /// let array = [var 1, 2, 3, 4];
+  /// VarArray.all<Nat>(array, func x = x > 0) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func all<T>(array : [var T], predicate : T -> Bool) : Bool {
     for (element in array.vals()) {
       if (not predicate(element)) {
@@ -650,6 +687,18 @@ module {
     true
   };
 
+  /// Returns true if any element in `array` satisfies the predicate function.
+  ///
+  /// ```motoko include=import
+  /// let array = [var 1, 2, 3, 4];
+  /// VarArray.any<Nat>(array, func x = x > 3) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func any<T>(array : [var T], predicate : T -> Bool) : Bool {
     for (element in array.vals()) {
       if (predicate(element)) {
@@ -807,6 +856,19 @@ module {
     }
   };
 
+  /// Converts the mutable array to its textual representation using `f` to convert each element to `Text`.
+  ///
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  /// let array = [var 1, 2, 3];
+  /// VarArray.toText<Nat>(array, Nat.toText) // => "[var 1, 2, 3]"
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func toText<T>(array : [var T], f : T -> Text) : Text {
     let size = array.size();
     if (size == 0) { return "[var]" };
@@ -823,6 +885,29 @@ module {
     text
   };
 
+  /// Compares two mutable arrays using the provided comparison function for elements.
+  /// Returns #less, #equal, or #greater if array1 is less than, equal to,
+  /// or greater than array2 respectively.
+  ///
+  /// If arrays have different sizes but all elements up to the shorter length are equal,
+  /// the shorter array is considered #less than the longer array.
+  ///
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  /// let array1 = [var 1, 2, 3];
+  /// let array2 = [var 1, 2, 4];
+  /// VarArray.compare<Nat>(array1, array2, Nat.compare) // => #less
+  ///
+  /// let array3 = [var 1, 2];
+  /// let array4 = [var 1, 2, 3];
+  /// VarArray.compare<Nat>(array3, array4, Nat.compare) // => #less (shorter array)
+  /// ```
+  ///
+  /// Runtime: O(min(size1, size2))
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `compare` runs in O(1) time and space.
   public func compare<T>(array1 : [var T], array2 : [var T], compare : (T, T) -> Order.Order) : Order.Order {
     let size1 = array1.size();
     let size2 = array2.size();

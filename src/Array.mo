@@ -609,6 +609,18 @@ module {
   /// Space: O(1)
   public func values<T>(array : [T]) : Iter.Iter<T> = array.vals();
 
+  /// Returns true if all elements in `array` satisfy the predicate function.
+  ///
+  /// ```motoko include=import
+  /// let array = [1, 2, 3, 4];
+  /// Array.all<Nat>(array, func x = x > 0) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func all<T>(array : [T], predicate : T -> Bool) : Bool {
     for (element in array.vals()) {
       if (not predicate(element)) {
@@ -618,6 +630,18 @@ module {
     true
   };
 
+  /// Returns true if any element in `array` satisfies the predicate function.
+  ///
+  /// ```motoko include=import
+  /// let array = [1, 2, 3, 4];
+  /// Array.any<Nat>(array, func x = x > 3) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func any<T>(array : [T], predicate : T -> Bool) : Bool {
     for (element in array.vals()) {
       if (predicate(element)) {
@@ -775,6 +799,19 @@ module {
     }
   };
 
+  /// Converts the array to its textual representation using `f` to convert each element to `Text`.
+  ///
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  /// let array = [1, 2, 3];
+  /// Array.toText<Nat>(array, Nat.toText) // => "[1, 2, 3]"
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func toText<T>(array : [T], f : T -> Text) : Text {
     let size = array.size();
     if (size == 0) { return "[]" };
@@ -791,6 +828,29 @@ module {
     text
   };
 
+  /// Compares two arrays using the provided comparison function for elements.
+  /// Returns #less, #equal, or #greater if array1 is less than, equal to,
+  /// or greater than array2 respectively.
+  ///
+  /// If arrays have different sizes but all elements up to the shorter length are equal,
+  /// the shorter array is considered #less than the longer array.
+  ///
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  /// let array1 = [1, 2, 3];
+  /// let array2 = [1, 2, 4];
+  /// Array.compare<Nat>(array1, array2, Nat.compare) // => #less
+  ///
+  /// let array3 = [1, 2];
+  /// let array4 = [1, 2, 3];
+  /// Array.compare<Nat>(array3, array4, Nat.compare) // => #less (shorter array)
+  /// ```
+  ///
+  /// Runtime: O(min(size1, size2))
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `compare` runs in O(1) time and space.
   public func compare<T>(array1 : [T], array2 : [T], compare : (T, T) -> Order.Order) : Order.Order {
     let size1 = array1.size();
     let size2 = array2.size();

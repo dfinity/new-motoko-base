@@ -62,9 +62,9 @@ let iterate = Suite.suite(
     var tests : [Suite.Suite] = [];
     var counter : Nat = 0;
     Result.iterate(makeNatural(5), func(x : Nat) { counter += x });
-    tests := Array.append(tests, [Suite.test("ok", counter, M.equals(T.nat(5)))]);
+    tests := Array.concat(tests, [Suite.test("ok", counter, M.equals(T.nat(5)))]);
     Result.iterate(makeNatural(-10), func(x : Nat) { counter += x });
-    tests := Array.append(tests, [Suite.test("err", counter, M.equals(T.nat(5)))]);
+    tests := Array.concat(tests, [Suite.test("err", counter, M.equals(T.nat(5)))]);
     tests
   }
 );

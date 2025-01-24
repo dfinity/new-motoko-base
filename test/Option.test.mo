@@ -251,9 +251,9 @@ do {
 };
 
 do {
-  Debug.print("  make");
+  Debug.print("  some");
 
-  let actual = Option.make<Int>(0);
+  let actual = Option.some<Int>(0);
   let expected = ?0;
 
   switch (actual, expected) {

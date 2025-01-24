@@ -49,8 +49,8 @@ func opnatEq(a : ?Nat, b : ?Nat) : Bool {
 
 // ## Construction
 let l1 = Stack.empty<X>();
-let l2 = Stack.add<X>(2, l1);
-let l3 = Stack.add<X>(3, l2);
+let l2 = Stack.push<X>(l1, 2);
+let l3 = Stack.push<X>(l2, 3);
 
 // ## Projection -- use nth
 assert (opnatEq(Stack.get<X>(l3, 0), ?3));
@@ -77,7 +77,7 @@ let (a2, _t2) = Stack.pop<X>(l2);
 assert (opnatEq(a2, ?2));
 let (a3, t3) = Stack.pop<X>(l1);
 assert (opnatEq(a3, null));
-assert (Stack.isNil<X>(t3));
+assert (Stack.isEmpty<X>(t3));
 
 // ## Stack functions
 assert (Stack.size<X>(l1) == 0);
@@ -104,7 +104,7 @@ do {
 do {
   Debug.print("  fromArray");
 
-  let expected : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.nil<Nat>())));
+  let expected : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.empty<Nat>())));
   let array = [1, 2, 3];
   let actual = Stack.fromArray<Nat>(array);
 
@@ -114,7 +114,7 @@ do {
 do {
   Debug.print("  fromVarArray");
 
-  let expected : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.nil<Nat>())));
+  let expected : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.empty<Nat>())));
   let array = [var 1, 2, 3];
   let actual = Stack.fromVarArray<Nat>(array);
 
@@ -125,7 +125,7 @@ do {
   Debug.print("  toArray");
 
   let expected = [1, 2, 3];
-  let list : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.nil<Nat>())));
+  let list : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.empty<Nat>())));
   let actual = Stack.toArray<Nat>(list);
 
   assert (actual.size() == expected.size());
@@ -139,7 +139,7 @@ do {
   Debug.print("  toVarArray");
 
   let expected = [var 1, 2, 3];
-  let list : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.nil<Nat>())));
+  let list : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.empty<Nat>())));
   let actual = Stack.toVarArray<Nat>(list);
 
   assert (actual.size() == expected.size());
@@ -152,7 +152,7 @@ do {
 do {
   Debug.print("  toIter");
 
-  let list : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.nil<Nat>())));
+  let list : Stack.Stack<Nat> = ?(1, ?(2, ?(3, Stack.empty<Nat>())));
   let _actual = Stack.toIter<Nat>(list);
   let actual = [var 0, 0, 0];
   let expected = [1, 2, 3];
@@ -179,9 +179,9 @@ let mapResult = Suite.suite(
   "mapResult",
   [
     Suite.test(
-      "empty list",
-      Stack.mapResult<Int, Nat, Text>(Stack.nil(), makeNatural),
-      M.equals(listRes(#ok(Stack.nil())))
+      "empty stack",
+      Stack.mapResult<Int, Nat, Text>(Stack.empty(), makeNatural),
+      M.equals(listRes(#ok(Stack.empty())))
     ),
     Suite.test(
       "success",
@@ -210,7 +210,7 @@ let replicate = Suite.suite(
       "empty-list",
       Stack.replicate<Nat>(0, 0),
       M.equals(
-        T.list(T.natTestable, Stack.nil<Nat>())
+        T.list(T.natTestable, Stack.empty<Nat>())
       )
     ),
     Suite.test(
@@ -230,7 +230,7 @@ let tabulate = Suite.suite(
       "empty-list",
       Stack.tabulate<Nat>(0, func i { i }),
       M.equals(
-        T.list(T.natTestable, Stack.nil<Nat>())
+        T.list(T.natTestable, Stack.empty<Nat>())
       )
     ),
     Suite.test(
@@ -281,17 +281,17 @@ let isNil = Suite.suite(
   [
     Suite.test(
       "empty",
-      Stack.isNil(Stack.nil<Nat>()),
+      Stack.isEmpty(Stack.empty<Nat>()),
        M.equals(T.bool(true))
     ),
     Suite.test(
       "singleton",
-      Stack.isNil(?(3, null)),
+      Stack.isEmpty(?(3, null)),
       M.equals(T.bool(false))
     ),
     Suite.test(
       "nary",
-      Stack.isNil(?(1, ?(2, ?(3, null)))),
+      Stack.isEmpty(?(1, ?(2, ?(3, null)))),
       M.equals(T.bool(false))
     )
   ]
@@ -302,17 +302,17 @@ let push = Suite.suite(
   [
     Suite.test(
       "empty",
-      Stack.add(0, Stack.nil<Nat>()),
+      Stack.add(0, Stack.empty<Nat>()),
       M.equals(T.list(T.natTestable, ?(0, null)))
     ),
     Suite.test(
       "singleton",
-      Stack.add(1, Stack.add(0, Stack.nil<Nat>())),
+      Stack.add(1, Stack.add(0, Stack.empty<Nat>())),
       M.equals(T.list(T.natTestable, ?(1, ?(0, null))))
     ),
     Suite.test(
       "nary",
-      Stack.add(2, Stack.add(1, Stack.add(0, Stack.nil<Nat>()))),
+      Stack.add(2, Stack.add(1, Stack.add(0, Stack.empty<Nat>()))),
       M.equals(T.list(T.natTestable, ?(2, ?(1, ?(0, null)))))
     )
   ]
@@ -324,7 +324,7 @@ let last = Suite.suite(
   [
     Suite.test(
       "empty list",
-      Stack.last(Stack.nil<Nat>()),
+      Stack.last(Stack.empty<Nat>()),
        M.equals(T.optional(T.natTestable, null : ?Nat))
     ),
     Suite.test(
@@ -345,7 +345,7 @@ let pop = Suite.suite(
   [
     Suite.test(
       "empty list",
-      Stack.pop(Stack.nil<Nat>()),
+      Stack.pop(Stack.empty<Nat>()),
       M.equals(T.tuple2(T.optionalTestable(T.natTestable),
                         T.listTestable(T.natTestable),
                         (null, null) : (?Nat, Stack.Stack<Nat>) ))
@@ -372,7 +372,7 @@ let size = Suite.suite(
   [
     Suite.test(
       "empty list",
-      Stack.size(Stack.nil<Nat>()),
+      Stack.size(Stack.empty<Nat>()),
       M.equals(T.nat(0))
     ),
     Suite.test(
@@ -393,7 +393,7 @@ let get = Suite.suite(
   [
     Suite.test(
       "empty list",
-      Stack.get(Stack.nil<Nat>(), 0),
+      Stack.get(Stack.empty<Nat>(), 0),
       M.equals(T.optional(T.natTestable, null : ?Nat))
     ),
     Suite.test(
@@ -440,7 +440,7 @@ let reverse = Suite.suite(
   [
     Suite.test(
       "empty list",
-      Stack.reverse(Stack.nil<Nat>()),
+      Stack.reverse(Stack.empty<Nat>()),
       M.equals(T.list(T.natTestable, null : Stack.Stack<Nat>))
 
     ),
@@ -464,7 +464,7 @@ let iterate = Suite.suite(
       "empty list",
       do {
         var t = "";
-        Stack.iterate<Nat>(Stack.nil<Nat>(), func n { t #= debug_show n });
+        Stack.iterate<Nat>(Stack.empty<Nat>(), func n { t #= debug_show n });
         t
       },
       M.equals(T.text(""))
@@ -496,7 +496,7 @@ let map = Suite.suite(
     Suite.test(
       "empty list",
       Stack.map<Nat,Nat>(
-       Stack.nil<Nat>(),
+       Stack.empty<Nat>(),
       func n { n + 1 }),
       M.equals(T.list(T.natTestable, null : Stack.Stack<Nat>))
     ),
@@ -524,7 +524,7 @@ let filter = Suite.suite(
     Suite.test(
       "empty list",
       Stack.filter<Nat>(
-       Stack.nil<Nat>(),
+       Stack.empty<Nat>(),
        func n { n % 2 == 0 }),
       M.equals(T.list(T.natTestable, null : Stack.Stack<Nat>))
     ),
@@ -558,7 +558,7 @@ let partition = Suite.suite(
     Suite.test(
       "empty list",
       Stack.partition<Nat>(
-       Stack.nil<Nat>(),
+       Stack.empty<Nat>(),
        func n { n % 2 == 0 }),
       M.equals(T.tuple2(T.listTestable(T.natTestable),
                         T.listTestable(T.natTestable),
@@ -612,7 +612,7 @@ let mapFilter = Suite.suite(
     Suite.test(
       "empty list",
       Stack.mapFilter<Nat, Text>(
-       Stack.nil<Nat>(),
+       Stack.empty<Nat>(),
        func n { if (n % 2 == 0) ?(debug_show n) else null }),
       M.equals(T.list(T.textTestable, null : Stack.Stack<Text>))
     ),
@@ -723,7 +723,7 @@ let take = Suite.suite(
   [
     Suite.test(
       "empty list",
-      Stack.take(Stack.nil<Nat>(), 0),
+      Stack.take(Stack.empty<Nat>(), 0),
       M.equals(T.list<Nat>(T.natTestable, null))
     ),
     Suite.test(
@@ -769,7 +769,7 @@ let drop = Suite.suite(
   [
     Suite.test(
       "empty list",
-      Stack.drop(Stack.nil<Nat>(), 0),
+      Stack.drop(Stack.empty<Nat>(), 0),
       M.equals(T.list<Nat>(T.natTestable, null))
     ),
     Suite.test(
@@ -1313,8 +1313,9 @@ let chunks = Suite.suite(
   [
     Suite.test(
       "five-even-split",
-      Stack.chunks<Nat>(5,
+      Stack.chunks<Nat>(
         Stack.tabulate<Nat>(10, func i { i }),
+        5,
       ),
       M.equals(
         T.list(

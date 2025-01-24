@@ -31,6 +31,10 @@ module {
     }
   };
 
+  public func tabulate<T>(size : Nat, generator : Nat -> T) : Stack<T> {
+    todo()
+  };
+
   public func clear<T>(stack : Stack<T>) {
     todo();
   };

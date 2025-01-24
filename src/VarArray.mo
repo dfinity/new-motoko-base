@@ -920,8 +920,8 @@ module {
   };
 
   /// Compares two mutable arrays using the provided comparison function for elements.
-  /// Returns #less, #equal, or #greater if array1 is less than, equal to,
-  /// or greater than array2 respectively.
+  /// Returns #less, #equal, or #greater if `array1` is less than, equal to,
+  /// or greater than `array2` respectively.
   ///
   /// If arrays have different sizes but all elements up to the shorter length are equal,
   /// the shorter array is considered #less than the longer array.

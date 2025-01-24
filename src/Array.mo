@@ -561,7 +561,7 @@ module {
 
   /// Converts an iterator to an array.
   public func fromIter<T>(iter : Iter.Iter<T>) : [T] {
-    todo()
+    todo() // Pending `List` implementation
   };
 
   /// Returns an iterator (`Iter`) over the indices of `array`.
@@ -610,11 +610,21 @@ module {
   public func values<T>(array : [T]) : Iter.Iter<T> = array.vals();
 
   public func all<T>(array : [T], predicate : T -> Bool) : Bool {
-    todo()
+    for (element in array.vals()) {
+      if (not predicate(element)) {
+        return false;
+      };
+    };
+    true
   };
 
   public func any<T>(array : [T], predicate : T -> Bool) : Bool {
-    todo()
+    for (element in array.vals()) {
+      if (predicate(element)) {
+        return true;
+      };
+    };
+    false
   };
 
   /// Returns a new sub-array from the given array provided the start index and length of elements in the sub-array.
@@ -734,15 +744,68 @@ module {
   ///
   /// Space: O(1)
   public func slice<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
-    todo() // New implementation due to accepting integer range
+    let size = array.size();
+    // Convert negative indices to positive and handle bounds
+    let startInt = if (fromInclusive < 0) {
+      let s = size + fromInclusive;
+      if (s < 0) { 0 } else { s }
+    } else {
+      if (fromInclusive > size) { size } else { fromInclusive }
+    };
+    let endInt = if (toExclusive < 0) {
+      let e = size + toExclusive;
+      if (e < 0) { 0 } else { e }
+    } else {
+      if (toExclusive > size) { size } else { toExclusive }
+    };
+    // Convert to Nat (values are non-negative due to bounds checking above)
+    let start = Prim.abs(startInt);
+    let end = Prim.abs(endInt);
+    object {
+      var pos = start;
+      public func next() : ?T {
+        if (pos >= end) {
+          null
+        } else {
+          let elem = array[pos];
+          pos += 1;
+          ?elem
+        }
+      }
+    }
   };
 
   public func toText<T>(array : [T], f : T -> Text) : Text {
-    todo()
+    let size = array.size();
+    if (size == 0) { return "[]" };
+    var text = "[";
+    var i = 0;
+    while (i < size) {
+      if (i != 0) {
+        text #= ", ";
+      };
+      text #= f(array[i]);
+      i += 1;
+    };
+    text #= "]";
+    text
   };
 
   public func compare<T>(array1 : [T], array2 : [T], compare : (T, T) -> Order.Order) : Order.Order {
-    todo()
+    let size1 = array1.size();
+    let size2 = array2.size();
+    var i = 0;
+    let minSize = if (size1 < size2) { size1 } else { size2 };
+    while (i < minSize) {
+      switch (compare(array1[i], array2[i])) {
+        case (#less) { return #less };
+        case (#greater) { return #greater };
+        case (#equal) { i += 1 };
+      };
+    };
+    if (size1 < size2) { #less }
+    else if (size1 > size2) { #greater }
+    else { #equal }
   };
 
 }

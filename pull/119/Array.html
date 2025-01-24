@@ -204,7 +204,7 @@ ordering of the elements.</p>
 <pre><code>motoko include=import
 
 let arrays = [[0, 1, 2], [2, 3], [], [4]];
-Array.flatten&lt;Nat&gt;(Array.fromIter(arrays)))</code></pre>
+Array.flatten&lt;Nat&gt;(Array.fromIter(arrays))) // =&gt; [0, 1, 2, 2, 3, 4]</code></pre>
 
 <p>Runtime: O(number of elements in array)</p>
 <p>Space: O(number of elements in array)</p>
@@ -251,11 +251,27 @@ sum</code></pre>
 
 <p>Runtime: O(1)</p>
 <p>Space: O(1)</p>
-</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="subArray"><code><span class="keyword">public func </span><span class="fnname">subArray</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">array</span> : [<span class="type">T</span>], <br/>  <span class="parameter">start</span> : <span class="type">Nat</span>, <br/>  <span class="parameter">length</span> : <span class="type">Nat</span><br/>) : [<span class="type">T</span>]</code></h4><p><p>Returns a new sub-array from the given array provided the start index and length of elements in the sub-array.</p>
+</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Returns true if all elements in <code>array</code> satisfy the predicate function.</p>
+<pre><code>motoko include=import
+let array = [1, 2, 3, 4];
+Array.all&lt;Nat&gt;(array, func x = x &gt; 0) // =&gt; true</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(1)</p>
+<p>*Runtime and space assumes that <code>predicate</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Returns true if any element in <code>array</code> satisfies the predicate function.</p>
+<pre><code>motoko include=import
+let array = [1, 2, 3, 4];
+Array.any&lt;Nat&gt;(array, func x = x &gt; 3) // =&gt; true</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(1)</p>
+<p>*Runtime and space assumes that <code>predicate</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="subArray"><code><span class="keyword">public func </span><span class="fnname">subArray</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">array</span> : [<span class="type">T</span>], <br/>  <span class="parameter">start</span> : <span class="type">Nat</span>, <br/>  <span class="parameter">length</span> : <span class="type">Nat</span><br/>) : [<span class="type">T</span>]</code></h4><p><p>Returns a new sub-array from the given array provided the start index and length of elements in the sub-array.</p>
 <p>Limitations: Traps if the start index + length is greater than the size of the array</p>
 <pre><code>motoko include=import
 
-let array = [1,2,3,4,5];
+let array = [1, 2, 3, 4, 5];
 let subArray = Array.subArray&lt;Nat&gt;(array, 2, 3);</code></pre><p>Runtime: O(length)</p>
 <p>Space: O(length)</p>
 </p></div><div class="declaration"><h4 class="function" id="indexOf"><code><span class="keyword">public func </span><span class="fnname">indexOf</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">element</span> : <span class="type">T</span>, <br/>  <span class="parameter">array</span> : [<span class="type">T</span>], <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : ?<span class="type">Nat</span></code></h4><p><p>Returns the index of the first <code>element</code> in the <code>array</code>.</p>
@@ -315,4 +331,31 @@ assert s.next() == null;</code></pre>
 
 <p>Runtime: O(1)</p>
 <p>Space: O(1)</p>
-</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">array1</span> : [<span class="type">T</span>], <br/>  <span class="parameter">array2</span> : [<span class="type">T</span>], <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p></p></div></div></body></html>
+</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Converts the array to its textual representation using <code>f</code> to convert each element to <code>Text</code>.</p>
+<pre><code>motoko include=import
+import Nat &quot;mo:base/Nat&quot;;
+let array = [1, 2, 3];
+Array.toText&lt;Nat&gt;(array, Nat.toText) // =&gt; &quot;[1, 2, 3]&quot;</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+<p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">array1</span> : [<span class="type">T</span>], <br/>  <span class="parameter">array2</span> : [<span class="type">T</span>], <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compares two arrays using the provided comparison function for elements.
+Returns #less, #equal, or #greater if array1 is less than, equal to,
+or greater than array2 respectively.</p>
+<p>If arrays have different sizes but all elements up to the shorter length are equal,
+the shorter array is considered #less than the longer array.</p>
+<pre><code>motoko include=import
+import Nat &quot;mo:base/Nat&quot;;
+let array1 = [1, 2, 3];
+let array2 = [1, 2, 4];
+Array.compare&lt;Nat&gt;(array1, array2, Nat.compare) // =&gt; #less
+
+let array3 = [1, 2];
+let array4 = [1, 2, 3];
+Array.compare&lt;Nat&gt;(array3, array4, Nat.compare) // =&gt; #less (shorter array)</code></pre>
+
+<p>Runtime: O(min(size1, size2))</p>
+<p>Space: O(1)</p>
+<p>*Runtime and space assumes that <code>compare</code> runs in O(1) time and space.</p>
+</p></div></div></body></html>

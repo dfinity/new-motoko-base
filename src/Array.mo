@@ -531,7 +531,7 @@ module {
   /// ```motoko include=import
   ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flatten<Nat>(Array.fromIter(arrays)))
+  /// Array.flatten<Nat>(Array.fromIter(arrays))) // => [0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -657,7 +657,7 @@ module {
   ///
   /// ```motoko include=import
   ///
-  /// let array = [1,2,3,4,5];
+  /// let array = [1, 2, 3, 4, 5];
   /// let subArray = Array.subArray<Nat>(array, 2, 3);
   /// ```
   /// Runtime: O(length)

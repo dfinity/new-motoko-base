@@ -252,7 +252,19 @@ module {
   ///
   /// Space: O(1)
   public func reverseInPlace<T>(array : [var T]) : () {
-    todo()
+    let size = array.size();
+    if (size == 0) {
+      return
+    };
+    var i = 0;
+    var j = (size - 1) : Nat;
+    while (i < j) {
+      let temp = array[i];
+      array[i] := array[j];
+      array[j] := temp;
+      i += 1;
+      j -= 1
+    }
   };
 
   /// Calls `f` with each element in `array`.
@@ -338,7 +350,29 @@ module {
   /// Space: O(size)
   /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func filter<T>(array : [var T], f : T -> Bool) : [var T] {
-    todo()
+    var count = 0;
+    let keep = Prim.Array_tabulate<Bool>(
+      array.size(),
+      func i {
+        if (f(array[i])) {
+          count += 1;
+          true
+        } else {
+          false
+        }
+      }
+    );
+    var nextKeep = 0;
+    tabulate<T>(
+      count,
+      func _ {
+        while (not keep[nextKeep]) {
+          nextKeep += 1
+        };
+        nextKeep += 1;
+        array[nextKeep - 1]
+      }
+    )
   };
 
   /// Creates a new array by applying `f` to each element in `array`,
@@ -587,8 +621,8 @@ module {
   ///
   /// ```motoko include=import
   ///
-  /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// VarArray.flatten<Nat>(VarArray.fromIter(arrays))
+  /// let arrays = [[var 0, 1, 2], [var 2, 3], [var], [var 4]];
+  /// VarArray.flatten<Nat>(VarArray.fromIter(arrays)) // => [var 0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -714,7 +748,7 @@ module {
   ///
   /// ```motoko include=import
   ///
-  /// let array = [1,2,3,4,5];
+  /// let array = [1, 2, 3, 4, 5];
   /// let subArray = VarArray.subArray<Nat>(array, 2, 3);
   /// ```
   /// Runtime: O(length)

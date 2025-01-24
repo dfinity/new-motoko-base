@@ -2431,7 +2431,7 @@ module {
       deleteIndex : Nat,
       deletionSide : DeletionSide
     ) : ([var ?T], T) {
-      let mergedArray = VarArray.init<?T>(leftChild.size(), null);
+      let mergedArray = VarArray.repeat<?T>(null, leftChild.size());
       var i = 0;
       switch (deletionSide) {
         case (#left) {
@@ -2789,7 +2789,7 @@ module {
       assert leftData.count <= minKeysFromOrder(leftData.kvs.size() + 1);
       assert rightData.count <= minKeysFromOrder(rightData.kvs.size() + 1);
 
-      let mergedKVs = VarArray.init<?(K, V)>(leftData.kvs.size(), null);
+      let mergedKVs = VarArray.repeat<?(K, V)>(null, leftData.kvs.size());
       var i = 0;
       while (i < leftData.count) {
         mergedKVs[i] := leftData.kvs[i];
@@ -2813,7 +2813,7 @@ module {
     };
 
     func mergeChildren<K, V>(leftChildren : [var ?Node<K, V>], rightChildren : [var ?Node<K, V>]) : [var ?Node<K, V>] {
-      let mergedChildren = VarArray.init<?Node<K, V>>(leftChildren.size(), null);
+      let mergedChildren = VarArray.repeat<?Node<K, V>>(null, leftChildren.size());
       var i = 0;
 
       while (Option.isSome(leftChildren[i])) {

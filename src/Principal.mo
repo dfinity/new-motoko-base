@@ -406,8 +406,8 @@ module {
     var s6 : Nat32 = 0;
     var s7 : Nat32 = 0;
 
-    let msg : [var Nat32] = VarArray.init<Nat32>(16, 0);
-    let digest = VarArray.init<Nat8>(sum_bytes, 0);
+    let msg : [var Nat32] = VarArray.repeat<Nat32>(0, 16);
+    let digest = VarArray.repeat<Nat8>(0, sum_bytes);
     var word : Nat32 = 0;
 
     var i_msg : Nat8 = 0;

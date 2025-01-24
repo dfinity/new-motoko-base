@@ -247,7 +247,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func map<T, R>(array : [T], f : T -> R) : [R] = Prim.Array_tabulate<Y>(array.size(), func i = f(array[i]));
+  public func map<T, R>(array : [T], f : T -> R) : [R] = Prim.Array_tabulate<R>(array.size(), func i = f(array[i]));
 
   /// Creates a new array by applying `predicate` to every element
   /// in `array`, retaining the elements for which `predicate` returns true.
@@ -305,7 +305,7 @@ module {
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func filterMap<T, R>(array : [T], f : T -> ?R) : [R] {
     var count = 0;
-    let options = Prim.Array_tabulate<?Y>(
+    let options = Prim.Array_tabulate<?R>(
       array.size(),
       func i {
         let result = f(array[i]);
@@ -322,7 +322,7 @@ module {
     );
 
     var nextSome = 0;
-    Prim.Array_tabulate<Y>(
+    Prim.Array_tabulate<R>(
       count,
       func _ {
         while (Option.isNull(options[nextSome])) {
@@ -389,7 +389,7 @@ module {
       case null {
         // unpack the option
         #ok(
-          map<?Y, Y>(
+          map<?R, R>(
             results,
             func element {
               switch element {
@@ -668,7 +668,7 @@ module {
     var index = fromInclusive;
     let size = array.size();
     while (index < size) {
-      if (equal(array[i], element)) {
+      if (equal(array[index], element)) {
         return ?index
       } else {
         index += 1

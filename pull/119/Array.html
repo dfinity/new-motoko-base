@@ -341,8 +341,8 @@ Array.toText&lt;Nat&gt;(array, Nat.toText) // =&gt; &quot;[1, 2, 3]&quot;</code>
 <p>Space: O(size)</p>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">array1</span> : [<span class="type">T</span>], <br/>  <span class="parameter">array2</span> : [<span class="type">T</span>], <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compares two arrays using the provided comparison function for elements.
-Returns #less, #equal, or #greater if array1 is less than, equal to,
-or greater than array2 respectively.</p>
+Returns #less, #equal, or #greater if <code>array1</code> is less than, equal to,
+or greater than <code>array2</code> respectively.</p>
 <p>If arrays have different sizes but all elements up to the shorter length are equal,
 the shorter array is considered #less than the longer array.</p>
 <pre><code>motoko include=import

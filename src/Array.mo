@@ -21,25 +21,27 @@ import { todo } "Debug";
 
 module {
 
-  /// Create an empty array (equivalent to `[]`).
+  /// Creates an empty array (equivalent to `[]`).
   public func empty<T>() : [T] = [];
 
-  /// Create an array with `size` copies of the initial value.
+  /// Creates an array containing `item` repeated `size` times.
   ///
   /// ```motoko include=import
-  /// let array = Array.init<Nat>(4, 2);
+  /// let array = Array.repeat<Nat>("Echo", 3);
+  /// assert array == [var "Echo", "Echo", "Echo"];
   /// ```
   ///
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func init<T>(size : Nat, initValue : T) : [T] = Prim.Array_tabulate<T>(size, func _ = initValue);
+  public func repeat<T>(item : T, size : Nat) : [T] = Prim.Array_tabulate<T>(size, func _ = item);
 
-  /// Create an immutable array of size `size`. Each element at index i
+  /// Creates an immutable array of size `size`. Each element at index i
   /// is created by applying `generator` to i.
   ///
   /// ```motoko include=import
-  /// let array : [Nat] = Array.generate<Nat>(4, func i = i * 2);
+  /// let array : [Nat] = Array.tabulate<Nat>(4, func i = i * 2);
+  /// assert array == [0, 2, 4, 6];
   /// ```
   ///
   /// Runtime: O(size)
@@ -47,7 +49,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `generator` runs in O(1) time and space.
-  public func generate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
+  public func tabulate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
 
   /// Transforms a mutable array into an immutable array.
   ///
@@ -213,7 +215,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// let array = [0, 1, 2, 3];
-  /// Array.forEach<Nat>(array, func (x) {
+  /// Array.forEach<Nat>(array, func(x) {
   ///   Debug.print(debug_show x)
   /// })
   /// ```
@@ -235,8 +237,9 @@ module {
   ///
   /// ```motoko include=import
   ///
-  /// let array = [0, 1, 2, 3];
-  /// Array.map<Nat, Nat>(array, func x = x * 3)
+  /// let array1 = [0, 1, 2, 3];
+  /// let array2 = Array.map<Nat, Nat>(array1, func x = x * 3)
+  /// assert array2 == [0, 2, 4, 6];
   /// ```
   ///
   /// Runtime: O(size)
@@ -244,7 +247,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func map<T, Y>(array : [T], f : T -> Y) : [Y] = Prim.Array_tabulate<Y>(array.size(), func i = f(array[i]));
+  public func map<T, R>(array : [T], f : T -> R) : [R] = Prim.Array_tabulate<Y>(array.size(), func i = f(array[i]));
 
   /// Creates a new array by applying `predicate` to every element
   /// in `array`, retaining the elements for which `predicate` returns true.
@@ -300,7 +303,7 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func filterMap<T, Y>(array : [T], f : T -> ?Y) : [Y] {
+  public func filterMap<T, R>(array : [T], f : T -> ?R) : [R] {
     var count = 0;
     let options = Prim.Array_tabulate<?Y>(
       array.size(),
@@ -329,7 +332,7 @@ module {
         switch (options[nextSome - 1]) {
           case (?element) element;
           case null {
-            Prim.trap "Malformed array in mapFilter"
+            Prim.trap "Malformed array in filterMap"
           }
         }
       }
@@ -357,11 +360,11 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func mapResult<T, Y, E>(array : [T], f : T -> Result.Result<Y, E>) : Result.Result<[Y], E> {
+  public func mapResult<T, R, E>(array : [T], f : T -> Result.Result<R, E>) : Result.Result<[R], E> {
     let size = array.size();
 
-    var error : ?Result.Result<[Y], E> = null;
-    let results = Prim.Array_tabulate<?Y>(
+    var error : ?Result.Result<[R], E> = null;
+    let results = Prim.Array_tabulate<?R>(
       size,
       func i {
         switch (f(array[i])) {
@@ -437,12 +440,12 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `k` runs in O(1) time and space.
-  public func flatMap<T, R>(array : [T], k : T -> [R]) : [R] {
+  public func flatMap<T, R>(array : [T], k : T -> Iter.Iter<R>) : [R] {
     var flatSize = 0;
     let arrays = Prim.Array_tabulate<[R]>(
       array.size(),
       func i {
-        let subArray = k(array[i]);
+        let subArray = fromIter<R>(k(array[i]));
         flatSize += subArray.size();
         subArray
       }
@@ -522,26 +525,27 @@ module {
     acc
   };
 
-  /// Flattens the array of arrays into a single array. Retains the original
+  /// Flattens the iterator of arrays into a single array. Retains the original
   /// ordering of the elements.
   ///
   /// ```motoko include=import
   ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flatten<Nat>(arrays)
+  /// Array.flatten<Nat>(Array.fromIter(arrays)))
   /// ```
   ///
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
   public func flatten<T>(arrays : Iter.Iter<[T]>) : [T] {
-    todo() // New implementation due to using `Iter<[T]>` in place of `[[T]]`
+    todo() // New implementation due to using `Iter<[T]>` in place of `[[T]]`, pending `List` data structure
   };
 
   /// Create an array containing a single value.
   ///
   /// ```motoko include=import
-  /// Array.singleton(2)
+  /// var array = Array.singleton(2);
+  /// assert array == [2];
   /// ```
   ///
   /// Runtime: O(1)
@@ -549,16 +553,19 @@ module {
   /// Space: O(1)
   public func singleton<T>(element : T) : [T] = [element];
 
+  /// Returns the size of an array. Equivalent to `array.size()`.
   public func size<T>(array : [T]) : Nat = array.size();
 
+  /// Returns whether an array is empty, i.e. contains zero elements.
   public func isEmpty<T>(array : [T]) : Bool = array.size() == 0;
 
+  /// Converts an iterator to an array.
   public func fromIter<T>(iter : Iter.Iter<T>) : [T] {
     todo()
   };
 
-  /// Returns an Iterator (`Iter`) over the indices of `array`.
-  /// Iterator provides a single method `next()`, which returns
+  /// Returns an iterator (`Iter`) over the indices of `array`.
+  /// An iterator provides a single method `next()`, which returns
   /// indices in order, or `null` when out of index to iterate over.
   ///
   /// NOTE: You can also use `array.keys()` instead of this function. See example
@@ -610,7 +617,7 @@ module {
     todo()
   };
 
-  /// Returns a new subarray from the given array provided the start index and length of elements in the subarray
+  /// Returns a new sub-array from the given array provided the start index and length of elements in the sub-array.
   ///
   /// Limitations: Traps if the start index + length is greater than the size of the array
   ///
@@ -623,7 +630,7 @@ module {
   ///
   /// Space: O(length)
   public func subArray<T>(array : [T], start : Nat, length : Nat) : [T] {
-    if (start + length > array.size()) { Prim.trap("Array.subArray") };
+    if (start + length > array.size()) { Prim.trap("Array.subArray()") };
     Prim.Array_tabulate<T>(length, func i = array[start + i])
   };
 
@@ -658,13 +665,13 @@ module {
   ///
   /// Space: O(1)
   public func nextIndexOf<T>(element : T, array : [T], fromInclusive : Nat, equal : (T, T) -> Bool) : ?Nat {
-    var i = fromInclusive;
-    let n = array.size();
-    while (i < n) {
+    var index = fromInclusive;
+    let size = array.size();
+    while (index < size) {
       if (equal(array[i], element)) {
-        return ?i
+        return ?index
       } else {
-        i += 1
+        index += 1
       }
     };
     null
@@ -730,20 +737,6 @@ module {
     todo() // New implementation due to accepting integer range
   };
 
-  /// Returns a new subarray of given length from the beginning or end of the given array
-  ///
-  /// Returns the entire array if the length is greater than the size of the array
-  ///
-  /// ```motoko include=import
-  /// let array = [1, 2, 3, 4, 5];
-  /// assert Array.take(array, 2) == [1, 2];
-  /// assert Array.take(array, -2) == [4, 5];
-  /// assert Array.take(array, 10) == [1, 2, 3, 4, 5];
-  /// assert Array.take(array, -99) == [1, 2, 3, 4, 5];
-  /// ```
-  /// Runtime: O(length)
-  ///
-  /// Space: O(length)
   public func toText<T>(array : [T], f : T -> Text) : Text {
     todo()
   };

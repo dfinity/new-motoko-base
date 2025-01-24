@@ -153,7 +153,7 @@ module {
     todo()
   };
 
-  public func generate<T>(n : Nat, f : Nat -> T) : Stack<T> {
+  public func tabulate<T>(n : Nat, f : Nat -> T) : Stack<T> {
     todo()
   };
 

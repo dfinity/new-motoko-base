@@ -664,14 +664,14 @@ run(
         M.equals(
           T.array<(Nat, Text)>(
             entryTestable,
-            Array.generate<(Nat, Text)>(smallSize, func(index) { (index, Nat.toText(index)) })
+            Array.tabulate<(Nat, Text)>(smallSize, func(index) { (index, Nat.toText(index)) })
           )
         )
       ),
       test(
         "iterate backward",
         Iter.toArray(Map.reverseEntries(smallMap())),
-        M.equals(T.array<(Nat, Text)>(entryTestable, Array.reverse(Array.generate<(Nat, Text)>(smallSize, func(index) { (index, Nat.toText(index)) }))))
+        M.equals(T.array<(Nat, Text)>(entryTestable, Array.reverse(Array.tabulate<(Nat, Text)>(smallSize, func(index) { (index, Nat.toText(index)) }))))
       ),
       test(
         "contains present keys",
@@ -808,17 +808,17 @@ run(
       test(
         "iterate keys",
         Iter.toArray(Map.keys(smallMap())),
-        M.equals(T.array<Nat>(T.natTestable, Array.generate<Nat>(smallSize, func(index) { index })))
+        M.equals(T.array<Nat>(T.natTestable, Array.tabulate<Nat>(smallSize, func(index) { index })))
       ),
       test(
         "iterate values",
         Iter.toArray(Map.values(smallMap())),
-        M.equals(T.array<Text>(T.textTestable, Array.generate<Text>(smallSize, func(index) { Nat.toText(index) })))
+        M.equals(T.array<Text>(T.textTestable, Array.tabulate<Text>(smallSize, func(index) { Nat.toText(index) })))
       ),
       test(
         "from iterator",
         do {
-          let array = Array.generate<(Nat, Text)>(smallSize, func(index) { (index, Nat.toText(index)) });
+          let array = Array.tabulate<(Nat, Text)>(smallSize, func(index) { (index, Nat.toText(index)) });
           let map = Map.fromIter<Nat, Text>(Iter.fromArray(array), Nat.compare);
           for (index in Nat.range(0, smallSize)) {
             assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))

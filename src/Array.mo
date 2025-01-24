@@ -561,7 +561,7 @@ module {
 
   /// Converts an iterator to an array.
   public func fromIter<T>(iter : Iter.Iter<T>) : [T] {
-    todo() // Pending `List` implementation
+    todo() // Pending `List` data structure
   };
 
   /// Returns an iterator (`Iter`) over the indices of `array`.

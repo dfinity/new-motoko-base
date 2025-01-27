@@ -27,7 +27,7 @@
 // Distributed under Apache 2.0 license
 
 // import ImmutableMap "immutable/Map";
-import IterType "IterType";
+import IterType "type/Iter";
 import Order "Order";
 import VarArray "VarArray";
 import Runtime "Runtime";

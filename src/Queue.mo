@@ -19,7 +19,7 @@
 ///
 /// `n` denotes the number of elements stored in the queue.
 
-import Iter "IterType";
+import Iter "Iter";
 import Immutable "immutable/Queue";
 import Order "Order";
 import { todo } "Debug";

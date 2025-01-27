@@ -1,7 +1,7 @@
 /// Mutable stack data structure.
 
 import Immutable "immutable/Stack";
-import IterType "IterType";
+import IterType "type/Iter";
 import Order "Order";
 import { todo } "Debug";
 

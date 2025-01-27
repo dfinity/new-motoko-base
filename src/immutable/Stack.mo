@@ -1,7 +1,7 @@
 /// Immutable singly-linked list
 
 import Array "../Array";
-import Iter "../IterType";
+import Iter "../Iter";
 import Order "../Order";
 import Result "../Result";
 import { todo } "../Debug";

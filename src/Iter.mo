@@ -51,27 +51,52 @@ module {
   /// ```motoko
   /// import Iter "mo:base/Iter";
   /// var sum = 0;
-  /// Iter.iterate<Nat>(Iter.range(1, 3), func(x, _index) {
+  /// Iter.forEach<Nat>(Iter.range(1, 3), func(x) {
   ///   sum += x;
   /// });
   /// assert(6 == sum)
   /// ```
-  public func iterate<T>(
+  public func forEach<T>(
     xs : Iter<T>,
-    f : (T, Nat) -> ()
+    f : (T) -> ()
   ) {
-    var i = 0;
     label l loop {
       switch (xs.next()) {
         case (?next) {
-          f(next, i)
+          f(next)
         };
         case (null) {
           break l
         }
-      };
-      i += 1;
-      continue l
+      }
+    }
+  };
+
+  /// Takes an iterator and returns a new iterator that pairs each element with its index.
+  /// The index starts at 0 and increments by 1 for each element.
+  ///
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  /// let iter = Iter.fromArray(["A", "B", "C"]);
+  /// let enumerated = Iter.enumerate(iter);
+  /// assert(?(0, "A") == enumerated.next());
+  /// assert(?(1, "B") == enumerated.next());
+  /// assert(?(2, "C") == enumerated.next());
+  /// assert(null == enumerated.next());
+  /// ```
+  public func enumerate<T>(xs : Iter<T>) : Iter<(Nat, T)> {
+    object {
+      var i = 0;
+      public func next() : ?(Nat, T) {
+        switch (xs.next()) {
+          case (?x) {
+            let current = (i, x);
+            i += 1;
+            ?current
+          };
+          case null { null }
+        }
+      }
     }
   };
 
@@ -79,7 +104,7 @@ module {
   /// (discarding them in the process).
   public func size<T>(xs : Iter<T>) : Nat {
     var len = 0;
-    iterate<T>(xs, func(x, i) { len += 1 });
+    forEach<T>(xs, func(x) { len += 1 });
     len
   };
 

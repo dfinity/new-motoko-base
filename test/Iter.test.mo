@@ -88,26 +88,11 @@ do {
 };
 
 do {
-  Debug.print("  fromArrayMut");
+  Debug.print("  fromVarArray");
 
   let expected = [var 1, 2, 3];
-  let _actual = Iter.fromArrayMut<Nat>(expected);
+  let _actual = Iter.fromVarArray<Nat>(expected);
   let actual = [var 0, 0, 0];
-
-  Iter.iterate<Nat>(_actual, func(x, i) { actual[i] := x });
-
-  for (i in actual.keys()) {
-    assert (actual[i] == expected[i])
-  }
-};
-
-do {
-  Debug.print("  fromList");
-
-  let list : List.List<Nat> = ?(1, ?(2, ?(3, List.nil<Nat>())));
-  let _actual = Iter.fromList<Nat>(list);
-  let actual = [var 0, 0, 0];
-  let expected = [1, 2, 3];
 
   Iter.iterate<Nat>(_actual, func(x, i) { actual[i] := x });
 
@@ -130,24 +115,16 @@ do {
 };
 
 do {
-  Debug.print("  toArrayMut");
+  Debug.print("  toVarArray");
 
   let expected = [var 1, 2, 3];
-  let actual = Iter.toArrayMut<Nat>(expected.vals());
+  let actual = Iter.toVarArray<Nat>(expected.vals());
 
   assert (actual.size() == expected.size());
 
   for (i in actual.keys()) {
     assert (actual[i] == expected[i])
   }
-};
-
-do {
-  Debug.print("  toList");
-
-  let expected : List.List<Nat> = ?(1, ?(2, ?(3, List.nil<Nat>())));
-  let actual = Iter.toList<Nat>([1, 2, 3].vals());
-  assert List.equal<Nat>(expected, actual, func(x1, x2) { x1 == x2 })
 };
 
 do {

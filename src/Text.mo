@@ -23,7 +23,6 @@
 import Char "Char";
 import Iter "Iter";
 import Hash "Hash";
-import List "List";
 import Stack "Stack";
 import Prim "mo:⛔";
 import { todo } "Debug";
@@ -139,30 +138,6 @@ module {
       r #= Prim.charToText(c)
     };
     return r
-  };
-
-  /// Create a text from a character list.
-  /// Example:
-  /// ```motoko include=initialize
-  /// fromList(?('H', ?('e', ?('l', ?('l', ?('o', null))))));
-  /// // => "Hello"
-  /// ```
-  ///
-  /// Runtime: O(size cs)
-  /// Space: O(size cs)
-  public func fromList(cs : List.List<Char>) : Text = fromIter(List.values cs);
-
-  /// Create a character list from a text.
-  /// Example:
-  /// ```motoko include=initialize
-  /// toList("Hello");
-  /// // => ?('H', ?('e', ?('l', ?('l', ?('o', null)))))
-  /// ```
-  ///
-  /// Runtime: O(t.size())
-  /// Space: O(t.size())
-  public func toList(t : Text) : List.List<Char> {
-    todo()
   };
 
   /// Returns the number of characters in the given `Text`.

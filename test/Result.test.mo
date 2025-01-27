@@ -56,14 +56,27 @@ let flatten = Suite.suite(
   ]
 );
 
-let iterate = Suite.suite(
-  "iterate",
+let forOk = Suite.suite(
+  "forOk",
   do {
     var tests : [Suite.Suite] = [];
     var counter : Nat = 0;
-    Result.iterate(makeNatural(5), func(x : Nat) { counter += x });
+    Result.forOk(makeNatural(5), func(x : Nat) { counter += x });
     tests := Array.concat(tests, [Suite.test("ok", counter, M.equals(T.nat(5)))]);
-    Result.iterate(makeNatural(-10), func(x : Nat) { counter += x });
+    Result.forOk(makeNatural(-10), func(x : Nat) { counter += x });
+    tests := Array.concat(tests, [Suite.test("err", counter, M.equals(T.nat(5)))]);
+    tests
+  }
+);
+
+let forErr = Suite.suite(
+  "forErr",
+  do {
+    var tests : [Suite.Suite] = [];
+    var counter : Nat = 0;
+    Result.forErr(#err 5, func(x : Nat) { counter += x });
+    tests := Array.concat(tests, [Suite.test("ok", counter, M.equals(T.nat(5)))]);
+    Result.forErr(#ok 5, func(x : Nat) { counter += x });
     tests := Array.concat(tests, [Suite.test("err", counter, M.equals(T.nat(5)))]);
     tests
   }
@@ -74,7 +87,8 @@ let suite = Suite.suite(
   [
     chain,
     flatten,
-    iterate
+    forOk,
+    forErr,
   ]
 );
 

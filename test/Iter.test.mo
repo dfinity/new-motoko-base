@@ -94,7 +94,7 @@ do {
   let _actual = Iter.fromVarArray<Nat>(expected);
   let actual = [var 0, 0, 0];
 
-  Iter.iterate<Nat>(_actual, func(x, i) { actual[i] := x });
+  Iter.forEach<Nat>(_actual, func(x) { actual[i] := x });
 
   for (i in actual.keys()) {
     assert (actual[i] == expected[i])

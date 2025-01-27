@@ -11,7 +11,7 @@
 /// import Array "mo:base/Array";
 /// ```
 
-import I "IterType";
+import Iter "IterType";
 import Option "Option";
 import Order "Order";
 import Prim "mo:⛔";
@@ -672,7 +672,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func vals<X>(array : [X]) : I.Iter<X> = array.vals();
+  public func vals<X>(array : [X]) : Iter.Iter<X> = array.vals();
 
   /// Returns an Iterator (`Iter`) over the indices of `array`.
   /// Iterator provides a single method `next()`, which returns
@@ -695,7 +695,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func keys<X>(array : [X]) : I.Iter<Nat> = array.keys();
+  public func keys<X>(array : [X]) : Iter.Iter<Nat> = array.keys();
 
   /// Returns the size of `array`.
   ///
@@ -829,7 +829,7 @@ module {
   ///
   /// Runtime: O(1)
   /// Space: O(1)
-  public func slice<X>(array : [X], fromInclusive : Nat, toExclusive : Nat) : I.Iter<X> = object {
+  public func slice<X>(array : [X], fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<X> = object {
     var i = fromInclusive;
 
     public func next() : ?X {

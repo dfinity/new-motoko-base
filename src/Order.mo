@@ -1,6 +1,6 @@
 /// Utilities for `Order` (comparison between two values).
 
-import Iter "IterType";
+import Iter "type/Iter";
 import { todo } "Debug";
 
 module {

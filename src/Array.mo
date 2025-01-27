@@ -11,7 +11,7 @@
 /// import Array "mo:base/Array";
 /// ```
 
-import Iter "IterType";
+import Iter "type/Iter";
 import Order "Order";
 import Result "Result";
 import VarArray "VarArray";

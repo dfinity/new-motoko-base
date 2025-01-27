@@ -6,7 +6,7 @@
 /// of their arguments.
 
 import Prim "mo:⛔";
-import Iter "IterType";
+import Iter "Iter";
 
 module {
 

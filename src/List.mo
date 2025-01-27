@@ -1,6 +1,6 @@
 /// Original: `vector` Mops package?
 
-import Iter "IterType";
+import Iter "Iter";
 import Order "Order";
 import Result "Result";
 import { todo } "Debug";

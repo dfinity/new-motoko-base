@@ -1,7 +1,7 @@
 /// Original: `OrderedSet.mo`
 
 import Immutable "immutable/Set";
-import Iter "IterType";
+import Iter "Iter";
 import Order "Order";
 import { todo } "Debug";
 

@@ -9,7 +9,7 @@
     "format": "npx -p prettier -p pretty-quick pretty-quick",
     "test": "run-s test:ts test:mops",
     "test:ts": "cd test/ts && tsx .",
-    "test:mops": "mops test --reporter files",
+    "test:mops": "mops test",
     "validate": "cd test/ts && tsx validate",
     "docs": "$(dfx cache show)/mo-doc"
   },

@@ -196,7 +196,35 @@ module {
   };
 
   public func slice<T>(array : [var T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
-    todo()
+    let size = array.size();
+    
+    func toIndex(i : Int) : Nat {
+      let n = if (i < 0) {
+        if (-i > size) { 0 } 
+        else { size - Prim.abs(i) : Nat }
+      } else {
+        let p = (Prim.abs(i) : Nat);
+        if (p > size) { size } else { p }
+      };
+      n
+    };
+
+    let start = toIndex(fromInclusive);
+    let end_ = toIndex(toExclusive);
+    let end = if (end_ < start) { start } else { end_ };
+
+    object {
+      var index = start;
+      public func next() : ?T {
+        if (index >= end) {
+          null
+        } else {
+          let value = array[index];
+          index += 1;
+          ?value
+        }
+      }
+    }
   };
 
   public func toText<T>(array : [var T], f : T -> Text) : Text {

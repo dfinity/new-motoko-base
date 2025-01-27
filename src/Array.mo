@@ -727,7 +727,35 @@ module {
   ///
   /// Space: O(1)
   public func slice<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
-    todo() // New implementation due to accepting integer range
+    let size = array.size();
+    
+    func toIndex(i : Int) : Nat {
+      let n = if (i < 0) {
+        if (-i > size) { 0 } 
+        else { size - Prim.abs(i) : Nat }
+      } else {
+        let p = (Prim.abs(i) : Nat);
+        if (p > size) { size } else { p }
+      };
+      n
+    };
+
+    let start = toIndex(fromInclusive);
+    let end_ = toIndex(toExclusive);
+    let end = if (end_ < start) { start } else { end_ };
+
+    object {
+      var index = start;
+      public func next() : ?T {
+        if (index >= end) {
+          null
+        } else {
+          let value = array[index];
+          index += 1;
+          ?value
+        }
+      }
+    }
   };
 
   /// Returns a new subarray of given length from the beginning or end of the given array

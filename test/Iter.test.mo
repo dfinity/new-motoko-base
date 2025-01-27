@@ -15,9 +15,9 @@ do {
   var y = "";
   var z = 0;
 
-  Iter.forEach<Text>(
-    xs.vals(),
-    func(x : Text, i : Nat) {
+  Iter.forEach<(Nat, Text)>(
+    Iter.enumerate(xs.vals()),
+    func(i, x) {
       y := y # x;
       z += i
     }
@@ -36,7 +36,7 @@ do {
 
   let _actual = Iter.map<Nat, Bool>([1, 2, 3].vals(), isEven);
   let actual = [var true, false, true];
-  Iter.iterate<Bool>(_actual, func(x, i) { actual[i] := x });
+  Iter.forEach<(Nat, Bool)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
   let expected = [false, true, false];
 
@@ -54,22 +54,36 @@ do {
 
   let _actual = Iter.filter<Nat>([1, 2, 3].vals(), isOdd);
   let actual = [var 0, 0];
-  Iter.iterate<Nat>(_actual, func(x, i) { actual[i] := x });
+  Iter.forEach<(Nat, Nat)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
   let expected = [1, 3];
 
-  assert (Array.freeze(actual) == expected)
+  assert (Array.fromVarArray(actual) == expected)
 };
 
 do {
-  Debug.print("  make");
+  Debug.print("  singleton");
 
   let x = 1;
-  let y = Iter.make<Nat>(x);
+  let y = Iter.singleton<Nat>(x);
 
   switch (y.next()) {
     case null { assert false };
     case (?z) { assert (x == z) }
+  }
+};
+
+do {
+  Debug.print("  infinite");
+
+  let x = 1;
+  let y = Iter.infinite<Nat>(x);
+
+  for (_ in Nat.range(0, 10000)) {
+    switch (y.next()) {
+      case null { assert false };
+      case (?z) { assert (x == z) }
+    }
   }
 };
 
@@ -80,7 +94,7 @@ do {
   let _actual = Iter.fromArray<Nat>(expected);
   let actual = [var 0, 0, 0];
 
-  Iter.iterate<Nat>(_actual, func(x, i) { actual[i] := x });
+  Iter.forEach<(Nat, Nat)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
   for (i in actual.keys()) {
     assert (actual[i] == expected[i])
@@ -94,7 +108,7 @@ do {
   let _actual = Iter.fromVarArray<Nat>(expected);
   let actual = [var 0, 0, 0];
 
-  Iter.forEach<Nat>(_actual, func(x) { actual[i] := x });
+  Iter.forEach<(Nat, Nat)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
   for (i in actual.keys()) {
     assert (actual[i] == expected[i])
@@ -165,5 +179,40 @@ do {
   assert sFull.next() == null;
 
   let sEmptier = Array.slice(input, input.size(), input.size());
-  assert sEmptier.next() == null
+  assert sEmptier.next() == null;
+
+  // Negative indices
+  let sNegStart = Array.slice(input, -2, 5); // Should get [2,5]
+  assert sNegStart.next() == ?2;
+  assert sNegStart.next() == ?5;
+  assert sNegStart.next() == null;
+
+  let sNegEnd = Array.slice(input, 0, -2); // Should get [4,3,1]
+  assert sNegEnd.next() == ?4;
+  assert sNegEnd.next() == ?3;
+  assert sNegEnd.next() == ?1;
+  assert sNegEnd.next() == null;
+
+  let sNegBoth = Array.slice(input, -3, -1); // Should get [1,2]
+  assert sNegBoth.next() == ?1;
+  assert sNegBoth.next() == ?2;
+  assert sNegBoth.next() == null;
+
+  // Out-of-bounds handling
+  let sOobStart = Array.slice(input, -10, 2); // Should clamp to [0,2]
+  assert sOobStart.next() == ?4;
+  assert sOobStart.next() == ?3;
+  assert sOobStart.next() == null;
+
+  let sOobEnd = Array.slice(input, 3, 10); // Should clamp to [3,5]
+  assert sOobEnd.next() == ?2;
+  assert sOobEnd.next() == ?5;
+  assert sOobEnd.next() == null;
+
+  // Empty slices
+  let sStartEqualsEnd = Array.slice(input, 2, 2);
+  assert sStartEqualsEnd.next() == null;
+
+  let sStartGreaterThanEnd = Array.slice(input, 3, 2);
+  assert sStartGreaterThanEnd.next() == null;
 }

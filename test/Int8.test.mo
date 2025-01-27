@@ -1672,7 +1672,7 @@ run(
                 do {
                     let number = 0 : Int8;
                     var count = 0;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         if (Int8.bittest(number, index)) {
                             count += 1
                         }
@@ -1686,7 +1686,7 @@ run(
                 do {
                     let number = -1 : Int8;
                     var count = 0;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         if (Int8.bittest(number, index)) {
                             count += 1
                         }
@@ -1734,7 +1734,7 @@ run(
                 "set all",
                 do {
                     var number = 0 : Int8;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         number := Int8.bitset(number, index)
                     };
                     number
@@ -1745,7 +1745,7 @@ run(
                 "all no effect",
                 do {
                     var number = -1 : Int8;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         number := Int8.bitset(number, index)
                     };
                     number
@@ -1791,7 +1791,7 @@ run(
                 "clear all",
                 do {
                     var number = -1 : Int8;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         number := Int8.bitclear(number, index)
                     };
                     number
@@ -1802,7 +1802,7 @@ run(
                 "all no effect",
                 do {
                     var number = 0 : Int8;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         number := Int8.bitclear(number, index)
                     };
                     number
@@ -1848,7 +1848,7 @@ run(
                 "clear all",
                 do {
                     var number = -1 : Int8;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         number := Int8.bitflip(number, index)
                     };
                     number
@@ -1859,7 +1859,7 @@ run(
                 "set all",
                 do {
                     var number = 0 : Int8;
-                    for (index in Nat.range(0, 7)) {
+                    for (index in Nat.range(0, 8)) {
                         number := Int8.bitflip(number, index)
                     };
                     number

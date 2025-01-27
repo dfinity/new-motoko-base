@@ -1670,7 +1670,7 @@ run(
                 do {
                     let number = 0 : Int64;
                     var count = 0;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         if (Int64.bittest(number, index)) {
                             count += 1
                         }
@@ -1684,7 +1684,7 @@ run(
                 do {
                     let number = -1 : Int64;
                     var count = 0;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         if (Int64.bittest(number, index)) {
                             count += 1
                         }
@@ -1732,7 +1732,7 @@ run(
                 "set all",
                 do {
                     var number = 0 : Int64;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         number := Int64.bitset(number, index)
                     };
                     number
@@ -1743,7 +1743,7 @@ run(
                 "all no effect",
                 do {
                     var number = -1 : Int64;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         number := Int64.bitset(number, index)
                     };
                     number
@@ -1789,7 +1789,7 @@ run(
                 "clear all",
                 do {
                     var number = -1 : Int64;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         number := Int64.bitclear(number, index)
                     };
                     number
@@ -1800,7 +1800,7 @@ run(
                 "all no effect",
                 do {
                     var number = 0 : Int64;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         number := Int64.bitclear(number, index)
                     };
                     number
@@ -1846,7 +1846,7 @@ run(
                 "clear all",
                 do {
                     var number = -1 : Int64;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         number := Int64.bitflip(number, index)
                     };
                     number
@@ -1857,7 +1857,7 @@ run(
                 "set all",
                 do {
                     var number = 0 : Int64;
-                    for (index in Nat.range(0, 63)) {
+                    for (index in Nat.range(0, 64)) {
                         number := Int64.bitflip(number, index)
                     };
                     number

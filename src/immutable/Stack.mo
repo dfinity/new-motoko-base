@@ -64,9 +64,11 @@ module {
       case (?(t, h)) ?(map(t, f), f h)
     };
 
-  public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T> {
-    todo()
-  };
+  public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T> =
+    switch stack {
+      case null null;
+      case (?(t, h)) filter(t, f) |> (if (f h) ?(_, h) else _)
+    };
 
   public func filterMap<T, U>(stack : Stack<T>, f : T -> ?U) : Stack<U> {
     todo()

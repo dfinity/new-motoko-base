@@ -18,19 +18,19 @@ module {
   public func size<T>(stack : Stack<T>) : Nat =
     switch stack {
       case null 0;
-      case (?(_, t)) 1 + size<T> t
+      case (?(t, h)) 1 + size<T> t
     };
 
   public func contains<T>(stack : Stack<T>, item : T, eq : (T, T) -> Bool) : Bool =
     switch stack {
       case null false;
-      case (?(h, t)) eq(h, item) or contains<T>(t, item, eq)
+      case (?(t, h)) eq(h, item) or contains<T>(t, item, eq)
     };
 
   public func get<T>(stack : Stack<T>, n : Nat) : ?T =
     switch stack {
       case null null;
-      case (?(h, t)) if (n == 0) h else get(t, /*(with underflow = false)*/ n - 1)
+      case (?(t, h)) if (n == 0) h else get(t, /*(with underflow = false)*/ n - 1)
     };
 
   public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
@@ -38,14 +38,14 @@ module {
   public func last<T>(stack : Stack<T>) : ?T =
     switch stack {
       case null null;
-      case (?(h, null)) ?h;
-      case (?(_, t)) last t
+      case (?(null, h)) ?h;
+      case (?(t, _)) last t
     };
 
   public func pop<T>(stack : Stack<T>) : (?T, Stack<T>) =
     switch stack {
       case null (null, null);
-      case (?(h, t)) (?h, t)
+      case (?(t, h)) (?t, h)
     };
 
   public func reverse<T>(stack : Stack<T>) : Stack<T> {
@@ -55,13 +55,13 @@ module {
   public func forEach<T>(stack : Stack<T>, f : T -> ()) =
     switch stack {
       case null ();
-      case (?(h, t)) { f h; forEach(t, f)}
+      case (?(t, h)) { f h; forEach(t, f)}
     };
 
   public func map<T1, T2>(stack : Stack<T1>, f : T1 -> T2) : Stack<T2> =
     switch stack {
       case null null;
-      case (?(h, t)) ?(f h, map(t, f))
+      case (?(t, h)) ?(f h, map(t, f))
     };
 
   public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T> {

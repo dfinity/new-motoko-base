@@ -38,7 +38,7 @@ module {
   public func last<T>(stack : Stack<T>) : ?T =
     switch stack {
       case null null;
-      case (?(h, null) ?h;
+      case (?(h, null)) ?h;
       case (?(_, t)) last t
     };
 

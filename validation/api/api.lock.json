@@ -145,7 +145,6 @@
       "public let cos : (x : Float) -> Float",
       "public func div(x : Float, y : Float) : Float",
       "public let e : Float",
-      "public func equal(x : Float, y : Float) : Bool",
       "public func equalWithin(x : Float, y : Float, epsilon : Float) : Bool",
       "public let exp : (x : Float) -> Float",
       "public type Float",
@@ -164,7 +163,6 @@
       "public func mul(x : Float, y : Float) : Float",
       "public let nearest : (x : Float) -> Float",
       "public func neg(x : Float) : Float",
-      "public func notEqual(x : Float, y : Float) : Bool",
       "public func notEqualWithin(x : Float, y : Float, epsilon : Float) : Bool",
       "public let pi : Float",
       "public func pow(x : Float, y : Float) : Float",
@@ -192,7 +190,6 @@
     "exports": [
       "public func bit(h : Hash, pos : Nat) : Bool",
       "public func equal(ha : Hash, hb : Hash) : Bool",
-      "public func hash(n : Nat) : Hash",
       "public type Hash",
       "public let length : Nat"
     ]
@@ -207,7 +204,6 @@
       "public func equal(x : Int, y : Int) : Bool",
       "public func greater(x : Int, y : Int) : Bool",
       "public func greaterOrEqual(x : Int, y : Int) : Bool",
-      "public func hash(i : Int) : Hash.Hash",
       "public type Int",
       "public func less(x : Int, y : Int) : Bool",
       "public func lessOrEqual(x : Int, y : Int) : Bool",
@@ -1495,7 +1491,6 @@
       "public func equal(x : Int, y : Int) : Bool",
       "public func greater(x : Int, y : Int) : Bool",
       "public func greaterOrEqual(x : Int, y : Int) : Bool",
-      "public func hash(i : Int) : Hash.Hash",
       "public func hashAcc(h1 : Hash.Hash, i : Int) : Hash.Hash",
       "public type Int",
       "public func less(x : Int, y : Int) : Bool",

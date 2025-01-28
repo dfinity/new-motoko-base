@@ -42,21 +42,27 @@ module {
       case (?(_, t)) last t
     };
 
-  public func pop<T>(stack : Stack<T>) : (?T, Stack<T>) {
-    todo()
-  };
+  public func pop<T>(stack : Stack<T>) : (?T, Stack<T>) =
+    switch stack {
+      case null (null, null);
+      case (?(h, t)) (?h, t)
+    };
 
   public func reverse<T>(stack : Stack<T>) : Stack<T> {
     todo()
   };
 
-  public func forEach<T>(stack : Stack<T>, f : T -> ()) {
-    todo()
-  };
+  public func forEach<T>(stack : Stack<T>, f : T -> ()) =
+    switch stack {
+      case null ();
+      case (?(h, t)) { f h; forEach(t, f)}
+    };
 
-  public func map<T1, T2>(stack : Stack<T1>, f : T1 -> T2) : Stack<T2> {
-    todo()
-  };
+  public func map<T1, T2>(stack : Stack<T1>, f : T1 -> T2) : Stack<T2> =
+    switch stack {
+      case null null;
+      case (?(h, t)) ?(f h, map(t, f))
+    };
 
   public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T> {
     todo()

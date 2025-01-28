@@ -640,7 +640,7 @@ module {
   public func powWrap(x : Int64, y : Int64) : Int64 { x **% y };
 
   /// Returns an iterator over `Int64` values from the first to second argument with an exclusive upper bound.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int64.range(1, 4);
@@ -651,7 +651,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int64.range(4, 1);
@@ -677,7 +677,7 @@ module {
   };
 
   /// Returns an iterator over `Int64` values from the first to second argument, inclusive.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int64.rangeInclusive(1, 3);
@@ -688,7 +688,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int64.rangeInclusive(4, 1);
@@ -707,9 +707,9 @@ module {
           } else {
             let result = n;
             if (n == to) {
-              done := true;
+              done := true
             } else {
-              n += 1;
+              n += 1
             };
             ?result
           }
@@ -719,7 +719,7 @@ module {
   };
 
   /// Returns an iterator over all Int64 values, from minValue to maxValue.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int64.allValues();

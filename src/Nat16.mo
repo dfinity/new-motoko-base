@@ -577,7 +577,7 @@ module {
   public func powWrap(x : Nat16, y : Nat16) : Nat16 { x **% y };
 
   /// Returns an iterator over `Nat16` values from the first to second argument with an exclusive upper bound.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat16.range(1, 4);
@@ -588,7 +588,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat16.range(4, 1);
@@ -625,7 +625,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat16.rangeInclusive(4, 1);
@@ -644,9 +644,9 @@ module {
           } else {
             let result = n;
             if (n == to) {
-              done := true;
+              done := true
             } else {
-              n += 1;
+              n += 1
             };
             ?result
           }
@@ -656,7 +656,7 @@ module {
   };
 
   /// Returns an iterator over all Nat16 values, from 0 to maxValue.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat16.allValues();

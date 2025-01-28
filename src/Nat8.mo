@@ -559,7 +559,7 @@ module {
   public func powWrap(x : Nat8, y : Nat8) : Nat8 { x **% y };
 
   /// Returns an iterator over `Nat8` values from the first to second argument with an exclusive upper bound.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat8.range(1, 4);
@@ -570,7 +570,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat8.range(4, 1);
@@ -596,7 +596,7 @@ module {
   };
 
   /// Returns an iterator over `Nat8` values from the first to second argument, inclusive.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat8.rangeInclusive(1, 3);
@@ -607,7 +607,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat8.rangeInclusive(4, 1);
@@ -626,9 +626,9 @@ module {
           } else {
             let result = n;
             if (n == to) {
-              done := true;
+              done := true
             } else {
-              n += 1;
+              n += 1
             };
             ?result
           }
@@ -638,7 +638,7 @@ module {
   };
 
   /// Returns an iterator over all Nat8 values, from 0 to maxValue.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat8.allValues();

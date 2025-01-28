@@ -576,16 +576,97 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Nat16, y : Nat16) : Nat16 { x **% y };
 
+  /// Returns an iterator over `Nat16` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat16.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat16.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func range(fromInclusive : Nat16, toExclusive : Nat16) : Iter.Iter<Nat16> {
-    todo()
+    if (fromInclusive >= toExclusive) {
+      Iter.empty()
+    } else {
+      object {
+        var n = fromInclusive;
+        public func next() : ?Nat16 {
+          if (n == toExclusive) {
+            null
+          } else {
+            let result = n;
+            n += 1;
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over `Nat16` values from the first to second argument, inclusive.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat16.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat16.rangeInclusive(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func rangeInclusive(from : Nat16, to : Nat16) : Iter.Iter<Nat16> {
-    todo()
+    if (from > to) {
+      Iter.empty()
+    } else {
+      object {
+        var n = from;
+        var done = false;
+        public func next() : ?Nat16 {
+          if (done) {
+            null
+          } else {
+            let result = n;
+            if (n == to) {
+              done := true;
+            } else {
+              n += 1;
+            };
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over all Nat16 values, from 0 to maxValue.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat16.allValues();
+  /// assert(?0 == iter.next());
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// // ...
+  /// ```
   public func allValues() : Iter.Iter<Nat16> {
-    todo()
+    rangeInclusive(0, maxValue)
   };
 
 }

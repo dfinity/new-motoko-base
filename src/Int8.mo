@@ -662,7 +662,7 @@ module {
             null
           } else {
             let result = n;
-            n := n + 1;
+            n += 1;
             ?result
           }
         }
@@ -703,7 +703,7 @@ module {
             if (n == to) {
               done := true;
             } else {
-              n := n + 1;
+              n += 1;
             };
             ?result
           }
@@ -719,10 +719,8 @@ module {
   /// let iter = Int8.allValues();
   /// assert(?-128 == iter.next());
   /// assert(?-127 == iter.next());
-  /// // ... and so on until
-  /// assert(?126 == iter.next());
-  /// assert(?127 == iter.next());
-  /// assert(null == iter.next());
+  /// assert(?-126 == iter.next());
+  /// // ...
   /// ```
   public func allValues() : Iter.Iter<Int8> {
     rangeInclusive(minValue, maxValue)

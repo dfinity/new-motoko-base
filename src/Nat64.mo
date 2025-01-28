@@ -563,16 +563,97 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Nat64, y : Nat64) : Nat64 { x **% y };
 
+  /// Returns an iterator over `Nat64` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat64.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat64.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func range(fromInclusive : Nat64, toExclusive : Nat64) : Iter.Iter<Nat64> {
-    todo()
+    if (fromInclusive >= toExclusive) {
+      Iter.empty()
+    } else {
+      object {
+        var n = fromInclusive;
+        public func next() : ?Nat64 {
+          if (n == toExclusive) {
+            null
+          } else {
+            let result = n;
+            n += 1;
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over `Nat64` values from the first to second argument, inclusive.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat64.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat64.rangeInclusive(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func rangeInclusive(from : Nat64, to : Nat64) : Iter.Iter<Nat64> {
-    todo()
+    if (from > to) {
+      Iter.empty()
+    } else {
+      object {
+        var n = from;
+        var done = false;
+        public func next() : ?Nat64 {
+          if (done) {
+            null
+          } else {
+            let result = n;
+            if (n == to) {
+              done := true;
+            } else {
+              n += 1;
+            };
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over all Nat64 values, from 0 to maxValue.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat64.allValues();
+  /// assert(?0 == iter.next());
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// // ...
+  /// ```
   public func allValues() : Iter.Iter<Nat64> {
-    todo()
+    rangeInclusive(0, maxValue)
   };
 
 }

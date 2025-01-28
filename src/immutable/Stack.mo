@@ -22,20 +22,25 @@ module {
     };
 
   public func contains<T>(stack : Stack<T>, item : T, eq : (T, T) -> Bool) : Bool =
-      switch stack {
-        case null false;
-        case (?(h, t)) eq(h, item) or contains(t, item, eq)
-      };
+    switch stack {
+      case null false;
+      case (?(h, t)) eq(h, item) or contains(t, item, eq)
+    };
 
-  public func get<T>(stack : Stack<T>, n : Nat) : ?T {
-    todo()
-  };
+  public func get<T>(stack : Stack<T>, n : Nat) : ?T =
+    switch stack {
+      case null null;
+      case (?(h, t)) if (n == 0) h else get(t, /*(with underflow = false)*/ n - 1)
+    };
 
   public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
 
-  public func last<T>(stack : Stack<T>) : ?T {
-    todo()
-  };
+  public func last<T>(stack : Stack<T>) : ?T =
+    switch stack {
+      case null null;
+      case (?(h, null) ?h;
+      case (?(_, t)) last t
+    };
 
   public func pop<T>(stack : Stack<T>) : (?T, Stack<T>) {
     todo()

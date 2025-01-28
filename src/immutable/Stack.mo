@@ -18,13 +18,13 @@ module {
   public func size<T>(stack : Stack<T>) : Nat =
     switch stack {
       case null 0;
-      case (?(t, h)) 1 + size<T> t
+      case (?(t, h)) 1 + size t
     };
 
   public func contains<T>(stack : Stack<T>, item : T, eq : (T, T) -> Bool) : Bool =
     switch stack {
       case null false;
-      case (?(t, h)) eq(h, item) or contains<T>(t, item, eq)
+      case (?(t, h)) eq(h, item) or contains(t, item, eq)
     };
 
   public func get<T>(stack : Stack<T>, n : Nat) : ?T =
@@ -61,7 +61,7 @@ module {
   public func map<T1, T2>(stack : Stack<T1>, f : T1 -> T2) : Stack<T2> =
     switch stack {
       case null null;
-      case (?(t, h)) ?(f h, map(t, f))
+      case (?(t, h)) ?(map(t, f), f h)
     };
 
   public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T> {

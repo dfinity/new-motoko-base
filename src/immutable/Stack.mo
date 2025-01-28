@@ -61,7 +61,7 @@ module {
   public func map<T1, T2>(stack : Stack<T1>, f : T1 -> T2) : Stack<T2> =
     switch stack {
       case null null;
-      case (?(h, t)) ?(f h, map(t, f))
+      case (?(t, h)) ?(f h, map(t, f))
     };
 
   public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T> {

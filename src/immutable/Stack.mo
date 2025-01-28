@@ -18,13 +18,13 @@ module {
   public func size<T>(stack : Stack<T>) : Nat =
     switch stack {
       case null 0;
-      case (?(_, t)) 1 + size t
+      case (?(_, t)) 1 + size<T> t
     };
 
   public func contains<T>(stack : Stack<T>, item : T, eq : (T, T) -> Bool) : Bool =
     switch stack {
       case null false;
-      case (?(h, t)) eq(h, item) or contains(t, item, eq)
+      case (?(h, t)) eq(h, item) or contains<T>(t, item, eq)
     };
 
   public func get<T>(stack : Stack<T>, n : Nat) : ?T =

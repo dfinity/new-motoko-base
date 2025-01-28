@@ -30,7 +30,7 @@ module {
   public func get<T>(stack : Stack<T>, n : Nat) : ?T =
     switch stack {
       case null null;
-      case (?(t, h)) if (n == 0) h else get(t, /*(with underflow = false)*/ n - 1)
+      case (?(t, h)) if (n == 0) ?h else get(t, /*(with underflow = false)*/ n - 1)
     };
 
   public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
@@ -45,7 +45,7 @@ module {
   public func pop<T>(stack : Stack<T>) : (?T, Stack<T>) =
     switch stack {
       case null (null, null);
-      case (?(t, h)) (?t, h)
+      case (?(t, h)) (?h, t)
     };
 
   public func reverse<T>(stack : Stack<T>) : Stack<T> {
@@ -61,7 +61,7 @@ module {
   public func map<T1, T2>(stack : Stack<T1>, f : T1 -> T2) : Stack<T2> =
     switch stack {
       case null null;
-      case (?(t, h)) ?(f h, map(t, f))
+      case (?(h, t)) ?(f h, map(t, f))
     };
 
   public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T> {

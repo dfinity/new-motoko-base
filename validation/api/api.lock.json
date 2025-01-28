@@ -457,12 +457,13 @@
     "name": "Iter",
     "exports": [
       "public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T>",
+      "public func enumerate<T>(xs : Iter<T>) : Iter<(Nat, T)>",
       "public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T>",
+      "public func forEach<T>( xs : Iter<T>, f : (T) -> () )",
       "public func fromArray<T>(xs : [T]) : Iter<T>",
       "public func fromVarArray<T>(xs : [var T]) : Iter<T>",
       "public func infinite<T>(item : T) : Iter<T>",
       "public type Iter<T>",
-      "public func iterate<T>( xs : Iter<T>, f : (T, Nat) -> () )",
       "public func map<T, R>(xs : Iter<T>, f : T -> R) : Iter<R>",
       "public func size<T>(xs : Iter<T>) : Nat",
       "public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T>",
@@ -937,11 +938,12 @@
       "public func compare<Ok, Err>( compareOk : (Ok, Ok) -> Order.Order, compareErr : (Err, Err) -> Order.Order, result1 : Result<Ok, Err>, result2 : Result<Ok, Err> ) : Order.Order",
       "public func equal<Ok, Err>( eqOk : (Ok, Ok) -> Bool, eqErr : (Err, Err) -> Bool, r1 : Result<Ok, Err>, r2 : Result<Ok, Err> ) : Bool",
       "public func flatten<Ok, Err>( result : Result<Result<Ok, Err>, Err> ) : Result<Ok, Err>",
+      "public func forErr<Ok, Err>(result : Result<Ok, Err>, f : Err -> ())",
+      "public func forOk<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ())",
       "public func fromOption<Ok, Err>(x : ?Ok, err : Err) : Result<Ok, Err>",
       "public func fromUpper<Ok, Err>( result : { #Ok : Ok; #Err : Err } ) : Result<Ok, Err>",
       "public func isErr(result : Result<Any, Any>) : Bool",
       "public func isOk(result : Result<Any, Any>) : Bool",
-      "public func iterate<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ())",
       "public func mapErr<Ok, Err1, Err2>( result : Result<Ok, Err1>, f : Err1 -> Err2 ) : Result<Ok, Err2>",
       "public func mapOk<Ok1, Ok2, Err>( result : Result<Ok1, Err>, f : Ok1 -> Ok2 ) : Result<Ok2, Err>",
       "public type Result<Ok, Err>",
@@ -1147,6 +1149,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "deprecated/Array",
     "exports": [
       "public func append<X>(array1 : [X], array2 : [X]) : [X]",
@@ -2290,6 +2293,8 @@
     ]
   },
   {
+=======
+>>>>>>> 1648687144f1acd9eff269fb0489d2431d2654f8
     "name": "immutable/Map",
     "exports": [
       "public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V>",

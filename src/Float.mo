@@ -491,14 +491,6 @@ module {
   /// ```
   public let fromInt : Int -> Float = Prim.intToFloat;
 
-  /// Returns `x == y`.
-  /// @deprecated Use `Float.equalWithin()` as this function does not consider numerical errors.
-  public func equal(x : Float, y : Float) : Bool { x == y };
-
-  /// Returns `x != y`.
-  /// @deprecated Use `Float.notEqualWithin()` as this function does not consider numerical errors.
-  public func notEqual(x : Float, y : Float) : Bool { x != y };
-
   /// Determines whether `x` is equal to `y` within the defined tolerance of `epsilon`.
   /// The `epsilon` considers numerical erros, see comment above.
   /// Equivalent to `Float.abs(x - y) <= epsilon` for a non-negative epsilon.

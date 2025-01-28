@@ -104,19 +104,6 @@ module {
     return hash
   };
 
-  /// Computes a hash from the least significant 32-bits of `i`, ignoring other bits.
-  /// @deprecated For large `Int` values consider using a bespoke hash function that considers all of the argument's bits.
-  public func hash(i : Int) : Hash.Hash {
-    // CAUTION: This removes the high bits!
-    let j = Prim.int32ToNat32(Prim.intToInt32Wrap(i));
-    hashNat8([
-      j & (255 << 0),
-      j & (255 << 8),
-      j & (255 << 16),
-      j & (255 << 24)
-    ])
-  };
-
   /// Equality function for Int types.
   /// This is equivalent to `x == y`.
   ///

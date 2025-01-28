@@ -90,20 +90,6 @@ module {
     if (x < y) { y } else { x }
   };
 
-  // this is a local copy of deprecated Hash.hashNat8 (redefined to suppress the warning)
-  private func hashNat8(key : [Nat32]) : Hash.Hash {
-    var hash : Nat32 = 0;
-    for (natOfKey in key.vals()) {
-      hash := hash +% natOfKey;
-      hash := hash +% hash << 10;
-      hash := hash ^ (hash >> 6)
-    };
-    hash := hash +% hash << 3;
-    hash := hash ^ (hash >> 11);
-    hash := hash +% hash << 15;
-    return hash
-  };
-
   /// Equality function for Int types.
   /// This is equivalent to `x == y`.
   ///

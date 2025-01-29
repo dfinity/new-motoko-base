@@ -172,7 +172,11 @@ module {
 
   public func toVarArray<T>(stack : Stack<T>) : [var T] = Array.toVarArray<T>(toArray<T>(stack));
 
-  public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> = todo();
+  public func fromIter<T>(iter : Iter.Iter<T>) : Stack<T> =
+    switch (iter.next()) {
+      case null null;
+      case (?item) ?(fromIter iter, item)
+    };
 
   public func toText<T>(stack : Stack<T>, f : T -> Text) : Text {
     var text = "Stack[";

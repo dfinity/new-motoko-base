@@ -91,7 +91,11 @@ module {
   };
 
   public func take<T>(stack : Stack<T>, n : Nat) : Stack<T> {
-    todo()
+    if (n == 0) return null;
+    switch stack {
+      case null null;
+      case (?(t, h)) ?(take(t, /*(with underflow = false)*/ n - 1), h)
+    }
   };
 
   public func drop<T>(stack : Stack<T>, n : Nat) : Stack<T> =

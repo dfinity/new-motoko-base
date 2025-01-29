@@ -116,13 +116,17 @@ module {
     todo()
   };
 
-  public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool {
-    todo()
-  };
+  public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool =
+    switch stack {
+      case null true;
+      case (?(t, h)) f h and all(t, f)
+    };
 
-  public func any<T>(stack : Stack<T>, f : T -> Bool) : Bool {
-    todo()
-  };
+  public func any<T>(stack : Stack<T>, f : T -> Bool) : Bool =
+    switch stack {
+      case null false;
+      case (?(t, h)) f h or any(t, f)
+    };
 
   public func merge<T>(stack1 : Stack<T>, stack2 : Stack<T>, lessThanOrEqual : (T, T) -> Bool) : Stack<T> {
     todo()

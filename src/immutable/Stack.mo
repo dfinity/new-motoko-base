@@ -150,9 +150,15 @@ module {
     todo()
   };
 
-  public func values<T>(stack : Stack<T>) : Iter.Iter<T> {
-    todo()
-  };
+  public func values<T>(stack : Stack<T>) : Iter.Iter<T> =
+    object {
+      var i = stack;
+      public func next() : ?T =
+        switch i {
+          case null null;
+          case (?(t, h)) { i := t; ?h}
+        }
+    };
 
   public func fromArray<T>(array : [T]) : Stack<T> {
     todo()

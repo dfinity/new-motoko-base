@@ -364,6 +364,51 @@ module {
     }
   };
 
+  /// Returns an iterator over `Nat` values from the first to second argument with an exclusive upper bound,
+  /// incrementing by the specified step size. The step can be positive or negative.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// // Positive step
+  /// let iter1 = Nat.step(1, 7, 2);
+  /// assert(?1 == iter1.next());
+  /// assert(?3 == iter1.next());
+  /// assert(?5 == iter1.next());
+  /// assert(null == iter1.next());
+  ///
+  /// // Negative step
+  /// let iter2 = Nat.step(7, 1, -2);
+  /// assert(?7 == iter2.next());
+  /// assert(?5 == iter2.next());
+  /// assert(?3 == iter2.next());
+  /// assert(null == iter2.next());
+  /// ```
+  ///
+  /// If step is 0 or if the iteration would not progress towards the bound, returns an empty iterator.
+  public func step(fromInclusive : Nat, toExclusive : Nat, step : Int) : Iter.Iter<Nat> = object {
+    var n = fromInclusive;
+    public func next() : ?Nat {
+      if (
+        step == 0 or
+        (step > 0 and n >= toExclusive) or
+        (step < 0 and n <= toExclusive)
+      ) {
+        return null
+      };
+      let current = n;
+      if (step > 0) {
+        n += Int.abs(step)
+      } else {
+        if (Int.abs(step) > n) {
+          n := 0
+        } else {
+          n -= Int.abs(step)
+        }
+      };
+      ?current
+    }
+  };
+
   /// Returns an iterator over the integers from the first to second argument, inclusive.
   /// ```motoko include=import
   /// import Iter "mo:base/Iter";

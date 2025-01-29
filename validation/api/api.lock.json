@@ -601,6 +601,7 @@
       "public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat>",
       "public func rangeInclusive(from : Nat, to : Nat) : Iter.Iter<Nat>",
       "public func rem(x : Nat, y : Nat) : Nat",
+      "public func step(fromInclusive : Nat, toExclusive : Nat, step : Int) : Iter.Iter<Nat>",
       "public func sub(x : Nat, y : Nat) : Nat",
       "public func toText(n : Nat) : Text"
     ]

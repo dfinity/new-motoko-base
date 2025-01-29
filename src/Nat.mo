@@ -9,7 +9,6 @@
 /// ```
 
 import Int "Int";
-import Order "Order";
 import Prim "mo:⛔";
 import Char "Char";
 import Iter "Iter";
@@ -52,6 +51,14 @@ module {
       }
     };
     ?n
+  };
+
+  public func fromInt(int : Int) : ?Nat {
+    if (int < 0) { null } else { ?Int.abs(int) }
+  };
+
+  public func toInt(nat : Nat) : Int {
+    nat : Int
   };
 
   /// Returns the minimum of `x` and `y`.
@@ -337,9 +344,9 @@ module {
   public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat> {
     var number = fromInclusive;
     object {
-      public func next(): ?Nat {
+      public func next() : ?Nat {
         if (number >= toExclusive) {
-          return null;
+          return null
         };
         let current = number;
         number += 1;

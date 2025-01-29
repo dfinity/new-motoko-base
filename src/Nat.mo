@@ -389,8 +389,8 @@ module {
     if (step == 0) {
       Iter.empty()
     } else if (step > 0) {
-      let stepNat = Int.abs(step); // Convert from Int to Nat. TODO: can we optimize this?
       object {
+        let stepNat = Int.abs(step); // Convert from Int to Nat. TODO: can we optimize this?
         var n = fromInclusive;
         public func next() : ?Nat {
           if (n >= toExclusive) {

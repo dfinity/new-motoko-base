@@ -176,7 +176,7 @@ module {
   public func fromArray<T>(array : [T]) : Stack<T> {
     let size = array.size();
     if (size == 0) return null;
-    var s = null;
+    var s : Stack<T> = null;
     for (i in Nat.range(0, size - 1)) { // FIXME
       s := ?(s, array[i])
     };

@@ -235,7 +235,7 @@ assert(?5 == iter2.next());
 assert(?3 == iter2.next());
 assert(null == iter2.next());</code></pre>
 
-<p>If step is 0 or if the iteration would not progress towards the bound, returns an empty iterator.</p>
+<p>If <code>step</code> is 0 or if the iteration would not progress towards the bound, returns an empty iterator.</p>
 </p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">to</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument, inclusive.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;

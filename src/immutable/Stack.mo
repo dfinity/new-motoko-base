@@ -177,9 +177,10 @@ module {
     let size = array.size();
     if (size == 0) return null;
     var s = null;
-    for (i in Nat.range(size - 1, 0)) {
+    for (i in Nat.range(0, size - 1)) { // FIXME
       s := ?(s, array[i])
-    }
+    };
+    s
   };
 
   public func fromVarArray<T>(array : [var T]) : Stack<T> = fromArray<T>(Array.fromVarArray<T>(array));

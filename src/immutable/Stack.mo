@@ -48,9 +48,11 @@ module {
       case (?(t, h)) (?h, t)
     };
 
-  public func reverse<T>(stack : Stack<T>) : Stack<T> {
-    todo()
-  };
+  public func reverse<T>(stack : Stack<T>) : Stack<T> =
+    switch stack {
+      case null null;
+      case (?(t, h)) ?(reverse t, h)
+    };
 
   public func forEach<T>(stack : Stack<T>, f : T -> ()) =
     switch stack {

@@ -140,9 +140,8 @@ module {
     todo()
   };
 
-  public func generate<T>(n : Nat, f : Nat -> T) : Stack<T> {
-    todo()
-  };
+  public func generate<T>(n : Nat, f : Nat -> T) : Stack<T> =
+    if (n == 0) null else ?(generate(/*(with underflow = false)*/ n - 1, f), f n);
 
   public func singleton<T>(item : T) : Stack<T> = ?(null, item);
 

@@ -2,6 +2,7 @@
 
 import Array "../Array";
 import Iter "../Iter";
+import Nat "../Nat";
 import Order "../Order";
 import Result "../Result";
 import { todo } "../Debug";
@@ -176,7 +177,7 @@ module {
     let size = array.size();
     if (size == 0) return null;
     var s = null;
-    for (i in Iter.revRange(size - 1, 0)) {
+    for (i in Nat.range(size - 1, 0)) {
       s := ?(s, array[i])
     }
   };

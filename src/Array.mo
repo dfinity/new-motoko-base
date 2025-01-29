@@ -568,11 +568,10 @@ module {
   /// An iterator provides a single method `next()`, which returns
   /// indices in order, or `null` when out of index to iterate over.
   ///
-  /// NOTE: You can also use `array.keys()` instead of this function. See example
+  /// Note: You can also use `array.keys()` instead of this function. See example
   /// below.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 11, 12];
   ///
   /// var sum = 0;
@@ -590,11 +589,10 @@ module {
   /// Iterator provides a single method `next()`, which returns
   /// elements in order, or `null` when out of elements to iterate over.
   ///
-  /// NOTE: You can also use `array.values()` instead of this function. See example
+  /// Note: You can also use `array.values()` instead of this function. See example
   /// below.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 11, 12];
   ///
   /// var sum = 0;
@@ -608,6 +606,35 @@ module {
   ///
   /// Space: O(1)
   public func values<T>(array : [T]) : Iter.Iter<T> = array.vals();
+
+  /// Iterator provides a single method `next()`, which returns
+  /// pairs of (index, element) in order, or `null` when out of elements to iterate over.
+  ///
+  /// ```motoko include=import
+  /// let array = [10, 11, 12];
+  ///
+  /// var sum = 0;
+  /// for ((index, element) in Array.enumerate(array)) {
+  ///   sum += element;
+  /// };
+  /// sum // => 33
+  /// ```
+  ///
+  /// Runtime: O(1)
+  ///
+  /// Space: O(1)
+  public func enumerate<T>(array : [var T]) : Iter.Iter<(Nat, T)> = object {
+    let size = array.size();
+    var index = 0;
+    public func next() : ?(Nat, T) {
+      if (index > size) {
+        return null
+      };
+      let i = index;
+      index += 1;
+      ?(i, array[i])
+    }
+  };
 
   /// Returns true if all elements in `array` satisfy the predicate function.
   ///

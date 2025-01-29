@@ -71,14 +71,15 @@ module {
     return if isNegative { "-" # text } else { text }
   };
 
-  /// Creates a natural number from its textual representation. Returns `null`
-  /// if the input is not a valid natural number.
+  /// Creates a integer from its textual representation. Returns `null`
+  /// if the input is not a valid integer.
   ///
-  /// Note: The textual representation _must not_ contain underscores.
+  /// The textual representation _must not_ contain underscores but may
+  /// begin with a '+' or '-' character.
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.fromText "1234" // => ?1234
+  /// Nat.fromText "-1234" // => ?-1234
   /// ```
   public func fromText(text : Text) : ?Int {
     if (text == "") {
@@ -103,10 +104,25 @@ module {
     ?(if (isNegative) { -n } else { n })
   };
 
+  /// Converts an integer to a natural number. Returns `null` if the integer is negative.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Debug "mo:base/Debug";
+  /// Debug.print(debug_show Int.toNat(-1)); // => null
+  /// Debug.print(debug_show Int.toNat(1234)); // => ?1234
+  /// ```
   public func toNat(int : Int) : ?Nat {
     if (int < 0) { null } else { ?abs(int) }
   };
 
+  /// Converts a natural number to an integer.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Debug "mo:base/Debug";
+  /// Debug.print(debug_show Int.fromNat(1234)); // => 1234
+  /// ```
   public func fromNat(nat : Nat) : Int {
     nat : Int
   };

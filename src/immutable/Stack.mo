@@ -173,7 +173,12 @@ module {
     };
 
   public func fromArray<T>(array : [T]) : Stack<T> {
-    todo()
+    let size = array.size();
+    if (size == 0) return null;
+    var s = null;
+    for (i in Iter.revRange(size - 1, 0)) {
+      s := ?(s, array[i])
+    }
   };
 
   public func fromVarArray<T>(array : [var T]) : Stack<T> = fromArray<T>(Array.fromVarArray<T>(array));

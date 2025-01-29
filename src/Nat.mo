@@ -385,27 +385,39 @@ module {
   /// ```
   ///
   /// If step is 0 or if the iteration would not progress towards the bound, returns an empty iterator.
-  public func step(fromInclusive : Nat, toExclusive : Nat, step : Int) : Iter.Iter<Nat> = object {
-    var n = fromInclusive;
-    public func next() : ?Nat {
-      if (
-        step == 0 or
-        (step > 0 and n >= toExclusive) or
-        (step < 0 and n <= toExclusive)
-      ) {
-        return null
-      };
-      let current = n;
-      if (step > 0) {
-        n += Int.abs(step)
-      } else {
-        if (Int.abs(step) > n) {
-          n := 0
-        } else {
-          n -= Int.abs(step)
+  public func step(fromInclusive : Nat, toExclusive : Nat, step : Int) : Iter.Iter<Nat> {
+    if (step == 0) {
+      Iter.empty()
+    } else if (step > 0) {
+      let stepNat = Int.abs(step); // Convert from Int to Nat. TODO: can we optimize this?
+      object {
+        var n = fromInclusive;
+        public func next() : ?Nat {
+          if (n >= toExclusive) {
+            return null
+          };
+          let current = n;
+          n += stepNat;
+          ?current
         }
-      };
-      ?current
+      }
+    } else {
+      object {
+        let stepMagnitude = Int.abs(step);
+        var n = fromInclusive;
+        public func next() : ?Nat {
+          if (n <= toExclusive) {
+            return null
+          };
+          let current = n;
+          if (stepMagnitude > n) {
+            n := 0
+          } else {
+            n -= stepMagnitude
+          };
+          ?current
+        }
+      }
     }
   };
 

@@ -384,7 +384,7 @@ module {
   /// assert(null == iter2.next());
   /// ```
   ///
-  /// If step is 0 or if the iteration would not progress towards the bound, returns an empty iterator.
+  /// If `step` is 0 or if the iteration would not progress towards the bound, returns an empty iterator.
   public func step(fromInclusive : Nat, toExclusive : Nat, step : Int) : Iter.Iter<Nat> {
     if (step == 0) {
       Iter.empty()

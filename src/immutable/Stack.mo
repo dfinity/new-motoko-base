@@ -138,9 +138,8 @@ module {
 
   public func singleton<T>(item : T) : Stack<T> = ?(null, item);
 
-  public func repeat<T>(item : T, n : Nat) : Stack<T> {
-    todo()
-  };
+  public func repeat<T>(item : T, n : Nat) : Stack<T> =
+    if (n == 0) null else ?(repeat(item, /*(with underflow = false)*/ n - 1), item);
 
   public func zip<T, U>(stack1 : Stack<T>, stack2 : Stack<U>) : Stack<(T, U)> = zipWith<T, U, (T, U)>(stack1, stack2, func(x, y) { (x, y) });
 

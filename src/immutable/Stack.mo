@@ -156,7 +156,7 @@ module {
       public func next() : ?T =
         switch i {
           case null null;
-          case (?(t, h)) { i := t; ?h}
+          case (?(t, h)) { i := t; ?h }
         }
     };
 

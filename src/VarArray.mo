@@ -616,8 +616,10 @@ module {
     acc
   };
 
-  /// Flattens the iterator of mutable arrays into a single mutable array. Retains the original
+  /// Flattens an iterator of mutable arrays into a single mutable array. Retains the original
   /// ordering of the elements.
+  ///
+  /// Consider using `VarArray.flattenVarArray()` where possible for better performance.
   ///
   /// ```motoko include=import
   ///
@@ -629,7 +631,43 @@ module {
   ///
   /// Space: O(number of elements in array)
   public func flatten<T>(arrays : Iter.Iter<[var T]>) : [var T] {
-    todo() // See `Array.flatten()`
+    flattenVarArray<T>(fromIter(arrays))
+  };
+
+  /// Flattens a mutable array of mutable arrays into a single mutable array. Retains the original
+  /// ordering of the elements.
+  ///
+  /// This has better performance compared to `VarArray.flatten()`.
+  ///
+  /// ```motoko include=import
+  ///
+  /// let arrays = [var [var 0, 1, 2], [var 2, 3], [var], [var 4]];
+  /// VarArray.flattenVarArray<Nat>(arrays) // => [var 0, 1, 2, 2, 3, 4]
+  /// ```
+  ///
+  /// Runtime: O(number of elements in array)
+  ///
+  /// Space: O(number of elements in array)
+  public func flattenVarArray<T>(arrays : [var [var T]]) : [var T] {
+    var flatSize = 0;
+    for (subArray in arrays.vals()) {
+      flatSize += subArray.size()
+    };
+
+    var outer = 0;
+    var inner = 0;
+    tabulate<T>(
+      flatSize,
+      func _ {
+        while (inner == arrays[outer].size()) {
+          inner := 0;
+          outer += 1
+        };
+        let element = arrays[outer][inner];
+        inner += 1;
+        element
+      }
+    )
   };
 
   /// Create an array containing a single value.

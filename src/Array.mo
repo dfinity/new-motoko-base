@@ -525,8 +525,10 @@ module {
     acc
   };
 
-  /// Flattens the iterator of arrays into a single array. Retains the original
+  /// Flattens an iterator of arrays into a single array. Retains the original
   /// ordering of the elements.
+  ///
+  /// Consider using `Array.flattenArray()` where possible for better performance.
   ///
   /// ```motoko include=import
   ///
@@ -538,7 +540,43 @@ module {
   ///
   /// Space: O(number of elements in array)
   public func flatten<T>(arrays : Iter.Iter<[T]>) : [T] {
-    todo() // New implementation due to using `Iter<[T]>` in place of `[[T]]`, pending `List` data structure
+    flattenArray(fromIter(arrays))
+  };
+
+  /// Flattens an array of arrays into a single array. Retains the original
+  /// ordering of the elements.
+  ///
+  /// This has better performance compared to `Array.flatten()`.
+  ///
+  /// ```motoko include=import
+  ///
+  /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
+  /// Array.flattenArray<Nat>(arrays)) // => [0, 1, 2, 2, 3, 4]
+  /// ```
+  ///
+  /// Runtime: O(number of elements in array)
+  ///
+  /// Space: O(number of elements in array)
+  public func flattenArray<T>(arrays : [[T]]) : [T] {
+    var flatSize = 0;
+    for (subArray in arrays.vals()) {
+      flatSize += subArray.size()
+    };
+
+    var outer = 0;
+    var inner = 0;
+    Prim.Array_tabulate<T>(
+      flatSize,
+      func _ {
+        while (inner == arrays[outer].size()) {
+          inner := 0;
+          outer += 1
+        };
+        let element = arrays[outer][inner];
+        inner += 1;
+        element
+      }
+    )
   };
 
   /// Create an array containing a single value.
@@ -651,8 +689,8 @@ module {
   public func all<T>(array : [T], predicate : T -> Bool) : Bool {
     for (element in array.vals()) {
       if (not predicate(element)) {
-        return false;
-      };
+        return false
+      }
     };
     true
   };
@@ -672,8 +710,8 @@ module {
   public func any<T>(array : [T], predicate : T -> Bool) : Bool {
     for (element in array.vals()) {
       if (predicate(element)) {
-        return true;
-      };
+        return true
+      }
     };
     false
   };
@@ -846,10 +884,10 @@ module {
     var i = 0;
     while (i < size) {
       if (i != 0) {
-        text #= ", ";
+        text #= ", "
       };
       text #= f(array[i]);
-      i += 1;
+      i += 1
     };
     text #= "]";
     text
@@ -887,12 +925,12 @@ module {
       switch (compare(array1[i], array2[i])) {
         case (#less) { return #less };
         case (#greater) { return #greater };
-        case (#equal) { i += 1 };
-      };
+        case (#equal) { i += 1 }
+      }
     };
-    if (size1 < size2) { #less }
-    else if (size1 > size2) { #greater }
-    else { #equal }
+    if (size1 < size2) { #less } else if (size1 > size2) { #greater } else {
+      #equal
+    }
   };
 
 }

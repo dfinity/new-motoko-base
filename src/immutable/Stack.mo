@@ -97,7 +97,7 @@ module {
   public func drop<T>(stack : Stack<T>, n : Nat) : Stack<T> =
     switch stack {
       case null null;
-      case (?(t, h)) if (n == 0) stack else drop(t, /*(with underflow = false)*/ n - 1))
+      case (?(t, h)) if (n == 0) stack else drop(t, /*(with underflow = false)*/ n - 1)
     };
 
   public func foldLeft<T, A>(stack : Stack<T>, base : A, combine : (A, T) -> A) : A {

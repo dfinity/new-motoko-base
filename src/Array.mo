@@ -816,6 +816,54 @@ module {
     null
   };
 
+  /// Returns an iterator over a slice of the given array.
+  ///
+  /// ```motoko include=import
+  /// let array = [1, 2, 3, 4, 5];
+  /// let s = Array.range<Nat>(array, 3, array.size());
+  /// assert s.next() == ?4;
+  /// assert s.next() == ?5;
+  /// assert s.next() == null;
+  ///
+  /// let s = Array.range<Nat>(array, 0, 0);
+  /// assert s.next() == null;
+  /// ```
+  ///
+  /// Runtime: O(1)
+  ///
+  /// Space: O(1)
+  public func range<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
+    let size = array.size();
+    // Convert negative indices to positive and handle bounds
+    let startInt = if (fromInclusive < 0) {
+      let s = size + fromInclusive;
+      if (s < 0) { 0 } else { s }
+    } else {
+      if (fromInclusive > size) { size } else { fromInclusive }
+    };
+    let endInt = if (toExclusive < 0) {
+      let e = size + toExclusive;
+      if (e < 0) { 0 } else { e }
+    } else {
+      if (toExclusive > size) { size } else { toExclusive }
+    };
+    // Convert to Nat (values are non-negative due to bounds checking above)
+    let start = Prim.abs(startInt);
+    let end = Prim.abs(endInt);
+    object {
+      var pos = start;
+      public func next() : ?T {
+        if (pos >= end) {
+          null
+        } else {
+          let elem = array[pos];
+          pos += 1;
+          ?elem
+        }
+      }
+    }
+  };
+
   /// Converts the array to its textual representation using `f` to convert each element to `Text`.
   ///
   /// ```motoko include=import

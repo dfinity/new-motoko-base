@@ -517,7 +517,7 @@ module {
   public func equal(x : Float, y : Float, epsilon : Float) : Bool {
     if (not (epsilon >= 0.0)) {
       // also considers NaN, not identical to `epsilon < 0.0`
-      Prim.trap("epsilon must be greater or equal 0.0")
+      Prim.trap("Float.equal(): epsilon must be greater or equal 0.0")
     };
     x == y or abs(x - y) <= epsilon // `x == y` to also consider infinity equal
   };
@@ -546,7 +546,11 @@ module {
   /// Float.notEqual(-12.3, -1.23e1, epsilon) // => false
   /// ```
   public func notEqual(x : Float, y : Float, epsilon : Float) : Bool {
-    not equal(x, y, epsilon)
+    if (not (epsilon >= 0.0)) {
+      // also considers NaN, not identical to `epsilon < 0.0`
+      Prim.trap("Float.notEqual(): epsilon must be greater or equal 0.0")
+    };
+    not (x == y or abs(x - y) <= epsilon)
   };
 
   /// Returns `x < y`.

@@ -202,4 +202,40 @@ value to pass to a higher order function. While <code>Nat</code> is not defined 
 of bit patterns, conceptually it can be regarded as such, and the operation
 is provided as a high-performance version of the corresponding arithmetic
 rule.</p>
-</p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">to</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p></p></div></div></body></html>
+</p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat</code> values from the first to second argument with an exclusive upper bound.</p>
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat.range(1, 4);
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+assert(?3 == iter.next());
+assert(null == iter.next());</code></pre>
+
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
+<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat.range(4, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">to</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument, inclusive.</p>
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat.rangeInclusive(1, 3);
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+assert(?3 == iter.next());
+assert(null == iter.next());</code></pre>
+
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
+<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat.rangeInclusive(3, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an infinite iterator over all possible <code>Nat</code> values.</p>
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat.allValues();
+assert(?0 == iter.next());
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+// ...</code></pre></p></div></div></body></html>

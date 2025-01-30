@@ -333,4 +333,41 @@ ignore Nat64.powWrap(2, 64); // =&gt; 0
 to the existing <code>**%</code> operator) is so that you can use it as a function
 value to pass to a higher order function. It is not possible to use <code>**%</code>
 as a function value at the moment.</p>
-</p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">to</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p></p></div></div></body></html>
+</p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat64</code> values from the first to second argument with an exclusive upper bound.</p>
+<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat64.range(1, 4);
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+assert(?3 == iter.next());
+assert(null == iter.next());</code></pre>
+
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat64.range(4, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">to</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat64</code> values from the first to second argument, inclusive.</p>
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat64.rangeInclusive(1, 3);
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+assert(?3 == iter.next());
+assert(null == iter.next());</code></pre>
+
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat64.rangeInclusive(4, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p><p>Returns an iterator over all Nat64 values, from 0 to maxValue.</p>
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Nat64.allValues();
+assert(?0 == iter.next());
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+// ...</code></pre></p></div></div></body></html>

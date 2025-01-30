@@ -179,4 +179,30 @@ Int.pow(-2, 3); // =&gt; -8</code></pre>
 to the existing <code>**</code> operator) is so that you can use it as a function
 value to pass to a higher order function. It is not possible to use <code>**</code>
 as a function value at the moment.</p>
-</p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int"><span class="type">Int</span></a>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">to</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int"><span class="type">Int</span></a>&gt;</code></h4><p></p></div></div></body></html>
+</p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int"><span class="type">Int</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument with an exclusive upper bound.</p>
+<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Int.range(1, 4);
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+assert(?3 == iter.next());
+assert(null == iter.next());</code></pre>
+
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
+<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Int.range(4, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">to</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int"><span class="type">Int</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument, inclusive.</p>
+<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Int.rangeInclusive(1, 3);
+assert(?1 == iter.next());
+assert(?2 == iter.next());
+assert(?3 == iter.next());
+assert(null == iter.next());</code></pre>
+
+<p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
+<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+
+let iter = Int.rangeInclusive(3, 1);
+assert(null == iter.next()); // empty iterator</code></pre></p></div></div></body></html>

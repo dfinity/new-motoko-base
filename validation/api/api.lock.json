@@ -1101,9 +1101,8 @@
     "name": "Timer",
     "exports": [
       "public let cancelTimer : TimerId -> ()",
-      "public type Duration",
-      "public func recurringTimer<system>(d : Duration, job : () -> async ()) : TimerId",
-      "public func setTimer<system>(d : Duration, job : () -> async ()) : TimerId",
+      "public func recurringTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId",
+      "public func setTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId",
       "public type TimerId"
     ]
   },

@@ -12,7 +12,7 @@
         "Principal",
         "Text"
       ],
-      "functions": []
+      "functions": ["equal"]
     },
     {
       "name": "Number",

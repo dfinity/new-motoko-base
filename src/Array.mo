@@ -525,39 +525,39 @@ module {
     acc
   };
 
-  /// Flattens an iterator of arrays into a single array. Retains the original
+  /// Combines an iterator of arrays into a single array. Retains the original
   /// ordering of the elements.
   ///
-  /// Consider using `Array.flattenArray()` where possible for better performance.
+  /// Consider using `Array.flatten()` where possible for better performance.
   ///
   /// ```motoko include=import
   ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flatten<Nat>(Array.fromIter(arrays))) // => [0, 1, 2, 2, 3, 4]
+  /// Array.join<Nat>(Array.fromIter(arrays))) // => [0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
-  public func flatten<T>(arrays : Iter.Iter<[T]>) : [T] {
-    flattenArray(fromIter(arrays))
+  public func join<T>(arrays : Iter.Iter<[T]>) : [T] {
+    flatten(fromIter(arrays))
   };
 
-  /// Flattens an array of arrays into a single array. Retains the original
+  /// Combines an array of arrays into a single array. Retains the original
   /// ordering of the elements.
   ///
-  /// This has better performance compared to `Array.flatten()`.
+  /// This has better performance compared to `Array.join()`.
   ///
   /// ```motoko include=import
   ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flattenArray<Nat>(arrays)) // => [0, 1, 2, 2, 3, 4]
+  /// Array.flatten<Nat>(arrays)) // => [0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
-  public func flattenArray<T>(arrays : [[T]]) : [T] {
+  public func flatten<T>(arrays : [[T]]) : [T] {
     var flatSize = 0;
     for (subArray in arrays.vals()) {
       flatSize += subArray.size()

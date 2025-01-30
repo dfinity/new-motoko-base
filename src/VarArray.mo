@@ -616,25 +616,25 @@ module {
     acc
   };
 
-  /// Flattens an iterator of mutable arrays into a single mutable array. Retains the original
+  /// Combines an iterator of mutable arrays into a single mutable array. Retains the original
   /// ordering of the elements.
   ///
-  /// Consider using `VarArray.flattenVarArray()` where possible for better performance.
+  /// Consider using `VarArray.flatten()` where possible for better performance.
   ///
   /// ```motoko include=import
   ///
   /// let arrays = [[var 0, 1, 2], [var 2, 3], [var], [var 4]];
-  /// VarArray.flatten<Nat>(VarArray.fromIter(arrays)) // => [var 0, 1, 2, 2, 3, 4]
+  /// VarArray.join<Nat>(VarArray.fromIter(arrays)) // => [var 0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
-  public func flatten<T>(arrays : Iter.Iter<[var T]>) : [var T] {
-    flattenVarArray<T>(fromIter(arrays))
+  public func join<T>(arrays : Iter.Iter<[var T]>) : [var T] {
+    flatten<T>(fromIter(arrays))
   };
 
-  /// Flattens a mutable array of mutable arrays into a single mutable array. Retains the original
+  /// Combines a mutable array of mutable arrays into a single mutable array. Retains the original
   /// ordering of the elements.
   ///
   /// This has better performance compared to `VarArray.flatten()`.
@@ -642,13 +642,13 @@ module {
   /// ```motoko include=import
   ///
   /// let arrays = [var [var 0, 1, 2], [var 2, 3], [var], [var 4]];
-  /// VarArray.flattenVarArray<Nat>(arrays) // => [var 0, 1, 2, 2, 3, 4]
+  /// VarArray.flatten<Nat>(arrays) // => [var 0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
-  public func flattenVarArray<T>(arrays : [var [var T]]) : [var T] {
+  public func flatten<T>(arrays : [var [var T]]) : [var T] {
     var flatSize = 0;
     for (subArray in arrays.vals()) {
       flatSize += subArray.size()

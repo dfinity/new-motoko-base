@@ -652,16 +652,97 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Int32, y : Int32) : Int32 { x **% y };
 
+  /// Returns an iterator over `Int32` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int32.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int32.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func range(fromInclusive : Int32, toExclusive : Int32) : Iter.Iter<Int32> {
-    todo()
+    if (fromInclusive >= toExclusive) {
+      Iter.empty()
+    } else {
+      object {
+        var n = fromInclusive;
+        public func next() : ?Int32 {
+          if (n == toExclusive) {
+            null
+          } else {
+            let result = n;
+            n += 1;
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over `Int32` values from the first to second argument, inclusive.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int32.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int32.rangeInclusive(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func rangeInclusive(from : Int32, to : Int32) : Iter.Iter<Int32> {
-    todo()
+    if (from > to) {
+      Iter.empty()
+    } else {
+      object {
+        var n = from;
+        var done = false;
+        public func next() : ?Int32 {
+          if (done) {
+            null
+          } else {
+            let result = n;
+            if (n == to) {
+              done := true
+            } else {
+              n += 1
+            };
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over all Int32 values, from minValue to maxValue.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int32.allValues();
+  /// assert(?-2_147_483_648 == iter.next());
+  /// assert(?-2_147_483_647 == iter.next());
+  /// assert(?-2_147_483_646 == iter.next());
+  /// // ...
+  /// ```
   public func allValues() : Iter.Iter<Int32> {
-    todo()
+    rangeInclusive(minValue, maxValue)
   };
 
 }

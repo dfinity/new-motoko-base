@@ -151,26 +151,26 @@ do {
 };
 
 do {
-  Debug.print("  Array slice");
+  Debug.print("  Array range");
 
   let input : [Nat] = [4, 3, 1, 2, 5];
 
-  let sEmpty = Array.slice(input, 0, 0);
+  let sEmpty = Array.range(input, 0, 0);
   assert sEmpty.next() == null;
 
-  let sPrefix = Array.slice(input, 0, 1);
+  let sPrefix = Array.range(input, 0, 1);
   assert sPrefix.next() == ?4;
   assert sPrefix.next() == null;
 
-  let sSuffix = Array.slice(input, 4, 5);
+  let sSuffix = Array.range(input, 4, 5);
   assert sSuffix.next() == ?5;
   assert sSuffix.next() == null;
 
-  let sInfix = Array.slice(input, 3, 4);
+  let sInfix = Array.range(input, 3, 4);
   assert sInfix.next() == ?2;
   assert sInfix.next() == null;
 
-  let sFull = Array.slice(input, 0, input.size());
+  let sFull = Array.range(input, 0, input.size());
   assert sFull.next() == ?4;
   assert sFull.next() == ?3;
   assert sFull.next() == ?1;
@@ -178,41 +178,41 @@ do {
   assert sFull.next() == ?5;
   assert sFull.next() == null;
 
-  let sEmptier = Array.slice(input, input.size(), input.size());
+  let sEmptier = Array.range(input, input.size(), input.size());
   assert sEmptier.next() == null;
 
   // Negative indices
-  let sNegStart = Array.slice(input, -2, 5); // Should get [2,5]
+  let sNegStart = Array.range(input, -2, 5); // Should get [2,5]
   assert sNegStart.next() == ?2;
   assert sNegStart.next() == ?5;
   assert sNegStart.next() == null;
 
-  let sNegEnd = Array.slice(input, 0, -2); // Should get [4,3,1]
+  let sNegEnd = Array.range(input, 0, -2); // Should get [4,3,1]
   assert sNegEnd.next() == ?4;
   assert sNegEnd.next() == ?3;
   assert sNegEnd.next() == ?1;
   assert sNegEnd.next() == null;
 
-  let sNegBoth = Array.slice(input, -3, -1); // Should get [1,2]
+  let sNegBoth = Array.range(input, -3, -1); // Should get [1,2]
   assert sNegBoth.next() == ?1;
   assert sNegBoth.next() == ?2;
   assert sNegBoth.next() == null;
 
   // Out-of-bounds handling
-  let sOobStart = Array.slice(input, -10, 2); // Should clamp to [0,2]
+  let sOobStart = Array.range(input, -10, 2); // Should clamp to [0,2]
   assert sOobStart.next() == ?4;
   assert sOobStart.next() == ?3;
   assert sOobStart.next() == null;
 
-  let sOobEnd = Array.slice(input, 3, 10); // Should clamp to [3,5]
+  let sOobEnd = Array.range(input, 3, 10); // Should clamp to [3,5]
   assert sOobEnd.next() == ?2;
   assert sOobEnd.next() == ?5;
   assert sOobEnd.next() == null;
 
   // Empty slices
-  let sStartEqualsEnd = Array.slice(input, 2, 2);
+  let sStartEqualsEnd = Array.range(input, 2, 2);
   assert sStartEqualsEnd.next() == null;
 
-  let sStartGreaterThanEnd = Array.slice(input, 3, 2);
+  let sStartGreaterThanEnd = Array.range(input, 3, 2);
   assert sStartGreaterThanEnd.next() == null;
 }

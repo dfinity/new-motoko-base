@@ -161,10 +161,6 @@ module {
     todo()
   };
 
-  public func tabulate<T>(n : Nat, f : Nat -> T) : Stack<T> {
-    todo()
-  };
-
   public func singleton<T>(item : T) : Stack<T> {
     todo()
   };

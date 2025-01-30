@@ -44,11 +44,11 @@ module {
   /// assert(6 == sum)
   /// ```
   public func forEach<T>(
-    xs : Iter<T>,
+    iter : Iter<T>,
     f : (T) -> ()
   ) {
     label l loop {
-      switch (xs.next()) {
+      switch (iter.next()) {
         case (?next) {
           f(next)
         };
@@ -71,11 +71,11 @@ module {
   /// assert(?(2, "C") == enumerated.next());
   /// assert(null == enumerated.next());
   /// ```
-  public func enumerate<T>(xs : Iter<T>) : Iter<(Nat, T)> {
+  public func enumerate<T>(iter : Iter<T>) : Iter<(Nat, T)> {
     object {
       var i = 0;
       public func next() : ?(Nat, T) {
-        switch (xs.next()) {
+        switch (iter.next()) {
           case (?x) {
             let current = (i, x);
             i += 1;
@@ -87,11 +87,43 @@ module {
     }
   };
 
+  /// Creates a new iterator that yields every nth element from the original iterator.
+  /// If `interval` is 0, returns an empty iterator. If `interval` is 1, returns the original iterator.
+  /// For any other positive interval, returns an iterator that skips `interval - 1` elements after each yielded element.
+  ///
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  /// let iter = Iter.fromArray([1, 2, 3, 4, 5, 6]);
+  /// let steppedIter = Iter.step(iter, 2); // Take every 2nd element
+  /// assert(?1 == steppedIter.next());
+  /// assert(?3 == steppedIter.next());
+  /// assert(?5 == steppedIter.next());
+  /// assert(null == steppedIter.next());
+  /// ```
+  public func step<T>(iter : Iter<T>, n : Nat) : Iter<T> {
+    if (n == 0) {
+      empty()
+    } else if (n == 1) {
+      iter
+    } else {
+      object {
+        public func next() : ?T {
+          let item = iter.next();
+          var i = 1;
+          while (i < n) {
+            ignore iter.next()
+          };
+          item
+        }
+      }
+    }
+  };
+
   /// Consumes an iterator and counts how many elements were produced
   /// (discarding them in the process).
-  public func size<T>(xs : Iter<T>) : Nat {
+  public func size<T>(iter : Iter<T>) : Nat {
     var len = 0;
-    forEach<T>(xs, func(x) { len += 1 });
+    forEach<T>(iter, func(x) { len += 1 });
     len
   };
 
@@ -106,9 +138,9 @@ module {
   /// assert(?6 == mappedIter.next());
   /// assert(null == mappedIter.next());
   /// ```
-  public func map<T, R>(xs : Iter<T>, f : T -> R) : Iter<R> = object {
+  public func map<T, R>(iter : Iter<T>, f : T -> R) : Iter<R> = object {
     public func next() : ?R {
-      switch (xs.next()) {
+      switch (iter.next()) {
         case (?next) {
           ?f(next)
         };
@@ -129,10 +161,10 @@ module {
   /// assert(?3 == mappedIter.next());
   /// assert(null == mappedIter.next());
   /// ```
-  public func filter<T>(xs : Iter<T>, f : T -> Bool) : Iter<T> = object {
+  public func filter<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> = object {
     public func next() : ?T {
       loop {
-        switch (xs.next()) {
+        switch (iter.next()) {
           case (null) {
             return null
           };
@@ -202,16 +234,16 @@ module {
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
   /// ```
-  public func fromArray<T>(xs : [T]) : Iter<T> {
-    var ix : Nat = 0;
-    let size = xs.size();
+  public func fromArray<T>(iter : [T]) : Iter<T> {
+    var i : Nat = 0;
+    let size = iter.size();
     object {
       public func next() : ?T {
-        if (ix >= size) {
+        if (i >= size) {
           return null
         } else {
-          let res = ?(xs[ix]);
-          ix += 1;
+          let res = ?(iter[i]);
+          i += 1;
           return res
         }
       }
@@ -221,8 +253,8 @@ module {
   /// Like `fromArray` but for Arrays with mutable elements. Captures
   /// the elements of the Array at the time the iterator is created, so
   /// further modifications won't be reflected in the iterator.
-  public func fromVarArray<T>(xs : [var T]) : Iter<T> {
-    fromArray<T>(Array.fromVarArray<T>(xs))
+  public func fromVarArray<T>(iter : [var T]) : Iter<T> {
+    fromArray<T>(Array.fromVarArray<T>(iter))
   };
 
   /// Consumes an iterator and collects its produced elements in an Array.
@@ -233,53 +265,56 @@ module {
   /// ```
   public func toArray<T>(iter : Iter<T>) : [T] {
     // TODO: Replace implementation. This is just temporay.
-    type Node<T> = { value: T; var next: ?Node<T>};
-    var first: ?Node<T> = null;
-    var last: ?Node<T> = null;
+    type Node<T> = { value : T; var next : ?Node<T> };
+    var first : ?Node<T> = null;
+    var last : ?Node<T> = null;
     var count = 0;
 
-    func add(value: T) {
+    func add(value : T) {
       let node : Node<T> = { value; var next = null };
       switch (last) {
         case null {
-          first := ?node;
+          first := ?node
         };
         case (?previous) {
-          previous.next := ?node;
+          previous.next := ?node
         }
       };
       last := ?node;
-      count += 1;
+      count += 1
     };
 
     for (value in iter) {
-      add(value);
+      add(value)
     };
     if (count == 0) {
-      return [];
+      return []
     };
     var current = first;
-    Prim.Array_tabulate<T>(count, func (_) {
-      switch (current) {
-        case null Runtime.trap("Node must not be null");
-        case (?node) {
-          current := node.next;
-          node.value
+    Prim.Array_tabulate<T>(
+      count,
+      func(_) {
+        switch (current) {
+          case null Runtime.trap("Node must not be null");
+          case (?node) {
+            current := node.next;
+            node.value
+          }
         }
       }
-    });
+    )
   };
 
   /// Like `toArray` but for Arrays with mutable elements.
-  public func toVarArray<T>(xs : Iter<T>) : [var T] {
-    Array.toVarArray<T>(toArray<T>(xs))
+  public func toVarArray<T>(iter : Iter<T>) : [var T] {
+    Array.toVarArray<T>(toArray<T>(iter))
   };
 
   /// Sorted iterator.  Will iterate over *all* elements to sort them, necessarily.
-  public func sort<T>(xs : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
-    let a = toVarArray<T>(xs);
-    VarArray.sortInPlace<T>(a, compare);
-    fromVarArray<T>(a)
+  public func sort<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T> {
+    let array = toVarArray<T>(iter);
+    VarArray.sortInPlace<T>(array, compare);
+    fromVarArray<T>(array)
   };
 
 }

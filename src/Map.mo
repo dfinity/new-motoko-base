@@ -160,7 +160,7 @@ module {
     {
       var root = #leaf({
         data = {
-          kvs = VarArray.generate<?(K, V)>(btreeOrder - 1, func(index) { null });
+          kvs = VarArray.tabulate<?(K, V)>(btreeOrder - 1, func(index) { null });
           var count = 0
         }
       });
@@ -187,7 +187,7 @@ module {
     {
       var root = #leaf({
         data = {
-          kvs = VarArray.generate<?(K, V)>(
+          kvs = VarArray.tabulate<?(K, V)>(
             btreeOrder - 1,
             func(index) {
               if (index == 0) {
@@ -461,7 +461,7 @@ module {
       case (#promote({ kv; leftChild; rightChild })) {
         map.root := #internal({
           data = {
-            kvs = VarArray.generate<?(K, V)>(
+            kvs = VarArray.tabulate<?(K, V)>(
               btreeOrder - 1,
               func(i) {
                 if (i == 0) { ?kv } else { null }
@@ -469,7 +469,7 @@ module {
             );
             var count = 1
           };
-          children = VarArray.generate<?(Node<K, V>)>(
+          children = VarArray.tabulate<?(Node<K, V>)>(
             btreeOrder,
             func(i) {
               if (i == 0) { ?leftChild } else if (i == 1) { ?rightChild } else {
@@ -2150,7 +2150,7 @@ module {
       if (splitIndex > array.size()) { assert false };
 
       let leftSplit = if (insertIndex < splitIndex) {
-        VarArray.generate<?T>(
+        VarArray.tabulate<?T>(
           array.size(),
           func(i) {
             // if below the split index
@@ -2167,7 +2167,7 @@ module {
       }
       // index >= splitIndex
       else {
-        VarArray.generate<?T>(
+        VarArray.tabulate<?T>(
           array.size(),
           func(i) {
             // right biased splitting
@@ -2179,7 +2179,7 @@ module {
       let (rightSplit, middleElement) : ([var ?T], ?T) =
       // if insert > split index, inserted element will be inserted into the right split
       if (insertIndex > splitIndex) {
-        let right = VarArray.generate<?T>(
+        let right = VarArray.tabulate<?T>(
           array.size(),
           func(i) {
             let adjIndex = i + splitIndex + 1; // + 1 accounts for the fact that the split element was part of the original array
@@ -2194,7 +2194,7 @@ module {
       }
       // if inserted element was placed in the left split
       else if (insertIndex < splitIndex) {
-        let right = VarArray.generate<?T>(
+        let right = VarArray.tabulate<?T>(
           array.size(),
           func(i) {
             let adjIndex = i + splitIndex;
@@ -2205,7 +2205,7 @@ module {
       }
       // insertIndex == splitIndex
       else {
-        let right = VarArray.generate<?T>(
+        let right = VarArray.tabulate<?T>(
           array.size(),
           func(i) {
             let adjIndex = i + splitIndex;
@@ -2243,7 +2243,7 @@ module {
     public func splitArrayAndInsertTwo<T>(children : [var ?T], rebalancedChildIndex : Nat, leftChildInsert : T, rightChildInsert : T) : ([var ?T], [var ?T]) {
       let splitIndex = children.size() / 2;
 
-      let leftRebalancedChildren = VarArray.generate<?T>(
+      let leftRebalancedChildren = VarArray.tabulate<?T>(
         children.size(),
         func(i) {
           // only insert elements up to the split index and fill the rest of the children with nulls
@@ -2262,7 +2262,7 @@ module {
       let rightRebalanceChildren : [var ?T] =
       // Case 1: if both left and right rebalanced halves were inserted into the left child can just go from the split index onwards
       if (rebalancedChildIndex + 1 <= splitIndex) {
-        VarArray.generate<?T>(
+        VarArray.tabulate<?T>(
           children.size(),
           func(i) {
             let adjIndex = i + splitIndex;
@@ -2273,7 +2273,7 @@ module {
       // Case 2: if both left and right rebalanced halves will be inserted into the right child
       else if (rebalancedChildIndex > splitIndex) {
         var rebalanceOffset = 0;
-        VarArray.generate<?T>(
+        VarArray.tabulate<?T>(
           children.size(),
           func(i) {
             let adjIndex = i + splitIndex + 1;
@@ -2289,7 +2289,7 @@ module {
       // Case 3: if left rebalanced half was in left child, and right rebalanced half will be in right child
       // rebalancedChildIndex == splitIndex
       else {
-        VarArray.generate<?T>(
+        VarArray.tabulate<?T>(
           children.size(),
           func(i) {
             // first element is the right rebalanced half
@@ -2431,7 +2431,7 @@ module {
       deleteIndex : Nat,
       deletionSide : DeletionSide
     ) : ([var ?T], T) {
-      let mergedArray = VarArray.init<?T>(leftChild.size(), null);
+      let mergedArray = VarArray.repeat<?T>(null, leftChild.size());
       var i = 0;
       switch (deletionSide) {
         case (#left) {
@@ -2789,7 +2789,7 @@ module {
       assert leftData.count <= minKeysFromOrder(leftData.kvs.size() + 1);
       assert rightData.count <= minKeysFromOrder(rightData.kvs.size() + 1);
 
-      let mergedKVs = VarArray.init<?(K, V)>(leftData.kvs.size(), null);
+      let mergedKVs = VarArray.repeat<?(K, V)>(null, leftData.kvs.size());
       var i = 0;
       while (i < leftData.count) {
         mergedKVs[i] := leftData.kvs[i];
@@ -2813,7 +2813,7 @@ module {
     };
 
     func mergeChildren<K, V>(leftChildren : [var ?Node<K, V>], rightChildren : [var ?Node<K, V>]) : [var ?Node<K, V>] {
-      let mergedChildren = VarArray.init<?Node<K, V>>(leftChildren.size(), null);
+      let mergedChildren = VarArray.repeat<?Node<K, V>>(null, leftChildren.size());
       var i = 0;
 
       while (Option.isSome(leftChildren[i])) {

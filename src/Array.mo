@@ -21,25 +21,27 @@ import { todo } "Debug";
 
 module {
 
-  /// Create an empty array (equivalent to `[]`).
+  /// Creates an empty array (equivalent to `[]`).
   public func empty<T>() : [T] = [];
 
-  /// Create an array with `size` copies of the initial value.
+  /// Creates an array containing `item` repeated `size` times.
   ///
   /// ```motoko include=import
-  /// let array = Array.init<Nat>(4, 2);
+  /// let array = Array.repeat<Nat>("Echo", 3);
+  /// assert array == [var "Echo", "Echo", "Echo"];
   /// ```
   ///
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func init<T>(size : Nat, initValue : T) : [T] = Prim.Array_tabulate<T>(size, func _ = initValue);
+  public func repeat<T>(item : T, size : Nat) : [T] = Prim.Array_tabulate<T>(size, func _ = item);
 
-  /// Create an immutable array of size `size`. Each element at index i
+  /// Creates an immutable array of size `size`. Each element at index i
   /// is created by applying `generator` to i.
   ///
   /// ```motoko include=import
   /// let array : [Nat] = Array.tabulate<Nat>(4, func i = i * 2);
+  /// assert array == [0, 2, 4, 6];
   /// ```
   ///
   /// Runtime: O(size)
@@ -213,7 +215,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// let array = [0, 1, 2, 3];
-  /// Array.forEach<Nat>(array, func (x) {
+  /// Array.forEach<Nat>(array, func(x) {
   ///   Debug.print(debug_show x)
   /// })
   /// ```
@@ -235,8 +237,9 @@ module {
   ///
   /// ```motoko include=import
   ///
-  /// let array = [0, 1, 2, 3];
-  /// Array.map<Nat, Nat>(array, func x = x * 3)
+  /// let array1 = [0, 1, 2, 3];
+  /// let array2 = Array.map<Nat, Nat>(array1, func x = x * 3)
+  /// assert array2 == [0, 2, 4, 6];
   /// ```
   ///
   /// Runtime: O(size)
@@ -244,7 +247,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func map<T, Y>(array : [T], f : T -> Y) : [Y] = Prim.Array_tabulate<Y>(array.size(), func i = f(array[i]));
+  public func map<T, R>(array : [T], f : T -> R) : [R] = Prim.Array_tabulate<R>(array.size(), func i = f(array[i]));
 
   /// Creates a new array by applying `predicate` to every element
   /// in `array`, retaining the elements for which `predicate` returns true.
@@ -300,9 +303,9 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func filterMap<T, Y>(array : [T], f : T -> ?Y) : [Y] {
+  public func filterMap<T, R>(array : [T], f : T -> ?R) : [R] {
     var count = 0;
-    let options = Prim.Array_tabulate<?Y>(
+    let options = Prim.Array_tabulate<?R>(
       array.size(),
       func i {
         let result = f(array[i]);
@@ -319,7 +322,7 @@ module {
     );
 
     var nextSome = 0;
-    Prim.Array_tabulate<Y>(
+    Prim.Array_tabulate<R>(
       count,
       func _ {
         while (Option.isNull(options[nextSome])) {
@@ -329,7 +332,7 @@ module {
         switch (options[nextSome - 1]) {
           case (?element) element;
           case null {
-            Prim.trap "Malformed array in mapFilter"
+            Prim.trap "Malformed array in filterMap"
           }
         }
       }
@@ -357,11 +360,11 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func mapResult<T, Y, E>(array : [T], f : T -> Result.Result<Y, E>) : Result.Result<[Y], E> {
+  public func mapResult<T, R, E>(array : [T], f : T -> Result.Result<R, E>) : Result.Result<[R], E> {
     let size = array.size();
 
-    var error : ?Result.Result<[Y], E> = null;
-    let results = Prim.Array_tabulate<?Y>(
+    var error : ?Result.Result<[R], E> = null;
+    let results = Prim.Array_tabulate<?R>(
       size,
       func i {
         switch (f(array[i])) {
@@ -386,7 +389,7 @@ module {
       case null {
         // unpack the option
         #ok(
-          map<?Y, Y>(
+          map<?R, R>(
             results,
             func element {
               switch element {
@@ -437,12 +440,12 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `k` runs in O(1) time and space.
-  public func flatMap<T, R>(array : [T], k : T -> [R]) : [R] {
+  public func flatMap<T, R>(array : [T], k : T -> Iter.Iter<R>) : [R] {
     var flatSize = 0;
     let arrays = Prim.Array_tabulate<[R]>(
       array.size(),
       func i {
-        let subArray = k(array[i]);
+        let subArray = fromIter<R>(k(array[i]));
         flatSize += subArray.size();
         subArray
       }
@@ -522,26 +525,65 @@ module {
     acc
   };
 
-  /// Flattens the array of arrays into a single array. Retains the original
+  /// Combines an iterator of arrays into a single array. Retains the original
   /// ordering of the elements.
+  ///
+  /// Consider using `Array.flatten()` where possible for better performance.
   ///
   /// ```motoko include=import
   ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flatten<Nat>(arrays)
+  /// Array.join<Nat>(Array.fromIter(arrays))) // => [0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
-  public func flatten<T>(arrays : Iter.Iter<[T]>) : [T] {
-    todo() // New implementation due to using `Iter<[T]>` in place of `[[T]]`
+  public func join<T>(arrays : Iter.Iter<[T]>) : [T] {
+    flatten(fromIter(arrays))
+  };
+
+  /// Combines an array of arrays into a single array. Retains the original
+  /// ordering of the elements.
+  ///
+  /// This has better performance compared to `Array.join()`.
+  ///
+  /// ```motoko include=import
+  ///
+  /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
+  /// Array.flatten<Nat>(arrays)) // => [0, 1, 2, 2, 3, 4]
+  /// ```
+  ///
+  /// Runtime: O(number of elements in array)
+  ///
+  /// Space: O(number of elements in array)
+  public func flatten<T>(arrays : [[T]]) : [T] {
+    var flatSize = 0;
+    for (subArray in arrays.vals()) {
+      flatSize += subArray.size()
+    };
+
+    var outer = 0;
+    var inner = 0;
+    Prim.Array_tabulate<T>(
+      flatSize,
+      func _ {
+        while (inner == arrays[outer].size()) {
+          inner := 0;
+          outer += 1
+        };
+        let element = arrays[outer][inner];
+        inner += 1;
+        element
+      }
+    )
   };
 
   /// Create an array containing a single value.
   ///
   /// ```motoko include=import
-  /// Array.singleton(2)
+  /// var array = Array.singleton(2);
+  /// assert array == [2];
   /// ```
   ///
   /// Runtime: O(1)
@@ -549,23 +591,25 @@ module {
   /// Space: O(1)
   public func singleton<T>(element : T) : [T] = [element];
 
+  /// Returns the size of an array. Equivalent to `array.size()`.
   public func size<T>(array : [T]) : Nat = array.size();
 
+  /// Returns whether an array is empty, i.e. contains zero elements.
   public func isEmpty<T>(array : [T]) : Bool = array.size() == 0;
 
+  /// Converts an iterator to an array.
   public func fromIter<T>(iter : Iter.Iter<T>) : [T] {
-    todo()
+    todo() // Pending `List` data structure
   };
 
-  /// Returns an Iterator (`Iter`) over the indices of `array`.
-  /// Iterator provides a single method `next()`, which returns
+  /// Returns an iterator (`Iter`) over the indices of `array`.
+  /// An iterator provides a single method `next()`, which returns
   /// indices in order, or `null` when out of index to iterate over.
   ///
-  /// NOTE: You can also use `array.keys()` instead of this function. See example
+  /// Note: You can also use `array.keys()` instead of this function. See example
   /// below.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 11, 12];
   ///
   /// var sum = 0;
@@ -583,11 +627,10 @@ module {
   /// Iterator provides a single method `next()`, which returns
   /// elements in order, or `null` when out of elements to iterate over.
   ///
-  /// NOTE: You can also use `array.values()` instead of this function. See example
+  /// Note: You can also use `array.values()` instead of this function. See example
   /// below.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 11, 12];
   ///
   /// var sum = 0;
@@ -602,28 +645,91 @@ module {
   /// Space: O(1)
   public func values<T>(array : [T]) : Iter.Iter<T> = array.vals();
 
+  /// Iterator provides a single method `next()`, which returns
+  /// pairs of (index, element) in order, or `null` when out of elements to iterate over.
+  ///
+  /// ```motoko include=import
+  /// let array = [10, 11, 12];
+  ///
+  /// var sum = 0;
+  /// for ((index, element) in Array.enumerate(array)) {
+  ///   sum += element;
+  /// };
+  /// sum // => 33
+  /// ```
+  ///
+  /// Runtime: O(1)
+  ///
+  /// Space: O(1)
+  public func enumerate<T>(array : [var T]) : Iter.Iter<(Nat, T)> = object {
+    let size = array.size();
+    var index = 0;
+    public func next() : ?(Nat, T) {
+      if (index > size) {
+        return null
+      };
+      let i = index;
+      index += 1;
+      ?(i, array[i])
+    }
+  };
+
+  /// Returns true if all elements in `array` satisfy the predicate function.
+  ///
+  /// ```motoko include=import
+  /// let array = [1, 2, 3, 4];
+  /// Array.all<Nat>(array, func x = x > 0) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func all<T>(array : [T], predicate : T -> Bool) : Bool {
-    todo()
+    for (element in array.vals()) {
+      if (not predicate(element)) {
+        return false
+      }
+    };
+    true
   };
 
+  /// Returns true if any element in `array` satisfies the predicate function.
+  ///
+  /// ```motoko include=import
+  /// let array = [1, 2, 3, 4];
+  /// Array.any<Nat>(array, func x = x > 3) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func any<T>(array : [T], predicate : T -> Bool) : Bool {
-    todo()
+    for (element in array.vals()) {
+      if (predicate(element)) {
+        return true
+      }
+    };
+    false
   };
 
-  /// Returns a new subarray from the given array provided the start index and length of elements in the subarray
+  /// Returns a new sub-array from the given array provided the start index and length of elements in the sub-array.
   ///
   /// Limitations: Traps if the start index + length is greater than the size of the array
   ///
   /// ```motoko include=import
   ///
-  /// let array = [1,2,3,4,5];
+  /// let array = [1, 2, 3, 4, 5];
   /// let subArray = Array.subArray<Nat>(array, 2, 3);
   /// ```
   /// Runtime: O(length)
   ///
   /// Space: O(length)
   public func subArray<T>(array : [T], start : Nat, length : Nat) : [T] {
-    if (start + length > array.size()) { Prim.trap("Array.subArray") };
+    if (start + length > array.size()) { Prim.trap("Array.subArray()") };
     Prim.Array_tabulate<T>(length, func i = array[start + i])
   };
 
@@ -658,13 +764,13 @@ module {
   ///
   /// Space: O(1)
   public func nextIndexOf<T>(element : T, array : [T], fromInclusive : Nat, equal : (T, T) -> Bool) : ?Nat {
-    var i = fromInclusive;
-    let n = array.size();
-    while (i < n) {
-      if (equal(array[i], element)) {
-        return ?i
+    var index = fromInclusive;
+    let size = array.size();
+    while (index < size) {
+      if (equal(array[index], element)) {
+        return ?index
       } else {
-        i += 1
+        index += 1
       }
     };
     null
@@ -714,70 +820,117 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4, 5];
-  /// let s = Array.slice<Nat>(array, 3, array.size());
+  /// let s = Array.range<Nat>(array, 3, array.size());
   /// assert s.next() == ?4;
   /// assert s.next() == ?5;
   /// assert s.next() == null;
   ///
-  /// let s = Array.slice<Nat>(array, 0, 0);
+  /// let s = Array.range<Nat>(array, 0, 0);
   /// assert s.next() == null;
   /// ```
   ///
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func slice<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
+  public func range<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
     let size = array.size();
-    
-    func toIndex(i : Int) : Nat {
-      let n = if (i < 0) {
-        if (-i > size) { 0 } 
-        else { size - Prim.abs(i) : Nat }
-      } else {
-        let p = (Prim.abs(i) : Nat);
-        if (p > size) { size } else { p }
-      };
-      n
+    // Convert negative indices to positive and handle bounds
+    let startInt = if (fromInclusive < 0) {
+      let s = size + fromInclusive;
+      if (s < 0) { 0 } else { s }
+    } else {
+      if (fromInclusive > size) { size } else { fromInclusive }
     };
-
-    let start = toIndex(fromInclusive);
-    let end_ = toIndex(toExclusive);
-    let end = if (end_ < start) { start } else { end_ };
-
+    let endInt = if (toExclusive < 0) {
+      let e = size + toExclusive;
+      if (e < 0) { 0 } else { e }
+    } else {
+      if (toExclusive > size) { size } else { toExclusive }
+    };
+    // Convert to Nat (values are non-negative due to bounds checking above)
+    let start = Prim.abs(startInt);
+    let end = Prim.abs(endInt);
     object {
-      var index = start;
+      var pos = start;
       public func next() : ?T {
-        if (index >= end) {
+        if (pos >= end) {
           null
         } else {
-          let value = array[index];
-          index += 1;
-          ?value
+          let elem = array[pos];
+          pos += 1;
+          ?elem
         }
       }
     }
   };
 
-  /// Returns a new subarray of given length from the beginning or end of the given array
-  ///
-  /// Returns the entire array if the length is greater than the size of the array
+  /// Converts the array to its textual representation using `f` to convert each element to `Text`.
   ///
   /// ```motoko include=import
-  /// let array = [1, 2, 3, 4, 5];
-  /// assert Array.take(array, 2) == [1, 2];
-  /// assert Array.take(array, -2) == [4, 5];
-  /// assert Array.take(array, 10) == [1, 2, 3, 4, 5];
-  /// assert Array.take(array, -99) == [1, 2, 3, 4, 5];
+  /// import Nat "mo:base/Nat";
+  /// let array = [1, 2, 3];
+  /// Array.toText<Nat>(array, Nat.toText) // => "[1, 2, 3]"
   /// ```
-  /// Runtime: O(length)
   ///
-  /// Space: O(length)
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func toText<T>(array : [T], f : T -> Text) : Text {
-    todo()
+    let size = array.size();
+    if (size == 0) { return "[]" };
+    var text = "[";
+    var i = 0;
+    while (i < size) {
+      if (i != 0) {
+        text #= ", "
+      };
+      text #= f(array[i]);
+      i += 1
+    };
+    text #= "]";
+    text
   };
 
+  /// Compares two arrays using the provided comparison function for elements.
+  /// Returns #less, #equal, or #greater if `array1` is less than, equal to,
+  /// or greater than `array2` respectively.
+  ///
+  /// If arrays have different sizes but all elements up to the shorter length are equal,
+  /// the shorter array is considered #less than the longer array.
+  ///
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  /// let array1 = [1, 2, 3];
+  /// let array2 = [1, 2, 4];
+  /// Array.compare<Nat>(array1, array2, Nat.compare) // => #less
+  ///
+  /// let array3 = [1, 2];
+  /// let array4 = [1, 2, 3];
+  /// Array.compare<Nat>(array3, array4, Nat.compare) // => #less (shorter array)
+  /// ```
+  ///
+  /// Runtime: O(min(size1, size2))
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `compare` runs in O(1) time and space.
   public func compare<T>(array1 : [T], array2 : [T], compare : (T, T) -> Order.Order) : Order.Order {
-    todo()
+    let size1 = array1.size();
+    let size2 = array2.size();
+    var i = 0;
+    let minSize = if (size1 < size2) { size1 } else { size2 };
+    while (i < minSize) {
+      switch (compare(array1[i], array2[i])) {
+        case (#less) { return #less };
+        case (#greater) { return #greater };
+        case (#equal) { i += 1 }
+      }
+    };
+    if (size1 < size2) { #less } else if (size1 > size2) { #greater } else {
+      #equal
+    }
   };
 
 }

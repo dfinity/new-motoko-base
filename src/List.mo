@@ -204,7 +204,11 @@ module {
     todo()
   };
 
-  public func flatten<T>(lists : Iter.Iter<List<T>>) : List<T> {
+  public func join<T>(lists : Iter.Iter<List<T>>) : List<T> {
+    todo()
+  };
+
+  public func flatten<T>(lists : List<List<T>>) : List<T> {
     todo()
   };
 

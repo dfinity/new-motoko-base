@@ -633,16 +633,97 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Int8, y : Int8) : Int8 { x **% y };
 
+  /// Returns an iterator over `Int8` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func range(fromInclusive : Int8, toExclusive : Int8) : Iter.Iter<Int8> {
-    todo()
+    if (fromInclusive >= toExclusive) {
+      Iter.empty()
+    } else {
+      object {
+        var n = fromInclusive;
+        public func next() : ?Int8 {
+          if (n == toExclusive) {
+            null
+          } else {
+            let result = n;
+            n += 1;
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over `Int8` values from the first to second argument, inclusive.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.rangeInclusive(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func rangeInclusive(from : Int8, to : Int8) : Iter.Iter<Int8> {
-    todo()
+    if (from > to) {
+      Iter.empty()
+    } else {
+      object {
+        var n = from;
+        var done = false;
+        public func next() : ?Int8 {
+          if (done) {
+            null
+          } else {
+            let result = n;
+            if (n == to) {
+              done := true
+            } else {
+              n += 1
+            };
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over all Int8 values, from minValue to maxValue.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int8.allValues();
+  /// assert(?-128 == iter.next());
+  /// assert(?-127 == iter.next());
+  /// assert(?-126 == iter.next());
+  /// // ...
+  /// ```
   public func allValues() : Iter.Iter<Int8> {
-    todo()
+    rangeInclusive(minValue, maxValue)
   };
 
 }

@@ -117,7 +117,11 @@ module {
     todo()
   };
 
-  public func flatten<T>(set : Iter.Iter<Set<T>>) : Set<T> {
+  public func join<T>(set : Iter.Iter<Set<T>>) : Set<T> {
+    todo()
+  };
+
+  public func flatten<T>(set : Set<Set<T>>) : Set<T> {
     todo()
   };
 

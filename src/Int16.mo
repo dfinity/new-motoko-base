@@ -642,16 +642,97 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Int16, y : Int16) : Int16 { x **% y };
 
+  /// Returns an iterator over `Int16` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int16.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int16.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func range(fromInclusive : Int16, toExclusive : Int16) : Iter.Iter<Int16> {
-    todo()
+    if (fromInclusive >= toExclusive) {
+      Iter.empty()
+    } else {
+      object {
+        var n = fromInclusive;
+        public func next() : ?Int16 {
+          if (n == toExclusive) {
+            null
+          } else {
+            let result = n;
+            n += 1;
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over `Int16` values from the first to second argument, inclusive.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int16.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int16.rangeInclusive(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func rangeInclusive(from : Int16, to : Int16) : Iter.Iter<Int16> {
-    todo()
+    if (from > to) {
+      Iter.empty()
+    } else {
+      object {
+        var n = from;
+        var done = false;
+        public func next() : ?Int16 {
+          if (done) {
+            null
+          } else {
+            let result = n;
+            if (n == to) {
+              done := true
+            } else {
+              n += 1
+            };
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over all Int16 values, from minValue to maxValue.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int16.allValues();
+  /// assert(?-32_768 == iter.next());
+  /// assert(?-32_767 == iter.next());
+  /// assert(?-32_766 == iter.next());
+  /// // ...
+  /// ```
   public func allValues() : Iter.Iter<Int16> {
-    todo()
+    rangeInclusive(minValue, maxValue)
   };
 
 }

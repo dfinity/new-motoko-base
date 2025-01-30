@@ -113,9 +113,13 @@ module {
     todo()
   };
 
-  // public func flatten<T>(stack : Iter.Iter<Stack<T>>) : Stack<T> {
-  //   todo()
-  // };
+  public func join<T>(stack : IterType.Iter<Stack<T>>) : Stack<T> {
+    todo()
+  };
+
+  public func flatten<T>(stack : Stack<Stack<T>>) : Stack<T> {
+    todo()
+  };
 
   public func take<T>(stack : Stack<T>, n : Nat) : Stack<T> {
     todo()
@@ -157,7 +161,7 @@ module {
     todo()
   };
 
-  public func generate<T>(n : Nat, f : Nat -> T) : Stack<T> {
+  public func tabulate<T>(n : Nat, f : Nat -> T) : Stack<T> {
     todo()
   };
 

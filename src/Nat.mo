@@ -334,26 +334,83 @@ module {
   /// rule.
   public func bitshiftRight(x : Nat, y : Nat32) : Nat { Prim.shiftRight(x, y) };
 
-  public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat> {
-    var number = fromInclusive;
-    object {
-      public func next(): ?Nat {
-        if (number >= toExclusive) {
-          return null;
-        };
-        let current = number;
-        number += 1;
-        ?current
-      }
+  /// Returns an iterator over `Nat` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
+  public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat> = object {
+    var n = fromInclusive;
+    public func next() : ?Nat {
+      if (n >= toExclusive) {
+        return null
+      };
+      let current = n;
+      n += 1;
+      ?current
     }
   };
 
-  public func rangeInclusive(from : Nat, to : Nat) : Iter.Iter<Nat> {
-    todo()
+  /// Returns an iterator over the integers from the first to second argument, inclusive.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat.rangeInclusive(3, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
+  public func rangeInclusive(from : Nat, to : Nat) : Iter.Iter<Nat> = object {
+    var n = from;
+    public func next() : ?Nat {
+      if (n > to) {
+        return null
+      };
+      let current = n;
+      n += 1;
+      ?current
+    }
   };
 
-  public func allValues() : Iter.Iter<Nat> {
-    todo()
+  /// Returns an infinite iterator over all possible `Nat` values.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Nat.allValues();
+  /// assert(?0 == iter.next());
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// // ...
+  /// ```
+  public func allValues() : Iter.Iter<Nat> = object {
+    var n = 0;
+    public func next() : ?Nat {
+      let current = n;
+      n += 1;
+      ?current
+    }
   };
 
 }

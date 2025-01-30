@@ -639,16 +639,97 @@ module {
   /// as a function value at the moment.
   public func powWrap(x : Int64, y : Int64) : Int64 { x **% y };
 
+  /// Returns an iterator over `Int64` values from the first to second argument with an exclusive upper bound.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int64.range(1, 4);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int64.range(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func range(fromInclusive : Int64, toExclusive : Int64) : Iter.Iter<Int64> {
-    todo()
+    if (fromInclusive >= toExclusive) {
+      Iter.empty()
+    } else {
+      object {
+        var n = fromInclusive;
+        public func next() : ?Int64 {
+          if (n == toExclusive) {
+            null
+          } else {
+            let result = n;
+            n += 1;
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over `Int64` values from the first to second argument, inclusive.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int64.rangeInclusive(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// If the first argument is greater than the second argument, the function returns an empty iterator.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int64.rangeInclusive(4, 1);
+  /// assert(null == iter.next()); // empty iterator
+  /// ```
   public func rangeInclusive(from : Int64, to : Int64) : Iter.Iter<Int64> {
-    todo()
+    if (from > to) {
+      Iter.empty()
+    } else {
+      object {
+        var n = from;
+        var done = false;
+        public func next() : ?Int64 {
+          if (done) {
+            null
+          } else {
+            let result = n;
+            if (n == to) {
+              done := true
+            } else {
+              n += 1
+            };
+            ?result
+          }
+        }
+      }
+    }
   };
 
+  /// Returns an iterator over all Int64 values, from minValue to maxValue.
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Int64.allValues();
+  /// assert(?-9_223_372_036_854_775_808 == iter.next());
+  /// assert(?-9_223_372_036_854_775_807 == iter.next());
+  /// assert(?-9_223_372_036_854_775_806 == iter.next());
+  /// // ...
+  /// ```
   public func allValues() : Iter.Iter<Int64> {
-    todo()
+    rangeInclusive(minValue, maxValue)
   };
 
 }

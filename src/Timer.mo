@@ -21,17 +21,12 @@
 /// For further usage information for timers on the IC, please consult
 /// [the documentation](https://internetcomputer.org/docs/current/developer-docs/backend/periodic-tasks#timers-library-limitations).
 import { setTimer = setTimerNano; cancelTimer = cancel } = "mo:⛔";
-import { fromIntWrap } = "Nat64";
+import Nat64 = "Nat64";
+import Time "Time";
 
 module {
 
-  public type Duration = { #seconds : Nat; #nanoseconds : Nat };
   public type TimerId = Nat;
-
-  func toNanos(d : Duration) : Nat64 =
-    fromIntWrap (switch d {
-      case (#seconds s) s * 1000_000_000;
-      case (#nanoseconds ns) ns });
 
   /// Installs a one-off timer that upon expiration after given duration `d`
   /// executes the future `job()`.
@@ -44,8 +39,8 @@ module {
   /// };
   /// appt.reminder = setTimer(#nanoseconds (Int.abs(appt.when - now - thirtyMinutes)), alarmUser);
   /// ```
-  public func setTimer<system>(d : Duration, job : () -> async ()) : TimerId {
-    setTimerNano<system>(toNanos d, false, job)
+  public func setTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId {
+    setTimerNano<system>(Nat64.fromNat(Time.toNanoseconds duration), false, job)
   };
 
   /// Installs a recurring timer that upon expiration after given duration `d`
@@ -59,8 +54,8 @@ module {
   /// };
   /// let daily = recurringTimer(#seconds (24 * 60 * 60), checkAndWaterPlants);
   /// ```
-  public func recurringTimer<system>(d : Duration, job : () -> async ()) : TimerId {
-    setTimerNano<system>(toNanos d, true, job)
+  public func recurringTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId {
+    setTimerNano<system>(Nat64.fromNat(Time.toNanoseconds duration), true, job)
   };
 
   /// Cancels a still active timer with `(id : TimerId)`. For expired timers

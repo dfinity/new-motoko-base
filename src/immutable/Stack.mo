@@ -66,7 +66,11 @@ module {
     todo()
   };
 
-  public func flatten<T>(stack : Iter.Iter<Stack<T>>) : Stack<T> {
+  public func join<T>(stack : Iter.Iter<Stack<T>>) : Stack<T> {
+    todo()
+  };
+
+  public func flatten<T>(stack : Stack<Stack<T>>) : Stack<T> {
     todo()
   };
 

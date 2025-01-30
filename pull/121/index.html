@@ -101,7 +101,7 @@ Floating point numbers have limited precision and operations may inherently resu
   let y = 0.3;
 
   let epsilon = 1e-6; // This depends on the application case (needs a numerical error analysis).
-  Float.equalWithin(x, y, epsilon) // =&gt; true
+  Float.equal(x, y, epsilon) // =&gt; true
   </code></pre>
 
 <ul><li>For absolute precision, it is recommened to encode the fraction number as a pair of a Nat for the base

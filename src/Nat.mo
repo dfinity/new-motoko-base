@@ -9,7 +9,6 @@
 /// ```
 
 import Int "Int";
-import Order "Order";
 import Prim "mo:⛔";
 import Char "Char";
 import Iter "Iter";
@@ -32,7 +31,7 @@ module {
   /// Creates a natural number from its textual representation. Returns `null`
   /// if the input is not a valid natural number.
   ///
-  /// Note: The textual representation _must not_ contain underscores.
+  /// The textual representation _must not_ contain underscores.
   ///
   /// Example:
   /// ```motoko include=import
@@ -52,6 +51,29 @@ module {
       }
     };
     ?n
+  };
+
+  /// Converts an integer to a natural number. Returns `null` if the integer is negative.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Debug "mo:base/Debug";
+  /// Debug.print(debug_show Nat.fromInt(-1)); // => null
+  /// Debug.print(debug_show Nat.fromInt(1234)); // => ?1234
+  /// ```
+  public func fromInt(int : Int) : ?Nat {
+    if (int < 0) { null } else { ?Int.abs(int) }
+  };
+
+  /// Converts a natural number to an integer.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Debug "mo:base/Debug";
+  /// Debug.print(debug_show Nat.toInt(1234)); // => 1234
+  /// ```
+  public func toInt(nat : Nat) : Int {
+    nat : Int
   };
 
   /// Returns the minimum of `x` and `y`.

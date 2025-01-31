@@ -9,6 +9,7 @@
 /// ```
 
 import Prim "mo:⛔";
+import Char "Char";
 import Hash "Hash";
 import Runtime "Runtime";
 import Iter "Iter";
@@ -68,6 +69,62 @@ module {
     };
 
     return if isNegative { "-" # text } else { text }
+  };
+
+  /// Creates a integer from its textual representation. Returns `null`
+  /// if the input is not a valid integer.
+  ///
+  /// The textual representation _must not_ contain underscores but may
+  /// begin with a '+' or '-' character.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Nat.fromText "-1234" // => ?-1234
+  /// ```
+  public func fromText(text : Text) : ?Int {
+    if (text == "") {
+      return null
+    };
+    var n = 0;
+    var isFirst = true;
+    var isNegative = false;
+    for (c in text.chars()) {
+      if (isFirst and c == '+') {
+        // Skip character
+      } else if (isFirst and c == '-') {
+        isNegative := true
+      } else if (Char.isDigit(c)) {
+        let charAsNat = Prim.nat32ToNat(Prim.charToNat32(c) -% Prim.charToNat32('0'));
+        n := n * 10 + charAsNat
+      } else {
+        return null
+      };
+      isFirst := false
+    };
+    ?(if (isNegative) { -n } else { n })
+  };
+
+  /// Converts an integer to a natural number. Returns `null` if the integer is negative.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Debug "mo:base/Debug";
+  /// Debug.print(debug_show Int.toNat(-1)); // => null
+  /// Debug.print(debug_show Int.toNat(1234)); // => ?1234
+  /// ```
+  public func toNat(int : Int) : ?Nat {
+    if (int < 0) { null } else { ?abs(int) }
+  };
+
+  /// Converts a natural number to an integer.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Debug "mo:base/Debug";
+  /// Debug.print(debug_show Int.fromNat(1234)); // => 1234
+  /// ```
+  public func fromNat(nat : Nat) : Int {
+    nat : Int
   };
 
   /// Returns the minimum of `x` and `y`.

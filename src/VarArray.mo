@@ -807,23 +807,6 @@ module {
     false
   };
 
-  /// Returns a new sub-array from the given array provided the start index and length of elements in the sub-array.
-  ///
-  /// Limitations: Traps if the start index + length is greater than the size of the array
-  ///
-  /// ```motoko include=import
-  ///
-  /// let array = [1, 2, 3, 4, 5];
-  /// let subArray = VarArray.subArray<Nat>(array, 2, 3);
-  /// ```
-  /// Runtime: O(length)
-  ///
-  /// Space: O(length)
-  public func subArray<T>(array : [var T], start : Nat, length : Nat) : [var T] {
-    if (start + length > array.size()) { Prim.trap("Array.subArray()") };
-    tabulate<T>(length, func i = array[start + i])
-  };
-
   /// Returns the index of the first `element` in the `array`.
   ///
   /// ```motoko include=import
@@ -907,17 +890,26 @@ module {
     null
   };
 
-  /// Returns an iterator over a slice of the given array.
+  /// Returns an iterator over a slice of `array` starting at `fromInclusive` up to (but not including) `toExclusive`.
+  ///
+  /// Negative indices are relative to the end of the array. For example, `-1` corresponds to the last element in the array.
+  ///
+  /// If the indices are out of bounds, they are clamped to the array bounds.
+  /// If the first index is greater than the second, the function returns an empty iterator.
   ///
   /// ```motoko include=import
-  /// let array = [var 1, 2, 3, 4, 5];
-  /// let s = VarArray.range<Nat>(array, 3, array.size());
-  /// assert s.next() == ?4;
-  /// assert s.next() == ?5;
-  /// assert s.next() == null;
+  /// let array = [1, 2, 3, 4, 5];
+  /// let iter1 = VarArray.range<Nat>(array, 3, array.size());
+  /// assert iter1.next() == ?4;
+  /// assert iter1.next() == ?5;
+  /// assert iter1.next() == null;
   ///
-  /// let s = Array.range<Nat>(array, 0, 0);
-  /// assert s.next() == null;
+  /// let iter2 = VarArray.range<Nat>(array, 3, -1);
+  /// assert iter2.next() == ?4;
+  /// assert iter2.next() == null;
+  ///
+  /// let iter3 = VarArray.range<Nat>(array, 0, 0);
+  /// assert iter3.next() == null;
   /// ```
   ///
   /// Runtime: O(1)
@@ -953,6 +945,42 @@ module {
         }
       }
     }
+  };
+
+  /// Returns a new array containing elements from `array` starting at index `fromInclusive` up to (but not including) index `toExclusive`.
+  /// If the indices are out of bounds, they are clamped to the array bounds.
+  ///
+  /// ```motoko include=import
+  /// let array = [1, 2, 3, 4, 5];
+  ///
+  /// let slice1 = VarArray.sliceToArray<Nat>(array, 1, 4);
+  /// assert slice1 == [2, 3, 4];
+  ///
+  /// let slice2 = VarArray.sliceToArray<Nat>(array, 1, -1);
+  /// assert slice2 == [2, 3, 4];
+  /// ```
+  ///
+  /// Runtime: O(toExclusive - fromInclusive)
+  ///
+  /// Space: O(toExclusive - fromInclusive)
+  public func sliceToArray<T>(array : [T], fromInclusive : Int, toExclusive : Int) : [T] {
+    let size = array.size();
+    // Convert negative indices to positive and handle bounds
+    let startInt = if (fromInclusive < 0) {
+      let s = size + fromInclusive;
+      if (s < 0) { 0 } else { s }
+    } else {
+      if (fromInclusive > size) { size } else { fromInclusive }
+    };
+    let endInt = if (toExclusive < 0) {
+      let e = size + toExclusive;
+      if (e < 0) { 0 } else { e }
+    } else {
+      if (toExclusive > size) { size } else { toExclusive }
+    };
+    // Convert to Nat (always non-negative due to bounds checking above)
+    let start = Prim.abs(startInt);
+    Prim.Array_tabulate<T>(endInt - start, func i = array[start + i])
   };
 
   /// Converts the mutable array to its textual representation using `f` to convert each element to `Text`.

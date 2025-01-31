@@ -980,7 +980,8 @@ module {
     };
     // Convert to Nat (always non-negative due to bounds checking above)
     let start = Prim.abs(startInt);
-    Prim.Array_tabulate<T>(endInt - start, func i = array[start + i])
+    let end = Prim.abs(endInt);
+    Prim.Array_tabulate<T>(end - start, func i = array[start + i])
   };
 
   /// Converts the mutable array to its textual representation using `f` to convert each element to `Text`.

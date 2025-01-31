@@ -207,6 +207,8 @@
       "public func compare(x : Int, y : Int) : { #less; #equal; #greater }",
       "public func div(x : Int, y : Int) : Int",
       "public func equal(x : Int, y : Int) : Bool",
+      "public func fromNat(nat : Nat) : Int",
+      "public func fromText(text : Text) : ?Int",
       "public func greater(x : Int, y : Int) : Bool",
       "public func greaterOrEqual(x : Int, y : Int) : Bool",
       "public func hash(i : Int) : Hash.Hash",
@@ -223,6 +225,7 @@
       "public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int>",
       "public func rem(x : Int, y : Int) : Int",
       "public func sub(x : Int, y : Int) : Int",
+      "public func toNat(int : Int) : ?Nat",
       "public func toText(x : Int) : Text"
     ]
   },
@@ -591,6 +594,7 @@
       "public func compare(x : Nat, y : Nat) : { #less; #equal; #greater }",
       "public func div(x : Nat, y : Nat) : Nat",
       "public func equal(x : Nat, y : Nat) : Bool",
+      "public func fromInt(int : Int) : ?Nat",
       "public func fromText(text : Text) : ?Nat",
       "public func greater(x : Nat, y : Nat) : Bool",
       "public func greaterOrEqual(x : Nat, y : Nat) : Bool",
@@ -607,6 +611,7 @@
       "public func rem(x : Nat, y : Nat) : Nat",
       "public func step(fromInclusive : Nat, toExclusive : Nat, step : Int) : Iter.Iter<Nat>",
       "public func sub(x : Nat, y : Nat) : Nat",
+      "public func toInt(nat : Nat) : Int",
       "public func toText(n : Nat) : Text"
     ]
   },

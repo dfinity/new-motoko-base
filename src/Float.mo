@@ -32,7 +32,7 @@
 ///   let y = 0.3;
 ///
 ///   let epsilon = 1e-6; // This depends on the application case (needs a numerical error analysis).
-///   Float.equalWithin(x, y, epsilon) // => true
+///   Float.equal(x, y, epsilon) // => true
 ///   ```
 ///
 /// * For absolute precision, it is recommened to encode the fraction number as a pair of a Nat for the base
@@ -491,14 +491,6 @@ module {
   /// ```
   public let fromInt : Int -> Float = Prim.intToFloat;
 
-  /// Returns `x == y`.
-  /// @deprecated Use `Float.equalWithin()` as this function does not consider numerical errors.
-  public func equal(x : Float, y : Float) : Bool { x == y };
-
-  /// Returns `x != y`.
-  /// @deprecated Use `Float.notEqualWithin()` as this function does not consider numerical errors.
-  public func notEqual(x : Float, y : Float) : Bool { x != y };
-
   /// Determines whether `x` is equal to `y` within the defined tolerance of `epsilon`.
   /// The `epsilon` considers numerical erros, see comment above.
   /// Equivalent to `Float.abs(x - y) <= epsilon` for a non-negative epsilon.
@@ -507,12 +499,12 @@ module {
   ///
   /// Special cases:
   /// ```
-  /// equalWithin(+0.0, -0.0, epsilon) => true for any `epsilon >= 0.0`
-  /// equalWithin(-0.0, +0.0, epsilon) => true for any `epsilon >= 0.0`
-  /// equalWithin(+inf, +inf, epsilon) => true for any `epsilon >= 0.0`
-  /// equalWithin(-inf, -inf, epsilon) => true for any `epsilon >= 0.0`
-  /// equalWithin(x, NaN, epsilon)     => false for any x and `epsilon >= 0.0`
-  /// equalWithin(NaN, y, epsilon)     => false for any y and `epsilon >= 0.0`
+  /// equal(+0.0, -0.0, epsilon) => true for any `epsilon >= 0.0`
+  /// equal(-0.0, +0.0, epsilon) => true for any `epsilon >= 0.0`
+  /// equal(+inf, +inf, epsilon) => true for any `epsilon >= 0.0`
+  /// equal(-inf, -inf, epsilon) => true for any `epsilon >= 0.0`
+  /// equal(x, NaN, epsilon)     => false for any x and `epsilon >= 0.0`
+  /// equal(NaN, y, epsilon)     => false for any y and `epsilon >= 0.0`
   /// ```
   ///
   /// Example:
@@ -520,12 +512,12 @@ module {
   /// import Float "mo:base/Float";
   ///
   /// let epsilon = 1e-6;
-  /// Float.equalWithin(-12.3, -1.23e1, epsilon) // => true
+  /// Float.equal(-12.3, -1.23e1, epsilon) // => true
   /// ```
-  public func equalWithin(x : Float, y : Float, epsilon : Float) : Bool {
+  public func equal(x : Float, y : Float, epsilon : Float) : Bool {
     if (not (epsilon >= 0.0)) {
       // also considers NaN, not identical to `epsilon < 0.0`
-      Prim.trap("epsilon must be greater or equal 0.0")
+      Prim.trap("Float.equal(): epsilon must be greater or equal 0.0")
     };
     x == y or abs(x - y) <= epsilon // `x == y` to also consider infinity equal
   };
@@ -538,12 +530,12 @@ module {
   ///
   /// Special cases:
   /// ```
-  /// notEqualWithin(+0.0, -0.0, epsilon) => false for any `epsilon >= 0.0`
-  /// notEqualWithin(-0.0, +0.0, epsilon) => false for any `epsilon >= 0.0`
-  /// notEqualWithin(+inf, +inf, epsilon) => false for any `epsilon >= 0.0`
-  /// notEqualWithin(-inf, -inf, epsilon) => false for any `epsilon >= 0.0`
-  /// notEqualWithin(x, NaN, epsilon)     => true for any x and `epsilon >= 0.0`
-  /// notEqualWithin(NaN, y, epsilon)     => true for any y and `epsilon >= 0.0`
+  /// notEqual(+0.0, -0.0, epsilon) => false for any `epsilon >= 0.0`
+  /// notEqual(-0.0, +0.0, epsilon) => false for any `epsilon >= 0.0`
+  /// notEqual(+inf, +inf, epsilon) => false for any `epsilon >= 0.0`
+  /// notEqual(-inf, -inf, epsilon) => false for any `epsilon >= 0.0`
+  /// notEqual(x, NaN, epsilon)     => true for any x and `epsilon >= 0.0`
+  /// notEqual(NaN, y, epsilon)     => true for any y and `epsilon >= 0.0`
   /// ```
   ///
   /// Example:
@@ -551,10 +543,14 @@ module {
   /// import Float "mo:base/Float";
   ///
   /// let epsilon = 1e-6;
-  /// Float.notEqualWithin(-12.3, -1.23e1, epsilon) // => false
+  /// Float.notEqual(-12.3, -1.23e1, epsilon) // => false
   /// ```
-  public func notEqualWithin(x : Float, y : Float, epsilon : Float) : Bool {
-    not equalWithin(x, y, epsilon)
+  public func notEqual(x : Float, y : Float, epsilon : Float) : Bool {
+    if (not (epsilon >= 0.0)) {
+      // also considers NaN, not identical to `epsilon < 0.0`
+      Prim.trap("Float.notEqual(): epsilon must be greater or equal 0.0")
+    };
+    not (x == y or abs(x - y) <= epsilon)
   };
 
   /// Returns `x < y`.
@@ -632,8 +628,8 @@ module {
   /// Defines a total order of `x` and `y` for use in sorting.
   ///
   /// Note: Using this operation to determine equality or inequality is discouraged for two reasons:
-  /// * It does not consider numerical errors, see comment above. Use `equalWithin(x, y, espilon)` or
-  ///   `notEqualWithin(x, y, epsilon)` to test for equality or inequality, respectively.
+  /// * It does not consider numerical errors, see comment above. Use `equal(x, y, espilon)` or
+  ///   `notEqual(x, y, epsilon)` to test for equality or inequality, respectively.
   /// * `NaN` are here considered equal if their sign matches, which is different to the standard equality
   ///    by `==` or when using `equal()` or `notEqual()`.
   ///

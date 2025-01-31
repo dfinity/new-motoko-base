@@ -332,7 +332,7 @@ module {
         switch (options[nextSome - 1]) {
           case (?element) element;
           case null {
-            Prim.trap "Malformed array in filterMap"
+            Prim.trap "Array.filterMap(): malformed array"
           }
         }
       }
@@ -397,7 +397,7 @@ module {
                   element
                 };
                 case null {
-                  Prim.trap "Malformed array in mapResults"
+                  Prim.trap "Array.mapResult(): Malformed array"
                 }
               }
             }
@@ -729,7 +729,7 @@ module {
   ///
   /// Space: O(length)
   public func subArray<T>(array : [T], start : Nat, length : Nat) : [T] {
-    if (start + length > array.size()) { Prim.trap("Array.subArray()") };
+    if (start + length > array.size()) { Prim.trap("Array.subArray(): 'start + length' is greater than 'array.size()'") };
     Prim.Array_tabulate<T>(length, func i = array[start + i])
   };
 

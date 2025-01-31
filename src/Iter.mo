@@ -3,7 +3,6 @@
 import Order "Order";
 import Array "Array";
 import VarArray "VarArray";
-import { todo } "Debug";
 import Prim "mo:prim";
 import Runtime "Runtime";
 
@@ -28,6 +27,19 @@ module {
     object {
       public func next() : ?T {
         null
+      }
+    }
+  };
+
+  public func singleton<T>(value : T) : Iter<T> {
+    object {
+      var returned = false;
+      public func next() : ?T {
+        if returned { null }
+        else {
+          returned := true;
+          ?value
+        }
       }
     }
   };

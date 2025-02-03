@@ -132,6 +132,60 @@ module {
   /// ```
   public func isAnonymous(p : Principal) : Bool = Prim.blobOfPrincipal p == anonymousBlob;
 
+  /// Checks if the given principal is a canister.
+  ///
+  /// The last byte for opaque principal ids must be 0x01
+  /// https://internetcomputer.org/docs/current/references/ic-interface-spec#principal
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
+  /// Principal.isCanister(principal) // => true
+  /// ```
+  public func isCanister(p: Principal) : Bool {
+    let byteArray = toByteArray(p);
+
+    byteArray.size() >= 0 and
+    byteArray.size() <= 29 and
+    isLastByte(byteArray, 1);
+  };
+
+  /// Checks if the given principal is a self authenticating principal.
+  /// Most of the time, this is a user principal.
+  ///
+  /// The last byte for user principal ids must be 0x02
+  /// https://internetcomputer.org/docs/current/references/ic-interface-spec#principal
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let principal = Principal.fromText("6rgy7-3uukz-jrj2k-crt3v-u2wjm-dmn3t-p26d6-ndilt-3gusv-75ybk-jae");
+  /// Principal.isSelfAuthenticating(principal) // => true
+  /// ```
+  public func isSelfAuthenticating(p: Principal) : Bool {
+    let byteArray = toByteArray(p);
+
+    byteArray.size() <= 29 and
+    isLastByte(byteArray, 2);
+  };
+
+  /// Checks if the given principal is a reserved principal.
+  ///
+  /// The last byte for reserved principal ids must be 0x7f
+  /// https://internetcomputer.org/docs/current/references/ic-interface-spec#principal
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
+  /// Principal.isReserved(principal) // => false
+  /// ```
+  public func isReserved(p: Principal) : Bool {
+    let byteArray = toByteArray(p);
+
+    byteArray.size() >= 0 and
+    byteArray.size() <= 29 and
+    isLastByte(byteArray, 127);
+  };
+
   /// Checks if the given principal can control this canister.
   ///
   /// Example:
@@ -1222,5 +1276,12 @@ module {
       Nat8.fromNat(Nat32.toNat(n & 0xff))
     };
     [byte(n >> 24), byte(n >> 16), byte(n >> 8), byte(n)]
-  }
+  };
+
+  func toByteArray(p : Principal) : [Nat8] = Blob.toArray(toBlob(p));
+
+  func isLastByte(byteArray : [Nat8], byte : Nat8) : Bool {
+    let size = byteArray.size();
+    size > 0 and byteArray[size - 1] == byte;
+  };
 }

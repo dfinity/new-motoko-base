@@ -93,7 +93,7 @@ run(
         do {
           let map1 = Map.empty<Nat, Text>();
           let map2 = Map.empty<Nat, Text>();
-          Map.equal(map1, map2, Nat.compare, Text.equal)
+          Map.equal(map1, map2, Nat.equal, Text.equal)
         },
         M.equals(T.bool(true))
       ),
@@ -286,7 +286,7 @@ run(
         do {
           let original = Map.singleton<Nat, Text>(0, "0");
           let clone = Map.clone(original);
-          assert (Map.equal(original, clone, Nat.compare, Text.equal));
+          assert (Map.equal(original, clone, Nat.equal, Text.equal));
           Map.size(clone)
         },
         M.equals(T.nat(1))
@@ -390,7 +390,7 @@ run(
         do {
           let map1 = Map.singleton<Nat, Text>(0, "0");
           let map2 = Map.singleton<Nat, Text>(0, "0");
-          Map.equal(map1, map2, Nat.compare, Text.equal)
+          Map.equal(map1, map2, Nat.equal, Text.equal)
         },
         M.equals(T.bool(true))
       ),
@@ -399,7 +399,7 @@ run(
         do {
           let map1 = Map.singleton<Nat, Text>(0, "0");
           let map2 = Map.singleton<Nat, Text>(1, "1");
-          Map.equal(map1, map2, Nat.compare, Text.equal)
+          Map.equal(map1, map2, Nat.equal, Text.equal)
         },
         M.equals(T.bool(false))
       ),
@@ -434,7 +434,7 @@ run(
         do {
           let map = Map.fromIter<Nat, Text>(Iter.fromArray<(Nat, Text)>([(0, "0")]), Nat.compare);
           assert (Map.get(map, Nat.compare, 0) == ?"0");
-          assert (Map.equal(map, Map.singleton<Nat, Text>(0, "0"), Nat.compare, Text.equal));
+          assert (Map.equal(map, Map.singleton<Nat, Text>(0, "0"), Nat.equal, Text.equal));
           Map.size(map)
         },
         M.equals(T.nat(1))
@@ -467,7 +467,7 @@ run(
               true
             }
           );
-          assert (Map.equal(input, output, Nat.compare, Text.equal));
+          assert (Map.equal(input, output, Nat.equal, Text.equal));
           Map.size(output)
         },
         M.equals(T.nat(1))
@@ -653,7 +653,7 @@ run(
         do {
           let original = smallMap();
           let clone = Map.clone(original);
-          assert (Map.equal(original, clone, Nat.compare, Text.equal));
+          assert (Map.equal(original, clone, Nat.equal, Text.equal));
           Map.size(clone)
         },
         M.equals(T.nat(smallSize))
@@ -775,7 +775,7 @@ run(
         do {
           let map1 = smallMap();
           let map2 = smallMap();
-          Map.equal(map1, map2, Nat.compare, Text.equal)
+          Map.equal(map1, map2, Nat.equal, Text.equal)
         },
         M.equals(T.bool(true))
       ),
@@ -785,7 +785,7 @@ run(
           let map1 = smallMap();
           let map2 = smallMap();
           Map.delete(map2, Nat.compare, smallSize - 1);
-          Map.equal(map1, map2, Nat.compare, Text.equal)
+          Map.equal(map1, map2, Nat.equal, Text.equal)
         },
         M.equals(T.bool(false))
       ),
@@ -823,7 +823,7 @@ run(
           for (index in Nat.range(0, smallSize)) {
             assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
           };
-          assert (Map.equal(map, smallMap(), Nat.compare, Text.equal));
+          assert (Map.equal(map, smallMap(), Nat.equal, Text.equal));
           Map.size(map)
         },
         M.equals(T.nat(smallSize))

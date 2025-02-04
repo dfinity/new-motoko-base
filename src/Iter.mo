@@ -233,15 +233,15 @@ module {
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
   /// ```
-  public func fromArray<T>(iter : [T]) : Iter<T> {
+  public func fromArray<T>(array : [T]) : Iter<T> {
     var i : Nat = 0;
-    let size = iter.size();
+    let size = array.size();
     object {
       public func next() : ?T {
         if (i >= size) {
           return null
         } else {
-          let res = ?(iter[i]);
+          let res = ?(array[i]);
           i += 1;
           return res
         }
@@ -252,8 +252,20 @@ module {
   /// Like `fromArray` but for Arrays with mutable elements. Captures
   /// the elements of the Array at the time the iterator is created, so
   /// further modifications won't be reflected in the iterator.
-  public func fromVarArray<T>(iter : [var T]) : Iter<T> {
-    fromArray<T>(Array.fromVarArray<T>(iter))
+  public func fromVarArray<T>(array : [var T]) : Iter<T> {
+    var i : Nat = 0;
+    let size = array.size();
+    object {
+      public func next() : ?T {
+        if (i >= size) {
+          return null
+        } else {
+          let res = ?(array[i]);
+          i += 1;
+          return res
+        }
+      }
+    }
   };
 
   /// Consumes an iterator and collects its produced elements in an Array.

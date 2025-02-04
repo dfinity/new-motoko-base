@@ -140,15 +140,6 @@ module {
   /// ```
   public func isController(p : Principal) : Bool = Prim.isController p;
 
-  /// Hashes the given principal by hashing its `Blob` representation.
-  ///
-  /// Example:
-  /// ```motoko include=import
-  /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
-  /// Principal.hash(principal) // => 2_742_573_646
-  /// ```
-  public func hash(principal : Principal) : Hash.Hash = Blob.hash(Prim.blobOfPrincipal(principal));
-
   /// General purpose comparison function for `Principal`. Returns the `Order` (
   /// either `#less`, `#equal`, or `#greater`) of comparing `principal1` with
   /// `principal2`.

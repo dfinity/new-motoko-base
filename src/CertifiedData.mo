@@ -32,9 +32,7 @@ module {
   ///
   /// See a full example on how to use certified variables here: https://github.com/dfinity/examples/tree/master/motoko/cert-var
   ///
-  public func set<system>(data : Blob) : () {
-    Prim.setCertifiedData(data)
-  };
+  public let set : (data : Blob) -> () = Prim.setCertifiedData;
 
   /// Gets a certificate
   ///

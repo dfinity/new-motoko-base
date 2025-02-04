@@ -31,6 +31,10 @@ module {
     }
   };
 
+  public func tabulate<T>(size : Nat, generator : Nat -> T) : Stack<T> {
+    todo()
+  };
+
   public func clear<T>(stack : Stack<T>) {
     todo();
   };
@@ -154,10 +158,6 @@ module {
   };
 
   public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>) : Bool {
-    todo()
-  };
-
-  public func tabulate<T>(n : Nat, f : Nat -> T) : Stack<T> {
     todo()
   };
 

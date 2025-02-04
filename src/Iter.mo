@@ -31,6 +31,19 @@ module {
     }
   };
 
+  public func singleton<T>(value : T) : Iter<T> {
+    object {
+      var returned = false;
+      public func next() : ?T {
+        if returned { null }
+        else {
+          returned := true;
+          ?value
+        }
+      }
+    }
+  };
+
   /// Calls a function `f` on every value produced by an iterator and discards
   /// the results. If you're looking to keep these results use `map` instead.
   ///

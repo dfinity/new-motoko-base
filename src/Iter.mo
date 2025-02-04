@@ -33,12 +33,14 @@ module {
 
   public func singleton<T>(value : T) : Iter<T> {
     object {
-      var returned = false;
+      var state = ?value;
       public func next() : ?T {
-        if returned { null }
-        else {
-          returned := true;
-          ?value
+        switch state {
+          case null null;
+          case some {
+            state := null;
+            some
+          }
         }
       }
     }
@@ -245,41 +247,44 @@ module {
   /// ```
   public func toArray<T>(iter : Iter<T>) : [T] {
     // TODO: Replace implementation. This is just temporay.
-    type Node<T> = { value: T; var next: ?Node<T>};
-    var first: ?Node<T> = null;
-    var last: ?Node<T> = null;
+    type Node<T> = { value : T; var next : ?Node<T> };
+    var first : ?Node<T> = null;
+    var last : ?Node<T> = null;
     var count = 0;
 
-    func add(value: T) {
+    func add(value : T) {
       let node : Node<T> = { value; var next = null };
       switch (last) {
         case null {
-          first := ?node;
+          first := ?node
         };
         case (?previous) {
-          previous.next := ?node;
+          previous.next := ?node
         }
       };
       last := ?node;
-      count += 1;
+      count += 1
     };
 
     for (value in iter) {
-      add(value);
+      add(value)
     };
     if (count == 0) {
-      return [];
+      return []
     };
     var current = first;
-    Prim.Array_tabulate<T>(count, func (_) {
-      switch (current) {
-        case null Runtime.trap("Node must not be null");
-        case (?node) {
-          current := node.next;
-          node.value
+    Prim.Array_tabulate<T>(
+      count,
+      func(_) {
+        switch (current) {
+          case null Runtime.trap("Node must not be null");
+          case (?node) {
+            current := node.next;
+            node.value
+          }
         }
       }
-    });
+    )
   };
 
   /// Like `toArray` but for Arrays with mutable elements.

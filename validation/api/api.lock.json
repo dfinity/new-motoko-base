@@ -53,7 +53,6 @@
       "public func fromVarArray(bytes : [var Nat8]) : Blob",
       "public func greater(blob1 : Blob, blob2 : Blob) : Bool",
       "public func greaterOrEqual(blob1 : Blob, blob2 : Blob) : Bool",
-      "public func hash(blob : Blob) : Nat32",
       "public func less(blob1 : Blob, blob2 : Blob) : Bool",
       "public func lessOrEqual(blob1 : Blob, blob2 : Blob) : Bool",
       "public func notEqual(blob1 : Blob, blob2 : Blob) : Bool",
@@ -190,16 +189,6 @@
     ]
   },
   {
-    "name": "Hash",
-    "exports": [
-      "public func bit(h : Hash, pos : Nat) : Bool",
-      "public func equal(ha : Hash, hb : Hash) : Bool",
-      "public func hash(n : Nat) : Hash",
-      "public type Hash",
-      "public let length : Nat"
-    ]
-  },
-  {
     "name": "Int",
     "exports": [
       "public func abs(x : Int) : Nat",
@@ -211,7 +200,6 @@
       "public func fromText(text : Text) : ?Int",
       "public func greater(x : Int, y : Int) : Bool",
       "public func greaterOrEqual(x : Int, y : Int) : Bool",
-      "public func hash(i : Int) : Hash.Hash",
       "public type Int",
       "public func less(x : Int, y : Int) : Bool",
       "public func lessOrEqual(x : Int, y : Int) : Bool",
@@ -509,7 +497,6 @@
       "public func fromArray<T>(array : [T]) : List<T>",
       "public func fromIter<T>(iter : { next : () -> ?T }) : List<T>",
       "public func fromVarArray<T>(array : [var T]) : List<T>",
-      "public func hash<T>(list : List<T>, hash : T -> Nat32) : Nat32",
       "public func indexOf<T>(list : List<T>, element : T, equal : (T, T) -> Bool) : ?Nat",
       "public func indexOfList<T>(list : List<T>, subList : List<T>, equal : (T, T) -> Bool) : ?Nat",
       "public func isEmpty<T>(list : List<T>) : Bool",
@@ -1077,7 +1064,6 @@
       "public func fromVarArray(a : [var Char]) : Text",
       "public func greater(t1 : Text, t2 : Text) : Bool",
       "public func greaterOrEqual(t1 : Text, t2 : Text) : Bool",
-      "public func hash(t : Text) : Hash.Hash",
       "public func join(sep : Text, ts : Iter.Iter<Text>) : Text",
       "public func less(t1 : Text, t2 : Text) : Bool",
       "public func lessOrEqual(t1 : Text, t2 : Text) : Bool",

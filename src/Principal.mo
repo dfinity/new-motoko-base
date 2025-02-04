@@ -26,7 +26,6 @@
 
 import Prim "mo:⛔";
 import Blob "Blob";
-import Hash "Hash";
 import Array "Array";
 import VarArray "VarArray";
 import Nat8 "Nat8";

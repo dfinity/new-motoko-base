@@ -60,10 +60,6 @@ module {
     todo()
   };
 
-  public func hash<T>(list : List<T>, hash : T -> Nat32) : Nat32 {
-    todo()
-  };
-
   public func indexOf<T>(list : List<T>, element : T, equal : (T, T) -> Bool) : ?Nat {
     todo()
   };

@@ -22,7 +22,6 @@
 
 import Char "Char";
 import Iter "Iter";
-import Hash "Hash";
 import Stack "Stack";
 import Prim "mo:⛔";
 
@@ -147,22 +146,6 @@ module {
   /// let size = Text.size("abc"); // 3
   /// ```
   public func size(t : Text) : Nat { t.size() };
-
-  /// Returns a hash obtained by using the `djb2` algorithm ([more details](http://www.cse.yorku.ca/~oz/hash.html)).
-  ///
-  /// ```motoko include=import
-  /// let hash = Text.hash("abc");
-  /// ```
-  ///
-  /// Note: this algorithm is intended for use in data structures rather than as a cryptographic hash function.
-  public func hash(t : Text) : Hash.Hash {
-    var x : Nat32 = 5381;
-    for (char in t.chars()) {
-      let c : Nat32 = Prim.charToNat32(char);
-      x := ((x << 5) +% x) +% c
-    };
-    return x
-  };
 
   /// Returns `t1 # t2`, where `#` is the `Text` concatenation operator.
   ///

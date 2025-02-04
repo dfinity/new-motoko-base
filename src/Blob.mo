@@ -77,15 +77,6 @@ module {
   /// ```
   public func toVarArray(blob : Blob) : [var Nat8] = Prim.blobToArrayMut blob;
 
-  /// Returns the (non-cryptographic) hash of `blob`.
-  ///
-  /// Example:
-  /// ```motoko include=import
-  /// let blob = "\00\FF\00" : Blob;
-  /// Blob.hash(blob) // => 1_818_567_776
-  /// ```
-  public func hash(blob : Blob) : Nat32 = Prim.hashBlob blob;
-
   /// General purpose comparison function for `Blob` by comparing the value of
   /// the bytes. Returns the `Order` (either `#less`, `#equal`, or `#greater`)
   /// by comparing `blob1` with `blob2`.

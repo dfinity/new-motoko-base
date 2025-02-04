@@ -33,12 +33,14 @@ module {
 
   public func singleton<T>(value : T) : Iter<T> {
     object {
-      var returned = false;
+      var state = ?value;
       public func next() : ?T {
-        if returned { null }
-        else {
-          returned := true;
-          ?value
+        switch state {
+          case null null;
+          case some {
+            state := null;
+            some
+          }
         }
       }
     }

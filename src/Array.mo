@@ -397,7 +397,7 @@ module {
                   element
                 };
                 case null {
-                  Prim.trap "Array.mapResult(): Malformed array"
+                  Prim.trap "Array.mapResult(): malformed array"
                 }
               }
             }

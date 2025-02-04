@@ -80,7 +80,7 @@
     "name": "CertifiedData",
     "exports": [
       "public let getCertificate : () -> ?Blob",
-      "public func set<system>(data : Blob) : ()"
+      "public let set : (data : Blob) -> ()"
     ]
   },
   {

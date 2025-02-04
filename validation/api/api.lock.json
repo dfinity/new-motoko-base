@@ -844,7 +844,6 @@
       "public func fromText(t : Text) : Principal",
       "public func greater(principal1 : Principal, principal2 : Principal) : Bool",
       "public func greaterOrEqual(principal1 : Principal, principal2 : Principal) : Bool",
-      "public func hash(principal : Principal) : Hash.Hash",
       "public func isAnonymous(p : Principal) : Bool",
       "public func isController(p : Principal) : Bool",
       "public func less(principal1 : Principal, principal2 : Principal) : Bool",

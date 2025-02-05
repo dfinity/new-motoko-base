@@ -828,7 +828,7 @@ module {
     map
   };
 
-  /// Apply an operation for each key-value pair contained in the map.
+  /// Apply an operation on each key-value pair contained in the map.
   /// The operation is applied in ascending order of the keys.
   ///
   /// Example:
@@ -896,7 +896,7 @@ module {
   };
 
   /// Project all values of the map in a new map.
-  /// Apply a mapping function to the values of each entriy in the map and collect
+  /// Apply a mapping function to the values of each entry in the map and
   /// collect the mapped entries in a new mutable key-value map.
   ///
   /// Example:

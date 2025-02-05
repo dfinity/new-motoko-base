@@ -142,12 +142,10 @@ module {
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
   /// Principal.isCanister(principal) // => true
   /// ```
-  public func isCanister(p: Principal) : Bool {
+  public func isCanister(p : Principal) : Bool {
     let byteArray = toByteArray(p);
 
-    byteArray.size() >= 0 and
-    byteArray.size() <= 29 and
-    isLastByte(byteArray, 1);
+    byteArray.size() >= 0 and byteArray.size() <= 29 and isLastByte(byteArray, 1)
   };
 
   /// Checks if the given principal is a self authenticating principal.
@@ -161,11 +159,10 @@ module {
   /// let principal = Principal.fromText("6rgy7-3uukz-jrj2k-crt3v-u2wjm-dmn3t-p26d6-ndilt-3gusv-75ybk-jae");
   /// Principal.isSelfAuthenticating(principal) // => true
   /// ```
-  public func isSelfAuthenticating(p: Principal) : Bool {
+  public func isSelfAuthenticating(p : Principal) : Bool {
     let byteArray = toByteArray(p);
 
-    byteArray.size() <= 29 and
-    isLastByte(byteArray, 2);
+    byteArray.size() == 29 and isLastByte(byteArray, 2)
   };
 
   /// Checks if the given principal is a reserved principal.
@@ -178,12 +175,10 @@ module {
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
   /// Principal.isReserved(principal) // => false
   /// ```
-  public func isReserved(p: Principal) : Bool {
+  public func isReserved(p : Principal) : Bool {
     let byteArray = toByteArray(p);
 
-    byteArray.size() >= 0 and
-    byteArray.size() <= 29 and
-    isLastByte(byteArray, 127);
+    byteArray.size() >= 0 and byteArray.size() <= 29 and isLastByte(byteArray, 127)
   };
 
   /// Checks if the given principal can control this canister.
@@ -1282,6 +1277,6 @@ module {
 
   func isLastByte(byteArray : [Nat8], byte : Nat8) : Bool {
     let size = byteArray.size();
-    size > 0 and byteArray[size - 1] == byte;
-  };
+    size > 0 and byteArray[size - 1] == byte
+  }
 }

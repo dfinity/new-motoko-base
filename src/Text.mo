@@ -96,7 +96,7 @@ module {
       func _ {
         switch (cs.next()) {
           case (?c) { c };
-          case null { Prim.trap("Text.toArray") }
+          case null { Prim.trap("Text.toArray()") }
         }
       }
     )

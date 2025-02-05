@@ -32,7 +32,7 @@ import IterType "type/Iter";
 import Order "Order";
 import VarArray "VarArray";
 import Runtime "Runtime";
-// import Stack "Stack";
+import Stack "Stack";
 import Option "Option";
 import { todo } "Debug";
 import BTreeHelper "internal/BTreeHelper";
@@ -89,7 +89,7 @@ module {
   // ///
   // /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
   // public func freeze<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Immutable.Set<T> {
-  //   ImmutableSet.fromIter(values(set), compare);
+  //   ImmutableSet.fromIter(elements(set), compare);
   // };
 
   // /// Convert an immutable set to a mutable set.
@@ -115,7 +115,7 @@ module {
   // /// where `n` denotes the number of elements stored in the set and
   // /// assuming that the `compare` function implements an `O(1)` comparison.
   // public func thaw<T>(set : Immutable.Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
-  //   fromIter(ImmutableSet.values(set), compare)
+  //   fromIter(ImmutableSet.elements(set), compare)
   // };
 
   /// Create a copy of the mutable set.
@@ -309,8 +309,8 @@ module {
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
   public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool {
-    let iterator1 = values(set1);
-    let iterator2 = values(set2);
+    let iterator1 = elements(set1);
+    let iterator2 = elements(set2);
     loop {
       let next1 = iterator1.next();
       let next2 = iterator2.next();
@@ -473,12 +473,12 @@ module {
               set.root := #internal(internalChild)
             }
             // This case will be hit if the BTree has order == 4
-            // In this case, the internalChild has no keys (last key was merged with new child), so need to promote that merged child (its only child)
+            // In this case, the internalChild has no element (last element was merged with new child), so need to promote that merged child (its only child)
             else {
               set.root := switch (internalChild.children[0]) {
                 case (?node) { node };
                 case null {
-                  Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.delete(), element deletion failed, due to a null replacement node error")
+                  Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.delete(), element deletion failed, due to a null replacement node error")
                 }
               }
             };
@@ -497,20 +497,128 @@ module {
     }
   };
 
+  /// Retrieves the maximum element from the set.
+  /// If the set is empty, returns `null`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///   Debug.print(debug_show(Set.max(set))); // prints `?3`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(1)`.
+  /// where `n` denotes the number of elements stored in the set.
   public func max<T>(set : Set<T>) : ?T {
-    todo()
+    reverseElements(set).next()
   };
 
+  /// Retrieves the minimum element from the set.
+  /// If the set is empty, returns `null`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///   Debug.print(debug_show(Set.min(set))); // prints `?1`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(1)`.
+  /// where `n` denotes the number of elements stored in the set.
   public func min<T>(set : Set<T>) : ?T {
-    todo()
+    elements(set).next()
   };
 
-  public func values<T>(set : Set<T>) : IterType.Iter<T> {
-    todo()
+  /// Returns an iterator over the elements in the set,
+  /// traversing the elements in the ascending order.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///
+  ///   for (number in Set.elements(set)) {
+  ///      Debug.print(debug_show(number));
+  ///   }
+  ///   // prints:
+  ///   // `1`
+  ///   // `2`
+  ///   // `3`
+  /// }
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func elements<T>(set : Set<T>) : IterType.Iter<T> {
+    switch (set.root) {
+      case (#leaf(leafNode)) { return leafElements(leafNode) };
+      case (#internal(internalNode)) { internalElements(internalNode) }
+    }
   };
 
-  public func reverseValues<T>(set : Set<T>) : IterType.Iter<T> {
-    todo()
+  /// Returns an iterator over the elements in the set,
+  /// traversing the elements in the descending order.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///
+  ///   for (number in Set.reverseElements(set)) {
+  ///      Debug.print(debug_show(number));
+  ///   }
+  ///   // prints:
+  ///   // `3`
+  ///   // `2`
+  ///   // `1`
+  /// }
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func reverseElements<T>(set : Set<T>) : IterType.Iter<T> {
+    switch (set.root) {
+      case (#leaf(leafNode)) { return reverseLeafElements(leafNode) };
+      case (#internal(internalNode)) { reverseInternalElements(internalNode) }
+    }
   };
 
   public func fromIter<T>(iter : IterType.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
@@ -593,6 +701,295 @@ module {
     todo()
   };
 
+  func leafElements<T>({ data } : Leaf<T>) : IterType.Iter<T> {
+    var i : Nat = 0;
+    object {
+      public func next() : ?T {
+        if (i >= data.count) {
+          return null
+        } else {
+          let res = data.elements[i];
+          i += 1;
+          return res
+        }
+      }
+    }
+  };
+
+  func reverseLeafElements<T>({ data } : Leaf<T>) : IterType.Iter<T> {
+    var i : Nat = data.count;
+    object {
+      public func next() : ?T {
+        if (i == 0) {
+          return null
+        } else {
+          let res = data.elements[i - 1];
+          i -= 1;
+          return res
+        }
+      }
+    }
+  };
+
+  // Cursor type that keeps track of the current node and the current element index in the node
+  type NodeCursor<T> = { node : Node<T>; elementIndex : Nat };
+
+  func internalElements<T>(internal : Internal<T>) : IterType.Iter<T> {
+    object {
+      // The nodeCursorStack keeps track of the current node and the current element index in the node
+      // We use a stack here to push to/pop off the next node cursor to visit
+      let nodeCursorStack = initializeForwardNodeCursorStack(internal);
+
+      public func next() : ?T {
+        // pop the next node cursor off the stack
+        var nodeCursor = Stack.pop(nodeCursorStack);
+        switch (nodeCursor) {
+          case null { return null };
+          case (?{ node; elementIndex }) {
+            switch (node) {
+              // if a leaf node, iterate through the leaf node's next element
+              case (#leaf(leafNode)) {
+                let lastIndex = leafNode.data.count - 1 : Nat;
+                if (elementIndex > lastIndex) {
+                  Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.internalElements(), leaf elementIndex out of bounds")
+                };
+
+                let currentElement = switch (leafNode.data.elements[elementIndex]) {
+                  case (?element) { element };
+                  case null {
+                    Runtime.trap(
+                      "UNREACHABLE_ERROR: file a bug report! In Set.internalElements(), null element found in leaf node."
+                      # "leafNode.data.count=" # debug_show (leafNode.data.count) # ", elementIndex=" # debug_show (elementIndex)
+                    )
+                  }
+                };
+                // if not at the last element, push the next element index of the leaf onto the stack and return the current element
+                if (elementIndex < lastIndex) {
+                  Stack.push(
+                    nodeCursorStack,
+                    {
+                      node = #leaf(leafNode);
+                      elementIndex = elementIndex + 1 : Nat
+                    }
+                  )
+                };
+
+                ?currentElement
+              };
+              // if an internal node
+              case (#internal(internalNode)) {
+                let lastIndex = internalNode.data.count - 1 : Nat;
+                // Developer facing message in case of a bug
+                if (elementIndex > lastIndex) {
+                  Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.internalElements(), internal elementIndex out of bounds")
+                };
+
+                let currentElement = switch (internalNode.data.elements[elementIndex]) {
+                  case (?element) { element };
+                  case null {
+                    Runtime.trap(
+                      "UNREACHABLE_ERROR: file a bug report! In Set.internalElements(), null element found in internal node. " #
+                      "internal.data.count=" # debug_show (internalNode.data.count) # ", elementIndex=" # debug_show (elementIndex)
+                    )
+                  }
+                };
+
+                let nextCursor = {
+                  node = #internal(internalNode);
+                  elementIndex = elementIndex + 1 : Nat
+                };
+                // if not the last element, push the next element of the internal node onto the stack
+                if (elementIndex < lastIndex) {
+                  Stack.push(nodeCursorStack, nextCursor)
+                };
+                // traverse the next child's min subtree and push the resulting node cursors onto the stack
+                // then return the current element of the internal node
+                traverseMinSubtreeIter(nodeCursorStack, nextCursor);
+                ?currentElement
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+  func reverseInternalElements<T>(internal : Internal<T>) : IterType.Iter<T> {
+    object {
+      // The nodeCursorStack keeps track of the current node and the current element index in the node
+      // We use a stack here to push to/pop off the next node cursor to visit
+      let nodeCursorStack = initializeReverseNodeCursorStack(internal);
+
+      public func next() : ?T {
+        // pop the next node cursor off the stack
+        var nodeCursor = Stack.pop(nodeCursorStack);
+        switch (nodeCursor) {
+          case null { return null };
+          case (?{ node; elementIndex }) {
+            let firstIndex = 0 : Nat;
+            assert (elementIndex > firstIndex);
+            switch (node) {
+              // if a leaf node, reverse iterate through the leaf node's next element
+              case (#leaf(leafNode)) {
+                let currentElement = switch (leafNode.data.elements[elementIndex - 1]) {
+                  case (?element) { element };
+                  case null {
+                    Runtime.trap(
+                      "UNREACHABLE_ERROR: file a bug report! In Set.reverseInternalElements(), null element found in leaf node."
+                      # "leafNode.data.count=" # debug_show (leafNode.data.count) # ", elementIndex=" # debug_show (elementIndex)
+                    )
+                  }
+                };
+                // if not at the last element, push the previous element index of the leaf onto the stack and return the current element
+                if (elementIndex - 1 : Nat > firstIndex) {
+                  Stack.push(
+                    nodeCursorStack,
+                    {
+                      node = #leaf(leafNode);
+                      elementIndex = elementIndex - 1 : Nat
+                    }
+                  )
+                };
+
+                // return the current element
+                ?currentElement
+              };
+              // if an internal node
+              case (#internal(internalNode)) {
+                let currentElement = switch (internalNode.data.elements[elementIndex - 1]) {
+                  case (?element) { element };
+                  case null {
+                    Runtime.trap(
+                      "UNREACHABLE_ERROR: file a bug report! In Set.reverseInternalElements(), null element found in internal node. " #
+                      "internal.data.count=" # debug_show (internalNode.data.count) # ", elementIndex=" # debug_show (elementIndex)
+                    )
+                  }
+                };
+
+                let previousCursor = {
+                  node = #internal(internalNode);
+                  elementIndex = elementIndex - 1 : Nat
+                };
+                // if not the first element, push the previous element index of the internal node onto the stack
+                if (elementIndex - 1 : Nat > firstIndex) {
+                  Stack.push(nodeCursorStack, previousCursor)
+                };
+                // traverse the previous child's max subtree and push the resulting node cursors onto the stack
+                // then return the current element of the internal node
+                traverseMaxSubtreeIter(nodeCursorStack, previousCursor);
+                ?currentElement
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+  func initializeForwardNodeCursorStack<T>(internal : Internal<T>) : Stack.Stack<NodeCursor<T>> {
+    let nodeCursorStack = Stack.empty<NodeCursor<T>>();
+    let nodeCursor : NodeCursor<T> = {
+      node = #internal(internal);
+      elementIndex = 0
+    };
+
+    // push the initial cursor to the stack
+    Stack.push(nodeCursorStack, nodeCursor);
+    // then traverse left
+    traverseMinSubtreeIter(nodeCursorStack, nodeCursor);
+    nodeCursorStack
+  };
+
+  func initializeReverseNodeCursorStack<T>(internal : Internal<T>) : Stack.Stack<NodeCursor<T>> {
+    let nodeCursorStack = Stack.empty<NodeCursor<T>>();
+    let nodeCursor : NodeCursor<T> = {
+      node = #internal(internal);
+      elementIndex = internal.data.count
+    };
+
+    // push the initial cursor to the stack
+    Stack.push(nodeCursorStack, nodeCursor);
+    // then traverse left
+    traverseMaxSubtreeIter(nodeCursorStack, nodeCursor);
+    nodeCursorStack
+  };
+
+  // traverse the min subtree of the current node cursor, passing each new element to the node cursor stack
+  func traverseMinSubtreeIter<T>(nodeCursorStack : Stack.Stack<NodeCursor<T>>, nodeCursor : NodeCursor<T>) {
+    var currentNode = nodeCursor.node;
+    var childIndex = nodeCursor.elementIndex;
+
+    label l loop {
+      switch (currentNode) {
+        // If currentNode is leaf, have hit the minimum element of the subtree and already pushed it's cursor to the stack
+        // so can return
+        case (#leaf(_)) {
+          return
+        };
+        // If currentNode is internal, add it's left most child to the stack and continue traversing
+        case (#internal(internalNode)) {
+          switch (internalNode.children[childIndex]) {
+            // Push the next min (left most) child node to the stack
+            case (?childNode) {
+              childIndex := 0;
+              currentNode := childNode;
+              Stack.push(
+                nodeCursorStack,
+                {
+                  node = currentNode;
+                  elementIndex = childIndex
+                }
+              )
+            };
+            case null {
+              Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.traverseMinSubtreeIter(), null child node error")
+            }
+          }
+        }
+      }
+    }
+  };
+
+  // traverse the max subtree of the current node cursor, passing each new element to the node cursor stack
+  func traverseMaxSubtreeIter<T>(nodeCursorStack : Stack.Stack<NodeCursor<T>>, nodeCursor : NodeCursor<T>) {
+    var currentNode = nodeCursor.node;
+    var childIndex = nodeCursor.elementIndex;
+
+    label l loop {
+      switch (currentNode) {
+        // If currentNode is leaf, have hit the maximum element of the subtree and already pushed it's cursor to the stack
+        // so can return
+        case (#leaf(_)) {
+          return
+        };
+        // If currentNode is internal, add it's right most child to the stack and continue traversing
+        case (#internal(internalNode)) {
+          assert (childIndex <= internalNode.data.count); // children are one more than data elements
+          switch (internalNode.children[childIndex]) {
+            // Push the next max (right most) child node to the stack
+            case (?childNode) {
+              childIndex := switch (childNode) {
+                case (#internal(internalNode)) internalNode.data.count;
+                case (#leaf(leafNode)) leafNode.data.count
+              };
+              currentNode := childNode;
+              Stack.push(
+                nodeCursorStack,
+                {
+                  node = currentNode;
+                  elementIndex = childIndex
+                }
+              )
+            };
+            case null {
+              Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.traverseMaxSubtreeIter(), null child node error")
+            }
+          }
+        }
+      }
+    }
+  };
+
   // This type is used to signal to the parent calling context what happened in the level below
   type IntermediateInternalDeleteResult<T> = {
     // element was deleted
@@ -610,14 +1007,14 @@ module {
     let minElements = NodeUtil.minElementsFromOrder(order);
     let elementIndex = NodeUtil.getElementIndex<T>(internalNode.data, compare, deleteElement);
 
-    // match on both the result of the node binary search, and if this node level should be skipped even if the key is found (internal kv replacement case)
+    // match on both the result of the node binary search, and if this node level should be skipped even if the element is found (internal element replacement case)
     switch (elementIndex, skipNode) {
       // if element is found in the internal node
       case (#elementFound(deleteIndex), false) {
         if (Option.isNull(internalNode.data.elements[deleteIndex])) {
           Runtime.trap("Bug in Set.internalDeleteHelper")
         };
-        // TODO: (optimization) replace with deletion in one step without having to retrieve the maxKey first
+        // TODO: (optimization) replace with deletion in one step without having to retrieve the max element first
         let replaceElement = NodeUtil.getMaxElement(internalNode.children[deleteIndex]);
         internalNode.data.elements[deleteIndex] := ?replaceElement;
         switch (internalDeleteHelper(internalNode, order, compare, replaceElement, true)) {
@@ -628,31 +1025,33 @@ module {
           }
         }
       };
-      // if element is not found in the internal node OR the key is found, but skipping this node (because deleting the in order precessor i.e. replacement kv)
-      // in both cases need to descend and traverse to find the kv to delete
+      // if element is not found in the internal node OR the element is found, but skipping this node (because deleting the in order precessor i.e. replacement element)
+      // in both cases need to descend and traverse to find the element to delete
       case ((#elementFound(_), true) or (#notFound(_), _)) {
         let childIndex = switch (elementIndex) {
-          case (#elementFound(replacedSkipKeyIndex)) { replacedSkipKeyIndex };
+          case (#elementFound(replacedSkipElementIndex)) {
+            replacedSkipElementIndex
+          };
           case (#notFound(childIndex)) { childIndex }
         };
         let child = switch (internalNode.children[childIndex]) {
           case (?c) { c };
           case null {
-            Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.internalDeleteHelper, child index of #keyFound or #notfound is null")
+            Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.internalDeleteHelper, child index of #elementFound or #notfound is null")
           }
         };
         switch (child) {
           // if child is internal
           case (#internal(internalChild)) {
             switch (internalDeleteHelper(internalChild, order, compare, deleteElement, false), childIndex == 0) {
-              // if value was successfully deleted and no additional tree re-balancing is needed, return the deleted value
+              // if element was successfully deleted and no additional tree re-balancing is needed, return #deleted
               case (#deleted, _) { #deleted };
               case (#inexistent, _) { #inexistent };
               // if internalChild needs rebalancing and pulling child is left most
               case (#mergeChild({ internalChild }), true) {
-                // try to pull left-most key and child from right sibling
+                // try to pull left-most element and child from right sibling
                 switch (NodeUtil.borrowFromInternalSibling(internalNode.children, childIndex + 1, #successor)) {
-                  // if can pull up sibling kv and child
+                  // if can pull up sibling element and child
                   case (#borrowed({ deletedSiblingElement; child })) {
                     NodeUtil.rotateBorrowedElementsAndChildFromSibling(
                       internalNode,
@@ -666,7 +1065,7 @@ module {
                   };
                   // unable to pull from sibling, need to merge with right sibling and push down parent
                   case (#notEnoughElements(sibling)) {
-                    // get the parent kv that will be pushed down the the child
+                    // get the parent element that will be pushed down the the child
                     let elementsToBePushedToChild = ?BTreeHelper.deleteAndShift(internalNode.data.elements, 0);
                     internalNode.data.count -= 1;
                     // merge the children and push down the parent
@@ -685,7 +1084,7 @@ module {
               };
               // if internalChild needs rebalancing and pulling child is > 0, so a left sibling exists
               case (#mergeChild({ internalChild }), false) {
-                // try to pull right-most key and its child directly from left sibling
+                // try to pull right-most element and its child directly from left sibling
                 switch (NodeUtil.borrowFromInternalSibling(internalNode.children, childIndex - 1 : Nat, #predecessor)) {
                   case (#borrowed({ deletedSiblingElement; child })) {
                     NodeUtil.rotateBorrowedElementsAndChildFromSibling(
@@ -703,7 +1102,7 @@ module {
                     // if child is not last index, try to pull from the right child
                     if (childIndex < internalNode.data.count) {
                       switch (NodeUtil.borrowFromInternalSibling(internalNode.children, childIndex, #successor)) {
-                        // if can pull up sibling kv and child
+                        // if can pull up sibling element and child
                         case (#borrowed({ deletedSiblingElement; child })) {
                           NodeUtil.rotateBorrowedElementsAndChildFromSibling(
                             internalNode,
@@ -720,11 +1119,11 @@ module {
                       }
                     };
 
-                    // get the parent kv that will be pushed down the the child
-                    let kvPairToBePushedToChild = ?BTreeHelper.deleteAndShift(internalNode.data.elements, childIndex - 1 : Nat);
+                    // get the parent element that will be pushed down the the child
+                    let elementToBePushedToChild = ?BTreeHelper.deleteAndShift(internalNode.data.elements, childIndex - 1 : Nat);
                     internalNode.data.count -= 1;
                     // merge it the children and push down the parent
-                    let newChild = NodeUtil.mergeChildrenAndPushDownParent(leftSibling, kvPairToBePushedToChild, internalChild);
+                    let newChild = NodeUtil.mergeChildrenAndPushDownParent(leftSibling, elementToBePushedToChild, internalChild);
 
                     // update children of the parent
                     internalNode.children[childIndex - 1] := ?#internal(newChild);
@@ -757,11 +1156,11 @@ module {
                   };
 
                   case null {
-                    // can't borrow from right child, delete from leaf and merge with right child and parent kv, then push down into new leaf
+                    // can't borrow from right child, delete from leaf and merge with right child and parent element, then push down into new leaf
                     let rightChild = switch (internalNode.children[childIndex + 1]) {
                       case (?#leaf(rc)) { rc };
                       case _ {
-                        Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.internalDeleteHelper, if trying to borrow from right leaf child is null, rightChild index cannot be null or internal")
+                        Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.internalDeleteHelper, if trying to borrow from right leaf child is null, rightChild index cannot be null or internal")
                       }
                     };
                     let mergedLeaf = mergeParentWithLeftRightChildLeafNodesAndDelete(
@@ -771,7 +1170,7 @@ module {
                       leafDeleteIndex,
                       #left
                     );
-                    // delete the left most internal node kv, since was merging from a deletion in left most child (0) and the parent kv was pushed into the mergedLeaf
+                    // delete the left most internal node element, since was merging from a deletion in left most child (0) and the parent element was pushed into the mergedLeaf
                     ignore BTreeHelper.deleteAndShift<T>(internalNode.data.elements, 0);
                     // update internal node children
                     BTreeHelper.replaceTwoWithElementAndShift<Node<T>>(internalNode.children, #leaf(mergedLeaf), 0);
@@ -804,10 +1203,10 @@ module {
                       // try to borrow from right
                       switch (NodeUtil.borrowFromRightLeafChild(internalNode.children, childIndex)) {
                         case (?borrowedElement) {
-                          let kvPairToBePushedToChild = internalNode.data.elements[childIndex];
+                          let elementToBePushedToChild = internalNode.data.elements[childIndex];
                           internalNode.data.elements[childIndex] := ?borrowedElement;
                           // insert the successor at the very last element
-                          ignore BTreeHelper.insertAtPostionAndDeleteAtPosition<T>(leafChild.data.elements, kvPairToBePushedToChild, leafChild.data.count - 1, leafDeleteIndex);
+                          ignore BTreeHelper.insertAtPostionAndDeleteAtPosition<T>(leafChild.data.elements, elementToBePushedToChild, leafChild.data.count - 1, leafDeleteIndex);
                           return #deleted
                         };
                         // if cannot borrow, from left or right, merge (see below)
@@ -815,11 +1214,11 @@ module {
                       }
                     };
 
-                    // can't borrow from left child, delete from leaf and merge with left child and parent kv, then push down into new leaf
+                    // can't borrow from left child, delete from leaf and merge with left child and parent element, then push down into new leaf
                     let leftChild = switch (internalNode.children[childIndex - 1]) {
                       case (?#leaf(lc)) { lc };
                       case _ {
-                        Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.internalDeleteHelper, if trying to borrow from left leaf child is null, then left child index must not be null or internal")
+                        Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.internalDeleteHelper, if trying to borrow from left leaf child is null, then left child index must not be null or internal")
                       }
                     };
                     let mergedLeaf = mergeParentWithLeftRightChildLeafNodesAndDelete(
@@ -829,7 +1228,7 @@ module {
                       leafDeleteIndex,
                       #right
                     );
-                    // delete the right most internal node kv, since was merging from a deletion in the right most child and the parent kv was pushed into the mergedLeaf
+                    // delete the right most internal node element, since was merging from a deletion in the right most child and the parent element was pushed into the mergedLeaf
                     ignore BTreeHelper.deleteAndShift<T>(internalNode.data.elements, childIndex - 1);
                     // update internal node children
                     BTreeHelper.replaceTwoWithElementAndShift<Node<T>>(internalNode.children, #leaf(mergedLeaf), childIndex - 1);
@@ -858,7 +1257,7 @@ module {
     #deleted;
     // element was absent
     #inexistent;
-    // leaf had the minimum number of elements when deleting, so returns the leaf node's data and the index of the key that will be deleted
+    // leaf had the minimum number of elements when deleting, so returns the leaf node's data and the index of the element that will be deleted
     #mergeLeafData : {
       data : Data<T>;
       leafDeleteIndex : Nat

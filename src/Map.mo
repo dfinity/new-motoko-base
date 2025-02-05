@@ -596,8 +596,7 @@ module {
     }
   };
 
-  /// Returns the maximum key in a BTree with its associated value. If the BTree is empty, returns null
-  /// Retrieves the key-value pair from the map `m` with the maximum key.
+  /// Retrieves the key-value pair from the map with the maximum key.
   /// If the map is empty, returns `null`.
   ///
   /// Example:

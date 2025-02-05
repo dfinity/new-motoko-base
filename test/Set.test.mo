@@ -34,16 +34,16 @@ run(
         },
         M.equals(T.nat(0))
       ),
-      // test(
-      //   "iterate forward",
-      //   Iter.toArray(Set.values(Set.empty<Nat>())),
-      //   M.equals(T.array<(Nat, Text)>(entryTestable, []))
-      // ),
-      // test(
-      //   "iterate backward",
-      //   Iter.toArray(Set.reverseValues(Set.empty<Nat>())),
-      //   M.equals(T.array<(Nat, Text)>(entryTestable, []))
-      // ),
+      test(
+        "iterate forward",
+        Iter.toArray(Set.elements(Set.empty<Nat>())),
+        M.equals(T.array<Nat>(T.natTestable, []))
+      ),
+      test(
+        "iterate backward",
+        Iter.toArray(Set.reverseElements(Set.empty<Nat>())),
+        M.equals(T.array<Nat>(T.natTestable, []))
+      ),
       test(
         "contains present",
         do {
@@ -79,22 +79,22 @@ run(
       //   },
       //   M.equals(T.bool(true))
       // ),
-      // test(
-      //   "maximum entry",
-      //   do {
-      //     let set = Set.empty<Nat>();
-      //     Set.maxEntry(set)
-      //   },
-      //   M.equals(T.optional(T.natTestable, null : ?Nat))
-      // ),
-      // test(
-      //   "minimum entry",
-      //   do {
-      //     let set = Set.empty<Nat>();
-      //     Set.minEntry(set)
-      //   },
-      //   M.equals(T.optional(entryTestable, null : ?Nat))
-      // ),
+      test(
+        "maximum entry",
+        do {
+          let set = Set.empty<Nat>();
+          Set.max(set)
+        },
+        M.equals(T.optional(T.natTestable, null : ?Nat))
+      ),
+      test(
+        "minimum entry",
+        do {
+          let set = Set.empty<Nat>();
+          Set.min(set)
+        },
+        M.equals(T.optional(T.natTestable, null : ?Nat))
+      ),
       // test(
       //   "from iterator",
       //   do {
@@ -1109,40 +1109,38 @@ run(
         },
         M.equals(T.nat(0))
       ),
-      // test(
-      //   "iterate",
-      //   do {
-      //     let map = Map.empty<Nat, Text>();
-      //     for (index in Nat.range(0, numberOfEntries)) {
-      //       Map.add(map, Nat.compare, index, Nat.toText(index))
-      //     };
-      //     var index = 0;
-      //     for ((key, value) in Map.entries(map)) {
-      //       assert (key == index);
-      //       assert (value == Nat.toText(index));
-      //       index += 1
-      //     };
-      //     index
-      //   },
-      //   M.equals(T.nat(numberOfEntries))
-      // ),
-      // test(
-      //   "reverseIterate",
-      //   do {
-      //     let map = Map.empty<Nat, Text>();
-      //     for (index in Nat.range(0, numberOfEntries)) {
-      //       Map.add(map, Nat.compare, index, Nat.toText(index))
-      //     };
-      //     var index = numberOfEntries;
-      //     for ((key, value) in Map.reverseEntries(map)) {
-      //       index -= 1;
-      //       assert (key == index);
-      //       assert (value == Nat.toText(index))
-      //     };
-      //     index
-      //   },
-      //   M.equals(T.nat(0))
-      // )
+      test(
+        "iterate",
+        do {
+          let set = Set.empty<Nat>();
+          for (index in Nat.range(0, numberOfElements)) {
+            Set.add(set, Nat.compare, index)
+          };
+          var index = 0;
+          for (element in Set.elements(set)) {
+            assert (element == index);
+            index += 1
+          };
+          index
+        },
+        M.equals(T.nat(numberOfElements))
+      ),
+      test(
+        "reverseIterate",
+        do {
+          let set = Set.empty<Nat>();
+          for (index in Nat.range(0, numberOfElements)) {
+            Set.add(set, Nat.compare, index)
+          };
+          var index = numberOfElements;
+          for (element in Set.reverseElements(set)) {
+            index -= 1;
+            assert (element == index);
+          };
+          index
+        },
+        M.equals(T.nat(0))
+      )
     ]
   )
 )

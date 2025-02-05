@@ -48,11 +48,11 @@ module {
     todo()
   };
 
-  public func values<T>(set : Set<T>) : Iter.Iter<T> {
+  public func elements<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 
-  public func reverseValues<T>(set : Set<T>) : Iter.Iter<T> {
+  public func reverseElements<T>(set : Set<T>) : Iter.Iter<T> {
     todo()
   };
 

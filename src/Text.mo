@@ -24,6 +24,7 @@ import Char "Char";
 import Iter "Iter";
 import Hash "Hash";
 import Stack "Stack";
+import Types "Types";
 import Prim "mo:⛔";
 
 module {
@@ -307,11 +308,7 @@ module {
   /// let textPattern = #text "phrase";
   /// let predicatePattern : Text.Pattern = #predicate (func(c) { c == 'A' or c == 'B' }); // matches "A" or "B"
   /// ```
-  public type Pattern = {
-    #char : Char;
-    #text : Text;
-    #predicate : (Char -> Bool)
-  };
+  public type Pattern = Types.Pattern;
 
   private func take(n : Nat, cs : Iter.Iter<Char>) : Iter.Iter<Char> {
     var i = n;

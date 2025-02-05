@@ -8,11 +8,12 @@
 import { setTimer = setTimerNano; cancelTimer = cancel } = "mo:⛔";
 import Time "Time";
 import Nat64 "Nat64";
+import Types "Types";
 
 module {
 
-  public type Duration = { #seconds : Nat; #nanoseconds : Nat };
-  public type TimerId = Nat;
+  public type Duration = Types.Duration;
+  public type TimerId = Types.TimerId;
 
   /// Installs a one-off timer that upon expiration after given `duration` executes the future `job()`.
   ///

@@ -37,29 +37,11 @@ import Option "Option";
 module {
   let btreeOrder = 32; // Should be >= 4 and <= 512.
 
-  public type Node<K, V> = {
-    #leaf : Leaf<K, V>;
-    #internal : Internal<K, V>
-  };
-
-  public type Data<K, V> = {
-    kvs : [var ?(K, V)];
-    var count : Nat
-  };
-
-  public type Internal<K, V> = {
-    data : Data<K, V>;
-    children : [var ?Node<K, V>]
-  };
-
-  public type Leaf<K, V> = {
-    data : Data<K, V>
-  };
-
-  public type Map<K, V> = {
-    var root : Node<K, V>;
-    var size : Nat
-  };
+  public type Node<K, V> = Types.Map.Node<K, V>;
+  public type Data<K, V> = Types.Map.Data<K, V>;
+  public type Internal<K, V> = Types.Map.Internal<K, V>;
+  public type Leaf<K, V> = Types.Map.Leaf<K, V>;
+  public type Map<K, V> = Types.Map<K, V>;
 
   // /// Convert the mutable key-value map to an immutable key-value map.
   // ///

@@ -3,18 +3,12 @@
 import Immutable "immutable/Stack";
 import IterType "type/Iter";
 import Order "Order";
+import Types "Types";
 import { todo } "Debug";
 
 module {
-  type StackNode<T> = {
-    value : T;
-    next : ?StackNode<T>
-  };
-
-  public type Stack<T> = {
-    var top : ?StackNode<T>;
-    var size : Nat
-  };
+  type StackNode<T> = Types.Stack.Node<T>;
+  public type Stack<T> = Types.Stack<T>;
 
   public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T> {
     todo()

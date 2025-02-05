@@ -22,11 +22,12 @@
 import Iter "Iter";
 import Immutable "immutable/Queue";
 import Order "Order";
+import Types "Types";
 import { todo } "Debug";
 
 module {
 
-  public type Queue<T> = { var immutable : Immutable.Queue<T> };
+  public type Queue<T> = Types.Queue<T>;
 
   public func freeze<T>(queue : Queue<T>) : Immutable.Queue<T> = queue.immutable;
 

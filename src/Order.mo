@@ -1,16 +1,13 @@
 /// Utilities for `Order` (comparison between two values).
 
 import Iter "type/Iter";
+import Types "Types";
 import { todo } "Debug";
 
 module {
 
   /// A type to represent an order.
-  public type Order = {
-    #less;
-    #equal;
-    #greater
-  };
+  public type Order = Types.Order;
 
   /// Check if an order is #less.
   public func isLess(order : Order) : Bool {

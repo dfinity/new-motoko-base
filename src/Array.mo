@@ -332,7 +332,7 @@ module {
         switch (options[nextSome - 1]) {
           case (?element) element;
           case null {
-            Prim.trap "Malformed array in filterMap"
+            Prim.trap "Array.filterMap(): malformed array"
           }
         }
       }
@@ -397,7 +397,7 @@ module {
                   element
                 };
                 case null {
-                  Prim.trap "Malformed array in mapResults"
+                  Prim.trap "Array.mapResult(): malformed array"
                 }
               }
             }

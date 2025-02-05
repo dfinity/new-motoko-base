@@ -146,8 +146,7 @@
       "public let cos : (x : Float) -> Float",
       "public func div(x : Float, y : Float) : Float",
       "public let e : Float",
-      "public func equal(x : Float, y : Float) : Bool",
-      "public func equalWithin(x : Float, y : Float, epsilon : Float) : Bool",
+      "public func equal(x : Float, y : Float, epsilon : Float) : Bool",
       "public let exp : (x : Float) -> Float",
       "public type Float",
       "public let floor : (x : Float) -> Float",
@@ -165,8 +164,7 @@
       "public func mul(x : Float, y : Float) : Float",
       "public let nearest : (x : Float) -> Float",
       "public func neg(x : Float) : Float",
-      "public func notEqual(x : Float, y : Float) : Bool",
-      "public func notEqualWithin(x : Float, y : Float, epsilon : Float) : Bool",
+      "public func notEqual(x : Float, y : Float, epsilon : Float) : Bool",
       "public let pi : Float",
       "public func pow(x : Float, y : Float) : Float",
       "public func rem(x : Float, y : Float) : Float",
@@ -1101,7 +1099,6 @@
     "name": "Timer",
     "exports": [
       "public let cancelTimer : TimerId -> ()",
-      "public type Duration",
       "public func recurringTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId",
       "public func setTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId",
       "public type TimerId"

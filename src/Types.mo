@@ -79,7 +79,7 @@ module {
     };
 
     public type Stack<T> = {
-      var top : ?StackNode<T>;
+      var top : ?Node<T>;
       var size : Nat
     }
   };

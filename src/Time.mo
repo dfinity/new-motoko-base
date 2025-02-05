@@ -23,9 +23,9 @@
 ///       so durations should be chosen well above that. For frequent
 ///       canister wake-ups the heartbeat mechanism should be considered.
 
-import Prim "mo:⛔";
+import Types "Types";
 import Nat "Nat";
-import Nat64 "Nat64";
+import Prim "mo:⛔";
 
 module {
 

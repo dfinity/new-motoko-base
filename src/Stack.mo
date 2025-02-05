@@ -1,13 +1,12 @@
 /// Mutable stack data structure.
 
 import Immutable "immutable/Stack";
-import IterType "type/Iter";
 import Order "Order";
 import Types "Types";
 import { todo } "Debug";
 
 module {
-  type StackNode<T> = Types.Stack.Node<T>;
+  type Node<T> = Types.Stack.Node<T>;
   public type Stack<T> = Types.Stack<T>;
 
   public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T> {
@@ -30,7 +29,7 @@ module {
   };
 
   public func clear<T>(stack : Stack<T>) {
-    todo();
+    todo()
   };
 
   public func clone<T>(stack : Stack<T>) : Stack<T> { todo() };
@@ -107,7 +106,7 @@ module {
     todo()
   };
 
-  public func join<T>(stack : IterType.Iter<Stack<T>>) : Stack<T> {
+  public func join<T>(stack : Types.Iter<Stack<T>>) : Stack<T> {
     todo()
   };
 
@@ -177,11 +176,11 @@ module {
     todo()
   };
 
-  public func values<T>(stack : Stack<T>) : IterType.Iter<T> {
+  public func values<T>(stack : Stack<T>) : Types.Iter<T> {
     todo()
   };
 
-  public func fromIter<T>(iter : IterType.Iter<T>) : Stack<T> {
+  public func fromIter<T>(iter : Types.Iter<T>) : Stack<T> {
     todo()
   };
 

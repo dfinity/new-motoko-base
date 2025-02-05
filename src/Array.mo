@@ -11,11 +11,11 @@
 /// import Array "mo:base/Array";
 /// ```
 
-import Iter "type/Iter";
 import Order "Order";
 import Result "Result";
 import VarArray "VarArray";
 import Option "Option";
+import Types "Types";
 import Prim "mo:⛔";
 import { todo } "Debug";
 
@@ -440,7 +440,7 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `k` runs in O(1) time and space.
-  public func flatMap<T, R>(array : [T], k : T -> Iter.Iter<R>) : [R] {
+  public func flatMap<T, R>(array : [T], k : T -> Types.Iter<R>) : [R] {
     var flatSize = 0;
     let arrays = Prim.Array_tabulate<[R]>(
       array.size(),
@@ -539,7 +539,7 @@ module {
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
-  public func join<T>(arrays : Iter.Iter<[T]>) : [T] {
+  public func join<T>(arrays : Types.Iter<[T]>) : [T] {
     flatten(fromIter(arrays))
   };
 
@@ -598,7 +598,7 @@ module {
   public func isEmpty<T>(array : [T]) : Bool = array.size() == 0;
 
   /// Converts an iterator to an array.
-  public func fromIter<T>(iter : Iter.Iter<T>) : [T] {
+  public func fromIter<T>(iter : Types.Iter<T>) : [T] {
     todo() // Pending `List` data structure
   };
 
@@ -622,7 +622,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func keys<T>(array : [T]) : Iter.Iter<Nat> = array.keys();
+  public func keys<T>(array : [T]) : Types.Iter<Nat> = array.keys();
 
   /// Iterator provides a single method `next()`, which returns
   /// elements in order, or `null` when out of elements to iterate over.
@@ -643,7 +643,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func values<T>(array : [T]) : Iter.Iter<T> = array.vals();
+  public func values<T>(array : [T]) : Types.Iter<T> = array.vals();
 
   /// Iterator provides a single method `next()`, which returns
   /// pairs of (index, element) in order, or `null` when out of elements to iterate over.
@@ -661,7 +661,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func enumerate<T>(array : [var T]) : Iter.Iter<(Nat, T)> = object {
+  public func enumerate<T>(array : [var T]) : Types.Iter<(Nat, T)> = object {
     let size = array.size();
     var index = 0;
     public func next() : ?(Nat, T) {
@@ -832,7 +832,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func range<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
+  public func range<T>(array : [T], fromInclusive : Int, toExclusive : Int) : Types.Iter<T> {
     let size = array.size();
     // Convert negative indices to positive and handle bounds
     let startInt = if (fromInclusive < 0) {

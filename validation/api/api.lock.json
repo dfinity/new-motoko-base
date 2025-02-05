@@ -1123,6 +1123,43 @@
     ]
   },
   {
+    "name": "Types",
+    "exports": [
+      "public type Blob",
+      "public type Bool",
+      "public type Char",
+      "public type Duration",
+      "public type Error",
+      "public type ErrorCode",
+      "public type Float",
+      "public type Hash",
+      "public type Int",
+      "public type Int16",
+      "public type Int32",
+      "public type Int64",
+      "public type Int8",
+      "public type Iter<T>",
+      "public type List<T>",
+      "public type Map<K, V>",
+      "public type Nat",
+      "public type Nat16",
+      "public type Nat32",
+      "public type Nat64",
+      "public type Nat8",
+      "public type Order",
+      "public type Pattern",
+      "public type Principal",
+      "public type Queue<T>",
+      "public type Region",
+      "public type Result<T, E>",
+      "public type Set<T>",
+      "public type Stack<T>",
+      "public type Text",
+      "public type Time",
+      "public type TimerId"
+    ]
+  },
+  {
     "name": "VarArray",
     "exports": [
       "public func all<T>(array : [var T], predicate : T -> Bool) : Bool",
@@ -1303,12 +1340,6 @@
       "public func values<T>(stack : Stack<T>) : Iter.Iter<T>",
       "public func zip<T, U>(stack1 : Stack<T>, stack2 : Stack<U>) : Stack<(T, U)>",
       "public func zipWith<T, U, V>(stack1 : Stack<T>, stack2 : Stack<U>, f : (T, U) -> V) : Stack<V>"
-    ]
-  },
-  {
-    "name": "type/Iter",
-    "exports": [
-      "public type Iter<T>"
     ]
   }
 ]

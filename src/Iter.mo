@@ -278,7 +278,7 @@ module {
       count,
       func(_) {
         switch (current) {
-          case null Runtime.trap("Node must not be null");
+          case null Runtime.trap("Iter.toArray(): node must not be null");
           case (?node) {
             current := node.next;
             node.value

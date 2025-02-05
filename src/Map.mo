@@ -389,7 +389,7 @@ module {
   public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : () {
     switch (put(map, compare, key, value)) {
       case null {};
-      case (?value) Runtime.trap("Key is already present")
+      case (?value) Runtime.trap("Map.add(): key is already present")
     }
   };
 

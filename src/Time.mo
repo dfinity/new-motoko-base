@@ -23,24 +23,17 @@
 ///       so durations should be chosen well above that. For frequent
 ///       canister wake-ups the heartbeat mechanism should be considered.
 
-import Prim "mo:⛔";
+import Types "Types";
 import Nat "Nat";
-import Nat64 "Nat64";
+import Prim "mo:⛔";
 
 module {
 
   /// System time is represent as nanoseconds since 1970-01-01.
-  public type Time = Int;
+  public type Time = Types.Time;
 
   /// Quantity of time expressed in `#days`, `#hours`, `#minutes`, `#seconds`, `#milliseconds`, or `#nanoseconds`.
-  public type Duration = {
-    #days : Nat;
-    #hours : Nat;
-    #minutes : Nat;
-    #seconds : Nat;
-    #milliseconds : Nat;
-    #nanoseconds : Nat
-  };
+  public type Duration = Types.Duration;
 
   /// Current system time given as nanoseconds since 1970-01-01. The system guarantees that:
   ///

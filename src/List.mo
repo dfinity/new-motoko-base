@@ -7,7 +7,7 @@ import Types "Types";
 import { todo } "Debug";
 
 module {
-  public type List<T> = (); // Placeholder
+  public type List<T> = Types.List<T>;
 
   public func empty<T>() : List<T> {
     todo()

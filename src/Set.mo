@@ -3,11 +3,12 @@
 import Immutable "immutable/Set";
 import Iter "Iter";
 import Order "Order";
+import Types "Types";
 import { todo } "Debug";
 
 module {
 
-  public type Set<T> = { var immutable : Immutable.Set<T> };
+  public type Set<T> = Types.Set<T>;
 
   public func freeze<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Immutable.Set<T> = set.immutable;
 

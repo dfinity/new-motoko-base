@@ -2,11 +2,12 @@
 
 import Order "../Order";
 import Iter "../Iter";
+import Types "../Types";
 import { todo } "../Debug";
 
 module {
 
-  public type Map<K, V> = (); // Placeholder
+  public type Map<K, V> = Types.Immutable.Map<K, V>;
 
   public func empty<K, V>() : Map<K, V> {
     todo()

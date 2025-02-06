@@ -4,11 +4,12 @@ import Array "../Array";
 import Iter "../Iter";
 import Order "../Order";
 import Result "../Result";
+import Types "../Types";
 import { todo } "../Debug";
 
 module {
 
-  public type Stack<T> = ?(Stack<T>, T);
+  public type Stack<T> = Types.Immutable.Stack<T>;
 
   public func empty<T>() : Stack<T> = null;
 

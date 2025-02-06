@@ -10,10 +10,8 @@
 
 import Prim "mo:⛔";
 import Char "Char";
-import Hash "Hash";
 import Runtime "Runtime";
 import Iter "Iter";
-import { todo } "Debug";
 
 module {
 

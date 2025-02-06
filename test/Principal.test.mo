@@ -4,6 +4,9 @@ import Blob "../src/Blob";
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
+import IntepreterSuite "mo:testing/Suite";
+import { describe; it } = "mo:testing/Suite";
+import { assertAllTrue } = "mo:testing/Assert";
 
 let BlobTestable : T.Testable<Blob> = object {
   public func display(blob : Blob) : Text {
@@ -50,4 +53,174 @@ let suite = Suite.suite(
   ]
 );
 
-Suite.run(suite)
+Suite.run(suite);
+
+let intepreterSuite = IntepreterSuite.Suite();
+
+await* intepreterSuite.run([
+  describe(
+    "isCanisterPrincipal",
+    [
+      it(
+        "returns true for opaque ids (typically canister principals)",
+        func() : Bool {
+          assertAllTrue([
+            Principal.isCanister(Principal.fromText("rwlgt-iiaaa-aaaaa-aaaaa-cai")),
+            Principal.isCanister(Principal.fromText("rrkah-fqaaa-aaaaa-aaaaq-cai")),
+            Principal.isCanister(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai")),
+            Principal.isCanister(Principal.fromText("yoizw-hyaaa-aaaab-qacea-cai")),
+            Principal.isCanister(Principal.fromText("n4mvt-mqaaa-aaaap-ahmzq-cai")),
+            Principal.isCanister(Principal.fromText("2daxo-giaaa-aaaap-anvca-cai")),
+            Principal.isCanister(Principal.fromText("i663v-bqaaa-aaaar-qaheq-cai"))
+          ])
+        }
+      ),
+      it(
+        "returns false for the management canister",
+        func() : Bool {
+          not Principal.isCanister(Principal.fromText("aaaaa-aa"))
+        }
+      ),
+      it(
+        "returns false for the anonymous principal",
+        func() : Bool {
+          not Principal.isCanister(Principal.fromText("2vxsx-fae"))
+        }
+      ),
+      it(
+        "returns false for self-authenticating ids (typically user principals)",
+        func() : Bool {
+          assertAllTrue([
+            not Principal.isCanister(Principal.fromText("6rgy7-3uukz-jrj2k-crt3v-u2wjm-dmn3t-p26d6-ndilt-3gusv-75ybk-jae")),
+            not Principal.isCanister(Principal.fromText("u2raz-tjwf4-cj7t5-7j5yd-cnqna-yj3z4-mohwc-hfve3-fidzp-fnd5u-eae")),
+            not Principal.isCanister(Principal.fromText("rvulb-jedtr-5esx3-xth6u-evhyu-evngq-4ftg3-ldbwr-qdxkk-mdi5z-nqe")),
+            not Principal.isCanister(Principal.fromText("l3e24-yowsz-w7lez-3gsgl-2tpob-z5kov-xwtuo-ap3vj-4pxee-2hhbt-vqe")),
+            not Principal.isCanister(Principal.fromText("a6bxj-cy5lv-vrl22-5hesn-br6t5-4gjtt-ch2pe-vmeth-72u23-7sad4-iqe")),
+            not Principal.isCanister(Principal.fromText("eqhzi-tc2i7-ge4gn-nqdho-eg5qo-tian6-55tr3-u4csn-mlzqn-cxan2-mqe"))
+          ])
+        }
+      ),
+      it(
+        "returns false for reserved principals",
+        func() : Bool {
+          assertAllTrue([
+            not Principal.isCanister(Principal.fromText("sfgyh-vddpf-rwyzl-pobzx-izlbn-unwyz-s5aym-nellq-yhkzl-nnx4f-yh6")),
+            not Principal.isCanister(Principal.fromText("bnffp-h3dpf-rwyzl-pobzx-izlbn-unwyz-3gb2u-ngoey-64bzq-fl5xm-jh6")),
+            not Principal.isCanister(Principal.fromText("qlxgs-zldpf-rwyzl-pobzx-izlbn-uowyl-gdlpd-vig4g-adn7z-xmfl6-nx6")),
+            not Principal.isCanister(Principal.fromText("4ji6x-kldpf-rwyzl-pobzx-izlbn-uoxhr-owz77-gtxm2-b26co-rgns7-vx6"))
+          ])
+        }
+      )
+    ]
+  ),
+  describe(
+    "isSelfAuthenticatingPrincipal",
+    [
+      it(
+        "returns false for opaque ids (typically canister principals)",
+        func() : Bool {
+          assertAllTrue([
+            not Principal.isSelfAuthenticating(Principal.fromText("rwlgt-iiaaa-aaaaa-aaaaa-cai")),
+            not Principal.isSelfAuthenticating(Principal.fromText("rrkah-fqaaa-aaaaa-aaaaq-cai")),
+            not Principal.isSelfAuthenticating(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai")),
+            not Principal.isSelfAuthenticating(Principal.fromText("yoizw-hyaaa-aaaab-qacea-cai")),
+            not Principal.isSelfAuthenticating(Principal.fromText("n4mvt-mqaaa-aaaap-ahmzq-cai")),
+            not Principal.isSelfAuthenticating(Principal.fromText("2daxo-giaaa-aaaap-anvca-cai")),
+            not Principal.isSelfAuthenticating(Principal.fromText("i663v-bqaaa-aaaar-qaheq-cai"))
+          ])
+        }
+      ),
+      it(
+        "returns false for the management canister",
+        func() : Bool {
+          not Principal.isSelfAuthenticating(Principal.fromText("aaaaa-aa"))
+        }
+      ),
+      it(
+        "returns false for the anonymous principal",
+        func() : Bool {
+          not Principal.isSelfAuthenticating(Principal.fromText("2vxsx-fae"))
+        }
+      ),
+      it(
+        "returns true for self-authenticating ids (typically user principals)",
+        func() : Bool {
+          assertAllTrue([
+            Principal.isSelfAuthenticating(Principal.fromText("6rgy7-3uukz-jrj2k-crt3v-u2wjm-dmn3t-p26d6-ndilt-3gusv-75ybk-jae")),
+            Principal.isSelfAuthenticating(Principal.fromText("u2raz-tjwf4-cj7t5-7j5yd-cnqna-yj3z4-mohwc-hfve3-fidzp-fnd5u-eae")),
+            Principal.isSelfAuthenticating(Principal.fromText("rvulb-jedtr-5esx3-xth6u-evhyu-evngq-4ftg3-ldbwr-qdxkk-mdi5z-nqe")),
+            Principal.isSelfAuthenticating(Principal.fromText("l3e24-yowsz-w7lez-3gsgl-2tpob-z5kov-xwtuo-ap3vj-4pxee-2hhbt-vqe")),
+            Principal.isSelfAuthenticating(Principal.fromText("a6bxj-cy5lv-vrl22-5hesn-br6t5-4gjtt-ch2pe-vmeth-72u23-7sad4-iqe")),
+            Principal.isSelfAuthenticating(Principal.fromText("eqhzi-tc2i7-ge4gn-nqdho-eg5qo-tian6-55tr3-u4csn-mlzqn-cxan2-mqe"))
+          ])
+        }
+      ),
+      it(
+        "returns false for reserved principals",
+        func() : Bool {
+          assertAllTrue([
+            not Principal.isSelfAuthenticating(Principal.fromText("sfgyh-vddpf-rwyzl-pobzx-izlbn-unwyz-s5aym-nellq-yhkzl-nnx4f-yh6")),
+            not Principal.isSelfAuthenticating(Principal.fromText("bnffp-h3dpf-rwyzl-pobzx-izlbn-unwyz-3gb2u-ngoey-64bzq-fl5xm-jh6")),
+            not Principal.isSelfAuthenticating(Principal.fromText("qlxgs-zldpf-rwyzl-pobzx-izlbn-uowyl-gdlpd-vig4g-adn7z-xmfl6-nx6")),
+            not Principal.isSelfAuthenticating(Principal.fromText("4ji6x-kldpf-rwyzl-pobzx-izlbn-uoxhr-owz77-gtxm2-b26co-rgns7-vx6"))
+          ])
+        }
+      )
+    ]
+  ),
+  describe(
+    "isReservedPrincipal",
+    [
+      it(
+        "returns false for opaque ids (typically canister principals)",
+        func() : Bool {
+          assertAllTrue([
+            not Principal.isReserved(Principal.fromText("rwlgt-iiaaa-aaaaa-aaaaa-cai")),
+            not Principal.isReserved(Principal.fromText("rrkah-fqaaa-aaaaa-aaaaq-cai")),
+            not Principal.isReserved(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai")),
+            not Principal.isReserved(Principal.fromText("yoizw-hyaaa-aaaab-qacea-cai")),
+            not Principal.isReserved(Principal.fromText("n4mvt-mqaaa-aaaap-ahmzq-cai")),
+            not Principal.isReserved(Principal.fromText("2daxo-giaaa-aaaap-anvca-cai")),
+            not Principal.isReserved(Principal.fromText("i663v-bqaaa-aaaar-qaheq-cai"))
+          ])
+        }
+      ),
+      it(
+        "returns false for the management canister",
+        func() : Bool {
+          not Principal.isReserved(Principal.fromText("aaaaa-aa"))
+        }
+      ),
+      it(
+        "returns false for the anonymous principal",
+        func() : Bool {
+          not Principal.isReserved(Principal.fromText("2vxsx-fae"))
+        }
+      ),
+      it(
+        "returns false for self-authenticating ids (typically user principals)",
+        func() : Bool {
+          assertAllTrue([
+            not Principal.isReserved(Principal.fromText("6rgy7-3uukz-jrj2k-crt3v-u2wjm-dmn3t-p26d6-ndilt-3gusv-75ybk-jae")),
+            not Principal.isReserved(Principal.fromText("u2raz-tjwf4-cj7t5-7j5yd-cnqna-yj3z4-mohwc-hfve3-fidzp-fnd5u-eae")),
+            not Principal.isReserved(Principal.fromText("rvulb-jedtr-5esx3-xth6u-evhyu-evngq-4ftg3-ldbwr-qdxkk-mdi5z-nqe")),
+            not Principal.isReserved(Principal.fromText("l3e24-yowsz-w7lez-3gsgl-2tpob-z5kov-xwtuo-ap3vj-4pxee-2hhbt-vqe")),
+            not Principal.isReserved(Principal.fromText("a6bxj-cy5lv-vrl22-5hesn-br6t5-4gjtt-ch2pe-vmeth-72u23-7sad4-iqe")),
+            not Principal.isReserved(Principal.fromText("eqhzi-tc2i7-ge4gn-nqdho-eg5qo-tian6-55tr3-u4csn-mlzqn-cxan2-mqe"))
+          ])
+        }
+      ),
+      it(
+        "returns true for reserved principals",
+        func() : Bool {
+          assertAllTrue([
+            Principal.isReserved(Principal.fromText("sfgyh-vddpf-rwyzl-pobzx-izlbn-unwyz-s5aym-nellq-yhkzl-nnx4f-yh6")),
+            Principal.isReserved(Principal.fromText("bnffp-h3dpf-rwyzl-pobzx-izlbn-unwyz-3gb2u-ngoey-64bzq-fl5xm-jh6")),
+            Principal.isReserved(Principal.fromText("qlxgs-zldpf-rwyzl-pobzx-izlbn-uowyl-gdlpd-vig4g-adn7z-xmfl6-nx6")),
+            Principal.isReserved(Principal.fromText("4ji6x-kldpf-rwyzl-pobzx-izlbn-uoxhr-owz77-gtxm2-b26co-rgns7-vx6"))
+          ])
+        }
+      )
+    ]
+  )
+])

@@ -213,7 +213,7 @@ module {
   /// Example:
   /// ```motoko
   /// import Set "mo:base/Set";
-  /// import Nat "mo:base/Nat";
+  /// import Text "mo:base/Text";
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
@@ -245,7 +245,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Text>();
+  ///   let set = Set.empty<Nat>();
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
@@ -293,7 +293,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set1 = Set.empty<Nat>();
@@ -632,7 +631,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let iterator = Iter.fromArray([1, 2, 3]);
+  ///   transient let iterator = Iter.fromArray([1, 2, 3]);
   ///   let set = Set.fromIter<Nat>(iterator, Nat.compare);
   /// }
   /// ```
@@ -695,7 +694,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let union = Set.union(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Set.toArray(union)));
+  ///   Debug.print(debug_show(Iter.toArray(Set.elements(union))));
   ///   // prints: `[1, 2, 3, 4, 5]`.
   /// }
   /// ```
@@ -728,7 +727,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let intersection = Set.intersect(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Set.toArray(intersection)));
+  ///   Debug.print(debug_show(Iter.toArray(Set.elements(intersection))));
   ///   // prints: `[1, 2]`.
   /// }
   /// ```
@@ -761,7 +760,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let difference = Set.diff(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Set.toArray(difference)));
+  ///   Debug.print(debug_show(Iter.toArray(Set.elements(difference))));
   ///   // prints: `[1, 2]`.
   /// }
   /// ```
@@ -864,7 +863,7 @@ module {
   ///   Set.add(numbers, Nat.compare, 2);
   ///   Set.add(numbers, Nat.compare, 3);
   ///
-  ///   let textNumbers = Set.map<Nat, Text>(numbers, Nat.compare, func (number) {
+  ///   let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, func (number) {
   ///     Nat.toText(number)
   ///   });
   ///   for (textNumbers in Set.elements(textNumbers)) {
@@ -911,14 +910,14 @@ module {
   ///   Set.add(numbers, Nat.compare, 2);
   ///   Set.add(numbers, Nat.compare, 3);
   ///
-  ///   let evenTextNumbers = Set.filterMap<Nat, Text>(numbers, Nat.compare, func (number) {
+  ///   let evenTextNumbers = Set.filterMap<Nat, Text>(numbers, Text.compare, func (number) {
   ///     if (number % 2 == 0) {
   ///        ?Nat.toText(number)
   ///     } else {
   ///        null // discard odd numbers
   ///     }
   ///   });
-  ///   for (textNumber in Set.entries(evenTextNumbers)) {
+  ///   for (textNumber in Set.elements(evenTextNumbers)) {
   ///      Debug.print(textNumber);
   ///   }
   ///   // prints:
@@ -998,12 +997,12 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat, Text>();
+  ///   let set = Set.empty<Nat>();
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   let text = Set.foldRight<Nat, Text, Text>(
+  ///   let text = Set.foldRight<Nat, Text>(
   ///      set,
   ///      "",
   ///      func (element, accumulator) {
@@ -1049,9 +1048,9 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let set3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
-  ///   let iterator = Iter.fromArray([set1, set2, set3]);
+  ///   transient let iterator = Iter.fromArray([set1, set2, set3]);
   ///   let combined = Set.join(iterator, Nat.compare);
-  ///   Debug.print(debug_show(Set.toArray(combined)));
+  ///   Debug.print(debug_show(Iter.toArray(Set.elements(combined))));
   ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
   /// }
   /// ```
@@ -1094,7 +1093,7 @@ module {
   ///   let subSet3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
   ///   let setOfSets = Set.fromIter(Iter.fromArray([subSet1, subSet2, subSet3]), setCompare);
   ///   let flatSet = Set.flatten(setOfSets, Nat.compare);
-  ///   Debug.print(debug_show(Set.toArray(combined)));
+  ///   Debug.print(debug_show(Iter.toArray(Set.elements(flatSet))));
   ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
   /// }
   /// ```

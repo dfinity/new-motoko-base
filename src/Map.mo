@@ -1062,7 +1062,7 @@ module {
         return false
       }
     };
-    return true
+    true
   };
 
   /// Check whether at least one entry in the map fulfils the predicate function, i.e.
@@ -1097,7 +1097,7 @@ module {
         return true
       }
     };
-    return false
+    false
   };
 
   /// Filter all entries in the map by also applying a projection to the value.
@@ -1193,7 +1193,7 @@ module {
   ///   Map.add(map, Nat.compare, 2, "Two");
   ///
   ///   let text = Map.toText<Nat, Text>(map, Nat.toText, func (value) { value });
-  ///   // `(0, Zero), (1, One), (2, Two)`
+  ///   // `"(0, Zero), (1, One), (2, Two)"`
   /// }
   /// ```
   ///
@@ -1215,7 +1215,8 @@ module {
   };
 
   /// Compare two maps by primarily comparing keys and secondarily values.
-  /// Both maps are iterated by the ascending order of their creation and
+  /// Both maps must have been created by the same key comparison function.
+  /// The two maps are iterated by the ascending order of their creation and
   /// order is determined by the following rules:
   /// Less:
   /// `map1` is less than `map2` if:

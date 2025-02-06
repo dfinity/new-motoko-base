@@ -550,6 +550,19 @@ run(
         M.equals(T.bool(true))
       ),
       test(
+        "not all",
+        do {
+          let map = Map.singleton<Nat, Text>(1, "1");
+          Map.all<Nat, Text>(
+            map,
+            func(key, value) {
+              key == 0
+            }
+          )
+        },
+        M.equals(T.bool(false))
+      ),
+      test(
         "any",
         do {
           let map = Map.singleton<Nat, Text>(1, "1");
@@ -561,6 +574,19 @@ run(
           )
         },
         M.equals(T.bool(true))
+      ),
+      test(
+        "not any",
+        do {
+          let map = Map.singleton<Nat, Text>(1, "1");
+          Map.any<Nat, Text>(
+            map,
+            func(key, value) {
+              key == 0
+            }
+          )
+        },
+        M.equals(T.bool(false))
       ),
       test(
         "to text",
@@ -784,7 +810,7 @@ run(
         do {
           let map1 = smallMap();
           let map2 = smallMap();
-          Map.delete(map2, Nat.compare, smallSize - 1);
+          Map.delete(map2, Nat.compare, smallSize - 1 : Nat);
           Map.equal(map1, map2, Nat.equal, Text.equal)
         },
         M.equals(T.bool(false))
@@ -795,7 +821,7 @@ run(
           let map = smallMap();
           Map.maxEntry(map)
         },
-        M.equals(T.optional(entryTestable, ?(smallSize - 1, Nat.toText(smallSize - 1))))
+        M.equals(T.optional(entryTestable, ?(smallSize - 1 : Nat, Nat.toText(smallSize - 1))))
       ),
       test(
         "minimum entry",
@@ -882,7 +908,7 @@ run(
             }
           );
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.get(output, Nat.compare, index) == +index)
+            assert (Map.get(output, Nat.compare, index) == ?+index)
           };
           Map.size(output)
         },
@@ -992,7 +1018,7 @@ run(
         "compare less key",
         do {
           let map1 = smallMap();
-          Map.delete(map1, Nat.compare, smallSize - 1);
+          Map.delete(map1, Nat.compare, smallSize - 1 : Nat);
           let map2 = smallMap();
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #less);
           true
@@ -1004,7 +1030,7 @@ run(
         do {
           let map1 = smallMap();
           let map2 = smallMap();
-          ignore Map.put(map2, Nat.compare, smallSize - 1, "Last");
+          ignore Map.put(map2, Nat.compare, smallSize - 1 : Nat, "Last");
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #less);
           true
         },
@@ -1025,7 +1051,7 @@ run(
         do {
           let map1 = smallMap();
           let map2 = smallMap();
-          Map.delete(map2, Nat.compare, smallSize - 1);
+          Map.delete(map2, Nat.compare, smallSize - 1 : Nat);
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #greater);
           true
         },
@@ -1035,7 +1061,7 @@ run(
         "compare greater value",
         do {
           let map1 = smallMap();
-          ignore Map.put(map1, Nat.compare, smallSize - 1, "Last");
+          ignore Map.put(map1, Nat.compare, smallSize - 1 : Nat, "Last");
           let map2 = smallMap();
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #greater);
           true
@@ -1075,10 +1101,10 @@ run(
           for (index in Nat.range(0, numberOfEntries)) {
             Map.add(map, Nat.compare, index, Nat.toText(index));
             assert (Map.size(map) == index + 1);
-            assert (Map.get(map, Nat.compare, index) == Nat.toText(index))
+            assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
           };
           for (index in Nat.range(0, numberOfEntries)) {
-            assert (Map.get(map, Nat.compare, index) == Nat.toText(index))
+            assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
           };
           assert (Map.get(map, Nat.compare, numberOfEntries) == null);
           Map.assertValid(map, Nat.compare);
@@ -1098,7 +1124,7 @@ run(
           random.reset();
           for (index in Nat.range(0, numberOfEntries)) {
             let key = random.next();
-            assert (Map.get(map, Nat.compare, key) == Nat.toText(key))
+            assert (Map.get(map, Nat.compare, key) == ?Nat.toText(key))
           };
           true
         },
@@ -1124,7 +1150,7 @@ run(
           for (index in Nat.range(0, numberOfEntries)) {
             let key = random.next();
             assert (Map.containsKey(map, Nat.compare, key));
-            assert (Map.get(map, Nat.compare, key) == Nat.toText(key) # "!")
+            assert (Map.get(map, Nat.compare, key) == ?(Nat.toText(key) # "!"))
           };
           Map.assertValid(map, Nat.compare);
           true
@@ -1144,7 +1170,7 @@ run(
           for (index in Nat.range(0, numberOfEntries)) {
             let key = random.next();
             assert (Map.containsKey(map, Nat.compare, key));
-            assert (Map.get(map, Nat.compare, key) == Nat.toText(key))
+            assert (Map.get(map, Nat.compare, key) == ?Nat.toText(key))
           };
           random.reset();
           for (index in Nat.range(0, numberOfEntries)) {

@@ -35,7 +35,6 @@ import VarArray "VarArray";
 import Runtime "Runtime";
 import Stack "Stack";
 import Option "Option";
-import { todo } "Debug";
 import BTreeHelper "internal/BTreeHelper";
 
 module {
@@ -363,7 +362,7 @@ module {
   };
 
   /// Insert a new element in the set.
-  /// Traps if the element is already present in the set.
+  /// No effect if the element already exists in the set.
   ///
   /// Example:
   /// ```motoko
@@ -398,7 +397,7 @@ module {
         set.size += 1
       };
       case (#existent) {
-        Runtime.trap("Element is already present")
+        // keep size
       };
       case (#promote({ element = promotedElement; leftChild; rightChild })) {
         set.root := #internal({
@@ -623,6 +622,8 @@ module {
   };
 
   /// Create a mutable set with the elements obtained from an iterator.
+  /// Potential duplicate elements in the iterator are ignored, i.e.
+  /// multiple occurrence of the equal element only occur once in the set.
   ///
   /// Example:
   /// ```motoko
@@ -638,7 +639,7 @@ module {
   ///
   /// Runtime: `O(n * log(n))`.
   /// Space: `O(n)`.
-  /// where `n` denotes the number of key-value entries returned by the iterator and
+  /// where `n` denotes the number of elements returned by the iterator and
   /// assuming that the `compare` function implements an `O(1)` comparison.
   public func fromIter<T>(iter : IterType.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let set = empty<T>();
@@ -648,7 +649,7 @@ module {
     set
   };
 
-  /// Test whether `set1` is a sub-set of `set2`, i.e. each element in `set1` is 
+  /// Test whether `set1` is a sub-set of `set2`, i.e. each element in `set1` is
   /// also contained in `set2`. Returns `true` if both sets are equal.
   ///
   /// Example:
@@ -678,8 +679,10 @@ module {
     true
   };
 
-  /// Returns a new set that is the union of `set1` and `set2`, 
+  /// Returns a new set that is the union of `set1` and `set2`,
   /// i.e. a new set that all the elements that exist in at least on of the two sets.
+  /// Potential duplicates are ignored, i.e. if the same element occurs in both `set1`
+  /// and `set2`, it only occurs once in the returned set.
   ///
   /// Example:
   /// ```motoko
@@ -711,7 +714,7 @@ module {
     result
   };
 
-  /// Returns a new set that is the intersection of `set1` and `set2`, 
+  /// Returns a new set that is the intersection of `set1` and `set2`,
   /// i.e. a new set that contains all the elements that exist in both sets.
   ///
   /// Example:
@@ -744,7 +747,7 @@ module {
     result
   };
 
-  /// Returns a new set that is the difference between `set1` and `set2` (`set1` minus `set2`), 
+  /// Returns a new set that is the difference between `set1` and `set2` (`set1` minus `set2`),
   /// i.e. a new set that contains all the elements of `set1` that do not exist in `set2`.
   ///
   /// Example:
@@ -808,7 +811,7 @@ module {
       operation(element)
     }
   };
-  
+
   /// Filter elements in a new set.
   /// Create a copy of the mutable set that only contains the elements
   /// that fulfil the criterion function.
@@ -843,7 +846,7 @@ module {
     };
     result
   };
-  
+
   /// Project all elements of the set in a new set.
   /// Apply a mapping function to each element in the set and
   /// collect the mapped elements in a new mutable set.
@@ -888,7 +891,7 @@ module {
     };
     result
   };
-  
+
   /// Filter all elements in the set by also applying a projection to the elements.
   /// Apply a mapping function `project` to all elements in the set and collect all
   /// elements, for which the function returns a non-null new element. Collect all
@@ -950,12 +953,12 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat, Text>();
+  ///   let set = Set.empty<Nat>();
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   let text = Map.foldLeft<Nat, Text, Text>(
+  ///   let text = Set.foldLeft<Nat, Text>(
   ///      set,
   ///      "",
   ///      func (accumulator, element) {
@@ -1005,7 +1008,7 @@ module {
   ///      "",
   ///      func (element, accumulator) {
   ///        let separator = if (accumulator != "") { ", " } else { "" };
-  ///        accumulator # separator # Nat.toText(key)
+  ///        accumulator # separator # Nat.toText(element)
   ///      }
   ///   );
   ///   Debug.print(text);
@@ -1030,32 +1033,281 @@ module {
     accumulator
   };
 
-  public func join<T>(set : IterType.Iter<Set<T>>) : Set<T> {
-    todo()
+  /// Merge a series of sets to a common new sets, i.e. all elements of
+  /// the iterated sets are added to a combined set.
+  /// Potential duplicates are ignored, i.e. if the same element occurs
+  /// in multiple iterated sets, it only occurs once in the returned set.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  ///   let set3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
+  ///   let iterator = Iter.fromArray([set1, set2, set3]);
+  ///   let combined = Set.join(iterator, Nat.compare);
+  ///   Debug.print(debug_show(Set.toArray(combined)));
+  ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of elements stored in the iterated sets,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func join<T>(setIterator : IterType.Iter<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
+    let result = empty<T>();
+    for (set in setIterator) {
+      for (element in elements(set)) {
+        add(result, compare, element)
+      }
+    };
+    result
   };
 
-  public func flatten<T>(set : Set<Set<T>>) : Set<T> {
-    todo()
+  /// Merge the subsets of elements to a new set, i.e. all elements of
+  /// the sub-sets of the set are added to a combined set that is returned.
+  /// Potential duplicate elements in the sub-sets are ignored, i.e. if the
+  /// same element occurs in multiple sub-sets, it only occurs once in the
+  /// returned set.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Order "mo:base/Order";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   func setCompare(first: Set.Set<Nat>, second: Set.Set<Nat>) : Order.Order {
+  ///      Set.compare(first, second, Nat.compare)
+  ///   };
+  ///
+  ///   let subSet1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  ///   let subSet2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  ///   let subSet3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
+  ///   let setOfSets = Set.fromIter(Iter.fromArray([subSet1, subSet2, subSet3]), setCompare);
+  ///   let flatSet = Set.flatten(setOfSets, Nat.compare);
+  ///   Debug.print(debug_show(Set.toArray(combined)));
+  ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of elements stored in all the sub-sets,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func flatten<T>(setOfSets : Set<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
+    let result = empty<T>();
+    for (subSet in elements(setOfSets)) {
+      for (element in elements(subSet)) {
+        add(result, compare, element)
+      }
+    };
+    result
   };
 
-  public func all<T>(set : Set<T>, pred : T -> Bool) : Bool {
-    todo()
+  /// Check whether all element in the set fulfil a predicate function, i.e.
+  /// the predicate function returns `true` for all element in the set.
+  /// Returns `true` for an empty set.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///
+  ///   let belowTen = Set.all<Nat>(set, func (number) {
+  ///     number < 10
+  ///   }); // `true`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func all<T>(set : Set<T>, predicate : T -> Bool) : Bool {
+    for (element in elements(set)) {
+      if (not predicate(element)) {
+        return false
+      }
+    };
+    true
   };
 
-  public func any<T>(set : Set<T>, pred : T -> Bool) : Bool {
-    todo()
+  /// Check whether at least one element in the set fulfils the predicate function, i.e.
+  /// the predicate function returns `true` for at least one element in the set.
+  /// Returns `false` for an empty set.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///
+  ///   let aboveTen = Set.any<Nat>(set, func (number) {
+  ///     number > 10
+  ///   }); // `false`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func any<T>(set : Set<T>, predicate : T -> Bool) : Bool {
+    for (element in elements(set)) {
+      if (predicate(element)) {
+        return true
+      }
+    };
+    false
   };
 
-  public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order) : () {
-    // todo()
+  /// Internal sanity check function.
+  /// Can be used to check that elements have been inserted with a consistent comparison function.
+  /// Traps if the internal set structure is invalid.
+  public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order) {
+    func checkIteration(iterator : IterType.Iter<T>, order : Order.Order) {
+      switch (iterator.next()) {
+        case null {};
+        case (?first) {
+          var previous = first;
+          loop {
+            switch (iterator.next()) {
+              case null return;
+              case (?next) {
+                if (compare(previous, next) != order) {
+                  Runtime.trap("Invalid order")
+                };
+                previous := next
+              }
+            }
+          }
+        }
+      }
+    };
+    checkIteration(elements(set), #less);
+    checkIteration(reverseElements(set), #greater)
   };
 
-  public func toText<T>(set : Set<T>, f : T -> Text) : Text {
-    todo()
+  /// Generate a textual representation of all the elements in the set.
+  /// Primarily to be used for testing and debugging.
+  /// The elements are formatted according to `elementFormat`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///
+  ///   let text = Set.toText<Nat>(set, Nat.toText);
+  ///   // `"0, 1, 2"`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that `elementFormat` has runtime and space costs of `O(1)`.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text {
+    var text = "";
+    for (element in elements(set)) {
+      if (text != "") {
+        text #= ", "
+      };
+      text #= elementFormat(element)
+    };
+    text
   };
 
+  /// Compare two sets by comparing the elements.
+  /// Both sets must have been created by the same comparison function.
+  /// The two sets are iterated by the ascending order of their creation and
+  /// order is determined by the following rules:
+  /// Less:
+  /// `set1` is less than `set2` if:
+  ///  * the pairwise iteration hits an element pair `element1` and `element2` where
+  ///    `element1` is less than `element2` and all preceding elements are equal, or,
+  ///  * `set1` is  a strict prefix of `set2`, i.e. `set2` has more elements than `set1`
+  ///     and all elements of `set1` occur at the beginning of iteration `set2`.
+  /// Equal:
+  /// `set1` and `set2` have same series of equal elements by pairwise iteration.
+  /// Greater:
+  /// `set1` is neither less nor equal `set2`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Text "mo:base/Text";
+  ///
+  /// persistent actor {
+  ///   let set1 = Set.empty<Nat>();
+  ///   Set.add(set1, Nat.compare, 0);
+  ///   Set.add(set1, Nat.compare, 1);
+  ///
+  ///   let set2 = Set.empty<Nat>();
+  ///   Set.add(set2, Nat.compare, 0);
+  ///   Set.add(set2, Nat.compare, 2);
+  ///
+  ///   let orderLess = Set.compare(set1, set2, Nat.compare);
+  ///   // `#less`
+  ///   let orderEqual = Set.compare(set1, set1, Nat.compare);
+  ///   // `#equal`
+  ///   let orderGreater = Set.compare(set2, set1, Nat.compare);
+  ///   // `#greater`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that `compare` has runtime and space costs of `O(1)`.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func compare<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    todo()
+    let iterator1 = elements(set1);
+    let iterator2 = elements(set2);
+    loop {
+      switch (iterator1.next(), iterator2.next()) {
+        case (null, null) return #equal;
+        case (null, _) return #less;
+        case (_, null) return #greater;
+        case (?element1, ?element2) {
+          let comparison = compare(element1, element2);
+          if (comparison != #equal) {
+            return comparison
+          }
+        }
+      }
+    }
   };
 
   func leafElements<T>({ data } : Leaf<T>) : IterType.Iter<T> {

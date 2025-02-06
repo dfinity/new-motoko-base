@@ -26,13 +26,13 @@
 
 import Prim "mo:⛔";
 import Blob "Blob";
-import Hash "Hash";
 import Array "Array";
 import VarArray "VarArray";
 import Nat8 "Nat8";
 import Nat32 "Nat32";
 import Nat64 "Nat64";
 import Text "Text";
+import Types "Types";
 
 module {
 
@@ -197,7 +197,7 @@ module {
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
   /// Principal.hash(principal) // => 2_742_573_646
   /// ```
-  public func hash(principal : Principal) : Hash.Hash = Blob.hash(Prim.blobOfPrincipal(principal));
+  public func hash(principal : Principal) : Types.Hash = Blob.hash(Prim.blobOfPrincipal(principal));
 
   /// General purpose comparison function for `Principal`. Returns the `Order` (
   /// either `#less`, `#equal`, or `#greater`) of comparing `principal1` with

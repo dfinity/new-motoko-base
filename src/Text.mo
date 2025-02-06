@@ -22,7 +22,7 @@
 
 import Char "Char";
 import Iter "Iter";
-import Hash "Hash";
+import Types "Types";
 import Stack "Stack";
 import Prim "mo:⛔";
 
@@ -155,7 +155,7 @@ module {
   /// ```
   ///
   /// Note: this algorithm is intended for use in data structures rather than as a cryptographic hash function.
-  public func hash(t : Text) : Hash.Hash {
+  public func hash(t : Text) : Types.Hash {
     var x : Nat32 = 5381;
     for (char in t.chars()) {
       let c : Nat32 = Prim.charToNat32(char);

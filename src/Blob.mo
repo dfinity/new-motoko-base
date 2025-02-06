@@ -30,6 +30,7 @@
 /// }
 /// ```
 
+import Types "Types";
 import Prim "mo:⛔";
 
 module {
@@ -84,7 +85,7 @@ module {
   /// let blob = "\00\FF\00" : Blob;
   /// Blob.hash(blob) // => 1_818_567_776
   /// ```
-  public func hash(blob : Blob) : Nat32 = Prim.hashBlob blob;
+  public func hash(blob : Blob) : Types.Hash = Prim.hashBlob blob;
 
   /// General purpose comparison function for `Blob` by comparing the value of
   /// the bytes. Returns the `Order` (either `#less`, `#equal`, or `#greater`)

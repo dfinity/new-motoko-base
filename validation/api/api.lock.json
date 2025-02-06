@@ -1067,7 +1067,6 @@
       "public func fromVarArray(a : [var Char]) : Text",
       "public func greater(t1 : Text, t2 : Text) : Bool",
       "public func greaterOrEqual(t1 : Text, t2 : Text) : Bool",
-      "public func hash(t : Text) : Types.Hash",
       "public func join(sep : Text, ts : Iter.Iter<Text>) : Text",
       "public func less(t1 : Text, t2 : Text) : Bool",
       "public func lessOrEqual(t1 : Text, t2 : Text) : Bool",

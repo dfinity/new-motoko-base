@@ -1,6 +1,6 @@
 /// Mutable array utilities.
 
-import Iter "type/Iter";
+import Types "Types";
 import Order "Order";
 import Result "Result";
 import Option "Option";
@@ -421,7 +421,7 @@ module {
         switch (options[nextSome - 1]) {
           case (?element) element;
           case null {
-            Prim.trap "Malformed array in filterMap"
+            Prim.trap "VarArray.filterMap(): malformed array"
           }
         }
       }
@@ -486,7 +486,7 @@ module {
                   element
                 };
                 case null {
-                  Prim.trap "Malformed array in mapResults"
+                  Prim.trap "VarArray.mapResults(): malformed array"
                 }
               }
             }
@@ -531,7 +531,7 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `k` runs in O(1) time and space.
-  public func flatMap<T, R>(array : [var T], k : T -> Iter.Iter<R>) : [var R] {
+  public func flatMap<T, R>(array : [var T], k : T -> Types.Iter<R>) : [var R] {
     var flatSize = 0;
     let arrays = Prim.Array_tabulate<[var R]>(
       array.size(),
@@ -630,7 +630,7 @@ module {
   /// Runtime: O(number of elements in array)
   ///
   /// Space: O(number of elements in array)
-  public func join<T>(arrays : Iter.Iter<[var T]>) : [var T] {
+  public func join<T>(arrays : Types.Iter<[var T]>) : [var T] {
     flatten<T>(fromIter(arrays))
   };
 
@@ -689,7 +689,7 @@ module {
   public func isEmpty<T>(array : [var T]) : Bool = array.size() == 0;
 
   /// Converts an iterator to a mutable array.
-  public func fromIter<T>(iter : Iter.Iter<T>) : [var T] {
+  public func fromIter<T>(iter : Types.Iter<T>) : [var T] {
     todo() // See `Array.fromIter()`
   };
 
@@ -713,7 +713,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func keys<T>(array : [var T]) : Iter.Iter<Nat> = array.keys();
+  public func keys<T>(array : [var T]) : Types.Iter<Nat> = array.keys();
 
   /// Iterator provides a single method `next()`, which returns
   /// elements in order, or `null` when out of elements to iterate over.
@@ -734,7 +734,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func values<T>(array : [var T]) : Iter.Iter<T> = array.vals();
+  public func values<T>(array : [var T]) : Types.Iter<T> = array.vals();
 
   /// Iterator provides a single method `next()`, which returns
   /// pairs of (index, element) in order, or `null` when out of elements to iterate over.
@@ -752,7 +752,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func enumerate<T>(array : [var T]) : Iter.Iter<(Nat, T)> = object {
+  public func enumerate<T>(array : [var T]) : Types.Iter<(Nat, T)> = object {
     let size = array.size();
     var index = 0;
     public func next() : ?(Nat, T) {
@@ -923,7 +923,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func range<T>(array : [var T], fromInclusive : Int, toExclusive : Int) : Iter.Iter<T> {
+  public func range<T>(array : [var T], fromInclusive : Int, toExclusive : Int) : Types.Iter<T> {
     let size = array.size();
     // Convert negative indices to positive and handle bounds
     let startInt = if (fromInclusive < 0) {

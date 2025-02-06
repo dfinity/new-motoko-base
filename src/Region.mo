@@ -68,7 +68,7 @@ module {
   public let new : () -> Region = Prim.regionNew;
 
   /// Return a Nat identifying the given region.
-  /// Maybe be used for equality, comparison and hashing.
+  /// May be used for equality, comparison and hashing.
   /// NB: Regions returned by `new()` are numbered from 16
   /// (regions 0..15 are currently reserved for internal use).
   /// Allocate a new, isolated Region of size 0.

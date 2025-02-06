@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy:
+    if: github.event.pull_request.head.repo.owner.login == 'dfinity'
     strategy:
       matrix:
         node: [20]
@@ -16,16 +17,6 @@ jobs:
     env:
       PR_PATH: pull/${{github.event.number}}
     steps:
-      - name: Comment on PR
-        uses: hasura/comment-progress@v2.2.0
-        if: github.ref != 'refs/heads/main'
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          number: ${{ github.event.number }}
-          id: deploy-preview
-          message: "⏳ Loading documentation preview..."
-
       - name: Checkout website repo
         uses: actions/checkout@v4
 

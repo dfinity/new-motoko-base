@@ -23,11 +23,12 @@
 import Iter "../Iter";
 import Stack "Stack";
 import Order "../Order";
+import Types "../Types";
 import { todo } "../Debug";
 
 module {
   /// Double-ended queue data type.
-  public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);
+  public type Queue<T> = Types.Immutable.Queue<T>;
 
   /// Create a new empty queue.
   ///

@@ -151,7 +151,7 @@ persistent actor {
 
 <p>The internal implementation is a B-tree with order 32.</p>
 <p>Performance:</p>
-<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree.
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire map.
 <code>n</code> denotes the number of key-value entries stored in the map.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Nat.html">Nat</a><div class="index-item-comment"><p>Natural numbers with infinite precision.</p>
 <p>Most operations on natural numbers (e.g. addition) are available as built-in operators (e.g. <code>1 + 1</code>).
 This module provides equivalent functions and <code>Text</code> conversion.</p>
@@ -262,8 +262,24 @@ All applications should reserve at least one page for stable variable data, even
 <p>Usage:</p>
 <pre><code>motoko no-repl
 import Region &quot;mo:base/Region&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Result.html">Result</a><div class="index-item-comment"><p>Error handling with the Result type.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>Mutable stack data structure.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>An imperative set based on order/comparison of the elements.
+A set is a collection of elements without duplicates.
+The set data structure type is stable and can be used for orthogonal persistence.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let userIds = Set.empty&lt;Nat&gt;();
+  Set.add(userIds, Nat.compare, 1);
+  Set.add(userIds, Nat.compare, 2);
+  Set.add(userIds, Nat.compare, 3);
+}</code></pre>
+
+<p>The internal implementation is a B-tree with order 32.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire set.
+<code>n</code> denotes the number of elements stored in the set.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>Mutable stack data structure.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Text.html">Text</a><div class="index-item-comment"><p>Utility functions for <code>Text</code> values.</p>
 <p>A <code>Text</code> value represents human-readable text as a sequence of characters of type <code>Char</code>.</p>
 <pre class="motoko"><code class="motoko">let text = &quot;Hello!&quot;;
@@ -332,4 +348,4 @@ that are dynamically size-balanced by splitting.</p>
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Set.html">immutable/Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
 </div></li><li class="index-item"><a class="index-item-link" href="immutable/Stack.html">immutable/Stack</a><div class="index-item-comment"><p>Immutable singly-linked list</p>
-</div></li></ul></div></html>
+</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li></ul></div></html>

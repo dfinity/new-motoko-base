@@ -86,9 +86,21 @@ module {
   public type Stack<T> = Stack.Stack<T>;
 
   public module Immutable {
-    public type Map<K, V> = (); // Placeholder
+
+    public type Map<K, V> = {
+     size : Nat;
+     root : Tree<K, V>
+    };
+
+    public type Tree<K, V> = {
+      #red : (Tree<K, V>, K, V, Tree<K, V>);
+      #black : (Tree<K, V>, K, V, Tree<K, V>);
+      #leaf
+    };
+
     public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);
     public type Set<T> = (); // Placeholder
-    public type Stack<T> = ?(Stack<T>, T)
+    public type Stack<T> = ?(Stack<T>, T); // Delete or reorder me
+    public type List<T> = ?(T, List<T>)
   }
 }

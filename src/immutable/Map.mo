@@ -29,9 +29,9 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]));
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
-  /// Debug.print(debug_show(natMap.size(map)));
+  /// Debug.print(debug_show(Map.size(map)));
   /// // 3
   /// ```
   ///
@@ -45,15 +45,15 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/OrderedMap";
+  /// import Map "mo:base/immutable/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
-  /// Debug.print(debug_show natMap.contains(map, 1)); // => true
-  /// Debug.print(debug_show natMap.contains(map, 42)); // => false
+  /// Debug.print(debug_show natMap.contains(map, Nat.compare, 1)); // => true
+  /// Debug.print(debug_show natMap.contains(map, Nat.compare, 42)); // => false
   /// ```
   ///
   /// Runtime: `O(log(n))`.
@@ -130,12 +130,77 @@ module {
    };
 
 
+  /// Given a `map`, ordered by `compare`, deletes the entry for `key` from `map`. Has no effect if `key` is not
+  /// present in the map. Returns a modified map, leaving `map` unchanged.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 1)))));
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 42)))));
+  ///
+  /// // [(0, "Zero"), (2, "Two")]
+  /// // [(0, "Zero"), (1, "One"), (2, "Two")]
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))`
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: The returned map shares with the `m` most of the tree nodes.
+  /// Garbage collecting one of maps (e.g. after an assignment `map := Map.delete(map, compare, k).0`)
+  /// causes collecting `O(log(n))` nodes.
   public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K) : Map<K, V> {
-    todo()
+    take(map, compare, key).0
   };
 
+  /// Given a `map`, ordered by `compare`, deletes the entry for `key`. Returns a modified map, leaving `map` unchanged, and the
+  /// previous value associated with `key` or `null` if no such value exists.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map0 = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// let (map1, old1) = Map.take(map0, Nat.compare, 0);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(map1))));
+  /// Debug.print(debug_show(old1));
+  /// // [(1, "One"), (2, "Two")]
+  /// // ?"Zero"
+  ///
+  /// let (map2, old2) = Map.take(map0, Nat.compare, 42);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(map2))));
+  /// Debug.print(debug_show(old2));
+  /// // [(0, "Zero"), (1, "One"), (2, "Two")]
+  /// // null
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))`.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: The returned map shares with the `m` most of the tree nodes.
+  /// Garbage collecting one of maps (e.g. after an assignment `map := Map.remove(map, compare, key)`)
+  /// causes collecting `O(log(n))` nodes.
   public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K) : (Map<K, V>, ?V) {
-    todo()
+    switch (Internal.remove(map.root, compare, key)) {
+      case (t, null) { ({root = t; size = map.size }, null) };
+      case (t, v)    { ({root = t; size = map.size - 1}, v) }
+    }
   };
 
   public func maxEntry<K, V>(map : Map<K, V>) : ?(K, V) {

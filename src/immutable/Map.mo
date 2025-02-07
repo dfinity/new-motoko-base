@@ -203,13 +203,47 @@ module {
     }
   };
 
-  public func maxEntry<K, V>(map : Map<K, V>) : ?(K, V) {
-    todo()
-  };
+  /// Given a `map` retrieves the key-value pair in `map` with a maximal key. If `map` is empty returns `null`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Map.maxEntry(map))); // => ?(2, "Two")
+  /// Debug.print(debug_show(Map.maxEntry(Map.empty<Nat, Text>()))); // => null
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(1)`.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  public func maxEntry<K, V>(map : Map<K, V>) : ?(K, V)
+    = Internal.maxEntry(map.root);
 
-  public func minEntry<K, V>(map : Map<K, V>) : ?(K, V) {
-    todo()
-  };
+  /// Retrieves a key-value pair from the map `m` with a minimal key. If the map is empty returns `null`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Iter "mo:base/Iter";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Map.minEntry(map))); // => ?(0, "Zero")
+  /// Debug.print(debug_show(Map.minEntry(natMap.empty()))); // => null
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(1)`.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  public func minEntry<K, V>(map : Map<K, V>) : ?(K, V)
+    = Internal.minEntry(map.root);
 
   public func entries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)> {
     todo()

@@ -25,7 +25,7 @@ module {
     todo()
   };
 
-  public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(stack, item);
+  public func push<T>(stack : Stack<T>, item : T) : Stack<T> = ?(item, stack);
 
   public func last<T>(stack : Stack<T>) : ?T {
     todo()
@@ -115,7 +115,7 @@ module {
     todo()
   };
 
-  public func singleton<T>(item : T) : Stack<T> = ?(null, item);
+  public func singleton<T>(item : T) : Stack<T> = ?(item, null);
 
   public func repeat<T>(item : T, n : Nat) : Stack<T> {
     todo()

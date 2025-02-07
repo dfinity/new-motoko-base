@@ -278,13 +278,57 @@ module {
     = Internal.iter(map.root, #bwd);
 
 
-  public func keys<K, V>(map : Map<K, V>) : Types.Iter<K> {
-    todo()
-  };
+  /// Given a `map`, returns an Iterator (`Iter`) over the keys of the `map`.
+  /// Iterator provides a single method `next()`, which returns
+  /// keys in ascending order, or `null` when out of keys to iterate over.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.keys(map))));
+  ///
+  /// // [0, 1, 2]
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(log(n))` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
+  public func keys<K, V>(map : Map<K, V>) : Types.Iter<K>
+    = Iter.map(entries(map), func(kv : (K, V)) : K {kv.0});
 
-  public func values<K, V>(map : Map<K, V>) : Types.Iter<V> {
-    todo()
-  };
+  /// Given a `map`, returns an Iterator (`Iter`) over the values of the map.
+  /// Iterator provides a single method `next()`, which returns
+  /// values in ascending order of associated keys, or `null` when out of values to iterate over.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+   /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.values(map))));
+  ///
+  /// // ["Zero", "One", "Two"]
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(log(n))` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
+  public func values<K, V>(map : Map<K, V>) : Types.Iter<V>
+    = Iter.map(entries(map), func(kv : (K, V)) : V {kv.1});
 
   public func fromIter<K, V>(iter : Types.Iter<(K, V)>, compare : (K, K) -> Types.Order) : Map<K, V> {
     todo()

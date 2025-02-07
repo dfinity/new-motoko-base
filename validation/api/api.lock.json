@@ -117,10 +117,7 @@
   },
   {
     "name": "Debug",
-    "exports": [
-      "public func print(text : Text)",
-      "public func todo() : None"
-    ]
+    "exports": ["public func print(text : Text)", "public func todo() : None"]
   },
   {
     "name": "Error",
@@ -542,19 +539,19 @@
   {
     "name": "Map",
     "exports": [
-      "public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ()",
+      "public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V)",
       "public func all<K, V>(map : Map<K, V>, predicate : (K, V) -> Bool) : Bool",
       "public func any<K, V>(map : Map<K, V>, predicate : (K, V) -> Bool) : Bool",
-      "public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ()",
-      "public func clear<K, V>(map : Map<K, V>) : ()",
+      "public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order)",
+      "public func clear<K, V>(map : Map<K, V>)",
       "public func clone<K, V>(map : Map<K, V>) : Map<K, V>",
       "public func compare<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compareKey : (K, K) -> Order.Order, compareValue : (V, V) -> Order.Order) : Order.Order",
       "public func containsKey<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Bool",
       "public type Data<K, V>",
-      "public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ()",
+      "public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K)",
       "public func empty<K, V>() : Map<K, V>",
       "public func entries<K, V>(map : Map<K, V>) : IterType.Iter<(K, V)>",
-      "public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compare : (K, K) -> Order.Order, equal : (V, V) -> Bool) : Bool",
+      "public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, equalKeys : (K, K) -> Bool, equalValues : (V, V) -> Bool) : Bool",
       "public func filter<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, criterion : (K, V) -> Bool) : Map<K, V>",
       "public func filterMap<K, V1, V2>(map : Map<K, V1>, compare : (K, K) -> Order.Order, project : (K, V1) -> ?V2) : Map<K, V2>",
       "public func foldLeft<K, V, A>( map : Map<K, V>, base : A, combine : (A, K, V) -> A ) : A",
@@ -974,41 +971,43 @@
   {
     "name": "Set",
     "exports": [
-      "public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : ()",
-      "public func all<T>(set : Set<T>, pred : T -> Bool) : Bool",
-      "public func any<T>(set : Set<T>, pred : T -> Bool) : Bool",
-      "public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order) : ()",
+      "public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T)",
+      "public func all<T>(set : Set<T>, predicate : T -> Bool) : Bool",
+      "public func any<T>(set : Set<T>, predicate : T -> Bool) : Bool",
+      "public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order)",
       "public func clear<T>(set : Set<T>)",
       "public func clone<T>(set : Set<T>) : Set<T>",
       "public func compare<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Order.Order",
-      "public func contains<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Bool",
-      "public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Bool",
-      "public func diff<T>(set1 : Set<T>, set2 : Set<T>) : Set<T>",
+      "public func contains<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool",
+      "public type Data<T>",
+      "public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T)",
+      "public func diff<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func empty<T>() : Set<T>",
       "public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool",
-      "public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, f : T -> Bool) : Set<T>",
-      "public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> ?T2) : Set<T2>",
-      "public func flatten<T>(set : Set<Set<T>>) : Set<T>",
+      "public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, criterion : T -> Bool) : Set<T>",
+      "public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, project : T1 -> ?T2) : Set<T2>",
+      "public func flatten<T>(setOfSets : Set<Set<T>>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func foldLeft<T, A>( set : Set<T>, base : A, combine : (A, T) -> A ) : A",
-      "public func foldRight<T, A>( set : Set<T>, base : A, combine : (A, T) -> A ) : A",
-      "public func forEach<T>(set : Set<T>, f : T -> ())",
-      "public func freeze<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Immutable.Set<T>",
-      "public func fromIter<T>(iter : Iter.Iter<T>, compare : (T, T) -> Order.Order) : Set<T>",
-      "public func intersect<T>(set1 : Set<T>, set2 : Set<T>) : Set<T>",
+      "public func foldRight<T, A>( set : Set<T>, base : A, combine : (T, A) -> A ) : A",
+      "public func forEach<T>(set : Set<T>, operation : T -> ())",
+      "public func fromIter<T>(iter : IterType.Iter<T>, compare : (T, T) -> Order.Order) : Set<T>",
+      "public type Internal<T>",
+      "public func intersect<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func isEmpty<T>(set : Set<T>) : Bool",
-      "public func isSubset<T>(set1 : Set<T>, set2 : Set<T>) : Bool",
-      "public func join<T>(set : Iter.Iter<Set<T>>) : Set<T>",
-      "public func map<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> T2) : Set<T2>",
+      "public func isSubset<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Bool",
+      "public func join<T>(setIterator : IterType.Iter<Set<T>>, compare : (T, T) -> Order.Order) : Set<T>",
+      "public type Leaf<T>",
+      "public func map<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, project : T1 -> T2) : Set<T2>",
       "public func max<T>(set : Set<T>) : ?T",
       "public func min<T>(set : Set<T>) : ?T",
-      "public func reverseValues<T>(set : Set<T>) : Iter.Iter<T>",
+      "public type Node<T>",
+      "public func reverseValues<T>(set : Set<T>) : IterType.Iter<T>",
       "public type Set<T>",
-      "public func singleton<T>() : Set<T>",
+      "public func singleton<T>(element : T) : Set<T>",
       "public func size<T>(set : Set<T>) : Nat",
-      "public func thaw<T>(set : Immutable.Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
-      "public func toText<T>(set : Set<T>, f : T -> Text) : Text",
-      "public func union<T>(set1 : Set<T>, set2 : Set<T>) : Set<T>",
-      "public func values<T>(set : Set<T>) : Iter.Iter<T>"
+      "public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text",
+      "public func union<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
+      "public func values<T>(set : Set<T>) : IterType.Iter<T>"
     ]
   },
   {
@@ -1032,7 +1031,6 @@
       "public func foldLeft<T, A>(stack : Stack<T>, base : A, combine : (A, T) -> A) : A",
       "public func foldRight<T, A>(stack : Stack<T>, base : A, combine : (T, A) -> A) : A",
       "public func forEach<T>(stack : Stack<T>, f : T -> ())",
-      "public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T>",
       "public func fromIter<T>(iter : IterType.Iter<T>) : Stack<T>",
       "public func get<T>(stack : Stack<T>, n : Nat) : ?T",
       "public func isEmpty<T>(stack : Stack<T>) : Bool",
@@ -1051,7 +1049,6 @@
       "public type Stack<T>",
       "public func tabulate<T>(size : Nat, generator : Nat -> T) : Stack<T>",
       "public func take<T>(stack : Stack<T>, n : Nat) : Stack<T>",
-      "public func thaw<T>(stack : Immutable.Stack<T>) : Stack<T>",
       "public func toText<T>(stack : Stack<T>, f : T -> Text) : Text",
       "public func values<T>(stack : Stack<T>) : IterType.Iter<T>",
       "public func zip<T, U>(stack1 : Stack<T>, stack2 : Stack<U>) : Stack<(T, U)>",
@@ -1238,7 +1235,7 @@
       "public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, f : T -> Bool) : Set<T>",
       "public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, f : T1 -> ?T2) : Set<T2>",
       "public func foldLeft<T, A>( set : Set<T>, base : A, combine : (A, T) -> A ) : A",
-      "public func foldRight<T, A>( set : Set<T>, base : A, combine : (A, T) -> A ) : A",
+      "public func foldRight<T, A>( set : Set<T>, base : A, combine : (T, A) -> A ) : A",
       "public func forEach<T>(set : Set<T>, f : T -> ())",
       "public func fromIter<T>(iter : Iter.Iter<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func intersect<T>(set1 : Set<T>, set2 : Set<T>) : Set<T>",
@@ -1304,9 +1301,20 @@
     ]
   },
   {
-    "name": "type/Iter",
+    "name": "internal/BTreeHelper",
     "exports": [
-      "public type Iter<T>"
+      "public func deleteAndShift<T>(array : [var ?T], deleteIndex : Nat) : T",
+      "public type DeletionSide",
+      "public func insertAtPosition<T>(array : [var ?T], insertElement : ?T, insertIndex : Nat, currentLastElementIndex : Nat)",
+      "public func insertAtPostionAndDeleteAtPosition<T>(array : [var ?T], insertElement : ?T, insertIndex : Nat, deleteIndex : Nat) : T",
+      "public func insertOneAtIndexAndSplitArray<T>(array : [var ?T], insertElement : T, insertIndex : Nat) : ([var ?T], T, [var ?T])",
+      "public func mergeParentWithChildrenAndDelete<T>( parentElement : ?T, childCount : Nat, leftChild : [var ?T], rightChild : [var ?T], deleteIndex : Nat, deletionSide : DeletionSide ) : ([var ?T], T)",
+      "public func replaceTwoWithElementAndShift<T>(array : [var ?T], element : T, replaceIndex : Nat)",
+      "public func splitArrayAndInsertTwo<T>(children : [var ?T], rebalancedChildIndex : Nat, leftChildInsert : T, rightChildInsert : T) : ([var ?T], [var ?T])"
     ]
+  },
+  {
+    "name": "type/Iter",
+    "exports": ["public type Iter<T>"]
   }
 ]

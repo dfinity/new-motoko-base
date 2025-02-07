@@ -35,12 +35,12 @@ run(
       ),
       test(
         "iterate forward",
-        Iter.toArray(Set.elements(Set.empty<Nat>())),
+        Iter.toArray(Set.values(Set.empty<Nat>())),
         M.equals(T.array<Nat>(T.natTestable, []))
       ),
       test(
         "iterate backward",
-        Iter.toArray(Set.reverseElements(Set.empty<Nat>())),
+        Iter.toArray(Set.reverseValues(Set.empty<Nat>())),
         M.equals(T.array<Nat>(T.natTestable, []))
       ),
       test(
@@ -338,12 +338,12 @@ run(
       ),
       test(
         "iterate forward",
-        Iter.toArray(Set.elements(Set.singleton<Nat>(0))),
+        Iter.toArray(Set.values(Set.singleton<Nat>(0))),
         M.equals(T.array<Nat>(T.natTestable, [0]))
       ),
       test(
         "iterate backward",
-        Iter.toArray(Set.reverseElements(Set.singleton<Nat>(0))),
+        Iter.toArray(Set.reverseValues(Set.singleton<Nat>(0))),
         M.equals(T.array<Nat>(T.natTestable, [0]))
       ),
       test(
@@ -426,12 +426,12 @@ run(
       ),
       test(
         "iterate forward",
-        Iter.toArray(Set.elements(Set.singleton<Nat>(0))),
+        Iter.toArray(Set.values(Set.singleton<Nat>(0))),
         M.equals(T.array<Nat>(T.natTestable, [0]))
       ),
       test(
         "iterate backwards",
-        Iter.toArray(Set.reverseElements(Set.singleton<Nat>(0))),
+        Iter.toArray(Set.reverseValues(Set.singleton<Nat>(0))),
         M.equals(T.array<Nat>(T.natTestable, [0]))
       ),
       test(
@@ -660,7 +660,7 @@ run(
           let set1 = Set.singleton<Nat>(1);
           let set2 = Set.singleton<Nat>(2);
           let union = Set.union(set1, set2, Nat.compare);
-          Iter.toArray(Set.elements(union))
+          Iter.toArray(Set.values(union))
         },
         M.equals(
           T.array<Nat>(
@@ -675,7 +675,7 @@ run(
           let set1 = Set.singleton<Nat>(1);
           let set2 = Set.singleton<Nat>(1);
           let union = Set.union(set1, set2, Nat.compare);
-          Iter.toArray(Set.elements(union))
+          Iter.toArray(Set.values(union))
         },
         M.equals(
           T.array<Nat>(
@@ -690,7 +690,7 @@ run(
           let set1 = Set.singleton<Nat>(0);
           let set2 = Set.singleton<Nat>(1);
           let intersection = Set.intersect(set1, set2, Nat.compare);
-          Iter.toArray(Set.elements(intersection))
+          Iter.toArray(Set.values(intersection))
         },
         M.equals(
           T.array<Nat>(
@@ -705,7 +705,7 @@ run(
           let set1 = Set.singleton<Nat>(1);
           let set2 = Set.singleton<Nat>(1);
           let intersection = Set.intersect(set1, set2, Nat.compare);
-          Iter.toArray(Set.elements(intersection))
+          Iter.toArray(Set.values(intersection))
         },
         M.equals(
           T.array<Nat>(
@@ -720,7 +720,7 @@ run(
           let set1 = Set.singleton<Nat>(1);
           let set2 = Set.singleton<Nat>(1);
           let difference = Set.diff(set1, set2, Nat.compare);
-          Iter.toArray(Set.elements(difference))
+          Iter.toArray(Set.values(difference))
         },
         M.equals(
           T.array<Nat>(
@@ -735,7 +735,7 @@ run(
           let set1 = Set.singleton<Nat>(0);
           let set2 = Set.singleton<Nat>(1);
           let difference = Set.diff(set1, set2, Nat.compare);
-          Iter.toArray(Set.elements(difference))
+          Iter.toArray(Set.values(difference))
         },
         M.equals(
           T.array<Nat>(
@@ -751,7 +751,7 @@ run(
           let set2 = Set.singleton<Nat>(1);
           let set3 = Set.singleton<Nat>(2);
           let combined = Set.join(Iter.fromArray([set1, set2, set3]), Nat.compare);
-          Iter.toArray(Set.elements(combined))
+          Iter.toArray(Set.values(combined))
         },
         M.equals(
           T.array<Nat>(
@@ -769,7 +769,7 @@ run(
           let iterator = Iter.fromArray([subSet1, subSet2, subSet3]);
           let setOfSets = Set.fromIter<Set.Set<Nat>>(iterator, func(first, second) { Set.compare(first, second, Nat.compare) });
           let combined = Set.flatten(setOfSets, Nat.compare);
-          Iter.toArray(Set.elements(combined))
+          Iter.toArray(Set.values(combined))
         },
         M.equals(
           T.array<Nat>(
@@ -818,7 +818,7 @@ run(
       ),
       test(
         "iterate forward",
-        Iter.toArray(Set.elements(smallSet())),
+        Iter.toArray(Set.values(smallSet())),
         M.equals(
           T.array<Nat>(
             T.natTestable,
@@ -828,7 +828,7 @@ run(
       ),
       test(
         "iterate backward",
-        Iter.toArray(Set.reverseElements(smallSet())),
+        Iter.toArray(Set.reverseValues(smallSet())),
         M.equals(T.array<Nat>(T.natTestable, Array.reverse(Array.tabulate<Nat>(smallSize, func(index) { index }))))
       ),
       test(
@@ -907,12 +907,12 @@ run(
       ),
       test(
         "forward iteration",
-        Iter.toArray(Set.elements(smallSet())),
+        Iter.toArray(Set.values(smallSet())),
         M.equals(T.array<Nat>(T.natTestable, Array.tabulate<Nat>(smallSize, func(index) { index })))
       ),
       test(
         "backwards iteration",
-        Iter.toArray(Set.reverseElements(smallSet())),
+        Iter.toArray(Set.reverseValues(smallSet())),
         M.equals(T.array<Nat>(T.natTestable, Array.tabulate<Nat>(smallSize, func(index) { smallSize - 1 - index : Nat })))
       ),
       test(
@@ -1121,7 +1121,7 @@ run(
           let set1 = Set.map<Nat, Int>(smallSet(), Int.compare, func(number) { +number });
           let set2 = Set.map<Nat, Int>(smallSet(), Int.compare, func(number) { -number });
           let union = Set.union(set1, set2, Int.compare);
-          Iter.toArray(Set.elements(union))
+          Iter.toArray(Set.values(union))
         },
         M.equals(
           T.array<Int>(
@@ -1143,7 +1143,7 @@ run(
           let set2 = Set.map<Nat, Int>(smallSet(), Int.compare, func(number) { -number });
           Set.add(set2, Int.compare, 1);
           let intersection = Set.intersect(set1, set2, Int.compare);
-          Iter.toArray(Set.elements(intersection))
+          Iter.toArray(Set.values(intersection))
         },
         M.equals(
           T.array<Int>(
@@ -1161,7 +1161,7 @@ run(
           Set.delete(set2, Nat.compare, 1);
           Set.delete(set2, Nat.compare, 2);
           let difference = Set.diff(set1, set2, Nat.compare);
-          Iter.toArray(Set.elements(difference))
+          Iter.toArray(Set.values(difference))
         },
         M.equals(
           T.array<Nat>(
@@ -1177,7 +1177,7 @@ run(
           let set2 = Set.map<Nat, Int>(smallSet(), Int.compare, func(number) { -number });
           let set3 = Set.fromIter(Iter.fromArray<Int>([-1, 1]), Int.compare);
           let combined = Set.join(Iter.fromArray([set1, set2, set3]), Int.compare);
-          Iter.toArray(Set.elements(combined))
+          Iter.toArray(Set.values(combined))
         },
         M.equals(
           T.array<Int>(
@@ -1200,7 +1200,7 @@ run(
           let iterator = Iter.fromArray([subSet1, subSet2, subSet3]);
           let setOfSets = Set.fromIter<Set.Set<Int>>(iterator, func(first, second) { Set.compare(first, second, Int.compare) });
           let combined = Set.flatten(setOfSets, Int.compare);
-          Iter.toArray(Set.elements(combined))
+          Iter.toArray(Set.values(combined))
         },
         M.equals(
           T.array<Int>(
@@ -1317,7 +1317,7 @@ run(
             Set.add(set, Nat.compare, index)
           };
           var index = 0;
-          for (element in Set.elements(set)) {
+          for (element in Set.values(set)) {
             assert (element == index);
             index += 1
           };
@@ -1333,7 +1333,7 @@ run(
             Set.add(set, Nat.compare, index)
           };
           var index = numberOfElements;
-          for (element in Set.reverseElements(set)) {
+          for (element in Set.reverseValues(set)) {
             index -= 1;
             assert (element == index)
           };

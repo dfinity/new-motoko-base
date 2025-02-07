@@ -89,7 +89,7 @@ module {
   // ///
   // /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
   // public func freeze<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Immutable.Set<T> {
-  //   ImmutableSet.fromIter(elements(set), compare);
+  //   ImmutableSet.fromIter(values(set), compare);
   // };
 
   // /// Convert an immutable set to a mutable set.
@@ -115,7 +115,7 @@ module {
   // /// where `n` denotes the number of elements stored in the set and
   // /// assuming that the `compare` function implements an `O(1)` comparison.
   // public func thaw<T>(set : Immutable.Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
-  //   fromIter(ImmutableSet.elements(set), compare)
+  //   fromIter(ImmutableSet.values(set), compare)
   // };
 
   /// Create a copy of the mutable set.
@@ -308,8 +308,8 @@ module {
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
   public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool {
-    let iterator1 = elements(set1);
-    let iterator2 = elements(set2);
+    let iterator1 = values(set1);
+    let iterator2 = values(set2);
     loop {
       let next1 = iterator1.next();
       let next2 = iterator2.next();
@@ -518,7 +518,7 @@ module {
   /// Space: `O(1)`.
   /// where `n` denotes the number of elements stored in the set.
   public func max<T>(set : Set<T>) : ?T {
-    reverseElements(set).next()
+    reverseValues(set).next()
   };
 
   /// Retrieves the minimum element from the set.
@@ -543,7 +543,7 @@ module {
   /// Space: `O(1)`.
   /// where `n` denotes the number of elements stored in the set.
   public func min<T>(set : Set<T>) : ?T {
-    elements(set).next()
+    values(set).next()
   };
 
   /// Returns an iterator over the elements in the set,
@@ -561,7 +561,7 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   for (number in Set.elements(set)) {
+  ///   for (number in Set.values(set)) {
   ///      Debug.print(debug_show(number));
   ///   }
   ///   // prints:
@@ -576,7 +576,7 @@ module {
   /// where `n` denotes the number of elements stored in the set.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func elements<T>(set : Set<T>) : IterType.Iter<T> {
+  public func values<T>(set : Set<T>) : IterType.Iter<T> {
     switch (set.root) {
       case (#leaf(leafNode)) { return leafElements(leafNode) };
       case (#internal(internalNode)) { internalElements(internalNode) }
@@ -598,7 +598,7 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   for (number in Set.reverseElements(set)) {
+  ///   for (number in Set.reverseValues(set)) {
   ///      Debug.print(debug_show(number));
   ///   }
   ///   // prints:
@@ -613,7 +613,7 @@ module {
   /// where `n` denotes the number of elements stored in the set.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func reverseElements<T>(set : Set<T>) : IterType.Iter<T> {
+  public func reverseValues<T>(set : Set<T>) : IterType.Iter<T> {
     switch (set.root) {
       case (#leaf(leafNode)) { return reverseLeafElements(leafNode) };
       case (#internal(internalNode)) { reverseInternalElements(internalNode) }
@@ -670,7 +670,7 @@ module {
   /// where `m` and `n` denote the number of elements stored in the sets `set1` and `set2`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func isSubset<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Bool {
-    for (element in elements(set1)) {
+    for (element in values(set1)) {
       if (not contains(set2, compare, element)) {
         return false
       }
@@ -694,7 +694,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let union = Set.union(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.elements(union))));
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(union))));
   ///   // prints: `[1, 2, 3, 4, 5]`.
   /// }
   /// ```
@@ -705,7 +705,7 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func union<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = clone<T>(set1);
-    for (element in elements(set2)) {
+    for (element in values(set2)) {
       if (not contains(result, compare, element)) {
         add(result, compare, element)
       }
@@ -727,7 +727,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let intersection = Set.intersect(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.elements(intersection))));
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(intersection))));
   ///   // prints: `[1, 2]`.
   /// }
   /// ```
@@ -738,7 +738,7 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func intersect<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = empty<T>();
-    for (element in elements(set1)) {
+    for (element in values(set1)) {
       if (contains(set2, compare, element)) {
         add(result, compare, element)
       }
@@ -760,7 +760,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let difference = Set.diff(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.elements(difference))));
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(difference))));
   ///   // prints: `[1, 2]`.
   /// }
   /// ```
@@ -771,7 +771,7 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func diff<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = empty<T>();
-    for (element in elements(set1)) {
+    for (element in values(set1)) {
       if (not contains(set2, compare, element)) {
         add(result, compare, element)
       }
@@ -806,7 +806,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func forEach<T>(set : Set<T>, operation : T -> ()) {
-    for (element in elements(set)) {
+    for (element in values(set)) {
       operation(element)
     }
   };
@@ -838,7 +838,7 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, criterion : T -> Bool) : Set<T> {
     let result = empty<T>();
-    for (element in elements(set)) {
+    for (element in values(set)) {
       if (criterion(element)) {
         add(result, compare, element)
       }
@@ -866,7 +866,7 @@ module {
   ///   let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, func (number) {
   ///     Nat.toText(number)
   ///   });
-  ///   for (textNumbers in Set.elements(textNumbers)) {
+  ///   for (textNumbers in Set.values(textNumbers)) {
   ///      Debug.print(debug_show(textNumbers));
   ///   }
   ///   // prints:
@@ -884,7 +884,7 @@ module {
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func map<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, project : T1 -> T2) : Set<T2> {
     let result = empty<T2>();
-    for (element1 in elements(set)) {
+    for (element1 in values(set)) {
       let element2 = project(element1);
       add(result, compare, element2)
     };
@@ -917,7 +917,7 @@ module {
   ///        null // discard odd numbers
   ///     }
   ///   });
-  ///   for (textNumber in Set.elements(evenTextNumbers)) {
+  ///   for (textNumber in Set.values(evenTextNumbers)) {
   ///      Debug.print(textNumber);
   ///   }
   ///   // prints:
@@ -933,7 +933,7 @@ module {
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, project : T1 -> ?T2) : Set<T2> {
     let result = empty<T2>();
-    for (element1 in elements(set)) {
+    for (element1 in values(set)) {
       switch (project(element1)) {
         case null {};
         case (?element2) add(result, compare, element2)
@@ -981,7 +981,7 @@ module {
     combine : (A, T) -> A
   ) : A {
     var accumulator = base;
-    for (element in elements(set)) {
+    for (element in values(set)) {
       accumulator := combine(accumulator, element)
     };
     accumulator
@@ -1026,7 +1026,7 @@ module {
     combine : (T, A) -> A
   ) : A {
     var accumulator = base;
-    for (element in reverseElements(set)) {
+    for (element in reverseValues(set)) {
       accumulator := combine(element, accumulator)
     };
     accumulator
@@ -1050,7 +1050,7 @@ module {
   ///   let set3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
   ///   transient let iterator = Iter.fromArray([set1, set2, set3]);
   ///   let combined = Set.join(iterator, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.elements(combined))));
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(combined))));
   ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
   /// }
   /// ```
@@ -1062,7 +1062,7 @@ module {
   public func join<T>(setIterator : IterType.Iter<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = empty<T>();
     for (set in setIterator) {
-      for (element in elements(set)) {
+      for (element in values(set)) {
         add(result, compare, element)
       }
     };
@@ -1093,7 +1093,7 @@ module {
   ///   let subSet3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
   ///   let setOfSets = Set.fromIter(Iter.fromArray([subSet1, subSet2, subSet3]), setCompare);
   ///   let flatSet = Set.flatten(setOfSets, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.elements(flatSet))));
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(flatSet))));
   ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
   /// }
   /// ```
@@ -1104,8 +1104,8 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func flatten<T>(setOfSets : Set<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = empty<T>();
-    for (subSet in elements(setOfSets)) {
-      for (element in elements(subSet)) {
+    for (subSet in values(setOfSets)) {
+      for (element in values(subSet)) {
         add(result, compare, element)
       }
     };
@@ -1139,7 +1139,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func all<T>(set : Set<T>, predicate : T -> Bool) : Bool {
-    for (element in elements(set)) {
+    for (element in values(set)) {
       if (not predicate(element)) {
         return false
       }
@@ -1174,7 +1174,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func any<T>(set : Set<T>, predicate : T -> Bool) : Bool {
-    for (element in elements(set)) {
+    for (element in values(set)) {
       if (predicate(element)) {
         return true
       }
@@ -1205,8 +1205,8 @@ module {
         }
       }
     };
-    checkIteration(elements(set), #less);
-    checkIteration(reverseElements(set), #greater)
+    checkIteration(values(set), #less);
+    checkIteration(reverseValues(set), #greater)
   };
 
   /// Generate a textual representation of all the elements in the set.
@@ -1237,7 +1237,7 @@ module {
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text {
     var text = "";
-    for (element in elements(set)) {
+    for (element in values(set)) {
       if (text != "") {
         text #= ", "
       };
@@ -1292,8 +1292,8 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func compare<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    let iterator1 = elements(set1);
-    let iterator2 = elements(set2);
+    let iterator1 = values(set1);
+    let iterator2 = values(set2);
     loop {
       switch (iterator1.next(), iterator2.next()) {
         case (null, null) return #equal;

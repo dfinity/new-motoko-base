@@ -87,7 +87,7 @@ module {
 
   public module Immutable {
     public type Map<K, V> = (); // Placeholder
-    public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);
+    public type Queue<T> = (Stack<T>, Stack<T>);
     public type Set<T> = (); // Placeholder
     public type Stack<T> = ?(T, Stack<T>)
   }

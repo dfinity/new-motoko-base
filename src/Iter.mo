@@ -5,6 +5,7 @@ import Array "Array";
 import VarArray "VarArray";
 import Prim "mo:prim";
 import Runtime "Runtime";
+import Types "Types";
 
 module {
 
@@ -21,7 +22,7 @@ module {
   ///   …do something with x…
   /// }
   /// ```
-  public type Iter<T> = { next : () -> ?T };
+  public type Iter<T> = Types.Iter<T>;
 
   public func empty<T>() : Iter<T> {
     object {

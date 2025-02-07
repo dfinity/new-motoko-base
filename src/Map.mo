@@ -27,8 +27,7 @@
 // Distributed under Apache 2.0 license.
 // With adjustments by the Motoko team.
 
-// import ImmutableMap "immutable/Map";
-import IterType "type/Iter";
+import Types "Types";
 import Order "Order";
 import VarArray "VarArray";
 import Runtime "Runtime";
@@ -39,29 +38,11 @@ import BTreeHelper "internal/BTreeHelper";
 module {
   let btreeOrder = 32; // Should be >= 4 and <= 512.
 
-  public type Node<K, V> = {
-    #leaf : Leaf<K, V>;
-    #internal : Internal<K, V>
-  };
-
-  public type Data<K, V> = {
-    kvs : [var ?(K, V)];
-    var count : Nat
-  };
-
-  public type Internal<K, V> = {
-    data : Data<K, V>;
-    children : [var ?Node<K, V>]
-  };
-
-  public type Leaf<K, V> = {
-    data : Data<K, V>
-  };
-
-  public type Map<K, V> = {
-    var root : Node<K, V>;
-    var size : Nat
-  };
+  public type Node<K, V> = Types.Map.Node<K, V>;
+  public type Data<K, V> = Types.Map.Data<K, V>;
+  public type Internal<K, V> = Types.Map.Internal<K, V>;
+  public type Leaf<K, V> = Types.Map.Leaf<K, V>;
+  public type Map<K, V> = Types.Map<K, V>;
 
   // /// Convert the mutable key-value map to an immutable key-value map.
   // ///
@@ -678,7 +659,7 @@ module {
   /// where `n` denotes the number of key-value entries stored in the map.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func entries<K, V>(map : Map<K, V>) : IterType.Iter<(K, V)> {
+  public func entries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)> {
     switch (map.root) {
       case (#leaf(leafNode)) { return leafEntries(leafNode) };
       case (#internal(internalNode)) { internalEntries(internalNode) }
@@ -715,7 +696,7 @@ module {
   /// where `n` denotes the number of key-value entries stored in the map.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func reverseEntries<K, V>(map : Map<K, V>) : IterType.Iter<(K, V)> {
+  public func reverseEntries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)> {
     switch (map.root) {
       case (#leaf(leafNode)) { return reverseLeafEntries(leafNode) };
       case (#internal(internalNode)) { reverseInternalEntries(internalNode) }
@@ -749,7 +730,7 @@ module {
   /// Cost of iteration over all elements:
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  public func keys<K, V>(map : Map<K, V>) : IterType.Iter<K> {
+  public func keys<K, V>(map : Map<K, V>) : Types.Iter<K> {
     object {
       let iterator = entries(map);
 
@@ -789,7 +770,7 @@ module {
   /// Cost of iteration over all elements:
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  public func values<K, V>(map : Map<K, V>) : IterType.Iter<V> {
+  public func values<K, V>(map : Map<K, V>) : Types.Iter<V> {
     object {
       let iterator = entries(map);
 
@@ -820,7 +801,7 @@ module {
   /// Space: `O(n)`.
   /// where `n` denotes the number of key-value entries returned by the iterator and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func fromIter<K, V>(iter : IterType.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V> {
+  public func fromIter<K, V>(iter : Types.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V> {
     let map = empty<K, V>();
     for ((key, value) in iter) {
       add(map, compare, key, value)
@@ -1154,7 +1135,7 @@ module {
   /// Can be used to check that key/value pairs have been inserted with a consistent key comparison function.
   /// Traps if the internal map structure is invalid.
   public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) {
-    func checkIteration(iterator : IterType.Iter<(K, V)>, order : Order.Order) {
+    func checkIteration(iterator : Types.Iter<(K, V)>, order : Order.Order) {
       switch (iterator.next()) {
         case null {};
         case (?first) {
@@ -1285,7 +1266,7 @@ module {
     }
   };
 
-  func leafEntries<K, V>({ data } : Leaf<K, V>) : IterType.Iter<(K, V)> {
+  func leafEntries<K, V>({ data } : Leaf<K, V>) : Types.Iter<(K, V)> {
     var i : Nat = 0;
     object {
       public func next() : ?(K, V) {
@@ -1300,7 +1281,7 @@ module {
     }
   };
 
-  func reverseLeafEntries<K, V>({ data } : Leaf<K, V>) : IterType.Iter<(K, V)> {
+  func reverseLeafEntries<K, V>({ data } : Leaf<K, V>) : Types.Iter<(K, V)> {
     var i : Nat = data.count;
     object {
       public func next() : ?(K, V) {
@@ -1318,7 +1299,7 @@ module {
   // Cursor type that keeps track of the current node and the current key-value index in the node
   type NodeCursor<K, V> = { node : Node<K, V>; kvIndex : Nat };
 
-  func internalEntries<K, V>(internal : Internal<K, V>) : IterType.Iter<(K, V)> {
+  func internalEntries<K, V>(internal : Internal<K, V>) : Types.Iter<(K, V)> {
     object {
       // The nodeCursorStack keeps track of the current node and the current key-value index in the node
       // We use a stack here to push to/pop off the next node cursor to visit
@@ -1399,7 +1380,7 @@ module {
     }
   };
 
-  func reverseInternalEntries<K, V>(internal : Internal<K, V>) : IterType.Iter<(K, V)> {
+  func reverseInternalEntries<K, V>(internal : Internal<K, V>) : Types.Iter<(K, V)> {
     object {
       // The nodeCursorStack keeps track of the current node and the current key-value index in the node
       // We use a stack here to push to/pop off the next node cursor to visit

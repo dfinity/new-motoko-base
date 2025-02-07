@@ -29,7 +29,7 @@
 // With adjustments by the Motoko team.
 
 // import Immutable "immutable/Set";
-import IterType "type/Iter";
+import Types "Types";
 import Order "Order";
 import VarArray "VarArray";
 import Runtime "Runtime";

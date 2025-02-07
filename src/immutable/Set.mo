@@ -2,11 +2,12 @@
 
 import Iter "../Iter";
 import Order "../Order";
+import Types "../Types";
 import { todo } "../Debug";
 
 module {
 
-  public type Set<T> = (); // Placeholder
+  public type Set<T> = Types.Immutable.Set<T>;
 
   public func empty<T>() : Set<T> {
     todo()

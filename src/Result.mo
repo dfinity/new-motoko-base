@@ -1,6 +1,7 @@
 /// Error handling with the Result type.
 
 import Order "Order";
+import Types "Types";
 
 module {
 
@@ -18,10 +19,7 @@ module {
   ///   case (#err(msg)) { Debug.print("Failed to create user with the error: " # msg) };
   /// }
   /// ```
-  public type Result<Ok, Err> = {
-    #ok : Ok;
-    #err : Err
-  };
+  public type Result<Ok, Err> = Types.Result<Ok, Err>;
 
   // Compares two Result's for equality.
   public func equal<Ok, Err>(

@@ -104,7 +104,7 @@ module {
   public func foldRight<T, A>(
     set : Set<T>,
     base : A,
-    combine : (T, A) -> A
+    combine : (A, T) -> A
   ) : A {
     todo()
   };

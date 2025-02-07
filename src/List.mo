@@ -169,7 +169,7 @@ module {
     todo()
   };
 
-  public func foldRight<T, A>(list : List<T>, base : A, combine : (T, A) -> A) : A {
+  public func foldRight<T, A>(list : List<T>, base : A, combine : (A, T) -> A) : A {
     todo()
   };
 

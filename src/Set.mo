@@ -1023,11 +1023,11 @@ module {
   public func foldRight<T, A>(
     set : Set<T>,
     base : A,
-    combine : (T, A) -> A
+    combine : (A, T) -> A
   ) : A {
     var accumulator = base;
     for (element in reverseValues(set)) {
-      accumulator := combine(element, accumulator)
+      accumulator := combine(accumulator, element)
     };
     accumulator
   };

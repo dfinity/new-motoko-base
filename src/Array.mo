@@ -514,13 +514,13 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that `combine` runs in O(1) time and space.
-  public func foldRight<T, A>(array : [T], base : A, combine : (T, A) -> A) : A {
+  public func foldRight<T, A>(array : [T], base : A, combine : (A, T) -> A) : A {
     var acc = base;
     let size = array.size();
     var i = size;
     while (i > 0) {
       i -= 1;
-      acc := combine(array[i], acc)
+      acc := combine(acc, array[i])
     };
     acc
   };

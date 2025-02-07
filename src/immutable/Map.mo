@@ -224,7 +224,7 @@ module {
   public func maxEntry<K, V>(map : Map<K, V>) : ?(K, V)
     = Internal.maxEntry(map.root);
 
-  /// Retrieves a key-value pair from the map `m` with a minimal key. If the map is empty returns `null`.
+  /// Retrieves a key-value pair from `map` with the minimal key. If the map is empty returns `null`.
   ///
   /// Example:
   /// ```motoko
@@ -245,13 +245,38 @@ module {
   public func minEntry<K, V>(map : Map<K, V>) : ?(K, V)
     = Internal.minEntry(map.root);
 
-  public func entries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)> {
-    todo()
-  };
+  /// Returns an Iterator (`Iter`) over the key-value pairs in the map.
+  /// Iterator provides a single method `next()`, which returns
+  /// pairs in ascending order by keys, or `null` when out of pairs to iterate over.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  /// // [(0, "Zero"), (1, "One"), (2, "Two")]
+  /// var sum = 0;
+  /// for ((k, _) in Map.entries(map)) { sum += k; };
+  /// Debug.print(debug_show(sum)); // => 3
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(log(n))` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
+  public func entries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)>
+    = Internal.iter(map.root, #fwd);
 
-  public func reverseEntries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)> {
-    todo()
-  };
+  /// Same as `entries` but iterates in descending order.
+  public func reverseEntries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)>
+    = Internal.iter(map.root, #bwd);
+
 
   public func keys<K, V>(map : Map<K, V>) : Types.Iter<K> {
     todo()

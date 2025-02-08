@@ -330,29 +330,130 @@ module {
   public func values<K, V>(map : Map<K, V>) : Types.Iter<V>
     = Iter.map(entries(map), func(kv : (K, V)) : V {kv.1});
 
-  public func fromIter<K, V>(iter : Types.Iter<(K, V)>, compare : (K, K) -> Types.Order) : Map<K, V> {
-    todo()
-  };
+  /// Returns a new map, containing all entries given by the iterator `i`.
+  /// If there are multiple entries with the same key the last one is taken.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  ///
+  /// // [(0, "Zero"), (1, "One"), (2, "Two")]
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(n)` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
+  public func fromIter<K, V>(iter : Types.Iter<(K, V)>, compare : (K, K) -> Types.Order) : Map<K, V>
+    = Internal.fromIter(iter, compare);
 
-  public func map<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> V2) : Map<K, V2> {
-    todo()
-  };
+  /// Given a `map` and function `f`, creates a new map by applying `f` to each entry in the map `m`. Each entry
+  /// `(k, v)` in the old map is transformed into a new entry `(k, v2)`, where
+  /// the new value `v2` is created by applying `f` to `(k, v)`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// func f(key : Nat, _val : Text) : Nat = key * 2;
+  ///
+  /// let resMap = Map.map(map, f);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(resMap))));
+  /// // [(0, 0), (1, 2), (2, 4)]
+  /// ```
+  ///
+  /// Cost of mapping all the elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)` retained memory
+  /// where `n` denotes the number of key-value entries stored in the map.
+  public func map<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> V2) : Map<K, V2>
+    = Internal.map(map, f);
 
+
+  /// Collapses the elements in the `map` into a single value by starting with `base`
+  /// and progressively combining keys and values into `base` with `combine`. Iteration runs
+  /// left to right.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// func folder(accum : (Nat, Text), key : Nat, val : Text) : ((Nat, Text))
+  ///   = (key + accum.0, accum.1 # val);
+  ///
+  /// Debug.print(debug_show(Map.foldLeft(map, (0, ""), folder)));
+  ///
+  /// // (3, "ZeroOneTwo")
+  /// ```
+  ///
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: depends on `combine` function plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
   public func foldLeft<K, V, A>(
     map : Map<K, V>,
     base : A,
     combine : (A, K, V) -> A
-  ) : A {
-    todo()
-  };
+  ) : A
+    = Internal.foldLeft(map.root, base, combine);
 
+  //TODO: base last?
+  /// Collapses the elements in the `map` into a single value by starting with `base`
+  /// and progressively combining keys and values into `base` with `combine`. Iteration runs
+  /// right to left.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// func folder(key : Nat, val : Text, accum : (Nat, Text)) : ((Nat, Text))
+  ///   = (key + accum.0, accum.1 # val);
+  ///
+  /// Debug.print(debug_show(Map.foldRight(map, (0, ""), folder)));
+  ///
+  /// // (3, "TwoOneZero")
+  /// ```
+  ///
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: depends on `combine` function plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
   public func foldRight<K, V, A>(
     map : Map<K, V>,
     base : A,
     combine : (K, V, A) -> A
-  ) : A {
-    todo()
-  };
+  ) : A
+    = Internal.foldRight(map.root, base, combine);
+
 
   public func all<K, V>(map : Map<K, V>, pred : (K, V) -> Bool) : Bool {
     todo()

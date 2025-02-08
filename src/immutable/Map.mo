@@ -4,7 +4,16 @@ import Order "../Order";
 import Iter "../Iter";
 import Types "../Types";
 import Runtime "../Runtime";
-import { todo } "../Debug"; //DELETE ME
+
+// TODO rename Internal.some, Internal.replace
+// Inline Internal
+// Restore wrapper?
+// Change argument order of ops with trailing compare (fromIter, filterMap)?
+// test,
+// test new toText
+// inline Tree type, remove Types.Immutable.Tree
+
+
 
 module {
 
@@ -419,7 +428,7 @@ module {
   ) : A
     = Internal.foldLeft(map.root, base, combine);
 
-  //TODO: base last?
+  // TODO: base last?
   /// Collapses the elements in the `map` into a single value by starting with `base`
   /// and progressively combining keys and values into `base` with `combine`. Iteration runs
   /// right to left.
@@ -454,28 +463,130 @@ module {
   ) : A
     = Internal.foldRight(map.root, base, combine);
 
+  /// Test whether all key-value pairs in `map` satisfy the given predicate `pred`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Map.all<Text>(map, func (k, v) = (v == debug_show(k)))));
+  /// // true
+  /// Debug.print(debug_show(Map.all<Text>(map, func (k, v) = (k < 2))));
+  /// // false
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)`.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  public func all<K, V>(map : Map<K, V>, pred : (K, V) -> Bool) : Bool
+    = Internal.all(map.root, pred);
 
-  public func all<K, V>(map : Map<K, V>, pred : (K, V) -> Bool) : Bool {
-    todo()
+  /// Test if any key-value pair in `map` satisfies the given predicate `pred`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]), Nat.compare);
+  ///
+  /// Debug.print(debug_show(Map.any<Text>(map, func (k, v) = (k >= 3))));
+  /// // false
+  /// Debug.print(debug_show(Map.any<Text>(map, func (k, v) = (k >= 0))));
+  /// // true
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)`.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  public func any<K, V>(map : Map<K, V>, pred : (K, V) -> Bool) : Bool
+    = Internal.some(map.root, pred);
+
+
+  /// Given a `map`, comparison `compare` and function `f`,
+  /// constructs a new map ordered by compare, by applying `f` to each entry in `map`.
+  /// For each entry `(k, v)` in the old map, if `f` evaluates to `null`, the entry is discarded.
+  /// Otherwise, the entry is transformed into a new entry `(k, v2)`, where
+  /// the new value `v2` is the result of applying `f` to `(k, v)`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  /// func f(key : Nat, val : Text) : ?Text {
+  ///   if(key == 0) {null}
+  ///   else { ?("Twenty " # val)}
+  /// };
+  ///
+  /// let newMap = Map.filterMap(map, f, Nat.compare);
+  ///
+  /// Debug.print(debug_show(Iter.toArray(Map.entries(newMap))));
+  ///
+  /// // [(1, "Twenty One"), (2, "Twenty Two")]
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(n)` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
+  public func filterMap<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> ?V2, compare : (K, K) -> Types.Order) : Map<K, V2>
+   = Internal.mapFilter(map, compare : (K, K) -> Types.Order, f);
+
+  /// Validate the representation invariants of the given `map`.
+  /// Assert if any invariants are violated.
+  public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order) : ()
+    = Internal.validate(map, compare);
+
+  /// Converts the `map` to its textual representation using `kf` and `vf` to convert each key and value to `Text`.
+  ///
+  /// ```motoko include=import
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  /// Map.toText<Nat, Text>(map, Nat.toText, func t { t })
+  /// // => "{(0, Zero), (2, Two), (1, One)}"
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `kf` and `vf` run in O(1) time and space.
+  public func toText<K, V>(map : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
+    if (size(map) == 0) { return "{}" };
+    var text = "{";
+    var i = 0;
+    for ((k, v) in entries(map)) {
+      if (i != 0) {
+        text #= ", "
+      };
+      text #= "(";
+      text #= kf(k);
+      text #= ", ";
+      text #= vf(v);
+      text #= ")";
+      i += 1
+    };
+    text #= "}";
+    text
   };
-
-  public func any<K, V>(map : Map<K, V>, pred : (K, V) -> Bool) : Bool {
-    todo()
-  };
-
-  public func filterMap<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> ?V2) : Map<K, V2> {
-    todo()
-  };
-
-  public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order) : () {
-    todo()
-  };
-
-  public func toText<K, V>(set : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
-    todo()
-  };
-
-
 
   module Internal {
 
@@ -630,8 +741,8 @@ module {
 
     public func contains<K, V>(m : Tree<K, V>, compare : (K, K) -> Types.Order, key : K) : Bool {
       switch (get(m, compare, key)) {
-        case(null) { false }; 
-        case(_)    { true } 
+        case(null) { false };
+        case(_)    { true }
       }
     };
 

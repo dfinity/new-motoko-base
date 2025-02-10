@@ -36,7 +36,7 @@
     {
       "name": "PureCollection",
       "extends": ["Collection"],
-      "modules": ["pure/Queue", "pure/Set", "pure/Stack"],
+      "modules": ["pure/Queue", "pure/Set", "pure/List"],
       "functions": []
     }
   ]

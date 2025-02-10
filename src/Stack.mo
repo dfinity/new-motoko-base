@@ -1,6 +1,5 @@
 /// Mutable stack data structure.
 
-// import Pure "pure/Stack";
 import Order "Order";
 import Types "Types";
 import { todo } "Debug";

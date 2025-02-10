@@ -10,10 +10,9 @@ import Runtime "../Runtime";
 // Restore wrapper?
 // Change argument order of ops with trailing compare (fromIter, filterMap)?
 // test,
-// test new toText
+// test new toText, replaceIfExists
 // inline Tree type, remove Types.Immutable.Tree
-
-
+// add replaceIfExists (to match Map.mo)
 
 module {
 
@@ -551,7 +550,7 @@ module {
   public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ()
     = Internal.validate(map, compare);
 
-  /// Converts the `map` to its textual representation using `kf` and `vf` to convert each key and value to `Text`.
+  /// Converts the `map` to its textual representation using `keyFormat` and `valueFormat` to convert each key and value to `Text`.
   ///
   /// ```motoko include=import
   /// import Map "mo:base/immutable/Map";
@@ -568,21 +567,13 @@ module {
   ///
   /// Space: O(size)
   ///
-  /// *Runtime and space assumes that `kf` and `vf` run in O(1) time and space.
-  public func toText<K, V>(map : Map<K, V>, kf : K -> Text, vf : V -> Text) : Text {
-    if (size(map) == 0) { return "{}" };
+  /// *Runtime and space assumes that `keyFormat` and `valueFormat` run in O(1) time and space.
+  public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text {
     var text = "{";
-    var i = 0;
+    var sep = "";
     for ((k, v) in entries(map)) {
-      if (i != 0) {
-        text #= ", "
-      };
-      text #= "(";
-      text #= kf(k);
-      text #= ", ";
-      text #= vf(v);
-      text #= ")";
-      i += 1
+      text #= sep # "(" # keyFormat(k) # ", " # valueFormat(v) # ")";
+      sep := ", "
     };
     text #= "}";
     text

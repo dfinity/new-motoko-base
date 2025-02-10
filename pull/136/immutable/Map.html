@@ -368,7 +368,7 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 <p>Note: Creates <code>O(n * log(n))</code> temporary objects that will be collected as garbage.</p>
 </p></div><div class="declaration"><h4 class="function" id="assertValid"><code><span class="keyword">public func </span><span class="fnname">assertValid</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a>) : ()</code></h4><p><p>Validate the representation invariants of the given <code>map</code>.
 Assert if any invariants are violated.</p>
-</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">kf</span> : <span class="type">K</span> -&gt; <span class="type">Text</span>, <br/>  <span class="parameter">vf</span> : <span class="type">V</span> -&gt; <span class="type">Text</span><br/>) : <span class="type">Text</span></code></h4><p><p>Converts the <code>map</code> to its textual representation using <code>kf</code> and <code>vf</code> to convert each key and value to <code>Text</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">keyFormat</span> : <span class="type">K</span> -&gt; <span class="type">Text</span>, <br/>  <span class="parameter">valueFormat</span> : <span class="type">V</span> -&gt; <span class="type">Text</span><br/>) : <span class="type">Text</span></code></h4><p><p>Converts the <code>map</code> to its textual representation using <code>keyFormat</code> and <code>valueFormat</code> to convert each key and value to <code>Text</code>.</p>
 <pre><code>motoko include=import
 import Map &quot;mo:base/immutable/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -381,5 +381,5 @@ Map.toText&lt;Nat, Text&gt;(map, Nat.toText, func t { t })
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
-<p>*Runtime and space assumes that <code>kf</code> and <code>vf</code> run in O(1) time and space.</p>
+<p>*Runtime and space assumes that <code>keyFormat</code> and <code>valueFormat</code> run in O(1) time and space.</p>
 </p></div></div></body></html>

@@ -18,7 +18,7 @@ import Runtime "../Runtime";
 module {
 
   public type Map<K, V> = Types.Immutable.Map<K, V>;
-  public type Tree<K, V> = Types.Immutable.Tree<K, V>;
+  type Tree<K, V> = Types.Immutable.Tree<K, V>;
 
   public func empty<K, V>() : Map<K, V> {
     Internal.empty<K, V>();
@@ -61,15 +61,15 @@ module {
   ///
   /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
-  /// Debug.print(debug_show natMap.contains(map, Nat.compare, 1)); // => true
-  /// Debug.print(debug_show natMap.contains(map, Nat.compare, 42)); // => false
+  /// Debug.print(debug_show Map.containsKey(map, Nat.compare, 1)); // => true
+  /// Debug.print(debug_show Map.containsKey(map, Nat.compare, 42)); // => false
   /// ```
   ///
   /// Runtime: `O(log(n))`.
   /// Space: `O(1)`.
   /// where `n` denotes the number of key-value entries stored in the map and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func containsKey<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K) : Bool
+  public func containsKey<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Bool
     = Internal.contains(map.root, compare, key);
 
   /// Given, `map` ordered by `compare`, return the value associated with key `key` if present and `null` otherwise.
@@ -81,10 +81,10 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
-  /// Debug.print(debug_show(natMap.get(map, Nat.compare, 1)));
-  /// Debug.print(debug_show(natMap.get(map, Nat.compare, 42)));
+  /// Debug.print(debug_show(Map.get(map, Nat.compare, 1)));
+  /// Debug.print(debug_show(Map.get(map, Nat.compare, 42)));
   ///
   /// // ?"One"
   /// // null
@@ -94,7 +94,7 @@ module {
   /// Space: `O(1)`.
   /// where `n` denotes the number of key-value entries stored in the map and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func get<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K) : ?V
+  public func get<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V
     = Internal.get(map.root, compare, key);
 
   /// Given `map` ordered by `compare`, add a mapping from `key` to `value`. Overwrites any existing entry with key `key`.
@@ -109,9 +109,9 @@ module {
   ///
   /// var map = Map.empty<Nat, Text>();
   ///
-  /// map := natMap.add(map, Nat.compare, 0, "Zero");
-  /// map := natMap.add(map, Nat.compare, 2, "Two");
-  /// map := natMap.add(map, Nat.compare, 1, "One");
+  /// map := Map.add(map, Nat.compare, 0, "Zero");
+  /// map := Map.add(map, Nat.compare, 2, "Two");
+  /// map := Map.add(map, Nat.compare, 1, "One");
   ///
   /// Debug.print(debug_show(Iter.toArray(map.entries(map))));
   ///
@@ -126,12 +126,12 @@ module {
   /// Note: The returned map shares with the `m` most of the tree nodes.
   /// Garbage collecting one of maps (e.g. after an assignment `m := Map.add(m, cmp, k, v)`)
   /// causes collecting `O(log(n))` nodes.
-  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K, value : V) : Map<K, V> {
+  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V> {
     put(map, compare, key, value).0
   };
 
   /// @deprecated: do we want to call put replace or exchange?
-  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K, value : V) : (Map<K, V>, ?V) {
+  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V) {
      switch (Internal.replace(map.root, compare, key, value)) {
         case (t, null) { ({root = t; size = map.size + 1}, null) };
         case (t, v)    { ({root = t; size = map.size}, v)}
@@ -149,7 +149,7 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   /// Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 1)))));
   /// Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 42)))));
@@ -166,7 +166,7 @@ module {
   /// Note: The returned map shares with the `m` most of the tree nodes.
   /// Garbage collecting one of maps (e.g. after an assignment `map := Map.delete(map, compare, k).0`)
   /// causes collecting `O(log(n))` nodes.
-  public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K) : Map<K, V> {
+  public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Map<K, V> {
     take(map, compare, key).0
   };
 
@@ -205,7 +205,7 @@ module {
   /// Note: The returned map shares with the `m` most of the tree nodes.
   /// Garbage collecting one of maps (e.g. after an assignment `map := Map.remove(map, compare, key)`)
   /// causes collecting `O(log(n))` nodes.
-  public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order, key : K) : (Map<K, V>, ?V) {
+  public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : (Map<K, V>, ?V) {
     switch (Internal.remove(map.root, compare, key)) {
       case (t, null) { ({root = t; size = map.size }, null) };
       case (t, v)    { ({root = t; size = map.size - 1}, v) }
@@ -245,7 +245,7 @@ module {
   /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   /// Debug.print(debug_show(Map.minEntry(map))); // => ?(0, "Zero")
-  /// Debug.print(debug_show(Map.minEntry(natMap.empty()))); // => null
+  /// Debug.print(debug_show(Map.minEntry(Map.empty()))); // => null
   /// ```
   ///
   /// Runtime: `O(log(n))`.
@@ -279,11 +279,11 @@ module {
   /// where `n` denotes the number of key-value entries stored in the map.
   ///
   /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
-  public func entries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)>
+  public func entries<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)>
     = Internal.iter(map.root, #fwd);
 
   /// Same as `entries` but iterates in descending order.
-  public func reverseEntries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)>
+  public func reverseEntries<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)>
     = Internal.iter(map.root, #bwd);
 
 
@@ -310,7 +310,7 @@ module {
   /// where `n` denotes the number of key-value entries stored in the map.
   ///
   /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
-  public func keys<K, V>(map : Map<K, V>) : Types.Iter<K>
+  public func keys<K, V>(map : Map<K, V>) : Iter.Iter<K>
     = Iter.map(entries(map), func(kv : (K, V)) : K {kv.0});
 
   /// Given a `map`, returns an Iterator (`Iter`) over the values of the map.
@@ -324,7 +324,7 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-   /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+   /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   /// Debug.print(debug_show(Iter.toArray(Map.values(map))));
   ///
@@ -336,7 +336,7 @@ module {
   /// where `n` denotes the number of key-value entries stored in the map.
   ///
   /// Note: Full map iteration creates `O(n)` temporary objects that will be collected as garbage.
-  public func values<K, V>(map : Map<K, V>) : Types.Iter<V>
+  public func values<K, V>(map : Map<K, V>) : Iter.Iter<V>
     = Iter.map(entries(map), func(kv : (K, V)) : V {kv.1});
 
   /// Returns a new map, containing all entries given by the iterator `i`.
@@ -362,7 +362,7 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
-  public func fromIter<K, V>(iter : Types.Iter<(K, V)>, compare : (K, K) -> Types.Order) : Map<K, V>
+  public func fromIter<K, V>(iter : Iter.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V>
     = Internal.fromIter(iter, compare);
 
   /// Given a `map` and function `f`, creates a new map by applying `f` to each entry in the map `m`. Each entry
@@ -440,7 +440,7 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   /// func folder(key : Nat, val : Text, accum : (Nat, Text)) : ((Nat, Text))
   ///   = (key + accum.0, accum.1 # val);
@@ -472,7 +472,7 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]), Nat.compare);
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]), Nat.compare);
   ///
   /// Debug.print(debug_show(Map.all<Text>(map, func (k, v) = (v == debug_show(k)))));
   /// // true
@@ -495,7 +495,7 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = natMap.fromIter<Text>(Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]), Nat.compare);
+  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]), Nat.compare);
   ///
   /// Debug.print(debug_show(Map.any<Text>(map, func (k, v) = (k >= 3))));
   /// // false
@@ -543,12 +543,12 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
-  public func filterMap<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> ?V2, compare : (K, K) -> Types.Order) : Map<K, V2>
-   = Internal.mapFilter(map, compare : (K, K) -> Types.Order, f);
+  public func filterMap<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> ?V2, compare : (K, K) -> Order.Order) : Map<K, V2>
+   = Internal.mapFilter(map, compare : (K, K) -> Order.Order, f);
 
   /// Validate the representation invariants of the given `map`.
   /// Assert if any invariants are violated.
-  public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Types.Order) : ()
+  public func assertValid<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ()
     = Internal.validate(map, compare);
 
   /// Converts the `map` to its textual representation using `kf` and `vf` to convert each key and value to `Text`.
@@ -594,7 +594,7 @@ module {
       { size = 0; root = #leaf }
     };
 
-    public func fromIter<K, V>(i : Types.Iter<(K,V)>, compare : (K, K) -> Types.Order) : Map<K, V> {
+    public func fromIter<K, V>(i : Iter.Iter<(K,V)>, compare : (K, K) -> Order.Order) : Map<K, V> {
       var map = #leaf : Tree<K, V>;
       var size = 0;
       for(val in i) {
@@ -608,7 +608,7 @@ module {
 
     type IterRep<K, V> = List<{ #tr : Tree<K, V>; #xy : (K, V) }>;
 
-    public func iter<K, V>(map : Tree<K, V>, direction : { #fwd; #bwd }) : Types.Iter<(K, V)> {
+    public func iter<K, V>(map : Tree<K, V>, direction : { #fwd; #bwd }) : Iter.Iter<(K, V)> {
       let turnLeftFirst : MapTraverser<K, V> = func(l, x, y, r, ts) {
         ?(#tr(l), ?(#xy(x, y), ?(#tr(r), ts)))
       };
@@ -705,7 +705,7 @@ module {
       }
     };
 
-    public func mapFilter<K, V1, V2>(map : Map<K, V1>, compare : (K, K) -> Types.Order, f : (K, V1) -> ?V2) : Map<K, V2> {
+    public func mapFilter<K, V1, V2>(map : Map<K, V1>, compare : (K, K) -> Order.Order, f : (K, V1) -> ?V2) : Map<K, V2> {
       var size = 0;
       func combine(acc : Tree<K, V2>, key : K, value1 : V1) : Tree<K, V2> {
         switch (f(key, value1)) {
@@ -719,7 +719,7 @@ module {
       { root = foldLeft(map.root, #leaf, combine); size }
     };
 
-    public func get<K, V>(t : Tree<K, V>, compare : (K, K) -> Types.Order, x : K) : ?V {
+    public func get<K, V>(t : Tree<K, V>, compare : (K, K) -> Order.Order, x : K) : ?V {
       switch t {
         case (#red(l, x1, y1, r)) {
           switch (compare(x, x1)) {
@@ -739,7 +739,7 @@ module {
       }
     };
 
-    public func contains<K, V>(m : Tree<K, V>, compare : (K, K) -> Types.Order, key : K) : Bool {
+    public func contains<K, V>(m : Tree<K, V>, compare : (K, K) -> Order.Order, key : K) : Bool {
       switch (get(m, compare, key)) {
         case(null) { false };
         case(_)    { true }
@@ -865,7 +865,7 @@ module {
 
     func insertWith<K, V>(
       m : Tree<K, V>,
-      compare : (K, K) -> Types.Order,
+      compare : (K, K) -> Order.Order,
       key : K,
       val : V,
       onClash : ClashResolver<V>
@@ -915,7 +915,7 @@ module {
 
     public func replace<K, V>(
       m : Tree<K, V>,
-      compare : (K, K) -> Types.Order,
+      compare : (K, K) -> Order.Order,
       key : K,
       val : V
     ) : (Tree<K, V>, ?V) {
@@ -930,7 +930,7 @@ module {
 
     public func put<K, V>(
       m : Tree<K, V>,
-      compare : (K, K) -> Types.Order,
+      compare : (K, K) -> Order.Order,
       key : K,
       val : V
     ) : Tree<K, V> = replace(m, compare, key, val).0;
@@ -1036,10 +1036,10 @@ module {
       }
     };
 
-    public func delete<K, V>(m : Tree<K, V>, compare : (K, K) -> Types.Order, key : K) : Tree<K, V>
+    public func delete<K, V>(m : Tree<K, V>, compare : (K, K) -> Order.Order, key : K) : Tree<K, V>
       = remove(m, compare, key).0;
 
-    public func remove<K, V>(tree : Tree<K, V>, compare : (K, K) -> Types.Order, x : K) : (Tree<K, V>, ?V) {
+    public func remove<K, V>(tree : Tree<K, V>, compare : (K, K) -> Order.Order, x : K) : (Tree<K, V>, ?V) {
       var y0 : ?V = null;
       func delNode(left : Tree<K, V>, x1 : K, y1 : V, right : Tree<K, V>) : Tree<K, V> {
         switch (compare(x, x1)) {
@@ -1093,11 +1093,11 @@ module {
     };
 
     // Test helper
-    public func validate<K, V>(rbMap : Map<K, V>, comp : (K, K) -> Types.Order) {
+    public func validate<K, V>(rbMap : Map<K, V>, comp : (K, K) -> Order.Order) {
       ignore blackDepth(rbMap.root, comp)
     };
 
-    func blackDepth<K, V>(node : Tree<K, V>, comp : (K, K) -> Types.Order) : Nat {
+    func blackDepth<K, V>(node : Tree<K, V>, comp : (K, K) -> Order.Order) : Nat {
       func checkNode(left : Tree<K, V>, key : K, right : Tree<K, V>) : Nat {
         checkKey(left, func(x : K) : Bool { comp(x, key) == #less });
         checkKey(right, func(x : K) : Bool { comp(x, key) == #greater });

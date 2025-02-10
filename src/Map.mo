@@ -1172,7 +1172,7 @@ module {
   ///   Map.add(map, Nat.compare, 2, "Two");
   ///
   ///   let text = Map.toText<Nat, Text>(map, Nat.toText, func (value) { value });
-  ///   // `(0, Zero), (1, One), (2, Two)`
+  ///   // `{(0, Zero), (1, One), (2, Two)}`
   /// }
   /// ```
   ///
@@ -1183,13 +1183,13 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text {
-    var text = "";
+    var text = "{";
+    var sep = "";
     for ((key, value) in entries(map)) {
-      if (text != "") {
-        text #= ", "
-      };
-      text #= "(" # keyFormat(key) # ", " # valueFormat(value) # ")"
+      text #= sep # "(" # keyFormat(key) # ", " # valueFormat(value) # ")";
+      sep := ", "
     };
+    text #= "}";
     text
   };
 

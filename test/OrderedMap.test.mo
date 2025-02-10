@@ -196,7 +196,12 @@ run(
         "empty any",
         Map.any<Nat, Text>(buildTestMap(), func (k, v) = true),
         M.equals(T.bool(false))
-      )
+      ),
+      test(
+        "empty to text",
+         Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
+         M.equals(T.text("{}"))
+      ),
     ]
   )
 );
@@ -335,11 +340,15 @@ run(
         "any",
         Map.any<Nat, Text>(buildTestMap(), func (k, v) = (k == 0)),
         M.equals(T.bool(true))
-      )
+      ),
+      test(
+        "to text",
+        Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
+        M.equals(T.text("{(0, 0)}"))
+      ),
     ]
   )
 );
-
 /* --------------------------------------- */
 
 expected := expectedEntries([0, 1, 2]);
@@ -469,7 +478,12 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] =
       "any false",
       Map.any<Nat, Text>(buildTestMap(), func (k, v) = (k > 2)),
       M.equals(T.bool(false))
-    )
+    ),
+    test(
+        "to text",
+         Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
+         M.equals(T.text("{(0, 0), (1, 1), (2, 2)}"))
+      ),
   ];
 
 buildTestMap := func() : Map.Map<Nat, Text> {

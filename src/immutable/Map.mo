@@ -552,11 +552,9 @@ module {
 
   /// Converts the `map` to its textual representation using `keyFormat` and `valueFormat` to convert each key and value to `Text`.
   ///
-  /// ```motoko include=import
+  /// ```motoko
   /// import Map "mo:base/immutable/Map";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
-  /// import Debug "mo:base/Debug";
   ///
   /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   /// Map.toText<Nat, Text>(map, Nat.toText, func t { t })

@@ -1,6 +1,6 @@
 // @testmode wasi
 
-import Map "../src/OrderedMap";
+import Map "../src/immutable/Map";
 import Nat "../src/Nat";
 import Iter "../src/Iter";
 import Debug "../src/Debug";
@@ -14,39 +14,37 @@ let { run; test; suite } = Suite;
 
 let entryTestable = T.tuple2Testable(T.natTestable, T.textTestable);
 
-let natMap = Map.Make<Nat>(Nat.compare);
-
 class MapMatcher(expected : [(Nat, Text)]) : M.Matcher<Map.Map<Nat, Text>> {
   public func describeMismatch(actual : Map.Map<Nat, Text>, _description : M.Description) {
-    Debug.print(debug_show (Iter.toArray(natMap.entries(actual))) # " should be " # debug_show (expected))
+    Debug.print(debug_show (Iter.toArray(Map.entries(actual))) # " should be " # debug_show (expected))
   };
 
   public func matches(actual : Map.Map<Nat, Text>) : Bool {
-    Iter.toArray(natMap.entries(actual)) == expected
+    Iter.toArray(Map.entries(actual)) == expected
   }
 };
 
-func checkMap(m: Map.Map<Nat, Text>) { natMap.validate(m); };
+func checkMap(m: Map.Map<Nat, Text>) { Map.assertValid(m, Nat.compare); };
 
 func insert(rbTree : Map.Map<Nat, Text>, key : Nat) : Map.Map<Nat, Text>  {
-  let updatedTree = natMap.put(rbTree, key, debug_show (key));
+  let updatedTree = Map.add(rbTree, Nat.compare, key, debug_show (key));
   checkMap(updatedTree);
   updatedTree
 };
 
 func getAll(rbTree : Map.Map<Nat, Text>, keys : [Nat]) {
   for (key in keys.vals()) {
-    let value = natMap.get(rbTree, key);
+    let value = Map.get(rbTree, Nat.compare, key);
     assert (value == ?debug_show (key))
   }
 };
 
 func clear(initialRbMap : Map.Map<Nat, Text>) : Map.Map<Nat, Text> {
   var rbMap = initialRbMap;
-  for ((key, value) in natMap.entries(initialRbMap)) {
+  for ((key, value) in Map.entries(initialRbMap)) {
     // stable iteration
     assert (value == debug_show (key));
-    let (newMap, result) = natMap.remove(rbMap, key);
+    let (newMap, result) = Map.take(rbMap, Nat.compare, key);
     rbMap := newMap;
     assert (result == ?debug_show (key));
     checkMap(rbMap)
@@ -88,7 +86,7 @@ func ifKeyLessThan(threshold : Nat, f : (Nat, Text) -> Text) : (Nat, Text) -> ?T
 /* --------------------------------------- */
 
 var buildTestMap = func() : Map.Map<Nat, Text> {
-  natMap.empty()
+  Map.empty()
 };
 
 run(
@@ -97,107 +95,106 @@ run(
     [
       test(
         "size",
-        natMap.size(buildTestMap()),
+        Map.size(buildTestMap()),
         M.equals(T.nat(0))
       ),
       test(
         "entries",
-        Iter.toArray(natMap.entries(buildTestMap())),
+        Iter.toArray(Map.entries(buildTestMap())),
         M.equals(T.array<(Nat, Text)>(entryTestable, []))
       ),
       test(
-        "entriesRev",
-        Iter.toArray(natMap.entriesRev(buildTestMap())),
+        "reverseEntries",
+        Iter.toArray(Map.reverseEntries(buildTestMap())),
         M.equals(T.array<(Nat, Text)>(entryTestable, []))
       ),
       test(
         "keys",
-        Iter.toArray(natMap.keys(buildTestMap())),
+        Iter.toArray(Map.keys(buildTestMap())),
         M.equals(T.array<Nat>(T.natTestable, []))
       ),
       test(
         "vals",
-        Iter.toArray(natMap.vals(buildTestMap())),
+        Iter.toArray(Map.values(buildTestMap())),
         M.equals(T.array<Text>(T.textTestable, []))
       ),
       test(
         "empty from iter",
-        natMap.fromIter(Iter.fromArray([])),
+        Map.fromIter(Iter.fromArray([]), Nat.compare),
         MapMatcher([])
       ),
       test(
         "get absent",
-        natMap.get(buildTestMap(), 0),
+        Map.get(buildTestMap(), Nat.compare, 0),
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
-      test(
-        "contains absent",
-        natMap.contains(buildTestMap(), 0),
+      test("containsKey absent",
+        Map.containsKey(buildTestMap(), Nat.compare, 0),
         M.equals(T.bool(false))
       ),
       test(
         "maxEntry",
-        natMap.maxEntry(buildTestMap()),
+        Map.maxEntry(buildTestMap()),
         M.equals(T.optional(entryTestable, null: ?(Nat, Text)))
       ),
       test(
         "minEntry",
-        natMap.minEntry(buildTestMap()),
+        Map.minEntry(buildTestMap()),
         M.equals(T.optional(entryTestable, null: ?(Nat, Text)))
       ),
       test(
-        "remove absent",
-        natMap.remove(buildTestMap(), 0).1,
+        "take absent",
+        Map.take(buildTestMap(), Nat.compare, 0).1,
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
       test(
         "replace absent/no value",
-        natMap.replace(buildTestMap(), 0, "Test").1,
+        Map.put(buildTestMap(), Nat.compare, 0, "Test").1,
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
       test(
         "replace absent/key appeared",
-        natMap.replace(buildTestMap(), 0, "Test").0,
+        Map.put(buildTestMap(), Nat.compare, 0, "Test").0,
         MapMatcher([(0, "Test")])
       ),
       test(
         "empty right fold keys",
-        natMap.foldRight(buildTestMap(), "", concatenateKeys),
+        Map.foldRight(buildTestMap(), "", concatenateKeys),
         M.equals(T.text(""))
       ),
       test(
         "empty left fold keys",
-        natMap.foldLeft(buildTestMap(), "", concatenateKeys2),
+        Map.foldLeft(buildTestMap(), "", concatenateKeys2),
         M.equals(T.text(""))
       ),
       test(
         "empty right fold values",
-        natMap.foldRight(buildTestMap(), "", concatenateValues),
+        Map.foldRight(buildTestMap(), "", concatenateValues),
         M.equals(T.text(""))
       ),
       test(
         "empty left fold values",
-        natMap.foldLeft(buildTestMap(), "", concatenateValues2),
+        Map.foldLeft(buildTestMap(), "", concatenateValues2),
         M.equals(T.text(""))
       ),
       test(
         "traverse empty map",
-        natMap.map(buildTestMap(), multiplyKeyAndConcat),
+        Map.map(buildTestMap(), multiplyKeyAndConcat),
         MapMatcher([])
       ),
       test(
         "empty map filter",
-        natMap.mapFilter(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat)),
+        Map.filterMap(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat), Nat.compare),
         MapMatcher([])
       ),
       test(
         "empty all",
-        natMap.all<Text>(buildTestMap(), func (k, v) = false),
+        Map.all<Nat, Text>(buildTestMap(), func (k, v) = false),
         M.equals(T.bool(true))
       ),
       test(
-        "empty some",
-        natMap.some<Text>(buildTestMap(), func (k, v) = true),
+        "empty any",
+        Map.any<Nat, Text>(buildTestMap(), func (k, v) = true),
         M.equals(T.bool(false))
       )
     ]
@@ -207,7 +204,7 @@ run(
 /* --------------------------------------- */
 
 buildTestMap := func() : Map.Map<Nat, Text> {
-  insert(natMap.empty(), 0);
+  insert(Map.empty(), 0);
 };
 
 var expected = expectedEntries([0]);
@@ -218,77 +215,77 @@ run(
     [
       test(
         "size",
-        natMap.size(buildTestMap()),
+        Map.size(buildTestMap()),
         M.equals(T.nat(1))
       ),
       test(
         "entries",
-        Iter.toArray(natMap.entries(buildTestMap())),
+        Iter.toArray(Map.entries(buildTestMap())),
         M.equals(T.array<(Nat, Text)>(entryTestable, expected))
       ),
       test(
-        "entriesRev",
-        Iter.toArray(natMap.entriesRev(buildTestMap())),
+        "reverseEntries",
+        Iter.toArray(Map.reverseEntries(buildTestMap())),
         M.equals(T.array<(Nat, Text)>(entryTestable, expected))
       ),
       test(
         "keys",
-        Iter.toArray(natMap.keys(buildTestMap())),
+        Iter.toArray(Map.keys(buildTestMap())),
         M.equals(T.array<Nat>(T.natTestable, [0]))
       ),
       test(
-        "vals",
-        Iter.toArray(natMap.vals(buildTestMap())),
+        "values",
+        Iter.toArray(Map.values(buildTestMap())),
         M.equals(T.array<Text>(T.textTestable, ["0"]))
       ),
       test(
         "from iter",
-        natMap.fromIter(Iter.fromArray(expected)),
+        Map.fromIter(Iter.fromArray(expected), Nat.compare),
         MapMatcher(expected)
       ),
       test(
         "get",
-        natMap.get(buildTestMap(), 0),
+        Map.get(buildTestMap(), Nat.compare, 0),
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
       test(
-        "contains",
-        natMap.contains(buildTestMap(), 0),
+        "containsKey",
+        Map.containsKey(buildTestMap(), Nat.compare, 0),
         M.equals(T.bool(true))
       ),
       test(
         "maxEntry",
-        natMap.maxEntry(buildTestMap()),
+        Map.maxEntry(buildTestMap()),
         M.equals(T.optional(entryTestable, ?(0, "0")))
       ),
       test(
         "minEntry",
-        natMap.minEntry(buildTestMap()),
+        Map.minEntry(buildTestMap()),
         M.equals(T.optional(entryTestable, ?(0, "0")))
       ),
       test(
-        "replace function result",
-        natMap.replace(buildTestMap(), 0, "TEST").1,
+        "put function result",
+        Map.put(buildTestMap(), Nat.compare, 0, "TEST").1,
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
       test(
-        "replace map result",
+        "put map result",
         do {
           let rbMap = buildTestMap();
-          natMap.replace(rbMap, 0, "TEST").0
+          Map.put(rbMap, Nat.compare, 0, "TEST").0
         },
         MapMatcher([(0, "TEST")])
       ),
       test(
-        "remove function result",
-        natMap.remove(buildTestMap(), 0).1,
+        "take function result",
+        Map.take(buildTestMap(), Nat.compare, 0).1,
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
       test(
-        "remove map result",
+        "take map result",
         do {
           var rbMap = buildTestMap();
-          rbMap := natMap.remove(rbMap, 0).0;
+          rbMap := Map.take(rbMap, Nat.compare, 0).0;
           checkMap(rbMap);
           rbMap
         },
@@ -296,47 +293,47 @@ run(
       ),
       test(
         "right fold keys",
-        natMap.foldRight(buildTestMap(), "", concatenateKeys),
+        Map.foldRight(buildTestMap(), "", concatenateKeys),
         M.equals(T.text("0"))
       ),
       test(
         "left fold keys",
-        natMap.foldLeft(buildTestMap(), "", concatenateKeys2),
+        Map.foldLeft(buildTestMap(), "", concatenateKeys2),
         M.equals(T.text("0"))
       ),
       test(
         "right fold values",
-        natMap.foldRight(buildTestMap(), "", concatenateValues),
+        Map.foldRight(buildTestMap(), "", concatenateValues),
         M.equals(T.text("0"))
       ),
       test(
         "left fold values",
-        natMap.foldLeft(buildTestMap(), "", concatenateValues2),
+        Map.foldLeft(buildTestMap(), "", concatenateValues2),
         M.equals(T.text("0"))
       ),
       test(
         "traverse map",
-        natMap.map(buildTestMap(), multiplyKeyAndConcat),
+        Map.map(buildTestMap(), multiplyKeyAndConcat),
         MapMatcher([(0, "00")])
       ),
       test(
-        "map filter/filter all",
-        natMap.mapFilter(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat)),
+        "filter map/filter all",
+        Map.filterMap(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat), Nat.compare),
         MapMatcher([])
       ),
       test(
-        "map filter/no filer",
-        natMap.mapFilter(buildTestMap(), ifKeyLessThan(1, multiplyKeyAndConcat)),
+        "filter map/no filter",
+        Map.filterMap(buildTestMap(), ifKeyLessThan(1, multiplyKeyAndConcat), Nat.compare),
         MapMatcher([(0, "00")])
       ),
       test(
         "all",
-        natMap.all<Text>(buildTestMap(), func (k, v) = (k == 0)),
+        Map.all<Nat, Text>(buildTestMap(), func (k, v) = (k == 0)),
         M.equals(T.bool(true))
       ),
       test(
-        "some",
-        natMap.some<Text>(buildTestMap(), func (k, v) = (k == 0)),
+        "any",
+        Map.any<Nat, Text>(buildTestMap(), func (k, v) = (k == 0)),
         M.equals(T.bool(true))
       )
     ]
@@ -351,7 +348,7 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] =
   [
     test(
       "size",
-      natMap.size(buildTestMap()),
+      Map.size(buildTestMap()),
       M.equals(T.nat(3))
     ),
     test(
@@ -361,27 +358,27 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] =
     ),
     test(
       "entries",
-      Iter.toArray(natMap.entries(buildTestMap())),
+      Iter.toArray(Map.entries(buildTestMap())),
       M.equals(T.array<(Nat, Text)>(entryTestable, expected))
     ),
     test(
-      "entriesRev",
-      Iter.toArray(natMap.entriesRev(buildTestMap())),
+      "reverserEntries",
+      Iter.toArray(Map.reverseEntries(buildTestMap())),
       M.equals(T.array<(Nat, Text)>(entryTestable, Array.reverse(expected)))
     ),
     test(
       "keys",
-      Iter.toArray(natMap.keys(buildTestMap())),
+      Iter.toArray(Map.keys(buildTestMap())),
       M.equals(T.array<Nat>(T.natTestable, [0, 1, 2]))
     ),
     test(
-      "vals",
-      Iter.toArray(natMap.vals(buildTestMap())),
+      "values",
+      Iter.toArray(Map.values(buildTestMap())),
       M.equals(T.array<Text>(T.textTestable, ["0", "1", "2"]))
     ),
     test(
       "from iter",
-      natMap.fromIter(Iter.fromArray(expected)),
+      Map.fromIter(Iter.fromArray(expected), Nat.compare),
       MapMatcher(expected)
     ),
     test(
@@ -394,18 +391,18 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] =
       MapMatcher(expected)
     ),
     test(
-      "contains",
-      Array.tabulate<Bool>(4, func (k: Nat) = (natMap.contains(buildTestMap(), k))),
+      "containsKey",
+      Array.tabulate<Bool>(4, func (k: Nat) = (Map.containsKey(buildTestMap(), Nat.compare, k))),
       M.equals(T.array<Bool>(T.boolTestable, [true, true, true, false]))
     ),
     test(
       "maxEntry",
-      natMap.maxEntry(buildTestMap()),
+      Map.maxEntry(buildTestMap()),
       M.equals(T.optional(entryTestable, ?(2, "2")))
     ),
     test(
       "minEntry",
-      natMap.minEntry(buildTestMap()),
+      Map.minEntry(buildTestMap()),
       M.equals(T.optional(entryTestable, ?(0, "0")))
     ),
     test(
@@ -415,68 +412,68 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] =
     ),
     test(
       "right fold keys",
-      natMap.foldRight(buildTestMap(), "", concatenateKeys),
+      Map.foldRight(buildTestMap(), "", concatenateKeys),
       M.equals(T.text("210"))
     ),
     test(
       "left fold keys",
-      natMap.foldLeft(buildTestMap(), "", concatenateKeys2),
+      Map.foldLeft(buildTestMap(), "", concatenateKeys2),
       M.equals(T.text("012"))
     ),
     test(
       "right fold values",
-      natMap.foldRight(buildTestMap(), "", concatenateValues),
+      Map.foldRight(buildTestMap(), "", concatenateValues),
       M.equals(T.text("210"))
     ),
     test(
       "left fold values",
-      natMap.foldLeft(buildTestMap(), "", concatenateValues2),
+      Map.foldLeft(buildTestMap(), "", concatenateValues2),
       M.equals(T.text("012"))
     ),
     test(
       "traverse map",
-      natMap.map(buildTestMap(), multiplyKeyAndConcat),
+      Map.map(buildTestMap(), multiplyKeyAndConcat),
       MapMatcher([(0, "00"), (1, "21"), (2, "42")])
     ),
     test(
-      "map filter/filter all",
-      natMap.mapFilter(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat)),
+      "filter map/filter all",
+      Map.filterMap(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat), Nat.compare),
       MapMatcher([])
     ),
     test(
-      "map filter/filter one",
-      natMap.mapFilter(buildTestMap(), ifKeyLessThan(1, multiplyKeyAndConcat)),
+      "filter map/filter one",
+      Map.filterMap(buildTestMap(), ifKeyLessThan(1, multiplyKeyAndConcat), Nat.compare),
       MapMatcher([(0, "00")])
     ),
     test(
-      "map filter/no filer",
-      natMap.mapFilter(buildTestMap(), ifKeyLessThan(3, multiplyKeyAndConcat)),
+      "filter map/no filter",
+      Map.filterMap(buildTestMap(), ifKeyLessThan(3, multiplyKeyAndConcat), Nat.compare),
       MapMatcher([(0, "00"), (1, "21"), (2, "42")])
     ),
     test(
       "all true",
-      natMap.all<Text>(buildTestMap(), func (k, v) = (k >= 0)),
+      Map.all<Nat, Text>(buildTestMap(), func (k, v) = (k >= 0)),
       M.equals(T.bool(true))
     ),
     test(
       "all false",
-      natMap.all<Text>(buildTestMap(), func (k, v) = (k > 0)),
+      Map.all<Nat, Text>(buildTestMap(), func (k, v) = (k > 0)),
       M.equals(T.bool(false))
     ),
     test(
-      "some true",
-      natMap.some<Text>(buildTestMap(), func (k, v) = (k >= 2)),
+      "any true",
+      Map.any<Nat, Text>(buildTestMap(), func (k, v) = (k >= 2)),
       M.equals(T.bool(true))
     ),
     test(
-      "some false",
-      natMap.some<Text>(buildTestMap(), func (k, v) = (k > 2)),
+      "any false",
+      Map.any<Nat, Text>(buildTestMap(), func (k, v) = (k > 2)),
       M.equals(T.bool(false))
     )
   ];
 
 buildTestMap := func() : Map.Map<Nat, Text> {
-  var rbMap = natMap.empty() : Map.Map<Nat, Text>;
+  var rbMap = Map.empty() : Map.Map<Nat, Text>;
   rbMap := insert(rbMap, 2);
   rbMap := insert(rbMap, 1);
   rbMap := insert(rbMap, 0);
@@ -488,7 +485,7 @@ run(suite("rebalance left, left", rebalanceTests(buildTestMap)));
 /* --------------------------------------- */
 
 buildTestMap := func() : Map.Map<Nat, Text> {
-  var rbMap = natMap.empty() : Map.Map<Nat, Text>;
+  var rbMap = Map.empty() : Map.Map<Nat, Text>;
   rbMap := insert(rbMap, 2);
   rbMap := insert(rbMap, 0);
   rbMap := insert(rbMap, 1);
@@ -500,7 +497,7 @@ run(suite("rebalance left, right", rebalanceTests(buildTestMap)));
 /* --------------------------------------- */
 
 buildTestMap := func() : Map.Map<Nat, Text> {
-  var rbMap = natMap.empty() : Map.Map<Nat, Text>;
+  var rbMap = Map.empty() : Map.Map<Nat, Text>;
   rbMap := insert(rbMap, 0);
   rbMap := insert(rbMap, 2);
   rbMap := insert(rbMap, 1);
@@ -512,7 +509,7 @@ run(suite("rebalance right, left", rebalanceTests(buildTestMap)));
 /* --------------------------------------- */
 
 buildTestMap := func() : Map.Map<Nat, Text> {
-  var rbMap = natMap.empty() : Map.Map<Nat, Text>;
+  var rbMap = Map.empty() : Map.Map<Nat, Text>;
   rbMap := insert(rbMap, 0);
   rbMap := insert(rbMap, 1);
   rbMap := insert(rbMap, 2);
@@ -528,35 +525,35 @@ run(
     "repeated operations",
     [
       test(
-        "repeated insert",
+        "repeated add",
         do {
           var rbMap = buildTestMap();
-          assert (natMap.get(rbMap, 1) == ?"1");
-          rbMap := natMap.put(rbMap, 1, "TEST-1");
-          natMap.get(rbMap, 1)
+          assert (Map.get(rbMap, Nat.compare, 1) == ?"1");
+          rbMap := Map.add(rbMap, Nat.compare, 1, "TEST-1");
+          Map.get(rbMap, Nat.compare, 1)
         },
         M.equals(T.optional(T.textTestable, ?"TEST-1"))
       ),
       test(
-        "repeated replace",
+        "repeated put",
         do {
           let rbMap0 = buildTestMap();
-          let (rbMap1, firstResult) = natMap.replace(rbMap0, 1, "TEST-1");
+          let (rbMap1, firstResult) = Map.put(rbMap0, Nat.compare, 1, "TEST-1");
           assert (firstResult == ?"1");
-          let (rbMap2, secondResult) = natMap.replace(rbMap1, 1, "1");
+          let (rbMap2, secondResult) = Map.put(rbMap1, Nat.compare, 1, "1");
           assert (secondResult == ?"TEST-1");
           rbMap2
         },
         MapMatcher(expected)
       ),
       test(
-        "repeated remove",
+        "repeated take",
         do {
           var rbMap0 = buildTestMap();
-          let (rbMap1, result) = natMap.remove(rbMap0, 1);
+          let (rbMap1, result) = Map.take(rbMap0, Nat.compare, 1);
           assert (result == ?"1");
           checkMap(rbMap1);
-          natMap.remove(rbMap1, 1).1
+          Map.take(rbMap1, Nat.compare, 1).1
         },
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
@@ -564,8 +561,8 @@ run(
         "repeated delete",
         do {
           var rbMap = buildTestMap();
-          rbMap := natMap.delete(rbMap, 1);
-          natMap.delete(rbMap, 1)
+          rbMap := Map.delete(rbMap, Nat.compare, 1);
+          Map.delete(rbMap, Nat.compare, 1)
         },
         MapMatcher(expectedEntries([0, 2]))
       )

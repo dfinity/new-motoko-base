@@ -1,4 +1,4 @@
-import Stack "../../src/immutable/Stack";
+import Stack "../../src/pure/Stack";
 import Nat "../../src/Nat";
 import Order "../../src/Order";
 import Debug "../../src/Debug";

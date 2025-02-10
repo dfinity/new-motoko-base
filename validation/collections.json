@@ -34,9 +34,9 @@
       "functions": ["keys", "entries"]
     },
     {
-      "name": "ImmutableCollection",
+      "name": "PureCollection",
       "extends": ["Collection"],
-      "modules": ["immutable/Queue", "immutable/Set", "immutable/Stack"],
+      "modules": ["pure/Queue", "pure/Set", "pure/Stack"],
       "functions": []
     }
   ]

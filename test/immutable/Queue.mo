@@ -1,5 +1,5 @@
 import Prim "mo:prim";
-import Queue "../../src/immutable/Queue";
+import Queue "../../src/pure/Queue";
 import Array "../../src/Array";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";

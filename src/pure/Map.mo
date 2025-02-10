@@ -7,7 +7,7 @@ import { todo } "../Debug";
 
 module {
 
-  public type Map<K, V> = Types.Immutable.Map<K, V>;
+  public type Map<K, V> = Types.Pure.Map<K, V>;
 
   public func empty<K, V>() : Map<K, V> {
     todo()

@@ -49,16 +49,16 @@ module {
   // /// Example:
   // /// ```motoko
   // /// import Map "mo:base/Map";
-  // /// import ImmutableMap "mo:base/immutable/Map";
+  // /// import PureMap "mo:base/pure/Map";
   // /// import Nat "mo:base/Nat";
   // ///
   // /// persistent actor {
-  // ///   let mutableMap = Map.empty<Nat, Text>();
-  // ///   Map.add(mutableMap, Nat.compare, 0, "Zero");
-  // ///   Map.add(mutableMap, Nat.compare, 1, "One");
-  // ///   Map.add(mutableMap, Nat.compare, 2, "Two");
-  // ///   let immutableMap = Map.freeze(mutableMap);
-  // ///   assert(ImmutableMap.get(immutableMap, 0) == Map.get(mutableMap, 0));
+  // ///   let map = Map.empty<Nat, Text>();
+  // ///   Map.add(map, Nat.compare, 0, "Zero");
+  // ///   Map.add(map, Nat.compare, 1, "One");
+  // ///   Map.add(map, Nat.compare, 2, "Two");
+  // ///   let pureMap = Map.toPure(map);
+  // ///   assert(PureMap.get(pureMap, 0) == Map.get(map, 0));
   // /// }
   // /// ```
   // ///
@@ -68,25 +68,25 @@ module {
   // /// assuming that the `compare` function implements an `O(1)` comparison.
   // ///
   // /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
-  // public func freeze<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : ImmutableMap.Map<K, V> {
-  //   ImmutableMap.fromIter(entries(map), compare)
+  // public func toPure<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : PureMap.Map<K, V> {
+  //   PureMap.fromIter(entries(map), compare)
   // };
 
   // /// Convert an immutable key-value map to a mutable key-value map.
   // ///
   // /// Example:
   // /// ```motoko
-  // /// import ImmutableMap "mo:base/immutable/Map";
+  // /// import PureMap "mo:base/pure/Map";
   // /// import Map "mo:base/Map";
   // /// import Nat "mo:base/Nat";
   // ///
   // /// persistent actor {
-  // ///   var immutableMap = ImmutableMap.empty<Nat, Text>();
-  // ///   immutableMap := ImmutableMap.add(immutableMap, Nat.compare, 0, "Zero");
-  // ///   immutableMap := ImmutableMap.add(immutableMap, Nat.compare, 1, "One");
-  // ///   immutableMap := ImmutableMap.add(immutableMap, Nat.compare, 2, "Two");
-  // ///   let mutableMap = Map.thaw(immutableMap);
-  // ///   assert(Map.get(mutableMap, 0) == Map.get(immutableMap, 0));
+  // ///   var pureMap = PureMap.empty<Nat, Text>();
+  // ///   pureMap := PureMap.add(pureMap, Nat.compare, 0, "Zero");
+  // ///   pureMap := PureMap.add(pureMap, Nat.compare, 1, "One");
+  // ///   pureMap := PureMap.add(pureMap, Nat.compare, 2, "Two");
+  // ///   let mutableMap = Map.fromPure(pureMap);
+  // ///   assert(Map.get(mutableMap, 0) == Map.get(pureMap, 0));
   // /// }
   // /// ```
   // ///
@@ -94,8 +94,8 @@ module {
   // /// Space: `O(n)`.
   // /// where `n` denotes the number of key-value entries stored in the map and
   // /// assuming that the `compare` function implements an `O(1)` comparison.
-  // public func thaw<K, V>(map : ImmutableMap.Map<K, V>) : Map<K, V> {
-  //   fromIter(ImmutableMap.entries(map), compare)
+  // public func fromPure<K, V>(map : PureMap.Map<K, V>) : Map<K, V> {
+  //   fromIter(PureMap.entries(map), compare)
   // };
 
   /// Create a copy of the mutable key-value map.

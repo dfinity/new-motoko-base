@@ -7,7 +7,7 @@ import { todo } "../Debug";
 
 module {
 
-  public type Set<T> = Types.Immutable.Set<T>;
+  public type Set<T> = Types.Pure.Set<T>;
 
   public func empty<T>() : Set<T> {
     todo()

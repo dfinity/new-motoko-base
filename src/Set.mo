@@ -28,7 +28,7 @@
 // Distributed under Apache 2.0 license.
 // With adjustments by the Motoko team.
 
-// import Immutable "immutable/Set";
+// import Pure "pure/Set";
 import Types "Types";
 import Order "Order";
 import VarArray "VarArray";
@@ -69,16 +69,16 @@ module {
   // /// Example:
   // /// ```motoko
   // /// import Set "mo:base/Set";
-  // /// import ImmutableSet "mo:base/immutable/Set";
+  // /// import PureSet "mo:base/pure/Set";
   // /// import Nat "mo:base/Nat";
   // ///
   // /// persistent actor {
-  // ///   let mutableSet = Set.empty<Nat>();
-  // ///   Set.add(mutableSet, Nat.compare, 1);
-  // ///   Set.add(mutableSet, Nat.compare, 2);
-  // ///   Set.add(mutableSet, Nat.compare, 3);
-  // ///   let immutableSet = Set.freeze(mutableSet);
-  // ///   assert(ImmutableSet.contains(immutableSet, 1));
+  // ///   let set = Set.empty<Nat>();
+  // ///   Set.add(set, Nat.compare, 1);
+  // ///   Set.add(set, Nat.compare, 2);
+  // ///   Set.add(set, Nat.compare, 3);
+  // ///   let pureSet = Set.toPure(set);
+  // ///   assert(PureSet.contains(pureSet, 1));
   // /// }
   // /// ```
   // ///
@@ -88,24 +88,24 @@ module {
   // /// assuming that the `compare` function implements an `O(1)` comparison.
   // ///
   // /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
-  // public func freeze<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Immutable.Set<T> {
-  //   ImmutableSet.fromIter(values(set), compare);
+  // public func toPure<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Pure.Set<T> {
+  //   PureSet.fromIter(values(set), compare);
   // };
 
   // /// Convert an immutable set to a mutable set.
   // ///
   // /// Example:
   // /// ```motoko
-  // /// import ImmutableSet "mo:base/immutable/Set";
+  // /// import PureSet "mo:base/pure/Set";
   // /// import Set "mo:base/Set";
   // /// import Nat "mo:base/Nat";
   // ///
   // /// persistent actor {
-  // ///   var immutableSet = ImmutableSet.empty<Nat>();
-  // ///   immutableSet := ImmutableSet.add(immutableSet, Nat.compare, 1);
-  // ///   immutableSet := ImmutableSet.add(immutableSet, Nat.compare, 2);
-  // ///   immutableSet := ImmutableSet.add(immutableSet, Nat.compare, 3);
-  // ///   let mutableSet = Set.thaw(immutableSet);
+  // ///   var pureSet = PureSet.empty<Nat>();
+  // ///   pureSet := PureSet.add(pureSet, Nat.compare, 1);
+  // ///   pureSet := PureSet.add(pureSet, Nat.compare, 2);
+  // ///   pureSet := PureSet.add(pureSet, Nat.compare, 3);
+  // ///   let mutableSet = Set.fromPure(pureSet);
   // //    assert(Set.contains(mutableSet, 1));
   // /// }
   // /// ```
@@ -114,8 +114,8 @@ module {
   // /// Space: `O(n)`.
   // /// where `n` denotes the number of elements stored in the set and
   // /// assuming that the `compare` function implements an `O(1)` comparison.
-  // public func thaw<T>(set : Immutable.Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
-  //   fromIter(ImmutableSet.values(set), compare)
+  // public func fromPure<T>(set : Pure.Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
+  //   fromIter(PureSet.values(set), compare)
   // };
 
   /// Create a copy of the mutable set.

@@ -873,7 +873,7 @@
       "public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T>",
       "public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U>",
       "public func forEach<T>(queue : Queue<T>, f : T -> ())",
-      "public func freeze<T>(queue : Queue<T>) : Immutable.Queue<T>",
+      "public func toPure<T>(queue : Queue<T>) : Pure.Queue<T>",
       "public func fromIter<T>(iter : Iter.Iter<T>) : Queue<T>",
       "public func isEmpty<T>(queue : Queue<T>) : Bool",
       "public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2>",
@@ -888,7 +888,7 @@
       "public type Queue<T>",
       "public func singleton<T>(item : T) : Queue<T>",
       "public func size<T>(queue : Queue<T>) : Nat",
-      "public func thaw<T>(queue : Immutable.Queue<T>) : Queue<T>",
+      "public func fromPure<T>(queue : Pure.Queue<T>) : Queue<T>",
       "public func toText<T>(queue : Queue<T>, f : T -> Text) : Text",
       "public func values<T>(queue : Queue<T>) : Iter.Iter<T>"
     ]
@@ -1192,7 +1192,7 @@
     ]
   },
   {
-    "name": "immutable/Map",
+    "name": "pure/Map",
     "exports": [
       "public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V>",
       "public func all<K, V>(map : Map<K, V>, pred : (K, V) -> Bool) : Bool",
@@ -1222,7 +1222,7 @@
     ]
   },
   {
-    "name": "immutable/Queue",
+    "name": "pure/Queue",
     "exports": [
       "public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool",
       "public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool",
@@ -1250,7 +1250,7 @@
     ]
   },
   {
-    "name": "immutable/Set",
+    "name": "pure/Set",
     "exports": [
       "public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, item : T) : Set<T>",
       "public func all<T>(set : Set<T>, pred : T -> Bool) : Bool",
@@ -1284,7 +1284,7 @@
     ]
   },
   {
-    "name": "immutable/Stack",
+    "name": "pure/Stack",
     "exports": [
       "public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool",
       "public func any<T>(stack : Stack<T>, f : T -> Bool) : Bool",

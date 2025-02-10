@@ -9,7 +9,7 @@ import { todo } "../Debug";
 
 module {
 
-  public type Stack<T> = Types.Immutable.Stack<T>;
+  public type Stack<T> = Types.Pure.Stack<T>;
 
   public func empty<T>() : Stack<T> = null;
 

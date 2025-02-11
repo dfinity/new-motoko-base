@@ -529,7 +529,7 @@ module {
   ///   else { ?("Twenty " # val)}
   /// };
   ///
-  /// let newMap = Map.filterMap(map, f, Nat.compare);
+  /// let newMap = Map.filterMap(map, Nat.compare, f);
   ///
   /// Debug.print(debug_show(Iter.toArray(Map.entries(newMap))));
   ///
@@ -542,7 +542,7 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
-  public func filterMap<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> ?V2, compare : (K, K) -> Order.Order) : Map<K, V2>
+  public func filterMap<K, V1, V2>(map : Map<K, V1>,  compare : (K, K) -> Order.Order, f : (K, V1) -> ?V2) : Map<K, V2>
    = Internal.mapFilter(map, compare : (K, K) -> Order.Order, f);
 
   /// Validate the representation invariants of the given `map`.

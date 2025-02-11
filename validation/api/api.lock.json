@@ -1202,7 +1202,7 @@
       "public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Map<K, V>",
       "public func empty<K, V>() : Map<K, V>",
       "public func entries<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)>",
-      "public func filterMap<K, V1, V2>(map : Map<K, V1>, f : (K, V1) -> ?V2, compare : (K, K) -> Order.Order) : Map<K, V2>",
+      "public func filterMap<K, V1, V2>(map : Map<K, V1>, compare : (K, K) -> Order.Order, f : (K, V1) -> ?V2) : Map<K, V2>",
       "public func foldLeft<K, V, A>( map : Map<K, V>, base : A, combine : (A, K, V) -> A ) : A",
       "public func foldRight<K, V, A>( map : Map<K, V>, base : A, combine : (K, V, A) -> A ) : A",
       "public func fromIter<K, V>(iter : Iter.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V>",

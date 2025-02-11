@@ -184,7 +184,7 @@ run(
       ),
       test(
         "empty map filter",
-        Map.filterMap(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat), Nat.compare),
+        Map.filterMap(buildTestMap(), Nat.compare, ifKeyLessThan(0, multiplyKeyAndConcat)),
         MapMatcher([])
       ),
       test(
@@ -323,12 +323,12 @@ run(
       ),
       test(
         "filter map/filter all",
-        Map.filterMap(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat), Nat.compare),
+        Map.filterMap(buildTestMap(), Nat.compare, ifKeyLessThan(0, multiplyKeyAndConcat)),
         MapMatcher([])
       ),
       test(
         "filter map/no filter",
-        Map.filterMap(buildTestMap(), ifKeyLessThan(1, multiplyKeyAndConcat), Nat.compare),
+        Map.filterMap(buildTestMap(), Nat.compare, ifKeyLessThan(1, multiplyKeyAndConcat)),
         MapMatcher([(0, "00")])
       ),
       test(
@@ -446,17 +446,17 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] =
     ),
     test(
       "filter map/filter all",
-      Map.filterMap(buildTestMap(), ifKeyLessThan(0, multiplyKeyAndConcat), Nat.compare),
+      Map.filterMap(buildTestMap(), Nat.compare, ifKeyLessThan(0, multiplyKeyAndConcat)),
       MapMatcher([])
     ),
     test(
       "filter map/filter one",
-      Map.filterMap(buildTestMap(), ifKeyLessThan(1, multiplyKeyAndConcat), Nat.compare),
+      Map.filterMap(buildTestMap(), Nat.compare, ifKeyLessThan(1, multiplyKeyAndConcat)),
       MapMatcher([(0, "00")])
     ),
     test(
       "filter map/no filter",
-      Map.filterMap(buildTestMap(), ifKeyLessThan(3, multiplyKeyAndConcat), Nat.compare),
+      Map.filterMap(buildTestMap(), Nat.compare, ifKeyLessThan(3, multiplyKeyAndConcat)),
       MapMatcher([(0, "00"), (1, "21"), (2, "42")])
     ),
     test(

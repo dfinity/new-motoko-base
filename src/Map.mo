@@ -149,7 +149,7 @@ module {
     }
   };
 
-  /// Create a new empty mutable key-value map with a single entry.
+  /// Create a new mutable key-value map with a single entry.
   ///
   /// Example:
   /// ```motoko

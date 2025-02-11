@@ -12,7 +12,7 @@ import Runtime "../Runtime";
 // test,
 // test new toText, replaceIfExists
 // inline Tree type, remove Types.Immutable.Tree
-// add replaceIfExists (to match Map.mo)
+// add replaceIfExists (to match Map.mo), filter, singleton forEach
 
 module {
 
@@ -509,8 +509,81 @@ module {
     = Internal.some(map.root, pred);
 
 
+  /// Create a new immutable key-value `map` with a single entry.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let cityCodes = Map.singleton<Text, Nat>("Zurich", 8000);
+  ///   Debug.print(debug_show(Map.size(cityCodes))); // prints `1`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  /// Space: `O(1)`.
+  public func singleton<K, V>(key : K, value : V) : Map<K, V> {
+    {
+      size = 1;
+      root = #red(#leaf, key, value, #leaf)
+    }
+  };
+
+  /// Apply an operation for each key-value pair contained in the map.
+  /// The operation is applied in ascending order of the keys.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let map = Map.fromIter<Text>(
+  ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
+  ///     Nat.compare);
+  ///   Map.forEach<Nat, Text>(map, func (key, value) {
+  ///     Debug.print("key=" # Nat.toText(key) # ", value='" # value # "'");
+  ///   })
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  public func forEach<K, V>(map : Map<K, V>, operation : (K, V) -> ())
+    = Internal.forEach(map, operation);
+
+
+  /// Filter entries in a new map.
+  /// Returns a new map that only contains the key-value pairs
+  /// that fulfil the criterion function.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let numberNames = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let numberNames = Map.empty<Nat, Text>();
+  ///   let evenNames = Map.filter<Nat, Text>(numberNames, Nat.compare, func (key, value) {
+  ///     key % 2 == 0
+  ///   });
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)`.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  public func filter<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, criterion : (K, V) -> Bool) : Map<K, V>
+    = Internal.filter(map, compare, criterion);
+
   /// Given a `map`, comparison `compare` and function `f`,
-  /// constructs a new map ordered by compare, by applying `f` to each entry in `map`.
+  /// constructs a new map ordered by `compare`, by applying `f` to each entry in `map`.
   /// For each entry `(k, v)` in the old map, if `f` evaluates to `null`, the entry is discarded.
   /// Otherwise, the entry is transformed into a new entry `(k, v2)`, where
   /// the new value `v2` is the result of applying `f` to `(k, v)`.
@@ -692,6 +765,26 @@ module {
           foldRight(l, middle, combine)
         }
       }
+    };
+
+    public func forEach<K, V>(map : Map<K, V>, operation: (K, V) -> ()) {
+      func combine(acc: Null, key : K, value : V) : Null {
+        operation(key, value);
+	null
+      };
+      ignore foldLeft(map.root, null, combine);
+    };
+
+    public func filter<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, criterion : (K, V) -> Bool) : Map<K, V> {
+      var size = 0;
+      func combine(acc : Tree<K, V>, key : K, value : V) : Tree<K, V> {
+        if (criterion(key, value)) {
+            size += 1;
+            put(acc, compare, key, value)
+        }
+        else acc
+      };
+      { root = foldLeft(map.root, #leaf, combine); size }
     };
 
     public func mapFilter<K, V1, V2>(map : Map<K, V1>, compare : (K, K) -> Order.Order, f : (K, V1) -> ?V2) : Map<K, V2> {

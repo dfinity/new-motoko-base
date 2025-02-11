@@ -209,18 +209,18 @@ func run_all_props(range: (Nat, Nat), size: Nat, map_samples: Nat, query_samples
       ]),
 
       suite("filterMap", [
-        prop_with_key("get(filterMap(m, (!=k), c), c, k) == null", func (m, k) {
+        prop_with_key("get(filterMap(m, c, (!=k)), c, k) == null", func (m, k) {
           Map.get(
-	    Map.filterMap<Nat, Text, Text>(m,
-              func (ki, vi) { if (ki != k) {?vi} else {null}}, c),
+	    Map.filterMap<Nat, Text, Text>(m, c,
+              func (ki, vi) { if (ki != k) {?vi} else {null}}),
 	    c, k) == null
         }),
-        prop_with_key("get(filterMap(add(m, c k, v), (==k), c ), c, k) == ?v", func (m, k) {
+        prop_with_key("get(filterMap(add(m, c, k, v), c, (==k)), c, k) == ?v", func (m, k) {
           Map.get(
 	    Map.filterMap<Nat, Text, Text>(
 	      Map.add(m, c, k, "v"),
-              func (ki, vi) { if (ki == k) {?vi} else {null}},
-	      c),
+	      c,
+              func (ki, vi) { if (ki == k) {?vi} else {null}}),
 	    c,
 	    k) == ?"v"
         })

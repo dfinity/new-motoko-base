@@ -86,7 +86,6 @@
   {
     "name": "Char",
     "exports": [
-      "public func allValues() : Iter.Iter<Char>",
       "public type Char",
       "public func compare(a : Char, b : Char) : { #less; #equal; #greater }",
       "public func equal(a : Char, b : Char) : Bool",

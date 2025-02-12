@@ -723,7 +723,7 @@ module {
   };
 
   /// Test whether two immutable maps have equal entries.
-  /// The order of the keys in both maps are defined by `compare`.
+  /// Assumes both maps are ordered equivalently.
   ///
   /// Example:
   /// ```motoko
@@ -735,13 +735,16 @@ module {
   /// persistent actor {
   ///   let map1 = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (1, "One"), (2, "Two")]), Nat.compare);
   ///   let map2 = Map.fromIter<Text>(Iter.fromArray([(2, "Two"), (1, "One"), (0, "Zero")]), Nat.compare);
-  ///   assert(Map.equal(map1, map2, Nat.compare, Text.equal));
+  ///   assert(Map.equal(map1, map2, Nat.equal, Text.equal));
   /// }
   /// ```
   ///
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compare : (K, K) -> Order.Order, equal : (V, V) -> Bool) : Bool {
+  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, equalKey : (K, K) -> Bool, equalValue : (V, V) -> Bool) : Bool {
+    if (map1.size != map2.size) {
+      return false;
+    };
     let iterator1 = entries(map1);
     let iterator2 = entries(map2);
     loop {
@@ -752,7 +755,7 @@ module {
           return true
         };
         case (?(key1, value1), ?(key2, value2)) {
-          if (compare(key1, key2) != #equal or not equal(value1, value2)) {
+          if (not equalKey(key1, key2) or not equalValue(value1, value2)) {
             return false
           }
         };

@@ -290,6 +290,9 @@ module {
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
   public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, equalKeys : (K, K) -> Bool, equalValues : (V, V) -> Bool) : Bool {
+    if (size(map1) != size(map2)) {
+       return false;
+    };
     let iterator1 = entries(map1);
     let iterator2 = entries(map2);
     loop {

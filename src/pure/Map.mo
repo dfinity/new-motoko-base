@@ -7,12 +7,9 @@ import Runtime "../Runtime";
 
 // TODO rename Internal.some, Internal.replace
 // Inline Internal
-// Restore wrapper?
-// Change argument order of ops with trailing compare (fromIter, filterMap)?
-// test,
-// test new toText, replaceIfExists
 // inline Tree type, remove Types.Immutable.Tree
-// add replaceIfExists (to match Map.mo), filter, singleton forEach
+
+// Do we want clone and clear, just to match imperative API?
 
 module {
 
@@ -33,7 +30,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -54,7 +51,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -76,7 +73,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -102,7 +99,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -136,7 +133,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -182,7 +179,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Debug "mo:base/Debug";
   ///
@@ -218,7 +215,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -249,7 +246,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -290,7 +287,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -311,7 +308,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Iter "mo:base/Iter";
   /// import Nat "mo:base/Nat";
   /// import Debug "mo:base/Debug";
@@ -334,7 +331,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -367,7 +364,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -393,7 +390,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -418,7 +415,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -445,7 +442,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -474,7 +471,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -509,7 +506,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -541,7 +538,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -564,7 +561,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -588,7 +585,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
@@ -611,7 +608,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Debug "mo:base/Debug";
   ///
@@ -638,7 +635,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
@@ -665,7 +662,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
@@ -701,7 +698,7 @@ module {
   /// Converts the `map` to its textual representation using `keyFormat` and `valueFormat` to convert each key and value to `Text`.
   ///
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   ///
   /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
@@ -730,7 +727,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Debug "mo:base/Debug";
   /// import Text "mo:base/Text";
@@ -784,7 +781,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/immutable/Map";
+  /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
   ///
@@ -1018,7 +1015,7 @@ module {
           case (#red(_, _, _, r))       { rightmost(r) };
           case (#black(_, k, v, #leaf)) { (k, v) };
           case (#black(_, _, _, r))     { rightmost(r) };
-          case (#leaf)                  { Runtime.trap "OrderedMap.impossible" }
+          case (#leaf)                  { Runtime.trap "Map.maxEntry() impossible" }
         }
       };
       switch m {
@@ -1034,7 +1031,7 @@ module {
           case (#red(l, _, _, _))       { leftmost(l) };
           case (#black(#leaf, k, v, _)) { (k, v) };
           case (#black(l, _, _, _))     { leftmost(l)};
-          case (#leaf)                  { Runtime.trap "OrderedMap.impossible" }
+          case (#leaf)                  { Runtime.trap "Map.minEntry() impossible" }
         }
       };
       switch m {
@@ -1073,7 +1070,7 @@ module {
           (#red (l, x, y, r))
         };
         case _ {
-          Runtime.trap "OrderedMap.red"
+          Runtime.trap "Map.redden() impossible"
         }
       }
     };
@@ -1221,7 +1218,7 @@ module {
             rbalance(r2, x3, y3, redden r3)
           )
         };
-        case _ { Runtime.trap "balLeft" }
+        case _ { Runtime.trap "Map.balLeft() impossible" }
       }
     };
 
@@ -1246,7 +1243,7 @@ module {
             #black(r2, x, y, r3)
           )
         };
-        case _ { Runtime.trap "balRight" }
+        case _ { Runtime.trap "Map.balRight() impossible" }
       }
     };
 

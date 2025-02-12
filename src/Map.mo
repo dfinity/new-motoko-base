@@ -38,11 +38,12 @@ import BTreeHelper "internal/BTreeHelper";
 module {
   let btreeOrder = 32; // Should be >= 4 and <= 512.
 
-  public type Node<K, V> = Types.Map.Node<K, V>;
-  public type Data<K, V> = Types.Map.Data<K, V>;
-  public type Internal<K, V> = Types.Map.Internal<K, V>;
-  public type Leaf<K, V> = Types.Map.Leaf<K, V>;
   public type Map<K, V> = Types.Map<K, V>;
+
+  type Node<K, V> = Types.Map.Node<K, V>;
+  type Data<K, V> = Types.Map.Data<K, V>;
+  type Internal<K, V> = Types.Map.Internal<K, V>;
+  type Leaf<K, V> = Types.Map.Leaf<K, V>;
 
   // /// Convert the mutable key-value map to an immutable key-value map.
   // ///

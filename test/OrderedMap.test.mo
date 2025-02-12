@@ -267,8 +267,18 @@ var expected = expectedEntries([0]);
 
 run(
   suite(
-    "single root",
+    "singleton",
     [
+       test(
+        "singleton valid",
+        do {
+	  let map = Map.singleton(0,"Zero");
+          Map.assertValid(map, Nat.compare);
+	  Map.size(map)
+	},
+        M.equals(T.nat(1))
+      ),
+
       test(
         "size",
         Map.size(buildTestMap()),
@@ -1167,7 +1177,6 @@ run(
         },
         M.equals(T.bool(true))
       ),
-      // TODO: Test freeze and thaw */
     ]
   )
 );

@@ -129,15 +129,52 @@ module {
     put(map, compare, key, value).0
   };
 
-
-  // TODO : doc
+  /// Given `map` ordered by `compare`, add a mapping from `key` to `value`. Overwrites any existing entry with key `key`.
+  /// Returns the modified map and the previous value associated with key `key`
+  /// or `null` if no such value exists.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let map0 = natMap.fromIter<Text>(
+  ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
+  ///     Nat.compare);
+  ///
+  ///   let (map1, old1) = Map.put(map0, Nat.compare, 0, "Nil");
+  ///
+  ///   Debug.print(debug_show(Iter.toArray(natMap.entries(map1))));
+  ///   Debug.print(debug_show(old1));
+  ///   // [(0, "Nil"), (1, "One"), (2, "Two")]
+  ///   // ?"Zero"
+  ///
+  ///   let (map2, old2) = natMap.put(map0, Nat.compare, 3, "Three");
+  ///
+  ///   Debug.print(debug_show(Iter.toArray(natMap.entries(map2))));
+  ///   Debug.print(debug_show(old2));
+  ///   // [(0, "Zero"), (1, "One"), (2, "Two"), (3, "Three")]
+  ///   // null
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: The returned map shares with the `m` most of the tree nodes.
+  /// Garbage collecting one of maps (e.g. after an assignment `m := Map.put(m, Nat.compare, k, v).0`)
+  /// causes collecting `O(log(n))` nodes.
   public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V) {
      switch (Internal.replace(map.root, compare, key, value)) {
         case (t, null) { ({root = t; size = map.size + 1}, null) };
         case (t, v)    { ({root = t; size = map.size}, v)}
       }
    };
-
 
   /// Overwrites the value of an existing key and returns the updated map and previous value.
   /// If the key does not exist, returns the original map and `null`.

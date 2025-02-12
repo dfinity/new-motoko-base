@@ -624,7 +624,7 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// peristent actor {
+  /// persistent actor {
   ///   let map = Map.fromIter<Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
@@ -926,10 +926,10 @@ module {
   /// persistent actor {
   ///   let map1 = Map.fromIter<Text>(
   ///     Iter.fromArray([(0, "Zero"), (1, "One")]),
-  ///	  Nat.compare);
+  ///     Nat.compare);
   ///   let map2 = Map.fromIter<Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two")]),
-  ///	  Nat.compare);
+  ///     Nat.compare);
   ///
   ///   let orderLess = Map.compare(map1, map2, Nat.compare, Text.compare);
   ///   // `#less`
@@ -1088,7 +1088,7 @@ module {
     public func forEach<K, V>(map : Map<K, V>, operation: (K, V) -> ()) {
       func combine(acc: Null, key : K, value : V) : Null {
         operation(key, value);
-	null
+        null
       };
       ignore foldLeft(map.root, null, combine);
     };

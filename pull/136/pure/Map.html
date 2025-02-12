@@ -487,8 +487,8 @@ Map.toText&lt;Nat, Text&gt;(map, Nat.toText, func t { t })
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 <p>*Runtime and space assumes that <code>keyFormat</code> and <code>valueFormat</code> run in O(1) time and space.</p>
-</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map1</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">map2</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">equal</span> : (<span class="type">V</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two immutable maps have equal entries.
-The order of the keys in both maps are defined by <code>compare</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map1</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">map2</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">equalKey</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">equalValue</span> : (<span class="type">V</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two immutable maps have equal entries.
+Assumes both maps are ordered equivalently.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -498,7 +498,7 @@ import Text &quot;mo:base/Text&quot;;
 persistent actor {
   let map1 = Map.fromIter&lt;Text&gt;(Iter.fromArray([(0, &quot;Zero&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;)]), Nat.compare);
   let map2 = Map.fromIter&lt;Text&gt;(Iter.fromArray([(2, &quot;Two&quot;), (1, &quot;One&quot;), (0, &quot;Zero&quot;)]), Nat.compare);
-  assert(Map.equal(map1, map2, Nat.compare, Text.equal));
+  assert(Map.equal(map1, map2, Nat.equal, Text.equal));
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

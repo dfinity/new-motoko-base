@@ -16,8 +16,9 @@ import Runtime "../Runtime";
 
 module {
 
-  public type Map<K, V> = Types.Immutable.Map<K, V>;
-  type Tree<K, V> = Types.Immutable.Tree<K, V>;
+  public type Map<K, V> = Types.Pure.Map<K, V>;
+
+  type Tree<K, V> = Types.Pure.Tree<K, V>;
 
   public func empty<K, V>() : Map<K, V> {
     Internal.empty<K, V>();

@@ -100,7 +100,7 @@ module {
       #leaf
     };
 
-    public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>); // 
+    public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>); // FIX ME
     public type Set<T> = () // Placeholder
   }
 }

@@ -1,12 +1,12 @@
 // @testmode wasi
 
-import Map "../src/immutable/Map";
-import Nat "../src/Nat";
-import Iter "../src/Iter";
-import Debug "../src/Debug";
-import Array "../src/Array";
-import Runtime "../src/Runtime";
-import Text "../src/Text";
+import Map "../../src/pure/Map";
+import Nat "../../src/Nat";
+import Iter "../../src/Iter";
+import Debug "../../src/Debug";
+import Array "../../src/Array";
+import Runtime "../../src/Runtime";
+import Text "../../src/Text";
 
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";

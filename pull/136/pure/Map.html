@@ -441,7 +441,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
-peristent actor {
+persistent actor {
   let map = Map.fromIter&lt;Text&gt;(
     Iter.fromArray([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)]),
     Nat.compare);
@@ -642,8 +642,10 @@ import Text &quot;mo:base/Text&quot;;
 persistent actor {
   let map1 = Map.fromIter&lt;Text&gt;(
     Iter.fromArray([(0, &quot;Zero&quot;), (1, &quot;One&quot;)]),
+    Nat.compare);
   let map2 = Map.fromIter&lt;Text&gt;(
     Iter.fromArray([(0, &quot;Zero&quot;), (2, &quot;Two&quot;)]),
+    Nat.compare);
 
   let orderLess = Map.compare(map1, map2, Nat.compare, Text.compare);
   // `#less`

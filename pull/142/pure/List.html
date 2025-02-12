@@ -121,7 +121,7 @@ function <code>f</code> returns true and the second list only includes
 the elements for which the function returns false.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
-List.partition&lt;Nat&gt;(?(0, ?(1, ?(2, null))), func n { n != 1 }) // =&gt; (?(0, ?(2, null)), ?(1, null))</code></pre>
+List.partition&lt;Nat&gt;(?(0, ?(1, ?(2, null))), func n = n != 1) // =&gt; (?(0, ?(2, null)), ?(1, null))</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
@@ -214,4 +214,187 @@ List.find&lt;Nat&gt;(
 <p>Runtime: O(size)</p>
 <p>Space: O(1)</p>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
-</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="merge"><code><span class="keyword">public func </span><span class="fnname">merge</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">lessThanOrEqual</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p></p></div><div class="declaration"><h4 class="function" id="tabulate"><code><span class="keyword">public func </span><span class="fnname">tabulate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">n</span> : <span class="type">Nat</span>, <span class="parameter">f</span> : <span class="type">Nat</span> -&gt; <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="repeat"><code><span class="keyword">public func </span><span class="fnname">repeat</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="zip"><code><span class="keyword">public func </span><span class="fnname">zip</span>&lt;<span class="type">T</span>, <span class="type">U</span>&gt;(<span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">U</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;(<span class="type">T</span>, <span class="type">U</span>)&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="zipWith"><code><span class="keyword">public func </span><span class="fnname">zipWith</span>&lt;<span class="type">T</span>, <span class="type">U</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">U</span>&gt;, <br/>  <span class="parameter">f</span> : (<span class="type">T</span>, <span class="type">U</span>) -&gt; <span class="type">V</span><br/>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">V</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="split"><code><span class="keyword">public func </span><span class="fnname">split</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : (<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p></p></div><div class="declaration"><h4 class="function" id="chunks"><code><span class="keyword">public func </span><span class="fnname">chunks</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p></p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p></p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p></p></div></div></body></html>
+</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if the given predicate <code>f</code> is true for all list
+elements.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+
+List.all&lt;Nat&gt;(
+  ?(1, ?(2, ?(3, null))),
+  func n = n &gt; 1
+); // =&gt; false</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(1)</p>
+<p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if there exists a list element for which
+the given predicate <code>f</code> is true.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+
+List.any&lt;Nat&gt;(
+  ?(1, ?(2, ?(3, null))),
+  func n = n &gt; 1
+) // =&gt; true</code></pre>
+
+<p>Runtime: O(size(list))</p>
+<p>Space: O(1)</p>
+<p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="merge"><code><span class="keyword">public func </span><span class="fnname">merge</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">lessThanOrEqual</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge two ordered lists into a single ordered list.
+This function requires both list to be ordered as specified
+by the given relation <code>lessThanOrEqual</code>.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+
+List.merge&lt;Nat&gt;(
+  ?(1, ?(2, ?(4, null))),
+  ?(2, ?(4, ?(6, null))),
+  func (n1, n2) = n1 &lt;= n2
+); // =&gt; ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))))),</code></pre>
+
+<p>Runtime: O(size(l1) + size(l2))</p>
+<p>Space: O(size(l1) + size(l2))</p>
+<p>*Runtime and space assumes that <code>lessThanOrEqual</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compare two lists using lexicographic ordering specified by argument function <code>compare</code>.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+import Nat &quot;mo:base/Nat&quot;;
+
+List.compare&lt;Nat&gt;(
+  ?(1, ?(2, null)),
+  ?(3, ?(4, null)),
+  Nat.compare
+) // =&gt; #less</code></pre>
+
+<p>Runtime: O(size(l1))</p>
+<p>Space: O(1)</p>
+<p>*Runtime and space assumes that argument <code>compare</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="tabulate"><code><span class="keyword">public func </span><span class="fnname">tabulate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">n</span> : <span class="type">Nat</span>, <span class="parameter">f</span> : <span class="type">Nat</span> -&gt; <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Generate a list based on a length and a function that maps from
+a list index to a list element.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.tabulate&lt;Nat&gt;(
+  3,
+  func n = n * 2
+) // =&gt; ?(0, ?(2, (?4, null)))</code></pre>
+
+<p>Runtime: O(n)</p>
+<p>Space: O(n)</p>
+<p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a list with exactly one element.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.singleton&lt;Nat&gt;(
+  0
+) // =&gt; ?(0, null)</code></pre>
+
+<p>Runtime: O(1)</p>
+<p>Space: O(1)</p>
+</p></div><div class="declaration"><h4 class="function" id="repeat"><code><span class="keyword">public func </span><span class="fnname">repeat</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a list of the given length with the same value in each position.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.repeat&lt;Nat&gt;(
+  3,
+  0
+) // =&gt; ?(0, ?(0, ?(0, null)))</code></pre>
+
+<p>Runtime: O(n)</p>
+<p>Space: O(n)</p>
+</p></div><div class="declaration"><h4 class="function" id="zip"><code><span class="keyword">public func </span><span class="fnname">zip</span>&lt;<span class="type">T</span>, <span class="type">U</span>&gt;(<span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">U</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;(<span class="type">T</span>, <span class="type">U</span>)&gt;</code></h4><p><p>Create a list of pairs from a pair of lists.</p>
+<p>If the given lists have different lengths, then the created list will have a
+length equal to the length of the smaller list.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.zip&lt;Nat, Text&gt;(
+  ?(0, ?(1, ?(2, null))),
+  ?(&quot;0&quot;, ?(&quot;1&quot;, null)),
+) // =&gt; ?((0, &quot;0&quot;), ?((1, &quot;1&quot;), null))</code></pre>
+
+<p>Runtime: O(min(size(xs), size(ys)))</p>
+<p>Space: O(min(size(xs), size(ys)))</p>
+</p></div><div class="declaration"><h4 class="function" id="zipWith"><code><span class="keyword">public func </span><span class="fnname">zipWith</span>&lt;<span class="type">T</span>, <span class="type">U</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">U</span>&gt;, <br/>  <span class="parameter">f</span> : (<span class="type">T</span>, <span class="type">U</span>) -&gt; <span class="type">V</span><br/>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">V</span>&gt;</code></h4><p><p>Create a list in which elements are created by applying function <code>f</code> to each pair <code>(x, y)</code> of elements
+occuring at the same position in list <code>xs</code> and list <code>ys</code>.</p>
+<p>If the given lists have different lengths, then the created list will have a
+length equal to the length of the smaller list.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+import Nat = &quot;mo:base/Nat&quot;;
+import Char = &quot;mo:base/Char&quot;;
+
+List.zipWith&lt;Nat, Char, Text&gt;(
+  ?(0, ?(1, ?(2, null))),
+  ?('a', ?('b', null)),
+  func (n, c) = Nat.toText(n) # Char.toText(c)
+) // =&gt; ?(&quot;0a&quot;, ?(&quot;1b&quot;, null))</code></pre>
+
+<p>Runtime: O(min(size(xs), size(ys)))</p>
+<p>Space: O(min(size(xs), size(ys)))</p>
+<p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="split"><code><span class="keyword">public func </span><span class="fnname">split</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : (<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Split the given list at the given zero-based index.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.split&lt;Nat&gt;(
+  2,
+  ?(0, ?(1, ?(2, null)))
+) // =&gt; (?(0, ?(1, null)), ?(2, null))</code></pre>
+
+<p>Runtime: O(n)</p>
+<p>Space: O(n)</p>
+</p></div><div class="declaration"><h4 class="function" id="chunks"><code><span class="keyword">public func </span><span class="fnname">chunks</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;</code></h4><p><p>Split the given list into chunks of length <code>n</code>.
+The last chunk will be shorter if the length of the given list
+does not divide by <code>n</code> evenly.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.chunks&lt;Nat&gt;(
+  2,
+  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
+)
+/* =&gt; ?(?(0, ?(1, null)),
+        ?(?(2, ?(3, null)),
+          ?(?(4, null),
+            null)))
+*/</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an array into a list.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.fromArray&lt;Nat&gt;([0, 1, 2, 3, 4])
+// =&gt;  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a mutable array into a list.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.fromVarArray&lt;Nat&gt;([var 0, 1, 2, 3, 4])
+// =&gt;  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p><p>Create an array from a list.
+Example:</p>
+<pre><code>motoko include=initialize
+List.toArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))))
+// =&gt; [0, 1, 2, 3, 4]</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Create a mutable array from a list.
+Example:</p>
+<pre><code>motoko include=initialize
+List.toVarArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))))
+// =&gt; [var 0, 1, 2, 3, 4]</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Turn an iterator into a list, consuming it.
+Example:</p>
+<pre><code>motoko include=initialize
+List.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].values())
+// =&gt; ?(0, ?(1, ?(2, ?(3, ?(4, null))))))</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p></p></div></div></body></html>

@@ -274,7 +274,7 @@ module {
   /// import Text "mo:base/Text";
   ///
   /// persistent actor {
-  /// let map1 = Map.empty<Nat, Text>();
+  ///   let map1 = Map.empty<Nat, Text>();
   ///   Map.add(map1, Nat.compare, 0, "Zero");
   ///   Map.add(map1, Nat.compare, 1, "One");
   ///   Map.add(map1, Nat.compare, 2, "Two");
@@ -874,6 +874,7 @@ module {
     result
   };
 
+  // TODO: remove redundant compare function by copying structure of map, not rebuilding it.
   /// Project all values of the map in a new map.
   /// Apply a mapping function to the values of each entriy in the map and collect
   /// collect the mapped entries in a new mutable key-value map.

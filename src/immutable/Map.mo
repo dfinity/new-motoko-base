@@ -129,7 +129,8 @@ module {
     put(map, compare, key, value).0
   };
 
-  /// @deprecated: do we want to call put replace or exchange?
+
+  // TODO : doc
   public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V) {
      switch (Internal.replace(map.root, compare, key, value)) {
         case (t, null) { ({root = t; size = map.size + 1}, null) };
@@ -137,6 +138,42 @@ module {
       }
    };
 
+
+  /// Overwrites the value of an existing key and returns the updated map and previous value.
+  /// If the key does not exist, returns the original map and `null`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let singleton = Map.singleton(0, "Null");
+  ///
+  ///   let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
+  ///   Debug.print(debug_show(oldZero)); // prints `?"Null"`, previous value.
+  ///   Debug.print(debug_show(Map.get(map1, Nat.compare, 0))); // prints `?"Zero"`, new value.
+
+  ///   let empty = Map.empty<Nat, Text>();
+  ///   let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, "One");  // no effect, key is absent
+  ///   Debug.print(debug_show(oldOne)); // prints `null`, key was absent.
+  ///   Debug.print(debug_show(Map.get(map2, Nat.compare, 0))); // prints `null`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))`.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  public func replaceIfExists<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K,V>, ?V) {
+    // TODO: Could be optimized in future
+    if (containsKey(map, compare, key)) {
+      put(map, compare, key, value)
+    } else {
+      (map, null)
+    }
+  };
 
   /// Given a `map`, ordered by `compare`, deletes the entry for `key` from `map`. Has no effect if `key` is not
   /// present in the map. Returns a modified map, leaving `map` unchanged.
@@ -631,7 +668,7 @@ module {
   ///
   /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   /// Map.toText<Nat, Text>(map, Nat.toText, func t { t })
-  /// // => "{(0, Zero), (2, Two), (1, One)}"
+  /// // => "{(0, Zero), (1, One), (2, Two)}"
   /// ```
   ///
   /// Runtime: O(size)
@@ -648,6 +685,114 @@ module {
     };
     text #= "}";
     text
+  };
+
+  /// Test whether two immutable maps have equal entries.
+  /// The order of the keys in both maps are defined by `compare`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  /// import Text "mo:base/Text";
+  ///
+  /// persistent actor {
+  ///   let map1 = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (1, "One"), (2, "Two")]), Nat.compare);
+  ///   let map2 = Map.fromIter<Text>(Iter.fromArray([(2, "Two"), (1, "One"), (0, "Zero")]), Nat.compare);
+  ///   assert(Map.equal(map1, map2, Nat.compare, Text.equal));
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)`.
+  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compare : (K, K) -> Order.Order, equal : (V, V) -> Bool) : Bool {
+    let iterator1 = entries(map1);
+    let iterator2 = entries(map2);
+    loop {
+      let next1 = iterator1.next();
+      let next2 = iterator2.next();
+      switch (next1, next2) {
+        case (null, null) {
+          return true
+        };
+        case (?(key1, value1), ?(key2, value2)) {
+          if (compare(key1, key2) != #equal or not equal(value1, value2)) {
+            return false
+          }
+        };
+        case _ { return false }
+      }
+    }
+  };
+
+  /// Compare two maps by primarily comparing keys and secondarily values.
+  /// Both maps are iterated by the ascending order of their creation and
+  /// order is determined by the following rules:
+  /// Less:
+  /// `map1` is less than `map2` if:
+  ///  * the pairwise iteration hits a entry pair `entry1` and `entry2` where
+  ///    `entry1` is less than `entry2` and all preceding entry pairs are equal, or,
+  ///  * `map1` is  a strict prefix of `map2`, i.e. `map2` has more entries than `map1`
+  ///     and all entries of `map1` occur at the beginning of iteration `map2`.
+  /// `entry1` is less than `entry2` if:
+  ///  * the key of `entry1` is less than the key of `entry2`, or
+  ///  * `entry1` and `entry2` have equal keys and the value of `entry1` is less than
+  ///    the value of `entry2`.
+  /// Equal:
+  /// `map1` and `map2` have same series of equal entries by pairwise iteration.
+  /// Greater:
+  /// `map1` is neither less nor equal `map2`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/immutable/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Text "mo:base/Text";
+  ///
+  /// persistent actor {
+  ///   let map1 = Map.fromIter<Text>(
+  ///     Iter.fromArray([(0, "Zero"), (1, "One")]),
+  ///	  Nat.compare);
+  ///   let map2 = Map.fromIter<Text>(
+  ///     Iter.fromArray([(0, "Zero"), (2, "Two")]),
+  ///	  Nat.compare);
+  ///
+  ///   let orderLess = Map.compare(map1, map2, Nat.compare, Text.compare);
+  ///   // `#less`
+  ///   let orderEqual = Map.compare(map1, map1, Nat.compare, Text.compare);
+  ///   // `#equal`
+  ///   let orderGreater = Map.compare(map2, map1, Nat.compare, Text.compare);
+  ///   // `#greater`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that `compareKey` and `compareValue` have runtime and space costs of `O(1)`.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func compare<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compareKey : (K, K) -> Order.Order, compareValue : (V, V) -> Order.Order) : Order.Order {
+    let iterator1 = entries(map1);
+    let iterator2 = entries(map2);
+    loop {
+      switch (iterator1.next(), iterator2.next()) {
+        case (null, null) return #equal;
+        case (null, _) return #less;
+        case (_, null) return #greater;
+        case (?(key1, value1), ?(key2, value2)) {
+          let keyComparison = compareKey(key1, key2);
+          if (keyComparison != #equal) {
+            return keyComparison
+          };
+          let valueComparison = compareValue(value1, value2);
+          if (valueComparison != #equal) {
+            return valueComparison
+          }
+        }
+      }
+    }
   };
 
   module Internal {

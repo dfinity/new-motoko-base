@@ -1,5 +1,5 @@
 import Prim "mo:prim";
-import Queue "../../src/immutable/Queue";
+import Queue "../../src/pure/Queue";
 import Array "../../src/Array";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";
@@ -10,11 +10,11 @@ import M "mo:matchers/Matchers";
 
 let { run; test; suite } = Suite;
 
-func iterateForward<T>(deque : Deque.Deque<T>) : Iter.Iter<T> {
+func iterateForward<T>(deque : Queue.Queue<T>) : Iter.Iter<T> {
   var current = deque;
   object {
     public func next() : ?T {
-      switch (Deque.popFront(current)) {
+      switch (Queue.popFront(current)) {
         case null null;
         case (?result) {
           current := result.1;
@@ -25,11 +25,11 @@ func iterateForward<T>(deque : Deque.Deque<T>) : Iter.Iter<T> {
   }
 };
 
-func iterateBackward<T>(deque : Deque.Deque<T>) : Iter.Iter<T> {
+func iterateBackward<T>(deque : Queue.Queue<T>) : Iter.Iter<T> {
   var current = deque;
   object {
     public func next() : ?T {
-      switch (Deque.popBack(current)) {
+      switch (Queue.popBack(current)) {
         case null null;
         case (?result) {
           current := result.0;
@@ -40,7 +40,7 @@ func iterateBackward<T>(deque : Deque.Deque<T>) : Iter.Iter<T> {
   }
 };
 
-func toText(deque : Deque.Deque<Nat>) : Text {
+func toText(deque : Queue.Queue<Nat>) : Text {
   var text = "[";
   var isFirst = true;
   for (element in iterateForward(deque)) {
@@ -55,39 +55,39 @@ func toText(deque : Deque.Deque<Nat>) : Text {
   text
 };
 
-let natDequeTestable : T.Testable<Deque.Deque<Nat>> = object {
-  public func display(deque : Deque.Deque<Nat>) : Text {
+let natQueueTestable : T.Testable<Queue.Queue<Nat>> = object {
+  public func display(deque : Queue.Queue<Nat>) : Text {
     toText(deque)
   };
-  public func equals(first : Deque.Deque<Nat>, second : Deque.Deque<Nat>) : Bool {
+  public func equals(first : Queue.Queue<Nat>, second : Queue.Queue<Nat>) : Bool {
     Array.equal(Iter.toArray(iterateForward(first)), Iter.toArray(iterateForward(second)), Nat.equal)
   }
 };
 
-func matchFrontRemoval(element : Nat, remainder : Deque.Deque<Nat>) : M.Matcher<?(Nat, Deque.Deque<Nat>)> {
-  let testable = T.tuple2Testable(T.natTestable, natDequeTestable);
+func matchFrontRemoval(element : Nat, remainder : Queue.Queue<Nat>) : M.Matcher<?(Nat, Queue.Queue<Nat>)> {
+  let testable = T.tuple2Testable(T.natTestable, natQueueTestable);
   M.equals(T.optional(testable, ?(element, remainder)))
 };
 
-func matchEmptyFrontRemoval() : M.Matcher<?(Nat, Deque.Deque<Nat>)> {
-  let testable = T.tuple2Testable(T.natTestable, natDequeTestable);
-  M.equals(T.optional(testable, null : ?(Nat, Deque.Deque<Nat>)))
+func matchEmptyFrontRemoval() : M.Matcher<?(Nat, Queue.Queue<Nat>)> {
+  let testable = T.tuple2Testable(T.natTestable, natQueueTestable);
+  M.equals(T.optional(testable, null : ?(Nat, Queue.Queue<Nat>)))
 };
 
-func matchBackRemoval(remainder : Deque.Deque<Nat>, element : Nat) : M.Matcher<?(Deque.Deque<Nat>, Nat)> {
-  let testable = T.tuple2Testable(natDequeTestable, T.natTestable);
+func matchBackRemoval(remainder : Queue.Queue<Nat>, element : Nat) : M.Matcher<?(Queue.Queue<Nat>, Nat)> {
+  let testable = T.tuple2Testable(natQueueTestable, T.natTestable);
   M.equals(T.optional(testable, ?(remainder, element)))
 };
 
-func matchEmptyBackRemoval() : M.Matcher<?(Deque.Deque<Nat>, Nat)> {
-  let testable = T.tuple2Testable(natDequeTestable, T.natTestable);
-  M.equals(T.optional(testable, null : ?(Deque.Deque<Nat>, Nat)))
+func matchEmptyBackRemoval() : M.Matcher<?(Queue.Queue<Nat>, Nat)> {
+  let testable = T.tuple2Testable(natQueueTestable, T.natTestable);
+  M.equals(T.optional(testable, null : ?(Queue.Queue<Nat>, Nat)))
 };
 
-func reduceFront<T>(deque : Deque.Deque<T>, amount : Nat) : Deque.Deque<T> {
+func reduceFront<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   var current = deque;
-  for (_ in Iter.range(1, amount)) {
-    switch (Deque.popFront(current)) {
+  for (_ in Nat.range(1, amount)) {
+    switch (Queue.popFront(current)) {
       case null Prim.trap("should not be null");
       case (?result) current := result.1
     }
@@ -95,10 +95,10 @@ func reduceFront<T>(deque : Deque.Deque<T>, amount : Nat) : Deque.Deque<T> {
   current
 };
 
-func reduceBack<T>(deque : Deque.Deque<T>, amount : Nat) : Deque.Deque<T> {
+func reduceBack<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   var current = deque;
-  for (_ in Iter.range(1, amount)) {
-    switch (Deque.popBack(current)) {
+  for (_ in Nat.range(1, amount)) {
+    switch (Queue.popBack(current)) {
       case null Prim.trap("should not be null");
       case (?result) current := result.0
     }
@@ -108,7 +108,7 @@ func reduceBack<T>(deque : Deque.Deque<T>, amount : Nat) : Deque.Deque<T> {
 
 /* --------------------------------------- */
 
-var deque = Deque.empty<Nat>();
+var deque = Queue.empty<Nat>();
 
 run(
   suite(
@@ -116,7 +116,7 @@ run(
     [
       test(
         "empty",
-        Deque.isEmpty(deque),
+        Queue.isEmpty(deque),
         M.equals(T.bool(true))
       ),
       test(
@@ -131,22 +131,22 @@ run(
       ),
       test(
         "peek front",
-        Deque.peekFront(deque),
+        Queue.peekFront(deque),
         M.equals(T.optional(T.natTestable, null : ?Nat))
       ),
       test(
         "peek back",
-        Deque.peekBack(deque),
+        Queue.peekBack(deque),
         M.equals(T.optional(T.natTestable, null : ?Nat))
       ),
       test(
         "pop front",
-        Deque.popFront(deque),
+        Queue.popFront(deque),
         matchEmptyFrontRemoval()
       ),
       test(
         "pop back",
-        Deque.popBack(deque),
+        Queue.popBack(deque),
         matchEmptyBackRemoval()
       )
     ]
@@ -155,7 +155,7 @@ run(
 
 /* --------------------------------------- */
 
-deque := Deque.pushFront(Deque.empty<Nat>(), 1);
+deque := Queue.pushFront(Queue.empty<Nat>(), 1);
 
 run(
   suite(
@@ -163,7 +163,7 @@ run(
     [
       test(
         "not empty",
-        Deque.isEmpty(deque),
+        Queue.isEmpty(deque),
         M.equals(T.bool(false))
       ),
       test(
@@ -178,23 +178,23 @@ run(
       ),
       test(
         "peek front",
-        Deque.peekFront(deque),
+        Queue.peekFront(deque),
         M.equals(T.optional(T.natTestable, ?1))
       ),
       test(
         "peek back",
-        Deque.peekBack(deque),
+        Queue.peekBack(deque),
         M.equals(T.optional(T.natTestable, ?1))
       ),
       test(
         "pop front",
-        Deque.popFront(deque),
-        matchFrontRemoval(1, Deque.empty())
+        Queue.popFront(deque),
+        matchFrontRemoval(1, Queue.empty())
       ),
       test(
         "pop back",
-        Deque.popBack(deque),
-        matchBackRemoval(Deque.empty(), 1)
+        Queue.popBack(deque),
+        matchBackRemoval(Queue.empty(), 1)
       )
     ]
   )
@@ -204,10 +204,10 @@ run(
 
 let testSize = 100;
 
-func populateForward(from : Nat, to : Nat) : Deque.Deque<Nat> {
-  var deque = Deque.empty<Nat>();
-  for (number in Iter.range(from, to)) {
-    deque := Deque.pushFront(deque, number)
+func populateForward(from : Nat, to : Nat) : Queue.Queue<Nat> {
+  var deque = Queue.empty<Nat>();
+  for (number in Nat.range(from, to)) {
+    deque := Queue.pushFront(deque, number)
   };
   deque
 };
@@ -220,7 +220,7 @@ run(
     [
       test(
         "not empty",
-        Deque.isEmpty(deque),
+        Queue.isEmpty(deque),
         M.equals(T.bool(false))
       ),
       test(
@@ -255,27 +255,27 @@ run(
       ),
       test(
         "peek front",
-        Deque.peekFront(deque),
+        Queue.peekFront(deque),
         M.equals(T.optional(T.natTestable, ?testSize))
       ),
       test(
         "peek back",
-        Deque.peekBack(deque),
+        Queue.peekBack(deque),
         M.equals(T.optional(T.natTestable, ?1))
       ),
       test(
         "pop front",
-        Deque.popFront(deque),
+        Queue.popFront(deque),
         matchFrontRemoval(testSize, populateForward(1, testSize - 1))
       ),
       test(
         "empty after front removal",
-        Deque.isEmpty(reduceFront(deque, testSize)),
+        Queue.isEmpty(reduceFront(deque, testSize)),
         M.equals(T.bool(true))
       ),
       test(
         "empty after front removal",
-        Deque.isEmpty(reduceBack(deque, testSize)),
+        Queue.isEmpty(reduceBack(deque, testSize)),
         M.equals(T.bool(true))
       )
     ]
@@ -284,10 +284,10 @@ run(
 
 /* --------------------------------------- */
 
-func populateBackward(from : Nat, to : Nat) : Deque.Deque<Nat> {
-  var deque = Deque.empty<Nat>();
-  for (number in Iter.range(from, to)) {
-    deque := Deque.pushBack(deque, number)
+func populateBackward(from : Nat, to : Nat) : Queue.Queue<Nat> {
+  var deque = Queue.empty<Nat>();
+  for (number in Nat.range(from, to)) {
+    deque := Queue.pushBack(deque, number)
   };
   deque
 };
@@ -300,7 +300,7 @@ run(
     [
       test(
         "not empty",
-        Deque.isEmpty(deque),
+        Queue.isEmpty(deque),
         M.equals(T.bool(false))
       ),
       test(
@@ -335,32 +335,32 @@ run(
       ),
       test(
         "peek front",
-        Deque.peekFront(deque),
+        Queue.peekFront(deque),
         M.equals(T.optional(T.natTestable, ?1))
       ),
       test(
         "peek back",
-        Deque.peekBack(deque),
+        Queue.peekBack(deque),
         M.equals(T.optional(T.natTestable, ?testSize))
       ),
       test(
         "pop front",
-        Deque.popFront(deque),
+        Queue.popFront(deque),
         matchFrontRemoval(1, populateBackward(2, testSize))
       ),
       test(
         "pop back",
-        Deque.popBack(deque),
+        Queue.popBack(deque),
         matchBackRemoval(populateBackward(1, testSize - 1), testSize)
       ),
       test(
         "empty after front removal",
-        Deque.isEmpty(reduceFront(deque, testSize)),
+        Queue.isEmpty(reduceFront(deque, testSize)),
         M.equals(T.bool(true))
       ),
       test(
         "empty after front removal",
-        Deque.isEmpty(reduceBack(deque, testSize)),
+        Queue.isEmpty(reduceBack(deque, testSize)),
         M.equals(T.bool(true))
       )
     ]
@@ -377,35 +377,35 @@ object Random {
   }
 };
 
-func randomPopulate(amount : Nat) : Deque.Deque<Nat> {
-  var current = Deque.empty<Nat>();
-  for (number in Iter.range(1, amount)) {
+func randomPopulate(amount : Nat) : Queue.Queue<Nat> {
+  var current = Queue.empty<Nat>();
+  for (number in Nat.range(1, amount)) {
     current := if (Random.next() % 2 == 0) {
-      Deque.pushFront(current, Nat.sub(amount, number))
+      Queue.pushFront(current, Nat.sub(amount, number))
     } else {
-      Deque.pushBack(current, amount + number)
+      Queue.pushBack(current, amount + number)
     }
   };
   current
 };
 
-func isSorted(deque : Deque.Deque<Nat>) : Bool {
+func isSorted(deque : Queue.Queue<Nat>) : Bool {
   let array = Iter.toArray(iterateForward(deque));
   let sorted = Array.sort(array, Nat.compare);
   Array.equal(array, sorted, Nat.equal)
 };
 
-func randomRemoval(deque : Deque.Deque<Nat>, amount : Nat) : Deque.Deque<Nat> {
+func randomRemoval(deque : Queue.Queue<Nat>, amount : Nat) : Queue.Queue<Nat> {
   var current = deque;
-  for (number in Iter.range(1, amount)) {
+  for (number in Nat.range(1, amount)) {
     current := if (Random.next() % 2 == 0) {
-      let pair = Deque.popFront(current);
+      let pair = Queue.popFront(current);
       switch pair {
         case null Prim.trap("should not be null");
         case (?result) result.1
       }
     } else {
-      let pair = Deque.popBack(current);
+      let pair = Queue.popBack(current);
       switch pair {
         case null Prim.trap("should not be null");
         case (?result) result.0
@@ -423,7 +423,7 @@ run(
     [
       test(
         "not empty",
-        Deque.isEmpty(deque),
+        Queue.isEmpty(deque),
         M.equals(T.bool(false))
       ),
       test(
@@ -453,7 +453,7 @@ run(
       ),
       test(
         "random total removal",
-        Deque.isEmpty(randomRemoval(deque, testSize)),
+        Queue.isEmpty(randomRemoval(deque, testSize)),
         M.equals(T.bool(true))
       )
     ]
@@ -462,22 +462,22 @@ run(
 
 /* --------------------------------------- */
 
-func randomInsertionDeletion(steps : Nat) : Deque.Deque<Nat> {
-  var current = Deque.empty<Nat>();
+func randomInsertionDeletion(steps : Nat) : Queue.Queue<Nat> {
+  var current = Queue.empty<Nat>();
   var size = 0;
-  for (number in Iter.range(1, steps)) {
+  for (number in Nat.range(1, steps)) {
     let random = Random.next();
     current := switch (random % 4) {
       case 0 {
         size += 1;
-        Deque.pushFront(current, Nat.sub(steps, number))
+        Queue.pushFront(current, Nat.sub(steps, number))
       };
       case 1 {
         size += 1;
-        Deque.pushBack(current, steps + number)
+        Queue.pushBack(current, steps + number)
       };
       case 2 {
-        switch (Deque.popFront(current)) {
+        switch (Queue.popFront(current)) {
           case null {
             assert (size == 0);
             current
@@ -489,7 +489,7 @@ func randomInsertionDeletion(steps : Nat) : Deque.Deque<Nat> {
         }
       };
       case 3 {
-        switch (Deque.popBack(current)) {
+        switch (Queue.popBack(current)) {
           case null {
             assert (size == 0);
             current

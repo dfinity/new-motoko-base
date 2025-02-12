@@ -42,8 +42,8 @@ module {
   public type TimerId = Nat;
 
   public type List<T> = (); // Placeholder
-  public type Queue<T> = { var immutable : Immutable.Queue<T> };
-  public type Set<T> = { var immutable : Immutable.Set<T> };
+  public type Queue<T> = { var pure : Pure.Queue<T> };
+  public type Set<T> = { var pure : Pure.Set<T> };
 
   public module Map {
     public type Node<K, V> = {
@@ -85,7 +85,9 @@ module {
   };
   public type Stack<T> = Stack.Stack<T>;
 
-  public module Immutable {
+  public module Pure {
+
+    public type List<T> = ?(T, List<T>);
 
     public type Map<K, V> = {
      size : Nat;
@@ -98,9 +100,7 @@ module {
       #leaf
     };
 
-    public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>);
-    public type Set<T> = (); // Placeholder
-    public type Stack<T> = ?(Stack<T>, T); // Delete or reorder me
-    public type List<T> = ?(T, List<T>)
+    public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>); // 
+    public type Set<T> = () // Placeholder
   }
 }

@@ -5,7 +5,6 @@ import Order "Order";
 import Result "Result";
 import Option "Option";
 import Prim "mo:⛔";
-import { todo } "Debug";
 
 module {
 
@@ -690,7 +689,41 @@ module {
 
   /// Converts an iterator to a mutable array.
   public func fromIter<T>(iter : Types.Iter<T>) : [var T] {
-    todo() // See `Array.fromIter()`
+    var list : Types.Pure.List<T> = null;
+    var size = 0;
+    label l loop {
+      switch (iter.next()) {
+        case (?element) {
+          list := ?(element, list);
+          size += 1
+        };
+        case null { break l }
+      }
+    };
+    if (size == 0) { return [var] };
+    let array = Prim.Array_init<T>(
+      size,
+      switch list {
+        case (?(h, _)) h;
+        case null {
+          Prim.trap("VarArray.fromIter(): unreachable")
+        }
+      }
+    );
+    var i = size;
+    while (i > 0) {
+      i -= 1;
+      switch list {
+        case (?(h, t)) {
+          array[i] := h;
+          list := t
+        };
+        case null {
+          Prim.trap("VarArray.fromIter(): unreachable")
+        }
+      }
+    };
+    array
   };
 
   /// Returns an iterator (`Iter`) over the indices of `array`.

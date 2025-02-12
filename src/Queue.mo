@@ -20,7 +20,7 @@
 /// `n` denotes the number of elements stored in the queue.
 
 import Iter "Iter";
-import Immutable "immutable/Queue";
+import Pure "pure/Queue";
 import Order "Order";
 import Types "Types";
 import { todo } "Debug";
@@ -29,23 +29,23 @@ module {
 
   public type Queue<T> = Types.Queue<T>;
 
-  public func freeze<T>(queue : Queue<T>) : Immutable.Queue<T> = queue.immutable;
+  public func toPure<T>(queue : Queue<T>) : Pure.Queue<T> = queue.pure;
 
-  public func thaw<T>(queue : Immutable.Queue<T>) : Queue<T> {
-    { var immutable = queue }
+  public func fromPure<T>(queue : Pure.Queue<T>) : Queue<T> {
+    { var pure = queue }
   };
 
-  public func empty<T>() : Queue<T> = { var immutable = Immutable.empty() };
+  public func empty<T>() : Queue<T> = { var pure = Pure.empty() };
 
   public func singleton<T>(item : T) : Queue<T> {
-    { var immutable = Immutable.singleton(item) }
+    { var pure = Pure.singleton(item) }
   };
 
   public func clear<T>(queue : Queue<T>) {
-    queue.immutable := Immutable.empty();
+    queue.pure := Pure.empty();
   };
 
-  public func clone<T>(queue : Queue<T>) : Queue<T> = { var immutable = queue.immutable };
+  public func clone<T>(queue : Queue<T>) : Queue<T> = { var pure = queue.pure };
 
   public func isEmpty<T>(queue : Queue<T>) : Bool {
     todo()

@@ -3,10 +3,15 @@
   "specs": [
     {
       "name": "Finite",
+      "modules": ["Char"],
+      "functions": []
+    },
+    {
+      "name": "FiniteWithAllValues",
+      "extends": ["Finite"],
       "modules": [
         "Order",
         "Bool",
-        "Char",
         "Int8",
         "Int16",
         "Int32",

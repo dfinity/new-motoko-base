@@ -2,7 +2,6 @@
 
 import Prim "mo:⛔";
 import Iter "Iter";
-import { todo } "Debug";
 
 module {
 
@@ -64,10 +63,6 @@ module {
   /// Returns the order of `a` and `b`.
   public func compare(a : Char, b : Char) : { #less; #equal; #greater } {
     if (a < b) { #less } else if (a == b) { #equal } else { #greater }
-  };
-
-  public func allValues() : Iter.Iter<Char> {
-    todo()
   };
 
 }

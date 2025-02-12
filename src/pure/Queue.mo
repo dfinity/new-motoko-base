@@ -21,14 +21,13 @@
 /// `n` denotes the number of elements stored in the queue.
 
 import Iter "../Iter";
-import Stack "Stack";
 import Order "../Order";
 import Types "../Types";
 import { todo } "../Debug";
 
 module {
   /// Double-ended queue data type.
-  public type Queue<T> = Types.Immutable.Queue<T>;
+  public type Queue<T> = Types.Pure.Queue<T>;
 
   /// Create a new empty queue.
   ///

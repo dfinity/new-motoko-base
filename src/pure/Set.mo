@@ -7,7 +7,7 @@ import { todo } "../Debug";
 
 module {
 
-  public type Set<T> = Types.Immutable.Set<T>;
+  public type Set<T> = Types.Pure.Set<T>;
 
   public func empty<T>() : Set<T> {
     todo()
@@ -104,7 +104,7 @@ module {
   public func foldRight<T, A>(
     set : Set<T>,
     base : A,
-    combine : (A, T) -> A
+    combine : (T, A) -> A
   ) : A {
     todo()
   };

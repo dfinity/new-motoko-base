@@ -1,6 +1,5 @@
 /// Mutable stack data structure.
 
-import Immutable "immutable/Stack";
 import Order "Order";
 import Types "Types";
 import { todo } "Debug";
@@ -9,13 +8,13 @@ module {
   type Node<T> = Types.Stack.Node<T>;
   public type Stack<T> = Types.Stack<T>;
 
-  public func freeze<T>(stack : Stack<T>) : Immutable.Stack<T> {
-    todo()
-  };
+  // public func toPure<T>(stack : Stack<T>) : Pure.Stack<T> {
+  //   todo()
+  // };
 
-  public func thaw<T>(stack : Immutable.Stack<T>) : Stack<T> {
-    todo()
-  };
+  // public func fromPure<T>(stack : Pure.Stack<T>) : Stack<T> {
+  //   todo()
+  // };
 
   public func empty<T>() : Stack<T> {
     {

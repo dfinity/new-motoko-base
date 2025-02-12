@@ -61,7 +61,7 @@ module {
       children : [var ?Node<K, V>]
     };
 
-    public type Leaf<K, V> = {
+    public type Leaf<K, V> = { // why the extra indirection?
       data : Data<K, V>
     };
 

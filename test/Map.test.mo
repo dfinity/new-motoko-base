@@ -166,7 +166,6 @@ run(
           let input = Map.empty<Nat, Text>();
           let output = Map.map<Nat, Text, Int>(
             input,
-            Nat.compare,
             func(_, _) {
               Runtime.trap("test failed")
             }
@@ -478,7 +477,6 @@ run(
           let input = Map.singleton<Nat, Text>(0, "0");
           let output = Map.map<Nat, Text, Int>(
             input,
-            Nat.compare,
             func(key, value) {
               assert (key == 0);
               assert (value == "0");
@@ -902,7 +900,6 @@ run(
           let input = smallMap();
           let output = Map.map<Nat, Text, Int>(
             input,
-            Nat.compare,
             func(key, value) {
               +key
             }

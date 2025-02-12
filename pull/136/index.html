@@ -2,8 +2,8 @@
 <html><head title="Motoko docs"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><div class="index-container"><h1 class="index-header">Index of modules</h1><ul class="index-listing"><li class="index-item"><a class="index-item-link" href="Array.html">Array</a><div class="index-item-comment"><p>Provides extended utility functions on Arrays.</p>
 <p>Note the difference between mutable and non-mutable arrays below.</p>
 <p>WARNING: If you are looking for a list that can grow and shrink in size,
-it is recommended you use either the Buffer class or the List class for
-those purposes. Arrays must be created with a fixed size.</p>
+it is recommended you use <code>List</code> for those purposes.
+Arrays must be created with a fixed size.</p>
 <p>Import from the base library to use this module.</p>
 <pre><code>motoko name=import
 import Array &quot;mo:base/Array&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Blob.html">Blob</a><div class="index-item-comment"><p>Module for working with Blobs (immutable sequences of bytes).</p>
@@ -330,8 +330,9 @@ and reinstalls.</p>
 <p>For further usage information for timers on the IC, please consult
 <a href="https://internetcomputer.org/docs/current/developer-docs/backend/periodic-tasks#timers-library-limitations">the documentation</a>.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Map.html">immutable/Map</a><div class="index-item-comment"><p>Original: <code>OrderedMap.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Queue.html">immutable/Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Immutable singly-linked list</p>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/Map.html">pure/Map</a><div class="index-item-comment"><p>Original: <code>OrderedMap.mo</code></p>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/Queue.html">pure/Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
 <p>The interface is purely functional, not imperative, and queues are immutable values.
 In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
 value of the modified Queue, alongside any other data.
@@ -346,6 +347,5 @@ that are dynamically size-balanced by splitting.</p>
 <ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Set.html">immutable/Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Stack.html">immutable/Stack</a><div class="index-item-comment"><p>Immutable singly-linked list</p>
-</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li></ul></div></html>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
+</div></li></ul></div></html>

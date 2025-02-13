@@ -193,8 +193,8 @@ module {
   ///
   ///   map := Map.add(map, Nat.compare, 0, "Zero");
   ///   map := Map.add(map, Nat.compare, 1, "One");
-  ///   Debug.print(debug_show(Iter.toArray(map.entries(map))));
-  ///   // [(0, "Nil"), (1, "One")]
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  ///   // [(0, "Zero"), (1, "One")]
   ///   map := Map.add(map, Nat.compare, 0, "Nil");
   ///   // traps
   ///
@@ -216,7 +216,8 @@ module {
     }
   };
 
-  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.  /// Replaces any existing entry with key `key`.
+  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.
+  /// Replaces any existing entry with key `key`.
   /// Returns the modified map.
   ///
   /// Example:
@@ -233,7 +234,7 @@ module {
   ///   map := Map.put(map, Nat.compare, 1, "One");
   ///   map := Map.put(map, Nat.compare, 0, "Nil");
   ///
-  ///   Debug.print(debug_show(Iter.toArray(map.entries(map))));
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
   ///   // [(0, "Nil"), (1, "One")]
   /// }
   /// ```
@@ -265,7 +266,7 @@ module {
   ///
   ///   map := Map.add(map, Nat.compare, 0, "Zero");
   ///   map := Map.update(map, Nat.compare, 0, "Nil");
-  ///   Debug.print(debug_show(Iter.toArray(map.entries(map))));
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
   ///   // [(0, "Nil")]
   ///   map := Map.update(map, Nat.compare, 1, "One");
   ///   // traps

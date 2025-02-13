@@ -636,7 +636,7 @@ persistent actor {
   Map.add(map, Nat.compare, 2, &quot;Two&quot;);
 
   let text = Map.toText&lt;Nat, Text&gt;(map, Nat.toText, func (value) { value });
-  // `&quot;(0, Zero), (1, One), (2, Two)&quot;`
+  // `{(0, Zero), (1, One), (2, Two)}`
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

@@ -1278,13 +1278,15 @@
       "public type Map<K, V>",
       "public func maxEntry<K, V>(map : Map<K, V>) : ?(K, V)",
       "public func minEntry<K, V>(map : Map<K, V>) : ?(K, V)",
-      "public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V)",
+      "public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V>",
       "public func replaceIfExists<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K,V>, ?V)",
       "public func reverseEntries<K, V>(map : Map<K, V>) : Iter.Iter<(K, V)>",
       "public func singleton<K, V>(key : K, value : V) : Map<K, V>",
       "public func size<K, V>(map : Map<K, V>) : Nat",
+      "public func swap<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V)",
       "public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : (Map<K, V>, ?V)",
       "public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text",
+      "public func update<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V>",
       "public func values<K, V>(map : Map<K, V>) : Iter.Iter<V>"
     ]
   },

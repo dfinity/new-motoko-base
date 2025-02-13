@@ -29,7 +29,7 @@ class MapMatcher(expected : [(Nat, Text)]) : M.Matcher<Map.Map<Nat, Text>> {
 func checkMap(m: Map.Map<Nat, Text>) { Map.assertValid(m, Nat.compare); };
 
 func insert(rbTree : Map.Map<Nat, Text>, key : Nat) : Map.Map<Nat, Text>  {
-  let updatedTree = Map.add(rbTree, Nat.compare, key, debug_show (key));
+  let updatedTree = Map.put(rbTree, Nat.compare, key, debug_show (key));
   checkMap(updatedTree);
   updatedTree
 };
@@ -151,12 +151,12 @@ run(
       ),
       test(
         "replace absent/no value",
-        Map.put(buildTestMap(), Nat.compare, 0, "Test").1,
+        Map.swap(buildTestMap(), Nat.compare, 0, "Test").1,
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
       test(
         "replace absent/key appeared",
-        Map.put(buildTestMap(), Nat.compare, 0, "Test").0,
+        Map.swap(buildTestMap(), Nat.compare, 0, "Test").0,
         MapMatcher([(0, "Test")])
       ),
       test(
@@ -330,15 +330,15 @@ run(
         M.equals(T.optional(entryTestable, ?(0, "0")))
       ),
       test(
-        "put function result",
-        Map.put(buildTestMap(), Nat.compare, 0, "TEST").1,
+        "swap function result",
+        Map.swap(buildTestMap(), Nat.compare, 0, "TEST").1,
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
       test(
-        "put map result",
+        "swap map result",
         do {
           let rbMap = buildTestMap();
-          Map.put(rbMap, Nat.compare, 0, "TEST").0
+          Map.swap(rbMap, Nat.compare, 0, "TEST").0
         },
         MapMatcher([(0, "TEST")])
       ),
@@ -737,22 +737,22 @@ run(
     "repeated operations",
     [
       test(
-        "repeated add",
+        "repeated put",
         do {
           var rbMap = buildTestMap();
           assert (Map.get(rbMap, Nat.compare, 1) == ?"1");
-          rbMap := Map.add(rbMap, Nat.compare, 1, "TEST-1");
+          rbMap := Map.put(rbMap, Nat.compare, 1, "TEST-1");
           Map.get(rbMap, Nat.compare, 1)
         },
         M.equals(T.optional(T.textTestable, ?"TEST-1"))
       ),
       test(
-        "repeated put",
+        "repeated swap",
         do {
           let rbMap0 = buildTestMap();
-          let (rbMap1, firstResult) = Map.put(rbMap0, Nat.compare, 1, "TEST-1");
+          let (rbMap1, firstResult) = Map.swap(rbMap0, Nat.compare, 1, "TEST-1");
           assert (firstResult == ?"1");
-          let (rbMap2, secondResult) = Map.put(rbMap1, Nat.compare, 1, "1");
+          let (rbMap2, secondResult) = Map.swap(rbMap1, Nat.compare, 1, "1");
           assert (secondResult == ?"TEST-1");
           rbMap2
         },
@@ -787,7 +787,7 @@ let smallSize = 100;
 func smallMap() : Map.Map<Nat, Text> {
   var map = Map.empty<Nat, Text>();
   for (index in Nat.range(0, smallSize)) {
-    map := Map.add(map, Nat.compare, index, Nat.toText(index))
+    map := Map.put(map, Nat.compare, index, Nat.toText(index))
   };
   map
 };
@@ -864,7 +864,7 @@ run(
         do {
           let map = smallMap();
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.put(map, Nat.compare, index, Nat.toText(index) # "!").1 == ?Nat.toText(index))
+            assert (Map.swap(map, Nat.compare, index, Nat.toText(index) # "!").1 == ?Nat.toText(index))
           };
           true
         },
@@ -874,7 +874,7 @@ run(
         "update absent",
         do {
           let map = smallMap();
-          Map.put(map, Nat.compare, smallSize, Nat.toText(smallSize)).1
+          Map.swap(map, Nat.compare, smallSize, Nat.toText(smallSize)).1
         },
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
@@ -1141,7 +1141,7 @@ run(
         "compare less value",
         do {
           let map1 = smallMap();
-          let (map2, _) = Map.put(smallMap(), Nat.compare, smallSize - 1, "Last");
+          let (map2, _) = Map.swap(smallMap(), Nat.compare, smallSize - 1, "Last");
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #less);
           true
         },
@@ -1170,7 +1170,7 @@ run(
       test(
         "compare greater value",
         do {
-          let (map1, _) = Map.put(smallMap(), Nat.compare, smallSize - 1, "Last");
+          let (map1, _) = Map.swap(smallMap(), Nat.compare, smallSize - 1, "Last");
           let map2 = smallMap();
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #greater);
           true

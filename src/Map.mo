@@ -2036,36 +2036,6 @@ module {
 
   // Additional functionality compared to original source.
 
-  func cloneData<K, V>(data : Data<K, V>) : Data<K, V> {
-      { kvs = VarArray.map<?(K, V), ?(K, V)>(data.kvs, func entry { entry });
-        var count = data.count };
-  };
-
-  func cloneNode<K, V>(node : Node<K, V>) : Node<K, V> {
-    switch node {
-      case (#leaf { data }) {
-	  #leaf { data = cloneData(data) }
-        };
-      case (#internal { data; children }) {
-        let clonedData = cloneData(data);
-        let clonedChildren = VarArray.map<?Node<K, V>, ?Node<K, V>>(
-          children,
-          func child {
-            switch child {
-              case null null;
-              case (?childNode) ?cloneNode(childNode)
-            }
-          }
-        );
-        # internal({
-          data = clonedData;
-          children = clonedChildren
-        })
-      }
-    }
-  };
-
-
   func mapData<K, V1, V2>(data : Data<K, V1>, project : (K, V1) -> V2) : Data<K, V2> {
       { kvs = VarArray.map<?(K, V1), ?(K, V2)>(
          data.kvs,
@@ -2083,8 +2053,8 @@ module {
 	  #leaf { data = mapData(data, project) }
         };
       case (#internal { data; children }) {
-        let clonedData = mapData<K, V1, V2>(data, project);
-        let clonedChildren = VarArray.map<?Node<K, V1>, ?Node<K, V2>>(
+        let mappedData = mapData<K, V1, V2>(data, project);
+        let mappedChildren = VarArray.map<?Node<K, V1>, ?Node<K, V2>>(
           children,
           func child {
             switch child {
@@ -2094,12 +2064,15 @@ module {
           }
         );
         # internal({
-          data = clonedData;
-          children = clonedChildren
+          data = mappedData;
+          children = mappedChildren
         })
       }
     }
   };
+
+  func cloneNode<K, V>(node : Node<K, V>) : Node<K, V> =
+    mapNode<K, V, V>(node, func (k, v) = v);
 
   module BinarySearch {
     public type SearchResult = {

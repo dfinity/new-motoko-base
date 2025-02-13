@@ -562,7 +562,7 @@ module {
       let w63 = w47 +% rot(w48, 07) ^ rot(w48, 18) ^ (w48 >> 03) +% w56 +% rot(w61, 17) ^ rot(w61, 19) ^ (w61 >> 10);
 
       /*
-      for ((i, j, k, l, m) in expansion_rounds.vals()) {
+      for ((i, j, k, l, m) in expansion_rounds.values()) {
         // (j,k,l,m) = (i+1,i+9,i+14,i+16)
         let (v0, v1) = (msg[j], msg[l]);
         let s0 = rot(v0, 07) ^ rot(v0, 18) ^ (v0 >> 03);
@@ -1200,8 +1200,8 @@ module {
       }
     };
 
-    public func writeArray(arr : [Nat8]) : () = writeIter(arr.vals());
-    public func writeBlob(blob : Blob) : () = writeIter(blob.vals());
+    public func writeArray(arr : [Nat8]) : () = writeIter(arr.values());
+    public func writeBlob(blob : Blob) : () = writeIter(blob.values());
 
     public func sum() : Blob {
       // calculate padding

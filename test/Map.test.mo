@@ -37,6 +37,16 @@ run(
         M.equals(T.nat(0))
       ),
       test(
+        "clone no alias",
+        do {
+          let original = Map.empty<Nat, Text>();
+          let clone = Map.clone(original);
+          ignore Map.put(original, Nat.compare, 0, "0");
+          Map.size(clone)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
         "iterate forward",
         Iter.toArray(Map.entries(Map.empty<Nat, Text>())),
         M.equals(T.array<(Nat, Text)>(entryTestable, []))

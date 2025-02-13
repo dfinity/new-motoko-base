@@ -37,6 +37,16 @@ run(
         M.equals(T.nat(0))
       ),
       test(
+        "clone no alias",
+        do {
+          let original = Map.empty<Nat, Text>();
+          let clone = Map.clone(original);
+          ignore Map.put(original, Nat.compare, 0, "0");
+          Map.size(clone)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
         "iterate forward",
         Iter.toArray(Map.entries(Map.empty<Nat, Text>())),
         M.equals(T.array<(Nat, Text)>(entryTestable, []))
@@ -286,6 +296,17 @@ run(
           let original = Map.singleton<Nat, Text>(0, "0");
           let clone = Map.clone(original);
           assert (Map.equal(original, clone, Nat.equal, Text.equal));
+          Map.size(clone)
+        },
+        M.equals(T.nat(1))
+      ),
+      test(
+        "clone no alias",
+        do {
+          let original = Map.singleton<Nat, Text>(0, "0");
+          let clone = Map.clone(original);
+          ignore Map.put(original, Nat.compare, 0, "1");
+	  assert (Map.get(clone, Nat.compare, 0) == ?"0");
           Map.size(clone)
         },
         M.equals(T.nat(1))
@@ -682,6 +703,23 @@ run(
         },
         M.equals(T.nat(smallSize))
       ),
+      test(
+        "clone no alias",
+        do {
+          let original = smallMap();
+          let copy = smallMap();
+          let clone = Map.clone(original);
+	  let keys = Iter.toArray(Map.keys(original));
+	  for (key in keys.values()) {
+            ignore Map.put(original, Nat.compare, 0, "X");
+	  };
+	  for (key in keys.values()) {
+            assert Map.get(clone, Nat.compare, key) ==
+  	           Map.get(copy, Nat.compare, key)
+	  };
+          Map.size(clone)
+        },
+        M.equals(T.nat(smallSize))),
       test(
         "iterate forward",
         Iter.toArray(Map.entries(smallMap())),

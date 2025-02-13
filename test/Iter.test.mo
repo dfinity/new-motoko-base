@@ -16,7 +16,7 @@ do {
   var z = 0;
 
   Iter.forEach<(Nat, Text)>(
-    Iter.enumerate(xs.vals()),
+    Iter.enumerate(xs.values()),
     func(i, x) {
       y := y # x;
       z += i
@@ -34,7 +34,7 @@ do {
     x % 2 == 0
   };
 
-  let _actual = Iter.map<Nat, Bool>([1, 2, 3].vals(), isEven);
+  let _actual = Iter.map<Nat, Bool>([1, 2, 3].values(), isEven);
   let actual = [var true, false, true];
   Iter.forEach<(Nat, Bool)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
@@ -52,7 +52,7 @@ do {
     x % 2 == 1
   };
 
-  let _actual = Iter.filter<Nat>([1, 2, 3].vals(), isOdd);
+  let _actual = Iter.filter<Nat>([1, 2, 3].values(), isOdd);
   let actual = [var 0, 0];
   Iter.forEach<(Nat, Nat)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
@@ -119,7 +119,7 @@ do {
   Debug.print("  toArray");
 
   let expected = [1, 2, 3];
-  let actual = Iter.toArray<Nat>(expected.vals());
+  let actual = Iter.toArray<Nat>(expected.values());
 
   assert (actual.size() == expected.size());
 
@@ -132,7 +132,7 @@ do {
   Debug.print("  toVarArray");
 
   let expected = [var 1, 2, 3];
-  let actual = Iter.toVarArray<Nat>(expected.vals());
+  let actual = Iter.toVarArray<Nat>(expected.values());
 
   assert (actual.size() == expected.size());
 
@@ -146,7 +146,7 @@ do {
 
   let input : [Nat] = [4, 3, 1, 2, 5];
   let expected : [Nat] = [1, 2, 3, 4, 5];
-  let actual = Iter.toArray(Iter.sort<Nat>(input.vals(), Nat.compare));
+  let actual = Iter.toArray(Iter.sort<Nat>(input.values(), Nat.compare));
   assert Array.equal<Nat>(expected, actual, func(x1, x2) { x1 == x2 })
 };
 

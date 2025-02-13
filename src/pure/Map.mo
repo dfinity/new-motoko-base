@@ -118,7 +118,7 @@ module {
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  /// let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   /// Debug.print(debug_show(Map.size(map)));
   /// // 3
@@ -139,7 +139,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   Debug.print(debug_show Map.containsKey(map, Nat.compare, 1)); // => true
   ///   Debug.print(debug_show Map.containsKey(map, Nat.compare, 42)); // => false
@@ -163,7 +163,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   Debug.print(debug_show(Map.get(map, Nat.compare, 1)));
   ///   // ?"One"
@@ -225,7 +225,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map0 = natMap.fromIter<Text>(
+  ///   let map0 = natMap.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
   ///
@@ -307,7 +307,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 1)))));
   ///   Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 42)))));
@@ -340,7 +340,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map0 = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map0 = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   let (map1, old1) = Map.take(map0, Nat.compare, 0);
   ///
@@ -383,7 +383,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   Debug.print(debug_show(Map.maxEntry(map)));
   //    // ?(2, "Two")
@@ -408,7 +408,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   Debug.print(debug_show(Map.minEntry(map)));
   ///   // ?(0, "Zero")
@@ -435,7 +435,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
   ///   // [(0, "Zero"), (1, "One"), (2, "Two")]
@@ -471,7 +471,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///   Nat.compare);
   ///
@@ -500,7 +500,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  /// let map = Map.fromIter<Text>(
+  /// let map = Map.fromIter<Nat, Text>(
   ///   Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///   Nat.compare);
   ///
@@ -528,7 +528,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
   ///   // [(0, "Zero"), (1, "One"), (2, "Two")]
@@ -556,7 +556,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
   ///
@@ -589,7 +589,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
   ///   func folder(accum : (Nat, Text), key : Nat, val : Text) : ((Nat, Text))
   ///     = (key + accum.0, accum.1 # val);
@@ -625,7 +625,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
   ///
@@ -660,7 +660,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]),
   ///     Nat.compare);
   ///
@@ -687,7 +687,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "0"), (2, "2"), (1, "1")]),
   ///     Nat.compare);
   ///
@@ -738,7 +738,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
   ///   Map.forEach<Nat, Text>(map, func (key, value) {
@@ -764,7 +764,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let numberNames = Map.fromIter<Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///   let numberNames = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///   let evenNames = Map.filter<Nat, Text>(numberNames, Nat.compare, func (key, value) {
   ///     key % 2 == 0
   ///   });
@@ -792,7 +792,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
   ///
@@ -829,7 +829,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter<Text>(
+  ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
   ///   Map.toText<Nat, Text>(map, Nat.toText, func t { t })
@@ -864,10 +864,10 @@ module {
   /// import Text "mo:base/Text";
   ///
   /// persistent actor {
-  ///   let map1 = Map.fromIter<Text>(
+  ///   let map1 = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (1, "One"), (2, "Two")]),
   ///     Nat.compare);
-  ///   let map2 = Map.fromIter<Text>(
+  ///   let map2 = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(2, "Two"), (1, "One"), (0, "Zero")]),
   ///     Nat.compare);
   ///   assert(Map.equal(map1, map2, Nat.equal, Text.equal));
@@ -924,10 +924,10 @@ module {
   /// import Text "mo:base/Text";
   ///
   /// persistent actor {
-  ///   let map1 = Map.fromIter<Text>(
+  ///   let map1 = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (1, "One")]),
   ///     Nat.compare);
-  ///   let map2 = Map.fromIter<Text>(
+  ///   let map2 = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two")]),
   ///     Nat.compare);
   ///

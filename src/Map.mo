@@ -1175,8 +1175,7 @@ module {
       text #= sep # "(" # keyFormat(key) # ", " # valueFormat(value) # ")";
       sep := ", "
     };
-    text #= "}";
-    text
+    text # "}"
   };
 
   /// Compare two maps by primarily comparing keys and secondarily values.

@@ -19,8 +19,8 @@
 ///
 /// `n` denotes the number of elements stored in the queue.
 
+import PureQueue "pure/Queue";
 import Iter "Iter";
-import Pure "pure/Queue";
 import Order "Order";
 import Types "Types";
 import { todo } "Debug";
@@ -29,20 +29,20 @@ module {
 
   public type Queue<T> = Types.Queue<T>;
 
-  public func toPure<T>(queue : Queue<T>) : Pure.Queue<T> = queue.pure;
+  public func toPure<T>(queue : Queue<T>) : PureQueue.Queue<T> = queue.pure;
 
-  public func fromPure<T>(queue : Pure.Queue<T>) : Queue<T> {
+  public func fromPure<T>(queue : PureQueue.Queue<T>) : Queue<T> {
     { var pure = queue }
   };
 
-  public func empty<T>() : Queue<T> = { var pure = Pure.empty() };
+  public func empty<T>() : Queue<T> = { var pure = PureQueue.empty() };
 
   public func singleton<T>(item : T) : Queue<T> {
-    { var pure = Pure.singleton(item) }
+    { var pure = PureQueue.singleton(item) }
   };
 
   public func clear<T>(queue : Queue<T>) {
-    queue.pure := Pure.empty();
+    queue.pure := PureQueue.empty();
   };
 
   public func clone<T>(queue : Queue<T>) : Queue<T> = { var pure = queue.pure };

@@ -41,7 +41,11 @@ module {
   };
   public type TimerId = Nat;
 
-  public type List<T> = (); // Placeholder
+  public type List<T> = {
+    var blocks : [var [var ?T]];
+    var blockIndex : Nat;
+    var elementIndex : Nat
+  };
   public type Queue<T> = { var pure : Pure.Queue<T> };
   public type Set<T> = { var pure : Pure.Set<T> };
 

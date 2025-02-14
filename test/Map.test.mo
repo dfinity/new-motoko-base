@@ -1223,4 +1223,63 @@ run(
       )
     ]
   )
-)
+);
+
+run(
+  suite(
+    "add, update, put",
+    [
+       test(
+        "add disjoint",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.add(map, Nat.compare, 0, "0");
+	  Map.add(map, Nat.compare, 1, "1");
+	  Map.size(map)
+	},
+        M.equals(T.nat(2))
+      ),
+      test(
+        "put existing",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.put(map, Nat.compare, 0, "0");
+	  Map.put(map, Nat.compare, 0, "Zero");
+	  Map.get(map, Nat.compare, 0)
+	},
+        M.equals(T.optional(T.textTestable, ?"Zero"))
+      ),
+      test(
+        "update existing",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.put(map, Nat.compare, 0, "0");
+	  Map.update(map, Nat.compare, 0, "Zero");
+	  Map.get(map, Nat.compare, 0)
+	},
+        M.equals(T.optional(T.textTestable, ?"Zero"))
+      ),
+      // TODO: test traps (checked manually)
+      /*
+      test(
+        "update absent",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.update(map, Nat.compare, 0, "Zero"); // traps
+	  assert false;
+	  Map.size(map);
+	},
+        M.equals(T.nat(0))
+      ),
+      test(
+        "add existing traps",
+        do {
+	  let map = Map.empty<Nat, Text>();
+          Map.add(map, Nat.compare, 0, "0");
+	  Map.add(map, Nat.compare, 0, "Zero"); // traps
+	  Map.get(map, Nat.compare, 0)
+	},
+        M.equals(T.optional(T.textTestable, ?"0"))
+      ),
+      */
+   ]))

@@ -8,7 +8,6 @@
 /// ```
 import Int "Int";
 import Iter "Iter";
-import { todo } "Debug";
 import Prim "mo:⛔";
 
 module {

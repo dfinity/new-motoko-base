@@ -38,11 +38,12 @@ import BTreeHelper "internal/BTreeHelper";
 module {
   let btreeOrder = 32; // Should be >= 4 and <= 512.
 
-  public type Node<K, V> = Types.Map.Node<K, V>;
-  public type Data<K, V> = Types.Map.Data<K, V>;
-  public type Internal<K, V> = Types.Map.Internal<K, V>;
-  public type Leaf<K, V> = Types.Map.Leaf<K, V>;
   public type Map<K, V> = Types.Map<K, V>;
+
+  type Node<K, V> = Types.Map.Node<K, V>;
+  type Data<K, V> = Types.Map.Data<K, V>;
+  type Internal<K, V> = Types.Map.Internal<K, V>;
+  type Leaf<K, V> = Types.Map.Leaf<K, V>;
 
   // /// Convert the mutable key-value map to an immutable key-value map.
   // ///
@@ -144,7 +145,7 @@ module {
     {
       var root = #leaf({
         data = {
-          kvs = VarArray.tabulate<?(K, V)>(btreeOrder - 1, func(index) { null });
+          kvs = VarArray.repeat<?(K, V)>(null, btreeOrder - 1);
           var count = 0
         }
       });
@@ -168,22 +169,10 @@ module {
   /// Runtime: `O(1)`.
   /// Space: `O(1)`.
   public func singleton<K, V>(key : K, value : V) : Map<K, V> {
-    {
-      var root = #leaf({
-        data = {
-          kvs = VarArray.tabulate<?(K, V)>(
-            btreeOrder - 1,
-            func(index) {
-              if (index == 0) {
-                ?(key, value)
-              } else {
-                null
-              }
-            }
-          );
-          var count = 1
-        }
-      });
+    let kvs = VarArray.repeat<?(K, V)>(null, btreeOrder - 1);
+    kvs[0] := ?(key, value);
+    { var root =
+       #leaf { data = { kvs; var count = 1 } };
       var size = 1
     }
   };
@@ -514,25 +503,18 @@ module {
         ov
       };
       case (#promote({ kv; leftChild; rightChild })) {
-        map.root := #internal({
+        let kvs = VarArray.repeat<?(K,V)>(null, btreeOrder - 1);
+	kvs[0] := ?kv;
+	let children = VarArray.repeat<?Node<K,V>>(null, btreeOrder);
+	children[0] := ?leftChild;
+	children[1] := ?rightChild;
+        map.root := #internal {
           data = {
-            kvs = VarArray.tabulate<?(K, V)>(
-              btreeOrder - 1,
-              func(i) {
-                if (i == 0) { ?kv } else { null }
-              }
-            );
+            kvs;
             var count = 1
           };
-          children = VarArray.tabulate<?(Node<K, V>)>(
-            btreeOrder,
-            func(i) {
-              if (i == 0) { ?leftChild } else if (i == 1) { ?rightChild } else {
-                null
-              }
-            }
-          )
-        });
+          children
+        };
         // promotion always comes from inserting a new element, so increment the tree size counter
         map.size += 1;
 
@@ -965,7 +947,7 @@ module {
   ///   Map.add(numberNames, Nat.compare, 1, "One");
   ///   Map.add(numberNames, Nat.compare, 2, "Two");
   ///
-  ///   let lowerCaseNames = Map.map<Nat, Text, Text>(numberNames, Nat.compare, func (key, value) {
+  ///   let lowerCaseNames = Map.map<Nat, Text, Text>(numberNames, func (key, value) {
   ///     Text.toLower(value)
   ///   });
   ///   for (entry in Map.entries(lowerCaseNames)) {
@@ -984,13 +966,11 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func map<K, V1, V2>(map : Map<K, V1>, compare : (K, K) -> Order.Order, project : (K, V1) -> V2) : Map<K, V2> {
-    let result = empty<K, V2>();
-    for ((key, value1) in entries(map)) {
-      let value2 = project(key, value1);
-      add(result, compare, key, value2)
-    };
-    result
+  public func map<K, V1, V2>(map : Map<K, V1>, project : (K, V1) -> V2) : Map<K, V2> {
+    {
+      var root = mapNode(map.root, project);
+      var size = map.size
+    }
   };
 
   /// Iterate all entries in ascending order of the keys,
@@ -2127,31 +2107,44 @@ module {
   };
 
   // Additional functionality compared to original source.
-  func cloneNode<K, V>(node : Node<K, V>) : Node<K, V> {
+
+  func mapData<K, V1, V2>(data : Data<K, V1>, project : (K, V1) -> V2) : Data<K, V2> {
+      { kvs = VarArray.map<?(K, V1), ?(K, V2)>(
+         data.kvs,
+         func entry {
+	   switch entry {
+             case (?kv) ?(kv.0, project kv);
+	     case null null;
+	   }});
+        var count = data.count };
+  };
+
+  func mapNode<K, V1, V2>(node : Node<K, V1>, project : (K, V1) -> V2) : Node<K, V2> {
     switch node {
-      case (#leaf _) { node };
-      case (#internal { data; children }) {
-        let clonedKeyValueSet = VarArray.map<?(K, V), ?(K, V)>(data.kvs, func entry { entry });
-        let clonedData = {
-          kvs = clonedKeyValueSet;
-          var count = data.count
+      case (#leaf { data }) {
+	  #leaf { data = mapData(data, project) }
         };
-        let clonedChildren = VarArray.map<?Node<K, V>, ?Node<K, V>>(
+      case (#internal { data; children }) {
+        let mappedData = mapData<K, V1, V2>(data, project);
+        let mappedChildren = VarArray.map<?Node<K, V1>, ?Node<K, V2>>(
           children,
           func child {
             switch child {
               case null null;
-              case (?childNode) ?cloneNode(childNode)
+              case (?childNode) ?mapNode(childNode, project)
             }
           }
         );
         # internal({
-          data = clonedData;
-          children = clonedChildren
+          data = mappedData;
+          children = mappedChildren
         })
       }
     }
   };
+
+  func cloneNode<K, V>(node : Node<K, V>) : Node<K, V> =
+    mapNode<K, V, V>(node, func (k, v) = v);
 
   module BinarySearch {
     public type SearchResult = {

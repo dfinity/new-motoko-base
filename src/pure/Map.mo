@@ -178,7 +178,8 @@ module {
   public func get<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V
     = Internal.get(map.root, compare, key);
 
-  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.  /// Traps if `map` contains any existing entry for `key`.
+  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.
+  /// Traps if `map` contains any existing entry for `key`.
   /// Returns the modified map.
   ///
   /// Example:

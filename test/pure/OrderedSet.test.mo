@@ -1,10 +1,10 @@
 // @testmode wasi
 
-import Set "../src/OrderedSet";
-import Array "../src/Array";
-import Nat "../src/Nat";
-import Iter "../src/Iter";
-import Debug "../src/Debug";
+import Set "../../src/pure/OrderedSet";
+import Array "../../src/Array";
+import Nat "../../src/Nat";
+import Iter "../../src/Iter";
+import Debug "../../src/Debug";
 
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
@@ -16,20 +16,18 @@ let entryTestable = T.natTestable;
 
 class SetMatcher(expected : [Nat]) : M.Matcher<Set.Set<Nat>> {
   public func describeMismatch(actual : Set.Set<Nat>, _description : M.Description) {
-    Debug.print(debug_show (Iter.toArray(natSet.vals(actual))) # " should be " # debug_show (expected))
+    Debug.print(debug_show (Iter.toArray(Set.values(actual))) # " should be " # debug_show (expected))
   };
 
   public func matches(actual : Set.Set<Nat>) : Bool {
-    Iter.toArray(natSet.vals(actual)) == expected
+    Iter.toArray(Set.values(actual)) == expected
   }
 };
 
-let natSet = Set.Make<Nat>(Nat.compare);
-
 func insert(s : Set.Set<Nat>, key : Nat) : Set.Set<Nat>  {
-  let updatedTree = natSet.put(s, key);
-  natSet.validate(updatedTree);
-  updatedTree
+  let s1 = Set.add(s, Nat.compare, key);
+  Set.assertValid(s1, Nat.compare);
+  s1
 };
 
 func concatenateKeys(key : Nat, accum : Text) : Text {
@@ -40,20 +38,20 @@ func concatenateKeys2(accum : Text, key : Nat) : Text {
   accum # debug_show(key)
 };
 
-func containsAll (rbSet : Set.Set<Nat>, elems : [Nat]) {
+func containsAll (set : Set.Set<Nat>, elems : [Nat]) {
     for (elem in elems.vals()) {
-        assert (natSet.contains(rbSet, elem))
+        assert (Set.contains(set, Nat.compare, elem))
     }
 };
 
-func clear(initialRbSet : Set.Set<Nat>) : Set.Set<Nat> {
-  var rbSet = initialRbSet;
-  for (elem in natSet.vals(initialRbSet)) {
-    let newSet = natSet.delete(rbSet, elem);
-    rbSet := newSet;
-    natSet.validate(rbSet)
+func clear(initialSet : Set.Set<Nat>) : Set.Set<Nat> {
+  var set = initialSet;
+  for (elem in Set.values(initialSet)) {
+    let newSet = Set.delete(set, Nat.compare, elem);
+    set := newSet;
+    Set.assertValid(set, Nat.compare)
   };
-  rbSet
+  set
 };
 
 func add1(x : Nat) : Nat { x + 1 };
@@ -69,7 +67,7 @@ func ifElemLessThan(threshold : Nat, f : Nat -> Nat) : Nat -> ?Nat
 /* --------------------------------------- */
 
 var buildTestSet = func() : Set.Set<Nat> {
-  natSet.empty()
+  Set.empty()
 };
 
 run(
@@ -78,62 +76,62 @@ run(
     [
       test(
         "size",
-        natSet.size(buildTestSet()),
+        Set.size(buildTestSet()),
         M.equals(T.nat(0))
       ),
       test(
-        "vals",
-        Iter.toArray(natSet.vals(buildTestSet())),
+        "values",
+        Iter.toArray(Set.values(buildTestSet())),
         M.equals(T.array<Nat>(entryTestable, []))
       ),
       test(
-        "valsRev",
-        Iter.toArray(natSet.vals(buildTestSet())),
+        "reverseValues",
+        Iter.toArray(Set.reverseValues(buildTestSet())),
         M.equals  (T.array<Nat>(entryTestable, []))
       ),
       test(
         "empty from iter",
-        natSet.fromIter(Iter.fromArray([])),
+        Set.fromIter(Iter.fromArray([]), Nat.compare),
         SetMatcher([])
       ),
       test(
         "contains absent",
-        natSet.contains(buildTestSet(), 0),
+        Set.contains(buildTestSet(), Nat.compare, 0),
         M.equals(T.bool(false))
       ),
       test(
         "empty right fold",
-        natSet.foldRight(buildTestSet(), "", concatenateKeys),
+        Set.foldRight(buildTestSet(), "", concatenateKeys),
         M.equals(T.text(""))
       ),
       test(
         "empty left fold",
-        natSet.foldLeft(buildTestSet(), "", concatenateKeys2),
+        Set.foldLeft(buildTestSet(), "", concatenateKeys2),
         M.equals(T.text(""))
       ),
       test(
         "traverse empty set",
-        natSet.map(buildTestSet(), add1),
+        Set.map(buildTestSet(), Nat.compare, add1),
         SetMatcher([])
       ),
       test(
-        "empty map filter",
-        natSet.mapFilter(buildTestSet(), ifElemLessThan(0, add1)),
+        "empty filter map",
+        Set.filterMap(buildTestSet(), Nat.compare, ifElemLessThan(0, add1)),
         SetMatcher([])
       ),
       test(
         "is empty",
-        natSet.isEmpty(buildTestSet()),
+        Set.isEmpty(buildTestSet()),
         M.equals(T.bool(true))
       ),
       test(
         "max",
-        natSet.max(buildTestSet()),
+        Set.max(buildTestSet()),
         M.equals(T.optional(entryTestable, null: ?Nat))
       ),
       test(
         "min",
-        natSet.min(buildTestSet()),
+        Set.min(buildTestSet()),
         M.equals(T.optional(entryTestable, null: ?Nat))
       )
     ]
@@ -143,7 +141,7 @@ run(
 /* --------------------------------------- */
 
 buildTestSet := func() : Set.Set<Nat> {
-  insert(natSet.empty(), 0);
+  insert(Set.empty(), 0);
 };
 
 var expected = [0];
@@ -154,82 +152,82 @@ run(
     [
       test(
         "size",
-        natSet.size(buildTestSet()),
+        Set.size(buildTestSet()),
         M.equals(T.nat(1))
       ),
       test(
-        "vals",
-        Iter.toArray(natSet.vals(buildTestSet())),
+        "values",
+        Iter.toArray(Set.values(buildTestSet())),
         M.equals(T.array<Nat>(entryTestable, expected))
       ),
       test(
-        "valsRev",
-        Iter.toArray(natSet.valsRev(buildTestSet())),
+        "reverseValues",
+        Iter.toArray(Set.reverseValues(buildTestSet())),
         M.equals(T.array<Nat>(entryTestable, expected))
       ),
       test(
         "from iter",
-        natSet.fromIter(Iter.fromArray(expected)),
+        Set.fromIter(Iter.fromArray(expected), Nat.compare),
         SetMatcher(expected)
       ),
       test(
         "contains",
-        natSet.contains(buildTestSet(), 0),
+        Set.contains(buildTestSet(), Nat.compare, 0),
         M.equals(T.bool(true))
       ),
       test(
         "delete",
-        natSet.delete(buildTestSet(), 0),
+        Set.delete(buildTestSet(), Nat.compare, 0),
         SetMatcher([])
       ),
       test(
         "right fold",
-        natSet.foldRight(buildTestSet(), "", concatenateKeys),
+        Set.foldRight(buildTestSet(), "", concatenateKeys),
         M.equals(T.text("0"))
       ),
       test(
         "left fold",
-        natSet.foldLeft(buildTestSet(), "", concatenateKeys2),
+        Set.foldLeft(buildTestSet(), "", concatenateKeys2),
         M.equals(T.text("0"))
       ),
       test(
         "traverse set",
-        natSet.map(buildTestSet(), add1),
+        Set.map(buildTestSet(), Nat.compare, add1),
         SetMatcher([1])
       ),
       test(
-        "map filter/filter all",
-        natSet.mapFilter(buildTestSet(), ifElemLessThan(0, add1)),
+        "filterMap / filter all",
+        Set.filterMap(buildTestSet(), Nat.compare, ifElemLessThan(0, add1)),
         SetMatcher([])
       ),
       test(
-        "map filter/no filer",
-        natSet.mapFilter(buildTestSet(), ifElemLessThan(1, add1)),
+        "filterMap / no filter",
+        Set.filterMap(buildTestSet(), Nat.compare, ifElemLessThan(1, add1)),
         SetMatcher([1])
       ),
       test(
         "is empty",
-        natSet.isEmpty(buildTestSet()),
+        Set.isEmpty(buildTestSet()),
         M.equals(T.bool(false))
       ),
       test(
         "max",
-        natSet.max(buildTestSet()),
+        Set.max(buildTestSet()),
         M.equals(T.optional(entryTestable, ?0))
       ),
       test(
         "min",
-        natSet.min(buildTestSet()),
+        Set.min(buildTestSet()),
         M.equals(T.optional(entryTestable, ?0))
       ),
       test(
         "all",
-        natSet.all(buildTestSet(), func (k) = (k == 0)),
+        Set.all<Nat>(buildTestSet(), func (k) = (k == 0)),
         M.equals(T.bool(true))
       ),
       test(
-        "some",
-        natSet.some(buildTestSet(), func (k) = (k == 0)),
+        "any",
+        Set.any<Nat>(buildTestSet(), func (k) = (k == 0)),
         M.equals(T.bool(true))
       ),
     ]
@@ -244,7 +242,7 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
   [
     test(
       "size",
-      natSet.size(buildTestSet()),
+      Set.size(buildTestSet()),
       M.equals(T.nat(3))
     ),
     test(
@@ -253,26 +251,26 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
       SetMatcher(expected)
     ),
     test(
-      "vals",
-      Iter.toArray(natSet.vals(buildTestSet())),
+      "values",
+      Iter.toArray(Set.values(buildTestSet())),
       M.equals(T.array<Nat>(entryTestable, expected))
     ),
     test(
-      "valsRev",
-      Array.reverse(Iter.toArray(natSet.valsRev(buildTestSet()))),
+      "reverseValues",
+      Array.reverse(Iter.toArray(Set.reverseValues(buildTestSet()))),
       M.equals(T.array<Nat>(entryTestable, expected))
     ),
     test(
       "from iter",
-      natSet.fromIter(Iter.fromArray(expected)),
+      Set.fromIter(Iter.fromArray(expected), Nat.compare),
       SetMatcher(expected)
     ),
     test(
       "contains all",
       do {
-        let rbSet = buildTestSet();
-        containsAll(rbSet, [0, 1, 2]);
-        rbSet
+        let set = buildTestSet();
+        containsAll(set, [0, 1, 2]);
+        set
       },
       SetMatcher(expected)
     ),
@@ -283,82 +281,82 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
     ),
     test(
       "right fold",
-      natSet.foldRight(buildTestSet(), "", concatenateKeys),
+      Set.foldRight(buildTestSet(), "", concatenateKeys),
       M.equals(T.text("210"))
     ),
     test(
       "left fold",
-      natSet.foldLeft(buildTestSet(), "", concatenateKeys2),
+      Set.foldLeft(buildTestSet(), "", concatenateKeys2),
       M.equals(T.text("012"))
     ),
     test(
       "traverse set",
-      natSet.map(buildTestSet(), add1),
+      Set.map(buildTestSet(), Nat.compare, add1),
       SetMatcher([1, 2, 3])
     ),
     test(
       "traverse set/reshape",
-      natSet.map(buildTestSet(), func (x : Nat) : Nat {5}),
+      Set.map(buildTestSet(), Nat.compare, func (x : Nat) : Nat {5}),
       SetMatcher([5])
     ),
     test(
-      "map filter/filter all",
-      natSet.mapFilter(buildTestSet(), ifElemLessThan(0, add1)),
+      "filterMap / filter all",
+      Set.filterMap(buildTestSet(), Nat.compare, ifElemLessThan(0, add1)),
       SetMatcher([])
     ),
     test(
-      "map filter/filter one",
-      natSet.mapFilter(buildTestSet(), ifElemLessThan(1, add1)),
+      "filterMap / filter one",
+      Set.filterMap(buildTestSet(), Nat.compare, ifElemLessThan(1, add1)),
       SetMatcher([1])
     ),
     test(
-      "map filter/no filer",
-      natSet.mapFilter(buildTestSet(), ifElemLessThan(3, add1)),
+      "filterMap / no filer",
+      Set.filterMap(buildTestSet(), Nat.compare, ifElemLessThan(3, add1)),
       SetMatcher([1, 2, 3])
     ),
     test(
       "is empty",
-      natSet.isEmpty(buildTestSet()),
+      Set.isEmpty(buildTestSet()),
       M.equals(T.bool(false))
     ),
     test(
       "max",
-      natSet.max(buildTestSet()),
+      Set.max(buildTestSet()),
       M.equals(T.optional(entryTestable, ?2))
     ),
     test(
       "min",
-      natSet.min(buildTestSet()),
+      Set.min(buildTestSet()),
       M.equals(T.optional(entryTestable, ?0))
     ),
     test(
       "all true",
-      natSet.all(buildTestSet(), func (k) = (k >= 0)),
+      Set.all<Nat>(buildTestSet(), func (k) = (k >= 0)),
       M.equals(T.bool(true))
     ),
     test(
       "all false",
-      natSet.all(buildTestSet(), func (k) = (k > 0)),
+      Set.all<Nat>(buildTestSet(), func (k) = (k > 0)),
       M.equals(T.bool(false))
     ),
     test(
-      "some true",
-      natSet.some(buildTestSet(), func (k) = (k >= 2)),
+      "any true",
+      Set.any<Nat>(buildTestSet(), func (k) = (k >= 2)),
       M.equals(T.bool(true))
     ),
     test(
-      "some false",
-      natSet.some(buildTestSet(), func (k) = (k > 2)),
+      "any false",
+      Set.any<Nat>(buildTestSet(), func (k) = (k > 2)),
       M.equals(T.bool(false))
     ),
   ];
 
 buildTestSet := func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 2);
-  rbSet := insert(rbSet, 1);
-  rbSet := insert(rbSet, 0);
-  rbSet
+  var set = Set.empty<Nat>();
+  set := insert(set, 2);
+  set := insert(set, 1);
+  set := insert(set, 0);
+  set
 };
 
 run(suite("rebalance left, left", rebalanceTests(buildTestSet)));
@@ -366,11 +364,11 @@ run(suite("rebalance left, left", rebalanceTests(buildTestSet)));
 /* --------------------------------------- */
 
 buildTestSet := func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 2);
-  rbSet := insert(rbSet, 0);
-  rbSet := insert(rbSet, 1);
-  rbSet
+  var set = Set.empty<Nat>();
+  set := insert(set, 2);
+  set := insert(set, 0);
+  set := insert(set, 1);
+  set
 };
 
 run(suite("rebalance left, right", rebalanceTests(buildTestSet)));
@@ -378,11 +376,11 @@ run(suite("rebalance left, right", rebalanceTests(buildTestSet)));
 /* --------------------------------------- */
 
 buildTestSet := func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 0);
-  rbSet := insert(rbSet, 2);
-  rbSet := insert(rbSet, 1);
-  rbSet
+  var set = Set.empty<Nat>();
+  set := insert(set, 0);
+  set := insert(set, 2);
+  set := insert(set, 1);
+  set
 };
 
 run(suite("rebalance right, left", rebalanceTests(buildTestSet)));
@@ -390,11 +388,11 @@ run(suite("rebalance right, left", rebalanceTests(buildTestSet)));
 /* --------------------------------------- */
 
 buildTestSet := func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 0);
-  rbSet := insert(rbSet, 1);
-  rbSet := insert(rbSet, 2);
-  rbSet
+  var set = Set.empty<Nat>();
+  set := insert(set, 0);
+  set := insert(set, 1);
+  set := insert(set, 2);
+  set
 };
 
 run(suite("rebalance right, right", rebalanceTests(buildTestSet)));
@@ -408,19 +406,19 @@ run(
       test(
         "repeated insert",
         do {
-          var rbSet = buildTestSet();
-          assert (natSet.contains(rbSet, 1));
-          rbSet := natSet.put(rbSet, 1);
-          natSet.size(rbSet)
+          var set = buildTestSet();
+          assert (Set.contains(set, Nat.compare, 1));
+          set := Set.add(set, Nat.compare, 1);
+          Set.size(set)
         },
         M.equals(T.nat(3))
       ),
       test(
         "repeated delete",
         do {
-          var rbSet = buildTestSet();
-          rbSet := natSet.delete(rbSet, 1);
-          natSet.delete(rbSet, 1)
+          var set = buildTestSet();
+          set := Set.delete(set, Nat.compare, 1);
+          Set.delete(set, Nat.compare, 1)
         },
         SetMatcher([0, 2])
       )
@@ -431,34 +429,34 @@ run(
 /* --------------------------------------- */
 
 let buildTestSet012 = func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 0);
-  rbSet := insert(rbSet, 1);
-  rbSet := insert(rbSet, 2);
-  rbSet
+  var set  = Set.empty<Nat>();
+  set := insert(set, 0);
+  set := insert(set, 1);
+  set := insert(set, 2);
+  set
 };
 
 let buildTestSet01 = func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 0);
-  rbSet := insert(rbSet, 1);
-  rbSet
+  var set = Set.empty<Nat>();
+  set := insert(set, 0);
+  set := insert(set, 1);
+  set
 };
 
 let buildTestSet234 = func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 2);
-  rbSet := insert(rbSet, 3);
-  rbSet := insert(rbSet, 4);
-  rbSet
+  var set = Set.empty<Nat>();
+  set := insert(set, 2);
+  set := insert(set, 3);
+  set := insert(set, 4);
+  set
 };
 
 let buildTestSet345 = func() : Set.Set<Nat> {
-  var rbSet = natSet.empty();
-  rbSet := insert(rbSet, 5);
-  rbSet := insert(rbSet, 3);
-  rbSet := insert(rbSet, 4);
-  rbSet
+  var set = Set.empty<Nat>();
+  set := insert(set, 5);
+  set := insert(set, 3);
+  set := insert(set, 4);
+  set
 };
 
 run(
@@ -467,132 +465,132 @@ run(
     [
       test(
         "subset/subset of itself",
-        natSet.isSubset(buildTestSet012(), buildTestSet012()),
+        Set.isSubset(buildTestSet012(), buildTestSet012(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
         "subset/empty set is subset of itself",
-        natSet.isSubset(natSet.empty(), natSet.empty()),
+        Set.isSubset(Set.empty(), Set.empty(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
         "subset/empty set is subset of another set",
-        natSet.isSubset(natSet.empty(), buildTestSet012()),
+        Set.isSubset(Set.empty(), buildTestSet012(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
         "subset/subset",
-        natSet.isSubset(buildTestSet01(), buildTestSet012()),
+        Set.isSubset(buildTestSet01(), buildTestSet012(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
         "subset/not subset",
-        natSet.isSubset(buildTestSet012(), buildTestSet01()),
+        Set.isSubset(buildTestSet012(), buildTestSet01(), Nat.compare),
         M.equals(T.bool(false))
       ),
       test(
         "equals/empty set",
-        natSet.equals(natSet.empty(), natSet.empty()),
+        Set.equals(Set.empty(), Set.empty(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
         "equals/equals",
-        natSet.equals(buildTestSet012(), buildTestSet012()),
+        Set.equals(buildTestSet012(), buildTestSet012(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
         "equals/not equals",
-        natSet.equals(buildTestSet012(), buildTestSet01()),
+        Set.equals(buildTestSet012(), buildTestSet01(), Nat.compare),
         M.equals(T.bool(false))
       ),
       test(
         "union/empty set",
-        natSet.union(natSet.empty(), natSet.empty()),
+        Set.union(Set.empty(), Set.empty(), Nat.compare),
         SetMatcher([])
       ),
       test(
         "union/union with empty set",
-        natSet.union(buildTestSet012(), natSet.empty()),
+        Set.union(buildTestSet012(), Set.empty(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
       test(
         "union/union with itself",
-        natSet.union(buildTestSet012(), buildTestSet012()),
+        Set.union(buildTestSet012(), buildTestSet012(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
       test(
         "union/union with subset",
-        natSet.union(buildTestSet012(), buildTestSet01()),
+        Set.union(buildTestSet012(), buildTestSet01(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
       test(
         "union/union expand",
-        natSet.union(buildTestSet012(), buildTestSet234()),
+        Set.union(buildTestSet012(), buildTestSet234(), Nat.compare),
         SetMatcher([0, 1, 2, 3, 4])
       ),
       test(
         "intersect/empty set",
-        natSet.intersect(natSet.empty(), natSet.empty()),
+        Set.intersect(Set.empty(), Set.empty(), Nat.compare),
         SetMatcher([])
       ),
       test(
         "intersect/intersect with empty set",
-        natSet.intersect(buildTestSet012(), natSet.empty()),
+        Set.intersect(buildTestSet012(), Set.empty(), Nat.compare),
         SetMatcher([])
       ),
       test(
         "intersect/intersect with itself",
-        natSet.intersect(buildTestSet012(), buildTestSet012()),
+        Set.intersect(buildTestSet012(), buildTestSet012(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
       test(
         "intersect/intersect with subset",
-        natSet.intersect(buildTestSet012(), buildTestSet01()),
+        Set.intersect(buildTestSet012(), buildTestSet01(), Nat.compare),
         SetMatcher([0, 1])
       ),
       test(
         "intersect/intersect",
-        natSet.intersect(buildTestSet012(), buildTestSet234()),
+        Set.intersect(buildTestSet012(), buildTestSet234(), Nat.compare),
         SetMatcher([2])
       ),
       test(
         "intersect/no intersection",
-        natSet.intersect(buildTestSet012(), buildTestSet345()),
+        Set.intersect(buildTestSet012(), buildTestSet345(), Nat.compare),
         SetMatcher([])
       ),
       test(
         "diff/empty set",
-        natSet.diff(natSet.empty(), natSet.empty()),
+        Set.diff(Set.empty(), Set.empty(), Nat.compare),
         SetMatcher([])
       ),
       test(
         "diff/diff with empty set",
-        natSet.diff(buildTestSet012(), natSet.empty()),
+        Set.diff(buildTestSet012(), Set.empty(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
       test(
         "diff/diff with empty set 2",
-        natSet.diff(natSet.empty(), buildTestSet012()),
+        Set.diff(Set.empty(), buildTestSet012(), Nat.compare),
         SetMatcher([])
       ),
       test(
         "diff/diff with subset",
-        natSet.diff(buildTestSet012(), buildTestSet01()),
+        Set.diff(buildTestSet012(), buildTestSet01(), Nat.compare),
         SetMatcher([2])
       ),
       test(
         "diff/diff with subset 2",
-        natSet.diff(buildTestSet01(), buildTestSet012()),
+        Set.diff(buildTestSet01(), buildTestSet012(), Nat.compare),
         SetMatcher([])
       ),
       test(
         "diff/diff",
-        natSet.diff(buildTestSet012(), buildTestSet234()),
+        Set.diff(buildTestSet012(), buildTestSet234(), Nat.compare),
         SetMatcher([0, 1])
       ),
       test(
         "diff/diff no intersection",
-        natSet.diff(buildTestSet012(), buildTestSet345()),
+        Set.diff(buildTestSet012(), buildTestSet345(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
     ]

@@ -4,7 +4,6 @@ import Char "../src/Char";
 import Nat "../src/Nat";
 import Text "../src/Text";
 import Suite "mo:matchers/Suite";
-import Iter "../src/Iter";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
 
@@ -12,13 +11,13 @@ let suite = Suite.suite(
   "Array",
   [
     Suite.test(
-      "init",
-      Array.init<Int>(3, 4),
+      "repeat",
+      Array.repeat<Int>(4, 3),
       M.equals(T.array<Int>(T.intTestable, [4, 4, 4]))
     ),
     Suite.test(
-      "init empty",
-      Array.init<Int>(0, 4),
+      "repeat empty",
+      Array.repeat<Int>(4, 0),
       M.equals(T.array<Int>(T.intTestable, []))
     ),
     Suite.test(
@@ -230,60 +229,76 @@ let suite = Suite.suite(
     ),
     Suite.test(
       "flatMap",
-      Array.flatMap<Int, Int>([0, 1, 2], func x = [x, -x]),
+      Array.flatMap<Int, Int>([0, 1, 2], func x = [x, -x].values()),
       M.equals(T.array<Int>(T.intTestable, [0, 0, 1, -1, 2, -2]))
     ),
     Suite.test(
       "flatMap empty",
-      Array.flatMap<Int, Int>([], func x = [x, -x]),
+      Array.flatMap<Int, Int>([], func x = [x, -x].values()),
       M.equals(T.array<Int>(T.intTestable, []))
     ),
     Suite.test(
       "flatMap mix",
-      Array.flatMap<Nat, Nat>([1, 2, 1, 2, 3],
-        func n = Array.tabulate<Nat>(n, func i = i)),
-      M.equals(T.array<Nat>(T.natTestable, [0,0,1,0,0,1,0,1,2]))
+      Array.flatMap<Nat, Nat>(
+        [1, 2, 1, 2, 3],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
+      M.equals(T.array<Nat>(T.natTestable, [0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
     Suite.test(
       "flatMap mix empty right",
-      Array.flatMap<Nat, Nat>([0, 1, 2, 0, 1, 2, 3, 0],
-        func n = Array.tabulate<Nat>(n, func i = i)),
-      M.equals(T.array<Nat>(T.natTestable, [0,0,1,0,0,1,0,1,2]))
+      Array.flatMap<Nat, Nat>(
+        [0, 1, 2, 0, 1, 2, 3, 0],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
+      M.equals(T.array<Nat>(T.natTestable, [0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
     Suite.test(
       "flatMap mix empties right",
-      Array.flatMap<Nat, Nat>([0, 1, 2, 0, 1, 2, 3, 0, 0, 0],
-        func n = Array.tabulate<Nat>(n, func i = i)),
-      M.equals(T.array<Nat>(T.natTestable, [0,0,1,0,0,1,0,1,2]))
+      Array.flatMap<Nat, Nat>(
+        [0, 1, 2, 0, 1, 2, 3, 0, 0, 0],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
+      M.equals(T.array<Nat>(T.natTestable, [0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
     Suite.test(
       "flatMap mix empty left",
-      Array.flatMap<Nat, Nat>([0, 1, 2, 0, 1, 2, 3],
-        func n = Array.tabulate<Nat>(n, func i = i)),
-      M.equals(T.array<Nat>(T.natTestable, [0,0,1,0,0,1,0,1,2]))
+      Array.flatMap<Nat, Nat>(
+        [0, 1, 2, 0, 1, 2, 3],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
+      M.equals(T.array<Nat>(T.natTestable, [0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
     Suite.test(
       "flatMap mix empties left",
-      Array.flatMap<Nat, Nat>([0, 0, 0, 1, 2, 0, 1, 2, 3],
-        func n = Array.tabulate<Nat>(n, func i = i)),
-      M.equals(T.array<Nat>(T.natTestable, [0,0,1,0,0,1,0,1,2]))
+      Array.flatMap<Nat, Nat>(
+        [0, 0, 0, 1, 2, 0, 1, 2, 3],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
+      M.equals(T.array<Nat>(T.natTestable, [0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
     Suite.test(
       "flatMap mix empties middle",
-      Array.flatMap<Nat, Nat>([0, 1, 2, 0, 0, 0, 1, 2, 3],
-        func n = Array.tabulate<Nat>(n, func i = i)),
-      M.equals(T.array<Nat>(T.natTestable, [0,0,1,0,0,1,0,1,2]))
+      Array.flatMap<Nat, Nat>(
+        [0, 1, 2, 0, 0, 0, 1, 2, 3],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
+      M.equals(T.array<Nat>(T.natTestable, [0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
     Suite.test(
       "flatMap mix empties",
-      Array.flatMap<Nat, Nat>([0, 0, 0],
-        func n = Array.tabulate<Nat>(n, func i = i)),
+      Array.flatMap<Nat, Nat>(
+        [0, 0, 0],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
       M.equals(T.array<Nat>(T.natTestable, []))
     ),
     Suite.test(
       "flatMap mix empty",
-      Array.flatMap<Nat, Nat>([],
-        func n = Array.tabulate<Nat>(n, func i = i)),
+      Array.flatMap<Nat, Nat>(
+        [],
+        func n = Array.tabulate<Nat>(n, func i = i).values()
+      ),
       M.equals(T.array<Nat>(T.natTestable, []))
     ),
     Suite.test(
@@ -308,32 +323,32 @@ let suite = Suite.suite(
     ),
     Suite.test(
       "flatten",
-      Array.flatten<Int>(Iter.fromArray([[1, 2, 3], [], [1]])),
+      Array.flatten<Int>([[1, 2, 3], [], [1]]),
       M.equals(T.array<Int>(T.intTestable, [1, 2, 3, 1]))
     ),
     Suite.test(
       "flatten empty start",
-      Array.flatten<Int>(Iter.fromArray([[], [1, 2, 3], [], [1]])),
+      Array.flatten<Int>([[], [1, 2, 3], [], [1]]),
       M.equals(T.array<Int>(T.intTestable, [1, 2, 3, 1]))
     ),
     Suite.test(
       "flatten empty end",
-      Array.flatten<Int>(Iter.fromArray([[1, 2, 3], [], [1], []])),
+      Array.flatten<Int>([[1, 2, 3], [], [1], []]),
       M.equals(T.array<Int>(T.intTestable, [1, 2, 3, 1]))
     ),
     Suite.test(
       "flatten singleton",
-      Array.flatten<Int>(Iter.fromArray([[1, 2, 3]])),
+      Array.flatten<Int>([[1, 2, 3]]),
       M.equals(T.array<Int>(T.intTestable, [1, 2, 3]))
     ),
     Suite.test(
       "flatten singleton empty",
-      Array.flatten<Int>(Iter.singleton([])),
+      Array.flatten<Int>([[]]),
       M.equals(T.array<Int>(T.intTestable, []))
     ),
     Suite.test(
       "flatten empty",
-      Array.flatten<Int>(Iter.empty()),
+      Array.flatten<Int>([]),
       M.equals(T.array<Int>(T.intTestable, []))
     ),
     Suite.test(
@@ -472,6 +487,16 @@ let suite = Suite.suite(
       Array.prevIndexOf<Char>('g', ['c', 'o', 'f', 'f', 'e', 'e'], 6, Char.equal),
       M.equals(T.optional(T.natTestable, null : ?Nat))
     ),
+    Suite.test(
+      "Iter conversions",
+      Array.fromIter<Nat>(Array.values([1, 2, 3])),
+      M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
+    ),
+    Suite.test(
+      "Iter conversions empty",
+      Array.fromIter<Nat>(Array.values([])),
+      M.equals(T.array<Nat>(T.natTestable, []))
+    )
   ]
 );
 

@@ -5,7 +5,6 @@ import Order "Order";
 import Result "Result";
 import Option "Option";
 import Prim "mo:⛔";
-import { todo } "Debug";
 
 module {
 
@@ -92,7 +91,7 @@ module {
   ///
   /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func find<T>(array : [var T], predicate : T -> Bool) : ?T {
-    for (element in array.vals()) {
+    for (element in array.values()) {
       if (predicate element) {
         return ?element
       }
@@ -285,7 +284,7 @@ module {
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func forEach<T>(array : [var T], f : T -> ()) {
-    for (item in array.vals()) {
+    for (item in array.values()) {
       f(item)
     }
   };
@@ -583,7 +582,7 @@ module {
   /// *Runtime and space assumes that `combine` runs in O(1) time and space.
   public func foldLeft<T, A>(array : [var T], base : A, combine : (A, T) -> A) : A {
     var acc = base;
-    for (element in array.vals()) {
+    for (element in array.values()) {
       acc := combine(acc, element)
     };
     acc
@@ -650,7 +649,7 @@ module {
   /// Space: O(number of elements in array)
   public func flatten<T>(arrays : [var [var T]]) : [var T] {
     var flatSize = 0;
-    for (subArray in arrays.vals()) {
+    for (subArray in arrays.values()) {
       flatSize += subArray.size()
     };
 
@@ -690,7 +689,41 @@ module {
 
   /// Converts an iterator to a mutable array.
   public func fromIter<T>(iter : Types.Iter<T>) : [var T] {
-    todo() // See `Array.fromIter()`
+    var list : Types.Pure.List<T> = null;
+    var size = 0;
+    label l loop {
+      switch (iter.next()) {
+        case (?element) {
+          list := ?(element, list);
+          size += 1
+        };
+        case null { break l }
+      }
+    };
+    if (size == 0) { return [var] };
+    let array = Prim.Array_init<T>(
+      size,
+      switch list {
+        case (?(h, _)) h;
+        case null {
+          Prim.trap("VarArray.fromIter(): unreachable")
+        }
+      }
+    );
+    var i = size;
+    while (i > 0) {
+      i -= 1;
+      switch list {
+        case (?(h, t)) {
+          array[i] := h;
+          list := t
+        };
+        case null {
+          Prim.trap("VarArray.fromIter(): unreachable")
+        }
+      }
+    };
+    array
   };
 
   /// Returns an iterator (`Iter`) over the indices of `array`.
@@ -734,7 +767,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func values<T>(array : [var T]) : Types.Iter<T> = array.vals();
+  public func values<T>(array : [var T]) : Types.Iter<T> = array.values();
 
   /// Iterator provides a single method `next()`, which returns
   /// pairs of (index, element) in order, or `null` when out of elements to iterate over.
@@ -778,7 +811,7 @@ module {
   ///
   /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func all<T>(array : [var T], predicate : T -> Bool) : Bool {
-    for (element in array.vals()) {
+    for (element in array.values()) {
       if (not predicate(element)) {
         return false
       }
@@ -799,7 +832,7 @@ module {
   ///
   /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func any<T>(array : [var T], predicate : T -> Bool) : Bool {
-    for (element in array.vals()) {
+    for (element in array.values()) {
       if (predicate(element)) {
         return true
       }

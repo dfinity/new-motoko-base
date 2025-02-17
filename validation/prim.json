@@ -23,23 +23,19 @@
     {
       "name": "IntNat",
       "extends": ["Number"],
-      "modules": ["Int", "Nat"],
-      "functions": ["range", "rangeInclusive", "min", "max"]
-    },
-    {
-      "name": "FixedSizeIntNat",
-      "extends": ["IntNat"],
       "modules": [
+        "Int",
         "Int8",
         "Int16",
         "Int32",
         "Int64",
+        "Nat",
         "Nat8",
         "Nat16",
         "Nat32",
         "Nat64"
       ],
-      "functions": ["allValues"]
+      "functions": ["range", "rangeInclusive", "min", "max"]
     }
   ]
 }

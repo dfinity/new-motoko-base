@@ -124,7 +124,7 @@ module {
 
   /// Unwraps an optional value, i.e. `unwrap(?x) = x`.
   ///
-  /// @deprecated `Option.unwrap()` is unsafe and fails if the argument is null. Consider using a `switch` or `do?` expression instead.
+  /// `Option.unwrap()` fails if the argument is null. Consider using a `switch` or `do?` expression instead.
   public func unwrap<T>(x : ?T) : T = switch x {
     case null { Runtime.trap("Option.unwrap()") };
     case (?x_) { x_ }

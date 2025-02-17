@@ -1,6 +1,5 @@
 import Iter "../src/Iter";
 import Array "../src/Array";
-import List "../src/List";
 import Nat "../src/Nat";
 import Int "../src/Int";
 import Debug "../src/Debug";
@@ -16,7 +15,7 @@ do {
   var z = 0;
 
   Iter.forEach<(Nat, Text)>(
-    Iter.enumerate(xs.vals()),
+    Iter.enumerate(xs.values()),
     func(i, x) {
       y := y # x;
       z += i
@@ -34,7 +33,7 @@ do {
     x % 2 == 0
   };
 
-  let _actual = Iter.map<Nat, Bool>([1, 2, 3].vals(), isEven);
+  let _actual = Iter.map<Nat, Bool>([1, 2, 3].values(), isEven);
   let actual = [var true, false, true];
   Iter.forEach<(Nat, Bool)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
@@ -52,7 +51,7 @@ do {
     x % 2 == 1
   };
 
-  let _actual = Iter.filter<Nat>([1, 2, 3].vals(), isOdd);
+  let _actual = Iter.filter<Nat>([1, 2, 3].values(), isOdd);
   let actual = [var 0, 0];
   Iter.forEach<(Nat, Nat)>(Iter.enumerate(_actual), func(i, x) { actual[i] := x });
 
@@ -119,7 +118,7 @@ do {
   Debug.print("  toArray");
 
   let expected = [1, 2, 3];
-  let actual = Iter.toArray<Nat>(expected.vals());
+  let actual = Iter.toArray<Nat>(expected.values());
 
   assert (actual.size() == expected.size());
 
@@ -132,7 +131,7 @@ do {
   Debug.print("  toVarArray");
 
   let expected = [var 1, 2, 3];
-  let actual = Iter.toVarArray<Nat>(expected.vals());
+  let actual = Iter.toVarArray<Nat>(expected.values());
 
   assert (actual.size() == expected.size());
 
@@ -146,7 +145,7 @@ do {
 
   let input : [Nat] = [4, 3, 1, 2, 5];
   let expected : [Nat] = [1, 2, 3, 4, 5];
-  let actual = Iter.toArray(Iter.sort<Nat>(input.vals(), Nat.compare));
+  let actual = Iter.toArray(Iter.sort<Nat>(input.values(), Nat.compare));
   assert Array.equal<Nat>(expected, actual, func(x1, x2) { x1 == x2 })
 };
 
@@ -214,5 +213,49 @@ do {
   assert sStartEqualsEnd.next() == null;
 
   let sStartGreaterThanEnd = Array.range(input, 3, 2);
-  assert sStartGreaterThanEnd.next() == null;
+  assert sStartGreaterThanEnd.next() == null
+};
+
+do {
+  Debug.print("  repeat");
+
+  // Basic repeat functionality
+  let iter1 = Iter.repeat<Char>('a', 3);
+  assert (?'a' == iter1.next());
+  assert (?'a' == iter1.next());
+  assert (?'a' == iter1.next());
+  assert (null == iter1.next());
+
+  // Count of 0 returns empty iterator
+  let iter2 = Iter.repeat<Nat>(1, 0);
+  assert (null == iter2.next());
+
+  // Count of 1 returns singleton iterator
+  let iter3 = Iter.repeat<Bool>(true, 1);
+  assert (?true == iter3.next());
+  assert (null == iter3.next())
+};
+
+do {
+  Debug.print("  reverse");
+
+  // Basic reverse functionality
+  let array1 = [1, 2, 3, 4];
+  let iter1 = Iter.reverse(array1.values());
+  assert (?4 == iter1.next());
+  assert (?3 == iter1.next());
+  assert (?2 == iter1.next());
+  assert (?1 == iter1.next());
+  assert (null == iter1.next());
+
+  // Empty array remains empty
+  let array2 = ([] : [Nat]);
+  let iter2 = Iter.reverse(array2.values());
+  assert (null == iter2.next());
+
+  // Single element array remains unchanged
+  let array3 = ['a'];
+  let iter3 = Iter.reverse(array3.values());
+  assert (?'a' == iter3.next());
+  assert (null == iter3.next())
 }

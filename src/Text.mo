@@ -52,7 +52,7 @@ module {
   ///
   /// Runtime: O(a.size())
   /// Space: O(a.size())
-  public func fromArray(a : [Char]) : Text = fromIter(a.vals());
+  public func fromArray(a : [Char]) : Text = fromIter(a.values());
 
   /// Converts the given `[var Char]` to a `Text` value.
   ///
@@ -62,7 +62,7 @@ module {
   ///
   /// Runtime: O(a.size())
   /// Space: O(a.size())
-  public func fromVarArray(a : [var Char]) : Text = fromIter(a.vals());
+  public func fromVarArray(a : [var Char]) : Text = fromIter(a.values());
 
   /// Iterates over each `Char` value in the given `Text`.
   ///
@@ -129,7 +129,7 @@ module {
   /// Creates a `Text` value from a `Char` iterator.
   ///
   /// ```motoko include=import
-  /// let text = Text.fromIter(['a', 'b', 'c'].vals()); // "abc"
+  /// let text = Text.fromIter(['a', 'b', 'c'].values()); // "abc"
   /// ```
   public func fromIter(cs : Iter.Iter<Char>) : Text {
     var r = "";
@@ -216,7 +216,7 @@ module {
   /// Join an iterator of `Text` values with a given delimiter.
   ///
   /// ```motoko include=import
-  /// let joined = Text.join(", ", ["a", "b", "c"].vals()); // "a, b, c"
+  /// let joined = Text.join(", ", ["a", "b", "c"].values()); // "a, b, c"
   /// ```
   public func join(sep : Text, ts : Iter.Iter<Text>) : Text {
     var r = "";

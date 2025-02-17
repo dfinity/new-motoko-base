@@ -1,6 +1,6 @@
 // @testmode wasi
 
-import Set "../../src/pure/OrderedSet";
+import Set "../../src/pure/Set";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";
 import Debug "../../src/Debug";

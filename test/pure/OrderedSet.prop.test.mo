@@ -143,6 +143,7 @@ func run_all_props(range: (Nat, Nat), size: Nat, set_samples: Nat, query_samples
         }, M.equals(T.bool(true)))
       ]),
 
+
       suite("contains & add", [
         prop_with_elem("contains(add(s, c, e), c,  e)", func (s, e) {
           Set.contains(Set.add(s, c, e), c, e)
@@ -160,7 +161,7 @@ func run_all_props(range: (Nat, Nat), size: Nat, set_samples: Nat, query_samples
           Set.foldLeft<Nat, Bool>(m, true, func (acc, v) {acc and it.next() == ?v})
         }),
         prop("foldRight as valsRev()", func(m) {
-          let it = Set.values(m);
+          let it = Set.reverseValues(m);
           Set.foldRight<Nat, Bool>(m, true, func (v, acc) {acc and it.next() == ?v})
         })
       ]),

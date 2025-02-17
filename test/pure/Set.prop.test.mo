@@ -21,7 +21,7 @@ class SetMatcher(expected : Set.Set<Nat>) : M.Matcher<Set.Set<Nat>> {
   };
 
   public func matches(actual : Set.Set<Nat>) : Bool {
-    Set.equals(actual, expected, c)
+    Set.equal(actual, expected, c)
   }
 };
 

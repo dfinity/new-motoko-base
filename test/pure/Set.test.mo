@@ -489,18 +489,18 @@ run(
         M.equals(T.bool(false))
       ),
       test(
-        "equals/empty set",
-        Set.equals(Set.empty(), Set.empty(), Nat.compare),
+        "equal/empty set",
+        Set.equal(Set.empty(), Set.empty(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
-        "equals/equals",
-        Set.equals(buildTestSet012(), buildTestSet012(), Nat.compare),
+        "equal/equal",
+        Set.equal(buildTestSet012(), buildTestSet012(), Nat.compare),
         M.equals(T.bool(true))
       ),
       test(
-        "equals/not equals",
-        Set.equals(buildTestSet012(), buildTestSet01(), Nat.compare),
+        "equal/not equal",
+        Set.equal(buildTestSet012(), buildTestSet01(), Nat.compare),
         M.equals(T.bool(false))
       ),
       test(

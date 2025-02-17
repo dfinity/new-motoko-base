@@ -405,6 +405,69 @@ module {
   public func map<T1, T2>(s : Set<T1>, compare : (T2, T2) -> Order.Order, project: T1 -> T2) : Set<T2>
     = Internal.foldLeft(s.root, empty<T2>(), func (acc : Set<T2>, elem : T1) : Set<T2> { Internal.put(acc, compare, project(elem)) });
 
+
+  /// Apply an operation on each element contained in the set.
+  /// The operation is applied in ascending order of the elements.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set0 = Set.add(empty, Nat.compare, 0);
+  ///   let set1 = Set.add(set0, Nat.compare, 1);
+  ///   let set2 = Set.add(set1, Nat.compare, 2);
+  ///   let numbers = Set.add(set2, Nat.compare, 3);
+  ///
+  ///   Set.forEach<Nat>(numbers, func (element) {
+  ///     Debug.print(" " # Nat.toText(element));
+  ///   })
+  ///   // prints
+  ///   //  0 1 2 3
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory.
+  /// where `n` denotes the number of elements stored in the set.
+  ///
+  public func forEach<T>(set : Set<T>, operation : T -> ()) {
+    ignore foldLeft<T, Null>(set, null, func (acc, e) : Null { operation(e); null });
+  };
+
+  /// Filter elements in a new set.
+  /// Create a copy of the mutable set that only contains the elements
+  /// that fulfil the criterion function.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/pure/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let set0 = Set.add(empty, Nat.compare, 0);
+  ///   let set1 = Set.add(set0, Nat.compare, 1);
+  ///   let set2 = Set.add(set1, Nat.compare, 2);
+  ///   let numbers = Set.add(set2, Nat.compare, 3);
+  ///
+  ///   let evenNumbers = Set.filter<Nat>(numbers, Nat.compare, func (number) {
+  ///     number % 2 == 0
+  ///   });
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)`.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, criterion : T -> Bool) : Set<T> {
+    foldLeft<T,Set<T>>(set, empty(), func (acc, e) {
+      if (criterion(e)) (add(acc, compare, e)) else acc });
+  };
+
+
   /// Filter all elements in the set by also applying a projection to the elements.
   /// Apply a mapping function `project` to all elements in the set and collect all
   /// elements, for which the function returns a non-null new element. Collect all
@@ -509,7 +572,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of elements stored in the sets set1 and set2, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func equals<T>(set1 : Set<T>, set2 : Set<T>, compare: (T, T) -> Order.Order) : Bool {
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>, compare: (T, T) -> Order.Order) : Bool {
     if (set1.size != set2.size) { return false };
     isSubsetHelper(set1.root, set2.root, compare)
   };
@@ -529,6 +592,74 @@ module {
       }
     }
   };
+
+
+  /// Compare two sets by comparing the elements.
+  /// Both sets must have been created by the same comparison function.
+  /// The two sets are iterated by the ascending order of their creation and
+  /// order is determined by the following rules:
+  /// Less:
+  /// `set1` is less than `set2` if:
+  ///  * the pairwise iteration hits an element pair `element1` and `element2` where
+  ///    `element1` is less than `element2` and all preceding elements are equal, or,
+  ///  * `set1` is  a strict prefix of `set2`, i.e. `set2` has more elements than `set1`
+  ///     and all elements of `set1` occur at the beginning of iteration `set2`.
+  /// Equal:
+  /// `set1` and `set2` have same series of equal elements by pairwise iteration.
+  /// Greater:
+  /// `set1` is neither less nor equal `set2`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Text "mo:base/Text";
+  ///
+  /// persistent actor {
+  ///   let set1 =
+  ///     Set.empty<Nat>() |>
+  ///     Set.add(_, Nat.compare, 0) |>
+  ///     Set.add(_, Nat.compare, 1);
+  ///
+  ///   let set2 =
+  ///     Set.empty<Nat>() |>
+  ///     Set.add(_, Nat.compare, 0) |>
+  ///     Set.add(_, Nat.compare, 2);
+  ///
+  ///   let orderLess = Set.compare(set1, set2, Nat.compare);
+  ///   // `#less`
+  ///   let orderEqual = Set.compare(set1, set1, Nat.compare);
+  ///   // `#equal`
+  ///   let orderGreater = Set.compare(set2, set1, Nat.compare);
+  ///   // `#greater`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that `compare` has runtime and space costs of `O(1)`.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func compare<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Order.Order {
+    // TODO: optimize
+    let iterator1 = values(set1);
+    let iterator2 = values(set2);
+    loop {
+      switch (iterator1.next(), iterator2.next()) {
+        case (null, null) return #equal;
+        case (null, _) return #less;
+        case (_, null) return #greater;
+        case (?element1, ?element2) {
+          let comparison = compare(element1, element2);
+          if (comparison != #equal) {
+            return comparison
+          }
+        }
+      }
+    }
+  };
+
 
   /// Returns an iterator over the elements in the set,
   /// traversing the elements in the ascending order.

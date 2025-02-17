@@ -1248,7 +1248,7 @@ module {
     var text = "{";
     var sep = "";
     for (element in values(set)) {
-      text #= elementFormat(element) # sep;
+      text #= sep # elementFormat(element);
       sep := ", "
     };
     text # "}";

@@ -926,8 +926,7 @@ module {
       text #= sep # "(" # keyFormat(k) # ", " # valueFormat(v) # ")";
       sep := ", "
     };
-    text #= "}";
-    text
+    text # "}"
   };
 
   /// Test whether two immutable maps have equal entries.

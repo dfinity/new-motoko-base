@@ -133,7 +133,17 @@ run(
         "min",
         Set.min(buildTestSet()),
         M.equals(T.optional(entryTestable, null: ?Nat))
-      )
+      ),
+      test(
+        "compare",
+        do {
+          let set1 = Set.empty<Nat>();
+          let set2 = Set.empty<Nat>();
+          assert (Set.compare(set1, set2, Nat.compare) == #equal);
+          true
+        },
+        M.equals(T.bool(true))
+      ),
     ]
   )
 );
@@ -228,6 +238,36 @@ run(
       test(
         "any",
         Set.any<Nat>(buildTestSet(), func (k) = (k == 0)),
+        M.equals(T.bool(true))
+      ),
+      test(
+        "compare less",
+        do {
+          let set1 = Set.singleton<Nat>(0);
+          let set2 = Set.singleton<Nat>(1);
+          assert (Set.compare(set1, set2, Nat.compare) == #less);
+          true
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
+        "compare equal",
+        do {
+          let set1 = Set.singleton<Nat>(0);
+          let set2 = Set.singleton<Nat>(0);
+          assert (Set.compare(set1, set2, Nat.compare) == #equal);
+          true
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
+        "compare greater key",
+        do {
+          let set1 = Set.singleton<Nat>(1);
+          let set2 = Set.singleton<Nat>(0);
+          assert (Set.compare(set1, set2, Nat.compare) == #greater);
+          true
+        },
         M.equals(T.bool(true))
       ),
     ]
@@ -349,6 +389,39 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
       Set.any<Nat>(buildTestSet(), func (k) = (k > 2)),
       M.equals(T.bool(false))
     ),
+    test(
+        "compare less key",
+        do {
+          let set1 = buildTestSet() |>
+            Set.delete(_, Nat.compare, Set.size(_) - 1 : Nat);
+          let set2 = buildTestSet();
+          assert (Set.compare(set1, set2, Nat.compare) == #less);
+          true
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
+        "compare equal",
+        do {
+          let set1 = buildTestSet();
+          let set2 = buildTestSet();
+          assert (Set.compare(set1, set2, Nat.compare) == #equal);
+          true
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
+        "compare greater key",
+        do {
+          let set1 = buildTestSet();
+          let set2 = buildTestSet() |>
+            Set.delete(_, Nat.compare, Set.size(_) - 1);
+
+          assert (Set.compare(set1, set2, Nat.compare) == #greater);
+          true
+        },
+        M.equals(T.bool(true))
+      )
   ];
 
 buildTestSet := func() : Set.Set<Nat> {

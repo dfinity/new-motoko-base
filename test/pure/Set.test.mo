@@ -5,6 +5,7 @@ import Array "../../src/Array";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";
 import Debug "../../src/Debug";
+import Runtime "../../src/Runtime";
 
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
@@ -110,6 +111,35 @@ run(
         M.equals(T.text(""))
       ),
       test(
+        "for each",
+        do {
+          let set = Set.empty<Nat>();
+          Set.forEach<Nat>(
+            set,
+            func(_) {
+              Runtime.trap("test failed")
+            }
+          );
+          Set.size(set)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
+        "filter",
+        do {
+          let input = Set.empty<Nat>();
+          let output = Set.filter<Nat>(
+            input,
+            Nat.compare,
+            func(_) {
+              Runtime.trap("test failed")
+            }
+          );
+          Set.size(output)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
         "traverse empty set",
         Set.map(buildTestSet(), Nat.compare, add1),
         SetMatcher([])
@@ -158,7 +188,7 @@ var expected = [0];
 
 run(
   suite(
-    "single root",
+    "singleton",
     [
       test(
         "size",
@@ -189,6 +219,37 @@ run(
         "delete",
         Set.delete(buildTestSet(), Nat.compare, 0),
         SetMatcher([])
+      ),
+      test(
+        "for each",
+        do {
+          let set = buildTestSet();
+          Set.forEach<Nat>(
+            set,
+            func(number) {
+              assert (number == 0)
+            }
+          );
+          Set.size(set)
+        },
+        M.equals(T.nat(1))
+      ),
+      test(
+        "filter",
+        do {
+          let input = buildTestSet();
+          let output = Set.filter<Nat>(
+            input,
+            Nat.compare,
+            func(number) {
+              assert (number == 0);
+              true
+            }
+          );
+          assert (Set.equal(input, output, Nat.compare));
+          Set.size(output)
+        },
+        M.equals(T.nat(1))
       ),
       test(
         "right fold",
@@ -340,6 +401,45 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
       SetMatcher([5])
     ),
     test(
+      "for each",
+      do {
+	let set = buildTestSet();
+	var index = 0;
+	Set.forEach<Nat>(
+	  set,
+	  func(element) {
+	    assert (element == index);
+	    index += 1
+	  }
+	);
+	Set.size(set)
+      },
+      M.equals(T.nat(Set.size(buildTestSet())))
+    ),
+    test(
+      "filter",
+      do {
+	let input = buildTestSet();
+	let output = Set.filter<Nat>(
+	  input,
+	  Nat.compare,
+	  func(number) {
+	    number % 2 == 0
+	  }
+	);
+	for (index in Nat.range(0, Set.size(input))) {
+	  let present = Set.contains(output, Nat.compare, index);
+	  if (index % 2 == 0) {
+	    assert (present)
+	  } else {
+	    assert (not present)
+	  }
+	};
+	Set.size(output)
+      },
+      M.equals(T.nat((Set.size(buildTestSet()) + 1) / 2))
+    ),
+    test(
       "filterMap / filter all",
       Set.filterMap(buildTestSet(), Nat.compare, ifElemLessThan(0, add1)),
       SetMatcher([])
@@ -390,39 +490,39 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
       M.equals(T.bool(false))
     ),
     test(
-        "compare less key",
-        do {
-          let set1 = buildTestSet() |>
-            Set.delete(_, Nat.compare, Set.size(_) - 1 : Nat);
-          let set2 = buildTestSet();
-          assert (Set.compare(set1, set2, Nat.compare) == #less);
-          true
-        },
-        M.equals(T.bool(true))
-      ),
-      test(
-        "compare equal",
-        do {
-          let set1 = buildTestSet();
-          let set2 = buildTestSet();
-          assert (Set.compare(set1, set2, Nat.compare) == #equal);
-          true
-        },
-        M.equals(T.bool(true))
-      ),
-      test(
-        "compare greater key",
-        do {
-          let set1 = buildTestSet();
-          let set2 = buildTestSet() |>
-            Set.delete(_, Nat.compare, Set.size(_) - 1);
+      "compare less key",
+      do {
+	let set1 = buildTestSet() |>
+	  Set.delete(_, Nat.compare, Set.size(_) - 1 : Nat);
+	let set2 = buildTestSet();
+	assert (Set.compare(set1, set2, Nat.compare) == #less);
+	true
+      },
+      M.equals(T.bool(true))
+    ),
+    test(
+      "compare equal",
+      do {
+	let set1 = buildTestSet();
+	let set2 = buildTestSet();
+	assert (Set.compare(set1, set2, Nat.compare) == #equal);
+	true
+      },
+      M.equals(T.bool(true))
+    ),
+    test(
+      "compare greater key",
+      do {
+	let set1 = buildTestSet();
+	let set2 = buildTestSet() |>
+	  Set.delete(_, Nat.compare, Set.size(_) - 1);
 
-          assert (Set.compare(set1, set2, Nat.compare) == #greater);
-          true
-        },
-        M.equals(T.bool(true))
-      )
-  ];
+	assert (Set.compare(set1, set2, Nat.compare) == #greater);
+	true
+      },
+      M.equals(T.bool(true))
+    )
+];
 
 buildTestSet := func() : Set.Set<Nat> {
   var set = Set.empty<Nat>();
@@ -669,3 +769,5 @@ run(
     ]
   )
 );
+
+// TODO: port smallSet and largeSet test from "../Set/test.mo"

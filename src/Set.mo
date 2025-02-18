@@ -28,7 +28,7 @@
 // Distributed under Apache 2.0 license.
 // With adjustments by the Motoko team.
 
-// import Pure "pure/Set";
+// import PureSet "pure/Set";
 import Types "Types";
 import Order "Order";
 import VarArray "VarArray";

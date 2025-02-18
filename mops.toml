@@ -1,7 +1,7 @@
 [package]
-name = "base-v2"
-version = "0.13.3"
-description = "The Motoko base library v2"
+name = "base"
+version = "1.0.0"
+description = "The Motoko base library"
 repository = "https://github.com/dfinity/motoko-base"
 keywords = [ "base" ]
 license = "Apache-2.0"
@@ -11,5 +11,5 @@ matchers = "https://github.com/kritzcreek/motoko-matchers#v1.3.0@3dac8a071b69e4e
 test = "2.1.0"
 
 [toolchain]
-moc = "0.14.0"
+moc = "0.14.1"
 wasmtime = "17.0.0"

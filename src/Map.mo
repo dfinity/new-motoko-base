@@ -373,7 +373,10 @@ module {
   ///   let map = Map.empty<Nat, Text>();
   ///   Map.add(map, Nat.compare, 0, "Zero");
   ///   Map.add(map, Nat.compare, 1, "One");
-  ///   Map.add(map, Nat.compare, 2, "Two");
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  ///   // [(0, "zero"), (1, "One")]
+  ///   Map.add(map, Nat.compare, 0, "Nil");
+  ///   // traps
   /// }
   /// ```
   ///
@@ -382,9 +385,74 @@ module {
   /// where `n` denotes the number of key-value entries stored in the map and
   /// assuming that the `compare` function implements an `O(1)` comparison.
   public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) {
-    switch (put(map, compare, key, value)) {
+    switch (swap(map, compare, key, value)) {
       case null {};
       case (?value) Runtime.trap("Map.add(): key is already present")
+    }
+  };
+
+  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.
+  /// Replaces any existing entry with key `key`.
+  /// Returns the modified map.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/pure/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let map = Map.empty<Nat, Text>();
+  ///
+  ///   Map.put(map, Nat.compare, 0, "Zero");
+  ///   Map.put(map, Nat.compare, 1, "One");
+  ///   Map.put(map, Nat.compare, 0, "Nil");
+  ///
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  ///   // [(0, "Nil"), (1, "One")]
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))`.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) {
+    ignore swap(map, compare, key, value)
+  };
+
+  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.  /// Traps if `map` contains an existing entry for `key`.
+  /// Returns the modified map.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/pure/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let map = Map.empty<Nat, Text>();
+  ///
+  ///   Map.add(map, Nat.compare, 0, "Zero");
+  ///   Map.update(map, Nat.compare, 0, "Nil");
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  ///   // [(0, "Nil")]
+  ///   Map.update(map, Nat.compare, 1, "One");
+  ///   // traps
+  ///
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))`.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  public func update<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) {
+    switch (swap(map, compare, key, value)) {
+      case (?_) {};
+      case _ Runtime.trap("Map.update(): key not present")
     }
   };
 
@@ -402,10 +470,10 @@ module {
   ///   let map = Map.empty<Nat, Text>();
   ///   Map.add(map, Nat.compare, 1, "ONE");
   ///
-  ///   let oldZero = Map.put(map, Nat.compare, 0, "Zero"); // inserts new key-value pair.
+  ///   let oldZero = Map.swap(map, Nat.compare, 0, "Zero"); // inserts new key-value pair.
   ///   Debug.print(debug_show(oldZero)); // prints `null`, key was inserted.
   ///
-  ///   let oldOne = Map.put(map, Nat.compare, 1, "One");   // overwrites value for existing key.
+  ///   let oldOne = Map.swap(map, Nat.compare, 1, "One");   // overwrites value for existing key.
   ///   Debug.print(debug_show(oldOne)); // prints `?"ONE"`, previous value.
   ///   Debug.print(debug_show(Map.get(map, Nat.compare, 1))); // prints `?"One"`, new value.
   /// }
@@ -415,7 +483,7 @@ module {
   /// Space: `O(log(n))`.
   /// where `n` denotes the number of key-value entries stored in the map and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
+  public func swap<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
     let insertResult = switch (map.root) {
       case (#leaf(leafNode)) {
         leafInsertHelper<K, V>(leafNode, btreeOrder, compare, key, value)
@@ -484,7 +552,7 @@ module {
   public func replaceIfExists<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
     // TODO: Could be optimized in future
     if (containsKey(map, compare, key)) {
-      put(map, compare, key, value)
+      swap(map, compare, key, value)
     } else {
       null
     }

@@ -76,7 +76,7 @@ run(
         "update absent",
         do {
           let map = Map.empty<Nat, Text>();
-          Map.put(map, Nat.compare, 0, "0")
+          Map.swap(map, Nat.compare, 0, "0")
         },
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
@@ -357,7 +357,7 @@ run(
         "update present",
         do {
           let map = Map.singleton<Nat, Text>(0, "0");
-          Map.put(map, Nat.compare, 0, "Zero")
+          Map.swap(map, Nat.compare, 0, "Zero")
         },
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
@@ -365,7 +365,7 @@ run(
         "update absent",
         do {
           let map = Map.singleton<Nat, Text>(0, "0");
-          Map.put(map, Nat.compare, 1, "1")
+          Map.swap(map, Nat.compare, 1, "1")
         },
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
@@ -778,7 +778,7 @@ run(
         do {
           let map = smallMap();
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.put(map, Nat.compare, index, Nat.toText(index) # "!") == ?Nat.toText(index))
+            assert (Map.swap(map, Nat.compare, index, Nat.toText(index) # "!") == ?Nat.toText(index))
           };
           true
         },
@@ -788,7 +788,7 @@ run(
         "update absent",
         do {
           let map = smallMap();
-          Map.put(map, Nat.compare, smallSize, Nat.toText(smallSize))
+          Map.swap(map, Nat.compare, smallSize, Nat.toText(smallSize))
         },
         M.equals(T.optional(T.textTestable, null : ?Text))
       ),
@@ -1066,7 +1066,7 @@ run(
         do {
           let map1 = smallMap();
           let map2 = smallMap();
-          ignore Map.put(map2, Nat.compare, smallSize - 1 : Nat, "Last");
+          ignore Map.swap(map2, Nat.compare, smallSize - 1 : Nat, "Last");
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #less);
           true
         },
@@ -1097,7 +1097,7 @@ run(
         "compare greater value",
         do {
           let map1 = smallMap();
-          ignore Map.put(map1, Nat.compare, smallSize - 1 : Nat, "Last");
+          ignore Map.swap(map1, Nat.compare, smallSize - 1 : Nat, "Last");
           let map2 = smallMap();
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #greater);
           true
@@ -1155,7 +1155,7 @@ run(
           let random = Random(randomSeed);
           for (index in Nat.range(0, numberOfEntries)) {
             let key = random.next();
-            ignore Map.put(map, Nat.compare, key, Nat.toText(key))
+            ignore Map.swap(map, Nat.compare, key, Nat.toText(key))
           };
           random.reset();
           for (index in Nat.range(0, numberOfEntries)) {
@@ -1173,13 +1173,13 @@ run(
           let random = Random(randomSeed);
           for (index in Nat.range(0, numberOfEntries)) {
             let key = random.next();
-            ignore Map.put(map, Nat.compare, key, Nat.toText(key))
+            ignore Map.swap(map, Nat.compare, key, Nat.toText(key))
           };
           random.reset();
           for (index in Nat.range(0, numberOfEntries)) {
             let key = random.next();
             assert (Map.containsKey(map, Nat.compare, key));
-            let oldValue = Map.put(map, Nat.compare, key, Nat.toText(key) # "!");
+            let oldValue = Map.swap(map, Nat.compare, key, Nat.toText(key) # "!");
             assert (oldValue != null)
           };
           random.reset();
@@ -1200,7 +1200,7 @@ run(
           let random = Random(randomSeed);
           for (index in Nat.range(0, numberOfEntries)) {
             let key = random.next();
-            ignore Map.put(map, Nat.compare, key, Nat.toText(key))
+            ignore Map.swap(map, Nat.compare, key, Nat.toText(key))
           };
           random.reset();
           for (index in Nat.range(0, numberOfEntries)) {
@@ -1258,4 +1258,63 @@ run(
       )
     ]
   )
-)
+);
+
+run(
+  suite(
+    "add, update, put",
+    [
+       test(
+        "add disjoint",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.add(map, Nat.compare, 0, "0");
+	  Map.add(map, Nat.compare, 1, "1");
+	  Map.size(map)
+	},
+        M.equals(T.nat(2))
+      ),
+      test(
+        "put existing",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.put(map, Nat.compare, 0, "0");
+	  Map.put(map, Nat.compare, 0, "Zero");
+	  Map.get(map, Nat.compare, 0)
+	},
+        M.equals(T.optional(T.textTestable, ?"Zero"))
+      ),
+      test(
+        "update existing",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.put(map, Nat.compare, 0, "0");
+	  Map.update(map, Nat.compare, 0, "Zero");
+	  Map.get(map, Nat.compare, 0)
+	},
+        M.equals(T.optional(T.textTestable, ?"Zero"))
+      ),
+      // TODO: test traps (checked manually)
+      /*
+      test(
+        "update absent",
+        do {
+	  let map = Map.empty<Nat, Text>();
+	  Map.update(map, Nat.compare, 0, "Zero"); // traps
+	  assert false;
+	  Map.size(map);
+	},
+        M.equals(T.nat(0))
+      ),
+      test(
+        "add existing traps",
+        do {
+	  let map = Map.empty<Nat, Text>();
+          Map.add(map, Nat.compare, 0, "0");
+	  Map.add(map, Nat.compare, 0, "Zero"); // traps
+	  Map.get(map, Nat.compare, 0)
+	},
+        M.equals(T.optional(T.textTestable, ?"0"))
+      ),
+      */
+   ]))

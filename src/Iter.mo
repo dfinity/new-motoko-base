@@ -344,4 +344,49 @@ module {
     fromVarArray<T>(array)
   };
 
+  /// Creates an iterator that produces a given item a specified number of times.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Iter.repeat<Nat>(3, 2);
+  /// assert(?3 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  ///
+  /// Runtime: O(1)
+  ///
+  /// Space: O(1)
+  public func repeat<T>(item : T, count : Nat) : Iter<T> = object {
+    var remaining = count;
+    public func next() : ?T {
+      if (remaining == 0) {
+        null
+      } else {
+        remaining -= 1;
+        ?item
+      }
+    }
+  };
+
+  /// Creates a new iterator that produces elements from the original iterator in reverse order.
+  /// Note: This function needs to consume the entire iterator to reverse it.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  ///
+  /// let iter = Iter.fromArray([1, 2, 3]);
+  /// let reversed = Iter.reverse(iter);
+  /// assert(?3 == reversed.next());
+  /// assert(?2 == reversed.next());
+  /// assert(?1 == reversed.next());
+  /// assert(null == reversed.next());
+  /// ```
+  ///
+  /// Runtime: O(n) where n is the number of elements in the iterator
+  ///
+  /// Space: O(n) where n is the number of elements in the iterator
+  public func reverse<T>(iter : Iter<T>) : Iter<T> {
+    fromArray(Array.reverse(toArray(iter))) // TODO: optimize
+  };
+
 }

@@ -8,7 +8,7 @@ license = "Apache-2.0"
 
 [dev-dependencies]
 matchers = "https://github.com/kritzcreek/motoko-matchers#v1.3.0@3dac8a071b69e4e651b25a7d9683fe831eb7cffd"
-testing = "https://github.com/internet-computer/testing.mo#v0.1.3@2968b359cf69d7bbef5005d8fbfbc60d56df8a88"
+test = "2.1.0"
 
 [toolchain]
 moc = "0.14.0"

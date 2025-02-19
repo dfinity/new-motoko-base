@@ -544,10 +544,11 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see below.
 where <code>n</code> denotes the number of elements stored in the set.</p>
 <p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
-</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setIterator</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge a series of sets to a common new sets, i.e. all elements of
-the iterated sets are added to a combined set.
-Potential duplicates are ignored, i.e. if the same element occurs
-in multiple iterated sets, it only occurs once in the returned set.</p>
+</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setIterator</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Construct the union of a series of sets, i.e. all elements of
+each set are included in the result set.
+Any duplicates are ignored, i.e. if an element occurs
+in several of the iterated sets, it only occurs once in the result set.</p>
+<p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -568,11 +569,11 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>n</code> denotes the number of elements stored in the iterated sets,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setOfSets</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge the subsets of elements to a new set, i.e. all elements of
-the sub-sets of the set are added to a combined set that is returned.
-Potential duplicate elements in the sub-sets are ignored, i.e. if the
-same element occurs in multiple sub-sets, it only occurs once in the
-returned set.</p>
+</p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setOfSets</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Construct the union of a set of element sets, i.e. all elements of
+each element set are included in the result set.
+Any duplicates are ignored, i.e. if the same element occurs in multiple element sets,
+it only occurs once in the result set.</p>
+<p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;

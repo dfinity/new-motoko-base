@@ -3,6 +3,7 @@
 import Set "../../src/pure/Set";
 import Array "../../src/Array";
 import Nat "../../src/Nat";
+import Int "../../src/Int";
 import Iter "../../src/Iter";
 import Debug "../../src/Debug";
 import Runtime "../../src/Runtime";
@@ -174,6 +175,29 @@ run(
         },
         M.equals(T.bool(true))
       ),
+      test(
+        "join",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([]), Nat.compare);
+          let set2 = set1;
+          let set3 = set2;
+          let combined = Set.join(Iter.fromArray([set1, set2, set3]), Nat.compare);
+          Set.size(combined)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
+        "flatten",
+        do {
+          let subSet1 = Set.fromIter(Iter.fromArray<Nat>([]), Nat.compare);
+          let subSet2 = subSet1;
+          let subSet3 = subSet2;
+          let iterator = Iter.fromArray([subSet1, subSet2, subSet3]);
+          let setOfSets = Set.fromIter<Set.Set<Nat>>(iterator, func(first, second) { Set.compare(first, second, Nat.compare) });
+          let combined = Set.flatten(setOfSets, Nat.compare);
+          Set.size(combined)
+        },
+        M.equals(T.nat(0)))
     ]
   )
 );
@@ -330,6 +354,40 @@ run(
           true
         },
         M.equals(T.bool(true))
+      ),
+      test(
+        "join",
+        do {
+          let set1 = Set.singleton<Nat>(0);
+          let set2 = Set.singleton<Nat>(1);
+          let set3 = Set.singleton<Nat>(2);
+          let combined = Set.join(Iter.fromArray([set1, set2, set3]), Nat.compare);
+          Iter.toArray(Set.values(combined))
+        },
+        M.equals(
+          T.array<Nat>(
+            T.natTestable,
+            [0, 1, 2]
+          )
+        )
+      ),
+      test(
+        "flatten",
+        do {
+          let subSet1 = Set.singleton<Nat>(0);
+          let subSet2 = Set.singleton<Nat>(1);
+          let subSet3 = Set.singleton<Nat>(2);
+          let iterator = Iter.fromArray([subSet1, subSet2, subSet3]);
+          let setOfSets = Set.fromIter<Set.Set<Nat>>(iterator, func(first, second) { Set.compare(first, second, Nat.compare) });
+          let combined = Set.flatten(setOfSets, Nat.compare);
+          Iter.toArray(Set.values(combined))
+        },
+        M.equals(
+          T.array<Nat>(
+            T.natTestable,
+            [0, 1, 2]
+          )
+        )
       ),
     ]
   )
@@ -521,7 +579,55 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
 	true
       },
       M.equals(T.bool(true))
-    )
+    ),
+    test(
+        "join",
+        do {
+          let set1 = Set.map<Nat, Int>(buildTestSet(), Int.compare, func(number) { +number });
+          let set2 = Set.map<Nat, Int>(buildTestSet(), Int.compare, func(number) { -number });
+          let set3 = Set.fromIter(Iter.fromArray<Int>([-1, 1]), Int.compare);
+          let combined = Set.join(Iter.fromArray([set1, set2, set3]), Int.compare);
+          Iter.toArray(Set.values(combined))
+        },
+	do {
+ 	  let size = Set.size(buildTestSet());
+          M.equals(
+          T.array<Int>(
+            T.intTestable,
+            Array.tabulate<Int>(
+              size * 2 - 1 : Nat,
+              func(index) {
+                index + 1 - size
+              }
+            )
+          )
+        ) }
+      ),
+      test(
+        "flatten",
+        do {
+          let subSet1 = Set.map<Nat, Int>(buildTestSet(), Int.compare, func(number) { +number });
+          let subSet2 = Set.map<Nat, Int>(buildTestSet(), Int.compare, func(number) { -number });
+          let subSet3 = Set.fromIter(Iter.fromArray<Int>([-1, 1]), Int.compare);
+          let iterator = Iter.fromArray([subSet1, subSet2, subSet3]);
+          let setOfSets = Set.fromIter<Set.Set<Int>>(iterator, func(first, second) { Set.compare(first, second, Int.compare) });
+          let combined = Set.flatten(setOfSets, Int.compare);
+          Iter.toArray(Set.values(combined))
+        },
+        do {
+	  let size = Set.size(buildTestSet());
+	  M.equals(
+          T.array<Int>(
+            T.intTestable,
+            Array.tabulate<Int>(
+             size * 2 - 1 : Nat,
+              func(index) {
+                index + 1 - size
+              }
+            )
+          )
+        ) }
+      ),
 ];
 
 buildTestSet := func() : Set.Set<Nat> {

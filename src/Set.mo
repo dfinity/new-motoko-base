@@ -1039,10 +1039,12 @@ module {
     accumulator
   };
 
-  /// Merge a series of sets to a common new sets, i.e. all elements of
-  /// the iterated sets are added to a combined set.
-  /// Potential duplicates are ignored, i.e. if the same element occurs
-  /// in multiple iterated sets, it only occurs once in the returned set.
+  /// Construct the union of a series of sets, i.e. all elements of
+  /// each set are included in the result set.
+  /// Any duplicates are ignored, i.e. if an element occurs
+  /// in several of the iterated sets, it only occurs once in the result set.
+  ///
+  /// Assumes all sets are ordered by `compare`.
   ///
   /// Example:
   /// ```motoko
@@ -1076,11 +1078,12 @@ module {
     result
   };
 
-  /// Merge the subsets of elements to a new set, i.e. all elements of
-  /// the sub-sets of the set are added to a combined set that is returned.
-  /// Potential duplicate elements in the sub-sets are ignored, i.e. if the
-  /// same element occurs in multiple sub-sets, it only occurs once in the
-  /// returned set.
+  /// Construct the union of a set of element sets, i.e. all elements of
+  /// each element set are included in the result set.
+  /// Any duplicates are ignored, i.e. if the same element occurs in multiple element sets,
+  /// it only occurs once in the result set.
+  ///
+  /// Assumes all sets are ordered by `compare`.
   ///
   /// Example:
   /// ```motoko

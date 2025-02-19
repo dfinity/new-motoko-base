@@ -991,6 +991,85 @@ module {
     text # "}"
   };
 
+  /// Construct the union of a set of element sets, i.e. all elements of
+  /// each element set are included in the result set.
+  /// Any duplicates are ignored, i.e. if the same element occurs in multiple element sets,
+  /// it only occurs once in the result set.
+  ///
+  /// Assumes all sets are ordered by `compare`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/pure/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Order "mo:base/Order";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   func setCompare(first: Set.Set<Nat>, second: Set.Set<Nat>) : Order.Order {
+  ///      Set.compare(first, second, Nat.compare)
+  ///   };
+  ///
+  ///   let subSet1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  ///   let subSet2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  ///   let subSet3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
+  ///   let setOfSets = Set.fromIter(Iter.fromArray([subSet1, subSet2, subSet3]), setCompare);
+  ///   let flatSet = Set.flatten(setOfSets, Nat.compare);
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(flatSet))));
+  ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of elements stored in all the sub-sets,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func flatten<T>(setOfSets : Set<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
+    var result = empty<T>();
+    for (set in values(setOfSets)) {
+      result := union(result, set, compare)
+    };
+    result
+  };
+
+  /// Construct the union of a series of sets, i.e. all elements of
+  /// each set are included in the result set.
+  /// Any duplicates are ignored, i.e. if an element occurs
+  /// in several of the iterated sets, it only occurs once in the result set.
+  ///
+  /// Assumes all sets are ordered by `compare`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  ///   let set3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
+  ///   transient let iterator = Iter.fromArray([set1, set2, set3]);
+  ///   let combined = Set.join(iterator, Nat.compare);
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(combined))));
+  ///   // prints: `[1, 2, 3, 4, 5, 6, 7]`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of elements stored in the iterated sets,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func join<T>(setIterator : Iter.Iter<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
+    var result = empty<T>();
+    for (set in setIterator) {
+      result := union(result, set, compare)
+    };
+    result
+  };
+
   module Internal {
     public func contains<T>(tree : Tree<T>, compare : (T, T) -> Order.Order, elem : T) : Bool {
       func f(t : Tree<T>, x : T) : Bool {

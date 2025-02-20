@@ -41,9 +41,8 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func empty<T>() : Queue<T> {
-    todo()
-  };
+  public func empty<T>() : Queue<T> =
+    ({var top = null; var size = 0}, {var top = null; var size = 0});
 
   /// Determine whether a queue is empty.
   /// Returns true if `queue` is empty, otherwise `false`.
@@ -59,17 +58,39 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func isEmpty<T>(queue : Queue<T>) : Bool {
-    todo()
-  };
+  public func isEmpty<T>(queue : Queue<T>) : Bool =
+    queue.0.size + queue.1.size == 0;
 
-  public func singleton<T>(item : T) : Queue<T> {
-    todo()
-  };
+  /// Create a new queue comprising a single element.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/Queue";
+  ///
+  /// Queue.singleton<Nat>(25)
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
+  public func singleton<T>(item : T) : Queue<T> =
+    ({var top = null; var size = 0}, {var top = ?{ value = item; next = null }; var size = 0});
 
-  public func size<T>(queue : Queue<T>) : Nat {
-    todo()
-  };
+  /// Determine the number of elements contained in a queue.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import {singleton, size} "mo:base/Queue";
+  ///
+  /// let queue = singleton<Nat>(42);
+  /// size(queue) // => 1
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
+  public func size<T>(queue : Queue<T>) : Nat =
+    queue.0.size + queue.1.size;
 
   public func contains<T>(queue : Queue<T>, item : T) : Bool {
     todo()

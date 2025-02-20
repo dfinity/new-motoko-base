@@ -188,7 +188,7 @@ module {
   /// Runtime: `O(1)`.
   /// Space: `O(1)`.
   public func singleton<T>(element : T) : Set<T> {
-    let elements = VarArray.repeat<?(K, V)>(null, btreeOrder - 1);
+    let elements = VarArray.repeat<?T>(null, btreeOrder - 1);
     elements[0] := ?element;
     {
       var root =
@@ -390,7 +390,7 @@ module {
       case (#promote({ element = promotedElement; leftChild; rightChild })) {
         let elements = VarArray.repeat<?T>(null, btreeOrder - 1);
 	elements[0] := ?promotedElement;
-	let children = VarArray.repeat<?T>(null, btreeOrder);
+	let children = VarArray.repeat<?Node<T>>(null, btreeOrder);
 	children[0] := ?leftChild;
 	children[1] := ?rightChild;
         set.root := #internal({

@@ -1029,7 +1029,7 @@ module {
   /// Runtime: O(toExclusive - fromInclusive)
   ///
   /// Space: O(toExclusive - fromInclusive)
-  public func sliceToArray<T>(array : [T], fromInclusive : Int, toExclusive : Int) : [T] {
+  public func sliceToArray<T>(array : [var T], fromInclusive : Int, toExclusive : Int) : [T] {
     let size = array.size();
     // Convert negative indices to positive and handle bounds
     let startInt = if (fromInclusive < 0) {

@@ -578,7 +578,7 @@ module {
   /// where `n` denotes the number of elements stored in the set.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func values<T>(set : Set<T>) : Iter.Iter<T> {
+  public func values<T>(set : Set<T>) : Types.Iter<T> {
     switch (set.root) {
       case (#leaf(leafNode)) { return leafElements(leafNode) };
       case (#internal(internalNode)) { internalElements(internalNode) }
@@ -615,7 +615,7 @@ module {
   /// where `n` denotes the number of elements stored in the set.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func reverseValues<T>(set : Set<T>) : Iter.Iter<T> {
+  public func reverseValues<T>(set : Set<T>) : Types.Iter<T> {
     switch (set.root) {
       case (#leaf(leafNode)) { return reverseLeafElements(leafNode) };
       case (#internal(internalNode)) { reverseInternalElements(internalNode) }
@@ -642,7 +642,7 @@ module {
   /// Space: `O(n)`.
   /// where `n` denotes the number of elements returned by the iterator and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func fromIter<T>(iter : Iter.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
+  public func fromIter<T>(iter : Types.Iter<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let set = empty<T>();
     for (element in iter) {
       add(set, compare, element)
@@ -800,7 +800,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of elements in `set` and `iter`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func addAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Iter.Iter<T>) {
+  public func addAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
     for (element in iter) {
       add(set, compare, element)
     }
@@ -829,7 +829,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of elements in `set` and `iter`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Iter.Iter<T>) {
+  public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
     for (element in iter) {
       delete(set, compare, element)
     }
@@ -857,7 +857,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of values in `set` and `iter`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Iter.Iter<T>) {
+  public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
     let list = List.fromIter<T>(iter);
     deleteAll(
       set,
@@ -1153,7 +1153,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `n` denotes the number of elements stored in the iterated sets,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func join<T>(setIterator : Iter.Iter<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
+  public func join<T>(setIterator : Types.Iter<Set<T>>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = empty<T>();
     for (set in setIterator) {
       for (element in values(set)) {
@@ -1280,7 +1280,7 @@ module {
   /// Can be used to check that elements have been inserted with a consistent comparison function.
   /// Traps if the internal set structure is invalid.
   public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order) {
-    func checkIteration(iterator : Iter.Iter<T>, order : Order.Order) {
+    func checkIteration(iterator : Types.Iter<T>, order : Order.Order) {
       switch (iterator.next()) {
         case null {};
         case (?first) {
@@ -1403,7 +1403,7 @@ module {
     }
   };
 
-  func leafElements<T>({ data } : Leaf<T>) : Iter.Iter<T> {
+  func leafElements<T>({ data } : Leaf<T>) : Types.Iter<T> {
     var i : Nat = 0;
     object {
       public func next() : ?T {
@@ -1418,7 +1418,7 @@ module {
     }
   };
 
-  func reverseLeafElements<T>({ data } : Leaf<T>) : Iter.Iter<T> {
+  func reverseLeafElements<T>({ data } : Leaf<T>) : Types.Iter<T> {
     var i : Nat = data.count;
     object {
       public func next() : ?T {
@@ -1436,7 +1436,7 @@ module {
   // Cursor type that keeps track of the current node and the current element index in the node
   type NodeCursor<T> = { node : Node<T>; elementIndex : Nat };
 
-  func internalElements<T>(internal : Internal<T>) : Iter.Iter<T> {
+  func internalElements<T>(internal : Internal<T>) : Types.Iter<T> {
     object {
       // The nodeCursorStack keeps track of the current node and the current element index in the node
       // We use a stack here to push to/pop off the next node cursor to visit
@@ -1516,7 +1516,7 @@ module {
     }
   };
 
-  func reverseInternalElements<T>(internal : Internal<T>) : Iter.Iter<T> {
+  func reverseInternalElements<T>(internal : Internal<T>) : Types.Iter<T> {
     object {
       // The nodeCursorStack keeps track of the current node and the current element index in the node
       // We use a stack here to push to/pop off the next node cursor to visit

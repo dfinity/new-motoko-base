@@ -78,6 +78,39 @@ module {
     array
   };
 
+  /// Tests if two arrays contain equal values (i.e. they represent the same
+  /// list of elements). Uses `equal` to compare elements in the arrays.
+  ///
+  /// ```motoko include=import
+  /// // Use the equal function from the Nat module to compare Nats
+  /// import {equal} "mo:base/Nat";
+  ///
+  /// let array1 = [var 0, 1, 2, 3];
+  /// let array2 = [var 0, 1, 2, 3];
+  /// VarArray.equal(array1, array2, equal)
+  /// ```
+  ///
+  /// Runtime: O(size1 + size2)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `equal` runs in O(1) time and space.
+  public func equal<T>(array1 : [var T], array2 : [var T], equal : (T, T) -> Bool) : Bool {
+    let size1 = array1.size();
+    let size2 = array2.size();
+    if (size1 != size2) {
+      return false
+    };
+    var i = 0;
+    while (i < size1) {
+      if (not equal(array1[i], array2[i])) {
+        return false
+      };
+      i += 1
+    };
+    true
+  };
+
   /// Returns the first value in `array` for which `predicate` returns true.
   /// If no element satisfies the predicate, returns null.
   ///

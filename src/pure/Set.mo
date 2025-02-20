@@ -564,7 +564,7 @@ module {
   ///   let set0 = Set.empty<Nat>();
   ///   let set1 = Set.add(set0, Nat.compare, 1);
   ///   let set2 = Set.add(set1, Nat.compare, 2);
-  ///   assert(not Set.equal(set1, set2, Nat.equal));
+  ///   assert (not Set.equal(set1, set2, Nat.compare));
   /// }
   /// ```
   ///

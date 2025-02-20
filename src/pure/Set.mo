@@ -19,10 +19,9 @@
 
 import Debug "../Debug";
 import Runtime "../Runtime";
-// TODO: reuse once on imperative List avaialbe (see intersection)
-// import Buffer "Buffer";
+import List "../List"; // NB: imperative!
 import Iter "../Iter";
-import List "../pure/List";
+import Types "../Types";
 import Nat "../Nat";
 import Order "../Order";
 
@@ -267,38 +266,21 @@ module {
   ///
   /// Note: Creates `O(m)` temporary objects that will be collected as garbage.
   public func intersect<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
-  /* TODO: restore optimization once imperative/List available
-    let elems = Buffer.Buffer<T>(Nat.min(Nat.min(set1.size, set2.size), 100));
+    let elems = List.empty<T>();
     if (set1.size < set2.size) {
       Internal.iterate(set1.root, func (x: T) {
 	if (Internal.contains(set2.root, compare, x)) {
-	  elems.add(x)
+	  List.add(elems, x)
 	}
       });
     } else {
       Internal.iterate(set2.root, func (x: T) {
 	if (Internal.contains(set1.root, compare, x)) {
-	  elems.add(x)
+	  List.add(elems, x)
 	}
       });
     };
-    { root = Internal.buildFromSorted(elems); size = elems.size() }
-    */
-    var elems = empty<T>();
-    if (set1.size < set2.size) {
-      Internal.iterate(set1.root, func (x: T) {
-	if (Internal.contains(set2.root, compare, x)) {
-	  elems := add(elems, compare, x)
-	}
-      });
-    } else {
-      Internal.iterate(set2.root, func (x: T) {
-	if (Internal.contains(set1.root, compare, x)) {
-	  elems := add(elems, compare, x)
-	}
-      });
-    };
-    elems
+    { root = Internal.buildFromSorted(elems); size = List.size(elems) }
   };
 
   /// Returns a new set that is the difference between `set1` and `set2` (`set1` minus `set2`),
@@ -327,35 +309,15 @@ module {
   ///
   /// Note: Creates `O(m * log(n))` temporary objects that will be collected as garbage.
   public func diff<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
-
-  /* TODO: optimize once imperative List available
     if (size(set1) < size(set2)) {
-      let elems = Buffer.Buffer<T>(Nat.min(set1.size, 100));
+      let elems = List.empty<T>(); /* imperative! */
       Internal.iterate(set1.root, func (x : T) {
 	  if (not Internal.contains(set2.root, compare, x)) {
-	    elems.add(x)
+	    List.add(elems, x)
 	  }
 	}
       );
-      { root = Internal.buildFromSorted(elems); size = elems.size() }
-    }
-    else {
-      foldLeft(set2, set1,
-	func (acc : Set<T>, elem : T) : Set<T> {
-	  if (Internal.contains(acc.root, compare, elem)) { Internal.delete(acc, compare, elem) } else { acc }
-	}
-      )
-    }
-   */
-    if (size(set1) < size(set2)) {
-      var elems : Set<T> = empty();
-      Internal.iterate(set1.root, func (x : T) {
-	  if (not Internal.contains(set2.root, compare, x)) {
-	    elems := add(elems, compare, x)
-	  }
-	}
-      );
-      elems
+      { root = Internal.buildFromSorted(elems); size = List.size(elems) }
     }
     else {
       foldLeft(set2, set1,
@@ -1158,12 +1120,11 @@ module {
       }
     };
 
-/* TODO: see above
     // build tree from elements arr[l]..arr[r-1]
-    public func buildFromSorted<V>(buf : Buffer.Buffer<V>) : Tree<V> {
+    public func buildFromSorted<V>(buf: List.List<V>) : Tree<V> {
       var maxDepth = 0;
       var maxSize = 1;
-      while (maxSize < buf.size()) {
+      while (maxSize < List.size(buf)) {
         maxDepth += 1;
         maxSize += maxSize + 1;
       };
@@ -1171,9 +1132,9 @@ module {
       func buildFromSortedHelper(l : Nat, r : Nat, depth : Nat) : Tree<V> {
         if (l + 1 == r) {
           if (depth == maxDepth) {
-            return #red(#leaf, buf.get(l), #leaf);
+            return #red(#leaf, List.get(buf, l), #leaf);
           } else {
-            return #black(#leaf, buf.get(l), #leaf);
+            return #black(#leaf, List.get(buf, l), #leaf);
           }
         };
         if (l >= r) {
@@ -1182,14 +1143,14 @@ module {
         let m = (l + r) / 2;
         return #black(
                   buildFromSortedHelper(l, m, depth+1),
-                  buf.get(m),
+                  List.get(buf, m),
                   buildFromSortedHelper(m+1, r, depth+1)
                 )
       };
-      buildFromSortedHelper(0, buf.size(), 0);
+      buildFromSortedHelper(0, List.size(buf), 0);
     };
-*/
-    type IterRep<T> = List.List<{ #tr : Tree<T>; #x : T }>;
+
+    type IterRep<T> = Types.Pure.List<{ #tr : Tree<T>; #x : T }>;
 
     type SetTraverser<T> = (Tree<T>, T, Tree<T>, IterRep<T>) -> IterRep<T>;
 

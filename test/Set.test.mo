@@ -30,7 +30,7 @@ run(
           let original = Set.empty<Nat>();
           let clone = Set.clone(original);
           Set.add(original, Nat.compare, 0);
-	  assert Set.size(original) == 1;
+          assert Set.size(original) == 1;
           Set.size(clone)
         },
         M.equals(T.nat(0))
@@ -351,12 +351,12 @@ run(
         "clone no alias",
         do {
           let original = Set.singleton<Nat>(0);
-	  assert Set.size(original) == 1;
+          assert Set.size(original) == 1;
           let clone = Set.clone(original);
           Set.delete(original, Nat.compare, 0);
-	  assert Set.size(original) == 0;
-  	  assert not Set.contains(original, Nat.compare, 0);
-	  assert Set.contains(clone, Nat.compare, 0);
+          assert Set.size(original) == 0;
+          assert not Set.contains(original, Nat.compare, 0);
+          assert Set.contains(clone, Nat.compare, 0);
           Set.size(clone)
         },
         M.equals(T.nat(1))
@@ -847,14 +847,14 @@ run(
           let original = smallSet();
           let copy = smallSet();
           let clone = Set.clone(original);
-	  let keys = Iter.toArray(Set.values(original));
-	  for (key in keys.values()) {
+          let keys = Iter.toArray(Set.values(original));
+          for (key in keys.values()) {
             Set.delete(original, Nat.compare, key);
-	  };
-	  for (key in keys.values()) {
+          };
+          for (key in keys.values()) {
             assert Set.contains(clone, Nat.compare, key) ==
-  	           Set.contains(copy, Nat.compare, key)
-	  };
+                   Set.contains(copy, Nat.compare, key)
+          };
           Set.size(clone)
         },
         M.equals(T.nat(smallSize))),

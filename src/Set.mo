@@ -2096,15 +2096,19 @@ module {
   };
 
   // Additional functionality compared to original source.
+
+  func cloneData<T>(data : Data<T>) : Data<T> {
+    { elements = VarArray.clone(data.elements);
+      var count = data.count };
+  };
+
   func cloneNode<T>(node : Node<T>) : Node<T> {
     switch node {
-      case (#leaf _) { node };
+      case (#leaf { data }) {
+        #leaf { data = cloneData(data) }
+      };
       case (#internal { data; children }) {
-        let clonedElements = VarArray.map<?T, ?T>(data.elements, func element { element });
-        let clonedData = {
-          elements = clonedElements;
-          var count = data.count
-        };
+        let clonedData = cloneData(data);
         let clonedChildren = VarArray.map<?Node<T>, ?Node<T>>(
           children,
           func child {

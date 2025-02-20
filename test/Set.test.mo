@@ -273,13 +273,32 @@ run(
         M.equals(T.nat(0))
       ),
       test(
-        "difference",
+        "addAll",
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([]), Nat.compare);
           let set2 = Set.clone(set1);
-          let set3 = Set.clone(set2);
-          let combined = Set.join(Iter.fromArray([set1, set2, set3]), Nat.compare);
-          Set.size(combined)
+          Set.addAll(set1, set2, Nat.compare);
+          Set.size(set1)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
+        "retainAll",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([]), Nat.compare);
+          let set2 = Set.clone(set1);
+          Set.retainAll(set1, set2, Nat.compare);
+          Set.size(set1)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
+        "deleteAll",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([]), Nat.compare);
+          let set2 = Set.clone(set1);
+          Set.deleteAll(set1, set2, Nat.compare);
+          Set.size(set1)
         },
         M.equals(T.nat(0))
       ),

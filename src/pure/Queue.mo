@@ -138,23 +138,28 @@ module Queue /* FIXME */ {
     };
 
   // helper to split the list evenly
-  public /* private FIXME */ func half<T>(list : Types.Pure.List<T>, fast : Types.Pure.List<T>) : (Types.Pure.List<T>, Types.Pure.List<T>) =
-    switch list {
-      case (null or (?(_, null))) (list, null);
-      case (?(h, ?(i, t))) {
-        switch fast {
-          case (null or ?(_, null)) (?(h, ?(i, null)), t);
-          case (?(_, ?(_, faster))) {
-            let (front, back) = half (t, faster);
-            (?(h, ?(i, front)), back)
-          }
-        }
+  func takeDrop<T>(list : Types.Pure.List<T>, n : Nat) : (Types.Pure.List<T>, Types.Pure.List<T>) =
+    if (n == 0) (null, list)
+    else switch list {
+      case null (null, null);
+      case (?(h, t)) {
+        let (f, b) = takeDrop(t, n - 1);
+        (?(h, f), b)
       }
     };
 
-  public /* private FIXME */ func rebalance<T>(list : Types.Pure.List<T>) : (Types.Pure.List<T>, Types.Pure.List<T>) {
-    let (front, back) = half (list, list);
-    (front, List.reverse back)
+  func check<T>(q : Queue<T>) : Queue<T> {
+    switch q {
+      case (null, n, r) {
+        let (a, b) = takeDrop(r, n / 2);
+        (List.reverse b, n, a)
+      };
+      case (f, n, null) {
+        let (a, b) = takeDrop(f, n / 2);
+        (a, n, List.reverse b)
+      };
+      case q q
+    }
   };
 
   /// Insert a new element on the front end of a queue.
@@ -174,9 +179,8 @@ module Queue /* FIXME */ {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> {
-    todo()
-  };
+  public func pushFront<T>((f, n, b) : Queue<T>, element : T) : Queue<T> =
+    check (?(element, f), n + 1, b);
 
   /// Insert a new element on the back end of a queue.
   /// Returns the new queue with all the elements of `queue`, followed by `element` on the back.
@@ -195,9 +199,8 @@ module Queue /* FIXME */ {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> {
-    todo()
-  };
+  public func pushBack<T>((f, n, b) : Queue<T>, element : T) : Queue<T> =
+    check (f, n + 1, ?(element, b));
 
   /// Remove the element on the front end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of

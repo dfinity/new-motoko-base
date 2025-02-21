@@ -31,12 +31,12 @@
 import PureSet "pure/Set";
 import Types "Types";
 import Order "Order";
+import Array "Array";
 import VarArray "VarArray";
 import Runtime "Runtime";
 import Stack "Stack";
 import Option "Option";
 import Iter "Iter";
-import List "List";
 import BTreeHelper "internal/BTreeHelper";
 
 module {

@@ -273,13 +273,14 @@ module Queue /* FIXME */ {
   public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) =
     if (queue.1 == 0) null
     else switch queue {
-      case (f, n, ?(i, b)) ?(i, (f, n - 1, b));
-      case (?(i, null), _, null) ?(i, (null, 0, null));
+      case (f, n, ?(i, b)) ?((f, n - 1, b), i);
+      case (?(i, null), _, null) ?((null, 0, null), i);
       case _ popBack (check queue)
     };
 
   public func fromIter<T>(iter : Iter.Iter<T>) : Queue<T> {
-    todo()
+    let list = List.fromIter iter;
+    check ((list, List.size list, null))
   };
 
   public func values<T>(queue : Queue<T>) : Iter.Iter<T> {

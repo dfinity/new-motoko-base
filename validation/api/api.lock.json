@@ -1158,6 +1158,7 @@
       "public func concat<T>(array1 : [var T], array2 : [var T]) : [var T]",
       "public func empty<T>() : [var T]",
       "public func enumerate<T>(array : [var T]) : Types.Iter<(Nat, T)>",
+      "public func equal<T>(array1 : [var T], array2 : [var T], equal : (T, T) -> Bool) : Bool",
       "public func filter<T>(array : [var T], f : T -> Bool) : [var T]",
       "public func filterMap<T, R>(array : [var T], f : T -> ?R) : [var R]",
       "public func find<T>(array : [var T], predicate : T -> Bool) : ?T",

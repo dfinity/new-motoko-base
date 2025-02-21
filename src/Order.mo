@@ -1,7 +1,6 @@
 /// Utilities for `Order` (comparison between two values).
 
 import Types "Types";
-import { todo } "Debug";
 
 module {
 

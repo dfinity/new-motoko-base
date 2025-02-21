@@ -40,30 +40,12 @@ import BTreeHelper "internal/BTreeHelper";
 module {
   let btreeOrder = 32; // Should be >= 4 and <= 512.
 
-  public type Node<T> = {
-    #leaf : Leaf<T>;
-    #internal : Internal<T>
-  };
-
-  public type Data<T> = {
-    elements : [var ?T];
-    var count : Nat
-  };
-
-  public type Internal<T> = {
-    data : Data<T>;
-    children : [var ?Node<T>]
-  };
-
-  public type Leaf<T> = {
-    data : Data<T>
-  };
-
-  public type Set<T> = {
-    var root : Node<T>;
-    var size : Nat
-  };
-
+  public type Set<T> = Types.Set.Set<T>;
+  type Node<T> = Types.Set.Node<T>;
+  type Data<T> = Types.Set.Data<T>;
+  type Internal<T> = Types.Set.Internal<T>;
+  type Leaf<T> = Types.Set.Leaf<T>;
+  
   // /// Convert the mutable set to an immutable set.
   // ///
   // /// Example:
@@ -192,7 +174,7 @@ module {
     elements[0] := ?element;
     {
       var root =
-        #leaf({ data = { elements; var count = 1 } });
+      #leaf({ data = { elements; var count = 1 } });
       var size = 1
     }
   };
@@ -389,13 +371,13 @@ module {
       };
       case (#promote({ element = promotedElement; leftChild; rightChild })) {
         let elements = VarArray.repeat<?T>(null, btreeOrder - 1);
-	elements[0] := ?promotedElement;
-	let children = VarArray.repeat<?Node<T>>(null, btreeOrder);
-	children[0] := ?leftChild;
-	children[1] := ?rightChild;
+        elements[0] := ?promotedElement;
+        let children = VarArray.repeat<?Node<T>>(null, btreeOrder);
+        children[0] := ?leftChild;
+        children[1] := ?rightChild;
         set.root := #internal({
           data = { elements; var count = 1 };
-          children;
+          children
         });
         // promotion always comes from inserting a new element, so increment the tree size counter
         set.size += 1
@@ -2077,8 +2059,10 @@ module {
   // Additional functionality compared to original source.
 
   func cloneData<T>(data : Data<T>) : Data<T> {
-    { elements = VarArray.clone(data.elements);
-      var count = data.count };
+    {
+      elements = VarArray.clone(data.elements);
+      var count = data.count
+    }
   };
 
   func cloneNode<T>(node : Node<T>) : Node<T> {

@@ -786,7 +786,7 @@ module {
   };
 
   /// Deletes all values in `iter` from the specified `set`.
-  /// This is different from `Set.intersect()` in that the function will trap if
+  /// This is different from `Set.diff()` in that the function will trap if
   /// `iter` contains an element that is not in `set`.
   ///
   /// Example:
@@ -815,7 +815,7 @@ module {
   };
 
   /// Removes all values in `set` aside from those contained in `iter`.
-  /// This is equivalent to `Set.diff()` but modifies the set in place.
+  /// This is equivalent to `Set.intersect()` but modifies the set in place.
   ///
   /// Example:
   /// ```motoko

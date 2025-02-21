@@ -849,15 +849,15 @@ run(
           let clone = Set.clone(original);
           let keys = Iter.toArray(Set.values(original));
           for (key in keys.values()) {
-            Set.delete(original, Nat.compare, key);
+            Set.delete(original, Nat.compare, key)
           };
           for (key in keys.values()) {
-            assert Set.contains(clone, Nat.compare, key) ==
-                   Set.contains(copy, Nat.compare, key)
+            assert Set.contains(clone, Nat.compare, key) == Set.contains(copy, Nat.compare, key)
           };
           Set.size(clone)
         },
-        M.equals(T.nat(smallSize))),
+        M.equals(T.nat(smallSize))
+      ),
       test(
         "iterate forward",
         Iter.toArray(Set.values(smallSet())),

@@ -44,14 +44,7 @@ module {
   /// Returns an iterator that yields all possible `Order` values:
   /// `#less`, `#equal`, `#greater`.
   public func allValues() : Types.Iter<Order> {
-    type State = {
-      #start;
-      #less;
-      #equal;
-      #greater;
-      #end
-    };
-    var state : State = #start;
+    var state : { #start; #less; #equal; #greater; #end } = #start;
     {
       next = func() : ?Order {
         switch state {

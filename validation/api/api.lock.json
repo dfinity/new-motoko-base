@@ -1214,7 +1214,7 @@
       "public func chunks<T>(list : List<T>, n : Nat) : List<List<T>>",
       "public func compare<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : Order.Order",
       "public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T>",
-      "public func contains<T>(list : List<T>, item : T) : Bool",
+      "public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool",
       "public func drop<T>(list : List<T>, n : Nat) : List<T>",
       "public func empty<T>() : List<T>",
       "public func filter<T>(list : List<T>, f : T -> Bool) : List<T>",

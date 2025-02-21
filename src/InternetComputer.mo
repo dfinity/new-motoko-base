@@ -1,7 +1,6 @@
 /// Low-level interface to the Internet Computer.
 
 import Prim "mo:⛔";
-import { todo } "Debug";
 
 module {
 
@@ -79,11 +78,11 @@ module {
   /// work();
   /// let diff : Nat64 = IC.performanceCounter(1) - c1;
   /// ```
-  public let performanceCounter : (counter : Nat32) -> (value : Nat64) = Prim.performanceCounter;
+  public let performanceCounter : (counter : Nat32) -> (value: Nat64) = Prim.performanceCounter;
 
   /// Returns the time (in nanoseconds from the epoch start) by when the update message should
   /// reply to the best effort message so that it can be received by the requesting canister.
   /// Queries and non-best-effort update messages return zero.
-  public func replyDeadline() : Nat = todo();
+  public func replyDeadline() : Nat = Prim.nat64ToNat(Prim.replyDeadline());
 
 }

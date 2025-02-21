@@ -166,7 +166,7 @@ module {
     {
       var root = #leaf({
         data = {
-          elements = VarArray.tabulate<?T>(btreeOrder - 1, func(index) { null });
+          elements = VarArray.repeat<?T>(null, btreeOrder - 1);
           var count = 0
         }
       });
@@ -190,22 +190,11 @@ module {
   /// Runtime: `O(1)`.
   /// Space: `O(1)`.
   public func singleton<T>(element : T) : Set<T> {
+    let elements = VarArray.repeat<?T>(null, btreeOrder - 1);
+    elements[0] := ?element;
     {
-      var root = #leaf({
-        data = {
-          elements = VarArray.tabulate<?T>(
-            btreeOrder - 1,
-            func(index) {
-              if (index == 0) {
-                ?element
-              } else {
-                null
-              }
-            }
-          );
-          var count = 1
-        }
-      });
+      var root =
+        #leaf({ data = { elements; var count = 1 } });
       var size = 1
     }
   };
@@ -401,24 +390,14 @@ module {
         // keep size
       };
       case (#promote({ element = promotedElement; leftChild; rightChild })) {
+        let elements = VarArray.repeat<?T>(null, btreeOrder - 1);
+	elements[0] := ?promotedElement;
+	let children = VarArray.repeat<?Node<T>>(null, btreeOrder);
+	children[0] := ?leftChild;
+	children[1] := ?rightChild;
         set.root := #internal({
-          data = {
-            elements = VarArray.tabulate<?T>(
-              btreeOrder - 1,
-              func(i) {
-                if (i == 0) { ?promotedElement } else { null }
-              }
-            );
-            var count = 1
-          };
-          children = VarArray.tabulate<?(Node<T>)>(
-            btreeOrder,
-            func(i) {
-              if (i == 0) { ?leftChild } else if (i == 1) { ?rightChild } else {
-                null
-              }
-            }
-          )
+          data = { elements; var count = 1 };
+          children;
         });
         // promotion always comes from inserting a new element, so increment the tree size counter
         set.size += 1
@@ -2191,15 +2170,19 @@ module {
   };
 
   // Additional functionality compared to original source.
+
+  func cloneData<T>(data : Data<T>) : Data<T> {
+    { elements = VarArray.clone(data.elements);
+      var count = data.count };
+  };
+
   func cloneNode<T>(node : Node<T>) : Node<T> {
     switch node {
-      case (#leaf _) { node };
+      case (#leaf { data }) {
+        #leaf { data = cloneData(data) }
+      };
       case (#internal { data; children }) {
-        let clonedElements = VarArray.map<?T, ?T>(data.elements, func element { element });
-        let clonedData = {
-          elements = clonedElements;
-          var count = data.count
-        };
+        let clonedData = cloneData(data);
         let clonedChildren = VarArray.map<?Node<T>, ?Node<T>>(
           children,
           func child {

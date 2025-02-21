@@ -814,42 +814,30 @@ module {
     }
   };
 
-  /// Removes all values in `set` aside from those contained in `iter`.
-  /// This is equivalent to `Set.intersect()` but modifies the set in place.
+  /// Removes all values in `set` that do not satisfy the given predicate.
+  /// Modifies the set in place.
   ///
   /// Example:
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  ///   let iter = Iter.fromArray([3, 4, 5]);
-  ///   Set.retainAll(set, Nat.compare, iter);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(difference)))); // => [1, 2]
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///   Set.retainAll(set, Nat.compare, func (n) { n % 2 == 0 });
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [2]
   /// }
   /// ```
-  ///
-  /// Runtime: `O(m * log(n))`.
-  /// Space: `O(1)` retained memory plus garbage, see the note below.
-  /// where `m` and `n` denote the number of values in `set` and `iter`, respectively,
-  /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
-    // TODO: optimize?
-    let setList = List.fromIter<T>(values(set));
-    let iterList = List.fromIter<T>(iter);
+  public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) {
+    let array = Array.fromIter<T>(values(set));
     deleteAll(
       set,
       compare,
-      Iter.filter(
-        List.values(setList),
-        func(element : T) : Bool = not List.any<T>(
-          iterList,
-          func(other : T) : Bool = compare(element, other) == #equal
-        )
-      )
+      Iter.filter<T>(array.values(), func(element : T) : Bool = not predicate(element))
     )
   };
 

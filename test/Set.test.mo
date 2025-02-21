@@ -1586,54 +1586,49 @@ run(
         M.equals(T.array<Nat>(T.natTestable, [1, 2, 3, 4]))
       ),
       test(
-        "retainAll both empty",
+        "retainAll empty",
         do {
-          let set1 = Set.empty<Nat>();
-          let set2 = Set.empty<Nat>();
-          Set.retainAll(set1, Nat.compare, Set.values(set2));
-          Set.size(set1)
+          let set = Set.empty<Nat>();
+          Set.retainAll(set, Nat.compare, func(n) { true });
+          Set.size(set)
         },
         M.equals(T.nat(0))
       ),
       test(
-        "retainAll first non-empty",
+        "retainAll all",
         do {
-          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          let set2 = Set.empty<Nat>();
-          Set.retainAll(set1, Nat.compare, Set.values(set2));
-          Set.size(set1)
+          let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          Set.retainAll(set, Nat.compare, func(n) { true });
+          Iter.toArray(Set.values(set))
+        },
+        M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
+      ),
+      test(
+        "retainAll none",
+        do {
+          let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          Set.retainAll(set, Nat.compare, func(n) { false });
+          Set.size(set)
         },
         M.equals(T.nat(0))
       ),
       test(
-        "retainAll second non-empty",
+        "retainAll even",
         do {
-          let set1 = Set.empty<Nat>();
-          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          Set.retainAll(set1, Nat.compare, Set.values(set2));
-          Set.size(set1)
+          let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3, 4]), Nat.compare);
+          Set.retainAll(set, Nat.compare, func(n) { n % 2 == 0 });
+          Iter.toArray(Set.values(set))
         },
-        M.equals(T.nat(0))
+        M.equals(T.array<Nat>(T.natTestable, [2, 4]))
       ),
       test(
-        "retainAll both non-empty disjoint",
+        "retainAll predicate",
         do {
-          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([4, 5, 6]), Nat.compare);
-          Set.retainAll(set1, Nat.compare, Set.values(set2));
-          Set.size(set1)
+          let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3, 4, 5]), Nat.compare);
+          Set.retainAll(set, Nat.compare, func(n) { n > 2 and n < 5 });
+          Iter.toArray(Set.values(set))
         },
-        M.equals(T.nat(0))
-      ),
-      test(
-        "retainAll both non-empty overlapping",
-        do {
-          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([2, 3, 4]), Nat.compare);
-          Set.retainAll(set1, Nat.compare, Set.values(set2));
-          Iter.toArray(Set.values(set1))
-        },
-        M.equals(T.array<Nat>(T.natTestable, [2, 3]))
+        M.equals(T.array<Nat>(T.natTestable, [3, 4]))
       ),
       test(
         "deleteAll both empty",

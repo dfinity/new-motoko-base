@@ -21,13 +21,14 @@
 /// `n` denotes the number of elements stored in the queue.
 
 import Iter "../Iter";
+import List "List";
 import Order "../Order";
 import Types "../Types";
 import { todo } "../Debug";
 
-module {
+module Queue /* FIXME */ {
   /// Double-ended queue data type.
-  public type Queue<T> = Types.Pure.Queue<T>;
+  public type Queue<T> = (Types.Pure.List<T>, Nat, Types.Pure.List<T>);//Types.Pure.Queue<T>;
 
   /// Create a new empty queue.
   ///
@@ -42,7 +43,7 @@ module {
   ///
   /// Space: `O(1)`.
   public func empty<T>() : Queue<T> =
-    ({var top = null; var size = 0}, {var top = null; var size = 0});
+    (null, 0, null);
 
   /// Determine whether a queue is empty.
   /// Returns true if `queue` is empty, otherwise `false`.
@@ -59,7 +60,7 @@ module {
   ///
   /// Space: `O(1)`.
   public func isEmpty<T>(queue : Queue<T>) : Bool =
-    queue.0.size + queue.1.size == 0;
+    queue.1 == 0;
 
   /// Create a new queue comprising a single element.
   ///
@@ -74,7 +75,7 @@ module {
   ///
   /// Space: `O(1)`.
   public func singleton<T>(item : T) : Queue<T> =
-    ({var top = null; var size = 0}, {var top = ?{ value = item; next = null }; var size = 0});
+    (null, 1, ?(item, null));
 
   /// Determine the number of elements contained in a queue.
   ///
@@ -90,7 +91,7 @@ module {
   ///
   /// Space: `O(1)`.
   public func size<T>(queue : Queue<T>) : Nat =
-    queue.0.size + queue.1.size;
+    queue.1;
 
   public func contains<T>(queue : Queue<T>, item : T) : Bool {
     todo()
@@ -110,9 +111,11 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekFront<T>(queue : Queue<T>) : ?T {
-    todo()
-  };
+  public func peekFront<T>(queue : Queue<T>) : ?T =
+    switch queue {
+      case ((?(x, _), _, _) or (_, _, ?(x, null))) ?x;
+      case _ null
+    };
 
   /// Inspect the optional element on the back end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, the back element of `queue`.
@@ -128,8 +131,30 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekBack<T>(queue : Queue<T>) : ?T {
-    todo()
+  public func peekBack<T>(queue : Queue<T>) : ?T  =
+    switch queue {
+      case ((_, _, ?(x, _)) or (?(x, null), _, _)) ?x;
+      case _ null
+    };
+
+  // helper to split the list evenly
+  public /* private FIXME */ func half<T>(list : Types.Pure.List<T>, fast : Types.Pure.List<T>) : (Types.Pure.List<T>, Types.Pure.List<T>) =
+    switch list {
+      case (null or (?(_, null))) (list, null);
+      case (?(h, ?(i, t))) {
+        switch fast {
+          case (null or ?(_, null)) (?(h, ?(i, null)), t);
+          case (?(_, ?(_, faster))) {
+            let (front, back) = half (t, faster);
+            (?(h, ?(i, front)), back)
+          }
+        }
+      }
+    };
+
+  public /* private FIXME */ func rebalance<T>(list : Types.Pure.List<T>) : (Types.Pure.List<T>, Types.Pure.List<T>) {
+    let (front, back) = half (list, list);
+    (front, List.reverse back)
   };
 
   /// Insert a new element on the front end of a queue.

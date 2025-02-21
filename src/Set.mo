@@ -28,13 +28,15 @@
 // Distributed under Apache 2.0 license.
 // With adjustments by the Motoko team.
 
-// import PureSet "pure/Set";
+import PureSet "pure/Set";
 import Types "Types";
 import Order "Order";
 import VarArray "VarArray";
 import Runtime "Runtime";
 import Stack "Stack";
 import Option "Option";
+import Iter "Iter";
+import List "List";
 import BTreeHelper "internal/BTreeHelper";
 
 module {
@@ -64,59 +66,59 @@ module {
     var size : Nat
   };
 
-  // /// Convert the mutable set to an immutable set.
-  // ///
-  // /// Example:
-  // /// ```motoko
-  // /// import Set "mo:base/Set";
-  // /// import PureSet "mo:base/pure/Set";
-  // /// import Nat "mo:base/Nat";
-  // ///
-  // /// persistent actor {
-  // ///   let set = Set.empty<Nat>();
-  // ///   Set.add(set, Nat.compare, 1);
-  // ///   Set.add(set, Nat.compare, 2);
-  // ///   Set.add(set, Nat.compare, 3);
-  // ///   let pureSet = Set.toPure(set);
-  // ///   assert(PureSet.contains(pureSet, 1));
-  // /// }
-  // /// ```
-  // ///
-  // /// Runtime: `O(n * log(n))`.
-  // /// Space: `O(n)` retained memory plus garbage, see the note below.
-  // /// where `n` denotes the number of elements stored in the set and
-  // /// assuming that the `compare` function implements an `O(1)` comparison.
-  // ///
-  // /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
-  // public func toPure<T>(set : Set<T>, compare : (T, T) -> Order.Order) : Pure.Set<T> {
-  //   PureSet.fromIter(values(set), compare);
-  // };
+  /// Convert the mutable set to an immutable set.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import PureSet "mo:base/pure/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///   let pureSet = Set.toPure(set);
+  ///   assert(PureSet.contains(pureSet, 1));
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(n)` retained memory plus garbage, see the note below.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
+  public func toPure<T>(set : Set<T>, compare : (T, T) -> Order.Order) : PureSet.Set<T> {
+    PureSet.fromIter(values(set), compare)
+  };
 
-  // /// Convert an immutable set to a mutable set.
-  // ///
-  // /// Example:
-  // /// ```motoko
-  // /// import PureSet "mo:base/pure/Set";
-  // /// import Set "mo:base/Set";
-  // /// import Nat "mo:base/Nat";
-  // ///
-  // /// persistent actor {
-  // ///   var pureSet = PureSet.empty<Nat>();
-  // ///   pureSet := PureSet.add(pureSet, Nat.compare, 1);
-  // ///   pureSet := PureSet.add(pureSet, Nat.compare, 2);
-  // ///   pureSet := PureSet.add(pureSet, Nat.compare, 3);
-  // ///   let mutableSet = Set.fromPure(pureSet);
-  // //    assert(Set.contains(mutableSet, 1));
-  // /// }
-  // /// ```
-  // ///
-  // /// Runtime: `O(n * log(n))`.
-  // /// Space: `O(n)`.
-  // /// where `n` denotes the number of elements stored in the set and
-  // /// assuming that the `compare` function implements an `O(1)` comparison.
-  // public func fromPure<T>(set : Pure.Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
-  //   fromIter(PureSet.values(set), compare)
-  // };
+  /// Convert an immutable set to a mutable set.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import PureSet "mo:base/pure/Set";
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   var pureSet = PureSet.empty<Nat>();
+  ///   pureSet := PureSet.add(pureSet, Nat.compare, 1);
+  ///   pureSet := PureSet.add(pureSet, Nat.compare, 2);
+  ///   pureSet := PureSet.add(pureSet, Nat.compare, 3);
+  ///   let mutableSet = Set.fromPure(pureSet);
+  //    assert(Set.contains(mutableSet, 1));
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n * log(n))`.
+  /// Space: `O(n)`.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  public func fromPure<T>(set : PureSet.Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
+    fromIter(PureSet.values(set), compare)
+  };
 
   /// Create a copy of the mutable set.
   ///
@@ -673,8 +675,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let union = Set.union(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(union))));
-  ///   // prints: `[1, 2, 3, 4, 5]`.
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(union)))); // => [1, 2, 3, 4, 5]
   /// }
   /// ```
   ///
@@ -706,8 +707,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let intersection = Set.intersect(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(intersection))));
-  ///   // prints: `[1, 2]`.
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(intersection)))); // => [1, 2]
   /// }
   /// ```
   ///
@@ -739,8 +739,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let difference = Set.diff(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(difference))));
-  ///   // prints: `[1, 2]`.
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(difference)))); // => [1, 2]
   /// }
   /// ```
   ///
@@ -756,6 +755,102 @@ module {
       }
     };
     result
+  };
+
+  /// Adds all elements from `iter` to the specified `set`.
+  /// This is equivalent to `Set.union()` but modifies the set in place.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  ///   let iter = Iter.fromArray([3, 4, 5]);
+  ///   Set.addAll(set, Nat.compare, iter);
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [1, 2, 3, 4, 5]
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(m * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `m` and `n` denote the number of elements in `set` and `iter`, respectively,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func addAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
+    for (element in iter) {
+      add(set, compare, element)
+    }
+  };
+
+  /// Deletes all values in `iter` from the specified `set`.
+  /// This is different from `Set.diff()` in that the function will trap if
+  /// `iter` contains an element that is not in `set`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
+  ///   let iter = Iter.fromArray([0, 2]);
+  ///   Set.deleteAll(set, Nat.compare, iter);
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [1]
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(m * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `m` and `n` denote the number of elements in `set` and `iter`, respectively,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
+    for (element in iter) {
+      delete(set, compare, element)
+    }
+  };
+
+  /// Removes all values in `set` aside from those contained in `iter`.
+  /// This is equivalent to `Set.intersect()` but modifies the set in place.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  ///   let iter = Iter.fromArray([3, 4, 5]);
+  ///   Set.retainAll(set, Nat.compare, iter);
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(difference)))); // => [1, 2]
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(m * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `m` and `n` denote the number of values in `set` and `iter`, respectively,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
+    // TODO: optimize?
+    let setList = List.fromIter<T>(values(set));
+    let iterList = List.fromIter<T>(iter);
+    deleteAll(
+      set,
+      compare,
+      Iter.filter(
+        List.values(setList),
+        func(element : T) : Bool = not List.any<T>(
+          iterList,
+          func(other : T) : Bool = compare(element, other) == #equal
+        )
+      )
+    )
   };
 
   /// Apply an operation on each element contained in the set.
@@ -2097,7 +2192,7 @@ module {
             }
           }
         );
-        # internal({
+        #internal({
           data = clonedData;
           children = clonedChildren
         })

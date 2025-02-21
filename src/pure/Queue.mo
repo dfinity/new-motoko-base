@@ -283,9 +283,8 @@ module Queue /* FIXME */ {
     check ((list, List.size list, null))
   };
 
-  public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
-    todo()
-  };
+  public func values<T>(queue : Queue<T>) : Iter.Iter<T> =
+    Iter.concat(List.values(queue.0), List.values(List.reverse(queue.2)));
 
   public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>) : Bool {
     todo()
@@ -304,15 +303,22 @@ module Queue /* FIXME */ {
   };
 
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
-    todo()
+    let (fr, n, b) = queue;
+    (List.map(fr, f), n, List.map(b, f))
   };
 
   public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T> {
-    todo()
+    let (fr, n, b) = queue;
+    let front = List.filter(fr, f);
+    let back = List.filter(b, f);
+    (front, List.size front + List.size back, back)
   };
 
   public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
-    todo()
+    let (fr, n, b) = queue;
+    let front = List.filterMap(fr, f);
+    let back = List.filterMap(b, f);
+    (front, List.size front + List.size back, back)
   };
 
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {

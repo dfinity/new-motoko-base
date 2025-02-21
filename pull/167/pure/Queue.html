@@ -14,7 +14,7 @@ that are dynamically size-balanced by splitting.</p>
 <ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-<div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = <a href="../Types.html#Pure.type.Queue"><span class="type">Types.Pure.Queue</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p>Double-ended queue data type.</p>
+<div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = (<a href="../Types.html#Pure.type.List"><span class="type">Types.Pure.List</span></a>&lt;<span class="type">T</span>&gt;, <span class="type">Nat</span>, <a href="../Types.html#Pure.type.List"><span class="type">Types.Pure.List</span></a>&lt;<span class="type">T</span>&gt;)</h4><p><p>Double-ended queue data type.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty queue.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
@@ -70,7 +70,7 @@ Queue.peekBack(queue) // =&gt; ?2</code></pre>
 
 <p>Runtime: <code>O(1)</code>.</p>
 <p>Space: <code>O(1)</code>.</p>
-</p></div><div class="declaration"><h4 class="function" id="pushFront"><code><span class="keyword">public func </span><span class="fnname">pushFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Insert a new element on the front end of a queue.
+</p></div><div class="declaration"><h4 class="function" id="pushFront"><code><span class="keyword">public func </span><span class="fnname">pushFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Insert a new element on the front end of a queue.
 Returns the new queue with <code>element</code> in the front followed by the elements of <code>queue</code>.</p>
 <p>This may involve dynamic rebalancing of the two, internally used lists.</p>
 <p>Example:</p>
@@ -81,7 +81,7 @@ Queue.pushFront(Queue.pushFront(Queue.empty&lt;Nat&gt;(), 2), 1) // queue with e
 <p>Runtime: <code>O(n)</code> worst-case, amortized to <code>O(1)</code>.</p>
 <p>Space: <code>O(n)</code> worst-case, amortized to <code>O(1)</code>.</p>
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-</p></div><div class="declaration"><h4 class="function" id="pushBack"><code><span class="keyword">public func </span><span class="fnname">pushBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Insert a new element on the back end of a queue.
+</p></div><div class="declaration"><h4 class="function" id="pushBack"><code><span class="keyword">public func </span><span class="fnname">pushBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Insert a new element on the back end of a queue.
 Returns the new queue with all the elements of <code>queue</code>, followed by <code>element</code> on the back.</p>
 <p>This may involve dynamic rebalancing of the two, internally used lists.</p>
 <p>Example:</p>

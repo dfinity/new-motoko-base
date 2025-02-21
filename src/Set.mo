@@ -858,16 +858,17 @@ module {
   /// where `m` and `n` denote the number of values in `set` and `iter`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
-    let list = List.fromIter<T>(iter);
+    // TODO: optimize?
+    let setList = List.fromIter<T>(values(set));
+    let iterList = List.fromIter<T>(iter);
     deleteAll(
       set,
       compare,
       Iter.filter(
-        values(set),
-        func(element : T) : Bool = not List.contains<T>(
-          list,
-          func(a : T, b : T) : Bool = compare(a, b) == #equal,
-          element
+        List.values(setList),
+        func(element : T) : Bool = not List.any<T>(
+          iterList,
+          func(other : T) : Bool = compare(element, other) == #equal
         )
       )
     )
@@ -2208,7 +2209,7 @@ module {
             }
           }
         );
-        # internal({
+        #internal({
           data = clonedData;
           children = clonedChildren
         })

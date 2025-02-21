@@ -7,6 +7,7 @@ import Nat "../src/Nat";
 import Int "../src/Int";
 import Runtime "../src/Runtime";
 import Array "../src/Array";
+import Debug "../src/Debug";
 
 let { run; test; suite } = Suite;
 
@@ -759,6 +760,40 @@ run(
         "size",
         Set.size<Nat>(smallSet()),
         M.equals(T.nat(smallSize))
+      ),
+      test(
+        "size after clone",
+        do {
+          let set1 = smallSet();
+          let set2 = Set.clone(set1);
+          Set.size(set1) == Set.size(set2)
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
+        "size after adding elements",
+        do {
+          let set = Set.empty<Nat>();
+          Set.add(set, Nat.compare, 1);
+          Set.add(set, Nat.compare, 2);
+          Set.add(set, Nat.compare, 3);
+          Set.size(set)
+        },
+        M.equals(T.nat(3))
+      ),
+      test(
+        "size after adding and removing elements",
+        do {
+          let set = Set.empty<Nat>();
+          Set.add(set, Nat.compare, 1);
+          Set.add(set, Nat.compare, 2);
+          Set.add(set, Nat.compare, 3);
+          Set.delete(set, Nat.compare, 1);
+          Set.delete(set, Nat.compare, 2);
+          Set.delete(set, Nat.compare, 3);
+          Set.size(set)
+        },
+        M.equals(T.nat(0))
       ),
       test(
         "is empty",
@@ -1582,7 +1617,7 @@ run(
         "deleteAll both non-empty equal",
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          let set2 = Set.clone(set1);
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           Set.deleteAll(set1, Nat.compare, Set.values(set2));
           Set.size(set1)
         },

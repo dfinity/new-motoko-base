@@ -231,9 +231,13 @@ module Queue /* FIXME */ {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) {
-    todo()
-  };
+  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) =
+    if (queue.1 == 0) null
+    else switch queue {
+      case (?(i, f), n, b) ?(i, (f, n - 1, b));
+      case (null, _, ?(i, null)) ?(i, (null, 0, null));
+      case _ popFront (check queue)
+    };
 
   /// Remove the element on the back end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of
@@ -266,9 +270,13 @@ module Queue /* FIXME */ {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) {
-    todo()
-  };
+  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) =
+    if (queue.1 == 0) null
+    else switch queue {
+      case (f, n, ?(i, b)) ?(i, (f, n - 1, b));
+      case (?(i, null), _, null) ?(i, (null, 0, null));
+      case _ popBack (check queue)
+    };
 
   public func fromIter<T>(iter : Iter.Iter<T>) : Queue<T> {
     todo()

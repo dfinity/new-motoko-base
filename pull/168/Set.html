@@ -446,26 +446,21 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="retainAll"><code><span class="keyword">public func </span><span class="fnname">retainAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>)</code></h4><p><p>Removes all values in <code>set</code> aside from those contained in <code>iter</code>.
-This is equivalent to <code>Set.intersect()</code> but modifies the set in place.</p>
+</p></div><div class="declaration"><h4 class="function" id="retainAll"><code><span class="keyword">public func </span><span class="fnname">retainAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span><br/>)</code></h4><p><p>Removes all values in <code>set</code> that do not satisfy the given predicate.
+Modifies the set in place.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  let iter = Iter.fromArray([3, 4, 5]);
-  Set.retainAll(set, Nat.compare, iter);
-  Debug.print(debug_show(Iter.toArray(Set.values(difference)))); // =&gt; [1, 2]
-}</code></pre>
-
-<p>Runtime: <code>O(m * log(n))</code>.
-Space: <code>O(1)</code> retained memory plus garbage, see the note below.
-where <code>m</code> and <code>n</code> denote the number of values in <code>set</code> and <code>iter</code>, respectively,
-and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">operation</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Apply an operation on each element contained in the set.
+  let set = Set.empty&lt;Nat&gt;();
+  Set.add(set, Nat.compare, 1);
+  Set.add(set, Nat.compare, 2);
+  Set.add(set, Nat.compare, 3);
+  Set.retainAll(set, Nat.compare, func (n) { n % 2 == 0 });
+  Debug.print(debug_show(Iter.toArray(Set.values(set)))); // =&gt; [2]
+}</code></pre></p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">operation</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Apply an operation on each element contained in the set.
 The operation is applied in ascending order of the elements.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;

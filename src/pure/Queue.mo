@@ -293,16 +293,20 @@ module Queue /* FIXME */ {
   };
 
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
-    todo()
+    for (item in values queue)
+      if (not (predicate item)) return false;
+    return true
   };
 
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
-    todo()
+    for (item in values queue)
+      if (predicate item) return true;
+    return false
   };
 
-  public func forEach<T>(queue : Queue<T>, f : T -> ()) {
-    todo()
-  };
+  public func forEach<T>(queue : Queue<T>, f : T -> ()) =
+    for (item in values queue)
+      f item;
 
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
     let (fr, n, b) = queue;
@@ -310,7 +314,7 @@ module Queue /* FIXME */ {
   };
 
   public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T> {
-    let (fr, n, b) = queue;
+    let (fr, _, b) = queue;
     let front = List.filter(fr, f);
     let back = List.filter(b, f);
     (front, List.size front + List.size back, back)
@@ -328,7 +332,16 @@ module Queue /* FIXME */ {
   };
 
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    todo()
-  };
+    let (i1, i2) = (values queue1, values queue2);
+    loop switch (i1.next(), i2.next()) {
+      case (null, null) return #equal;
+      case (null, _) return #less;
+      case (_, null) return #greater;
+      case (?v1, ?v2) switch (compare(v1, v2)) {
+        case (#equal) ();
+        case c return c
+      }
+    }
+  }
 
 }

@@ -334,13 +334,13 @@ module Queue /* FIXME */ {
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order {
     let (i1, i2) = (values queue1, values queue2);
     loop switch (i1.next(), i2.next()) {
-      case (null, null) return #equal;
-      case (null, _) return #less;
-      case (_, null) return #greater;
       case (?v1, ?v2) switch (compare(v1, v2)) {
         case (#equal) ();
         case c return c
-      }
+      };
+      case (null, null) return #equal;
+      case (null, _) return #less;
+      case (_, null) return #greater
     }
   }
 

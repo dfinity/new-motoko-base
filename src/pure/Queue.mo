@@ -90,8 +90,10 @@ module Queue /* FIXME */ {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func size<T>(queue : Queue<T>) : Nat =
-    queue.1;
+  public func size<T>(queue : Queue<T>) : Nat {
+    debug assert queue.1 == List.size(queue.0) + List.size(queue.2);
+    queue.1
+  };
 
   public func contains<T>(queue : Queue<T>, item : T) : Bool {
     todo()

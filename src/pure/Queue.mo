@@ -27,8 +27,10 @@ import Types "../Types";
 import { todo } "../Debug";
 
 module Queue /* FIXME */ {
+  type List<T> = Types.Pure.List<T>;
+
   /// Double-ended queue data type.
-  public type Queue<T> = (Types.Pure.List<T>, Nat, Types.Pure.List<T>);//Types.Pure.Queue<T>;
+  public type Queue<T> = (List<T>, Nat, List<T>);//Types.Pure.Queue<T>;
 
   /// Create a new empty queue.
   ///
@@ -140,7 +142,7 @@ module Queue /* FIXME */ {
     };
 
   // helper to split the list evenly
-  func takeDrop<T>(list : Types.Pure.List<T>, n : Nat) : (Types.Pure.List<T>, Types.Pure.List<T>) =
+  func takeDrop<T>(list : List<T>, n : Nat) : (List<T>, List<T>) =
     if (n == 0) (null, list)
     else switch list {
       case null (null, null);

@@ -158,7 +158,7 @@ do {
   let actual = [var 0, 0, 0];
   let expected = [1, 2, 3];
 
-  Iter.iterate<Nat>(_actual, func(x, i) { actual[i] := x });
+  Iter.forEach<Nat>(_actual, func(x, i) = actual[i] := x);
 
   for (i in actual.keys()) {
     assert (actual[i] == expected[i])
@@ -458,14 +458,14 @@ let reverse = Suite.suite(
   ]
 );
 
-let iterate = Suite.suite(
-  "iterate",
+let forEach = Suite.suite(
+  "forEach",
   [
     Suite.test(
       "empty list",
       do {
         var t = "";
-        List.iterate<Nat>(List.empty<Nat>(), func n { t #= debug_show n });
+        List.forEach<Nat>(List.empty<Nat>(), func n = t #= debug_show n);
         t
       },
       M.equals(T.text(""))
@@ -474,7 +474,7 @@ let iterate = Suite.suite(
       "singleton",
       do {
         var t = "";
-        List.iterate<Nat>(?(3, null), func n { t #= debug_show n });
+        List.forEach<Nat>(?(3, null), func n = t #= debug_show n);
         t
       },
       M.equals(T.text("3"))
@@ -483,7 +483,7 @@ let iterate = Suite.suite(
       "threesome",
       do {
         var t = "";
-        List.iterate<Nat>(?(1, ?(2, ?(3, null))), func n { t #= debug_show n });
+        List.forEach<Nat>(?(1, ?(2, ?(3, null))), func n = t #= debug_show n);
         t
       },
       M.equals(T.text("123"))
@@ -708,12 +708,12 @@ let flatten = Suite.suite(
   ]
 );
 
-let make = Suite.suite(
-  "make",
+let singleton = Suite.suite(
+  "singleton",
   [
     Suite.test(
-      "make",
-      List.make<Int>(0),
+      "singleton",
+      List.singleton<Int>(0),
       M.equals(T.list<Int>(T.intTestable, ?(0, null)))
     ),
   ]

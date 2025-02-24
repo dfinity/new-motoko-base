@@ -720,9 +720,30 @@ module List /*FIXME: remove?*/ {
     }
   };
 
-  public func equal<T>(list1 : List<T>, list2 : List<T>) : Bool {
-    todo()
-  };
+  /// Compare two lists for equality using lexicographic ordering specified by argument function `f`.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat "mo:base/Nat";
+  ///
+  /// List.equal<Nat>(
+  ///   ?(1, ?(2, null)),
+  ///   ?(3, ?(4, null)),
+  ///   Nat.equal
+  /// ) // => false
+  /// ```
+  ///
+  /// Runtime: O(min(size(list1), size(list2)))
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that argument `equal` runs in O(1) time and space.
+  public func equal<T>(list1 : List<T>, list2 : List<T>, f : (T, T) -> Bool) : Bool =
+    switch (list1, list2) {
+      case (?(h1, t1), ?(h2, t2)) f(h1, h2) and equal(t1, t2, f);
+      case (null, null) true;
+      case _ false
+    };
 
   /// Convert an array into a list.
   ///

@@ -188,20 +188,20 @@ func run_all_props(range: (Nat, Nat), size: Nat, set_samples: Nat, query_samples
         }),
       ]),
 
-      suite("delete", [
-        prop_with_elem("not contains(s, c, e) ==> delete(s, c, e) == s", func (s, e) {
+      suite("remove", [
+        prop_with_elem("not contains(s, c, e) ==> remove(s, c, e) == s", func (s, e) {
           if (not Set.contains(s, c, e)) {
-            SetMatcher(s).matches(Set.delete(s, c, e))
+            SetMatcher(s).matches(Set.remove(s, c, e))
           } else { true }
         }),
-        prop_with_elem("delete(add(s, c, e), c, e) == s", func (s, e) {
+        prop_with_elem("remove(add(s, c, e), c, e) == s", func (s, e) {
           if (not Set.contains(s, c, e)) {
-            SetMatcher(s).matches(Set.delete(Set.add(s, c, e), c, e))
+            SetMatcher(s).matches(Set.remove(Set.add(s, c, e), c, e))
           } else { true }
         }),
-        prop_with_elem("delete(delete(s, c, e), c, e)) == delete(s, c, e)", func (s, e) {
-          let s1 = Set.delete(Set.delete(s, c, e), c, e);
-          let s2 = Set.delete(s, c, e);
+        prop_with_elem("remove(remove(s, c, e), c, e)) == remove(s, c, e)", func (s, e) {
+          let s1 = Set.remove(Set.remove(s, c, e), c, e);
+          let s2 = Set.remove(s, c, e);
           SetMatcher(s2).matches(s1)
         })
       ]),
@@ -210,8 +210,8 @@ func run_all_props(range: (Nat, Nat), size: Nat, set_samples: Nat, query_samples
         prop_with_elem("size(add(s, c, e)) == size(s) + int(not contains(s, c, e))", func (s, e) {
           Set.size(Set.add(s, c, e)) == Set.size(s) + (if (not Set.contains(s, c, e)) {1} else {0})
         }),
-        prop_with_elem("size(delete(s, c, e)) + int(contains(s, c, e)) == size(s)", func (s, e) {
-          Set.size(Set.delete(s, c, e)) + (if (Set.contains(s, c, e)) {1} else {0}) == Set.size(s)
+        prop_with_elem("size(remove(s, c, e)) + int(contains(s, c, e)) == size(s)", func (s, e) {
+          Set.size(Set.remove(s, c, e)) + (if (Set.contains(s, c, e)) {1} else {0}) == Set.size(s)
         })
       ]),
 
@@ -267,12 +267,12 @@ func run_all_props(range: (Nat, Nat), size: Nat, set_samples: Nat, query_samples
         prop("isSubset(empty(), s, c)", func (s) {
           Set.isSubset(Set.empty(), s, c)
         }),
-        prop_with_elem("isSubset(delete(s, c, e), s, c)", func (s, e) {
-          Set.isSubset(Set.delete(s, c, e), s, c)
+        prop_with_elem("isSubset(remove(s, c, e), s, c)", func (s, e) {
+          Set.isSubset(Set.remove(s, c, e), s, c)
         }),
-        prop_with_elem("contains(s, e) ==> not isSubset(s, delete(s, e))", func (s, e) {
+        prop_with_elem("contains(s, e) ==> not isSubset(s, remove(s, e))", func (s, e) {
           if (Set.contains(s, c, e)) {
-            not Set.isSubset(s, Set.delete(s, c, e), c)
+            not Set.isSubset(s, Set.remove(s, c, e), c)
           } else { true }
         }),
         prop_with_elem("isSubset(s  add(s, c, e), c)", func (s, e) {

@@ -49,7 +49,7 @@ func containsAll (set : Set.Set<Nat>, elems : [Nat]) {
 func clear(initialSet : Set.Set<Nat>) : Set.Set<Nat> {
   var set = initialSet;
   for (elem in Set.values(initialSet)) {
-    let newSet = Set.delete(set, Nat.compare, elem);
+    let newSet = Set.remove(set, Nat.compare, elem);
     set := newSet;
     Set.assertValid(set, Nat.compare)
   };
@@ -240,8 +240,8 @@ run(
         M.equals(T.bool(true))
       ),
       test(
-        "delete",
-        Set.delete(buildTestSet(), Nat.compare, 0),
+        "remove",
+        Set.remove(buildTestSet(), Nat.compare, 0),
         SetMatcher([])
       ),
       test(
@@ -551,7 +551,7 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
       "compare less key",
       do {
 	let set1 = buildTestSet() |>
-	  Set.delete(_, Nat.compare, Set.size(_) - 1 : Nat);
+	  Set.remove(_, Nat.compare, Set.size(_) - 1 : Nat);
 	let set2 = buildTestSet();
 	assert (Set.compare(set1, set2, Nat.compare) == #less);
 	true
@@ -573,7 +573,7 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] =
       do {
 	let set1 = buildTestSet();
 	let set2 = buildTestSet() |>
-	  Set.delete(_, Nat.compare, Set.size(_) - 1);
+	  Set.remove(_, Nat.compare, Set.size(_) - 1);
 
 	assert (Set.compare(set1, set2, Nat.compare) == #greater);
 	true
@@ -683,7 +683,7 @@ run(
     "repeated operations",
     [
       test(
-        "repeated insert",
+        "repeated add",
         do {
           var set = buildTestSet();
           assert (Set.contains(set, Nat.compare, 1));
@@ -693,14 +693,35 @@ run(
         M.equals(T.nat(3))
       ),
       test(
+        "repeated remove",
+        do {
+          var set = buildTestSet();
+          set := Set.remove(set, Nat.compare, 1);
+          Set.remove(set, Nat.compare, 1)
+        },
+        SetMatcher([0, 2])
+      ),
+      test(
+        "repeated insert",
+        do {
+          var set = buildTestSet();
+          assert (Set.contains(set, Nat.compare, 1));
+          let null = Set.insert(set, Nat.compare, 1);
+	  true
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
         "repeated delete",
         do {
           var set = buildTestSet();
-          set := Set.delete(set, Nat.compare, 1);
-          Set.delete(set, Nat.compare, 1)
+          let ?set1 = Set.delete(set, Nat.compare, 1);
+          let null = Set.delete(set1, Nat.compare, 1);
+	  true
         },
-        SetMatcher([0, 2])
+        M.equals(T.bool(true))
       )
+
     ]
   )
 );

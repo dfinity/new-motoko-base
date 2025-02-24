@@ -674,7 +674,7 @@ run(
         do {
           let set1 = Set.singleton<Nat>(0);
           let set2 = Set.singleton<Nat>(1);
-          let intersection = Set.intersect(set1, set2, Nat.compare);
+          let intersection = Set.intersection(set1, set2, Nat.compare);
           Iter.toArray(Set.values(intersection))
         },
         M.equals(
@@ -689,7 +689,7 @@ run(
         do {
           let set1 = Set.singleton<Nat>(1);
           let set2 = Set.singleton<Nat>(1);
-          let intersection = Set.intersect(set1, set2, Nat.compare);
+          let intersection = Set.intersection(set1, set2, Nat.compare);
           Iter.toArray(Set.values(intersection))
         },
         M.equals(
@@ -704,7 +704,7 @@ run(
         do {
           let set1 = Set.singleton<Nat>(1);
           let set2 = Set.singleton<Nat>(1);
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Iter.toArray(Set.values(difference))
         },
         M.equals(
@@ -719,7 +719,7 @@ run(
         do {
           let set1 = Set.singleton<Nat>(0);
           let set2 = Set.singleton<Nat>(1);
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Iter.toArray(Set.values(difference))
         },
         M.equals(
@@ -1178,7 +1178,7 @@ run(
           Set.add(set1, Int.compare, -1);
           let set2 = Set.map<Nat, Int>(smallSet(), Int.compare, func(number) { -number });
           Set.add(set2, Int.compare, 1);
-          let intersection = Set.intersect(set1, set2, Int.compare);
+          let intersection = Set.intersection(set1, set2, Int.compare);
           Iter.toArray(Set.values(intersection))
         },
         M.equals(
@@ -1196,7 +1196,7 @@ run(
           Set.delete(set2, Nat.compare, 0);
           Set.delete(set2, Nat.compare, 1);
           Set.delete(set2, Nat.compare, 2);
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Iter.toArray(Set.values(difference))
         },
         M.equals(
@@ -1440,7 +1440,7 @@ run(
         do {
           let set1 = Set.empty<Nat>();
           let set2 = Set.empty<Nat>();
-          let intersection = Set.intersect(set1, set2, Nat.compare);
+          let intersection = Set.intersection(set1, set2, Nat.compare);
           Set.size(intersection)
         },
         M.equals(T.nat(0))
@@ -1450,7 +1450,7 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.empty<Nat>();
-          let intersection = Set.intersect(set1, set2, Nat.compare);
+          let intersection = Set.intersection(set1, set2, Nat.compare);
           Set.size(intersection)
         },
         M.equals(T.nat(0))
@@ -1460,7 +1460,7 @@ run(
         do {
           let set1 = Set.empty<Nat>();
           let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          let intersection = Set.intersect(set1, set2, Nat.compare);
+          let intersection = Set.intersection(set1, set2, Nat.compare);
           Set.size(intersection)
         },
         M.equals(T.nat(0))
@@ -1470,7 +1470,7 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([4, 5, 6]), Nat.compare);
-          let intersection = Set.intersect(set1, set2, Nat.compare);
+          let intersection = Set.intersection(set1, set2, Nat.compare);
           Set.size(intersection)
         },
         M.equals(T.nat(0))
@@ -1480,7 +1480,7 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([2, 3, 4]), Nat.compare);
-          let intersection = Set.intersect(set1, set2, Nat.compare);
+          let intersection = Set.intersection(set1, set2, Nat.compare);
           Iter.toArray(Set.values(intersection))
         },
         M.equals(T.array<Nat>(T.natTestable, [2, 3]))
@@ -1490,7 +1490,7 @@ run(
         do {
           let set1 = Set.empty<Nat>();
           let set2 = Set.empty<Nat>();
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Set.size(difference)
         },
         M.equals(T.nat(0))
@@ -1500,7 +1500,7 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.empty<Nat>();
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Iter.toArray(Set.values(difference))
         },
         M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
@@ -1510,7 +1510,7 @@ run(
         do {
           let set1 = Set.empty<Nat>();
           let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Set.size(difference)
         },
         M.equals(T.nat(0))
@@ -1520,7 +1520,7 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([4, 5, 6]), Nat.compare);
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Iter.toArray(Set.values(difference))
         },
         M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
@@ -1530,7 +1530,7 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([2, 3, 4]), Nat.compare);
-          let difference = Set.diff(set1, set2, Nat.compare);
+          let difference = Set.difference(set1, set2, Nat.compare);
           Iter.toArray(Set.values(difference))
         },
         M.equals(T.array<Nat>(T.natTestable, [1]))

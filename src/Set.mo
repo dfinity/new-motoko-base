@@ -688,7 +688,7 @@ module {
   /// persistent actor {
   ///   let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  ///   let intersection = Set.intersect(set1, set2, Nat.compare);
+  ///   let intersection = Set.intersection(set1, set2, Nat.compare);
   ///   Debug.print(debug_show(Iter.toArray(Set.values(intersection)))); // => [1, 2]
   /// }
   /// ```
@@ -697,7 +697,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of elements stored in the sets `set1` and `set2`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func intersect<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
+  public func intersection<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = empty<T>();
     for (element in values(set1)) {
       if (contains(set2, compare, element)) {
@@ -720,7 +720,7 @@ module {
   /// persistent actor {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
-  ///   let difference = Set.diff(set1, set2, Nat.compare);
+  ///   let difference = Set.difference(set1, set2, Nat.compare);
   ///   Debug.print(debug_show(Iter.toArray(Set.values(difference)))); // => [1, 2]
   /// }
   /// ```
@@ -729,7 +729,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of elements stored in the sets `set1` and `set2`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func diff<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
+  public func difference<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let result = empty<T>();
     for (element in values(set1)) {
       if (not contains(set2, compare, element)) {
@@ -768,7 +768,7 @@ module {
   };
 
   /// Deletes all values in `iter` from the specified `set`.
-  /// This is different from `Set.diff()` in that the function will trap if
+  /// This is different from `Set.difference()` in that the function will trap if
   /// `iter` contains an element that is not in `set`.
   ///
   /// Example:

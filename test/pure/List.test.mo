@@ -2,7 +2,7 @@ import Suite "mo:matchers/Suite";
 import M "mo:matchers/Matchers";
 import T "mo:matchers/Testable";
 
-import List "../../src/List";
+import List "../../src/pure/List";
 import Nat "../../src/Nat";
 import Order "../../src/Order";
 import Debug "../../src/Debug";

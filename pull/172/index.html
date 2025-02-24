@@ -308,26 +308,29 @@ persistent actor {
 <code>n</code> denotes the number of elements stored in the set.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>A mutable stack data structure.
 Elements can be pushed on top of the stack
 and removed from top of the stack (LIFO).</p>
-<p>import Stack &quot;Stack&quot;;
-import Debug &quot;Debug&quot;;</p>
-<p>persistent actor {
- let levels = Stack.empty&lt;Text&gt;();
- Stack.push(levels, &quot;Inner&quot;);
- Stack.push(levels, &quot;Middle&quot;);
- Stack.push(levels, &quot;Outer&quot;);
- label iteration loop {</p>
-<pre><code>switch (Stack.pop(levels)) {
-  case null { break iteration };
-  case (?name) {
-    Debug.print(name)
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Stack &quot;Stack&quot;;
+import Debug &quot;Debug&quot;;
+
+persistent actor {
+  let levels = Stack.empty&lt;Text&gt;();
+  Stack.push(levels, &quot;Inner&quot;);
+  Stack.push(levels, &quot;Middle&quot;);
+  Stack.push(levels, &quot;Outer&quot;);
+  label iteration loop {
+    switch (Stack.pop(levels)) {
+      case null { break iteration };
+      case (?name) {
+        Debug.print(name)
+      }
+    }
   }
-}</code></pre><p> }
- // prints:
- // <code>Outer</code>
- // <code>Middle</code>
- // <code>Inner</code>
-}
-```</p>
+  // prints:
+  // `Outer`
+  // `Middle`
+  // `Inner`
+}</code></pre>
+
 <p>The internal implementation is a singly-linked list.</p>
 <p>Performance:</p>
 <ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operation.</li><li>Space: <code>O(n)</code>.

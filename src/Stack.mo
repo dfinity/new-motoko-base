@@ -125,7 +125,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   Stack.clear(stack);
   ///   // stack is now empty
   /// }
@@ -145,7 +145,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let original = Stack.fromIter([1, 2, 3].vals());
+  ///   let original = Stack.fromIter([1, 2, 3].values());
   ///   let copy = Stack.clone(original);
   /// }
   /// ```
@@ -187,7 +187,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.size(stack) == 3);
   /// }
   /// ```
@@ -207,7 +207,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.contains(stack, 2, Nat.equal));
   /// }
   /// ```
@@ -256,7 +256,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.peek(stack) == ?3);
   /// }
   /// ```
@@ -278,7 +278,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.pop(stack) == ?3);
   /// }
   /// ```
@@ -305,7 +305,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.get(stack, 1) == ?2);
   /// }
   /// ```
@@ -338,7 +338,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   Stack.reverse(stack);
   ///   // stack now contains [1, 2, 3] (top to bottom)
   /// }
@@ -365,7 +365,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   for (element in Stack.values(stack)) {
   ///     // Iterates: 3, 2, 1
   ///   };
@@ -398,7 +398,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([2, 4, 6].vals());
+  ///   let stack = Stack.fromIter([2, 4, 6].values());
   ///   assert(Stack.all(stack, func(n) = n % 2 == 0));
   /// }
   /// ```
@@ -423,7 +423,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.any(stack, func(n) = n == 2));
   /// }
   /// ```
@@ -449,7 +449,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   Stack.forEach(stack, func(n) { Debug.print(debug_show(n)) });
   /// }
   /// ```
@@ -472,7 +472,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   let doubled = Stack.map(stack, func(n) = n * 2);
   ///   // doubled contains [6, 4, 2] (top to bottom)
   /// }
@@ -499,7 +499,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3, 4].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3, 4].values());
   ///   let evens = Stack.filter(stack, func(n) = n % 2 == 0);
   ///   // evens contains [4, 2] (top to bottom)
   /// }
@@ -529,7 +529,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3, 4].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3, 4].values());
   ///   let evenDoubled = Stack.filterMap(stack, func(n) =
   ///     if (n % 2 == 0) ?(n * 2) else null
   ///   );
@@ -563,8 +563,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack1 = Stack.fromIter([1, 2, 3].vals());
-  ///   let stack2 = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack1 = Stack.fromIter([1, 2, 3].values());
+  ///   let stack2 = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.equal(stack1, stack2, Nat.equal));
   /// }
   /// ```
@@ -604,7 +604,7 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   // stack contains [3, 2, 1] (top to bottom)
   /// }
   /// ```
@@ -629,7 +629,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack = Stack.fromIter([1, 2, 3].values());
   ///   let text = Stack.toText(stack, Nat.toText);
   ///   // text = "stack(3, 2, 1)"
   /// }
@@ -658,8 +658,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack1 = Stack.fromIter([1, 2].vals());
-  ///   let stack2 = Stack.fromIter([1, 2, 3].vals());
+  ///   let stack1 = Stack.fromIter([1, 2].values());
+  ///   let stack2 = Stack.fromIter([1, 2, 3].values());
   ///   assert(Stack.compare(stack1, stack2, Nat.compare) == #less);
   /// }
   /// ```

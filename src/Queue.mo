@@ -1,4 +1,4 @@
-/// An imperative double-ended queue of elements.
+/// A mutable double-ended queue of elements.
 /// The queue has two ends, front and back.
 /// Elements can be added and removed at the two ends.
 ///
@@ -26,18 +26,18 @@
 ///     }
 ///   }
 ///   // prints:
-///   // `"Antipasta"`
-///   // `"Spaghetti"`
-///   // `"Bistecca"`
-///   // `"Dolce"`
+///   // `Antipasta`
+///   // `Spaghetti`
+///   // `Bistecca`
+///   // `Dolce`
 /// }
 /// ```
 ///
 /// The internal implementation is a doubly-linked list.
 ///
 /// Performance:
-/// * Runtime: `O(1)` amortized costs, `O(n)` worst case cost per single call.
-/// * Space: `O(1)` amortized costs, `O(n)` worst case cost per single call.
+/// * Runtime: `O(1)` for push, pop, and peek operations.
+/// * Space: `O(n)`.
 /// `n` denotes the number of elements stored in the queue.
 
 import Iter "Iter";
@@ -49,10 +49,12 @@ module {
 
   type Node<T> = Types.Queue.Node<T>;
 
-  // public func toPure<T>(queue : Queue<T>) : PureQueue.Queue<T> = queue.pure;
+  // public func toPure<T>(queue : Queue<T>) : PureQueue.Queue<T> {
+  //   todo();
+  // };
 
   // public func fromPure<T>(queue : PureQueue.Queue<T>) : Queue<T> {
-  //   { var pure = queue }
+  //   todo();
   // };
 
   /// Create a new empty mutable double-ended queue.

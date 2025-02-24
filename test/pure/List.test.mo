@@ -611,33 +611,33 @@ let partition = Suite.suite(
 );
 
 
-let mapFilter = Suite.suite(
-  "mapFilter",
+let filterMap = Suite.suite(
+  "filterMap",
   [
     Suite.test(
       "empty list",
-      List.mapFilter<Nat, Text>(
+      List.filterMap<Nat, Text>(
        List.empty<Nat>(),
        func n { if (n % 2 == 0) ?(debug_show n) else null }),
       M.equals(T.list(T.textTestable, null : List.List<Text>))
     ),
     Suite.test(
       "singleton",
-      List.mapFilter<Nat, Text>(
+      List.filterMap<Nat, Text>(
         ?(3, null),
        func n { if (n % 2 == 0) ?(debug_show n) else null }),
       M.equals(T.list(T.textTestable, null : List.List<Text>))
     ),
     Suite.test(
       "threesome",
-      List.mapFilter<Nat, Text>(
+      List.filterMap<Nat, Text>(
         ?(1, ?(2, ?(3, null))),
        func n { if (n % 2 == 0) ?(debug_show n) else null }),
       M.equals(T.list(T.textTestable, ?("2", null)))
     ),
     Suite.test(
       "foursome",
-      List.mapFilter<Nat, Text>(
+      List.filterMap<Nat, Text>(
         ?(1, ?(2, ?(3, ?(4, null)))),
         func n { if (n % 2 == 0) ?(debug_show n) else null }),
       M.equals(T.list(T.textTestable, ?("2", ?("4", null))))
@@ -1318,9 +1318,7 @@ let chunks = Suite.suite(
   [
     Suite.test(
       "five-even-split",
-      List.chunks<Nat>(5,
-        List.tabulate<Nat>(10, func i = i),
-      ),
+      List.chunks<Nat>(List.tabulate<Nat>(10, func i = i), 5),
       M.equals(
         T.list(
           T.listTestable(T.natTestable),
@@ -1329,9 +1327,7 @@ let chunks = Suite.suite(
       )),
     Suite.test(
       "five-remainder",
-      List.chunks<Nat>(5,
-        List.tabulate<Nat>(13, func i = i),
-      ),
+      List.chunks<Nat>(List.tabulate<Nat>(13, func i = i), 5),
       M.equals(
         T.list(
           T.listTestable(T.natTestable),
@@ -1340,9 +1336,7 @@ let chunks = Suite.suite(
       )),
     Suite.test(
       "five-too-few",
-      List.chunks<Nat>(5,
-        List.tabulate<Nat>(3, func i = i),
-      ),
+      List.chunks<Nat>(List.tabulate<Nat>(3, func i = i), 5),
       M.equals(
         T.list(
           T.listTestable(T.natTestable),
@@ -1379,7 +1373,7 @@ Suite.run(Suite.suite("List", [
   map,
   filter,
   partition,
-  mapFilter,
+  filterMap,
   flatten,
   singleton,
   take,

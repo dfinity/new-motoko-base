@@ -26,10 +26,10 @@
 ///     }
 ///   }
 ///   // prints:
-///   // `"Antipasta"`
-///   // `"Spaghetti"`
-///   // `"Bistecca"`
-///   // `"Dolce"`
+///   // `Antipasta`
+///   // `Spaghetti`
+///   // `Bistecca`
+///   // `Dolce`
 /// }
 /// ```
 ///
@@ -43,7 +43,6 @@
 import Iter "Iter";
 import Order "Order";
 import Types "Types";
-import Bool "Bool";
 
 module {
   public type Queue<T> = Types.Queue.Queue<T>;
@@ -274,8 +273,8 @@ module {
     };
     queue.front := ?node;
     switch (queue.back) {
-      case null {};
-      case (?_) queue.back := ?node
+      case null queue.back := ?node;
+      case (?_) {}
     };
     queue.size += 1
   };
@@ -307,8 +306,8 @@ module {
     };
     queue.back := ?node;
     switch (queue.front) {
-      case null {};
-      case (?_) queue.front := ?node
+      case null queue.front := ?node;
+      case (?_) {}
     };
     queue.size += 1
   };

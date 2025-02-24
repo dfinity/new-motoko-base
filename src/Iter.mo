@@ -16,7 +16,7 @@ module {
   /// the Iterator that cannot be put back, so keep that in mind when sharing
   /// iterators between consumers.
   ///
-  /// An iterater `i` can be iterated over using
+  /// An iterator `i` can be iterated over using
   /// ```
   /// for (x in i) {
   ///   …do something with x…

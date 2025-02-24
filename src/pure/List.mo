@@ -16,7 +16,7 @@ import Result "../Result";
 import Types "../Types";
 import { todo } "../Debug";
 
-module {
+module List /*FIXME: remove?*/ {
 
   public type List<T> = Types.Pure.List<T>;
 
@@ -89,7 +89,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=initialize
-  /// List.push<Nat>(0, null) // => ?(0, null);
+  /// List.push<Nat>(null, 0) // => ?(0, null);
   /// ```
   ///
   /// Runtime: O(1)

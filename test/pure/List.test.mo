@@ -50,8 +50,8 @@ func opnatEq(a : ?Nat, b : ?Nat) : Bool {
 
 // ## Construction
 let l1 = List.empty<X>();
-let l2 = List.push<X>(2, l1);
-let l3 = List.push<X>(3, l2);
+let l2 = List.push<X>(l1, 2);
+let l3 = List.push<X>(l2, 3);
 
 // ## Projection -- use nth
 assert (opnatEq(List.get<X>(l3, 0), ?3));
@@ -303,17 +303,17 @@ let push = Suite.suite(
   [
     Suite.test(
       "empty",
-      List.push(0, List.empty<Nat>()),
+      List.push(List.empty<Nat>(), 0),
       M.equals(T.list(T.natTestable, ?(0, null)))
     ),
     Suite.test(
       "singleton",
-      List.push(1, List.push(0, List.empty<Nat>())),
+      List.push(List.push(List.empty<Nat>(), 0), 1),
       M.equals(T.list(T.natTestable, ?(1, ?(0, null))))
     ),
     Suite.test(
       "nary",
-      List.push(2, List.push(1, List.push(0, List.empty<Nat>()))),
+      List.push(List.push(List.push(List.empty<Nat>(), 0), 1), 2),
       M.equals(T.list(T.natTestable, ?(2, ?(1, ?(0, null)))))
     )
   ]

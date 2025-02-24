@@ -342,7 +342,7 @@ List.split&lt;Nat&gt;(
 <p>Space: O(n)</p>
 </p></div><div class="declaration"><h4 class="function" id="chunks"><code><span class="keyword">public func </span><span class="fnname">chunks</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;</code></h4><p><p>Split the given list into chunks of length <code>n</code>.
 The last chunk will be shorter if the length of the given list
-does not divide by <code>n</code> evenly.</p>
+does not divide by <code>n</code> evenly. Passing <code>n = 0</code> is not allowed.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
 List.chunks&lt;Nat&gt;(

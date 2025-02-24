@@ -610,7 +610,6 @@ let partition = Suite.suite(
   ]
 );
 
-
 let filterMap = Suite.suite(
   "filterMap",
   [
@@ -645,14 +644,13 @@ let filterMap = Suite.suite(
   ]
 );
 
-
 let flatten = Suite.suite(
   "flatten",
   [
     Suite.test(
       "small-list",
       List.flatten(
-        List.tabulate<List.List<Nat>>(10, func i = List.tabulate<Nat>(10, func j { i * 10 + j }))
+        List.tabulate<List.List<Nat>>(10, func i = List.tabulate<Nat>(10, func j = i * 10 + j))
       ),
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(100, func i = i))

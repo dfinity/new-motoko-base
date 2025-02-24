@@ -1229,9 +1229,7 @@ let split = Suite.suite(
   [
     Suite.test(
       "split-zero-nonempty",
-      List.split<Nat>(0,
-        List.tabulate<Nat>(10, func i = i),
-      ),
+      List.split<Nat>(List.tabulate<Nat>(10, func i = i), 0),
       M.equals(
         T.tuple2(
           T.listTestable(T.natTestable),
@@ -1242,9 +1240,7 @@ let split = Suite.suite(
 
     Suite.test(
       "split-zero-empty",
-      List.split<Nat>(0,
-        null
-      ),
+      List.split<Nat>(null, 0),
       M.equals(
         T.tuple2(
           T.listTestable(T.natTestable),
@@ -1255,9 +1251,7 @@ let split = Suite.suite(
 
     Suite.test(
       "split-nonzero-empty",
-      List.split<Nat>(15,
-        null
-      ),
+      List.split<Nat>(null, 15),
       M.equals(
         T.tuple2(
           T.listTestable(T.natTestable),
@@ -1268,9 +1262,7 @@ let split = Suite.suite(
 
     Suite.test(
       "split-too-few",
-      List.split<Nat>(15,
-        List.tabulate<Nat>(10, func i = i),
-      ),
+      List.split<Nat>(List.tabulate<Nat>(10, func i = i), 15),
       M.equals(
         T.tuple2(
           T.listTestable(T.natTestable),
@@ -1282,9 +1274,7 @@ let split = Suite.suite(
 
     Suite.test(
       "split-too-many",
-      List.split<Nat>(10,
-        List.tabulate<Nat>(15, func i = i),
-      ),
+      List.split<Nat>(List.tabulate<Nat>(15, func i = i), 10),
       M.equals(
         T.tuple2(
           T.listTestable(T.natTestable),
@@ -1296,9 +1286,7 @@ let split = Suite.suite(
 
     Suite.test(
       "split-one",
-      List.split<Nat>(1,
-        List.tabulate<Nat>(15, func i = i),
-      ),
+      List.split<Nat>(List.tabulate<Nat>(15, func i = i), 1),
       M.equals(
         T.tuple2(
           T.listTestable(T.natTestable),

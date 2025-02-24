@@ -245,7 +245,7 @@ let tabulate = Suite.suite(
       "large-list",
       List.tabulate<Nat>(10000, func i { 0 }),
       M.equals(
-        T.list<Nat>(T.natTestable, List.replicate(10000, 0))
+        T.list<Nat>(T.natTestable, List.repeat(0, 10000))
       )
     )
   ]
@@ -887,20 +887,20 @@ let all = Suite.suite(
 );
 
 let some = Suite.suite(
-  "some", [
+  "any", [
     Suite.test(
       "non-empty true",
-      List.some<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x = x >= 8),
+      List.any<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x = x >= 8),
       M.equals(T.bool(true))
     ),
     Suite.test(
       "non-empty false",
-      List.some<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x =  x > 9),
+      List.any<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x =  x > 9),
       M.equals(T.bool(false))
     ),
     Suite.test(
       "empty",
-      List.some<Nat>(null, func x = true),
+      List.any<Nat>(null, func x = true),
       M.equals(T.bool(false))
     ),
   ]
@@ -1384,7 +1384,7 @@ Suite.run(Suite.suite("List", [
   foldRight,
   find,
   all,
-  some,
+  any,
   merge,
   compare,
   equal,

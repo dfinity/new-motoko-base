@@ -151,10 +151,10 @@ do {
 };
 
 do {
-  Debug.print("  toIter");
+  Debug.print("  values");
 
   let list : List.List<Nat> = ?(1, ?(2, ?(3, List.empty<Nat>())));
-  let _actual = List.toIter<Nat>(list);
+  let _actual = List.values<Nat>(list);
   let actual = [var 0, 0, 0];
   let expected = [1, 2, 3];
 
@@ -204,19 +204,19 @@ let mapResult = Suite.suite(
 
 Suite.run(Suite.suite("List", [mapResult]));
 
-let replicate = Suite.suite(
-  "replicate",
+let repeat = Suite.suite(
+  "repeat",
   [
     Suite.test(
       "empty-list",
-      List.replicate<Nat>(0, 0),
+      List.repeat<Nat>(0, 0),
       M.equals(
         T.list(T.natTestable, List.empty<Nat>())
       )
     ),
     Suite.test(
       "small-list",
-      List.replicate(3, 0),
+      List.repeat(0, 3),
       M.equals(
         T.list<Nat>(T.natTestable, ?(0, ?(0, ?(0, null))))
       )
@@ -1361,7 +1361,7 @@ let chunks = Suite.suite(
 
 Suite.run(Suite.suite("List", [
   mapResult,
-  replicate,
+  repeat,
   tabulate,
   append,
   isEmpty,
@@ -1371,13 +1371,13 @@ Suite.run(Suite.suite("List", [
   size,
   get,
   reverse,
-  iterate,
+  forEach,
   map,
   filter,
   partition,
   mapFilter,
   flatten,
-  make,
+  singleton,
   take,
   drop,
   foldLeft,

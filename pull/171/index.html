@@ -217,7 +217,7 @@ shared(msg) func foo() {
 <p>Then, you can use this module to work with the <code>Principal</code>.</p>
 <p>Import from the base library to use this module.</p>
 <pre><code>motoko name=import
-import Principal &quot;mo:base/Principal&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Queue.html">Queue</a><div class="index-item-comment"><p>An imperative double-ended queue of elements.
+import Principal &quot;mo:base/Principal&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Queue.html">Queue</a><div class="index-item-comment"><p>A mutable double-ended queue of elements.
 The queue has two ends, front and back.
 Elements can be added and removed at the two ends.</p>
 <p>This can be used for different use cases, such as:</p>
@@ -242,15 +242,15 @@ persistent actor {
     }
   }
   // prints:
-  // `&quot;Antipasta&quot;`
-  // `&quot;Spaghetti&quot;`
-  // `&quot;Bistecca&quot;`
-  // `&quot;Dolce&quot;`
+  // `Antipasta`
+  // `Spaghetti`
+  // `Bistecca`
+  // `Dolce`
 }</code></pre>
 
 <p>The internal implementation is a doubly-linked list.</p>
 <p>Performance:</p>
-<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.
+<ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operations.</li><li>Space: <code>O(n)</code>.
 <code>n</code> denotes the number of elements stored in the queue.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Random.html">Random</a><div class="index-item-comment"><p>Random number generation.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Region.html">Region</a><div class="index-item-comment"><p>Byte-level access to isolated, virtual stable memory regions.</p>
 <p>This is a moderately lightweight abstraction over IC <em>stable memory</em> and supports persisting

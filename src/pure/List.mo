@@ -536,6 +536,33 @@ module {
       case (_, null) list1
     };
 
+  /// Check if two lists are equal using the given equality function to compare elements.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat "mo:base/Nat";
+  /// List.equal<Nat>(?(1, ?(2, null)), ?(1, ?(2, null)), Nat.equal) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `equal` runs in O(1) time and space.
+  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool {
+    switch (list1, list2) {
+      case (null, null) true;
+      case (?(h1, t1), ?(h2, t2)) {
+        if (equalFunc(h1, h2)) {
+          equal(t1, t2, equalFunc)
+        } else {
+          false
+        }
+      };
+      case _ false;
+    }
+  };
+
   /// Compare two lists using lexicographic ordering specified by argument function `compare`.
   ///
   /// Example:

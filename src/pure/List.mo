@@ -720,6 +720,10 @@ module List /*FIXME: remove?*/ {
     }
   };
 
+  public func equal<T>(list1 : List<T>, list2 : List<T>) : Bool {
+    todo()
+  };
+
   /// Convert an array into a list.
   ///
   /// Example:

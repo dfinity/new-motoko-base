@@ -255,12 +255,12 @@ let tabulate = Suite.suite(
   ]
 );
 
-let append = Suite.suite(
-  "append",
+let concat = Suite.suite(
+  "concat",
   [
     Suite.test(
       "small-list",
-      List.append(
+      List.concat(
         List.tabulate<Nat>(10, func i = i),
         List.tabulate<Nat>(10, func i = i + 10)
       ),
@@ -270,7 +270,7 @@ let append = Suite.suite(
     ),
     Suite.test(
       "large-list",
-      List.append(
+      List.concat(
         List.tabulate<Nat>(10000, func i = i),
         List.tabulate<Nat>(10000, func i = i + 10000)
       ),
@@ -1347,7 +1347,7 @@ Suite.run(Suite.suite("List", [
   mapResult,
   repeat,
   tabulate,
-  append,
+  concat,
   isEmpty,
   push,
   last,

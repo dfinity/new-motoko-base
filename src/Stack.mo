@@ -2,6 +2,8 @@
 /// Elements can be pushed on top of the stack
 /// and removed from top of the stack (LIFO).
 ///
+/// Example:
+/// ```motoko
 /// import Stack "Stack";
 /// import Debug "Debug";
 ///
@@ -76,10 +78,18 @@ module {
   /// Example:
   /// ```motoko
   /// import Stack "mo:base/Stack";
+  /// import Debug "mo:base/Debug";
+  /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack = Stack.tabulate<Nat>(3, func(i) = i * 2);
-  ///   // stack contains [4, 2, 0] (top to bottom)
+  ///   let stack = Stack.tabulate<Nat>(3, func(i) { 2 * i });
+  ///   for (number in Stack.values(stack)) {
+  ///     Debug.print(Nat.toText(number))
+  ///   }
+  ///   // prints:
+  ///   // `4`
+  ///   // `2`
+  ///   // `0`
   /// }
   /// ```
   ///
@@ -105,8 +115,8 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.singleton<Text>("hello");
-  ///   // stack contains ["hello"]
+  ///   let stack = Stack.singleton<Text>("motoko");
+  ///   assert(Stack.peek(stack) ==?"motoko");
   /// }
   /// ```
   ///
@@ -125,9 +135,9 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
+  ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
   ///   Stack.clear(stack);
-  ///   // stack is now empty
+  ///   assert(Stack.isEmpty(stack));
   /// }
   /// ```
   ///

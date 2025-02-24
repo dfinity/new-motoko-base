@@ -240,14 +240,14 @@ let tabulate = Suite.suite(
     ),
     Suite.test(
       "small-list",
-      List.tabulate<Nat>(3, func i { i * 2 }),
+      List.tabulate<Nat>(3, func i = i * 2),
       M.equals(
         T.list<Nat>(T.natTestable, ?(0, ?(2, ?(4, null))))
       )
     ),
     Suite.test(
       "large-list",
-      List.tabulate<Nat>(10000, func i { 0 }),
+      List.tabulate<Nat>(10000, func i = 0),
       M.equals(
         T.list<Nat>(T.natTestable, List.repeat(0, 10000))
       )
@@ -262,7 +262,7 @@ let append = Suite.suite(
       "small-list",
       List.append(
         List.tabulate<Nat>(10, func i = i),
-        List.tabulate<Nat>(10, func i { i + 10 })
+        List.tabulate<Nat>(10, func i = i + 10)
       ),
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(20, func i = i))
@@ -652,7 +652,7 @@ let flatten = Suite.suite(
     Suite.test(
       "small-list",
       List.flatten(
-        List.tabulate<List.List<Nat>>(10, func i { List.tabulate<Nat>(10, func j { i * 10 + j })})
+        List.tabulate<List.List<Nat>>(10, func i = List.tabulate<Nat>(10, func j { i * 10 + j }))
       ),
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(100, func i = i))
@@ -661,7 +661,7 @@ let flatten = Suite.suite(
     Suite.test(
       "small-nulls",
       List.flatten(
-        List.tabulate<List.List<Nat>>(10, func i { null : List.List<Nat> })
+        List.tabulate<List.List<Nat>>(10, func i = null : List.List<Nat>)
       ),
       M.equals(
         T.list(T.natTestable, null : List.List<Nat>)
@@ -917,8 +917,8 @@ let merge = Suite.suite(
     Suite.test(
       "small-list",
       List.merge<Nat>(
-        List.tabulate<Nat>(10, func i { 2 * i  }),
-        List.tabulate<Nat>(10, func i { 2 * i + 1 }),
+        List.tabulate<Nat>(10, func i = 2 * i),
+        List.tabulate<Nat>(10, func i = 2 * i + 1),
         func (i, j) { i <= j }
       ),
       M.equals(
@@ -950,20 +950,20 @@ let merge = Suite.suite(
     Suite.test(
       "small-list-equal",
       List.merge<Nat>(
-        List.tabulate<Nat>(10, func i { 2 * i  }),
-        List.tabulate<Nat>(10, func i { 2 * i }),
+        List.tabulate<Nat>(10, func i = 2 * i),
+        List.tabulate<Nat>(10, func i = 2 * i),
         func (i, j) { i <= j }
       ),
       M.equals(
-        T.list(T.natTestable, List.tabulate<Nat>(20, func i { 2 * (i / 2) }))
+        T.list(T.natTestable, List.tabulate<Nat>(20, func i = 2 * (i / 2)))
       )
     ),
 
     Suite.test(
       "large-list",
       List.merge<Nat>(
-        List.tabulate<Nat>(1000, func i { 2 * i }),
-        List.tabulate<Nat>(1000, func i { 2 * i + 1 }),
+        List.tabulate<Nat>(1000, func i = 2 * i),
+        List.tabulate<Nat>(1000, func i = 2 * i + 1),
         func (i, j) { i <= j }
       ),
       M.equals(
@@ -1105,7 +1105,7 @@ let zipWith = Suite.suite(
         func (i, j) { i * j }
       ),
       M.equals(
-        T.list(T.natTestable, List.tabulate<Nat>(10, func i { i  *  i}))
+        T.list(T.natTestable, List.tabulate<Nat>(10, func i = i * i))
       )),
     Suite.test(
       "small-list-shorter",
@@ -1115,7 +1115,7 @@ let zipWith = Suite.suite(
         func (i, j) { i * j }
       ),
       M.equals(
-        T.list(T.natTestable, List.tabulate<Nat>(10, func i { i  *  i}))
+        T.list(T.natTestable, List.tabulate<Nat>(10, func i = i * i))
       )),
     Suite.test(
       "small-list-longer",
@@ -1125,7 +1125,7 @@ let zipWith = Suite.suite(
         func (i, j) { i * j }
       ),
       M.equals(
-        T.list(T.natTestable, List.tabulate<Nat>(10, func i { i  *  i}))
+        T.list(T.natTestable, List.tabulate<Nat>(10, func i = i * i))
       )),
     Suite.test(
       "small-list-empty-left",
@@ -1171,7 +1171,7 @@ let zip = Suite.suite(
       ),
       M.equals(
         T.list(T.tuple2Testable(T.natTestable,T.natTestable),
-          List.tabulate<(Nat, Nat)>(10, func i { (i, i) }))
+          List.tabulate<(Nat, Nat)>(10, func i = (i, i)))
       )),
     Suite.test(
       "small-list-shorter",
@@ -1181,7 +1181,7 @@ let zip = Suite.suite(
       ),
       M.equals(
         T.list(T.tuple2Testable(T.natTestable,T.natTestable),
-          List.tabulate<(Nat, Nat)>(10, func i { (i, i) }))
+          List.tabulate<(Nat, Nat)>(10, func i = (i, i)))
       )),
     Suite.test(
       "small-list-longer",
@@ -1191,7 +1191,7 @@ let zip = Suite.suite(
       ),
       M.equals(
         T.list(T.tuple2Testable(T.natTestable,T.natTestable),
-          List.tabulate<(Nat, Nat)>(10, func i { (i, i) }))
+          List.tabulate<(Nat, Nat)>(10, func i = (i, i)))
       )),
     Suite.test(
       "small-list-empty-left",
@@ -1292,7 +1292,7 @@ let split = Suite.suite(
           T.listTestable(T.natTestable),
           T.listTestable(T.natTestable),
           (List.tabulate<Nat>(10, func i = i),
-           List.tabulate<Nat>(5, func i { 10 + i })
+           List.tabulate<Nat>(5, func i = 10 + i)
            ))
       )),
 
@@ -1306,7 +1306,7 @@ let split = Suite.suite(
           T.listTestable(T.natTestable),
           T.listTestable(T.natTestable),
           (List.tabulate<Nat>(1, func i = i),
-           List.tabulate<Nat>(14, func i { 1 + i })
+           List.tabulate<Nat>(14, func i = 1 + i)
            ))
       )),
 
@@ -1325,7 +1325,7 @@ let chunks = Suite.suite(
         T.list(
           T.listTestable(T.natTestable),
           (List.tabulate<List.List<Nat>>(2, func i {
-            List.tabulate<Nat>(5, func j { i * 5 + j }) })))
+            List.tabulate<Nat>(5, func j = i * 5 + j) })))
       )),
     Suite.test(
       "five-remainder",
@@ -1336,7 +1336,7 @@ let chunks = Suite.suite(
         T.list(
           T.listTestable(T.natTestable),
           (List.tabulate<List.List<Nat>>((13+4)/5, func i {
-            List.tabulate<Nat>(if (i < 13 / 5) 5 else 13 % 5, func j { i * 5 + j }) })))
+            List.tabulate<Nat>(if (i < 13 / 5) 5 else 13 % 5, func j = i * 5 + j) })))
       )),
     Suite.test(
       "five-too-few",
@@ -1347,7 +1347,7 @@ let chunks = Suite.suite(
         T.list(
           T.listTestable(T.natTestable),
           (List.tabulate<List.List<Nat>>(1, func i {
-            List.tabulate<Nat>(3, func j { i * 5 + j }) })))
+            List.tabulate<Nat>(3, func j = i * 5 + j) })))
       )),
     Suite.test(
       "split-zero",

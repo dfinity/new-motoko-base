@@ -154,11 +154,15 @@ do {
   Debug.print("  values");
 
   let list : List.List<Nat> = ?(1, ?(2, ?(3, List.empty<Nat>())));
-  let _actual = List.values<Nat>(list);
+  let vals = List.values<Nat>(list);
   let actual = [var 0, 0, 0];
   let expected = [1, 2, 3];
 
-  Iter.forEach<Nat>(_actual, func(x, i) = actual[i] := x);
+  var i = 0;
+  for(x in vals) {
+    actual[i] := x;
+    i += 1;
+  };
 
   for (i in actual.keys()) {
     assert (actual[i] == expected[i])

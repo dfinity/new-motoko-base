@@ -1461,7 +1461,7 @@ module {
   /// List.add(list, 0);
   /// List.add(list, 3);
   ///
-  /// List.contains<Nat>(list, 2, Nat.equal); // => true
+  /// List.contains<Nat>(list, Nat.equal, 2); // => true
   /// ```
   ///
   /// Runtime: `O(size)`

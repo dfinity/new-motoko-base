@@ -60,11 +60,12 @@ module {
       case (?(_, t)) 1 + size t
     };
 
-  /// Return whether the `list` contains `element` when compared using the `equal` predicate.
+  /// Check whether the list contains a given value. Uses the provided equality function to compare values.
   ///
   /// Example:
   /// ```motoko include=initialize
-  /// List.contains<Nat>(?(0, ?(1, ?(2, null))), Nat.equal, 1) // => true
+  /// import Nat "mo:base/Nat";
+  /// List.contains<Nat>(?(1, ?(2, ?(3, null))), Nat.equal, 2) // => true
   /// ```
   ///
   /// Runtime: O(size)
@@ -72,9 +73,9 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that `equal` runs in O(1) time and space.
-  public func contains<T>(list : List<T>, equal : (T, T) -> Bool, element : T) : Bool =
+  public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool =
     switch list {
-      case (?(h, t)) equal(h, element) or contains(t, equal, element);
+      case (?(h, t)) equal(h, item) or contains(t, equal, item);
       case _ false
     };
 
@@ -530,6 +531,33 @@ module {
       case (null, _) list2;
       case (_, null) list1
     };
+
+  /// Check if two lists are equal using the given equality function to compare elements.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat "mo:base/Nat";
+  /// List.equal<Nat>(?(1, ?(2, null)), ?(1, ?(2, null)), Nat.equal) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `equal` runs in O(1) time and space.
+  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool {
+    switch (list1, list2) {
+      case (null, null) true;
+      case (?(h1, t1), ?(h2, t2)) {
+        if (equalFunc(h1, h2)) {
+          equal(t1, t2, equalFunc)
+        } else {
+          false
+        }
+      };
+      case _ false;
+    }
+  };
 
   /// Compare two lists using lexicographic ordering specified by argument function `compare`.
   ///

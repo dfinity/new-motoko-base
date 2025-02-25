@@ -195,9 +195,9 @@ module {
   /// Runtime: O(n)
   /// Space: O(1)
   /// `n` denotes the number of elements stored in the queue.
-  public func contains<T>(queue : Queue<T>, equals : (T, T) -> Bool, element : T) : Bool {
+  public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, element : T) : Bool {
     for (existing in values(queue)) {
-      if (equals(existing, element)) {
+      if (equal(existing, element)) {
         return true
       }
     };

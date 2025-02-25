@@ -11,6 +11,7 @@ import Debug "mo:base/Debug";
 import Blob "Blob";
 import Iter "Iter";
 import Runtime "Runtime";
+import { todo } "Debug";
 
 module {
 
@@ -100,30 +101,21 @@ module {
     /// Random `Float` value in the range [0, 1).
     /// The resolution is maximal (i.e. all relevant mantissa bits are randomized).
     public func float() : Float {
-      var acc : Nat = 0;
-      var i = 0;
-      label l loop {
-        if (i >= 8) break l;
-        acc := Nat.bitshiftLeft(acc, 8) + Nat8.toNat(byte());
-        i += 1
-      };
-      Float.fromInt(acc) / Float.fromInt(Nat.pow(2, 64))
+      todo()
     };
 
     public func intRange(from : Int, toExclusive : Int) : Int {
       if (from > toExclusive) {
         Debug.trap("Random.intRange(): from > toExclusive")
       };
-      let range = toExclusive - from;
-      from + Int.abs(range) * Int.fromNat(Nat8.toNat(byte())) / 256
+      todo()
     };
 
     public func natRange(from : Nat, toExclusive : Nat) : Nat {
       if (from > toExclusive) {
         Debug.trap("Random.natRange(): from > toExclusive")
       };
-      let range = toExclusive - from : Nat;
-      from + range * Nat8.toNat(byte()) / 256
+      todo()
     };
 
   };
@@ -186,30 +178,21 @@ module {
     /// Random `Float` value in the range [0, 1).
     /// The resolution is maximal (i.e. all relevant mantissa bits are randomized).
     public func float() : async* Float {
-      var acc : Nat = 0;
-      var i = 0;
-      label l loop {
-        if (i >= 8) break l;
-        acc := Nat.bitshiftLeft(acc, 8) + Nat8.toNat(await* byte());
-        i += 1
-      };
-      Float.fromInt(acc) / Float.fromInt(Nat.pow(2, 64))
+      todo()
     };
 
     public func intRange(from : Int, toExclusive : Int) : async* Int {
       if (from > toExclusive) {
         Debug.trap("AsyncRandom.intRange(): from > toExclusive")
       };
-      let range = toExclusive - from;
-      from + range * Int.fromNat(Nat8.toNat(await* byte())) / 256
+      todo()
     };
 
     public func natRange(from : Nat, toExclusive : Nat) : async* Nat {
       if (from > toExclusive) {
         Debug.trap("AsyncRandom.natRange(): from > toExclusive")
       };
-      let range = toExclusive - from : Nat;
-      from + range * Nat8.toNat(await* byte()) / 256
+      todo()
     };
 
   };

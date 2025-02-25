@@ -16,7 +16,7 @@ module {
   /// the Iterator that cannot be put back, so keep that in mind when sharing
   /// iterators between consumers.
   ///
-  /// An iterater `i` can be iterated over using
+  /// An iterator `i` can be iterated over using
   /// ```
   /// for (x in i) {
   ///   …do something with x…
@@ -387,23 +387,6 @@ module {
   /// Space: O(n) where n is the number of elements in the iterator
   public func reverse<T>(iter : Iter<T>) : Iter<T> {
     fromArray(Array.reverse(toArray(iter))) // TODO: optimize
-  };
-
-  /// Creates an iterator that produces all `Nat`s from `x` to `y` including
-  /// both of the bounds.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
-  /// ```
-  public class range(x : Nat, y : Int) {
-    var i = x;
-    public func next() : ?Nat {
-      if (i > y) null else { let j = i; i += 1; ?j }
-    }
   };
 
 }

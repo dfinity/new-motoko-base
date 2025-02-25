@@ -46,8 +46,8 @@ persistent actor {
   pureMap := PureMap.add(pureMap, Nat.compare, 0, &quot;Zero&quot;);
   pureMap := PureMap.add(pureMap, Nat.compare, 1, &quot;One&quot;);
   pureMap := PureMap.add(pureMap, Nat.compare, 2, &quot;Two&quot;);
-  let mutableMap = Map.fromPure(pureMap, Nat.compare);
-  assert(Map.get(mutableMap, 0) == Map.get(pureMap, 0));
+  let mutableMap = Map.fromPure&lt;Nat, Text&gt;(pureMap, Nat.compare);
+  assert (Map.get(mutableMap, Nat.compare, 0) == PureMap.get(pureMap, Nat.compare, 0));
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.

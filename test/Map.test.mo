@@ -5,9 +5,9 @@ import Map "../src/Map";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
 import Runtime "../src/Runtime";
-import Debug "../src/Debug";
 import Text "../src/Text";
 import Array "../src/Array";
+import PureMap "../src/pure/Map";
 
 let { run; test; suite } = Suite;
 
@@ -41,7 +41,7 @@ run(
         do {
           let original = Map.empty<Nat, Text>();
           let clone = Map.clone(original);
-          ignore Map.put(original, Nat.compare, 0, "0");
+          Map.put(original, Nat.compare, 0, "0");
           Map.size(clone)
         },
         M.equals(T.nat(0))
@@ -305,7 +305,7 @@ run(
         do {
           let original = Map.singleton<Nat, Text>(0, "0");
           let clone = Map.clone(original);
-          ignore Map.put(original, Nat.compare, 0, "1");
+          Map.put(original, Nat.compare, 0, "1");
           assert (Map.get(clone, Nat.compare, 0) == ?"0");
           Map.size(clone)
         },
@@ -711,15 +711,15 @@ run(
           let clone = Map.clone(original);
           let keys = Iter.toArray(Map.keys(original));
           for (key in keys.values()) {
-            ignore Map.put(original, Nat.compare, key, "X");
+            Map.put(original, Nat.compare, key, "X")
           };
           for (key in keys.values()) {
-            assert Map.get(clone, Nat.compare, key) ==
-                   Map.get(copy, Nat.compare, key)
+            assert Map.get(clone, Nat.compare, key) == Map.get(copy, Nat.compare, key)
           };
           Map.size(clone)
         },
-        M.equals(T.nat(smallSize))),
+        M.equals(T.nat(smallSize))
+      ),
       test(
         "iterate forward",
         Iter.toArray(Map.entries(smallMap())),
@@ -1264,7 +1264,7 @@ run(
   suite(
     "add, update, put",
     [
-       test(
+      test(
         "add disjoint",
         do {
           let map = Map.empty<Nat, Text>();
@@ -1317,4 +1317,46 @@ run(
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
       */
-   ]))
+    ]
+  )
+);
+
+run(
+  suite(
+    "map conversion",
+    [
+      test(
+        "toPure",
+        do {
+          let map = Map.empty<Nat, Text>();
+          for (index in Nat.range(0, numberOfEntries)) {
+            Map.add(map, Nat.compare, index, Nat.toText(index))
+          };
+          let pureMap = Map.toPure(map, Nat.compare);
+          for (index in Nat.range(0, numberOfEntries)) {
+            assert (PureMap.get(pureMap, Nat.compare, index) == ?Nat.toText(index))
+          };
+          PureMap.assertValid(pureMap, Nat.compare);
+          PureMap.size(pureMap)
+        },
+        M.equals(T.nat(numberOfEntries))
+      ),
+      test(
+        "fromPure",
+        do {
+          var pureMap = PureMap.empty<Nat, Text>();
+          for (index in Nat.range(0, numberOfEntries)) {
+            pureMap := PureMap.add(pureMap, Nat.compare, index, Nat.toText(index))
+          };
+          let map = Map.fromPure<Nat, Text>(pureMap, Nat.compare);
+          for (index in Nat.range(0, numberOfEntries)) {
+            assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
+          };
+          Map.assertValid(map, Nat.compare);
+          Map.size(map)
+        },
+        M.equals(T.nat(numberOfEntries))
+      )
+    ]
+  )
+)

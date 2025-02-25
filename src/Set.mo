@@ -47,7 +47,7 @@ module {
   type Data<T> = Types.Set.Data<T>;
   type Internal<T> = Types.Set.Internal<T>;
   type Leaf<T> = Types.Set.Leaf<T>;
-  
+ 
   /// Convert the mutable set to an immutable set.
   ///
   /// Example:
@@ -333,7 +333,7 @@ module {
     }
   };
 
-  /// Insert a new element in the set.
+  /// Add a new element to a set.
   /// No effect if the element already exists in the set.
   ///
   /// Example:
@@ -354,6 +354,31 @@ module {
   /// where `n` denotes the number of elements stored in the set and
   /// assuming that the `compare` function implements an `O(1)` comparison.
   public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) {
+    ignore insert(set, compare, element);
+  };
+
+  /// Insert a new element in the set.
+  /// Returns true if the element is new, false if the element was already contained in the set.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   assert Set.insert(set, Nat.compare, 1);
+  ///   assert Set.insert(set, Nat.compare, 2);
+  ///   assert Set.insert(set, Nat.compare, 3);
+  ///   assert not (Set.insert(set, Nat.compare, 3));
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))`.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  public func insert<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool {
     let insertResult = switch (set.root) {
       case (#leaf(leafNode)) {
         leafInsertHelper<T>(leafNode, btreeOrder, compare, element)
@@ -366,10 +391,12 @@ module {
     switch (insertResult) {
       case (#inserted) {
         // if inserted an element that was not previously there, increment the tree size counter
-        set.size += 1
+        set.size += 1;
+	return true
       };
       case (#existent) {
         // keep size
+	return false
       };
       case (#promote({ element = promotedElement; leftChild; rightChild })) {
         let elements = VarArray.repeat<?T>(null, btreeOrder - 1);
@@ -382,13 +409,14 @@ module {
           children
         });
         // promotion always comes from inserting a new element, so increment the tree size counter
-        set.size += 1
+        set.size += 1;
+	return true
       }
     }
   };
 
-  /// Delete an existing element in the set.
-  /// Traps if the element does not exist in the set.
+  /// Deletes an element from a set.
+  /// Returns true if the element was contained in the set, false if not.
   ///
   /// ```motoko
   /// import Set "mo:base/Set";
@@ -401,8 +429,11 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   Set.delete(set, Nat.compare, 1);
+  ///   Set.remove(set, Nat.compare, 1);
   ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 1))); // prints `false`.
+  ///
+  ///   Set.remove(set, Nat.compare, 4);
+  ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 4))); // prints `false`.
   /// }
   /// ```
   ///
@@ -412,7 +443,39 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(log(n))` objects that will be collected as garbage.
-  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) {
+  public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : () {
+    ignore delete(set, compare, element);
+  };
+
+  /// Deletes an element from a set.
+  /// Returns true if the element was contained in the set, false if not.
+  ///
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 1);
+  ///   Set.add(set, Nat.compare, 2);
+  ///   Set.add(set, Nat.compare, 3);
+  ///
+  ///   assert (Set.delete(set, Nat.compare, 1)); // delete returns true
+  ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 1))); // prints `false`.
+  ///
+  ///   assert (not Set.delete(set, Nat.compare, 4)); // delete returns false
+  ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 4))); // prints `false`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))` including garbage, see below.
+  /// where `n` denotes the number of elements stored in the set and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: Creates `O(log(n))` objects that will be collected as garbage.
+  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool {
     let deleted = switch (set.root) {
       case (#leaf(leafNode)) {
         // TODO: think about how this can be optimized so don't have to do two steps (search and then insert)?
@@ -454,9 +517,7 @@ module {
         deletedElement
       }
     };
-    if (not deleted) {
-      Runtime.trap("Element is not present")
-    }
+    return deleted
   };
 
   /// Retrieves the maximum element from the set.
@@ -792,7 +853,9 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
     for (element in iter) {
-      delete(set, compare, element)
+      if (not (delete(set, compare, element))) {
+        Runtime.trap("Set.deleteAll");  // TBR: do we want this behaviour at all?
+      }
     }
   };
 

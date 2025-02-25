@@ -313,7 +313,7 @@ run(
           let original = Set.singleton<Nat>(0);
           assert Set.size(original) == 1;
           let clone = Set.clone(original);
-          Set.delete(original, Nat.compare, 0);
+          Set.remove(original, Nat.compare, 0);
           assert Set.size(original) == 0;
           assert not Set.contains(original, Nat.compare, 0);
           assert Set.contains(clone, Nat.compare, 0);
@@ -358,10 +358,10 @@ run(
         M.equals(T.nat(1))
       ),
       test(
-        "delete",
+        "remove",
         do {
           let set = Set.singleton<Nat>(0);
-          Set.delete(set, Nat.compare, 0);
+          Set.remove(set, Nat.compare, 0);
           Set.size(set)
         },
         M.equals(T.nat(0))
@@ -813,9 +813,9 @@ run(
           Set.add(set, Nat.compare, 1);
           Set.add(set, Nat.compare, 2);
           Set.add(set, Nat.compare, 3);
-          Set.delete(set, Nat.compare, 1);
-          Set.delete(set, Nat.compare, 2);
-          Set.delete(set, Nat.compare, 3);
+          Set.remove(set, Nat.compare, 1);
+          Set.remove(set, Nat.compare, 2);
+          Set.remove(set, Nat.compare, 3);
           Set.size(set)
         },
         M.equals(T.nat(0))
@@ -843,7 +843,7 @@ run(
           let clone = Set.clone(original);
           let keys = Iter.toArray(Set.values(original));
           for (key in keys.values()) {
-            Set.delete(original, Nat.compare, key)
+            Set.remove(original, Nat.compare, key)
           };
           for (key in keys.values()) {
             assert Set.contains(clone, Nat.compare, key) == Set.contains(copy, Nat.compare, key)
@@ -887,11 +887,11 @@ run(
         M.equals(T.bool(false))
       ),
       test(
-        "delete",
+        "remove",
         do {
           let set = smallSet();
           for (index in Nat.range(0, smallSize)) {
-            Set.delete(set, Nat.compare, index)
+            Set.remove(set, Nat.compare, index)
           };
           Set.isEmpty(set)
         },
@@ -920,7 +920,7 @@ run(
         do {
           let set1 = smallSet();
           let set2 = smallSet();
-          Set.delete(set2, Nat.compare, smallSize - 1 : Nat);
+          Set.remove(set2, Nat.compare, smallSize - 1 : Nat);
           Set.equal(set1, set2, Nat.equal)
         },
         M.equals(T.bool(false))
@@ -1123,7 +1123,7 @@ run(
         "compare less key",
         do {
           let set1 = smallSet();
-          Set.delete(set1, Nat.compare, smallSize - 1 : Nat);
+          Set.remove(set1, Nat.compare, smallSize - 1 : Nat);
           let set2 = smallSet();
           assert (Set.compare(set1, set2, Nat.compare) == #less);
           true
@@ -1145,7 +1145,7 @@ run(
         do {
           let set1 = smallSet();
           let set2 = smallSet();
-          Set.delete(set2, Nat.compare, smallSize - 1 : Nat);
+          Set.remove(set2, Nat.compare, smallSize - 1 : Nat);
           assert (Set.compare(set1, set2, Nat.compare) == #greater);
           true
         },
@@ -1193,9 +1193,9 @@ run(
         do {
           let set1 = smallSet();
           let set2 = smallSet();
-          Set.delete(set2, Nat.compare, 0);
-          Set.delete(set2, Nat.compare, 1);
-          Set.delete(set2, Nat.compare, 2);
+          Set.remove(set2, Nat.compare, 0);
+          Set.remove(set2, Nat.compare, 1);
+          Set.remove(set2, Nat.compare, 2);
           let difference = Set.difference(set1, set2, Nat.compare);
           Iter.toArray(Set.values(difference))
         },
@@ -1315,7 +1315,7 @@ run(
         M.equals(T.bool(true))
       ),
       test(
-        "delete",
+        "remove",
         do {
           let set = Set.empty<Nat>();
           let random = Random(randomSeed);
@@ -1335,7 +1335,7 @@ run(
           for (index in Nat.range(0, numberOfElements)) {
             let element = random.next();
             if (Set.contains(set, Nat.compare, element)) {
-              Set.delete(set, Nat.compare, element);
+              Set.remove(set, Nat.compare, element);
               assert (not Set.contains(set, Nat.compare, element))
             };
             assert (not Set.contains(set, Nat.compare, element))
@@ -1660,7 +1660,7 @@ run(
         },
         M.equals(T.nat(0))
       ),
-      // The following test cases trap with the current behavior of `delete()`:
+      // The following test cases trap with the current behavior of `remove()`:
       // test(
       //   "deleteAll second non-empty",
       //   do {

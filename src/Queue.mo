@@ -40,6 +40,7 @@
 /// * Space: `O(n)`.
 /// `n` denotes the number of elements stored in the queue.
 
+import PureQueue "pure/Queue";
 import Iter "Iter";
 import Order "Order";
 import Types "Types";
@@ -49,13 +50,50 @@ module {
 
   type Node<T> = Types.Queue.Node<T>;
 
-  // public func toPure<T>(queue : Queue<T>) : PureQueue.Queue<T> {
-  //   todo();
-  // };
+  /// Convert a mutable queue to an immutable queue.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/Queue";
+  /// import PureQueue "mo:base/pure/Queue";
+  ///
+  /// persistent actor {
+  ///   let mutableQueue = Queue.empty<Nat>();
+  ///   Queue.pushBack(mutableQueue, 0);
+  ///   Queue.pushBack(mutableQueue, 1);
+  ///   Queue.pushBack(mutableQueue, 2);
+  ///   let immutableQueue = Queue.toPure(mutableQueue);
+  ///   assert(PureQueue.size(immutableQueue) == Queue.size(mutableQueue));
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)`.
+  /// where `n` denotes the number of elements stored in the queue.
+  public func toPure<T>(queue : Queue<T>) : PureQueue.Queue<T> {
+    PureQueue.fromIter(values(queue));
+  };
 
-  // public func fromPure<T>(queue : PureQueue.Queue<T>) : Queue<T> {
-  //   todo();
-  // };
+  /// Convert an immutable queue to a mutable queue.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/Queue";
+  /// import PureQueue "mo:base/pure/Queue";
+  ///
+  /// persistent actor {
+  ///   let immutableQueue = PureQueue.fromIter<Nat>([1, 2, 3].values());
+  ///   let mutableQueue = Queue.fromPure(pureQueue);
+  ///   assert(PureQueue.size(immutableQueue) == Queue.size(mutableQueue));
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)`.
+  /// where `n` denotes the number of elements stored in the queue.
+  public func fromPure<T>(queue : PureQueue.Queue<T>) : Queue<T> {
+    fromIter(PureQueue.values(queue))
+  };
 
   /// Create a new empty mutable double-ended queue.
   ///

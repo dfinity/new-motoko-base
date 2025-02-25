@@ -80,8 +80,8 @@ module {
   /// persistent actor {
   ///   let immutableList = PureList.fromIter<Nat>([1, 2, 3].values());
   ///   // pure (functional) list is a FIFO data structure, similar to imperative stack.
-  ///   let mutableStack = Stack.fromPure(immutableList);
-  ///   for (element in values(mutableStack)) {
+  ///   let mutableStack = Stack.fromPure<Nat>(immutableList);
+  ///   for (element in Stack.values(mutableStack)) {
   ///     Debug.print(Nat.toText(element));
   ///   }
   ///   // prints:

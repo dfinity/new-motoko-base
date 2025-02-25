@@ -853,7 +853,7 @@ module {
   public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) : Bool {
     var deleted = false;
     for (element in iter) {
-      deleted := deleted or delete(set, compare, element)
+      deleted := delete(set, compare, element) or deleted // order matters!
     };
     return deleted
   };

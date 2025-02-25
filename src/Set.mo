@@ -858,6 +858,38 @@ module {
     return deleted
   };
 
+
+  /// Inserts all values in `iter` into `set`.
+  /// Returns true if any value was not contained in the original set, otherwise false.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
+  ///   let iter = Iter.fromArray([0, 2, 3]);
+  ///   assert Set.insertAll(set, Nat.compare, iter);
+  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [0, 1, 2, 3]
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(m * log(n))`.
+  /// Space: `O(1)` retained memory plus garbage, see the note below.
+  /// where `m` and `n` denote the number of elements in `set` and `iter`, respectively,
+  /// and assuming that the `compare` function implements an `O(1)` comparison.
+  public func insertAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) : Bool {
+    var inserted = false;
+    for (element in iter) {
+      inserted := insert(set, compare, element) or inserted // order matters!
+    };
+    return inserted
+  };
+
+
   /// Removes all values in `set` that do not satisfy the given predicate.
   /// Modifies the set in place.
   ///

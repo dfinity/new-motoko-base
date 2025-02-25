@@ -985,6 +985,7 @@
       "public func fromIter<T>(iter : Types.Iter<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func fromPure<T>(set : PureSet.Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func insert<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool",
+      "public func insertAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) : Bool",
       "public func intersection<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func isEmpty<T>(set : Set<T>) : Bool",
       "public func isSubset<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Bool",

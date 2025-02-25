@@ -28,7 +28,7 @@ persistent actor {
   Set.add(set, Nat.compare, 2);
   Set.add(set, Nat.compare, 3);
   let pureSet = Set.toPure(set);
-  assert(PureSet.contains(pureSet, 1));
+  assert(PureSet.contains(pureSet, Nat.compare, 1));
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -471,9 +471,8 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="deleteAll"><code><span class="keyword">public func </span><span class="fnname">deleteAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>)</code></h4><p><p>Deletes all values in <code>iter</code> from the specified <code>set</code>.
-This is different from <code>Set.difference()</code> in that the function will trap if
-<code>iter</code> contains an element that is not in <code>set</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="deleteAll"><code><span class="keyword">public func </span><span class="fnname">deleteAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>) : <span class="type">Bool</span></code></h4><p><p>Deletes all values in <code>iter</code> from the specified <code>set</code>.
+Returns true if any value was present in the set, otherwise false.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -483,7 +482,7 @@ import Debug &quot;mo:base/Debug&quot;;
 persistent actor {
   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   let iter = Iter.fromArray([0, 2]);
-  Set.deleteAll(set, Nat.compare, iter);
+  assert Set.deleteAll(set, Nat.compare, iter);
   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // =&gt; [1]
 }</code></pre>
 

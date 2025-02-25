@@ -829,8 +829,7 @@ module {
   };
 
   /// Deletes all values in `iter` from the specified `set`.
-  /// This is different from `Set.difference()` in that the function will trap if
-  /// `iter` contains an element that is not in `set`.
+  /// Returns true if any value was present in the set, otherwise false.
   ///
   /// Example:
   /// ```motoko
@@ -842,7 +841,7 @@ module {
   /// persistent actor {
   ///   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let iter = Iter.fromArray([0, 2]);
-  ///   Set.deleteAll(set, Nat.compare, iter);
+  ///   assert Set.deleteAll(set, Nat.compare, iter);
   ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [1]
   /// }
   /// ```
@@ -851,12 +850,12 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of elements in `set` and `iter`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) {
+  public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) : Bool {
+    var deleted = false;
     for (element in iter) {
-      if (not (delete(set, compare, element))) {
-        Runtime.trap("Set.deleteAll");  // TBR: do we want this behaviour at all?
-      }
-    }
+      deleted := deleted or delete(set, compare, element)
+    };
+    return deleted
   };
 
   /// Removes all values in `set` that do not satisfy the given predicate.
@@ -879,7 +878,7 @@ module {
   /// ```
   public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) {
     let array = Array.fromIter<T>(values(set));
-    deleteAll(
+    ignore deleteAll(
       set,
       compare,
       Iter.filter<T>(array.values(), func(element : T) : Bool = not predicate(element))

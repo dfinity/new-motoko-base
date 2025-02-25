@@ -1635,7 +1635,7 @@ run(
         do {
           let set1 = Set.empty<Nat>();
           let set2 = Set.empty<Nat>();
-          Set.deleteAll(set1, Nat.compare, Set.values(set2));
+          assert (not Set.deleteAll(set1, Nat.compare, Set.values(set2)));
           Set.size(set1)
         },
         M.equals(T.nat(0))
@@ -1645,7 +1645,7 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.empty<Nat>();
-          Set.deleteAll(set1, Nat.compare, Set.values(set2));
+          assert (not Set.deleteAll(set1, Nat.compare, Set.values(set2)));
           Iter.toArray(Set.values(set1))
         },
         M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
@@ -1655,42 +1655,41 @@ run(
         do {
           let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
           let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          Set.deleteAll(set1, Nat.compare, Set.values(set2));
+          assert (Set.deleteAll(set1, Nat.compare, Set.values(set2)));
           Set.size(set1)
         },
         M.equals(T.nat(0))
       ),
-      // The following test cases trap with the current behavior of `remove()`:
-      // test(
-      //   "deleteAll second non-empty",
-      //   do {
-      //     let set1 = Set.empty<Nat>();
-      //     let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-      //     Set.deleteAll(set1, Nat.compare, Set.values(set2));
-      //     Set.size(set1)
-      //   },
-      //   M.equals(T.nat(0))
-      // ),
-      // test(
-      //   "deleteAll both non-empty disjoint",
-      //   do {
-      //     let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-      //     let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([4, 5, 6]), Nat.compare);
-      //     Set.deleteAll(set1, Nat.compare, Set.values(set2));
-      //     Iter.toArray(Set.values(set1))
-      //   },
-      //   M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
-      // ),
-      // test(
-      //   "deleteAll both non-empty overlapping",
-      //   do {
-      //     let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-      //     let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([2, 3, 4]), Nat.compare);
-      //     Set.deleteAll(set1, Nat.compare, Set.values(set2));
-      //     Iter.toArray(Set.values(set1))
-      //   },
-      //   M.equals(T.array<Nat>(T.natTestable, [1]))
-      // ),
+      test(
+        "deleteAll second non-empty",
+        do {
+          let set1 = Set.empty<Nat>();
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          assert (not (Set.deleteAll(set1, Nat.compare, Set.values(set2))));
+          Set.size(set1)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
+        "deleteAll both non-empty disjoint",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([4, 5, 6]), Nat.compare);
+          assert (not (Set.deleteAll(set1, Nat.compare, Set.values(set2))));
+          Iter.toArray(Set.values(set1))
+        },
+        M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
+      ),
+      test(
+        "deleteAll both non-empty overlapping",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([2, 3, 4]), Nat.compare);
+          assert Set.deleteAll(set1, Nat.compare, Set.values(set2));
+          Iter.toArray(Set.values(set1))
+        },
+        M.equals(T.array<Nat>(T.natTestable, [1]))
+      ),
     ]
   )
 )

@@ -972,7 +972,7 @@
       "public func compare<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Order.Order",
       "public func contains<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool",
       "public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool",
-      "public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>)",
+      "public func deleteAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, iter : Types.Iter<T>) : Bool",
       "public func difference<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func empty<T>() : Set<T>",
       "public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool",

@@ -544,20 +544,13 @@ module {
   ///
   /// Space: O(1)
   ///
-  /// *Runtime and space assumes that `equal` runs in O(1) time and space.
-  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool {
+  /// *Runtime and space assumes that `equalFunc` runs in O(1) time and space.
+  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool =
     switch (list1, list2) {
       case (null, null) true;
-      case (?(h1, t1), ?(h2, t2)) {
-        if (equalFunc(h1, h2)) {
-          equal(t1, t2, equalFunc)
-        } else {
-          false
-        }
-      };
+      case (?(h1, t1), ?(h2, t2)) equalFunc(h1, h2) and equal(t1, t2, equalFunc);
       case _ false;
-    }
-  };
+    };
 
   /// Compare two lists using lexicographic ordering specified by argument function `compare`.
   ///

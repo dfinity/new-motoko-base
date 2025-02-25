@@ -36,18 +36,67 @@
 
 import Order "Order";
 import Types "Types";
+import PureList "pure/List";
 
 module {
   type Node<T> = Types.Stack.Node<T>;
   public type Stack<T> = Types.Stack<T>;
 
-  // public func toPure<T>(stack : Stack<T>) : Pure.Stack<T> {
-  //   todo()
-  // };
+  /// Convert a mutable stack to an immutable (functional) list.
+  /// Please note that functional lists are ordered like stacks (FIFO).
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Stack "mo:base/Stack";
+  /// import PureList "mo:base/pure/List";
+  ///
+  /// persistent actor {
+  ///   let mutableStack = Stack.empty<Nat>();
+  ///   Stack.push(mutableStack, 0);
+  ///   Stack.push(mutableStack, 1);
+  ///   Stack.push(mutableStack, 2);
+  ///   let immutableList = Stack.toPure(mutableStack);
+  ///   assert(PureList.size(immutableList) == Stack.size(mutableStack));
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)`.
+  /// where `n` denotes the number of elements stored in the stack.
+  public func toPure<T>(stack : Stack<T>) : PureList.List<T> {
+    PureList.fromIter(values(stack))
+  };
 
-  // public func fromPure<T>(stack : Pure.Stack<T>) : Stack<T> {
-  //   todo()
-  // };
+  /// Convert an immutable (functional) list to a mutable stack.
+  /// Please note that functional lists are ordered like stacks (FIFO).
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Stack "mo:base/Stack";
+  /// import PureList "mo:base/pure/List";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let immutableList = PureList.fromIter<Nat>([1, 2, 3].values());
+  ///   // pure (functional) list is a FIFO data structure, similar to imperative stack.
+  ///   let mutableStack = Stack.fromPure(immutableList);
+  ///   for (element in values(mutableStack)) {
+  ///     Debug.print(Nat.toText(element));
+  ///   }
+  ///   // prints:
+  ///   // `3`
+  ///   // `2`
+  ///   // `1`
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(n)`.
+  /// Space: `O(n)`.
+  /// where `n` denotes the number of elements stored in the queue.
+  public func fromPure<T>(list : PureList.List<T>) : Stack<T> {
+    fromIter(PureList.values(list))
+  };
 
   /// Create a new empty mutable stack.
   ///

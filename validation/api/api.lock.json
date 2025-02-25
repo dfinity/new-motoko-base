@@ -116,10 +116,7 @@
   },
   {
     "name": "Debug",
-    "exports": [
-      "public func print(text : Text)",
-      "public func todo() : None"
-    ]
+    "exports": ["public func print(text : Text)", "public func todo() : None"]
   },
   {
     "name": "Error",
@@ -1017,6 +1014,7 @@
       "public func filterMap<T, U>(stack : Stack<T>, project : T -> ?U) : Stack<U>",
       "public func forEach<T>(stack : Stack<T>, operation : T -> ())",
       "public func fromIter<T>(iter : Types.Iter<T>) : Stack<T>",
+      "public func fromPure<T>(list : PureList.List<T>) : Stack<T>",
       "public func get<T>(stack : Stack<T>, position : Nat) : ?T",
       "public func isEmpty<T>(stack : Stack<T>) : Bool",
       "public func map<T, U>(stack : Stack<T>, project : T -> U) : Stack<U>",
@@ -1028,6 +1026,7 @@
       "public func size<T>(stack : Stack<T>) : Nat",
       "public type Stack<T>",
       "public func tabulate<T>(size : Nat, generator : Nat -> T) : Stack<T>",
+      "public func toPure<T>(stack : Stack<T>) : PureList.List<T>",
       "public func toText<T>(stack : Stack<T>, format : T -> Text) : Text",
       "public func values<T>(stack : Stack<T>) : Types.Iter<T>"
     ]

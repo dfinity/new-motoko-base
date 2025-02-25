@@ -4,6 +4,7 @@ import M "mo:matchers/Matchers";
 import Stack "../src/Stack";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
+import PureList "../src/pure/List";
 
 let { run; test; suite } = Suite;
 
@@ -404,6 +405,48 @@ run(
           true
         },
         M.equals(T.bool(true))
+      )
+    ]
+  )
+);
+
+run(
+  suite(
+    "stack conversion",
+    [
+      test(
+        "toPure",
+        do {
+          let stack = Stack.empty<Nat>();
+          for (index in Nat.range(0, largeSize)) {
+            Stack.push(stack, index)
+          };
+          let pureList = Stack.toPure(stack);
+          var index = largeSize;
+          for (element in PureList.values(pureList)) {
+            index -= 1;
+            assert (element == index)
+          };
+          PureList.size(pureList)
+        },
+        M.equals(T.nat(largeSize))
+      ),
+      test(
+        "fromPure",
+        do {
+          var pureList = PureList.empty<Nat>();
+          for (index in Nat.range(0, largeSize)) {
+            pureList := PureList.push(pureList, index)
+          };
+          let stack = Stack.fromPure<Nat>(pureList);
+          var index = largeSize;
+          for (element in PureList.values(pureList)) {
+            index -= 1;
+            assert (element == index)
+          };
+          Stack.size(stack)
+        },
+        M.equals(T.nat(largeSize))
       )
     ]
   )

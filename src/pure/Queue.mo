@@ -97,8 +97,8 @@ module Queue /* FIXME */ {
     queue.1
   };
 
-  public func contains<T>(queue : Queue<T>, item : T) : Bool {
-    todo()
+  public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, element : T) : Bool {
+    List.contains(queue.0, equal, element) or List.contains(queue.2, equal, element)
   };
 
   /// Inspect the optional element on the front end of a queue.

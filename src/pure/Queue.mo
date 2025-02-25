@@ -183,8 +183,8 @@ module Queue /* FIXME */ {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func pushFront<T>((f, n, b) : Queue<T>, element : T) : Queue<T> =
-    check (?(element, f), n + 1, b);
+  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> =
+    check (?(element, queue.0), queue.1 + 1, queue.2);
 
   /// Insert a new element on the back end of a queue.
   /// Returns the new queue with all the elements of `queue`, followed by `element` on the back.
@@ -203,8 +203,8 @@ module Queue /* FIXME */ {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func pushBack<T>((f, n, b) : Queue<T>, element : T) : Queue<T> =
-    check (f, n + 1, ?(element, b));
+  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> =
+    check (queue.0, queue.1 + 1, ?(element, queue.2));
 
   /// Remove the element on the front end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of

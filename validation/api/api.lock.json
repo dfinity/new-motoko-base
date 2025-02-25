@@ -116,7 +116,10 @@
   },
   {
     "name": "Debug",
-    "exports": ["public func print(text : Text)", "public func todo() : None"]
+    "exports": [
+      "public func print(text : Text)",
+      "public func todo() : None"
+    ]
   },
   {
     "name": "Error",

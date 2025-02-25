@@ -61,9 +61,23 @@ module {
       case (?(_, t)) 1 + size t
     };
 
-  public func contains<T>(list : List<T>, item : T) : Bool {
-    todo()
-  };
+  /// Return whether the `list` contains `element` when compared using the `equal` predicate.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// List.contains<Nat>(?(0, ?(1, ?(2, null))), Nat.equal, 1) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `equal` runs in O(1) time and space.
+  public func contains<T>(list : List<T>, equal : (T, T) -> Bool, element : T) : Bool =
+    switch list {
+      case (?(h, t)) equal(h, element) or contains(t, equal, element);
+      case _ false
+    };
 
   /// Access any item in a list, zero-based.
   ///

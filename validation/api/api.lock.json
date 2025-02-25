@@ -486,7 +486,6 @@
       "public func compare<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : Order.Order",
       "public func contains<T>(list : List<T>, equal : (T, T) -> Bool, element : T) : Bool",
       "public func empty<T>() : List<T>",
-      "public func equal<T>(list1 : List<T>, list2 : List<T>, f : (T, T) -> Bool) : Bool",
       "public func entries<T>(list : List<T>) : Iter.Iter<(T, Nat)>",
       "public func entriesRev<T>(list : List<T>) : Iter.Iter<(T, Nat)>",
       "public func equal<T>(list1 : List<T>, list2 : List<T>, equal : (T, T) -> Bool) : Bool",

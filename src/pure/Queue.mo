@@ -118,7 +118,7 @@ module Queue /* FIXME */ {
   public func peekFront<T>(queue : Queue<T>) : ?T =
     switch queue {
       case ((?(x, _), _, _) or (_, _, ?(x, null))) ?x;
-      case _ null
+      case _ { debug assert List.isEmpty(queue.2); null }
     };
 
   /// Inspect the optional element on the back end of a queue.
@@ -138,7 +138,7 @@ module Queue /* FIXME */ {
   public func peekBack<T>(queue : Queue<T>) : ?T  =
     switch queue {
       case ((_, _, ?(x, _)) or (?(x, null), _, _)) ?x;
-      case _ null
+      case _ { debug assert List.isEmpty(queue.0); null }
     };
 
   // helper to split the list evenly

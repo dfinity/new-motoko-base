@@ -86,7 +86,7 @@ func matchEmptyBackRemoval() : M.Matcher<?(Queue.Queue<Nat>, Nat)> {
 
 func reduceFront<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   var current = deque;
-  for (_ in Iter.range(1, amount)) {
+  for (_ in Nat.range(1, amount)) {
     switch (Queue.popFront(current)) {
       case null Prim.trap("should not be null");
       case (?result) current := result.1
@@ -97,7 +97,7 @@ func reduceFront<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
 
 func reduceBack<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   var current = deque;
-  for (_ in Iter.range(1, amount)) {
+  for (_ in Nat.range(1, amount)) {
     switch (Queue.popBack(current)) {
       case null Prim.trap("should not be null");
       case (?result) current := result.0
@@ -206,7 +206,7 @@ let testSize = 100;
 
 func populateForward(from : Nat, to : Nat) : Queue.Queue<Nat> {
   var deque = Queue.empty<Nat>();
-  for (number in Iter.range(from, to)) {
+  for (number in Nat.range(from, to)) {
     deque := Queue.pushFront(deque, number)
   };
   deque
@@ -286,7 +286,7 @@ run(
 
 func populateBackward(from : Nat, to : Nat) : Queue.Queue<Nat> {
   var deque = Queue.empty<Nat>();
-  for (number in Iter.range(from, to)) {
+  for (number in Nat.range(from, to)) {
     deque := Queue.pushBack(deque, number)
   };
   deque
@@ -379,7 +379,7 @@ object Random {
 
 func randomPopulate(amount : Nat) : Queue.Queue<Nat> {
   var current = Queue.empty<Nat>();
-  for (number in Iter.range(1, amount)) {
+  for (number in Nat.range(1, amount)) {
     current := if (Random.next() % 2 == 0) {
       Queue.pushFront(current, Nat.sub(amount, number))
     } else {
@@ -397,7 +397,7 @@ func isSorted(deque : Queue.Queue<Nat>) : Bool {
 
 func randomRemoval(deque : Queue.Queue<Nat>, amount : Nat) : Queue.Queue<Nat> {
   var current = deque;
-  for (number in Iter.range(1, amount)) {
+  for (number in Nat.range(1, amount)) {
     current := if (Random.next() % 2 == 0) {
       let pair = Queue.popFront(current);
       switch pair {
@@ -465,7 +465,7 @@ run(
 func randomInsertionDeletion(steps : Nat) : Queue.Queue<Nat> {
   var current = Queue.empty<Nat>();
   var size = 0;
-  for (number in Iter.range(1, steps)) {
+  for (number in Nat.range(1, steps)) {
     let random = Random.next();
     current := switch (random % 4) {
       case 0 {

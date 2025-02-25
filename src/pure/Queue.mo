@@ -330,7 +330,14 @@ module Queue /* FIXME */ {
   };
 
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
-    todo()
+    var text = "[/*Q*/ ";
+    func add(item : T) {
+      if (text.size() > 7) text #= ", ";
+      text #= f(item)
+    };
+    List.forEach(queue.0, add);
+    List.forEach(queue.2, add);
+    text # "]"
   };
 
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order {

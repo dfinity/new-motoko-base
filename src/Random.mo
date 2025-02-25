@@ -21,19 +21,9 @@ module {
 
   /// Opinionated choice of PRNG from a given seed.
   public func new(seed : Blob) : Random {
-    var entropy = seed;
     Random(
       func() {
-        // TODO: use a better PRNG implementation
-        let bytes = entropy.vals();
-        var result = "";
-        for (b in bytes) {
-          let x = Nat8.toNat(b);
-          let mixed = (x * 1103515245 + 12345) % 256;
-          result := result # Text.fromChar(Char.fromNat32(Nat32.fromNat(mixed)))
-        };
-        entropy := Text.encodeUtf8(result);
-        entropy
+        todo()
       }
     )
   };

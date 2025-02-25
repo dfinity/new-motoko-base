@@ -2109,14 +2109,14 @@ module {
   // Additional functionality compared to original source.
 
   func mapData<K, V1, V2>(data : Data<K, V1>, project : (K, V1) -> V2) : Data<K, V2> {
-      { kvs = VarArray.map<?(K, V1), ?(K, V2)>(
-         data.kvs,
-         func entry {
-	   switch entry {
-             case (?kv) ?(kv.0, project kv);
-	     case null null;
-	   }});
-        var count = data.count };
+    { kvs = VarArray.map<?(K, V1), ?(K, V2)>(
+      data.kvs,
+      func entry {
+      switch entry {
+        case (?kv) ?(kv.0, project kv);
+        case null null;
+      }});
+      var count = data.count };
   };
 
   func mapNode<K, V1, V2>(node : Node<K, V1>, project : (K, V1) -> V2) : Node<K, V2> {

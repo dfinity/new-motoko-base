@@ -493,7 +493,6 @@ module {
       if (criterion(e)) (add(acc, compare, e)) else acc });
   };
 
-
   /// Filter all elements in the set by also applying a projection to the elements.
   /// Apply a mapping function `project` to all elements in the set and collect all
   /// elements, for which the function returns a non-null new element. Collect all

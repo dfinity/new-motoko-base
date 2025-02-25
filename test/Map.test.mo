@@ -306,7 +306,7 @@ run(
           let original = Map.singleton<Nat, Text>(0, "0");
           let clone = Map.clone(original);
           ignore Map.put(original, Nat.compare, 0, "1");
-	  assert (Map.get(clone, Nat.compare, 0) == ?"0");
+          assert (Map.get(clone, Nat.compare, 0) == ?"0");
           Map.size(clone)
         },
         M.equals(T.nat(1))
@@ -709,14 +709,14 @@ run(
           let original = smallMap();
           let copy = smallMap();
           let clone = Map.clone(original);
-	  let keys = Iter.toArray(Map.keys(original));
-	  for (key in keys.values()) {
-            ignore Map.put(original, Nat.compare, 0, "X");
-	  };
-	  for (key in keys.values()) {
+          let keys = Iter.toArray(Map.keys(original));
+          for (key in keys.values()) {
+            ignore Map.put(original, Nat.compare, key, "X");
+          };
+          for (key in keys.values()) {
             assert Map.get(clone, Nat.compare, key) ==
-  	           Map.get(copy, Nat.compare, key)
-	  };
+                   Map.get(copy, Nat.compare, key)
+          };
           Map.size(clone)
         },
         M.equals(T.nat(smallSize))),
@@ -1046,7 +1046,7 @@ run(
             };
             text #= "(" # Nat.toText(index) # ", " # Nat.toText(index) # ")"
           };
-	  text #= "}";
+          text #= "}";
           M.equals(T.text(text))
         }
       ),
@@ -1267,31 +1267,31 @@ run(
        test(
         "add disjoint",
         do {
-	  let map = Map.empty<Nat, Text>();
-	  Map.add(map, Nat.compare, 0, "0");
-	  Map.add(map, Nat.compare, 1, "1");
-	  Map.size(map)
-	},
+          let map = Map.empty<Nat, Text>();
+          Map.add(map, Nat.compare, 0, "0");
+          Map.add(map, Nat.compare, 1, "1");
+          Map.size(map)
+        },
         M.equals(T.nat(2))
       ),
       test(
         "put existing",
         do {
-	  let map = Map.empty<Nat, Text>();
-	  Map.put(map, Nat.compare, 0, "0");
-	  Map.put(map, Nat.compare, 0, "Zero");
-	  Map.get(map, Nat.compare, 0)
-	},
+          let map = Map.empty<Nat, Text>();
+          Map.put(map, Nat.compare, 0, "0");
+          Map.put(map, Nat.compare, 0, "Zero");
+          Map.get(map, Nat.compare, 0)
+        },
         M.equals(T.optional(T.textTestable, ?"Zero"))
       ),
       test(
         "update existing",
         do {
-	  let map = Map.empty<Nat, Text>();
-	  Map.put(map, Nat.compare, 0, "0");
-	  Map.update(map, Nat.compare, 0, "Zero");
-	  Map.get(map, Nat.compare, 0)
-	},
+          let map = Map.empty<Nat, Text>();
+          Map.put(map, Nat.compare, 0, "0");
+          Map.update(map, Nat.compare, 0, "Zero");
+          Map.get(map, Nat.compare, 0)
+        },
         M.equals(T.optional(T.textTestable, ?"Zero"))
       ),
       // TODO: test traps (checked manually)
@@ -1299,21 +1299,21 @@ run(
       test(
         "update absent",
         do {
-	  let map = Map.empty<Nat, Text>();
-	  Map.update(map, Nat.compare, 0, "Zero"); // traps
-	  assert false;
-	  Map.size(map);
-	},
+          let map = Map.empty<Nat, Text>();
+          Map.update(map, Nat.compare, 0, "Zero"); // traps
+          assert false;
+          Map.size(map);
+        },
         M.equals(T.nat(0))
       ),
       test(
         "add existing traps",
         do {
-	  let map = Map.empty<Nat, Text>();
+          let map = Map.empty<Nat, Text>();
           Map.add(map, Nat.compare, 0, "0");
-	  Map.add(map, Nat.compare, 0, "Zero"); // traps
-	  Map.get(map, Nat.compare, 0)
-	},
+          Map.add(map, Nat.compare, 0, "Zero"); // traps
+          Map.get(map, Nat.compare, 0)
+        },
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
       */

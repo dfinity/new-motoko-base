@@ -71,7 +71,7 @@ module {
     todo()
   };
 
-  public func contains<T>(queue : Queue<T>, item : T) : Bool {
+  public func contains<T>(queue : Queue<T>, equal : T -> Bool, item : T) : Bool {
     todo()
   };
 

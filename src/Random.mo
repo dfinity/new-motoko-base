@@ -20,41 +20,65 @@ module {
 
   /// Opinionated choice of PRNG from a given seed.
   public func new(seed : Blob) : Random {
-    // Use the seed as initial entropy
     var entropy = seed;
-
-    func nextBlob() : Blob {
-      // Simple xorshift-like algorithm for demonstration
-      let bytes = entropy.vals();
-      var result = "";
-      for (b in bytes) {
-        // Simple PRNG using multiplication and addition
-        let x = Nat8.toNat(b);
-        let mixed = (x * 1103515245 + 12345) % 256;
-        result := result # Text.fromChar(Char.fromNat32(Nat32.fromNat(mixed)))
-      };
-      entropy := Text.encodeUtf8(result);
-      entropy
-    };
-
-    Random(nextBlob)
+    Random(
+      func() {
+        // TODO: use a better PRNG implementation
+        let bytes = entropy.vals();
+        var result = "";
+        for (b in bytes) {
+          let x = Nat8.toNat(b);
+          let mixed = (x * 1103515245 + 12345) % 256;
+          result := result # Text.fromChar(Char.fromNat32(Nat32.fromNat(mixed)))
+        };
+        entropy := Text.encodeUtf8(result);
+        entropy
+      }
+    )
   };
 
   /// Uses entropy from the management canister with automatic resupply.
   public func newAsync() : AsyncRandom {
-    // Convert shared function to async* function
-    func asyncRand() : async* Blob {
-      await rawRand()
-    };
-    AsyncRandom(asyncRand)
+    AsyncRandom(func() : async* Blob { await rawRand() })
   };
 
   public class Random(generator : () -> Blob) {
     var iter : Iter.Iter<Nat8> = Iter.empty();
+    let bitIter : Iter.Iter<Bool> = object {
+      var mask = 0x00 : Nat8;
+      var byte = 0x00 : Nat8;
+      public func next() : ?Bool {
+        if (0 : Nat8 == mask) {
+          switch (iter.next()) {
+            case null { null };
+            case (?w) {
+              byte := w;
+              mask := 0x40;
+              ?(0 : Nat8 != byte & (0x80 : Nat8))
+            }
+          }
+        } else {
+          let m = mask;
+          mask >>= (1 : Nat8);
+          ?(0 : Nat8 != byte & m)
+        }
+      }
+    };
 
     /// Random choice between `true` and `false`.
     public func bool() : Bool {
-      byte() % 2 == 0
+      switch (bitIter.next()) {
+        case (?bit) { bit };
+        case null {
+          iter := generator().vals();
+          switch (bitIter.next()) {
+            case (?bit) { bit };
+            case null {
+              Runtime.trap("Random.bool(): generator produced empty Blob")
+            }
+          }
+        }
+      }
     };
 
     /// Random `Nat8` value in the range [0, 256).
@@ -65,7 +89,9 @@ module {
           iter := generator().vals();
           switch (iter.next()) {
             case (?byte) { byte };
-            case null { Runtime.trap("Random generator produced empty Blob") }
+            case null {
+              Runtime.trap("Random.byte(): generator produced empty Blob")
+            }
           }
         }
       }
@@ -85,16 +111,16 @@ module {
     };
 
     public func intRange(from : Int, toExclusive : Int) : Int {
-      if (from >= toExclusive) {
-        Debug.trap("Random.intRange: from >= toExclusive")
+      if (from > toExclusive) {
+        Debug.trap("Random.intRange(): from > toExclusive")
       };
       let range = toExclusive - from;
       from + Int.abs(range) * Int.fromNat(Nat8.toNat(byte())) / 256
     };
 
     public func natRange(from : Nat, toExclusive : Nat) : Nat {
-      if (from >= toExclusive) {
-        Debug.trap("Random.natRange: from >= toExclusive")
+      if (from > toExclusive) {
+        Debug.trap("Random.natRange(): from > toExclusive")
       };
       let range = toExclusive - from : Nat;
       from + range * Nat8.toNat(byte()) / 256
@@ -104,6 +130,42 @@ module {
 
   public class AsyncRandom(generator : () -> async* Blob) {
     var iter = Iter.empty<Nat8>();
+    let bitIter : Iter.Iter<Bool> = object {
+      var mask = 0x00 : Nat8;
+      var byte = 0x00 : Nat8;
+      public func next() : ?Bool {
+        if (0 : Nat8 == mask) {
+          switch (iter.next()) {
+            case null { null };
+            case (?w) {
+              byte := w;
+              mask := 0x40;
+              ?(0 : Nat8 != byte & (0x80 : Nat8))
+            }
+          }
+        } else {
+          let m = mask;
+          mask >>= (1 : Nat8);
+          ?(0 : Nat8 != byte & m)
+        }
+      }
+    };
+
+    /// Random choice between `true` and `false`.
+    public func bool() : async* Bool {
+      switch (bitIter.next()) {
+        case (?bit) { bit };
+        case null {
+          iter := (await* generator()).vals();
+          switch (bitIter.next()) {
+            case (?bit) { bit };
+            case null {
+              Runtime.trap("AsyncRandom.bool(): generator produced empty Blob")
+            }
+          }
+        }
+      }
+    };
 
     /// Random `Nat8` value in the range [0, 256).
     public func byte() : async* Nat8 {
@@ -113,15 +175,12 @@ module {
           iter := (await* generator()).vals();
           switch (iter.next()) {
             case (?byte) { byte };
-            case null { Runtime.trap("Random generator produced empty Blob") }
+            case null {
+              Runtime.trap("AsyncRandom.byte(): generator produced empty Blob")
+            }
           }
         }
       }
-    };
-
-    /// Random choice between `true` and `false`.
-    public func bool() : async* Bool {
-      (await* byte()) % 2 == 0
     };
 
     /// Random `Float` value in the range [0, 1).
@@ -138,16 +197,16 @@ module {
     };
 
     public func intRange(from : Int, toExclusive : Int) : async* Int {
-      if (from >= toExclusive) {
-        Debug.trap("AsyncRandom.intRange: from >= toExclusive")
+      if (from > toExclusive) {
+        Debug.trap("AsyncRandom.intRange(): from > toExclusive")
       };
       let range = toExclusive - from;
-      from + Int.abs(range) * Int.fromNat(Nat8.toNat(await* byte())) / 256
+      from + range * Int.fromNat(Nat8.toNat(await* byte())) / 256
     };
 
     public func natRange(from : Nat, toExclusive : Nat) : async* Nat {
-      if (from >= toExclusive) {
-        Debug.trap("AsyncRandom.natRange: from >= toExclusive")
+      if (from > toExclusive) {
+        Debug.trap("AsyncRandom.natRange(): from > toExclusive")
       };
       let range = toExclusive - from : Nat;
       from + range * Nat8.toNat(await* byte()) / 256

@@ -829,68 +829,68 @@ run(
         SetMatcher([0, 1, 2, 3, 4])
       ),
       test(
-        "intersect/empty set",
-        Set.intersect(Set.empty(), Set.empty(), Nat.compare),
+        "intersection/empty set",
+        Set.intersection(Set.empty(), Set.empty(), Nat.compare),
         SetMatcher([])
       ),
       test(
-        "intersect/intersect with empty set",
-        Set.intersect(buildTestSet012(), Set.empty(), Nat.compare),
+        "intersection/intersection with empty set",
+        Set.intersection(buildTestSet012(), Set.empty(), Nat.compare),
         SetMatcher([])
       ),
       test(
-        "intersect/intersect with itself",
-        Set.intersect(buildTestSet012(), buildTestSet012(), Nat.compare),
+        "intersection/intersection with itself",
+        Set.intersection(buildTestSet012(), buildTestSet012(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
       test(
-        "intersect/intersect with subset",
-        Set.intersect(buildTestSet012(), buildTestSet01(), Nat.compare),
+        "intersection/intersection with subset",
+        Set.intersection(buildTestSet012(), buildTestSet01(), Nat.compare),
         SetMatcher([0, 1])
       ),
       test(
-        "intersect/intersect",
-        Set.intersect(buildTestSet012(), buildTestSet234(), Nat.compare),
+        "intersection/intersection",
+        Set.intersection(buildTestSet012(), buildTestSet234(), Nat.compare),
         SetMatcher([2])
       ),
       test(
-        "intersect/no intersection",
-        Set.intersect(buildTestSet012(), buildTestSet345(), Nat.compare),
+        "intersection/no intersectionion",
+        Set.intersection(buildTestSet012(), buildTestSet345(), Nat.compare),
         SetMatcher([])
       ),
       test(
-        "diff/empty set",
-        Set.diff(Set.empty(), Set.empty(), Nat.compare),
+        "difference/empty set",
+        Set.difference(Set.empty(), Set.empty(), Nat.compare),
         SetMatcher([])
       ),
       test(
-        "diff/diff with empty set",
-        Set.diff(buildTestSet012(), Set.empty(), Nat.compare),
+        "difference/difference with empty set",
+        Set.difference(buildTestSet012(), Set.empty(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
       test(
-        "diff/diff with empty set 2",
-        Set.diff(Set.empty(), buildTestSet012(), Nat.compare),
+        "difference/difference with empty set 2",
+        Set.difference(Set.empty(), buildTestSet012(), Nat.compare),
         SetMatcher([])
       ),
       test(
-        "diff/diff with subset",
-        Set.diff(buildTestSet012(), buildTestSet01(), Nat.compare),
+        "difference/difference with subset",
+        Set.difference(buildTestSet012(), buildTestSet01(), Nat.compare),
         SetMatcher([2])
       ),
       test(
-        "diff/diff with subset 2",
-        Set.diff(buildTestSet01(), buildTestSet012(), Nat.compare),
+        "difference/difference with subset 2",
+        Set.difference(buildTestSet01(), buildTestSet012(), Nat.compare),
         SetMatcher([])
       ),
       test(
-        "diff/diff",
-        Set.diff(buildTestSet012(), buildTestSet234(), Nat.compare),
+        "difference/difference",
+        Set.difference(buildTestSet012(), buildTestSet234(), Nat.compare),
         SetMatcher([0, 1])
       ),
       test(
-        "diff/diff no intersection",
-        Set.diff(buildTestSet012(), buildTestSet345(), Nat.compare),
+        "difference/difference no intersection",
+        Set.difference(buildTestSet012(), buildTestSet345(), Nat.compare),
         SetMatcher([0, 1, 2])
       ),
     ]

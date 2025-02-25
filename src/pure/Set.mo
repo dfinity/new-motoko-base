@@ -317,7 +317,7 @@ module {
   /// persistent actor {
   ///   let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  ///   let intersection = Set.intersect(set1, set2, Nat.compare);
+  ///   let intersection = Set.intersection(set1, set2, Nat.compare);
   ///   Debug.print(debug_show(Iter.toArray(Set.values(intersection))));
   ///   // prints: `[1, 2]`.
   /// }
@@ -329,7 +329,7 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(m)` temporary objects that will be collected as garbage.
-  public func intersect<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
+  public func intersection<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let elems = List.empty<T>();
     if (set1.size < set2.size) {
       Internal.iterate(set1.root, func (x: T) {
@@ -360,7 +360,7 @@ module {
   /// persistent actor {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
-  ///   let difference = Set.diff(set1, set2, Nat.compare);
+  ///   let difference = Set.difference(set1, set2, Nat.compare);
   ///   Debug.print(debug_show(Iter.toArray(Set.values(difference))));
   ///   // prints: `[1, 2]`.
   /// }
@@ -372,7 +372,7 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(m * log(n))` temporary objects that will be collected as garbage.
-  public func diff<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
+  public func difference<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     if (size(set1) < size(set2)) {
       let elems = List.empty<T>(); /* imperative! */
       Internal.iterate(set1.root, func (x : T) {

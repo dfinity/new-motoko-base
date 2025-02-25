@@ -283,11 +283,11 @@ func run_all_props(range: (Nat, Nat), size: Nat, set_samples: Nat, query_samples
             not Set.isSubset(Set.add(s, c, e), s, c)
           } else { true }
         }),
-        prop("intersect(empty(), s, c) == empty()", func (s) {
-          SetMatcher(Set.empty()).matches(Set.intersect(Set.empty(), s, c))
+        prop("intersection(empty(), s, c) == empty()", func (s) {
+          SetMatcher(Set.empty()).matches(Set.intersection(Set.empty(), s, c))
         }),
-        prop("intersect(s, empty(), c) == empty()", func (s) {
-          SetMatcher(Set.empty()).matches(Set.intersect(s, Set.empty(), c))
+        prop("intersection(s, empty(), c) == empty()", func (s) {
+          SetMatcher(Set.empty()).matches(Set.intersection(s, Set.empty(), c))
         }),
         prop("union(s, empty(), c) == s", func (s) {
           SetMatcher(s).matches(Set.union(s, Set.empty(), c))
@@ -295,46 +295,46 @@ func run_all_props(range: (Nat, Nat), size: Nat, set_samples: Nat, query_samples
         prop("union(empty(), s, c) == s", func (s) {
           SetMatcher(s).matches(Set.union(Set.empty(), s, c))
         }),
-        prop("diff(empty(), s, c) == empty()", func (s) {
-          SetMatcher(Set.empty()).matches(Set.diff(Set.empty(), s, c))
+        prop("difference(empty(), s, c) == empty()", func (s) {
+          SetMatcher(Set.empty()).matches(Set.difference(Set.empty(), s, c))
         }),
-        prop("diff(s, empty(), c) == s", func (s) {
-          SetMatcher(s).matches(Set.diff(s, Set.empty(), c))
+        prop("difference(s, empty(), c) == s", func (s) {
+          SetMatcher(s).matches(Set.difference(s, Set.empty(), c))
         }),
-        prop("intersect(s, s, c) == s", func (s) {
-          SetMatcher(s).matches(Set.intersect(s, s, c))
+        prop("intersection(s, s, c) == s", func (s) {
+          SetMatcher(s).matches(Set.intersection(s, s, c))
         }),
         prop("union(s, s, c) == s", func (s) {
           SetMatcher(s).matches(Set.union(s, s, c))
         }),
-        prop("diff(s, s, c) == empty()", func (s) {
-          SetMatcher(Set.empty()).matches(Set.diff(s, s, c))
+        prop("difference(s, s, c) == empty()", func (s) {
+          SetMatcher(Set.empty()).matches(Set.difference(s, s, c))
         }),
-        prop2("intersect(s1, s2, c) == intersect(s2, s1, c)", func (s1, s2) {
-          SetMatcher(Set.intersect(s1, s2, c)).matches(Set.intersect(s2, s1, c))
+        prop2("intersection(s1, s2, c) == intersection(s2, s1, c)", func (s1, s2) {
+          SetMatcher(Set.intersection(s1, s2, c)).matches(Set.intersection(s2, s1, c))
         }),
         prop2("union(s1, s2, c) == union(s2, s1, c)", func (s1, s2) {
           SetMatcher(Set.union(s1, s2, c)).matches(Set.union(s2, s1, c))
         }),
-        prop2("isSubset(diff(s1, s2, c), s1, c)", func (s1, s2) {
-          Set.isSubset(Set.diff(s1, s2, c), s1, c)
+        prop2("isSubset(difference(s1, s2, c), s1, c)", func (s1, s2) {
+          Set.isSubset(Set.difference(s1, s2, c), s1, c)
         }),
-        prop2("intersect(diff(s1, s2, c), s2, c) == empty()", func (s1, s2) {
-          SetMatcher(Set.intersect(Set.diff(s1, s2, c), s2, c)).matches(Set.empty())
+        prop2("intersection(difference(s1, s2, c), s2, c) == empty()", func (s1, s2) {
+          SetMatcher(Set.intersection(Set.difference(s1, s2, c), s2, c)).matches(Set.empty())
         }),
         prop3("union(union(s1, s2, c), s3, c) == union(s1, union(s2, s3, c), c)", func (s1, s2, s3) {
           SetMatcher(Set.union(Set.union(s1, s2, c), s3, c)).matches(Set.union(s1, Set.union(s2, s3, c), c))
         }),
-        prop3("intersect(intersect(s1, s2, c), s3, c) == intersect(s1, intersect(s2, s3, c), c)", func (s1, s2, s3) {
-          SetMatcher(Set.intersect(Set.intersect(s1, s2, c), s3, c)).matches(Set.intersect(s1, Set.intersect(s2, s3, c), c))
+        prop3("intersection(intersection(s1, s2, c), s3, c) == intersection(s1, intersection(s2, s3, c), c)", func (s1, s2, s3) {
+          SetMatcher(Set.intersection(Set.intersection(s1, s2, c), s3, c)).matches(Set.intersection(s1, Set.intersection(s2, s3, c), c))
         }),
-        prop3("union(s1, intersect(s2, s3, c), c) == intersect(union(s1, s2, c), union(s1, s3, c))", func (s1, s2, s3) {
-          SetMatcher(Set.union(s1, Set.intersect(s2, s3, c), c)).matches(
-            Set.intersect(Set.union(s1, s2, c), Set.union(s1, s3, c), c))
+        prop3("union(s1, intersection(s2, s3, c), c) == intersection(union(s1, s2, c), union(s1, s3, c))", func (s1, s2, s3) {
+          SetMatcher(Set.union(s1, Set.intersection(s2, s3, c), c)).matches(
+            Set.intersection(Set.union(s1, s2, c), Set.union(s1, s3, c), c))
         }),
-        prop3("intersect(s1, union(s2, s3), c) == union(intersect(s1, s2, c), intersect(s1, s3))", func (s1, s2, s3) {
-          SetMatcher(Set.intersect(s1, Set.union(s2, s3, c), c)).matches(
-            Set.union(Set.intersect(s1, s2, c), Set.intersect(s1, s3, c), c))
+        prop3("intersection(s1, union(s2, s3), c) == union(intersection(s1, s2, c), intersection(s1, s3))", func (s1, s2, s3) {
+          SetMatcher(Set.intersection(s1, Set.union(s2, s3, c), c)).matches(
+            Set.union(Set.intersection(s1, s2, c), Set.intersection(s1, s3, c), c))
         }),
       ]),
     ]))

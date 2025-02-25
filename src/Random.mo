@@ -7,7 +7,6 @@ import Int "Int";
 import Nat "Nat";
 import Char "Char";
 import Nat32 "Nat32";
-import Debug "mo:base/Debug";
 import Blob "Blob";
 import Iter "Iter";
 import Runtime "Runtime";
@@ -95,14 +94,14 @@ module {
 
     public func intRange(from : Int, toExclusive : Int) : Int {
       if (from > toExclusive) {
-        Debug.trap("Random.intRange(): from > toExclusive")
+        Runtime.trap("Random.intRange(): from > toExclusive")
       };
       todo()
     };
 
     public func natRange(from : Nat, toExclusive : Nat) : Nat {
       if (from > toExclusive) {
-        Debug.trap("Random.natRange(): from > toExclusive")
+        Runtime.trap("Random.natRange(): from > toExclusive")
       };
       todo()
     };
@@ -171,14 +170,14 @@ module {
 
     public func intRange(from : Int, toExclusive : Int) : async* Int {
       if (from > toExclusive) {
-        Debug.trap("AsyncRandom.intRange(): from > toExclusive")
+        Runtime.trap("AsyncRandom.intRange(): from > toExclusive")
       };
       todo()
     };
 
     public func natRange(from : Nat, toExclusive : Nat) : async* Nat {
       if (from > toExclusive) {
-        Debug.trap("AsyncRandom.natRange(): from > toExclusive")
+        Runtime.trap("AsyncRandom.natRange(): from > toExclusive")
       };
       todo()
     };

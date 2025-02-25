@@ -1,12 +1,9 @@
 /// Random number generation.
 
 import Nat8 "Nat8";
-import Text "Text";
 import Float "Float";
 import Int "Int";
 import Nat "Nat";
-import Char "Char";
-import Nat32 "Nat32";
 import Blob "Blob";
 import Iter "Iter";
 import Runtime "Runtime";

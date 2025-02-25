@@ -69,11 +69,11 @@ module {
     todo()
   };
 
-  public func intersect<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
+  public func intersection<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 
-  public func diff<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
+  public func difference<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
     todo()
   };
 

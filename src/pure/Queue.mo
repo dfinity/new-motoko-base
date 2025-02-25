@@ -30,7 +30,7 @@ module Queue /* FIXME */ {
   type List<T> = Types.Pure.List<T>;
 
   /// Double-ended queue data type.
-  public type Queue<T> = (List<T>, Nat, List<T>);//Types.Pure.Queue<T>;
+  public type Queue<T> = Types.Pure.Queue<T>;
 
   /// Create a new empty queue.
   ///

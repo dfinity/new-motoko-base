@@ -87,8 +87,8 @@ module {
   ///   pureMap := PureMap.add(pureMap, Nat.compare, 0, "Zero");
   ///   pureMap := PureMap.add(pureMap, Nat.compare, 1, "One");
   ///   pureMap := PureMap.add(pureMap, Nat.compare, 2, "Two");
-  ///   let mutableMap = Map.fromPure(pureMap, Nat.compare);
-  ///   assert(Map.get(mutableMap, 0) == Map.get(pureMap, 0));
+  ///   let mutableMap = Map.fromPure<Nat, Text>(pureMap, Nat.compare);
+  ///   assert (Map.get(mutableMap, Nat.compare, 0) == PureMap.get(pureMap, Nat.compare, 0));
   /// }
   /// ```
   ///

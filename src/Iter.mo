@@ -389,4 +389,21 @@ module {
     fromArray(Array.reverse(toArray(iter))) // TODO: optimize
   };
 
+  /// Creates an iterator that produces all `Nat`s from `x` to `y` including
+  /// both of the bounds.
+  /// ```motoko
+  /// import Iter "mo:base/Iter";
+  /// let iter = Iter.range(1, 3);
+  /// assert(?1 == iter.next());
+  /// assert(?2 == iter.next());
+  /// assert(?3 == iter.next());
+  /// assert(null == iter.next());
+  /// ```
+  public class range(x : Nat, y : Int) {
+    var i = x;
+    public func next() : ?Nat {
+      if (i > y) null else { let j = i; i += 1; ?j }
+    }
+  };
+
 }

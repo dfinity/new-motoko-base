@@ -86,7 +86,7 @@ func matchEmptyBackRemoval() : M.Matcher<?(Queue.Queue<Nat>, Nat)> {
 
 func reduceFront<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   var current = deque;
-  for (_ in Nat.range(1, amount)) {
+  for (_ in Nat.range(0, amount)) {
     switch (Queue.popFront(current)) {
       case null Prim.trap("should not be null");
       case (?result) current := result.1
@@ -97,7 +97,7 @@ func reduceFront<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
 
 func reduceBack<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   var current = deque;
-  for (_ in Nat.range(1, amount)) {
+  for (_ in Nat.range(0, amount)) {
     switch (Queue.popBack(current)) {
       case null Prim.trap("should not be null");
       case (?result) current := result.0
@@ -379,7 +379,7 @@ object Random {
 
 func randomPopulate(amount : Nat) : Queue.Queue<Nat> {
   var current = Queue.empty<Nat>();
-  for (number in Nat.range(1, amount)) {
+  for (number in Nat.range(0, amount)) {
     current := if (Random.next() % 2 == 0) {
       Queue.pushFront(current, Nat.sub(amount, number))
     } else {
@@ -397,7 +397,7 @@ func isSorted(deque : Queue.Queue<Nat>) : Bool {
 
 func randomRemoval(deque : Queue.Queue<Nat>, amount : Nat) : Queue.Queue<Nat> {
   var current = deque;
-  for (number in Nat.range(1, amount)) {
+  for (number in Nat.range(0, amount)) {
     current := if (Random.next() % 2 == 0) {
       let pair = Queue.popFront(current);
       switch pair {

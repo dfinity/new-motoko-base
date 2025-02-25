@@ -116,7 +116,7 @@ module {
   ///
   /// persistent actor {
   ///   let stack = Stack.singleton<Text>("motoko");
-  ///   assert(Stack.peek(stack) ==?"motoko");
+  ///   assert (Stack.peek(stack) ==?"motoko");
   /// }
   /// ```
   ///
@@ -137,7 +137,7 @@ module {
   /// persistent actor {
   ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
   ///   Stack.clear(stack);
-  ///   assert(Stack.isEmpty(stack));
+  ///   assert (Stack.isEmpty(stack));
   /// }
   /// ```
   ///
@@ -153,10 +153,12 @@ module {
   /// Example:
   /// ```motoko
   /// import Stack "mo:base/Stack";
+  /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let original = Stack.fromIter([1, 2, 3].values());
+  ///   let original = Stack.fromIter<Nat>([1, 2, 3].values());
   ///   let copy = Stack.clone(original);
+  ///   assert (Stack.equal(copy, original, Nat.equal))
   /// }
   /// ```
   ///
@@ -180,7 +182,7 @@ module {
   ///
   /// persistent actor {
   ///   let stack = Stack.empty<Nat>();
-  ///   assert(Stack.isEmpty(stack));
+  ///   assert (Stack.isEmpty(stack));
   /// }
   /// ```
   ///
@@ -197,8 +199,8 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.size(stack) == 3);
+  ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
+  ///   assert (Stack.size(stack) == 3);
   /// }
   /// ```
   ///
@@ -217,8 +219,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.contains(stack, 2, Nat.equal));
+  ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
+  ///   assert (Stack.contains(stack, 2, Nat.equal));
   /// }
   /// ```
   ///
@@ -266,8 +268,11 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.peek(stack) == ?3);
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
+  ///   assert (Stack.peek(stack) == ?3);
   /// }
   /// ```
   ///
@@ -288,8 +293,14 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.pop(stack) == ?3);
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
+  ///   assert (Stack.pop(stack) == ?3);
+  ///   assert (Stack.pop(stack) == ?2);
+  ///   assert (Stack.pop(stack) == ?1);
+  ///   assert (Stack.pop(stack) == null);
   /// }
   /// ```
   ///
@@ -315,8 +326,14 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.get(stack, 1) == ?2);
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
+  ///   assert (Stack.get(stack, 0) == ?3);
+  ///   assert (Stack.get(stack, 1) == ?2);
+  ///   assert (Stack.get(stack, 2) == ?1);
+  ///   assert (Stack.get(stack, 3) == null);
   /// }
   /// ```
   ///
@@ -348,9 +365,15 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
   ///   Stack.reverse(stack);
-  ///   // stack now contains [1, 2, 3] (top to bottom)
+  ///   assert (Stack.pop(stack) == ?1);
+  ///   assert (Stack.pop(stack) == ?2);
+  ///   assert (Stack.pop(stack) == ?3);
+  ///   assert (Stack.pop(stack) == null);
   /// }
   /// ```
   ///
@@ -373,12 +396,21 @@ module {
   /// Example:
   /// ```motoko
   /// import Stack "mo:base/Stack";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
   ///   for (element in Stack.values(stack)) {
-  ///     // Iterates: 3, 2, 1
+  ///     Debug.print(Nat.toText(element));
   ///   };
+  ///   // prints:
+  ///   // `3`
+  ///   // `2`
+  ///   // `1`
   /// }
   /// ```
   ///
@@ -408,8 +440,8 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([2, 4, 6].values());
-  ///   assert(Stack.all(stack, func(n) = n % 2 == 0));
+  ///   let stack = Stack.fromIter<Nat>([2, 4, 6].values());
+  ///   assert (Stack.all<Nat>(stack, func(n) { n % 2 == 0 }));
   /// }
   /// ```
   ///
@@ -433,8 +465,8 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.any(stack, func(n) = n == 2));
+  ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
+  ///   assert (Stack.any<Nat>(stack, func(n) { n == 2 }));
   /// }
   /// ```
   ///
@@ -456,11 +488,21 @@ module {
   /// Example:
   /// ```motoko
   /// import Stack "mo:base/Stack";
+  /// import Nat "mo:base/Nat";
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   Stack.forEach(stack, func(n) { Debug.print(debug_show(n)) });
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
+  ///   Stack.forEach<Nat>(stack, func(n) {
+  ///     Debug.print(Nat.toText(n))
+  ///   });
+  ///   // prints:
+  ///   // `3`
+  ///   // `2`
+  ///   // `1`
   /// }
   /// ```
   ///
@@ -482,9 +524,15 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   let doubled = Stack.map(stack, func(n) = n * 2);
-  ///   // doubled contains [6, 4, 2] (top to bottom)
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
+  ///   let doubled = Stack.map<Nat, Nat>(stack, func(n) { 2 * n });
+  ///   assert (Stack.get(doubled, 0) == ?6);
+  ///   assert (Stack.get(doubled, 1) == ?4);
+  ///   assert (Stack.get(doubled, 2) == ?2);
+  ///   assert (Stack.get(doubled, 3) == null);
   /// }
   /// ```
   ///
@@ -509,9 +557,15 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3, 4].values());
-  ///   let evens = Stack.filter(stack, func(n) = n % 2 == 0);
-  ///   // evens contains [4, 2] (top to bottom)
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
+  ///   Stack.push(stack, 4);
+  ///   let evens = Stack.filter<Nat>(stack, func(n) { n % 2 == 0 });
+  ///   assert(Stack.pop(evens) == ?4);
+  ///   assert(Stack.pop(evens) == ?2);
+  ///   assert(Stack.pop(evens) == null);
   /// }
   /// ```
   ///
@@ -539,11 +593,21 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3, 4].values());
-  ///   let evenDoubled = Stack.filterMap(stack, func(n) =
-  ///     if (n % 2 == 0) ?(n * 2) else null
-  ///   );
-  ///   // evenDoubled contains [8, 4] (top to bottom)
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
+  ///   Stack.push(stack, 4);
+  ///   let evenDoubled = Stack.filterMap<Nat, Nat>(stack, func(n) {
+  ///     if (n % 2 == 0) {
+  ///       ?(n * 2)
+  ///     } else {
+  ///       null
+  ///     }
+  ///   });
+  ///   assert(Stack.pop(evenDoubled) == ?8);
+  ///   assert(Stack.pop(evenDoubled) == ?4);
+  ///   assert(Stack.pop(evenDoubled) == null);
   /// }
   /// ```
   ///
@@ -573,9 +637,9 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack1 = Stack.fromIter([1, 2, 3].values());
-  ///   let stack2 = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.equal(stack1, stack2, Nat.equal));
+  ///   let stack1 = Stack.fromIter<Nat>([1, 2, 3].values());
+  ///   let stack2 = Stack.fromIter<Nat>([1, 2, 3].values());
+  ///   assert (Stack.equal(stack1, stack2, Nat.equal));
   /// }
   /// ```
   ///
@@ -614,8 +678,11 @@ module {
   /// import Stack "mo:base/Stack";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
-  ///   // stack contains [3, 2, 1] (top to bottom)
+  ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
+  ///   assert(Stack.pop(stack) == ?3);
+  ///   assert(Stack.pop(stack) == ?2);
+  ///   assert(Stack.pop(stack) == ?1);
+  ///   assert(Stack.pop(stack) == null);
   /// }
   /// ```
   ///
@@ -637,11 +704,16 @@ module {
   /// ```motoko
   /// import Stack "mo:base/Stack";
   /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let stack = Stack.fromIter([1, 2, 3].values());
+  ///   let stack = Stack.empty<Nat>();
+  ///   Stack.push(stack, 1);
+  ///   Stack.push(stack, 2);
+  ///   Stack.push(stack, 3);
   ///   let text = Stack.toText(stack, Nat.toText);
-  ///   // text = "stack(3, 2, 1)"
+  ///   Debug.print(text);
+  ///   // prints `[3, 2, 1]`
   /// }
   /// ```
   ///
@@ -668,9 +740,9 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let stack1 = Stack.fromIter([1, 2].values());
-  ///   let stack2 = Stack.fromIter([1, 2, 3].values());
-  ///   assert(Stack.compare(stack1, stack2, Nat.compare) == #less);
+  ///   let stack1 = Stack.fromIter<Nat>([1, 2].values());
+  ///   let stack2 = Stack.fromIter<Nat>([1, 2, 3].values());
+  ///   assert (Stack.compare(stack1, stack2, Nat.compare) == #less);
   /// }
   /// ```
   ///

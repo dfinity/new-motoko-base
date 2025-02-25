@@ -99,7 +99,6 @@ module {
     };
 
     /// Random `Float` value in the range [0, 1).
-    /// The resolution is maximal (i.e. all relevant mantissa bits are randomized).
     public func float() : Float {
       todo()
     };
@@ -176,7 +175,6 @@ module {
     };
 
     /// Random `Float` value in the range [0, 1).
-    /// The resolution is maximal (i.e. all relevant mantissa bits are randomized).
     public func float() : async* Float {
       todo()
     };

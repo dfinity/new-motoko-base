@@ -1257,6 +1257,25 @@ run(
         M.equals(T.nat(numberOfEntries))
       ),
       test(
+        "insert",
+        do {
+          let map = Map.empty<Nat, Text>();
+          for (index in Nat.range(0, numberOfEntries)) {
+            assert Map.insert(map, Nat.compare, index, Nat.toText(index));
+            assert (Map.size(map) == index + 1);
+            assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
+          };
+          for (index in Nat.range(0, numberOfEntries)) {
+	    assert (not Map.insert(map, Nat.compare, index, Nat.toText(index)));
+            assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
+          };
+          assert (Map.get(map, Nat.compare, numberOfEntries) == null);
+          Map.assertValid(map, Nat.compare);
+          Map.size(map)
+        },
+        M.equals(T.nat(numberOfEntries))
+      ),
+      test(
         "get",
         do {
           let map = Map.empty<Nat, Text>();
@@ -1302,6 +1321,37 @@ run(
         M.equals(T.bool(true))
       ),
       test(
+        "remove",
+        do {
+          let map = Map.empty<Nat, Text>();
+          let random = Random(randomSeed);
+          for (index in Nat.range(0, numberOfEntries)) {
+            let key = random.next();
+            ignore Map.swap(map, Nat.compare, key, Nat.toText(key))
+          };
+          random.reset();
+          for (index in Nat.range(0, numberOfEntries)) {
+            let key = random.next();
+            assert (Map.containsKey(map, Nat.compare, key));
+            assert (Map.get(map, Nat.compare, key) == ?Nat.toText(key))
+          };
+          random.reset();
+          for (index in Nat.range(0, numberOfEntries)) {
+            let key = random.next();
+            if (Map.containsKey(map, Nat.compare, key)) {
+              Map.remove(map, Nat.compare, key);
+              assert (not Map.containsKey(map, Nat.compare, key))
+            } else {
+	      Map.remove(map, Nat.compare, key);
+	    };
+            assert (Map.get(map, Nat.compare, key) == null)
+          };
+          Map.assertValid(map, Nat.compare);
+          Map.size(map)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
         "delete",
         do {
           let map = Map.empty<Nat, Text>();
@@ -1322,7 +1372,9 @@ run(
             if (Map.containsKey(map, Nat.compare, key)) {
               assert Map.delete(map, Nat.compare, key);
               assert (not Map.containsKey(map, Nat.compare, key))
-            };
+            } else {
+	      assert not Map.delete(map, Nat.compare, key);
+	    };
             assert (Map.get(map, Nat.compare, key) == null)
           };
           Map.assertValid(map, Nat.compare);

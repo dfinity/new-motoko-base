@@ -54,9 +54,10 @@ run(
       ),
       test(
         "delete empty",
-	do { let set = Set.empty<Nat>();
-	     assert (not Set.delete(set, Nat.compare, 0));
-             Iter.toArray(Set.values(set))
+	do { 
+	   let set = Set.empty<Nat>();
+	   assert (not Set.delete(set, Nat.compare, 0));
+           Iter.toArray(Set.values(set))
 	},
         M.equals(T.array<Nat>(T.natTestable, []))
       ),

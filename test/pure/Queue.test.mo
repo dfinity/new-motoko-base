@@ -35,23 +35,8 @@ func iterateBackward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> {
   }
 };
 
-func toText(queue : Queue.Queue<Nat>) : Text {
-  var text = "[";
-  var isFirst = true;
-  for (element in iterateForward(queue)) {
-    if (not isFirst) {
-      text #= ", "
-    } else {
-      isFirst := false
-    };
-    text #= debug_show (element)
-  };
-  text #= "]";
-  text
-};
-
 func frontToText(t : (Nat, Queue.Queue<Nat>)) : Text {
-  "(" # Nat.toText(t.0) # ", " # toText(t.1) # ")"
+  "(" # Nat.toText(t.0) # ", " # Queue.toText(t.1, Nat.toText) # ")"
 };
 
 func frontEqual(t1 : (Nat, Queue.Queue<Nat>), t2 : (Nat, Queue.Queue<Nat>)) : Bool {
@@ -59,7 +44,7 @@ func frontEqual(t1 : (Nat, Queue.Queue<Nat>), t2 : (Nat, Queue.Queue<Nat>)) : Bo
 };
 
 func backToText(t : (Queue.Queue<Nat>, Nat)) : Text {
-  "(" # toText(t.0) # ", " # Nat.toText(t.1) # ")"
+  "(" # Queue.toText(t.0, Nat.toText) # ", " # Nat.toText(t.1) # ")"
 };
 
 func backEqual(t1 : (Queue.Queue<Nat>, Nat), t2 : (Queue.Queue<Nat>, Nat)) : Bool {

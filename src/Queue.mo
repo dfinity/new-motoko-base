@@ -93,13 +93,13 @@ module {
   /// Runtime: O(n)
   /// Space: O(n)
   /// `n` denotes the number of elements stored in the queue.
-  public func fromPure<T>(queue : PureQueue.Queue<T>) : Queue<T> {
-    let mutableQueue = empty<T>();
-    let iter = PureQueue.values(queue);
+  public func fromPure<T>(pureQueue : PureQueue.Queue<T>) : Queue<T> {
+    let queue = empty<T>();
+    let iter = PureQueue.values(pureQueue);
     loop {
       switch(iter.next()) {
-        case null { return mutableQueue };
-        case (?val) { pushBack(mutableQueue, val) };
+        case null { return queue };
+        case (?val) { pushBack(queue, val) };
       };
     };
   };

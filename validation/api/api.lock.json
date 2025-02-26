@@ -1352,8 +1352,6 @@
       "public func size<T>(set : Set<T>) : Nat",
       "public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text",
       "public func union<T>(set1 : Set<T>, set2 : Set<T>, compare: (T, T) -> Order.Order) : Set<T>",
-      "public func toText<T>(set : Set<T>, f : T -> Text) : Text",
-      "public func union<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func values<T>(set : Set<T>) : Iter.Iter<T>"
     ]
   }

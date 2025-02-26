@@ -62,7 +62,7 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///   let pureSet = Set.toPure(set);
-  ///   assert(PureSet.contains(pureSet, 1));
+  ///   assert(PureSet.contains(pureSet, Nat.compare, 1));
   /// }
   /// ```
   ///
@@ -90,7 +90,7 @@ module {
   ///   pureSet := PureSet.add(pureSet, Nat.compare, 2);
   ///   pureSet := PureSet.add(pureSet, Nat.compare, 3);
   ///   let mutableSet = Set.fromPure(pureSet);
-  //    assert(Set.contains(mutableSet, 1));
+  //    assert(Set.contains(mutableSet, Nat.compare, 1));
   /// }
   /// ```
   ///

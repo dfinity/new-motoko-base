@@ -65,15 +65,15 @@ module {
     todo()
   };
 
-  public func union<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
+  public func union<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
-  public func intersection<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
+  public func intersection<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 
-  public func difference<T>(set1 : Set<T>, set2 : Set<T>) : Set<T> {
+  public func difference<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     todo()
   };
 

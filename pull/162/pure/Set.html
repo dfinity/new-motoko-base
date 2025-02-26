@@ -52,18 +52,18 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 <p>Note: The returned set shares with the <code>set</code> most of the tree nodes.
 Garbage collecting one of the sets (e.g. after an assignment <code>m := Set.add(m, c, e)</code>)
 causes collecting <code>O(log(n))</code> nodes.</p>
-</p></div><div class="declaration"><h4 class="function" id="insert"><code><span class="keyword">public func </span><span class="fnname">insert</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">elem</span> : <span class="type">T</span><br/>) : ?<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Given <code>set</code> ordered by <code>compare</code>, insert the new <code>element</code>,
-returning either the extended set as an option
-or null if the element was already in the set.</p>
+</p></div><div class="declaration"><h4 class="function" id="insert"><code><span class="keyword">public func </span><span class="fnname">insert</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">elem</span> : <span class="type">T</span><br/>) : (<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="type">Bool</span>)</code></h4><p><p>Given <code>set</code> ordered by <code>compare</code>, insert the new <code>element</code>,
+returning the set extended with <code>element</code> and a Boolean indicating
+if the element was already present in <code>set</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let ?set1 = Set.insert(Set.empty&lt;Nat&gt;, Nat.compare, 1);
-  let ?set2 = Set.insert(set2, Nat.compare, 2);
-  let ?set3 = Set.insert(set3, Nat.compare, 3);
-  let null = Set.insert(set3, Nat.compare, 1);
+  let (set1, true) = Set.insert(Set.empty&lt;Nat&gt;, Nat.compare, 1);
+  let (set2, true) = Set.insert(set2, Nat.compare, 2);
+  let (set3, true) = Set.insert(set3, Nat.compare, 3);
+  let (set4, false) = Set.insert(set3, Nat.compare, 1);
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -99,9 +99,9 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 Note: The returned set shares with <code>set</code> most of the tree nodes.
 Garbage collecting one of the sets (e.g. after an assignment <code>m := Set.delete(m, c, e)</code>)
 causes collecting <code>O(log(n))</code> nodes.</p>
-</p></div><div class="declaration"><h4 class="function" id="delete"><code><span class="keyword">public func </span><span class="fnname">delete</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : ?<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Given <code>set</code> ordered by <code>compare</code>, delete <code>element</code> from the set, returning
-either the set without the element, as an option, or
-<code>null</code> if the element was not in the set.</p>
+</p></div><div class="declaration"><h4 class="function" id="delete"><code><span class="keyword">public func </span><span class="fnname">delete</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : (<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="type">Bool</span>)</code></h4><p><p>Given <code>set</code> ordered by <code>compare</code>, delete <code>element</code> from the set, returning
+either the set without the element and a Boolean indicating whether
+whether <code>element</code> was contained in <code>set</code>.</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/pure/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
@@ -112,9 +112,11 @@ persistent actor {
             Set.add(_, Nat.compare, 2) |&gt;
             Set.add(_, Nat.compare, 3);
 
-  let ?set1 = Set.delete(set, Nat.compare, 2);
+  let (set1, contained_two) = Set.delete(set, Nat.compare, 2);
+  assert contained_two;
   Debug.print(Set.toText(set1, Nat.toText));   // prints `{1, 3}`
-  assert (Set.delete(set, Nat.compare, 4) == null);
+  let (set2, contained_four) = Set.delete(set1, Nat.compare, 4);
+  assert not contained_four;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.

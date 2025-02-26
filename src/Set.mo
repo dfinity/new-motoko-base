@@ -274,13 +274,16 @@ module {
   ///   Set.add(set1, Nat.compare, 3);
   ///   let set2 = Set.clone(set1);
   ///
-  ///   assert(Set.equal(set1, set2, Nat.equal));
+  ///   assert Set.equal(set1, set2, Nat.compare);
   /// }
   /// ```
   ///
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  public func equal<T>(set1 : Set<T>, set2 : Set<T>, equal : (T, T) -> Bool) : Bool {
+  // TODO: pass compare, not equal to match pure API and allow optimization
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Types.Order) : Bool {
+    if (set1.size != set2.size) return false;
+    // TODO: optimize
     let iterator1 = values(set1);
     let iterator2 = values(set2);
     loop {
@@ -291,7 +294,7 @@ module {
           return true
         };
         case (?element1, ?element2) {
-          if (not equal(element1, element2)) {
+          if (not (compare(element1, element2) == #equal)) {
             return false
           }
         };
@@ -416,7 +419,7 @@ module {
   };
 
   /// Deletes an element from a set.
-  /// Returns true if the element was contained in the set, false if not.
+  /// Returns `true` if the element was contained in the set, `false` if not.
   ///
   /// ```motoko
   /// import Set "mo:base/Set";
@@ -646,7 +649,7 @@ module {
 
   /// Create a mutable set with the elements obtained from an iterator.
   /// Potential duplicate elements in the iterator are ignored, i.e.
-  /// multiple occurrence of the equal element only occur once in the set.
+  /// multiple occurrence of an equal element only occur once in the set.
   ///
   /// Example:
   /// ```motoko
@@ -655,8 +658,8 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   transient let iterator = Iter.fromArray([1, 2, 3]);
-  ///   let set = Set.fromIter<Nat>(iterator, Nat.compare);
+  ///   transient let iterator = Iter.fromArray([3, 1, 2, 1]);
+  ///   let set = Set.fromIter<Nat>(iterator, Nat.compare);  // => {1, 2, 3}
   /// }
   /// ```
   ///
@@ -694,6 +697,8 @@ module {
   /// where `m` and `n` denote the number of elements stored in the sets `set1` and `set2`, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   public func isSubset<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Bool {
+    if (set1.size > set2.size) { return false };
+    // TODO: optimize
     for (element in values(set1)) {
       if (not contains(set2, compare, element)) {
         return false
@@ -1173,10 +1178,12 @@ module {
     accumulator
   };
 
-  /// Merge a series of sets to a common new sets, i.e. all elements of
-  /// the iterated sets are added to a combined set.
-  /// Potential duplicates are ignored, i.e. if the same element occurs
-  /// in multiple iterated sets, it only occurs once in the returned set.
+  /// Construct the union of a series of sets, i.e. all elements of
+  /// each set are included in the result set.
+  /// Any duplicates are ignored, i.e. if an element occurs
+  /// in several of the iterated sets, it only occurs once in the result set.
+  ///
+  /// Assumes all sets are ordered by `compare`.
   ///
   /// Example:
   /// ```motoko
@@ -1210,11 +1217,12 @@ module {
     result
   };
 
-  /// Merge the subsets of elements to a new set, i.e. all elements of
-  /// the sub-sets of the set are added to a combined set that is returned.
-  /// Potential duplicate elements in the sub-sets are ignored, i.e. if the
-  /// same element occurs in multiple sub-sets, it only occurs once in the
-  /// returned set.
+  /// Construct the union of a set of element sets, i.e. all elements of
+  /// each element set are included in the result set.
+  /// Any duplicates are ignored, i.e. if the same element occurs in multiple element sets,
+  /// it only occurs once in the result set.
+  ///
+  /// Assumes all sets are ordered by `compare`.
   ///
   /// Example:
   /// ```motoko
@@ -1253,8 +1261,8 @@ module {
     result
   };
 
-  /// Check whether all element in the set fulfil a predicate function, i.e.
-  /// the predicate function returns `true` for all element in the set.
+  /// Check whether all elements in the set satisfy a predicate, i.e.
+  /// the `predicate` function returns `true` for all elements in the set.
   /// Returns `true` for an empty set.
   ///
   /// Example:
@@ -1280,6 +1288,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func all<T>(set : Set<T>, predicate : T -> Bool) : Bool {
+    // TODO optimize, avoiding iterator
     for (element in values(set)) {
       if (not predicate(element)) {
         return false
@@ -1288,8 +1297,8 @@ module {
     true
   };
 
-  /// Check whether at least one element in the set fulfils the predicate function, i.e.
-  /// the predicate function returns `true` for at least one element in the set.
+  /// Check whether at least one element in the set satisfies a predicate, i.e.
+  /// the `predicate` function returns `true` for at least one element in the set.
   /// Returns `false` for an empty set.
   ///
   /// Example:
@@ -1315,6 +1324,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func any<T>(set : Set<T>, predicate : T -> Bool) : Bool {
+    // TODO optimize, avoiding iterator
     for (element in values(set)) {
       if (predicate(element)) {
         return true
@@ -1366,7 +1376,7 @@ module {
   ///   Set.add(set, Nat.compare, 3);
   ///
   ///   let text = Set.toText<Nat>(set, Nat.toText);
-  ///   // `"0, 1, 2"`
+  ///   // `"{0, 1, 2}"`
   /// }
   /// ```
   ///
@@ -1377,14 +1387,13 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text {
-    var text = "";
+    var text = "{";
+    var sep = "";
     for (element in values(set)) {
-      if (text != "") {
-        text #= ", "
-      };
-      text #= elementFormat(element)
+      text #= sep # elementFormat(element);
+      sep := ", "
     };
-    text
+    text # "}";
   };
 
   /// Compare two sets by comparing the elements.
@@ -2236,6 +2245,7 @@ module {
     })
   };
 
+  // FIXME
   // Additional functionality compared to original source.
 
   func cloneData<T>(data : Data<T>) : Data<T> {

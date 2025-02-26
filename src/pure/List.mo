@@ -13,6 +13,7 @@ import Array "../Array";
 import Iter "../Iter";
 import Order "../Order";
 import Result "../Result";
+import { trap } "../Runtime";
 import Types "../Types";
 
 module {
@@ -729,7 +730,7 @@ module {
   /// Space: O(size)
   public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> =
     switch (split(list, n)) {
-      case (null, _) { assert n > 0; null };
+      case (null, _) { if (n == 0) trap "pure/List.chunks()"; null };
       case (pre, null) ?(pre, null);
       case (pre, post) ?(pre, chunks(post, n));
     };

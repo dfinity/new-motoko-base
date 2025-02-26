@@ -980,7 +980,7 @@ run(
           let map1 = smallMap();
           let map2 = smallMap();
           assert Map.delete(map2, Nat.compare, smallSize - 1 : Nat);
-          Map.equal(map1, map2, Nat.equal, Text.equal)
+          Map.equal(map1, map2, Nat.compare, Text.equal)
         },
         M.equals(T.bool(false))
       ),

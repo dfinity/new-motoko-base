@@ -927,7 +927,7 @@ run(
         do {
           let map1 = smallMap();
           let (map2, _) = Map.delete(map1, Nat.compare, smallSize - 1);
-          Map.equal(map1, map2, Nat.equal, Text.equal)
+          Map.equal(map1, map2, Nat.compare, Text.equal)
         },
         M.equals(T.bool(false))
       ),

@@ -706,20 +706,20 @@ run(
         do {
           var set = buildTestSet();
           assert (Set.contains(set, Nat.compare, 1));
-          let null = Set.insert(set, Nat.compare, 1);
-	  true
+          let (_, changed) = Set.insert(set, Nat.compare, 1);
+	  changed
         },
-        M.equals(T.bool(true))
+        M.equals(T.bool(false))
       ),
       test(
         "repeated delete",
         do {
           var set = buildTestSet();
-          let ?set1 = Set.delete(set, Nat.compare, 1);
-          let null = Set.delete(set1, Nat.compare, 1);
-	  true
+          let (set1, true) = Set.delete(set, Nat.compare, 1);
+          let (_, changed) = Set.delete(set1, Nat.compare, 1);
+	  changed
         },
-        M.equals(T.bool(true))
+        M.equals(T.bool(false))
       )
 
     ]

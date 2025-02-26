@@ -720,7 +720,7 @@ module {
 
   /// Split the given list into chunks of length `n`.
   /// The last chunk will be shorter if the length of the given list
-  /// does not divide by `n` evenly. Passing `n = 0` is not allowed.
+  /// does not divide by `n` evenly. Traps if `n` = 0.
   ///
   /// Example:
   /// ```motoko include=initialize
@@ -740,7 +740,7 @@ module {
   /// Space: O(size)
   public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> =
     switch (split(list, n)) {
-      case (null, _) { debug assert n > 0; null };
+      case (null, _) { assert n > 0; null };
       case (pre, null) ?(pre, null);
       case (pre, post) ?(pre, chunks(post, n));
     };

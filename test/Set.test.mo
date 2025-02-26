@@ -86,7 +86,7 @@ run(
         do {
           let set1 = Set.empty<Nat>();
           let set2 = Set.empty<Nat>();
-          Set.equal(set1, set2, Nat.equal)
+          Set.equal(set1, set2, Nat.compare)
         },
         M.equals(T.bool(true))
       ),
@@ -233,7 +233,7 @@ run(
           let set = Set.empty<Nat>();
           Set.toText<Nat>(set, Nat.toText)
         },
-        M.equals(T.text(""))
+        M.equals(T.text("{}"))
       ),
       test(
         "compare",
@@ -302,7 +302,7 @@ run(
         do {
           let original = Set.singleton<Nat>(0);
           let clone = Set.clone(original);
-          assert (Set.equal(original, clone, Nat.equal));
+          assert (Set.equal(original, clone, Nat.compare));
           Set.size(clone)
         },
         M.equals(T.nat(1))
@@ -380,7 +380,7 @@ run(
         do {
           let set1 = Set.singleton<Nat>(0);
           let set2 = Set.singleton<Nat>(0);
-          Set.equal(set1, set2, Nat.equal)
+          Set.equal(set1, set2, Nat.compare)
         },
         M.equals(T.bool(true))
       ),
@@ -389,7 +389,7 @@ run(
         do {
           let set1 = Set.singleton<Nat>(0);
           let set2 = Set.singleton<Nat>(1);
-          Set.equal(set1, set2, Nat.equal)
+          Set.equal(set1, set2, Nat.compare)
         },
         M.equals(T.bool(false))
       ),
@@ -424,7 +424,7 @@ run(
         do {
           let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([0]), Nat.compare);
           assert (Set.contains(set, Nat.compare, 0));
-          assert (Set.equal(set, Set.singleton<Nat>(0), Nat.equal));
+          assert (Set.equal(set, Set.singleton<Nat>(0), Nat.compare));
           Set.size(set)
         },
         M.equals(T.nat(1))
@@ -455,7 +455,7 @@ run(
               true
             }
           );
-          assert (Set.equal(input, output, Nat.equal));
+          assert (Set.equal(input, output, Nat.compare));
           Set.size(output)
         },
         M.equals(T.nat(1))
@@ -580,7 +580,7 @@ run(
           let set = Set.singleton<Nat>(1);
           Set.toText<Nat>(set, Nat.toText)
         },
-        M.equals(T.text("1"))
+        M.equals(T.text("{1}"))
       ),
       test(
         "compare less",
@@ -830,7 +830,7 @@ run(
         do {
           let original = smallSet();
           let clone = Set.clone(original);
-          assert (Set.equal(original, clone, Nat.equal));
+          assert (Set.equal(original, clone, Nat.compare));
           Set.size(clone)
         },
         M.equals(T.nat(smallSize))
@@ -911,7 +911,7 @@ run(
         do {
           let set1 = smallSet();
           let set2 = smallSet();
-          Set.equal(set1, set2, Nat.equal)
+          Set.equal(set1, set2, Nat.compare)
         },
         M.equals(T.bool(true))
       ),
@@ -921,7 +921,7 @@ run(
           let set1 = smallSet();
           let set2 = smallSet();
           Set.delete(set2, Nat.compare, smallSize - 1 : Nat);
-          Set.equal(set1, set2, Nat.equal)
+          Set.equal(set1, set2, Nat.compare)
         },
         M.equals(T.bool(false))
       ),
@@ -959,7 +959,7 @@ run(
           for (index in Nat.range(0, smallSize)) {
             assert (Set.contains(set, Nat.compare, index))
           };
-          assert (Set.equal(set, smallSet(), Nat.equal));
+          assert (Set.equal(set, smallSet(), Nat.compare));
           Set.size(set)
         },
         M.equals(T.nat(smallSize))
@@ -1109,13 +1109,14 @@ run(
           Set.toText<Nat>(set, Nat.toText)
         },
         do {
-          var text = "";
+          var text = "{";
           for (index in Nat.range(0, smallSize)) {
-            if (text != "") {
+            if (text != "{") {
               text #= ", "
             };
             text #= Nat.toText(index)
           };
+	  text #= "}";
           M.equals(T.text(text))
         }
       ),

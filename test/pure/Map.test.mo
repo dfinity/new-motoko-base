@@ -248,7 +248,7 @@ run(
         do {
           let map1 = Map.empty<Nat, Text>();
           let map2 = Map.empty<Nat, Text>();
-          Map.equal(map1, map2, Nat.equal, Text.equal)
+          Map.equal(map1, map2, Nat.compare, Text.equal)
         },
         M.equals(T.bool(true))
       ),
@@ -435,7 +435,7 @@ run(
               true
             }
           );
-          assert (Map.equal(input, output, Nat.equal, Text.equal));
+          assert (Map.equal(input, output, Nat.compare, Text.equal));
           Map.size(output)
         },
         M.equals(T.nat(1))
@@ -918,7 +918,7 @@ run(
         do {
           let map1 = smallMap();
           let map2 = smallMap();
-          Map.equal(map1, map2, Nat.equal, Text.equal)
+          Map.equal(map1, map2, Nat.compare, Text.equal)
         },
         M.equals(T.bool(true))
       ),
@@ -965,7 +965,7 @@ run(
           for (index in Nat.range(0, smallSize)) {
             assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
           };
-          assert (Map.equal(map, smallMap(), Nat.equal, Text.equal));
+          assert (Map.equal(map, smallMap(), Nat.compare, Text.equal));
           Map.size(map)
         },
         M.equals(T.nat(smallSize))

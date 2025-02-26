@@ -934,8 +934,7 @@ module {
       text #= sep # "(" # keyFormat(k) # ", " # valueFormat(v) # ")";
       sep := ", "
     };
-    text #= "}";
-    text
+    text # "}"
   };
 
   /// Test whether two immutable maps have equal entries.
@@ -955,13 +954,13 @@ module {
   ///   let map2 = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(2, "Two"), (1, "One"), (0, "Zero")]),
   ///     Nat.compare);
-  ///   assert(Map.equal(map1, map2, Nat.equal, Text.equal));
+  ///   assert(Map.equal(map1, map2, Nat.compare, Text.equal));
   /// }
   /// ```
   ///
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, equalKey : (K, K) -> Bool, equalValue : (V, V) -> Bool) : Bool {
+  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compareKey : (K, K) -> Order.Order, equalValue : (V, V) -> Bool) : Bool {
     if (map1.size != map2.size) {
       return false;
     };
@@ -975,7 +974,7 @@ module {
           return true
         };
         case (?(key1, value1), ?(key2, value2)) {
-          if (not equalKey(key1, key2) or not equalValue(value1, value2)) {
+          if (not (compareKey(key1, key2) == #equal) or not equalValue(value1, value2)) {
             return false
           }
         };

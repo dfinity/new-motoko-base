@@ -272,13 +272,13 @@ module {
   ///   Map.add(map1, Nat.compare, 2, "Two");
   ///   let map2 = Map.clone(map1);
   ///
-  ///   assert(Map.equal(map1, map2, Nat.equal, Text.equal));
+  ///   assert(Map.equal(map1, map2, Nat.compare, Text.equal));
   /// }
   /// ```
   ///
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, equalKeys : (K, K) -> Bool, equalValues : (V, V) -> Bool) : Bool {
+  public func equal<K, V>(map1 : Map<K, V>, map2 : Map<K, V>, compareKeys : (K, K) -> Types.Order, equalValues : (V, V) -> Bool) : Bool {
     if (size(map1) != size(map2)) {
        return false;
     };
@@ -292,7 +292,8 @@ module {
           return true
         };
         case (?(key1, value1), ?(key2, value2)) {
-          if (not equalKeys(key1, key2) or not equalValues(value1, value2)) {
+          if (not (compareKeys(key1, key2) == #equal) or
+            not equalValues(value1, value2)) {
             return false
           }
         };
@@ -1281,8 +1282,7 @@ module {
       text #= sep # "(" # keyFormat(key) # ", " # valueFormat(value) # ")";
       sep := ", "
     };
-    text #= "}";
-    text
+    text # "}"
   };
 
   /// Compare two maps by primarily comparing keys and secondarily values.

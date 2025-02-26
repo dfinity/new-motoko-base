@@ -566,6 +566,7 @@
       "public func singleton<K, V>(key : K, value : V) : Map<K, V>",
       "public func size<K, V>(map : Map<K, V>) : Nat",
       "public func swap<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V",
+      "public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V",
       "public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text",
       "public func values<K, V>(map : Map<K, V>) : Types.Iter<V>"
     ]

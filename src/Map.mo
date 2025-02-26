@@ -557,6 +557,7 @@ module {
     ignore delete(map, compare, key);
   };
 
+
   /// Delete an existing entry by its key in the map.
   /// Returns `true` if the key was present in the map, otherwise `false`.
   ///
@@ -586,7 +587,43 @@ module {
   ///
   /// Note: Creates `O(log(n))` objects that will be collected as garbage.
   public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Bool {
-    let deleted = switch (map.root) {
+    switch (take(map, compare, key)) {
+      case null false;
+      case _ true;
+    }
+  };
+
+
+  /// Delete an existing entry by its key in the map.
+  /// Returns `true` if the key was present in the map, otherwise `false`.
+  ///
+  /// ```motoko
+  /// import Map "mo:base/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let map = Map.empty<Nat, Text>();
+  ///   Map.add(map, Nat.compare, 0, "Zero");
+  ///   Map.add(map, Nat.compare, 1, "One");
+  ///   Map.add(map, Nat.compare, 2, "Two");
+  ///
+  ///   assert Map.delete(map, Nat.compare, 0); // returns true
+  ///   Debug.print(debug_show(Map.containsKey(map, Nat.compare, 0))); // prints `false`.
+  ///
+  ///   assert not Map.delete(map, Nat.compare, 3); // returns false
+  ///   Debug.print(debug_show(Map.containsKey(map, Nat.compare, 3))); // prints `false`.
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))` including garbage, see below.
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: Creates `O(log(n))` objects that will be collected as garbage.
+  public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V {
+    let deletedValue = switch (map.root) {
       case (#leaf(leafNode)) {
         // TODO: think about how this can be optimized so don't have to do two steps (search and then insert)?
         switch (NodeUtil.getKeyIndex<K, V>(leafNode.data, compare, key)) {
@@ -627,11 +664,9 @@ module {
         deletedValueResult
       }
     };
-    switch deleted {
-      case null false;
-      case _ true;
-    }
+    deletedValue
   };
+
 
   /// Retrieves the key-value pair from the map with the maximum key.
   /// If the map is empty, returns `null`.

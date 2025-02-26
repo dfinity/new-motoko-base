@@ -396,7 +396,7 @@ module {
       };
       case (#existent) {
         // keep size
-	return false
+	false
       };
       case (#promote({ element = promotedElement; leftChild; rightChild })) {
         let elements = VarArray.repeat<?T>(null, btreeOrder - 1);
@@ -410,7 +410,7 @@ module {
         });
         // promotion always comes from inserting a new element, so increment the tree size counter
         set.size += 1;
-	return true
+	true
       }
     }
   };
@@ -517,7 +517,7 @@ module {
         deletedElement
       }
     };
-    return deleted
+    deleted
   };
 
   /// Retrieves the maximum element from the set.
@@ -856,7 +856,7 @@ module {
     for (element in iter) {
       deleted := delete(set, compare, element) or deleted // order matters!
     };
-    return deleted
+    deleted
   };
 
 
@@ -888,7 +888,7 @@ module {
     for (element in iter) {
       inserted := insert(set, compare, element) or inserted // order matters!
     };
-    return inserted
+    inserted
   };
 
 

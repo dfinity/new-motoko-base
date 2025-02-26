@@ -829,7 +829,8 @@ module {
   };
 
   /// Deletes all values in `iter` from the specified `set`.
-  /// Returns true if any value was present in the set, otherwise false.
+  /// Returns `true` if any value was present in the set, otherwise false.
+  /// The return value indicates whether the size of the set has changed.
   ///
   /// Example:
   /// ```motoko
@@ -861,6 +862,7 @@ module {
 
   /// Inserts all values in `iter` into `set`.
   /// Returns true if any value was not contained in the original set, otherwise false.
+  /// The return value indicates whether the size of the set has changed.
   ///
   /// Example:
   /// ```motoko
@@ -891,6 +893,7 @@ module {
 
 
   /// Removes all values in `set` that do not satisfy the given predicate.
+  /// Returns `true` if and only if the size of the set has changed.
   /// Modifies the set in place.
   ///
   /// Example:
@@ -908,9 +911,9 @@ module {
   ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [2]
   /// }
   /// ```
-  public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) {
+  public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) : Bool {
     let array = Array.fromIter<T>(values(set));
-    ignore deleteAll(
+    deleteAll(
       set,
       compare,
       Iter.filter<T>(array.values(), func(element : T) : Bool = not predicate(element))

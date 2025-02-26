@@ -1589,7 +1589,7 @@ run(
         "retainAll empty",
         do {
           let set = Set.empty<Nat>();
-          Set.retainAll<Nat>(set, Nat.compare, func(n) { true });
+          assert (not Set.retainAll<Nat>(set, Nat.compare, func(n) { true }));
           Set.size(set)
         },
         M.equals(T.nat(0))
@@ -1598,7 +1598,7 @@ run(
         "retainAll all",
         do {
           let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          Set.retainAll<Nat>(set, Nat.compare, func(n) { true });
+          assert (not Set.retainAll<Nat>(set, Nat.compare, func(n) { true }));
           Iter.toArray(Set.values(set))
         },
         M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
@@ -1607,7 +1607,7 @@ run(
         "retainAll none",
         do {
           let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
-          Set.retainAll<Nat>(set, Nat.compare, func(n) { false });
+          assert (Set.retainAll<Nat>(set, Nat.compare, func(n) { false }));
           Set.size(set)
         },
         M.equals(T.nat(0))
@@ -1616,7 +1616,7 @@ run(
         "retainAll even",
         do {
           let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3, 4]), Nat.compare);
-          Set.retainAll<Nat>(set, Nat.compare, func(n) { n % 2 == 0 });
+          assert (Set.retainAll<Nat>(set, Nat.compare, func(n) { n % 2 == 0 }));
           Iter.toArray(Set.values(set))
         },
         M.equals(T.array<Nat>(T.natTestable, [2, 4]))
@@ -1625,7 +1625,7 @@ run(
         "retainAll predicate",
         do {
           let set = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3, 4, 5]), Nat.compare);
-          Set.retainAll<Nat>(set, Nat.compare, func(n) { n > 2 and n < 5 });
+          assert (Set.retainAll<Nat>(set, Nat.compare, func(n) { n > 2 and n < 5 }));
           Iter.toArray(Set.values(set))
         },
         M.equals(T.array<Nat>(T.natTestable, [3, 4]))

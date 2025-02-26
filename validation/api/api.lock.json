@@ -994,7 +994,7 @@
       "public func max<T>(set : Set<T>) : ?T",
       "public func min<T>(set : Set<T>) : ?T",
       "public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : ()",
-      "public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool)",
+      "public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) : Bool",
       "public func reverseValues<T>(set : Set<T>) : Types.Iter<T>",
       "public type Set<T>",
       "public func singleton<T>(element : T) : Set<T>",

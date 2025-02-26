@@ -15,7 +15,7 @@ import Order "../Order";
 import Result "../Result";
 import Types "../Types";
 
-module List /*FIXME: remove?*/ {
+module {
 
   public type List<T> = Types.Pure.List<T>;
 
@@ -740,7 +740,7 @@ module List /*FIXME: remove?*/ {
   /// Space: O(size)
   public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> =
     switch (split(list, n)) {
-      case (null, _) { assert n > 0; null };
+      case (null, _) { debug assert n > 0; null };
       case (pre, null) ?(pre, null);
       case (pre, post) ?(pre, chunks(post, n));
     };

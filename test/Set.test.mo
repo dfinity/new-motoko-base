@@ -26,6 +26,41 @@ run(
         M.equals(T.bool(true))
       ),
       test(
+        "add empty",
+	do {
+	  let set = Set.empty<Nat>();
+	  Set.add(set, Nat.compare, 0);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0]))
+      ),
+      test(
+        "insert empty",
+	do {
+	  let set = Set.empty<Nat>();
+          assert Set.insert(set, Nat.compare, 0);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0]))
+      ),
+      test(
+        "remove empty",
+	do {
+	  let set = Set.empty<Nat>();
+	  Set.remove(set, Nat.compare, 0);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, []))
+      ),
+      test(
+        "delete empty",
+	do { let set = Set.empty<Nat>();
+	     assert (not Set.delete(set, Nat.compare, 0));
+             Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, []))
+      ),
+      test(
         "clone no alias",
         do {
           let original = Set.empty<Nat>();
@@ -296,6 +331,76 @@ run(
         "is empty",
         Set.isEmpty<Nat>(Set.singleton(0)),
         M.equals(T.bool(false))
+      ),
+      test(
+        "add singleton old",
+	do {
+	  let set = Set.singleton<Nat>(0);
+	  Set.add(set, Nat.compare, 0);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0]))
+      ),
+      test(
+        "add singleton new",
+	do {
+	  let set = Set.singleton<Nat>(0);
+	  Set.add(set, Nat.compare, 1);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0, 1]))
+      ),
+      test(
+        "insert singleton old",
+	do {
+	  let set = Set.singleton<Nat>(0);
+          assert (not Set.insert(set, Nat.compare, 0));
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0]))
+     ),
+     test(
+        "insert singleton new",
+	do {
+	  let set = Set.singleton<Nat>(0);
+          assert Set.insert(set, Nat.compare, 1);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0, 1]))
+      ),
+      test(
+        "remove singleton old",
+	do {
+	  let set = Set.singleton<Nat>(0);
+	  Set.remove(set, Nat.compare, 0);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, []))
+      ),
+      test(
+        "remove singleton new",
+	do {
+	  let set = Set.singleton<Nat>(0);
+	  Set.remove(set, Nat.compare, 1);
+          Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0]))
+      ),
+      test(
+        "delete singleton old",
+	do { let set = Set.singleton<Nat>(0);
+	     assert (Set.delete(set, Nat.compare, 0));
+             Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, []))
+      ),
+      test(
+        "delete singleton new",
+	do { let set = Set.singleton<Nat>(0);
+	     assert (not Set.delete(set, Nat.compare, 1));
+             Iter.toArray(Set.values(set))
+	},
+        M.equals(T.array<Nat>(T.natTestable, [0]))
       ),
       test(
         "clone",
@@ -1294,6 +1399,26 @@ run(
         },
         M.equals(T.nat(numberOfElements))
       ),
+      test("insert",
+        do {
+          let set = Set.empty<Nat>();
+          for (index in Nat.range(0, numberOfElements)) {
+            assert (Set.insert(set, Nat.compare, index));
+            assert (Set.size(set) == index + 1);
+            assert (Set.contains(set, Nat.compare, index))
+          };
+          for (index in Nat.range(0, numberOfElements)) {
+            assert (not (Set.insert(set, Nat.compare, index)));
+          };
+          for (index in Nat.range(0, numberOfElements)) {
+            assert (Set.contains(set, Nat.compare, index))
+          };
+          assert (not Set.contains(set, Nat.compare, numberOfElements));
+          Set.assertValid(set, Nat.compare);
+          Set.size(set)
+        },
+        M.equals(T.nat(numberOfElements))
+      ),
       test(
         "contains",
         do {
@@ -1338,6 +1463,40 @@ run(
               Set.remove(set, Nat.compare, element);
               assert (not Set.contains(set, Nat.compare, element))
             };
+            assert (not Set.contains(set, Nat.compare, element))
+          };
+          Set.assertValid(set, Nat.compare);
+          Set.size(set)
+        },
+        M.equals(T.nat(0))
+      ),
+
+      test(
+        "delete",
+        do {
+          let set = Set.empty<Nat>();
+          let random = Random(randomSeed);
+          for (index in Nat.range(0, numberOfElements)) {
+            let element = random.next();
+            if (not Set.contains(set, Nat.compare, element)) {
+              Set.add(set, Nat.compare, element)
+            }
+          };
+          assert (Set.size(set) > 0);
+          random.reset();
+          for (index in Nat.range(0, numberOfElements)) {
+            let element = random.next();
+            assert (Set.contains(set, Nat.compare, element))
+          };
+          random.reset();
+          for (index in Nat.range(0, numberOfElements)) {
+            let element = random.next();
+            if (Set.contains(set, Nat.compare, element)) {
+              assert Set.delete(set, Nat.compare, element);
+              assert (not Set.contains(set, Nat.compare, element))
+            } else {
+              assert (not Set.delete(set, Nat.compare, element));
+	    };
             assert (not Set.contains(set, Nat.compare, element))
           };
           Set.assertValid(set, Nat.compare);

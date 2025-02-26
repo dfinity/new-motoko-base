@@ -711,15 +711,15 @@ run(
           let clone = Map.clone(original);
           let keys = Iter.toArray(Map.keys(original));
           for (key in keys.values()) {
-            ignore Map.put(original, Nat.compare, key, "X");
+            ignore Map.put(original, Nat.compare, key, "X")
           };
           for (key in keys.values()) {
-            assert Map.get(clone, Nat.compare, key) ==
-                   Map.get(copy, Nat.compare, key)
+            assert Map.get(clone, Nat.compare, key) == Map.get(copy, Nat.compare, key)
           };
           Map.size(clone)
         },
-        M.equals(T.nat(smallSize))),
+        M.equals(T.nat(smallSize))
+      ),
       test(
         "iterate forward",
         Iter.toArray(Map.entries(smallMap())),
@@ -1264,7 +1264,7 @@ run(
   suite(
     "add, update, put",
     [
-       test(
+      test(
         "add disjoint",
         do {
           let map = Map.empty<Nat, Text>();
@@ -1317,4 +1317,6 @@ run(
         M.equals(T.optional(T.textTestable, ?"0"))
       ),
       */
-   ]))
+    ]
+  )
+)

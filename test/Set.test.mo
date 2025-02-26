@@ -1116,7 +1116,7 @@ run(
             };
             text #= Nat.toText(index)
           };
-	  text #= "}";
+          text #= "}";
           M.equals(T.text(text))
         }
       ),

@@ -47,7 +47,7 @@ module {
   type Data<T> = Types.Set.Data<T>;
   type Internal<T> = Types.Set.Internal<T>;
   type Leaf<T> = Types.Set.Leaf<T>;
-  
+
   /// Convert the mutable set to an immutable set.
   ///
   /// Example:
@@ -1298,7 +1298,7 @@ module {
       text #= sep # elementFormat(element);
       sep := ", "
     };
-    text # "}";
+    text # "}"
   };
 
   /// Compare two sets by comparing the elements.

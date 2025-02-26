@@ -594,8 +594,8 @@ module {
   };
 
 
-  /// Delete an existing entry by its key in the map.
-  /// Returns `true` if the key was present in the map, otherwise `false`.
+  /// Removes any existing entry by its key in the map.
+  /// Returns the previous value of the key or `null` if the key was absent.
   ///
   /// ```motoko
   /// import Map "mo:base/Map";
@@ -608,10 +608,10 @@ module {
   ///   Map.add(map, Nat.compare, 1, "One");
   ///   Map.add(map, Nat.compare, 2, "Two");
   ///
-  ///   assert Map.delete(map, Nat.compare, 0); // returns true
+  ///   assert Map.take(map, Nat.compare, 0) == ?"Zero";
   ///   Debug.print(debug_show(Map.containsKey(map, Nat.compare, 0))); // prints `false`.
   ///
-  ///   assert not Map.delete(map, Nat.compare, 3); // returns false
+  ///   assert Map.take(map, Nat.compare, 3) == null; // returns false
   ///   Debug.print(debug_show(Map.containsKey(map, Nat.compare, 3))); // prints `false`.
   /// }
   /// ```

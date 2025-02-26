@@ -96,9 +96,7 @@ module {
   /// Note: The returned set shares with the `set` most of the tree nodes.
   /// Garbage collecting one of the sets (e.g. after an assignment `m := Set.add(m, c, e)`)
   /// causes collecting `O(log(n))` nodes.
-  public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : Set<T>
-    = Internal.add(set, compare, elem);
-
+  public func add<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : Set<T> = Internal.add(set, compare, elem);
 
   /// Given `set` ordered by `compare`, insert the new `element`,
   /// returning the set extended with `element` and a Boolean indicating
@@ -125,9 +123,7 @@ module {
   /// Note: The returned set shares with the `set` most of the tree nodes.
   /// Garbage collecting one of the sets (e.g. after an assignment `m := Set.add(m, c, e)`)
   /// causes collecting `O(log(n))` nodes.
-  public func insert<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : (Set<T>, Bool)
-    = Internal.insert<T>(set, compare, elem);
-
+  public func insert<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : (Set<T>, Bool) = Internal.insert<T>(set, compare, elem);
 
   /// Given `set` ordered by `compare` return the set with `element` removed.
   /// Return the set unchanged if the element was absent.
@@ -159,8 +155,7 @@ module {
   /// Note: The returned set shares with `set` most of the tree nodes.
   /// Garbage collecting one of the sets (e.g. after an assignment `m := Set.delete(m, c, e)`)
   /// causes collecting `O(log(n))` nodes.
-  public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Set<T>
-    = Internal.remove(set, compare, element);
+  public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Set<T> = Internal.remove(set, compare, element);
 
   /// Given `set` ordered by `compare`, delete `element` from the set, returning
   /// either the set without the element and a Boolean indicating whether
@@ -194,8 +189,7 @@ module {
   /// Note: The returned set shares with `set` most of the tree nodes.
   /// Garbage collecting one of the sets (e.g. after an assignment `m := Set.delete(m, c, e)`)
   /// causes collecting `O(log(n))` nodes.
-  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : (Set<T>, Bool)
-    = Internal.delete(set, compare, element);
+  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : (Set<T>, Bool) = Internal.delete(set, compare, element);
 
   /// Tests whether the set contains the provided element.
   ///
@@ -221,8 +215,7 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `n` denotes the number of elements stored in the set and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func contains<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool
-    = Internal.contains(set.root, compare, element);
+  public func contains<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : Bool = Internal.contains(set.root, compare, element);
 
   /// Get the maximal element of the set `set` if it is not empty, otherwise returns `null`
   ///
@@ -244,8 +237,7 @@ module {
   /// Runtime: `O(log(n))`.
   /// Space: `O(1)`.
   /// where `n` denotes the number of elements in the set
-  public func max<T>(s : Set<T>) : ?T
-    = Internal.max(s.root);
+  public func max<T>(s : Set<T>) : ?T = Internal.max(s.root);
 
   /// Retrieves the minimum element from the set.
   /// If the set is empty, returns `null`.
@@ -268,8 +260,7 @@ module {
   /// Runtime: `O(log(n))`.
   /// Space: `O(1)`.
   /// where `n` denotes the number of elements stored in the set.
-  public func min<T>(s : Set<T>) : ?T
-    = Internal.min(s.root);
+  public func min<T>(s : Set<T>) : ?T = Internal.min(s.root);
 
   /// Returns a new set that is the union of `set1` and `set2`,
   /// i.e. a new set that all the elements that exist in at least on of the two sets.
@@ -298,7 +289,7 @@ module {
   /// and assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(m * log(n))` temporary objects that will be collected as garbage.
-  public func union<T>(set1 : Set<T>, set2 : Set<T>, compare: (T, T) -> Order.Order) : Set<T> {
+  public func union<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     if (size(set1) < size(set2)) {
       foldLeft(set1, set2, func(acc : Set<T>, elem : T) : Set<T> { Internal.add(acc, compare, elem) })
     } else {
@@ -334,17 +325,23 @@ module {
   public func intersection<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     let elems = List.empty<T>();
     if (set1.size < set2.size) {
-      Internal.iterate(set1.root, func (x: T) {
-	if (Internal.contains(set2.root, compare, x)) {
-	  List.add(elems, x)
-	}
-      });
+      Internal.iterate(
+        set1.root,
+        func(x : T) {
+          if (Internal.contains(set2.root, compare, x)) {
+            List.add(elems, x)
+          }
+        }
+      )
     } else {
-      Internal.iterate(set2.root, func (x: T) {
-	if (Internal.contains(set1.root, compare, x)) {
-	  List.add(elems, x)
-	}
-      });
+      Internal.iterate(
+        set2.root,
+        func(x : T) {
+          if (Internal.contains(set1.root, compare, x)) {
+            List.add(elems, x)
+          }
+        }
+      )
     };
     { root = Internal.buildFromSorted(elems); size = List.size(elems) }
   };
@@ -377,19 +374,24 @@ module {
   public func difference<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T> {
     if (size(set1) < size(set2)) {
       let elems = List.empty<T>(); /* imperative! */
-      Internal.iterate(set1.root, func (x : T) {
-	  if (not Internal.contains(set2.root, compare, x)) {
-	    List.add(elems, x)
-	  }
-	}
+      Internal.iterate(
+        set1.root,
+        func(x : T) {
+          if (not Internal.contains(set2.root, compare, x)) {
+            List.add(elems, x)
+          }
+        }
       );
       { root = Internal.buildFromSorted(elems); size = List.size(elems) }
-    }
-    else {
-      foldLeft(set2, set1,
-	func (acc : Set<T>, elem : T) : Set<T> {
-	  if (Internal.contains(acc.root, compare, elem)) { Internal.remove(acc, compare, elem) } else { acc }
-	}
+    } else {
+      foldLeft(
+        set2,
+        set1,
+        func(acc : Set<T>, elem : T) : Set<T> {
+          if (Internal.contains(acc.root, compare, elem)) {
+            Internal.remove(acc, compare, elem)
+          } else { acc }
+        }
       )
     }
   };
@@ -430,9 +432,7 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: Creates `O(n * log(n))` temporary objects that will be collected as garbage.
-  public func map<T1, T2>(s : Set<T1>, compare : (T2, T2) -> Order.Order, project: T1 -> T2) : Set<T2>
-    = Internal.foldLeft(s.root, empty<T2>(), func (acc : Set<T2>, elem : T1) : Set<T2> { Internal.add(acc, compare, project(elem)) });
-
+  public func map<T1, T2>(s : Set<T1>, compare : (T2, T2) -> Order.Order, project : T1 -> T2) : Set<T2> = Internal.foldLeft(s.root, empty<T2>(), func(acc : Set<T2>, elem : T1) : Set<T2> { Internal.add(acc, compare, project(elem)) });
 
   /// Apply an operation on each element contained in the set.
   /// The operation is applied in ascending order of the elements.
@@ -462,7 +462,7 @@ module {
   /// where `n` denotes the number of elements stored in the set.
   ///
   public func forEach<T>(set : Set<T>, operation : T -> ()) {
-    ignore foldLeft<T, Null>(set, null, func (acc, e) : Null { operation(e); null });
+    ignore foldLeft<T, Null>(set, null, func(acc, e) : Null { operation(e); null })
   };
 
   /// Filter elements in a new set.
@@ -491,8 +491,13 @@ module {
   /// where `n` denotes the number of elements stored in the set and
   /// assuming that the `compare` function implements an `O(1)` comparison.
   public func filter<T>(set : Set<T>, compare : (T, T) -> Order.Order, criterion : T -> Bool) : Set<T> {
-    foldLeft<T,Set<T>>(set, empty(), func (acc, e) {
-      if (criterion(e)) (add(acc, compare, e)) else acc });
+    foldLeft<T, Set<T>>(
+      set,
+      empty(),
+      func(acc, e) {
+        if (criterion(e)) (add(acc, compare, e)) else acc
+      }
+    )
   };
 
   /// Filter all elements in the set by also applying a projection to the elements.
@@ -544,10 +549,10 @@ module {
   public func filterMap<T1, T2>(set : Set<T1>, compare : (T2, T2) -> Order.Order, project : T1 -> ?T2) : Set<T2> {
     func combine(acc : Set<T2>, elem : T1) : Set<T2> {
       switch (project(elem)) {
-	case null { acc };
-	case (?elem2) {
-	  Internal.add(acc, compare, elem2)
-	}
+        case null { acc };
+        case (?elem2) {
+          Internal.add(acc, compare, elem2)
+        }
       }
     };
     Internal.foldLeft(set.root, empty(), combine)
@@ -599,27 +604,32 @@ module {
   /// Space: `O(1)` retained memory plus garbage, see the note below.
   /// where `m` and `n` denote the number of elements stored in the sets set1 and set2, respectively,
   /// and assuming that the `compare` function implements an `O(1)` comparison.
-  public func equal<T>(set1 : Set<T>, set2 : Set<T>, compare: (T, T) -> Order.Order) : Bool {
+  public func equal<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Bool {
     if (set1.size != set2.size) { return false };
     isSubsetHelper(set1.root, set2.root, compare)
   };
 
-  func isSubsetHelper<T>(t1 : Tree<T>, t2 : Tree<T>, compare: (T, T) -> Order.Order) : Bool {
+  func isSubsetHelper<T>(t1 : Tree<T>, t2 : Tree<T>, compare : (T, T) -> Order.Order) : Bool {
     switch (t1, t2) {
-      case (#leaf, _) { true  };
+      case (#leaf, _) { true };
       case (_, #leaf) { false };
       case ((#red(t1l, x1, t1r) or #black(t1l, x1, t1r)), (#red(t2l, x2, t2r)) or #black(t2l, x2, t2r)) {
-	switch (compare(x1, x2)) {
-	  case (#equal)   { isSubsetHelper(t1l, t2l, compare) and isSubsetHelper(t1r, t2r, compare) };
-	  // x1 < x2 ==> x1 \in t2l /\ t1l \subset t2l
-	  case (#less)    { Internal.contains(t2l, compare, x1) and isSubsetHelper(t1l, t2l, compare) and isSubsetHelper(t1r, t2, compare) };
-	  // x2 < x1 ==> x1 \in t2r /\ t1r \subset t2r
-	  case (#greater) { Internal.contains(t2r, compare, x1) and isSubsetHelper(t1l, t2, compare) and isSubsetHelper(t1r, t2r, compare) }
-	}
+        switch (compare(x1, x2)) {
+          case (#equal) {
+            isSubsetHelper(t1l, t2l, compare) and isSubsetHelper(t1r, t2r, compare)
+          };
+          // x1 < x2 ==> x1 \in t2l /\ t1l \subset t2l
+          case (#less) {
+            Internal.contains(t2l, compare, x1) and isSubsetHelper(t1l, t2l, compare) and isSubsetHelper(t1r, t2, compare)
+          };
+          // x2 < x1 ==> x1 \in t2r /\ t1r \subset t2r
+          case (#greater) {
+            Internal.contains(t2r, compare, x1) and isSubsetHelper(t1l, t2, compare) and isSubsetHelper(t1r, t2r, compare)
+          }
+        }
       }
     }
   };
-
 
   /// Compare two sets by comparing the elements.
   /// Both sets must have been created by the same comparison function.
@@ -687,7 +697,6 @@ module {
     }
   };
 
-
   /// Returns an iterator over the elements in the set,
   /// traversing the elements in the ascending order.
   ///
@@ -718,8 +727,7 @@ module {
   /// where `n` denotes the number of elements stored in the set.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func values<T>(set : Set<T>) : Iter.Iter<T>
-    = Internal.iter(set.root, #fwd);
+  public func values<T>(set : Set<T>) : Iter.Iter<T> = Internal.iter(set.root, #fwd);
 
   /// Returns an iterator over the elements in the set,
   /// traversing the elements in the descending order.
@@ -751,8 +759,7 @@ module {
   /// where `n` denotes the number of elements stored in the set.
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
-  public func reverseValues<T>(set : Set<T>) : Iter.Iter<T>
-    = Internal.iter(set.root, #bwd);
+  public func reverseValues<T>(set : Set<T>) : Iter.Iter<T> = Internal.iter(set.root, #bwd);
 
   /// Create a new empty mutable set.
   ///
@@ -770,8 +777,7 @@ module {
   ///
   /// Runtime: `O(1)`.
   /// Space: `O(1)`.
-  public func empty<T>() : Set<T>
-    = { root = #leaf; size = 0};
+  public func empty<T>() : Set<T> = { root = #leaf; size = 0 };
 
   /// Create a new set with a single element.
   ///
@@ -815,8 +821,7 @@ module {
   ///
   /// Runtime: `O(1)`.
   /// Space: `O(1)`.
-  public func size<T>(set : Set<T>) : Nat
-    = set.size;
+  public func size<T>(set : Set<T>) : Nat = set.size;
 
   /// Iterate all elements in descending order,
   /// and accumulate the elements by applying the combine function, starting from a base value.
@@ -853,8 +858,7 @@ module {
     set : Set<T>,
     base : A,
     combine : (A, T) -> A
-  ) : A
-    = Internal.foldLeft(set.root, base, combine);
+  ) : A = Internal.foldLeft(set.root, base, combine);
 
   /// Iterate all elements in descending order,
   /// and accumulate the elements by applying the combine function, starting from a base value.
@@ -891,8 +895,7 @@ module {
     set : Set<T>,
     base : A,
     combine : (T, A) -> A
-  ) : A
-    = Internal.foldRight(set.root, base, combine);
+  ) : A = Internal.foldRight(set.root, base, combine);
 
   /// Determines whether a set is empty.
   ///
@@ -947,8 +950,7 @@ module {
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
   /// where `n` denotes the number of elements stored in the set.
-  public func all<T>(set : Set<T>, predicate : T -> Bool) : Bool
-    = Internal.all(set.root, predicate);
+  public func all<T>(set : Set<T>, predicate : T -> Bool) : Bool = Internal.all(set.root, predicate);
 
   /// Check whether at least one element in the set satisfies a predicate, i.e.
   /// the `predicate` function returns `true` for at least one element in the set.
@@ -973,13 +975,12 @@ module {
   ///
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  public func any<T>(s : Set<T>, pred : T -> Bool) : Bool
-    = Internal.any(s.root, pred);
+  public func any<T>(s : Set<T>, pred : T -> Bool) : Bool = Internal.any(s.root, pred);
 
   /// Test helper that check internal invariant for the given set `s`.
   /// Raise an error (for a stack trace) if invariants are violated.
-  public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order): () {
-    Internal.assertValid(set, compare);
+  public func assertValid<T>(set : Set<T>, compare : (T, T) -> Order.Order) : () {
+    Internal.assertValid(set, compare)
   };
 
   /// Generate a textual representation of all the elements in the set.
@@ -1124,32 +1125,32 @@ module {
     public func max<V>(m : Tree<V>) : ?V {
       func rightmost(m : Tree<V>) : V {
         switch m {
-          case (#red(_, v, #leaf))   { v };
-          case (#red(_, _, r))       { rightmost(r) };
+          case (#red(_, v, #leaf)) { v };
+          case (#red(_, _, r)) { rightmost(r) };
           case (#black(_, v, #leaf)) { v };
-          case (#black(_, _, r))     { rightmost(r) };
-          case (#leaf)               { Runtime.trap "pure/Set.max() impossible" }
+          case (#black(_, _, r)) { rightmost(r) };
+          case (#leaf) { Runtime.trap "pure/Set.max() impossible" }
         }
       };
       switch m {
         case (#leaf) { null };
-        case (_)     { ?rightmost(m) }
+        case (_) { ?rightmost(m) }
       }
     };
 
     public func min<V>(m : Tree<V>) : ?V {
       func leftmost(m : Tree<V>) : V {
         switch m {
-          case (#red(#leaf, v, _))   { v };
-          case (#red(l, _, _))       { leftmost(l) };
+          case (#red(#leaf, v, _)) { v };
+          case (#red(l, _, _)) { leftmost(l) };
           case (#black(#leaf, v, _)) { v };
-          case (#black(l, _, _))     { leftmost(l)};
-          case (#leaf)               { Runtime.trap "pure/Set.min() impossible" }
+          case (#black(l, _, _)) { leftmost(l) };
+          case (#leaf) { Runtime.trap "pure/Set.min() impossible" }
         }
       };
       switch m {
         case (#leaf) { null };
-        case (_)     { ?leftmost(m) }
+        case (_) { ?leftmost(m) }
       }
     };
 
@@ -1179,40 +1180,40 @@ module {
 
     public func iterate<V>(m : Tree<V>, f : V -> ()) {
       switch m {
-        case (#leaf) { };
+        case (#leaf) {};
         case (#black(l, v, r)) { iterate(l, f); f(v); iterate(r, f) };
-        case (#red(l, v, r))   { iterate(l, f); f(v); iterate(r, f) }
+        case (#red(l, v, r)) { iterate(l, f); f(v); iterate(r, f) }
       }
     };
 
     // build tree from elements arr[l]..arr[r-1]
-    public func buildFromSorted<V>(buf: List.List<V>) : Tree<V> {
+    public func buildFromSorted<V>(buf : List.List<V>) : Tree<V> {
       var maxDepth = 0;
       var maxSize = 1;
       while (maxSize < List.size(buf)) {
         maxDepth += 1;
-        maxSize += maxSize + 1;
+        maxSize += maxSize + 1
       };
-      maxDepth := if (maxDepth == 0) {1} else {maxDepth}; // keep root black for 1 element tree
+      maxDepth := if (maxDepth == 0) { 1 } else { maxDepth }; // keep root black for 1 element tree
       func buildFromSortedHelper(l : Nat, r : Nat, depth : Nat) : Tree<V> {
         if (l + 1 == r) {
           if (depth == maxDepth) {
-            return #red(#leaf, List.get(buf, l), #leaf);
+            return #red(#leaf, List.get(buf, l), #leaf)
           } else {
-            return #black(#leaf, List.get(buf, l), #leaf);
+            return #black(#leaf, List.get(buf, l), #leaf)
           }
         };
         if (l >= r) {
-          return #leaf;
+          return #leaf
         };
         let m = (l + r) / 2;
         return #black(
-                  buildFromSortedHelper(l, m, depth+1),
-                  List.get(buf, m),
-                  buildFromSortedHelper(m+1, r, depth+1)
-                )
+          buildFromSortedHelper(l, m, depth + 1),
+          List.get(buf, m),
+          buildFromSortedHelper(m + 1, r, depth + 1)
+        )
       };
-      buildFromSortedHelper(0, List.size(buf), 0);
+      buildFromSortedHelper(0, List.size(buf), 0)
     };
 
     type IterRep<T> = Types.Pure.List<{ #tr : Tree<T>; #x : T }>;
@@ -1244,12 +1245,14 @@ module {
       }
     };
 
-    public func iter<T>(s : Tree<T>, direction : {#fwd; #bwd}) : Iter.Iter<T> {
-      let turnLeftFirst : SetTraverser<T>
-      = func (l, x, r, ts) { ?(#tr(l), ?(#x(x), ?(#tr(r), ts))) };
+    public func iter<T>(s : Tree<T>, direction : { #fwd; #bwd }) : Iter.Iter<T> {
+      let turnLeftFirst : SetTraverser<T> = func(l, x, r, ts) {
+        ?(#tr(l), ?(#x(x), ?(#tr(r), ts)))
+      };
 
-      let turnRightFirst : SetTraverser<T>
-      = func (l, x, r, ts) { ?(#tr(r), ?(#x(x), ?(#tr(l), ts))) };
+      let turnRightFirst : SetTraverser<T> = func(l, x, r, ts) {
+        ?(#tr(r), ?(#x(x), ?(#tr(l), ts)))
+      };
 
       switch direction {
         case (#fwd) IterSet(s, turnLeftFirst);
@@ -1299,9 +1302,7 @@ module {
 
     func redden<T>(t : Tree<T>) : Tree<T> {
       switch t {
-        case (#black(l, x, r)) {
-          (#red (l, x, r))
-        };
+        case (#black(l, x, r)) { (#red(l, x, r)) };
         case _ {
           Runtime.trap "pure/Set.redden() impossible"
         }
@@ -1406,10 +1407,7 @@ module {
         };
         case other { other }
       };
-      if newNodeIsCreated
-        ({ root = newRoot; size = s.size + 1}, true )
-      else
-        (s, false)
+      if newNodeIsCreated ({ root = newRoot; size = s.size + 1 }, true) else (s, false)
     };
 
     func balLeft<T>(left : Tree<T>, x : T, right : Tree<T>) : Tree<T> {
@@ -1498,8 +1496,7 @@ module {
       }
     };
 
-    public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : Set<T>
-    {
+    public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : Set<T> {
       delete(set, compare, elem).0
     };
 
@@ -1554,10 +1551,7 @@ module {
         };
         case other { other }
       };
-      if changed
-       ({ root = newRoot; size = s.size-1 }, true)
-      else
-       (s, false)
+      if changed ({ root = newRoot; size = s.size - 1 }, true) else (s, false)
     };
 
     // check binary search tree order of elements and black depth invariant of the RB-tree
@@ -1567,8 +1561,8 @@ module {
 
     func blackDepth<T>(node : Tree<T>, comp : (T, T) -> Order.Order) : Nat {
       func checkNode(left : Tree<T>, x1 : T, right : Tree<T>) : Nat {
-        checkElem(left,  func(x: T) : Bool { comp(x, x1) == #less });
-        checkElem(right, func(x: T) : Bool { comp(x, x1) == #greater });
+        checkElem(left, func(x : T) : Bool { comp(x, x1) == #less });
+        checkElem(right, func(x : T) : Bool { comp(x, x1) == #greater });
         let leftBlacks = blackDepth(left, comp);
         let rightBlacks = blackDepth(right, comp);
         assert (leftBlacks == rightBlacks);

@@ -1090,24 +1090,24 @@ func testFoldRight(n : Nat) : Bool {
 
 func testFilter(n : Nat) : Bool {
   let vec = List.fromArray<Nat>(Array.tabulate<Nat>(n, func(i) = i));
-  
+
   let evens = List.filter<Nat>(vec, func x = x % 2 == 0);
   let expectedEvens = List.fromArray<Nat>(Array.tabulate<Nat>((n + 1) / 2, func(i) = i * 2));
   if (not List.equal<Nat>(evens, expectedEvens, Nat.equal)) {
     Debug.print("Filter evens failed");
-    return false;
+    return false
   };
 
   let none = List.filter<Nat>(vec, func _ = false);
   if (not List.isEmpty(none)) {
     Debug.print("Filter none failed");
-    return false;
+    return false
   };
 
   let all = List.filter<Nat>(vec, func _ = true);
   if (not List.equal<Nat>(all, vec, Nat.equal)) {
     Debug.print("Filter all failed");
-    return false;
+    return false
   };
 
   true
@@ -1115,24 +1115,24 @@ func testFilter(n : Nat) : Bool {
 
 func testFilterMap(n : Nat) : Bool {
   let vec = List.fromArray<Nat>(Array.tabulate<Nat>(n, func(i) = i));
-  
+
   let doubledEvens = List.filterMap<Nat, Nat>(vec, func x = if (x % 2 == 0) ?(x * 2) else null);
   let expectedDoubledEvens = List.fromArray<Nat>(Array.tabulate<Nat>((n + 1) / 2, func(i) = i * 4));
   if (not List.equal<Nat>(doubledEvens, expectedDoubledEvens, Nat.equal)) {
     Debug.print("FilterMap doubled evens failed");
-    return false;
+    return false
   };
 
   let none = List.filterMap<Nat, Nat>(vec, func _ = null);
   if (not List.isEmpty(none)) {
     Debug.print("FilterMap none failed");
-    return false;
+    return false
   };
 
   let all = List.filterMap<Nat, Nat>(vec, func x = ?x);
   if (not List.equal<Nat>(all, vec, Nat.equal)) {
     Debug.print("FilterMap all failed");
-    return false;
+    return false
   };
 
   true

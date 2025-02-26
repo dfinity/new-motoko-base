@@ -88,7 +88,7 @@ let suite = Suite.suite(
     chain,
     flatten,
     forOk,
-    forErr,
+    forErr
   ]
 );
 

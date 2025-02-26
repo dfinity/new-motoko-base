@@ -21,11 +21,13 @@
 /// `n` denotes the number of elements stored in the queue.
 
 import Iter "../Iter";
+import List "List";
 import Order "../Order";
 import Types "../Types";
-import { todo } "../Debug";
 
-module {
+module Queue {
+  type List<T> = Types.Pure.List<T>;
+
   /// Double-ended queue data type.
   public type Queue<T> = Types.Pure.Queue<T>;
 
@@ -41,9 +43,8 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func empty<T>() : Queue<T> {
-    todo()
-  };
+  public func empty<T>() : Queue<T> =
+    (null, 0, null);
 
   /// Determine whether a queue is empty.
   /// Returns true if `queue` is empty, otherwise `false`.
@@ -59,21 +60,44 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func isEmpty<T>(queue : Queue<T>) : Bool {
-    todo()
-  };
+  public func isEmpty<T>(queue : Queue<T>) : Bool =
+    queue.1 == 0;
 
-  public func singleton<T>(item : T) : Queue<T> {
-    todo()
-  };
+  /// Create a new queue comprising a single element.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/Queue";
+  ///
+  /// Queue.singleton<Nat>(25)
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
+  public func singleton<T>(item : T) : Queue<T> =
+    (null, 1, ?(item, null));
 
+  /// Determine the number of elements contained in a queue.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import {singleton, size} "mo:base/Queue";
+  ///
+  /// let queue = singleton<Nat>(42);
+  /// size(queue) // => 1
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
   public func size<T>(queue : Queue<T>) : Nat {
-    todo()
+    debug assert queue.1 == List.size(queue.0) + List.size(queue.2);
+    queue.1
   };
 
-  public func contains<T>(queue : Queue<T>, equal : T -> Bool, item : T) : Bool {
-    todo()
-  };
+  public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, item : T) : Bool =
+    List.contains(queue.0, equal, item) or List.contains(queue.2, equal, item);
 
   /// Inspect the optional element on the front end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, the front element of `queue`.
@@ -89,9 +113,11 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekFront<T>(queue : Queue<T>) : ?T {
-    todo()
-  };
+  public func peekFront<T>(queue : Queue<T>) : ?T =
+    switch queue {
+      case ((?(x, _), _, _) or (_, _, ?(x, null))) ?x;
+      case _ { debug assert List.isEmpty(queue.2); null }
+    };
 
   /// Inspect the optional element on the back end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, the back element of `queue`.
@@ -107,8 +133,35 @@ module {
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekBack<T>(queue : Queue<T>) : ?T {
-    todo()
+  public func peekBack<T>(queue : Queue<T>) : ?T  =
+    switch queue {
+      case ((_, _, ?(x, _)) or (?(x, null), _, _)) ?x;
+      case _ { debug assert List.isEmpty(queue.0); null }
+    };
+
+  // helper to split the list evenly
+  func takeDrop<T>(list : List<T>, n : Nat) : (List<T>, List<T>) =
+    if (n == 0) (null, list)
+    else switch list {
+      case null (null, null);
+      case (?(h, t)) {
+        let (f, b) = takeDrop(t, n - 1 : Nat);
+        (?(h, f), b)
+      }
+    };
+
+  func check<T>(q : Queue<T>) : Queue<T> {
+    switch q {
+      case (null, n, r) {
+        let (a, b) = takeDrop(r, n / 2);
+        (List.reverse b, n, a)
+      };
+      case (f, n, null) {
+        let (a, b) = takeDrop(f, n / 2);
+        (a, n, List.reverse b)
+      };
+      case q q
+    }
   };
 
   /// Insert a new element on the front end of a queue.
@@ -128,9 +181,8 @@ module {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> {
-    todo()
-  };
+  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> =
+    check (?(element, queue.0), queue.1 + 1, queue.2);
 
   /// Insert a new element on the back end of a queue.
   /// Returns the new queue with all the elements of `queue`, followed by `element` on the back.
@@ -149,9 +201,8 @@ module {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> {
-    todo()
-  };
+  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> =
+    check (queue.0, queue.1 + 1, ?(element, queue.2));
 
   /// Remove the element on the front end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of
@@ -182,9 +233,13 @@ module {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) {
-    todo()
-  };
+  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) =
+    if (queue.1 == 0) null
+    else switch queue {
+      case (?(i, f), n, b) ?(i, (f, n - 1, b));
+      case (null, _, ?(i, null)) ?(i, (null, 0, null));
+      case _ popFront (check queue)
+    };
 
   /// Remove the element on the back end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of
@@ -217,52 +272,95 @@ module {
   /// Space: `O(n)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
-  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) {
-    todo()
-  };
+  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) =
+    if (queue.1 == 0) null
+    else switch queue {
+      case (f, n, ?(i, b)) ?((f, n - 1, b), i);
+      case (?(i, null), _, null) ?((null, 0, null), i);
+      case _ popBack (check queue)
+    };
 
   public func fromIter<T>(iter : Iter.Iter<T>) : Queue<T> {
-    todo()
+    let list = List.fromIter iter;
+    check ((list, List.size list, null))
   };
 
-  public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
-    todo()
-  };
+  public func values<T>(queue : Queue<T>) : Iter.Iter<T> =
+    Iter.concat(List.values(queue.0), List.values(List.reverse(queue.2)));
 
-  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>) : Bool {
-    todo()
+  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equal : (T, T) -> Bool) : Bool {
+    if (queue1.1 != queue2.1) {
+      return false;
+    };
+    let (iter1, iter2) = (values(queue1), values(queue2));
+    loop {
+      switch (iter1.next(), iter2.next()) {
+        case (null, null) { return true };
+        case (?v1, ?v2) {
+          if (not equal(v1, v2)) { return false };
+        };
+        case (_, _) { return false };
+      };
+    };
   };
 
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
-    todo()
+    for (item in values queue)
+      if (not (predicate item)) return false;
+    return true
   };
 
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
-    todo()
+    for (item in values queue)
+      if (predicate item) return true;
+    return false
   };
 
-  public func forEach<T>(queue : Queue<T>, f : T -> ()) {
-    todo()
-  };
+  public func forEach<T>(queue : Queue<T>, f : T -> ()) =
+    for (item in values queue)
+      f item;
 
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
-    todo()
+    let (fr, n, b) = queue;
+    (List.map(fr, f), n, List.map(b, f))
   };
 
   public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T> {
-    todo()
+    let (fr, _, b) = queue;
+    let front = List.filter(fr, f);
+    let back = List.filter(b, f);
+    (front, List.size front + List.size back, back)
   };
 
   public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
-    todo()
+    let (fr, _n, b) = queue;
+    let front = List.filterMap(fr, f);
+    let back = List.filterMap(b, f);
+    (front, List.size front + List.size back, back)
   };
 
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
-    todo()
+    var text = "PureQueue[";
+    func add(item : T) {
+      if (text.size() > 10) text #= ", ";
+      text #= f(item)
+    };
+    List.forEach(queue.0, add);
+    List.forEach(queue.2, add);
+    text # "]"
   };
 
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    todo()
-  };
+    let (i1, i2) = (values queue1, values queue2);
+    loop switch (i1.next(), i2.next()) {
+      case (?v1, ?v2) switch (compare(v1, v2)) {
+        case (#equal) ();
+        case c return c
+      };
+      case (null, null) return #equal;
+      case (null, _) return #less;
+      case (_, null) return #greater
+    }
+  }
 
 }

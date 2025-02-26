@@ -145,7 +145,7 @@ module {
       #leaf
     };
 
-    public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>); // FIX ME
+    public type Queue<T> = (List<T>, Nat, List<T>);
     public type Set<T> = () // Placeholder
   }
 }

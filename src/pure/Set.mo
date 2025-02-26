@@ -101,8 +101,8 @@ module {
 
 
   /// Given `set` ordered by `compare`, insert the new `element`,
-  /// returning either the extended set as an option
-  /// or null if the element was already in the set.
+  /// returning the set extended with `element` and a Boolean indicating
+  /// if the element was already present in `set`.
   ///
   /// Example:
   /// ```motoko
@@ -110,10 +110,10 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let ?set1 = Set.insert(Set.empty<Nat>, Nat.compare, 1);
-  ///   let ?set2 = Set.insert(set2, Nat.compare, 2);
-  ///   let ?set3 = Set.insert(set3, Nat.compare, 3);
-  ///   let null = Set.insert(set3, Nat.compare, 1);
+  ///   let (set1, true) = Set.insert(Set.empty<Nat>, Nat.compare, 1);
+  ///   let (set2, true) = Set.insert(set2, Nat.compare, 2);
+  ///   let (set3, true) = Set.insert(set3, Nat.compare, 3);
+  ///   let (set4, false) = Set.insert(set3, Nat.compare, 1);
   /// }
   /// ```
   ///
@@ -125,7 +125,7 @@ module {
   /// Note: The returned set shares with the `set` most of the tree nodes.
   /// Garbage collecting one of the sets (e.g. after an assignment `m := Set.add(m, c, e)`)
   /// causes collecting `O(log(n))` nodes.
-  public func insert<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : ?Set<T>
+  public func insert<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : (Set<T>, Bool)
     = Internal.insert<T>(set, compare, elem);
 
 
@@ -163,8 +163,8 @@ module {
     = Internal.remove(set, compare, element);
 
   /// Given `set` ordered by `compare`, delete `element` from the set, returning
-  /// either the set without the element, as an option, or
-  /// `null` if the element was not in the set.
+  /// either the set without the element and a Boolean indicating whether
+  /// whether `element` was contained in `set`.
   ///
   /// ```motoko
   /// import Set "mo:base/pure/Set";
@@ -177,9 +177,11 @@ module {
   ///             Set.add(_, Nat.compare, 2) |>
   ///             Set.add(_, Nat.compare, 3);
   ///
-  ///   let ?set1 = Set.delete(set, Nat.compare, 2);
+  ///   let (set1, contained_two) = Set.delete(set, Nat.compare, 2);
+  ///   assert contained_two;
   ///   Debug.print(Set.toText(set1, Nat.toText));   // prints `{1, 3}`
-  ///   assert (Set.delete(set, Nat.compare, 4) == null);
+  ///   let (set2, contained_four) = Set.delete(set1, Nat.compare, 4);
+  ///   assert not contained_four;
   /// }
   /// ```
   ///
@@ -192,7 +194,7 @@ module {
   /// Note: The returned set shares with `set` most of the tree nodes.
   /// Garbage collecting one of the sets (e.g. after an assignment `m := Set.delete(m, c, e)`)
   /// causes collecting `O(log(n))` nodes.
-  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : ?Set<T>
+  public func delete<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : (Set<T>, Bool)
     = Internal.delete(set, compare, element);
 
   /// Tests whether the set contains the provided element.
@@ -1355,17 +1357,14 @@ module {
       compare : (T, T) -> Order.Order,
       elem : T
     ) : Set<T> {
-      switch (Internal.insert(set, compare, elem)) {
-        case null set;
-	case (?set1) set1;
-      }
+      insert(set, compare, elem).0
     };
 
     public func insert<T>(
       s : Set<T>,
       compare : (T, T) -> Order.Order,
       elem : T
-    ) : ?Set<T> {
+    ) : (Set<T>, Bool) {
       var newNodeIsCreated : Bool = false;
       func ins(tree : Tree<T>) : Tree<T> {
         switch tree {
@@ -1408,9 +1407,9 @@ module {
         case other { other }
       };
       if newNodeIsCreated
-        (? { root = newRoot;
-             size = s.size + 1} )
-      else null
+        ({ root = newRoot; size = s.size + 1}, true )
+      else
+        (s, false)
     };
 
     func balLeft<T>(left : Tree<T>, x : T, right : Tree<T>) : Tree<T> {
@@ -1501,13 +1500,10 @@ module {
 
     public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, elem : T) : Set<T>
     {
-      switch (delete(set, compare, elem)) {
-        case null set;
-	case (?set1) set1;
-      }
+      delete(set, compare, elem).0
     };
 
-    public func delete<T>(s : Set<T>, compare : (T, T) -> Order.Order, x : T) : ?Set<T> {
+    public func delete<T>(s : Set<T>, compare : (T, T) -> Order.Order, x : T) : (Set<T>, Bool) {
       var changed : Bool = false;
       func delNode(left : Tree<T>, x1 : T, right : Tree<T>) : Tree<T> {
         switch (compare(x, x1)) {
@@ -1559,9 +1555,9 @@ module {
         case other { other }
       };
       if changed
-       (?{ root = newRoot;
-           size = s.size-1 })
-      else null
+       ({ root = newRoot; size = s.size-1 }, true)
+      else
+       (s, false)
     };
 
     // check binary search tree order of elements and black depth invariant of the RB-tree

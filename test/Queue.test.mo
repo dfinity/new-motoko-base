@@ -2,6 +2,7 @@ import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
 import Queue "../src/Queue";
+import PureQueue "../src/pure/Queue";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
 import Runtime "../src/Runtime";
@@ -383,6 +384,94 @@ run(
           Queue.any<Nat>(queue, func n = n % 2 == 0)
         },
         M.equals(T.bool(false))
+      )
+    ]
+  )
+);
+
+run(
+  suite(
+    "pure queue conversions",
+    [
+      test(
+        "empty to pure",
+        do {
+          let queue = Queue.empty<Nat>();
+          let pureQueue = Queue.toPure(queue);
+          PureQueue.isEmpty(pureQueue)
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
+        "empty from pure",
+        do {
+          let pureQueue = PureQueue.empty<Nat>();
+          let queue = Queue.fromPure<Nat>(pureQueue);
+          Queue.isEmpty(queue)
+        },
+        M.equals(T.bool(true))
+      ),
+      test(
+        "singleton to pure",
+        do {
+          let queue = Queue.singleton<Nat>(1);
+          let pureQueue = Queue.toPure(queue);
+          Iter.toArray(PureQueue.values(pureQueue))
+        },
+        M.equals(T.array(T.natTestable, [1]))
+      ),
+      test(
+        "singleton from pure",
+        do {
+          let pureQueue = PureQueue.pushBack(PureQueue.empty(), 1);
+          let queue = Queue.fromPure<Nat>(pureQueue);
+          Iter.toArray(Queue.values(queue))
+        },
+        M.equals(T.array(T.natTestable, [1]))
+      ),
+      test(
+        "multiple elements to pure",
+        do {
+          let queue = Queue.fromIter<Nat>([1, 2, 3].vals());
+          let pureQueue = Queue.toPure(queue);
+          Iter.toArray(PureQueue.values(pureQueue))
+        },
+        M.equals(T.array(T.natTestable, [1, 2, 3]))
+      ),
+      test(
+        "multiple elements from pure",
+        do {
+          var pureQueue = PureQueue.empty<Nat>();
+          pureQueue := PureQueue.pushBack(pureQueue, 1);
+          pureQueue := PureQueue.pushBack(pureQueue, 2);
+          pureQueue := PureQueue.pushBack(pureQueue, 3);
+          let queue = Queue.fromPure<Nat>(pureQueue);
+          Iter.toArray(Queue.values(queue))
+        },
+        M.equals(T.array(T.natTestable, [1, 2, 3]))
+      ),
+      test(
+        "round trip mutable to pure to mutable",
+        do {
+          let original = Queue.fromIter<Nat>([1, 2, 3].vals());
+          let pureQueue = Queue.toPure(original);
+          let roundTrip = Queue.fromPure<Nat>(pureQueue);
+          Iter.toArray(Queue.values(roundTrip))
+        },
+        M.equals(T.array(T.natTestable, [1, 2, 3]))
+      ),
+      test(
+        "round trip pure to mutable to pure",
+        do {
+          var original = PureQueue.empty<Nat>();
+          original := PureQueue.pushBack(original, 1);
+          original := PureQueue.pushBack(original, 2);
+          original := PureQueue.pushBack(original, 3);
+          let mutableQueue = Queue.fromPure<Nat>(original);
+          let roundTrip = Queue.toPure(mutableQueue);
+          Iter.toArray(PureQueue.values(roundTrip))
+        },
+        M.equals(T.array(T.natTestable, [1, 2, 3]))
       )
     ]
   )

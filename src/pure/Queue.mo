@@ -25,7 +25,7 @@ import List "List";
 import Order "../Order";
 import Types "../Types";
 
-module Queue {
+module {
   type List<T> = Types.Pure.List<T>;
 
   /// Double-ended queue data type.

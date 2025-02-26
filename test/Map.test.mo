@@ -62,6 +62,14 @@ run(
           Iter.toArray(Map.entries(map))
 	},
         M.equals(T.array<(Nat,Text)>(entryTestable, []))
+       ),
+      test(
+        "take absent",
+	do {
+	  let map = Map.empty<Nat, Text>();
+          Map.take(map, Nat.compare, 0)
+	},
+        M.equals(T.optional(T.textTestable, null : ?Text))
       ),
       test(
         "clone",
@@ -397,6 +405,23 @@ run(
           Iter.toArray(Map.entries(map))
 	},
         M.equals(T.array<(Nat, Text)>(entryTestable, [(0, "0")]))
+      ),
+      test(
+        "take function result",
+       do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+          Map.take(map, Nat.compare, 0)
+        },
+        M.equals(T.optional(T.textTestable, ?"0"))
+      ),
+      test(
+        "take map result",
+        do {
+          let map = Map.singleton<Nat, Text>(0, "0");
+          ignore Map.take(map, Nat.compare, 0);
+          Map.size(map);
+        },
+        M.equals(T.nat(0))
       ),
       test(
         "clone",
@@ -1374,6 +1399,37 @@ run(
               assert (not Map.containsKey(map, Nat.compare, key))
             } else {
 	      assert not Map.delete(map, Nat.compare, key);
+	    };
+            assert (Map.get(map, Nat.compare, key) == null)
+          };
+          Map.assertValid(map, Nat.compare);
+          Map.size(map)
+        },
+        M.equals(T.nat(0))
+      ),
+      test(
+        "take",
+        do {
+          let map = Map.empty<Nat, Text>();
+          let random = Random(randomSeed);
+          for (index in Nat.range(0, numberOfEntries)) {
+            let key = random.next();
+            ignore Map.swap(map, Nat.compare, key, Nat.toText(key))
+          };
+          random.reset();
+          for (index in Nat.range(0, numberOfEntries)) {
+            let key = random.next();
+            assert (Map.containsKey(map, Nat.compare, key));
+            assert (Map.get(map, Nat.compare, key) == ?Nat.toText(key))
+          };
+          random.reset();
+          for (index in Nat.range(0, numberOfEntries)) {
+            let key = random.next();
+            if (Map.containsKey(map, Nat.compare, key)) {
+              assert Map.take(map, Nat.compare, key) == ?(Nat.toText(key));
+              assert (not Map.containsKey(map, Nat.compare, key))
+            } else {
+	      assert Map.take(map, Nat.compare, key) == null;
 	    };
             assert (Map.get(map, Nat.compare, key) == null)
           };

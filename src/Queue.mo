@@ -58,7 +58,7 @@ module {
   ///
   /// persistent actor {
   ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
-  ///   let pureQueue = Queue.toPure(queue);
+  ///   let pureQueue = Queue.toPure<Nat>(queue);
   /// }
   /// ```
   ///
@@ -86,7 +86,7 @@ module {
   ///
   /// persistent actor {
   ///   let pureQueue = PureQueue.fromIter<Nat>([1, 2, 3].values());
-  ///   let queue = Queue.fromPure(pureQueue);
+  ///   let queue = Queue.fromPure<Nat>(pureQueue);
   /// }
   /// ```
   ///

@@ -340,9 +340,9 @@ module {
   };
 
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
-    var text = "[/*Q*/ ";
+    var text = "PureQueue[";
     func add(item : T) {
-      if (text.size() > 7) text #= ", ";
+      if (text.size() > 10) text #= ", ";
       text #= f(item)
     };
     List.forEach(queue.0, add);

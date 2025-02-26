@@ -1,7 +1,6 @@
 /// Utilities for `Order` (comparison between two values).
 
 import Types "Types";
-import { todo } "Debug";
 
 module {
 
@@ -42,8 +41,22 @@ module {
     }
   };
 
+  /// Returns an iterator that yields all possible `Order` values:
+  /// `#less`, `#equal`, `#greater`.
   public func allValues() : Types.Iter<Order> {
-    todo()
+    var nextState : ?Order = ?#less;
+    {
+      next = func() : ?Order {
+        let state = nextState;
+        switch state {
+          case (?#less) { nextState := ?#equal };
+          case (?#equal) { nextState := ?#greater };
+          case (?#greater) { nextState := null };
+          case (null) {}
+        };
+        state
+      }
+    }
   }
 
 }

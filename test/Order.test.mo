@@ -25,4 +25,15 @@ do {
   assert (not Order.isGreater(#less));
   assert (not Order.isGreater(#equal));
   assert (Order.isGreater(#greater))
+};
+
+do {
+  Debug.print("  allValues");
+
+  let iter = Order.allValues();
+  assert (iter.next() == ?#less);
+  assert (iter.next() == ?#equal);
+  assert (iter.next() == ?#greater);
+  assert (iter.next() == null);
+  assert (iter.next() == null)
 }

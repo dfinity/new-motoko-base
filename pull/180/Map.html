@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html><head title="Doc"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><body><nav class="sidebar"><h3>Modules</h3><ul><li><li><a href="Array.html">Array</a></li></li><li><li><a href="Blob.html">Blob</a></li></li><li><li><a href="Bool.html">Bool</a></li></li><li><li><a href="CertifiedData.html">CertifiedData</a></li></li><li><li><a href="Char.html">Char</a></li></li><li><li><a href="Cycles.html">Cycles</a></li></li><li><li><a href="Debug.html">Debug</a></li></li><li><li><a href="Error.html">Error</a></li></li><li><li><a href="Float.html">Float</a></li></li><li><li><a href="Func.html">Func</a></li></li><li><li><a href="Int.html">Int</a></li></li><li><li><a href="Int16.html">Int16</a></li></li><li><li><a href="Int32.html">Int32</a></li></li><li><li><a href="Int64.html">Int64</a></li></li><li><li><a href="Int8.html">Int8</a></li></li><li><li><a href="InternetComputer.html">InternetComputer</a></li></li><li><li><a href="Iter.html">Iter</a></li></li><li><li><a href="List.html">List</a></li></li><li><li><a href="Map.html">Map</a></li></li><li><li><a href="Nat.html">Nat</a></li></li><li><li><a href="Nat16.html">Nat16</a></li></li><li><li><a href="Nat32.html">Nat32</a></li></li><li><li><a href="Nat64.html">Nat64</a></li></li><li><li><a href="Nat8.html">Nat8</a></li></li><li><li><a href="Option.html">Option</a></li></li><li><li><a href="Order.html">Order</a></li></li><li><li><a href="Principal.html">Principal</a></li></li><li><li><a href="Queue.html">Queue</a></li></li><li><li><a href="Random.html">Random</a></li></li><li><li><a href="Region.html">Region</a></li></li><li><li><a href="Result.html">Result</a></li></li><li><li><a href="Runtime.html">Runtime</a></li></li><li><li><a href="Set.html">Set</a></li></li><li><li><a href="Stack.html">Stack</a></li></li><li><li><a href="Text.html">Text</a></li></li><li><li><a href="Time.html">Time</a></li></li><li><li><a href="Timer.html">Timer</a></li></li><li><li><a href="Types.html">Types</a></li></li><li><li><a href="VarArray.html">VarArray</a></li></li><li><li><a href="internal/BTreeHelper.html">internal/BTreeHelper</a></li></li><li><li><a href="pure/List.html">pure/List</a></li></li><li><li><a href="pure/Map.html">pure/Map</a></li></li><li><li><a href="pure/Queue.html">pure/Queue</a></li></li><li><li><a href="pure/Set.html">pure/Set</a></li></li></ul><h3>Declarations</h3><ul><li><li><a href="#type.Map">Map</a></li></li><li><li><a href="#clone">clone</a></li></li><li><li><a href="#empty">empty</a></li></li><li><li><a href="#singleton">singleton</a></li></li><li><li><a href="#clear">clear</a></li></li><li><li><a href="#isEmpty">isEmpty</a></li></li><li><li><a href="#size">size</a></li></li><li><li><a href="#equal">equal</a></li></li><li><li><a href="#containsKey">containsKey</a></li></li><li><li><a href="#get">get</a></li></li><li><li><a href="#add">add</a></li></li><li><li><a href="#put">put</a></li></li><li><li><a href="#update">update</a></li></li><li><li><a href="#swap">swap</a></li></li><li><li><a href="#replaceIfExists">replaceIfExists</a></li></li><li><li><a href="#delete">delete</a></li></li><li><li><a href="#maxEntry">maxEntry</a></li></li><li><li><a href="#minEntry">minEntry</a></li></li><li><li><a href="#entries">entries</a></li></li><li><li><a href="#reverseEntries">reverseEntries</a></li></li><li><li><a href="#keys">keys</a></li></li><li><li><a href="#values">values</a></li></li><li><li><a href="#fromIter">fromIter</a></li></li><li><li><a href="#forEach">forEach</a></li></li><li><li><a href="#filter">filter</a></li></li><li><li><a href="#map">map</a></li></li><li><li><a href="#foldLeft">foldLeft</a></li></li><li><li><a href="#foldRight">foldRight</a></li></li><li><li><a href="#all">all</a></li></li><li><li><a href="#any">any</a></li></li><li><li><a href="#filterMap">filterMap</a></li></li><li><li><a href="#assertValid">assertValid</a></li></li><li><li><a href="#toText">toText</a></li></li><li><li><a href="#compare">compare</a></li></li></ul></nav><div class="documentation"><h1>Map</h1><p>An imperative key-value map based on order/comparison of the keys.
+The map data structure type is stable and can be used for orthogonal persistence.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let numberNames = Map.empty&lt;Nat, Text&gt;();
+  Map.add(numberNames, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(numberNames, Nat.compare, 1, &quot;One&quot;);
+  Map.add(numberNames, Nat.compare, 2, &quot;Two&quot;);
+}</code></pre>
+
+<p>The internal implementation is a B-tree with order 32.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire map.
+<code>n</code> denotes the number of key-value entries stored in the map.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Map"><span class="keyword">type </span><span class="type">Map</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt; = <a href="Types.html#type.Map"><span class="type">Types.Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="clone"><code><span class="keyword">public func </span><span class="fnname">clone</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></h4><p><p>Create a copy of the mutable key-value map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let originalMap = Map.empty&lt;Nat, Text&gt;();
+  Map.add(originalMap, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(originalMap, Nat.compare, 1, &quot;One&quot;);
+  Map.add(originalMap, Nat.compare, 2, &quot;Two&quot;);
+  let clonedMap = Map.clone(originalMap);
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(n)</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+</p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;() : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></h4><p><p>Create a new empty mutable key-value map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Debug.print(Nat.toText(Map.size(map))); // prints `0`
+}</code></pre>
+
+<p>Runtime: <code>O(1)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">key</span> : <span class="type">K</span>, <span class="parameter">value</span> : <span class="type">V</span>) : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></h4><p><p>Create a new mutable key-value map with a single entry.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let cityCodes = Map.singleton&lt;Text, Nat&gt;(&quot;Zurich&quot;, 8000);
+  Debug.print(debug_show(Map.size(cityCodes))); // prints `1`
+}</code></pre>
+
+<p>Runtime: <code>O(1)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="clear"><code><span class="keyword">public func </span><span class="fnname">clear</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;)</code></h4><p><p>Delete all the entries in the key-value map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+  Debug.print(debug_show(Map.size(map))); // prints `3`
+
+  Map.clear(map);
+  Debug.print(debug_show(Map.size(map))); // prints `0`
+}</code></pre>
+
+<p>Runtime: <code>O(1)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : <span class="type">Bool</span></code></h4><p><p>Determines whether a key-value map is empty.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Debug.print(debug_show(Map.isEmpty(map))); // prints `false`
+  Map.clear(map);
+  Debug.print(debug_show(Map.isEmpty(map))); // prints `true`
+}</code></pre>
+
+<p>Runtime: <code>O(1)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Return the number of entries in a key-value map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Debug.print(Nat.toText(Map.size(map))); // prints `3`
+}</code></pre>
+
+<p>Runtime: <code>O(1)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map1</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">map2</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compareKeys</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Types.html#type.Order"><span class="type">Types.Order</span></a>, <br/>  <span class="parameter">equalValues</span> : (<span class="type">V</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative maps have equal entries.
+Both maps have to be constructed by the same comparison function.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+import Text &quot;mo:base/Text&quot;;
+
+persistent actor {
+  let map1 = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map1, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map1, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map1, Nat.compare, 2, &quot;Two&quot;);
+  let map2 = Map.clone(map1);
+
+  assert(Map.equal(map1, map2, Nat.compare, Text.equal));
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="containsKey"><code><span class="keyword">public func </span><span class="fnname">containsKey</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Tests whether the map contains the provided key.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Bool &quot;mo:base/Bool&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Debug.print(Bool.toText(Map.containsKey(map, Nat.compare, 1))); // prints `true`
+  Debug.print(Bool.toText(Map.containsKey(map, Nat.compare, 3))); // prints `false`
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(1)</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="get"><code><span class="keyword">public func </span><span class="fnname">get</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span><br/>) : ?<span class="type">V</span></code></h4><p><p>Get the value associated with key in the given map if present and <code>null</code> otherwise.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Debug.print(debug_show(Map.get(map, Nat.compare, 1))); // prints `?&quot;One&quot;`
+  Debug.print(debug_show(Map.get(map, Nat.compare, 3))); // prints `null`
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(1)</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span>, <br/>  <span class="parameter">value</span> : <span class="type">V</span><br/>)</code></h4><p><p>Insert a new key-value entry in the map.
+Traps if the key is already present in the map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  // [(0, &quot;zero&quot;), (1, &quot;One&quot;)]
+  Map.add(map, Nat.compare, 0, &quot;Nil&quot;);
+  // traps
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="put"><code><span class="keyword">public func </span><span class="fnname">put</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span>, <br/>  <span class="parameter">value</span> : <span class="type">V</span><br/>)</code></h4><p><p>Given <code>map</code> ordered by <code>compare</code>, add a new mapping from <code>key</code> to <code>value</code>.
+Replaces any existing entry with key <code>key</code>.
+Returns the modified map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+
+  Map.put(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.put(map, Nat.compare, 1, &quot;One&quot;);
+  Map.put(map, Nat.compare, 0, &quot;Nil&quot;);
+
+  Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  // [(0, &quot;Nil&quot;), (1, &quot;One&quot;)]
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="update"><code><span class="keyword">public func </span><span class="fnname">update</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span>, <br/>  <span class="parameter">value</span> : <span class="type">V</span><br/>)</code></h4><p><p>Given <code>map</code> ordered by <code>compare</code>, add a new mapping from <code>key</code> to <code>value</code>.  /// Traps if <code>map</code> contains an existing entry for <code>key</code>.
+Returns the modified map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.update(map, Nat.compare, 0, &quot;Nil&quot;);
+  Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  // [(0, &quot;Nil&quot;)]
+  Map.update(map, Nat.compare, 1, &quot;One&quot;);
+  // traps
+
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="swap"><code><span class="keyword">public func </span><span class="fnname">swap</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span>, <br/>  <span class="parameter">value</span> : <span class="type">V</span><br/>) : ?<span class="type">V</span></code></h4><p><p>Associates the value with the key in the map.
+If the key is not yet present in the map, a new key-value pair is added and <code>null</code> is returned.
+Otherwise, if the key is already present, the value is overwritten and the previous value is returned.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 1, &quot;ONE&quot;);
+
+  let oldZero = Map.swap(map, Nat.compare, 0, &quot;Zero&quot;); // inserts new key-value pair.
+  Debug.print(debug_show(oldZero)); // prints `null`, key was inserted.
+
+  let oldOne = Map.swap(map, Nat.compare, 1, &quot;One&quot;);   // overwrites value for existing key.
+  Debug.print(debug_show(oldOne)); // prints `?&quot;ONE&quot;`, previous value.
+  Debug.print(debug_show(Map.get(map, Nat.compare, 1))); // prints `?&quot;One&quot;`, new value.
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="replaceIfExists"><code><span class="keyword">public func </span><span class="fnname">replaceIfExists</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span>, <br/>  <span class="parameter">value</span> : <span class="type">V</span><br/>) : ?<span class="type">V</span></code></h4><p><p>Overwrites the value of an existing key and returns the previous value.
+If the key does not exist, it has no effect and returns <code>null</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Null&quot;);
+
+  let oldZero = Map.replaceIfExists(map, Nat.compare, 0, &quot;Zero&quot;); // overwrites the value for existing key.
+  Debug.print(debug_show(oldZero)); // prints `?&quot;Null&quot;`, previous value.
+  Debug.print(debug_show(Map.get(map, Nat.compare, 0))); // prints `?&quot;Zero&quot;`, new value.
+
+  let oldOne = Map.replaceIfExists(map, Nat.compare, 1, &quot;One&quot;);  // no effect, key is absent
+  Debug.print(debug_show(oldOne)); // prints `null`, key was absent.
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="delete"><code><span class="keyword">public func </span><span class="fnname">delete</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">key</span> : <span class="type">K</span><br/>)</code></h4><p><p>Delete an existing entry by its key in the map.
+Traps if the key does not exist in the map.</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Map.delete(map, Nat.compare, 0);
+  Debug.print(debug_show(Map.containsKey(map, Nat.compare, 0))); // prints `false`.
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code> including garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+<p>Note: Creates <code>O(log(n))</code> objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="maxEntry"><code><span class="keyword">public func </span><span class="fnname">maxEntry</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : ?(<span class="type">K</span>, <span class="type">V</span>)</code></h4><p><p>Retrieves the key-value pair from the map with the maximum key.
+If the map is empty, returns <code>null</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Debug.print(debug_show(Map.maxEntry(map))); // prints `?(2, &quot;Two&quot;)`.
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(1)</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+</p></div><div class="declaration"><h4 class="function" id="minEntry"><code><span class="keyword">public func </span><span class="fnname">minEntry</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : ?(<span class="type">K</span>, <span class="type">V</span>)</code></h4><p><p>Retrieves the key-value pair from the map with the minimum key.
+If the map is empty, returns <code>null</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Debug.print(debug_show(Map.minEntry(map))); // prints `?(0, &quot;Zero&quot;)`.
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(1)</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+</p></div><div class="declaration"><h4 class="function" id="entries"><code><span class="keyword">public func </span><span class="fnname">entries</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;(<span class="type">K</span>, <span class="type">V</span>)&gt;</code></h4><p><p>Returns an iterator over the key-value pairs in the map,
+traversing the entries in the ascending order of the keys.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  for (entry in Map.entries(map)) {
+     Debug.print(debug_show(entry));
+  }
+  // prints:
+  // `(0, &quot;Zero&quot;)`
+  // `(1, &quot;One&quot;)`
+  // `(2, &quot;Two&quot;)`
+}</code></pre><p>Cost of iteration over all elements:
+Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="reverseEntries"><code><span class="keyword">public func </span><span class="fnname">reverseEntries</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;(<span class="type">K</span>, <span class="type">V</span>)&gt;</code></h4><p><p>Returns an iterator over the key-value pairs in the map,
+traversing the entries in the descending order of the keys.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  for (entry in Map.reverseEntries(map)) {
+     Debug.print(debug_show(entry));
+  }
+  // prints:
+  // `(2, &quot;Two&quot;)`
+  // `(1, &quot;One&quot;)`
+  // `(0, &quot;Zero&quot;)`
+}</code></pre><p>Cost of iteration over all elements:
+Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="keys"><code><span class="keyword">public func </span><span class="fnname">keys</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">K</span>&gt;</code></h4><p><p>Returns an iterator over the keys in the map,
+traversing all keys in ascending order.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  for (key in Map.keys(map)) {
+     Debug.print(Nat.toText(key));
+  }
+  // prints:
+  // `0`
+  // `1`
+  // `2`
+}</code></pre><p>Cost of iteration over all elements:
+Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">V</span>&gt;</code></h4><p><p>Returns an iterator over the values in the map,
+traversing the values in the ascending order of the keys to which they are associated.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  for (value in Map.values(map)) {
+     Debug.print(value);
+  }
+  // prints:
+  // `Zero`
+  // `One`
+  // `Two`
+}</code></pre><p>Cost of iteration over all elements:
+Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;(<span class="type">K</span>, <span class="type">V</span>)&gt;, <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></h4><p><p>Create a mutable key-value map with the entries obtained from an iterator.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
+
+persistent actor {
+  let iterator = Iter.fromArray([(0, &quot;Zero&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;)]);
+  let map = Map.fromIter&lt;Nat, Text&gt;(iterator, Nat.compare);
+}</code></pre>
+
+<p>Runtime: <code>O(n * log(n))</code>.
+Space: <code>O(n)</code>.
+where <code>n</code> denotes the number of key-value entries returned by the iterator and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <span class="parameter">operation</span> : (<span class="type">K</span>, <span class="type">V</span>) -&gt; ())</code></h4><p><p>Apply an operation on each key-value pair contained in the map.
+The operation is applied in ascending order of the keys.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  Map.forEach&lt;Nat, Text&gt;(map, func (key, value) {
+    Debug.print(&quot;key=&quot; # Nat.toText(key) # &quot;, value='&quot; # value # &quot;'&quot;);
+  })
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">criterion</span> : (<span class="type">K</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span><br/>) : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></h4><p><p>Filter entries in a new map.
+Create a copy of the mutable map that only contains the key-value pairs
+that fulfil the criterion function.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let numberNames = Map.empty&lt;Nat, Text&gt;();
+  Map.add(numberNames, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(numberNames, Nat.compare, 1, &quot;One&quot;);
+  Map.add(numberNames, Nat.compare, 2, &quot;Two&quot;);
+
+  let evenNumbers = Map.filter&lt;Nat, Text&gt;(numberNames, Nat.compare, func (key, value) {
+    key % 2 == 0
+  });
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(n)</code>.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">K</span>, <span class="type">V1</span>, <span class="type">V2</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V1</span>&gt;, <span class="parameter">project</span> : (<span class="type">K</span>, <span class="type">V1</span>) -&gt; <span class="type">V2</span>) : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V2</span>&gt;</code></h4><p><p>Project all values of the map in a new map.
+Apply a mapping function to the values of each entry in the map and
+collect the mapped entries in a new mutable key-value map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Text &quot;mo:base/Text&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let numberNames = Map.empty&lt;Nat, Text&gt;();
+  Map.add(numberNames, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(numberNames, Nat.compare, 1, &quot;One&quot;);
+  Map.add(numberNames, Nat.compare, 2, &quot;Two&quot;);
+
+  let lowerCaseNames = Map.map&lt;Nat, Text, Text&gt;(numberNames, func (key, value) {
+    Text.toLower(value)
+  });
+  for (entry in Map.entries(lowerCaseNames)) {
+     Debug.print(debug_show(entry));
+  }
+  // prints:
+  // `(0, &quot;zero&quot;)`
+  // `(1, &quot;one&quot;)`
+  // `(2, &quot;two&quot;)`
+}</code></pre>
+
+<p>Runtime: <code>O(n * log(n))</code>.
+Space: <code>O(n)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="foldLeft"><code><span class="keyword">public func </span><span class="fnname">foldLeft</span>&lt;<span class="type">K</span>, <span class="type">V</span>, <span class="type">A</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">base</span> : <span class="type">A</span>, <br/>  <span class="parameter">combine</span> : (<span class="type">A</span>, <span class="type">K</span>, <span class="type">V</span>) -&gt; <span class="type">A</span><br/>) : <span class="type">A</span></code></h4><p><p>Iterate all entries in ascending order of the keys,
+and accumulate the entries by applying the combine function, starting from a base value.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  let text = Map.foldLeft&lt;Nat, Text, Text&gt;(
+     map,
+     &quot;&quot;,
+     func (accumulator, key, value) {
+       let separator = if (accumulator != &quot;&quot;) { &quot;, &quot; } else { &quot;&quot; };
+       accumulator # separator # Nat.toText(key) # &quot; is &quot; # value
+     }
+  );
+  Debug.print(text);
+  // prints `0 is Zero, 1 is One, 2 is Two`
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="foldRight"><code><span class="keyword">public func </span><span class="fnname">foldRight</span>&lt;<span class="type">K</span>, <span class="type">V</span>, <span class="type">A</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">base</span> : <span class="type">A</span>, <br/>  <span class="parameter">combine</span> : (<span class="type">K</span>, <span class="type">V</span>, <span class="type">A</span>) -&gt; <span class="type">A</span><br/>) : <span class="type">A</span></code></h4><p><p>Iterate all entries in descending order of the keys,
+and accumulate the entries by applying the combine function, starting from a base value.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  let text = Map.foldRight&lt;Nat, Text, Text&gt;(
+     map,
+     &quot;&quot;,
+     func (key, value, accumulator) {
+       let separator = if (accumulator != &quot;&quot;) { &quot;, &quot; } else { &quot;&quot; };
+       accumulator # separator # Nat.toText(key) # &quot; is &quot; # value
+     }
+  );
+  Debug.print(text);
+  // prints `2 is Two, 1 is One, 0 is Zero`
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <span class="parameter">predicate</span> : (<span class="type">K</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether all entries in the map fulfil a predicate function, i.e.
+the predicate function returns <code>true</code> for all entries in the map.
+Returns <code>true</code> for an empty map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  let belowTen = Map.all&lt;Nat, Text&gt;(map, func (key, _) {
+    key &lt; 10
+  }); // `true`
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <span class="parameter">predicate</span> : (<span class="type">K</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether at least one entry in the map fulfils the predicate function, i.e.
+the predicate function returns <code>true</code> for at least one entry in the map.
+Returns <code>false</code> for an empty map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  let aboveTen = Map.any&lt;Nat, Text&gt;(map, func (key, _) {
+    key &gt; 10
+  }); // `false`
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="filterMap"><code><span class="keyword">public func </span><span class="fnname">filterMap</span>&lt;<span class="type">K</span>, <span class="type">V1</span>, <span class="type">V2</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V1</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">project</span> : (<span class="type">K</span>, <span class="type">V1</span>) -&gt; ?<span class="type">V2</span><br/>) : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V2</span>&gt;</code></h4><p><p>Filter all entries in the map by also applying a projection to the value.
+Apply a mapping function <code>project</code> to all entries in the map and collect all
+entries, for which the function returns a non-null new value. Collect all
+non-discarded entries with the key and new value in a new mutable map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Text &quot;mo:base/Text&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let numberNames = Map.empty&lt;Nat, Text&gt;();
+  Map.add(numberNames, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(numberNames, Nat.compare, 1, &quot;One&quot;);
+  Map.add(numberNames, Nat.compare, 2, &quot;Two&quot;);
+
+  let evenNumbers = Map.filterMap&lt;Nat, Text, Text&gt;(numberNames, Nat.compare, func (key, value) {
+    if (key % 2 == 0) {
+       ?Text.toLower(value)
+    } else {
+       null // discard odd numbers
+    }
+  });
+  for (entry in Map.entries(evenNumbers)) {
+     Debug.print(debug_show(entry));
+  }
+  // prints:
+  // `(0, &quot;zero&quot;)`
+  // `(2, &quot;two&quot;)`
+}</code></pre>
+
+<p>Runtime: <code>O(n * log(n))</code>.
+Space: <code>O(n)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="assertValid"><code><span class="keyword">public func </span><span class="fnname">assertValid</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>)</code></h4><p><p>Internal sanity check function.
+Can be used to check that key/value pairs have been inserted with a consistent key comparison function.
+Traps if the internal map structure is invalid.</p>
+</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">keyFormat</span> : <span class="type">K</span> -&gt; <span class="type">Text</span>, <br/>  <span class="parameter">valueFormat</span> : <span class="type">V</span> -&gt; <span class="type">Text</span><br/>) : <span class="type">Text</span></code></h4><p><p>Generate a textual representation of all the entries in the map.
+Primarily to be used for testing and debugging.
+The keys and values are formatted according to <code>keyFormat</code> and <code>valueFormat</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let map = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map, Nat.compare, 1, &quot;One&quot;);
+  Map.add(map, Nat.compare, 2, &quot;Two&quot;);
+
+  let text = Map.toText&lt;Nat, Text&gt;(map, Nat.toText, func (value) { value });
+  // `{(0, Zero), (1, One), (2, Two)}`
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(n)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that <code>keyFormat</code> and <code>valueFormat</code> have runtime and space costs of <code>O(1)</code>.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map1</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">map2</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compareKey</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">compareValue</span> : (<span class="type">V</span>, <span class="type">V</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compare two maps by primarily comparing keys and secondarily values.
+Both maps must have been created by the same key comparison function.
+The two maps are iterated by the ascending order of their creation and
+order is determined by the following rules:
+Less:
+<code>map1</code> is less than <code>map2</code> if:</p>
+<ul><li>the pairwise iteration hits a entry pair <code>entry1</code> and <code>entry2</code> where
+ <code>entry1</code> is less than <code>entry2</code> and all preceding entry pairs are equal, or,</li><li><code>map1</code> is  a strict prefix of <code>map2</code>, i.e. <code>map2</code> has more entries than <code>map1</code>
+ and all entries of <code>map1</code> occur at the beginning of iteration <code>map2</code>.
+<code>entry1</code> is less than <code>entry2</code> if:</li><li>the key of <code>entry1</code> is less than the key of <code>entry2</code>, or</li><li><code>entry1</code> and <code>entry2</code> have equal keys and the value of <code>entry1</code> is less than
+ the value of <code>entry2</code>.
+Equal:
+<code>map1</code> and <code>map2</code> have same series of equal entries by pairwise iteration.
+Greater:
+<code>map1</code> is neither less nor equal <code>map2</code>.</li></ul>
+
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Text &quot;mo:base/Text&quot;;
+
+persistent actor {
+  let map1 = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map1, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map1, Nat.compare, 1, &quot;One&quot;);
+
+  let map2 = Map.empty&lt;Nat, Text&gt;();
+  Map.add(map2, Nat.compare, 0, &quot;Zero&quot;);
+  Map.add(map2, Nat.compare, 2, &quot;Two&quot;);
+
+  let orderLess = Map.compare(map1, map2, Nat.compare, Text.compare);
+  // `#less`
+  let orderEqual = Map.compare(map1, map1, Nat.compare, Text.compare);
+  // `#equal`
+  let orderGreater = Map.compare(map2, map1, Nat.compare, Text.compare);
+  // `#greater`
+}</code></pre>
+
+<p>Runtime: <code>O(n)</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see below.
+where <code>n</code> denotes the number of key-value entries stored in the map and
+assuming that <code>compareKey</code> and <code>compareValue</code> have runtime and space costs of <code>O(1)</code>.</p>
+<p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
+</p></div></div></body></html>

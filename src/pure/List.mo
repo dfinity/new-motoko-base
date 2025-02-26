@@ -14,6 +14,7 @@ import Iter "../Iter";
 import Order "../Order";
 import Result "../Result";
 import Types "../Types";
+import Runtime "../Runtime";
 
 module {
 
@@ -506,7 +507,15 @@ module {
   /// *Runtime and space assumes that `lessThanOrEqual` runs in O(1) time and space.
   // TODO: replace by merge taking a compare : (T, T) -> Order.Order function?
   public func merge<T>(list1 : List<T>, list2 : List<T>, lessThanOrEqual : (T, T) -> Bool) : List<T> = switch (list1, list2) {
-    case (?(h1, t1), ?(h2, t2)) if (lessThanOrEqual(h1, h2)) ?(h1, merge(t1, list2, lessThanOrEqual)) else if (lessThanOrEqual(h2, h1)) ?(h2, merge(list1, t2, lessThanOrEqual)) else ?(h1, ?(h2, merge(list1, list2, lessThanOrEqual)));
+    case (?(h1, t1), ?(h2, t2)) {
+      if (lessThanOrEqual(h1, h2)) {
+        ?(h1, merge(t1, list2, lessThanOrEqual))
+      } else if (lessThanOrEqual(h2, h1)) {
+        ?(h2, merge(list1, t2, lessThanOrEqual))
+      } else {
+        ?(h1, ?(h2, merge(list1, list2, lessThanOrEqual)))
+      }
+    };
     case (null, _) list2;
     case (_, null) list1
   };
@@ -774,7 +783,7 @@ module {
   /// Space: O(size)
   public func toArray<T>(list : List<T>) : [T] {
     var l = list;
-    Array_tabulate<T>(size list, func _ { let ?(h, t) = l else loop (); l := t; h })
+    Array_tabulate<T>(size list, func _ { let ?(h, t) = l else Runtime.trap("List.toArray(): unreachable"); l := t; h })
   };
 
   /// Create a mutable array from a list.

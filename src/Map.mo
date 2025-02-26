@@ -172,8 +172,7 @@ module {
     let kvs = VarArray.repeat<?(K, V)>(null, btreeOrder - 1);
     kvs[0] := ?(key, value);
     {
-      var root =
-      #leaf { data = { kvs; var count = 1 } };
+      var root = #leaf { data = { kvs; var count = 1 } };
       var size = 1
     }
   };

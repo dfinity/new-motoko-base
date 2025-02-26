@@ -868,7 +868,7 @@
       "public func clear<T>(queue : Queue<T>)",
       "public func clone<T>(queue : Queue<T>) : Queue<T>",
       "public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order",
-      "public func contains<T>(queue : Queue<T>, equals : (T, T) -> Bool, element : T) : Bool",
+      "public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, element : T) : Bool",
       "public func empty<T>() : Queue<T>",
       "public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equal : (T, T) -> Bool) : Bool",
       "public func filter<T>(queue : Queue<T>, criterion : T -> Bool) : Queue<T>",
@@ -1211,9 +1211,10 @@
       "public func chunks<T>(list : List<T>, n : Nat) : List<List<T>>",
       "public func compare<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : Order.Order",
       "public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T>",
-      "public func contains<T>(list : List<T>, item : T) : Bool",
+      "public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool",
       "public func drop<T>(list : List<T>, n : Nat) : List<T>",
       "public func empty<T>() : List<T>",
+      "public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool",
       "public func filter<T>(list : List<T>, f : T -> Bool) : List<T>",
       "public func filterMap<T, R>(list : List<T>, f : T -> ?R) : List<R>",
       "public func find<T>(list : List<T>, f : T -> Bool) : ?T",
@@ -1294,7 +1295,7 @@
       "public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool",
       "public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool",
       "public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order",
-      "public func contains<T>(queue : Queue<T>, item : T) : Bool",
+      "public func contains<T>(queue : Queue<T>, equal : T -> Bool, item : T) : Bool",
       "public func empty<T>() : Queue<T>",
       "public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>) : Bool",
       "public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T>",
@@ -1351,6 +1352,8 @@
       "public func size<T>(set : Set<T>) : Nat",
       "public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text",
       "public func union<T>(set1 : Set<T>, set2 : Set<T>, compare: (T, T) -> Order.Order) : Set<T>",
+      "public func toText<T>(set : Set<T>, f : T -> Text) : Text",
+      "public func union<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
       "public func values<T>(set : Set<T>) : Iter.Iter<T>"
     ]
   }

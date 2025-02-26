@@ -14,7 +14,6 @@ import Iter "../Iter";
 import Order "../Order";
 import Result "../Result";
 import Types "../Types";
-import { todo } "../Debug";
 
 module {
 
@@ -61,8 +60,27 @@ module {
       case (?(_, t)) 1 + size t
     };
 
-  public func contains<T>(list : List<T>, item : T) : Bool {
-    todo()
+  /// Check if the list contains a given value. Uses the provided equality function to compare values.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat "mo:base/Nat";
+  /// List.contains<Nat>(?(1, ?(2, ?(3, null))), Nat.equal, 2) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `equal` runs in O(1) time and space.
+  public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool {
+    switch list {
+      case null false;
+      case (?(head, tail)) {
+        if (equal(head, item)) true
+        else contains(tail, equal, item)
+      }
+    }
   };
 
   /// Access any item in a list, zero-based.
@@ -89,7 +107,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=initialize
-  /// List.push<Nat>(0, null) // => ?(0, null);
+  /// List.push<Nat>(null, 0) // => ?(0, null);
   /// ```
   ///
   /// Runtime: O(1)
@@ -518,6 +536,33 @@ module {
       case (_, null) list1
     };
 
+  /// Check if two lists are equal using the given equality function to compare elements.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat "mo:base/Nat";
+  /// List.equal<Nat>(?(1, ?(2, null)), ?(1, ?(2, null)), Nat.equal) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `equal` runs in O(1) time and space.
+  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool {
+    switch (list1, list2) {
+      case (null, null) true;
+      case (?(h1, t1), ?(h2, t2)) {
+        if (equalFunc(h1, h2)) {
+          equal(t1, t2, equalFunc)
+        } else {
+          false
+        }
+      };
+      case _ false;
+    }
+  };
+
   /// Compare two lists using lexicographic ordering specified by argument function `compare`.
   ///
   /// Example:
@@ -675,7 +720,7 @@ module {
 
   /// Split the given list into chunks of length `n`.
   /// The last chunk will be shorter if the length of the given list
-  /// does not divide by `n` evenly.
+  /// does not divide by `n` evenly. Traps if `n` = 0.
   ///
   /// Example:
   /// ```motoko include=initialize
@@ -695,7 +740,7 @@ module {
   /// Space: O(size)
   public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> =
     switch (split(list, n)) {
-      case (null, _) null;
+      case (null, _) { assert n > 0; null };
       case (pre, null) ?(pre, null);
       case (pre, post) ?(pre, chunks(post, n));
     };

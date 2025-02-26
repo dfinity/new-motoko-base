@@ -392,7 +392,7 @@ module {
       case (#inserted) {
         // if inserted an element that was not previously there, increment the tree size counter
         set.size += 1;
-	return true
+	true
       };
       case (#existent) {
         // keep size

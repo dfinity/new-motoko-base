@@ -77,7 +77,7 @@ run(
         do {
           let original = Map.empty<Nat, Text>();
           let clone = Map.clone(original);
-          ignore Map.put(original, Nat.compare, 0, "0");
+          ignore Map.add(original, Nat.compare, 0, "0");
           Map.size(clone)
         },
         M.equals(T.nat(0))
@@ -413,7 +413,7 @@ run(
         do {
           let original = Map.singleton<Nat, Text>(0, "0");
           let clone = Map.clone(original);
-          ignore Map.put(original, Nat.compare, 0, "1");
+          ignore Map.add(original, Nat.compare, 0, "1");
           assert (Map.get(clone, Nat.compare, 0) == ?"0");
           Map.size(clone)
         },
@@ -819,7 +819,7 @@ run(
           let clone = Map.clone(original);
           let keys = Iter.toArray(Map.keys(original));
           for (key in keys.values()) {
-            ignore Map.put(original, Nat.compare, key, "X");
+            ignore Map.add(original, Nat.compare, key, "X");
           };
           for (key in keys.values()) {
             assert Map.get(clone, Nat.compare, key) ==
@@ -1438,8 +1438,8 @@ run(
         "put existing",
         do {
           let map = Map.empty<Nat, Text>();
-          Map.put(map, Nat.compare, 0, "0");
-          Map.put(map, Nat.compare, 0, "Zero");
+          Map.add(map, Nat.compare, 0, "0");
+          Map.add(map, Nat.compare, 0, "Zero");
           Map.get(map, Nat.compare, 0)
         },
         M.equals(T.optional(T.textTestable, ?"Zero"))
@@ -1448,7 +1448,7 @@ run(
         "update existing",
         do {
           let map = Map.empty<Nat, Text>();
-          Map.put(map, Nat.compare, 0, "0");
+          Map.add(map, Nat.compare, 0, "0");
           Map.update(map, Nat.compare, 0, "Zero");
           Map.get(map, Nat.compare, 0)
         },

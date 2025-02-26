@@ -178,9 +178,8 @@ module {
   public func get<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V
     = Internal.get(map.root, compare, key);
 
-  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.
-  /// Traps if `map` contains any existing entry for `key`.
-  /// Returns the modified map.
+  /// Given `map` ordered by `compare`, insert a mapping from `key` to `value`.
+  /// Returns the modified map and `true` if the key is new to map, otherwise `false`.
   ///
   /// Example:
   /// ```motoko
@@ -190,14 +189,15 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   var map = Map.empty<Nat, Text>();
+  ///   let map = Map.empty<Nat, Text>();
   ///
-  ///   map := Map.add(map, Nat.compare, 0, "Zero");
-  ///   map := Map.add(map, Nat.compare, 1, "One");
-  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
+  ///   let (map0, true) = Map.insert(map, Nat.compare, 0, "Zero");
+  ///   let (map1, true) = Map.insert(map0, Nat.compare, 1, "One");
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map1))));
   ///   // [(0, "Zero"), (1, "One")]
-  ///   map := Map.add(map, Nat.compare, 0, "Nil");
-  ///   // traps
+  ///   let (map2, false) = Map.insert(map1, Nat.compare, 0, "Nil");
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map2))));
+  ///   // [(0, "Nil"), (1, "One")]
   ///
   /// }
   /// ```
@@ -210,10 +210,11 @@ module {
   /// Note: The returned map shares with the `m` most of the tree nodes.
   /// Garbage collecting one of maps (e.g. after an assignment `m := Map.add(m, cmp, k, v)`)
   /// causes collecting `O(log(n))` nodes.
-  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V> {
+  public func insert<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V)
+    : (Map<K, V>, Bool) {
     switch (swap(map, compare, key, value)) {
-      case (map1, null) map1;
-      case _ Runtime.trap("pure/Map.add(): key is already present")
+      case (map1, null) (map1, true);
+      case (map1, _) (map1, false)
     }
   };
 
@@ -231,9 +232,9 @@ module {
   /// persistent actor {
   ///   var map = Map.empty<Nat, Text>();
   ///
-  ///   map := Map.put(map, Nat.compare, 0, "Zero");
-  ///   map := Map.put(map, Nat.compare, 1, "One");
-  ///   map := Map.put(map, Nat.compare, 0, "Nil");
+  ///   map := Map.add(map, Nat.compare, 0, "Zero");
+  ///   map := Map.add(map, Nat.compare, 1, "One");
+  ///   map := Map.add(map, Nat.compare, 0, "Nil");
   ///
   ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
   ///   // [(0, "Nil"), (1, "One")]
@@ -246,9 +247,9 @@ module {
   /// assuming that the `compare` function implements an `O(1)` comparison.
   ///
   /// Note: The returned map shares with the `m` most of the tree nodes.
-  /// Garbage collecting one of maps (e.g. after an assignment `m := Map.put(m, cmp, k, v)`)
+  /// Garbage collecting one of maps (e.g. after an assignment `m := Map.add(m, cmp, k, v)`)
   /// causes collecting `O(log(n))` nodes.
-  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V> {
+  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V> {
     swap(map, compare, key, value).0
   };
 
@@ -373,8 +374,10 @@ module {
     }
   };
 
-  /// Given a `map`, ordered by `compare`, deletes the entry for `key` from `map`. Has no effect if `key` is not
-  /// present in the map. Returns a modified map, leaving `map` unchanged.
+
+  /// Given a `map`, ordered by `compare`, deletes any entry for `key` from `map`.
+  /// Has no effect if `key` is not present in the map.
+  /// Returns the updated map.
   ///
   /// Example:
   /// ```motoko
@@ -386,10 +389,11 @@ module {
   /// persistent actor {
   ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
   ///
-  ///   Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 1)))));
-  ///   Debug.print(debug_show(Iter.toArray(Map.entries(Map.delete(map, Nat.compare, 42)))));
-  ///
+  ///   let map1 = Map.remove(map, Nat.compare, 1);
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map1))));
   ///   // [(0, "Zero"), (2, "Two")]
+  ///   let map2 = Map.remove(map0, Nat.compare, 42))
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map2))));
   ///   // [(0, "Zero"), (1, "One"), (2, "Two")]
   /// }
   /// ```
@@ -402,8 +406,49 @@ module {
   /// Note: The returned map shares with the `m` most of the tree nodes.
   /// Garbage collecting one of maps (e.g. after an assignment `map := Map.delete(map, compare, k).0`)
   /// causes collecting `O(log(n))` nodes.
-  public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Map<K, V> {
-    take(map, compare, key).0
+  public func remove<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : Map<K, V> {
+    switch (Internal.remove(map.root, compare, key)) {
+      case (_, null) map;
+      case (t, ?_) { {root = t; size = map.size - 1} }
+    }
+  };
+
+  /// Given a `map`, ordered by `compare`, deletes any entry for `key` from `map`.
+  /// Has no effect if `key` is not present in the map.
+  /// Returns the updated map and `true` if the `key` was present in `map`, otherwise `false`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/pure/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Debug "mo:base/Debug";
+  ///
+  /// persistent actor {
+  ///   let map = Map.fromIter<Nat, Text>(Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]), Nat.compare);
+  ///
+  ///   let (map1, true) = Map.delete(map, Nat.compare, 1);
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map1))));
+  ///   // [(0, "Zero"), (2, "Two")]
+  ///   let (map2, false) = Map.delete(map0, Nat.compare, 42))
+  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map2))));
+  ///   // [(0, "Zero"), (1, "One"), (2, "Two")]
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(log(n))`.
+  /// Space: `O(log(n))`
+  /// where `n` denotes the number of key-value entries stored in the map and
+  /// assuming that the `compare` function implements an `O(1)` comparison.
+  ///
+  /// Note: The returned map shares with the `m` most of the tree nodes.
+  /// Garbage collecting one of maps (e.g. after an assignment `map := Map.delete(map, compare, k).0`)
+  /// causes collecting `O(log(n))` nodes.
+  public func delete<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : (Map<K, V>, Bool) {
+    switch (Internal.remove(map.root, compare, key)) {
+      case (_, null) { (map, false) };
+      case (t, ?_)    { ({root = t; size = map.size - 1}, true) }
+    }
   };
 
   /// Given a `map`, ordered by `compare`, deletes the entry for `key`. Returns a modified map, leaving `map` unchanged, and the
@@ -1055,7 +1100,7 @@ module {
       var map = #leaf : Tree<K, V>;
       var size = 0;
       for(val in i) {
-        map := put(map, compare, val.0, val.1);
+        map := add(map, compare, val.0, val.1);
         size += 1;
       };
       {root = map; size}
@@ -1175,7 +1220,7 @@ module {
       func combine(acc : Tree<K, V>, key : K, value : V) : Tree<K, V> {
         if (criterion(key, value)) {
             size += 1;
-            put(acc, compare, key, value)
+            add(acc, compare, key, value)
         }
         else acc
       };
@@ -1189,7 +1234,7 @@ module {
           case null { acc };
           case (?value2) {
             size += 1;
-            put(acc, compare, key, value2)
+            add(acc, compare, key, value2)
           }
         }
       };
@@ -1405,7 +1450,7 @@ module {
       (res, oldVal)
     };
 
-    public func put<K, V>(
+    public func add<K, V>(
       m : Tree<K, V>,
       compare : (K, K) -> Order.Order,
       key : K,

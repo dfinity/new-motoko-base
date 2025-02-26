@@ -110,22 +110,22 @@ func run_all_props(range: (Nat, Nat), size: Nat, map_samples: Nat, query_samples
         }, M.equals(T.bool(true)))
       ]),
 
-      suite("get & put", [
-        prop_with_key("get(put(m, c, k, v), c,  k) == ?v", func (m, k) {
-          Map.get(Map.put(m, c, k, "v"), c, k) == ?"v"
+      suite("get & add", [
+        prop_with_key("get(add(m, c, k, v), c,  k) == ?v", func (m, k) {
+          Map.get(Map.add(m, c, k, "v"), c, k) == ?"v"
         }),
-        prop_with_key("get(put(put(m, c, k, v1), c, k, v2), c, k) == ?v2", func (m, k) {
+        prop_with_key("get(add(add(m, c, k, v1), c, k, v2), c, k) == ?v2", func (m, k) {
           let (v1, v2) = ("V1", "V2");
-          Map.get(Map.put(Map.put(m, c, k, v1), c, k, v2), c, k) == v2
+          Map.get(Map.add(Map.add(m, c, k, v1), c, k, v2), c, k) == v2
         }),
       ]),
 
       suite("swap", [
-        prop_with_key("swap(m, c, k, v).0 == put(m, c, k, v)", func (m, k) {
-          Map.swap(m, c, k, "v").0 == Map.put(m, c, k, "v")
+        prop_with_key("swap(m, c, k, v).0 == add(m, c, k, v)", func (m, k) {
+          Map.swap(m, c, k, "v").0 == Map.add(m, c, k, "v")
         }),
-        prop_with_key("swap(put(m, c, k, v1), c,  k, v2).1 == ?v1", func (m, k) {
-          Map.swap(Map.put(m, c, k, "v1"), c, k, "v2").1 == ?"v1"
+        prop_with_key("swap(add(m, c, k, v1), c,  k, v2).1 == ?v1", func (m, k) {
+          Map.swap(Map.add(m, c, k, "v1"), c, k, "v2").1 == ?"v1"
         }),
         prop_with_key("get(m, c, k) == null ==> swap(m, c, k, v).1 == null", func (m, k) {
           if (Map.get(m, c, k) == null) {
@@ -134,49 +134,49 @@ func run_all_props(range: (Nat, Nat), size: Nat, map_samples: Nat, query_samples
         }),
       ]),
 
-      suite("delete", [
-        prop_with_key("get(m, c, k) == null ==> delete(m, c, k) == m", func (m, k) {
+      suite("remove", [
+        prop_with_key("get(m, c, k) == null ==> remove(m, c, k) == m", func (m, k) {
           if (Map.get(m, c, k) == null) {
-            MapMatcher(m).matches(Map.delete(m, c, k))
+            MapMatcher(m).matches(Map.remove(m, c, k))
           } else { true }
         }),
-        prop_with_key("delete(put(m, c, k, v), c, k) == m", func (m, k) {
+        prop_with_key("remove(add(m, c, k, v), c, k) == m", func (m, k) {
           if (Map.get(m, c,  k) == null) {
-            MapMatcher(m).matches(Map.delete(Map.put(m, c, k, "v"), c, k))
+            MapMatcher(m).matches(Map.remove(Map.add(m, c, k, "v"), c, k))
           } else { true }
         }),
-        prop_with_key("delete(delete(m, c, k), c, k)) == delete(m, c, k)", func (m, k) {
-          let m1 = Map.delete(Map.delete(m, c, k), c, k);
-          let m2 = Map.delete(m, c, k);
+        prop_with_key("remove(remove(m, c, k), c, k)) == remove(m, c, k)", func (m, k) {
+          let m1 = Map.remove(Map.remove(m, c, k), c, k);
+          let m2 = Map.remove(m, c, k);
           MapMatcher(m2).matches(m1)
         })
       ]),
 
       suite("take", [
-        prop_with_key("take(m, c, k).0 == delete(m, c, k)", func (m, k) {
+        prop_with_key("take(m, c, k).0 == remove(m, c, k)", func (m, k) {
           let m1 = Map.take(m, c, k).0;
-          let m2 = Map.delete(m, c, k);
+          let m2 = Map.remove(m, c, k);
           MapMatcher(m2).matches(m1)
         }),
-        prop_with_key("take(put(m, c k, v), c, k).1 == ?v", func (m, k) {
-          Map.take(Map.put(m, c, k, "v"), c, k).1 == ?"v"
+        prop_with_key("take(add(m, c k, v), c, k).1 == ?v", func (m, k) {
+          Map.take(Map.add(m, c, k, "v"), c, k).1 == ?"v"
         }),
         prop_with_key("take(take(m, c, k).0, c, k).1 == null", func (m, k) {
          Map.take(Map.take(m, c, k).0, c, k).1 == null
         }),
-        prop_with_key("put(take(m, c, k).0, c, k, take(m, c, k).1) == m", func (m, k) {
+        prop_with_key("add(take(m, c, k).0, c, k, take(m, c, k).1) == m", func (m, k) {
           if (Map.get(m, c, k) != null) {
-            MapMatcher(m).matches(Map.put(Map.take(m, c, k).0, c, k, Option.get(Map.take(m, c, k).1, "")))
+            MapMatcher(m).matches(Map.add(Map.take(m, c, k).0, c, k, Option.get(Map.take(m, c, k).1, "")))
           } else { true }
         })
       ]),
 
       suite("size", [
-        prop_with_key("size(put(m, c, k, v)) == size(m) + int(get(m, c, k) == null)", func (m, k) {
-          Map.size(Map.put(m, c, k, "v")) == Map.size(m) + (if (Map.get(m, c, k) == null) {1} else {0})
+        prop_with_key("size(add(m, c, k, v)) == size(m) + int(get(m, c, k) == null)", func (m, k) {
+          Map.size(Map.add(m, c, k, "v")) == Map.size(m) + (if (Map.get(m, c, k) == null) {1} else {0})
         }),
-        prop_with_key("size(delete(m, c, k)) + int(get(m, c, k) != null) == size(m)", func (m, k) {
-          Map.size(Map.delete(m, c, k)) + (if (Map.get(m, c, k) != null) {1} else {0}) == Map.size(m)
+        prop_with_key("size(remove(m, c, k)) + int(get(m, c, k) != null) == size(m)", func (m, k) {
+          Map.size(Map.remove(m, c, k)) + (if (Map.get(m, c, k) != null) {1} else {0}) == Map.size(m)
         })
       ]),
 
@@ -215,10 +215,10 @@ func run_all_props(range: (Nat, Nat), size: Nat, map_samples: Nat, query_samples
               func (ki, vi) { if (ki != k) {?vi} else {null}}),
 	    c, k) == null
         }),
-        prop_with_key("get(filterMap(put(m, c, k, v), c, (==k)), c, k) == ?v", func (m, k) {
+        prop_with_key("get(filterMap(add(m, c, k, v), c, (==k)), c, k) == ?v", func (m, k) {
           Map.get(
 	    Map.filterMap<Nat, Text, Text>(
-	      Map.put(m, c, k, "v"),
+	      Map.add(m, c, k, "v"),
 	      c,
               func (ki, vi) { if (ki == k) {?vi} else {null}}),
 	    c,

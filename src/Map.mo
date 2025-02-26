@@ -361,35 +361,6 @@ module {
     }
   };
 
-  /// Add a new key-value entry to the map.
-  /// Replaces any existing mapping for key.
-  ///
-  /// Example:
-  /// ```motoko
-  /// import Map "mo:base/Map";
-  /// import Nat "mo:base/Nat";
-  ///
-  /// persistent actor {
-  ///   let map = Map.empty<Nat, Text>();
-  ///   Map.add(map, Nat.compare, 0, "Zero");
-  ///   Map.add(map, Nat.compare, 1, "One");
-  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
-  ///   // [(0, "Zero"), (1, "One")]
-  ///   Map.add(map, Nat.compare, 0, "Nil");
-  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
-  ///   // [(0, "Nil"), (1, "One")]
-  /// }
-  /// ```
-  ///
-  /// Runtime: `O(log(n))`.
-  /// Space: `O(log(n))`.
-  /// where `n` denotes the number of key-value entries stored in the map and
-  /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) {
-    ignore (swap(map, compare, key, value))
-  };
-
-  /// Insert a key-value entry in the map.
   /// Returns true if the key is new to the map, otherwise false.
   ///
   /// Example:
@@ -434,9 +405,9 @@ module {
   /// persistent actor {
   ///   let map = Map.empty<Nat, Text>();
   ///
-  ///   Map.put(map, Nat.compare, 0, "Zero");
-  ///   Map.put(map, Nat.compare, 1, "One");
-  ///   Map.put(map, Nat.compare, 0, "Nil");
+  ///   Map.add(map, Nat.compare, 0, "Zero");
+  ///   Map.add(map, Nat.compare, 1, "One");
+  ///   Map.add(map, Nat.compare, 0, "Nil");
   ///
   ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
   ///   // [(0, "Nil"), (1, "One")]
@@ -447,7 +418,7 @@ module {
   /// Space: `O(log(n))`.
   /// where `n` denotes the number of key-value entries stored in the map and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func put<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) {
+  public func add<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) {
     ignore swap(map, compare, key, value)
   };
 

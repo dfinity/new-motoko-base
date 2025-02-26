@@ -29,7 +29,7 @@ class MapMatcher(expected : [(Nat, Text)]) : M.Matcher<Map.Map<Nat, Text>> {
 func checkMap(m: Map.Map<Nat, Text>) { Map.assertValid(m, Nat.compare); };
 
 func insert(rbTree : Map.Map<Nat, Text>, key : Nat) : Map.Map<Nat, Text>  {
-  let updatedTree = Map.put(rbTree, Nat.compare, key, debug_show (key));
+  let updatedTree = Map.add(rbTree, Nat.compare, key, debug_show (key));
   checkMap(updatedTree);
   updatedTree
 };
@@ -741,7 +741,7 @@ run(
         do {
           var rbMap = buildTestMap();
           assert (Map.get(rbMap, Nat.compare, 1) == ?"1");
-          rbMap := Map.put(rbMap, Nat.compare, 1, "TEST-1");
+          rbMap := Map.add(rbMap, Nat.compare, 1, "TEST-1");
           Map.get(rbMap, Nat.compare, 1)
         },
         M.equals(T.optional(T.textTestable, ?"TEST-1"))
@@ -772,9 +772,10 @@ run(
       test(
         "repeated delete",
         do {
-          var rbMap = buildTestMap();
-          rbMap := Map.delete(rbMap, Nat.compare, 1);
-          Map.delete(rbMap, Nat.compare, 1)
+          let map = buildTestMap();
+          let (map1, true) = Map.delete(map, Nat.compare, 1);
+	  let (map2, false) = Map.delete(map1, Nat.compare, 1);
+	  map2
         },
         MapMatcher(expectedEntries([0, 2]))
       )
@@ -787,7 +788,7 @@ let smallSize = 100;
 func smallMap() : Map.Map<Nat, Text> {
   var map = Map.empty<Nat, Text>();
   for (index in Nat.range(0, smallSize)) {
-    map := Map.put(map, Nat.compare, index, Nat.toText(index))
+    map := Map.add(map, Nat.compare, index, Nat.toText(index))
   };
   map
 };
@@ -904,7 +905,9 @@ run(
         do {
           var map = smallMap();
           for (index in Nat.range(0, smallSize)) {
-            map := Map.delete(map, Nat.compare, index)
+	    let (map1, changed) = Map.delete(map, Nat.compare, index);
+	    assert changed;
+            map := map1
           };
           Map.isEmpty(map)
         },
@@ -923,7 +926,7 @@ run(
         "not equal",
         do {
           let map1 = smallMap();
-          let map2 = Map.delete(map1, Nat.compare, smallSize - 1);
+          let (map2, _) = Map.delete(map1, Nat.compare, smallSize - 1);
           Map.equal(map1, map2, Nat.equal, Text.equal)
         },
         M.equals(T.bool(false))
@@ -1130,7 +1133,7 @@ run(
       test(
         "compare less key",
         do {
-          let map1 = Map.delete(smallMap(), Nat.compare, smallSize - 1);
+          let (map1, true) = Map.delete(smallMap(), Nat.compare, smallSize - 1);
           let map2 = smallMap();
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #less);
           true
@@ -1161,7 +1164,7 @@ run(
         "compare greater key",
         do {
           let map1 = smallMap();
-          let map2 = Map.delete(smallMap(), Nat.compare, smallSize - 1);
+          let (map2, true) = Map.delete(smallMap(), Nat.compare, smallSize - 1);
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #greater);
           true
         },
@@ -1199,8 +1202,8 @@ run(
         "put existing",
         do {
 	  var map = Map.empty<Nat, Text>();
-	  map := Map.put(map, Nat.compare, 0, "0");
-	  map := Map.put(map, Nat.compare, 0, "Zero");
+	  map := Map.add(map, Nat.compare, 0, "0");
+	  map := Map.add(map, Nat.compare, 0, "Zero");
 	  Map.get(map, Nat.compare, 0)
 	},
         M.equals(T.optional(T.textTestable, ?"Zero"))
@@ -1209,7 +1212,7 @@ run(
         "update existing",
         do {
 	  var map = Map.empty<Nat, Text>();
-	  map := Map.put(map, Nat.compare, 0, "0");
+	  map := Map.add(map, Nat.compare, 0, "0");
 	  map := Map.update(map, Nat.compare, 0, "Zero");
 	  Map.get(map, Nat.compare, 0)
 	},

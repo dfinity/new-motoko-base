@@ -5,7 +5,7 @@
 <p>Iterators are inherently stateful. Calling <code>next</code> &quot;consumes&quot; a value from
 the Iterator that cannot be put back, so keep that in mind when sharing
 iterators between consumers.</p>
-<p>An iterater <code>i</code> can be iterated over using</p>
+<p>An iterator <code>i</code> can be iterated over using</p>
 <pre><code>for (x in i) {
   …do something with x…
 }</code></pre></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">value</span> : <span class="type">T</span>) : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : (<span class="type">T</span>) -&gt; ())</code></h4><p><p>Calls a function <code>f</code> on every value produced by an iterator and discards

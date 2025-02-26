@@ -5,8 +5,8 @@ import Iter "../../src/Iter";
 import Prim "mo:prim";
 import { suite; test; expect } = "mo:test";
 
-func iterateForward<T>(deque : Queue.Queue<T>) : Iter.Iter<T> {
-  var current = deque;
+func iterateForward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> {
+  var current = queue;
   object {
     public func next() : ?T {
       switch (Queue.popFront(current)) {
@@ -20,8 +20,8 @@ func iterateForward<T>(deque : Queue.Queue<T>) : Iter.Iter<T> {
   }
 };
 
-func iterateBackward<T>(deque : Queue.Queue<T>) : Iter.Iter<T> {
-  var current = deque;
+func iterateBackward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> {
+  var current = queue;
   object {
     public func next() : ?T {
       switch (Queue.popBack(current)) {
@@ -35,10 +35,10 @@ func iterateBackward<T>(deque : Queue.Queue<T>) : Iter.Iter<T> {
   }
 };
 
-func toText(deque : Queue.Queue<Nat>) : Text {
+func toText(queue : Queue.Queue<Nat>) : Text {
   var text = "[";
   var isFirst = true;
-  for (element in iterateForward(deque)) {
+  for (element in iterateForward(queue)) {
     if (not isFirst) {
       text #= ", "
     } else {
@@ -50,8 +50,24 @@ func toText(deque : Queue.Queue<Nat>) : Text {
   text
 };
 
-func reduceFront<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
-  var current = deque;
+func frontToText(t : (Nat, Queue.Queue<Nat>)) : Text {
+  "(" # Nat.toText(t.0) # ", " # toText(t.1) # ")"
+};
+
+func frontEqual(t1 : (Nat, Queue.Queue<Nat>), t2 : (Nat, Queue.Queue<Nat>)) : Bool {
+  t1.0 == t2.0 and Queue.equal(t1.1, t2.1, Nat.equal)
+};
+
+func backToText(t : (Queue.Queue<Nat>, Nat)) : Text {
+  "(" # toText(t.0) # ", " # Nat.toText(t.1) # ")"
+};
+
+func backEqual(t1 : (Queue.Queue<Nat>, Nat), t2 : (Queue.Queue<Nat>, Nat)) : Bool {
+  t1.1 == t2.1 and Queue.equal(t1.0, t2.0, Nat.equal)
+};
+
+func reduceFront<T>(queue : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
+  var current = queue;
   for (_ in Nat.range(0, amount)) {
     switch (Queue.popFront(current)) {
       case null Prim.trap("should not be null");
@@ -61,8 +77,8 @@ func reduceFront<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   current
 };
 
-func reduceBack<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
-  var current = deque;
+func reduceBack<T>(queue : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
+  var current = queue;
   for (_ in Nat.range(0, amount)) {
     switch (Queue.popBack(current)) {
       case null Prim.trap("should not be null");
@@ -72,7 +88,7 @@ func reduceBack<T>(deque : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   current
 };
 
-var deque = Queue.empty<Nat>();
+var queue = Queue.empty<Nat>();
 
 suite(
   "construct",
@@ -80,45 +96,45 @@ suite(
     test(
       "empty",
       func() {
-        expect.bool(Queue.isEmpty(deque)).isTrue()
+        expect.bool(Queue.isEmpty(queue)).isTrue()
       }
     );
 
     test(
       "iterate forward",
       func() {
-        expect.array<Nat>(Iter.toArray(iterateForward(deque)), Nat.toText, Nat.equal).size(0)
+        expect.array<Nat>(Iter.toArray(iterateForward(queue)), Nat.toText, Nat.equal).size(0)
       }
     );
 
     test(
       "iterate backward",
       func() {
-        expect.array(Iter.toArray(iterateBackward(deque)), Nat.toText, Nat.equal).size(0)
+        expect.array(Iter.toArray(iterateBackward(queue)), Nat.toText, Nat.equal).size(0)
       }
     );
 
     test(
       "peek front",
       func() {
-        expect.option(Queue.peekFront(deque), Nat.toText, Nat.equal).isNull()
+        expect.option(Queue.peekFront(queue), Nat.toText, Nat.equal).isNull()
       }
     );
 
     test(
       "peek back",
       func() {
-        expect.option(Queue.peekBack(deque), Nat.toText, Nat.equal).isNull()
+        expect.option(Queue.peekBack(queue), Nat.toText, Nat.equal).isNull()
       }
     );
 
     test(
       "pop front",
       func() {
-        expect.option<(Nat, Queue.Queue<Nat>)>(
-          Queue.popFront(deque),
-          func(n, _) = Nat.toText(n),
-          func(a, b) = a.0 == b.0
+        expect.option(
+          Queue.popFront(queue),
+          frontToText,
+          frontEqual
         ).isNull()
       }
     );
@@ -126,17 +142,17 @@ suite(
     test(
       "pop back",
       func() {
-        expect.option<(Queue.Queue<Nat>, Nat)>(
-          Queue.popBack(deque),
-          func(_, n) = Nat.toText(n),
-          func(a, b) = a.1 == b.1
+        expect.option(
+          Queue.popBack(queue),
+          backToText,
+          backEqual
         ).isNull()
       }
     )
   }
 );
 
-deque := Queue.pushFront(Queue.empty<Nat>(), 1);
+queue := Queue.pushFront(Queue.empty<Nat>(), 1);
 
 suite(
   "single item",
@@ -144,45 +160,45 @@ suite(
     test(
       "not empty",
       func() {
-        expect.bool(Queue.isEmpty(deque)).isFalse()
+        expect.bool(Queue.isEmpty(queue)).isFalse()
       }
     );
 
     test(
       "iterate forward",
       func() {
-        expect.array(Iter.toArray(iterateForward(deque)), Nat.toText, Nat.equal).equal([1])
+        expect.array(Iter.toArray(iterateForward(queue)), Nat.toText, Nat.equal).equal([1])
       }
     );
 
     test(
       "iterate backward",
       func() {
-        expect.array(Iter.toArray(iterateBackward(deque)), Nat.toText, Nat.equal).equal([1])
+        expect.array(Iter.toArray(iterateBackward(queue)), Nat.toText, Nat.equal).equal([1])
       }
     );
 
     test(
       "peek front",
       func() {
-        expect.option(Queue.peekFront(deque), Nat.toText, Nat.equal).equal(?1)
+        expect.option(Queue.peekFront(queue), Nat.toText, Nat.equal).equal(?1)
       }
     );
 
     test(
       "peek back",
       func() {
-        expect.option(Queue.peekBack(deque), Nat.toText, Nat.equal).equal(?1)
+        expect.option(Queue.peekBack(queue), Nat.toText, Nat.equal).equal(?1)
       }
     );
 
     test(
       "pop front",
       func() {
-        expect.option<(Nat, Queue.Queue<Nat>)>(
-          Queue.popFront(deque),
-          func(n, _) = Nat.toText(n),
-          func(a, b) = a.0 == b.0
+        expect.option(
+          Queue.popFront(queue),
+          frontToText,
+          frontEqual
         ).equal(?(1, Queue.empty()))
       }
     );
@@ -190,10 +206,10 @@ suite(
     test(
       "pop back",
       func() {
-        expect.option<(Queue.Queue<Nat>, Nat)>(
-          Queue.popBack(deque),
-          func(_, n) = Nat.toText(n),
-          func(a, b) = a.1 == b.1
+        expect.option(
+          Queue.popBack(queue),
+          backToText,
+          backEqual
         ).equal(?(Queue.empty(), 1))
       }
     )
@@ -203,14 +219,14 @@ suite(
 let testSize = 100;
 
 func populateForward(from : Nat, to : Nat) : Queue.Queue<Nat> {
-  var deque = Queue.empty<Nat>();
+  var queue = Queue.empty<Nat>();
   for (number in Nat.range(from, to)) {
-    deque := Queue.pushFront(deque, number)
+    queue := Queue.pushFront(queue, number)
   };
-  deque
+  queue
 };
 
-deque := populateForward(1, testSize);
+queue := populateForward(1, testSize + 1);
 
 suite(
   "forward insertion",
@@ -218,7 +234,7 @@ suite(
     test(
       "not empty",
       func() {
-        expect.bool(Queue.isEmpty(deque)).isFalse()
+        expect.bool(Queue.isEmpty(queue)).isFalse()
       }
     );
 
@@ -226,7 +242,7 @@ suite(
       "iterate forward",
       func() {
         expect.array(
-          Iter.toArray(iterateForward(deque)),
+          Iter.toArray(iterateForward(queue)),
           Nat.toText,
           Nat.equal
         ).equal(
@@ -244,7 +260,7 @@ suite(
       "iterate backward",
       func() {
         expect.array(
-          Iter.toArray(iterateBackward(deque)),
+          Iter.toArray(iterateBackward(queue)),
           Nat.toText,
           Nat.equal
         ).equal(
@@ -261,53 +277,53 @@ suite(
     test(
       "peek front",
       func() {
-        expect.option(Queue.peekFront(deque), Nat.toText, Nat.equal).equal(?testSize)
+        expect.option(Queue.peekFront(queue), Nat.toText, Nat.equal).equal(?testSize)
       }
     );
 
     test(
       "peek back",
       func() {
-        expect.option(Queue.peekBack(deque), Nat.toText, Nat.equal).equal(?1)
+        expect.option(Queue.peekBack(queue), Nat.toText, Nat.equal).equal(?1)
       }
     );
 
     test(
       "pop front",
       func() {
-        expect.option<(Nat, Queue.Queue<Nat>)>(
-          Queue.popFront(deque),
-          func(n, _) = Nat.toText(n),
-          func(a, b) = a.0 == b.0
-        ).equal(?(testSize, populateForward(1, testSize - 1)))
+        expect.option(
+          Queue.popFront(queue),
+          frontToText,
+          frontEqual
+        ).equal(?(testSize, populateForward(1, testSize)))
       }
     );
 
     test(
       "empty after front removal",
       func() {
-        expect.bool(Queue.isEmpty(reduceFront(deque, testSize))).isTrue()
+        expect.bool(Queue.isEmpty(reduceFront(queue, testSize))).isTrue()
       }
     );
 
     test(
       "empty after back removal",
       func() {
-        expect.bool(Queue.isEmpty(reduceBack(deque, testSize))).isTrue()
+        expect.bool(Queue.isEmpty(reduceBack(queue, testSize))).isTrue()
       }
     )
   }
 );
 
 func populateBackward(from : Nat, to : Nat) : Queue.Queue<Nat> {
-  var deque = Queue.empty<Nat>();
+  var queue = Queue.empty<Nat>();
   for (number in Nat.range(from, to)) {
-    deque := Queue.pushBack(deque, number)
+    queue := Queue.pushBack(queue, number)
   };
-  deque
+  queue
 };
 
-deque := populateBackward(1, testSize);
+queue := populateBackward(1, testSize + 1);
 
 suite(
   "backward insertion",
@@ -315,7 +331,7 @@ suite(
     test(
       "not empty",
       func() {
-        expect.bool(Queue.isEmpty(deque)).isFalse()
+        expect.bool(Queue.isEmpty(queue)).isFalse()
       }
     );
 
@@ -323,7 +339,7 @@ suite(
       "iterate forward",
       func() {
         expect.array(
-          Iter.toArray(iterateForward(deque)),
+          Iter.toArray(iterateForward(queue)),
           Nat.toText,
           Nat.equal
         ).equal(
@@ -341,7 +357,7 @@ suite(
       "iterate backward",
       func() {
         expect.array(
-          Iter.toArray(iterateBackward(deque)),
+          Iter.toArray(iterateBackward(queue)),
           Nat.toText,
           Nat.equal
         ).equal(
@@ -358,50 +374,50 @@ suite(
     test(
       "peek front",
       func() {
-        expect.option(Queue.peekFront(deque), Nat.toText, Nat.equal).equal(?1)
+        expect.option(Queue.peekFront(queue), Nat.toText, Nat.equal).equal(?1)
       }
     );
 
     test(
       "peek back",
       func() {
-        expect.option(Queue.peekBack(deque), Nat.toText, Nat.equal).equal(?testSize)
+        expect.option(Queue.peekBack(queue), Nat.toText, Nat.equal).equal(?testSize)
       }
     );
 
     test(
       "pop front",
       func() {
-        expect.option<(Nat, Queue.Queue<Nat>)>(
-          Queue.popFront(deque),
-          func(n, _) = Nat.toText(n),
-          func(a, b) = a.0 == b.0
-        ).equal(?(1, populateBackward(2, testSize)))
+        expect.option(
+          Queue.popFront(queue),
+          frontToText,
+          frontEqual
+        ).equal(?(1, populateBackward(2, testSize + 1)))
       }
     );
 
     test(
       "pop back",
       func() {
-        expect.option<(Queue.Queue<Nat>, Nat)>(
-          Queue.popBack(deque),
-          func(_, n) = Nat.toText(n),
-          func(a, b) = a.1 == b.1
-        ).equal(?(populateBackward(1, testSize - 1), testSize))
+        expect.option(
+          Queue.popBack(queue),
+          backToText,
+          backEqual
+        ).equal(?(populateBackward(1, testSize), testSize))
       }
     );
 
     test(
       "empty after front removal",
       func() {
-        expect.bool(Queue.isEmpty(reduceFront(deque, testSize))).isTrue()
+        expect.bool(Queue.isEmpty(reduceFront(queue, testSize))).isTrue()
       }
     );
 
     test(
       "empty after back removal",
       func() {
-        expect.bool(Queue.isEmpty(reduceBack(deque, testSize))).isTrue()
+        expect.bool(Queue.isEmpty(reduceBack(queue, testSize))).isTrue()
       }
     )
   }
@@ -427,14 +443,14 @@ func randomPopulate(amount : Nat) : Queue.Queue<Nat> {
   current
 };
 
-func isSorted(deque : Queue.Queue<Nat>) : Bool {
-  let array = Iter.toArray(iterateForward(deque));
+func isSorted(queue : Queue.Queue<Nat>) : Bool {
+  let array = Iter.toArray(iterateForward(queue));
   let sorted = Array.sort(array, Nat.compare);
   Array.equal(array, sorted, Nat.equal)
 };
 
-func randomRemoval(deque : Queue.Queue<Nat>, amount : Nat) : Queue.Queue<Nat> {
-  var current = deque;
+func randomRemoval(queue : Queue.Queue<Nat>, amount : Nat) : Queue.Queue<Nat> {
+  var current = queue;
   for (number in Nat.range(0, amount)) {
     current := if (Random.next() % 2 == 0) {
       let pair = Queue.popFront(current);
@@ -453,7 +469,7 @@ func randomRemoval(deque : Queue.Queue<Nat>, amount : Nat) : Queue.Queue<Nat> {
   current
 };
 
-deque := randomPopulate(testSize);
+queue := randomPopulate(testSize);
 
 suite(
   "random insertion",
@@ -461,14 +477,14 @@ suite(
     test(
       "not empty",
       func() {
-        expect.bool(Queue.isEmpty(deque)).isFalse()
+        expect.bool(Queue.isEmpty(queue)).isFalse()
       }
     );
 
     test(
       "correct order",
       func() {
-        expect.bool(isSorted(deque)).isTrue()
+        expect.bool(isSorted(queue)).isTrue()
       }
     );
 
@@ -476,38 +492,38 @@ suite(
       "consistent iteration",
       func() {
         expect.array(
-          Iter.toArray(iterateForward(deque)),
+          Iter.toArray(iterateForward(queue)),
           Nat.toText,
           Nat.equal
-        ).equal(Array.reverse(Iter.toArray(iterateBackward(deque))))
+        ).equal(Array.reverse(Iter.toArray(iterateBackward(queue))))
       }
     );
 
     test(
       "random quarter removal",
       func() {
-        expect.bool(isSorted(randomRemoval(deque, testSize / 4))).isTrue()
+        expect.bool(isSorted(randomRemoval(queue, testSize / 4))).isTrue()
       }
     );
 
     test(
       "random half removal",
       func() {
-        expect.bool(isSorted(randomRemoval(deque, testSize / 2))).isTrue()
+        expect.bool(isSorted(randomRemoval(queue, testSize / 2))).isTrue()
       }
     );
 
     test(
       "random three quarter removal",
       func() {
-        expect.bool(isSorted(randomRemoval(deque, testSize * 3 / 4))).isTrue()
+        expect.bool(isSorted(randomRemoval(queue, testSize * 3 / 4))).isTrue()
       }
     );
 
     test(
       "random total removal",
       func() {
-        expect.bool(Queue.isEmpty(randomRemoval(deque, testSize))).isTrue()
+        expect.bool(Queue.isEmpty(randomRemoval(queue, testSize))).isTrue()
       }
     )
   }

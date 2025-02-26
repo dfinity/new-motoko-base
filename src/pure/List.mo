@@ -76,20 +76,10 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that `equal` runs in O(1) time and space.
-  public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool =
-    switch list {
-<<<<<<< HEAD
-      case null false;
-      case (?(head, tail)) {
-        if (equal(head, item)) true else contains(tail, equal, item)
-      }
-    }
+  public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool = switch list {
+    case (?(h, t)) equal(h, item) or contains(t, equal, item);
+    case _ false
   };
-=======
-      case (?(h, t)) equal(h, item) or contains(t, equal, item);
-      case _ false
-    };
->>>>>>> fec9a85fad5b29ce02b8d1010e3dfaaecbec2398
 
   /// Access any item in a list, zero-based.
   ///
@@ -540,25 +530,11 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that `equalFunc` runs in O(1) time and space.
-  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool =
-    switch (list1, list2) {
-      case (null, null) true;
-<<<<<<< HEAD
-      case (?(h1, t1), ?(h2, t2)) {
-        if (equalFunc(h1, h2)) {
-          equal(t1, t2, equalFunc)
-        } else {
-          false
-        }
-      };
-      case _ false
-    }
+  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool = switch (list1, list2) {
+    case (null, null) true;
+    case (?(h1, t1), ?(h2, t2)) equalFunc(h1, h2) and equal(t1, t2, equalFunc);
+    case _ false
   };
-=======
-      case (?(h1, t1), ?(h2, t2)) equalFunc(h1, h2) and equal(t1, t2, equalFunc);
-      case _ false;
-    };
->>>>>>> fec9a85fad5b29ce02b8d1010e3dfaaecbec2398
 
   /// Compare two lists using lexicographic ordering specified by argument function `compare`.
   ///
@@ -729,20 +705,11 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-<<<<<<< HEAD
   public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> = switch (split(list, n)) {
-    case (null, _) { assert n > 0; null };
+    case (null, _) { if (n == 0) trap "pure/List.chunks()"; null };
     case (pre, null) ?(pre, null);
     case (pre, post) ?(pre, chunks(post, n))
   };
-=======
-  public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> =
-    switch (split(list, n)) {
-      case (null, _) { if (n == 0) trap "pure/List.chunks()"; null };
-      case (pre, null) ?(pre, null);
-      case (pre, post) ?(pre, chunks(post, n));
-    };
->>>>>>> fec9a85fad5b29ce02b8d1010e3dfaaecbec2398
 
   /// Returns an iterator to the elements in the list.
   ///

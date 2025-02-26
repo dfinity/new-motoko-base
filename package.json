@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "mops install",
     "format:check": "prettier --check '**/*.mo' --ignore-path .gitignore",
-    "format": "prettier '**/*.mo' --ignore-path .gitignore",
+    "format": "prettier --write '**/*.mo' --ignore-path .gitignore",
     "test": "run-s test:ts test:mops",
     "test:ts": "cd test/ts && tsx .",
     "test:mops": "mops test",

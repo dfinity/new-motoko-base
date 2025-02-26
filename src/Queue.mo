@@ -639,7 +639,7 @@ module {
   ///
   /// persistent actor {
   ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
-  ///   assert (Queue.toText(queue, Nat.toText) == "(1, 2, 3)");
+  ///   assert (Queue.toText(queue, Nat.toText) == "Queue[1, 2, 3]");
   /// }
   /// ```
   ///
@@ -647,13 +647,13 @@ module {
   /// Space: O(n)
   /// `n` denotes the number of elements stored in the queue.
   public func toText<T>(queue : Queue<T>, format : T -> Text) : Text {
-    var text = "(";
+    var text = "Queue[";
     var sep = "";
     for (element in values(queue)) {
       text #= sep # format(element);
       sep := ", "
     };
-    text #= ")";
+    text #= "]";
     text
   };
 

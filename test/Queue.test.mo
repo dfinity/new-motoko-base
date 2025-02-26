@@ -84,7 +84,7 @@ run(
       test(
         "to text",
         Queue.toText(Queue.empty<Nat>(), Nat.toText),
-        M.equals(T.text("()"))
+        M.equals(T.text("Queue[]"))
       )
     ]
   )
@@ -196,7 +196,7 @@ run(
       test(
         "to text",
         Queue.toText(Queue.singleton<Nat>(123), Nat.toText),
-        M.equals(T.text("(123)"))
+        M.equals(T.text("Queue[123]"))
       )
     ]
   )

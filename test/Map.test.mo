@@ -327,6 +327,78 @@ run(
         M.equals(T.bool(false))
       ),
       test(
+        "add singleton old",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+	  Map.add(map, Nat.compare, 0, "1");
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, [(0, "1")]))
+      ),
+      test(
+        "add singleton new",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+	  Map.add(map, Nat.compare, 1, "1");
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, [(0, "0"), (1, "1")]))
+      ),
+      test(
+        "insert singleton old",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+          assert (not Map.insert(map, Nat.compare, 0, "1"));
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, [(0, "1")]))
+     ),
+     test(
+        "insert singleton new",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+          assert Map.insert(map, Nat.compare, 1, "1");
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, [(0, "0"), (1, "1")]))
+      ),
+      test(
+        "remove singleton old",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+	  Map.remove(map, Nat.compare, 0);
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, []))
+      ),
+      test(
+        "remove singleton new",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+	  Map.remove(map, Nat.compare, 1);
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, [(0, "0")]))
+      ),
+      test(
+        "delete singleton old",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+	  assert (Map.delete(map, Nat.compare, 0));
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, []))
+      ),
+      test(
+        "delete singleton new",
+	do {
+	  let map = Map.singleton<Nat, Text>(0, "0");
+	  assert (not Map.delete(map, Nat.compare, 1));
+          Iter.toArray(Map.entries(map))
+	},
+        M.equals(T.array<(Nat, Text)>(entryTestable, [(0, "0")]))
+      ),
+      test(
         "clone",
         do {
           let original = Map.singleton<Nat, Text>(0, "0");

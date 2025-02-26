@@ -24,9 +24,8 @@ import Iter "../Iter";
 import List "List";
 import Order "../Order";
 import Types "../Types";
-import { todo } "../Debug";
 
-module Queue /* FIXME */ {
+module Queue {
   type List<T> = Types.Pure.List<T>;
 
   /// Double-ended queue data type.
@@ -146,7 +145,7 @@ module Queue /* FIXME */ {
     else switch list {
       case null (null, null);
       case (?(h, t)) {
-        let (f, b) = takeDrop(t, n - 1);
+        let (f, b) = takeDrop(t, n - 1 : Nat);
         (?(h, f), b)
       }
     };
@@ -289,8 +288,20 @@ module Queue /* FIXME */ {
   public func values<T>(queue : Queue<T>) : Iter.Iter<T> =
     Iter.concat(List.values(queue.0), List.values(List.reverse(queue.2)));
 
-  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>) : Bool {
-    todo()
+  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equal : (T, T) -> Bool) : Bool {
+    if (queue1.1 != queue2.1) {
+      return false;
+    };
+    let (iter1, iter2) = (values(queue1), values(queue2));
+    loop {
+      switch (iter1.next(), iter2.next()) {
+        case (null, null) { return true };
+        case (?v1, ?v2) {
+          if (not equal(v1, v2)) { return false };
+        };
+        case (_, _) { return false };
+      };
+    };
   };
 
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
@@ -322,7 +333,7 @@ module Queue /* FIXME */ {
   };
 
   public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
-    let (fr, n, b) = queue;
+    let (fr, _n, b) = queue;
     let front = List.filterMap(fr, f);
     let back = List.filterMap(b, f);
     (front, List.size front + List.size back, back)

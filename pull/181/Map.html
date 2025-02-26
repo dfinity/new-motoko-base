@@ -111,7 +111,7 @@ persistent actor {
 
 <p>Runtime: <code>O(1)</code>.
 Space: <code>O(1)</code>.</p>
-</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map1</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">map2</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">equalKeys</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">equalValues</span> : (<span class="type">V</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative maps have equal entries.
+</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<br/>  <span class="parameter">map1</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">map2</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <br/>  <span class="parameter">compareKeys</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Types.html#type.Order"><span class="type">Types.Order</span></a>, <br/>  <span class="parameter">equalValues</span> : (<span class="type">V</span>, <span class="type">V</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative maps have equal entries.
 Both maps have to be constructed by the same comparison function.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
@@ -126,7 +126,7 @@ persistent actor {
   Map.add(map1, Nat.compare, 2, &quot;Two&quot;);
   let map2 = Map.clone(map1);
 
-  assert(Map.equal(map1, map2, Nat.equal, Text.equal));
+  assert(Map.equal(map1, map2, Nat.compare, Text.equal));
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

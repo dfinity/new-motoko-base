@@ -1027,7 +1027,7 @@ run(
           let set1 = smallSet();
           let set2 = smallSet();
           Set.remove(set2, Nat.compare, smallSize - 1 : Nat);
-          Set.equal(set1, set2, Nat.equal)
+          Set.equal(set1, set2, Nat.compare)
         },
         M.equals(T.bool(false))
       ),

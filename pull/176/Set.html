@@ -472,7 +472,8 @@ Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
 </p></div><div class="declaration"><h4 class="function" id="deleteAll"><code><span class="keyword">public func </span><span class="fnname">deleteAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>) : <span class="type">Bool</span></code></h4><p><p>Deletes all values in <code>iter</code> from the specified <code>set</code>.
-Returns true if any value was present in the set, otherwise false.</p>
+Returns <code>true</code> if any value was present in the set, otherwise false.
+The return value indicates whether the size of the set has changed.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -491,7 +492,8 @@ Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
 </p></div><div class="declaration"><h4 class="function" id="insertAll"><code><span class="keyword">public func </span><span class="fnname">insertAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>) : <span class="type">Bool</span></code></h4><p><p>Inserts all values in <code>iter</code> into <code>set</code>.
-Returns true if any value was not contained in the original set, otherwise false.</p>
+Returns true if any value was not contained in the original set, otherwise false.
+The return value indicates whether the size of the set has changed.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -509,7 +511,8 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="retainAll"><code><span class="keyword">public func </span><span class="fnname">retainAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span><br/>)</code></h4><p><p>Removes all values in <code>set</code> that do not satisfy the given predicate.
+</p></div><div class="declaration"><h4 class="function" id="retainAll"><code><span class="keyword">public func </span><span class="fnname">retainAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Removes all values in <code>set</code> that do not satisfy the given predicate.
+Returns <code>true</code> if and only if the size of the set has changed.
 Modifies the set in place.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;

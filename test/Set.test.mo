@@ -1690,6 +1690,58 @@ run(
         },
         M.equals(T.array<Nat>(T.natTestable, [1]))
       ),
+
+      test(
+        "insertAll first non-empty",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          let set2 = Set.empty<Nat>();
+          assert (not Set.insertAll(set1, Nat.compare, Set.values(set2)));
+          Iter.toArray(Set.values(set1))
+        },
+        M.equals(T.array<Nat>(T.natTestable, [1, 2, 3]))
+      ),
+      test(
+        "insertAll both non-empty equal",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          assert (not Set.insertAll(set1, Nat.compare, Set.values(set2)));
+          Set.size(set1)
+        },
+        M.equals(T.nat(3))
+      ),
+      test(
+        "insertAll second non-empty",
+        do {
+          let set1 = Set.empty<Nat>();
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          assert (Set.insertAll(set1, Nat.compare, Set.values(set2)));
+          Set.size(set1)
+        },
+        M.equals(T.nat(3))
+      ),
+      test(
+        "insertAll both non-empty disjoint",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([4, 5, 6]), Nat.compare);
+          assert (Set.insertAll(set1, Nat.compare, Set.values(set2)));
+          Iter.toArray(Set.values(set1))
+        },
+        M.equals(T.array<Nat>(T.natTestable, [1, 2, 3, 4, 5, 6]))
+      ),
+      test(
+        "insertAll both non-empty overlapping",
+        do {
+          let set1 = Set.fromIter<Nat>(Iter.fromArray<Nat>([1, 2, 3]), Nat.compare);
+          let set2 = Set.fromIter<Nat>(Iter.fromArray<Nat>([2, 3, 4]), Nat.compare);
+          assert Set.insertAll(set1, Nat.compare, Set.values(set2));
+          Iter.toArray(Set.values(set1))
+        },
+        M.equals(T.array<Nat>(T.natTestable, [1, 2, 3, 4]))
+      ),
+
     ]
   )
 )

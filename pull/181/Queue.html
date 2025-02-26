@@ -45,7 +45,7 @@ persistent actor {
 <p>Runtime: O(n)
 Space: O(n)
 <code>n</code> denotes the number of elements stored in the queue.</p>
-</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts an immutable, purely functional queue to a mutable queue.</p>
+</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">pureQueue</span> : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts an immutable, purely functional queue to a mutable queue.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
 import PureQueue &quot;mo:base/pure/Queue&quot;;

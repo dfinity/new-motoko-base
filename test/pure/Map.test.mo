@@ -1208,37 +1208,4 @@ run(
 	},
         M.equals(T.optional(T.textTestable, ?"Zero"))
       ),
-      test(
-        "update existing",
-        do {
-	  var map = Map.empty<Nat, Text>();
-	  map := Map.add(map, Nat.compare, 0, "0");
-	  map := Map.update(map, Nat.compare, 0, "Zero");
-	  Map.get(map, Nat.compare, 0)
-	},
-        M.equals(T.optional(T.textTestable, ?"Zero"))
-      ),
-      // TODO: test traps
-      /*
-      test(
-        "update absent",
-        do {
-	  var map = Map.empty<Nat, Text>();
-	  map := Map.update(map, Nat.compare, 0, "Zero"); // traps
-	  assert false;
-	  Map.size(map);
-	},
-        M.equals(T.nat(0))
-      ),
-      test(
-        "add existing traps",
-        do {
-	  var map = Map.empty<Nat, Text>();
-	  map := Map.add(map, Nat.compare, 0, "0");
-	  map := Map.add(map, Nat.compare, 0, "Zero"); // traps
-	  Map.get(map, Nat.compare, 0)
-	},
-        M.equals(T.optional(T.textTestable, ?"0"))
-      ),
-      */
    ]))

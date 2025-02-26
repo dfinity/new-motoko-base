@@ -253,43 +253,6 @@ module {
     swap(map, compare, key, value).0
   };
 
-  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.  /// Traps if `map` contains an existing entry for `key`.
-  /// Returns the modified map.
-  ///
-  /// Example:
-  /// ```motoko
-  /// import Map "mo:base/pure/Map";
-  /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
-  /// import Debug "mo:base/Debug";
-  ///
-  /// persistent actor {
-  ///   var map = Map.empty<Nat, Text>();
-  ///
-  ///   map := Map.add(map, Nat.compare, 0, "Zero");
-  ///   map := Map.update(map, Nat.compare, 0, "Nil");
-  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
-  ///   // [(0, "Nil")]
-  ///   map := Map.update(map, Nat.compare, 1, "One");
-  ///   // traps
-  ///
-  /// }
-  /// ```
-  ///
-  /// Runtime: `O(log(n))`.
-  /// Space: `O(log(n))`.
-  /// where `n` denotes the number of key-value entries stored in the map and
-  /// assuming that the `compare` function implements an `O(1)` comparison.
-  ///
-  /// Note: The returned map shares with the `m` most of the tree nodes.
-  /// Garbage collecting one of maps (e.g. after an assignment `m := Map.update(m, cmp, k, v)`)
-  /// causes collecting `O(log(n))` nodes.
-  public func update<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Map<K, V> {
-    switch (swap(map, compare, key, value)) {
-      case (map1, ?_) map1;
-      case _ Runtime.trap("pure/Map.update(): key not present")
-    }
-  };
 
   /// Given `map` ordered by `compare`, add a mapping from `key` to `value`. Overwrites any existing entry with key `key`.
   /// Returns the modified map and the previous value associated with key `key`
@@ -1661,6 +1624,5 @@ module {
       }
     };
   };
-
 
 }

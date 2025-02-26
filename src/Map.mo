@@ -422,39 +422,6 @@ module {
     ignore swap(map, compare, key, value)
   };
 
-  /// Given `map` ordered by `compare`, add a new mapping from `key` to `value`.  /// Traps if `map` contains an existing entry for `key`.
-  /// Returns the modified map.
-  ///
-  /// Example:
-  /// ```motoko
-  /// import Map "mo:base/pure/Map";
-  /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
-  /// import Debug "mo:base/Debug";
-  ///
-  /// persistent actor {
-  ///   let map = Map.empty<Nat, Text>();
-  ///
-  ///   Map.add(map, Nat.compare, 0, "Zero");
-  ///   Map.update(map, Nat.compare, 0, "Nil");
-  ///   Debug.print(debug_show(Iter.toArray(Map.entries(map))));
-  ///   // [(0, "Nil")]
-  ///   Map.update(map, Nat.compare, 1, "One");
-  ///   // traps
-  ///
-  /// }
-  /// ```
-  ///
-  /// Runtime: `O(log(n))`.
-  /// Space: `O(log(n))`.
-  /// where `n` denotes the number of key-value entries stored in the map and
-  /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func update<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) {
-    switch (swap(map, compare, key, value)) {
-      case (?_) {};
-      case _ Runtime.trap("Map.update(): key not present")
-    }
-  };
 
   /// Associates the value with the key in the map.
   /// If the key is not yet present in the map, a new key-value pair is added and `null` is returned.

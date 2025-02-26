@@ -150,7 +150,7 @@ persistent actor {
 
 <p>Runtime: <code>O(1)</code>.
 Space: <code>O(1)</code>.</p>
-</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative sets are equal.
+</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Types.html#type.Order"><span class="type">Types.Order</span></a><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative sets are equal.
 Both sets have to be constructed by the same comparison function.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -163,7 +163,7 @@ persistent actor {
   Set.add(set1, Nat.compare, 3);
   let set2 = Set.clone(set1);
 
-  assert(Set.equal(set1, set2, Nat.equal));
+  assert Set.equal(set1, set2, Nat.compare);
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -225,7 +225,7 @@ Space: <code>O(log(n))</code>.
 where <code>n</code> denotes the number of elements stored in the set and
 assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
 </p></div><div class="declaration"><h4 class="function" id="remove"><code><span class="keyword">public func </span><span class="fnname">remove</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : ()</code></h4><p><p>Deletes an element from a set.
-Returns true if the element was contained in the set, false if not.</p>
+Returns <code>true</code> if the element was contained in the set, <code>false</code> if not.</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
@@ -360,15 +360,15 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 <p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a mutable set with the elements obtained from an iterator.
 Potential duplicate elements in the iterator are ignored, i.e.
-multiple occurrence of the equal element only occur once in the set.</p>
+multiple occurrence of an equal element only occur once in the set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  transient let iterator = Iter.fromArray([1, 2, 3]);
-  let set = Set.fromIter&lt;Nat&gt;(iterator, Nat.compare);
+  transient let iterator = Iter.fromArray([3, 1, 2, 1]);
+  let set = Set.fromIter&lt;Nat&gt;(iterator, Nat.compare);  // =&gt; {1, 2, 3}
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -696,10 +696,11 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see below.
 where <code>n</code> denotes the number of elements stored in the set.</p>
 <p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
-</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setIterator</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge a series of sets to a common new sets, i.e. all elements of
-the iterated sets are added to a combined set.
-Potential duplicates are ignored, i.e. if the same element occurs
-in multiple iterated sets, it only occurs once in the returned set.</p>
+</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setIterator</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Construct the union of a series of sets, i.e. all elements of
+each set are included in the result set.
+Any duplicates are ignored, i.e. if an element occurs
+in several of the iterated sets, it only occurs once in the result set.</p>
+<p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -720,11 +721,11 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>n</code> denotes the number of elements stored in the iterated sets,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setOfSets</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge the subsets of elements to a new set, i.e. all elements of
-the sub-sets of the set are added to a combined set that is returned.
-Potential duplicate elements in the sub-sets are ignored, i.e. if the
-same element occurs in multiple sub-sets, it only occurs once in the
-returned set.</p>
+</p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setOfSets</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Construct the union of a set of element sets, i.e. all elements of
+each element set are included in the result set.
+Any duplicates are ignored, i.e. if the same element occurs in multiple element sets,
+it only occurs once in the result set.</p>
+<p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -750,8 +751,8 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>n</code> denotes the number of elements stored in all the sub-sets,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether all element in the set fulfil a predicate function, i.e.
-the predicate function returns <code>true</code> for all element in the set.
+</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether all elements in the set satisfy a predicate, i.e.
+the <code>predicate</code> function returns <code>true</code> for all elements in the set.
 Returns <code>true</code> for an empty set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -772,8 +773,8 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see below.
 where <code>n</code> denotes the number of elements stored in the set.</p>
 <p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
-</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether at least one element in the set fulfils the predicate function, i.e.
-the predicate function returns <code>true</code> for at least one element in the set.
+</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether at least one element in the set satisfies a predicate, i.e.
+the <code>predicate</code> function returns <code>true</code> for at least one element in the set.
 Returns <code>false</code> for an empty set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -811,7 +812,7 @@ persistent actor {
   Set.add(set, Nat.compare, 3);
 
   let text = Set.toText&lt;Nat&gt;(set, Nat.toText);
-  // `&quot;0, 1, 2&quot;`
+  // `&quot;{0, 1, 2}&quot;`
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

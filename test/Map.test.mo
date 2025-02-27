@@ -1498,9 +1498,8 @@ run(
           Map.add(map, Nat.compare, 0, "Zero");
           Map.get(map, Nat.compare, 0)
         },
-        M.equals(T.optional(T.textTestable, ?"0"))
-      ),
-      * /
+        M.equals(T.optional(T.textTestable, ?"Zero"))
+      )
     ]
   )
 );

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head title="Doc"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><body><nav class="sidebar"><h3>Modules</h3><ul><li><li><a href="Array.html">Array</a></li></li><li><li><a href="Blob.html">Blob</a></li></li><li><li><a href="Bool.html">Bool</a></li></li><li><li><a href="CertifiedData.html">CertifiedData</a></li></li><li><li><a href="Char.html">Char</a></li></li><li><li><a href="Cycles.html">Cycles</a></li></li><li><li><a href="Debug.html">Debug</a></li></li><li><li><a href="Error.html">Error</a></li></li><li><li><a href="Float.html">Float</a></li></li><li><li><a href="Func.html">Func</a></li></li><li><li><a href="Int.html">Int</a></li></li><li><li><a href="Int16.html">Int16</a></li></li><li><li><a href="Int32.html">Int32</a></li></li><li><li><a href="Int64.html">Int64</a></li></li><li><li><a href="Int8.html">Int8</a></li></li><li><li><a href="InternetComputer.html">InternetComputer</a></li></li><li><li><a href="Iter.html">Iter</a></li></li><li><li><a href="List.html">List</a></li></li><li><li><a href="Map.html">Map</a></li></li><li><li><a href="Nat.html">Nat</a></li></li><li><li><a href="Nat16.html">Nat16</a></li></li><li><li><a href="Nat32.html">Nat32</a></li></li><li><li><a href="Nat64.html">Nat64</a></li></li><li><li><a href="Nat8.html">Nat8</a></li></li><li><li><a href="Option.html">Option</a></li></li><li><li><a href="Order.html">Order</a></li></li><li><li><a href="Principal.html">Principal</a></li></li><li><li><a href="Queue.html">Queue</a></li></li><li><li><a href="Random.html">Random</a></li></li><li><li><a href="Region.html">Region</a></li></li><li><li><a href="Result.html">Result</a></li></li><li><li><a href="Runtime.html">Runtime</a></li></li><li><li><a href="Set.html">Set</a></li></li><li><li><a href="Stack.html">Stack</a></li></li><li><li><a href="Text.html">Text</a></li></li><li><li><a href="Time.html">Time</a></li></li><li><li><a href="Timer.html">Timer</a></li></li><li><li><a href="Types.html">Types</a></li></li><li><li><a href="VarArray.html">VarArray</a></li></li><li><li><a href="internal/BTreeHelper.html">internal/BTreeHelper</a></li></li><li><li><a href="pure/List.html">pure/List</a></li></li><li><li><a href="pure/Map.html">pure/Map</a></li></li><li><li><a href="pure/Queue.html">pure/Queue</a></li></li><li><li><a href="pure/Set.html">pure/Set</a></li></li></ul><h3>Declarations</h3><ul><li><li><a href="#type.Set">Set</a></li></li><li><li><a href="#toPure">toPure</a></li></li><li><li><a href="#fromPure">fromPure</a></li></li><li><li><a href="#clone">clone</a></li></li><li><li><a href="#empty">empty</a></li></li><li><li><a href="#singleton">singleton</a></li></li><li><li><a href="#clear">clear</a></li></li><li><li><a href="#isEmpty">isEmpty</a></li></li><li><li><a href="#size">size</a></li></li><li><li><a href="#equal">equal</a></li></li><li><li><a href="#contains">contains</a></li></li><li><li><a href="#add">add</a></li></li><li><li><a href="#delete">delete</a></li></li><li><li><a href="#max">max</a></li></li><li><li><a href="#min">min</a></li></li><li><li><a href="#values">values</a></li></li><li><li><a href="#reverseValues">reverseValues</a></li></li><li><li><a href="#fromIter">fromIter</a></li></li><li><li><a href="#isSubset">isSubset</a></li></li><li><li><a href="#union">union</a></li></li><li><li><a href="#intersection">intersection</a></li></li><li><li><a href="#difference">difference</a></li></li><li><li><a href="#addAll">addAll</a></li></li><li><li><a href="#deleteAll">deleteAll</a></li></li><li><li><a href="#retainAll">retainAll</a></li></li><li><li><a href="#forEach">forEach</a></li></li><li><li><a href="#filter">filter</a></li></li><li><li><a href="#map">map</a></li></li><li><li><a href="#filterMap">filterMap</a></li></li><li><li><a href="#foldLeft">foldLeft</a></li></li><li><li><a href="#foldRight">foldRight</a></li></li><li><li><a href="#join">join</a></li></li><li><li><a href="#flatten">flatten</a></li></li><li><li><a href="#all">all</a></li></li><li><li><a href="#any">any</a></li></li><li><li><a href="#assertValid">assertValid</a></li></li><li><li><a href="#toText">toText</a></li></li><li><li><a href="#compare">compare</a></li></li></ul></nav><div class="documentation"><h1>Set</h1><p>An imperative set based on order/comparison of the elements.
+<html><head title="Doc"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><body><nav class="sidebar"><h3>Modules</h3><ul><li><li><a href="Array.html">Array</a></li></li><li><li><a href="Blob.html">Blob</a></li></li><li><li><a href="Bool.html">Bool</a></li></li><li><li><a href="CertifiedData.html">CertifiedData</a></li></li><li><li><a href="Char.html">Char</a></li></li><li><li><a href="Cycles.html">Cycles</a></li></li><li><li><a href="Debug.html">Debug</a></li></li><li><li><a href="Error.html">Error</a></li></li><li><li><a href="Float.html">Float</a></li></li><li><li><a href="Func.html">Func</a></li></li><li><li><a href="Int.html">Int</a></li></li><li><li><a href="Int16.html">Int16</a></li></li><li><li><a href="Int32.html">Int32</a></li></li><li><li><a href="Int64.html">Int64</a></li></li><li><li><a href="Int8.html">Int8</a></li></li><li><li><a href="InternetComputer.html">InternetComputer</a></li></li><li><li><a href="Iter.html">Iter</a></li></li><li><li><a href="List.html">List</a></li></li><li><li><a href="Map.html">Map</a></li></li><li><li><a href="Nat.html">Nat</a></li></li><li><li><a href="Nat16.html">Nat16</a></li></li><li><li><a href="Nat32.html">Nat32</a></li></li><li><li><a href="Nat64.html">Nat64</a></li></li><li><li><a href="Nat8.html">Nat8</a></li></li><li><li><a href="Option.html">Option</a></li></li><li><li><a href="Order.html">Order</a></li></li><li><li><a href="Principal.html">Principal</a></li></li><li><li><a href="Queue.html">Queue</a></li></li><li><li><a href="Random.html">Random</a></li></li><li><li><a href="Region.html">Region</a></li></li><li><li><a href="Result.html">Result</a></li></li><li><li><a href="Runtime.html">Runtime</a></li></li><li><li><a href="Set.html">Set</a></li></li><li><li><a href="Stack.html">Stack</a></li></li><li><li><a href="Text.html">Text</a></li></li><li><li><a href="Time.html">Time</a></li></li><li><li><a href="Timer.html">Timer</a></li></li><li><li><a href="Types.html">Types</a></li></li><li><li><a href="VarArray.html">VarArray</a></li></li><li><li><a href="internal/BTreeHelper.html">internal/BTreeHelper</a></li></li><li><li><a href="pure/List.html">pure/List</a></li></li><li><li><a href="pure/Map.html">pure/Map</a></li></li><li><li><a href="pure/Queue.html">pure/Queue</a></li></li><li><li><a href="pure/Set.html">pure/Set</a></li></li></ul><h3>Declarations</h3><ul><li><li><a href="#type.Set">Set</a></li></li><li><li><a href="#toPure">toPure</a></li></li><li><li><a href="#fromPure">fromPure</a></li></li><li><li><a href="#clone">clone</a></li></li><li><li><a href="#empty">empty</a></li></li><li><li><a href="#singleton">singleton</a></li></li><li><li><a href="#clear">clear</a></li></li><li><li><a href="#isEmpty">isEmpty</a></li></li><li><li><a href="#size">size</a></li></li><li><li><a href="#equal">equal</a></li></li><li><li><a href="#contains">contains</a></li></li><li><li><a href="#add">add</a></li></li><li><li><a href="#insert">insert</a></li></li><li><li><a href="#remove">remove</a></li></li><li><li><a href="#delete">delete</a></li></li><li><li><a href="#max">max</a></li></li><li><li><a href="#min">min</a></li></li><li><li><a href="#values">values</a></li></li><li><li><a href="#reverseValues">reverseValues</a></li></li><li><li><a href="#fromIter">fromIter</a></li></li><li><li><a href="#isSubset">isSubset</a></li></li><li><li><a href="#union">union</a></li></li><li><li><a href="#intersection">intersection</a></li></li><li><li><a href="#difference">difference</a></li></li><li><li><a href="#addAll">addAll</a></li></li><li><li><a href="#deleteAll">deleteAll</a></li></li><li><li><a href="#insertAll">insertAll</a></li></li><li><li><a href="#retainAll">retainAll</a></li></li><li><li><a href="#forEach">forEach</a></li></li><li><li><a href="#filter">filter</a></li></li><li><li><a href="#map">map</a></li></li><li><li><a href="#filterMap">filterMap</a></li></li><li><li><a href="#foldLeft">foldLeft</a></li></li><li><li><a href="#foldRight">foldRight</a></li></li><li><li><a href="#join">join</a></li></li><li><li><a href="#flatten">flatten</a></li></li><li><li><a href="#all">all</a></li></li><li><li><a href="#any">any</a></li></li><li><li><a href="#assertValid">assertValid</a></li></li><li><li><a href="#toText">toText</a></li></li><li><li><a href="#compare">compare</a></li></li></ul></nav><div class="documentation"><h1>Set</h1><p>An imperative set based on order/comparison of the elements.
 A set is a collection of elements without duplicates.
 The set data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>
@@ -16,7 +16,7 @@ persistent actor {
 <p>The internal implementation is a B-tree with order 32.</p>
 <p>Performance:</p>
 <ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire set.
-<code>n</code> denotes the number of elements stored in the set.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Set"><span class="keyword">type </span><span class="type">Set</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Set.type.Set"><span class="type">Types.Set.Set</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert the mutable set to an immutable set.</p>
+<code>n</code> denotes the number of elements stored in the set.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Set"><span class="keyword">type </span><span class="type">Set</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Set.type.Set"><span class="type">Types.Set.Set</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert the mutable set to an immutable, purely functional set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import PureSet &quot;mo:base/pure/Set&quot;;
@@ -28,7 +28,7 @@ persistent actor {
   Set.add(set, Nat.compare, 2);
   Set.add(set, Nat.compare, 3);
   let pureSet = Set.toPure(set, Nat.compare);
-  assert(PureSet.contains(pureSet, 1));
+  assert(PureSet.contains(pureSet, Nat.compare, 1));
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -36,7 +36,7 @@ Space: <code>O(n)</code> retained memory plus garbage, see the note below.
 where <code>n</code> denotes the number of elements stored in the set and
 assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
 <p>Note: Creates <code>O(n * log(n))</code> temporary objects that will be collected as garbage.</p>
-</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable set to a mutable set.</p>
+</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable, purely functional set to a mutable set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import PureSet &quot;mo:base/pure/Set&quot;;
 import Set &quot;mo:base/Set&quot;;
@@ -150,7 +150,7 @@ persistent actor {
 
 <p>Runtime: <code>O(1)</code>.
 Space: <code>O(1)</code>.</p>
-</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative sets are equal.
+</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Types.html#type.Order"><span class="type">Types.Order</span></a><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative sets are equal.
 Both sets have to be constructed by the same comparison function.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -163,7 +163,7 @@ persistent actor {
   Set.add(set1, Nat.compare, 3);
   let set2 = Set.clone(set1);
 
-  assert(Set.equal(set1, set2, Nat.equal));
+  assert Set.equal(set1, set2, Nat.compare);
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -189,7 +189,7 @@ persistent actor {
 Space: <code>O(1)</code>.
 where <code>n</code> denotes the number of elements stored in the set and
 assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>)</code></h4><p><p>Insert a new element in the set.
+</p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>)</code></h4><p><p>Add a new element to a set.
 No effect if the element already exists in the set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -206,8 +206,26 @@ persistent actor {
 Space: <code>O(log(n))</code>.
 where <code>n</code> denotes the number of elements stored in the set and
 assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="delete"><code><span class="keyword">public func </span><span class="fnname">delete</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>)</code></h4><p><p>Delete an existing element in the set.
-Traps if the element does not exist in the set.</p>
+</p></div><div class="declaration"><h4 class="function" id="insert"><code><span class="keyword">public func </span><span class="fnname">insert</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Insert a new element in the set.
+Returns true if the element is new, false if the element was already contained in the set.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let set = Set.empty&lt;Nat&gt;();
+  assert Set.insert(set, Nat.compare, 1);
+  assert Set.insert(set, Nat.compare, 2);
+  assert Set.insert(set, Nat.compare, 3);
+  assert not (Set.insert(set, Nat.compare, 3));
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code>.
+where <code>n</code> denotes the number of elements stored in the set and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="remove"><code><span class="keyword">public func </span><span class="fnname">remove</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : ()</code></h4><p><p>Deletes an element from a set.
+Returns <code>true</code> if the element was contained in the set, <code>false</code> if not.</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
@@ -218,8 +236,35 @@ persistent actor {
   Set.add(set, Nat.compare, 2);
   Set.add(set, Nat.compare, 3);
 
-  Set.delete(set, Nat.compare, 1);
+  Set.remove(set, Nat.compare, 1);
   Debug.print(debug_show(Set.contains(set, Nat.compare, 1))); // prints `false`.
+
+  Set.remove(set, Nat.compare, 4);
+  Debug.print(debug_show(Set.contains(set, Nat.compare, 4))); // prints `false`.
+}</code></pre>
+
+<p>Runtime: <code>O(log(n))</code>.
+Space: <code>O(log(n))</code> including garbage, see below.
+where <code>n</code> denotes the number of elements stored in the set and
+assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+<p>Note: Creates <code>O(log(n))</code> objects that will be collected as garbage.</p>
+</p></div><div class="declaration"><h4 class="function" id="delete"><code><span class="keyword">public func </span><span class="fnname">delete</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Deletes an element from a set.
+Returns true if the element was contained in the set, false if not.</p>
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let set = Set.empty&lt;Nat&gt;();
+  Set.add(set, Nat.compare, 1);
+  Set.add(set, Nat.compare, 2);
+  Set.add(set, Nat.compare, 3);
+
+  assert (Set.delete(set, Nat.compare, 1)); // delete returns true
+  Debug.print(debug_show(Set.contains(set, Nat.compare, 1))); // prints `false`.
+
+  assert (not Set.delete(set, Nat.compare, 4)); // delete returns false
+  Debug.print(debug_show(Set.contains(set, Nat.compare, 4))); // prints `false`.
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -315,15 +360,15 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 <p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a mutable set with the elements obtained from an iterator.
 Potential duplicate elements in the iterator are ignored, i.e.
-multiple occurrence of the equal element only occur once in the set.</p>
+multiple occurrence of an equal element only occur once in the set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  transient let iterator = Iter.fromArray([1, 2, 3]);
-  let set = Set.fromIter&lt;Nat&gt;(iterator, Nat.compare);
+  transient let iterator = Iter.fromArray([3, 1, 2, 1]);
+  let set = Set.fromIter&lt;Nat&gt;(iterator, Nat.compare);  // =&gt; {1, 2, 3}
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -426,9 +471,9 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="deleteAll"><code><span class="keyword">public func </span><span class="fnname">deleteAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>)</code></h4><p><p>Deletes all values in <code>iter</code> from the specified <code>set</code>.
-This is different from <code>Set.difference()</code> in that the function will trap if
-<code>iter</code> contains an element that is not in <code>set</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="deleteAll"><code><span class="keyword">public func </span><span class="fnname">deleteAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>) : <span class="type">Bool</span></code></h4><p><p>Deletes all values in <code>iter</code> from the specified <code>set</code>.
+Returns <code>true</code> if any value was present in the set, otherwise false.
+The return value indicates whether the size of the set has changed.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -438,7 +483,7 @@ import Debug &quot;mo:base/Debug&quot;;
 persistent actor {
   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   let iter = Iter.fromArray([0, 2]);
-  Set.deleteAll(set, Nat.compare, iter);
+  assert Set.deleteAll(set, Nat.compare, iter);
   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // =&gt; [1]
 }</code></pre>
 
@@ -446,7 +491,28 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="retainAll"><code><span class="keyword">public func </span><span class="fnname">retainAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span><br/>)</code></h4><p><p>Removes all values in <code>set</code> that do not satisfy the given predicate.
+</p></div><div class="declaration"><h4 class="function" id="insertAll"><code><span class="keyword">public func </span><span class="fnname">insertAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>) : <span class="type">Bool</span></code></h4><p><p>Inserts all values in <code>iter</code> into <code>set</code>.
+Returns true if any value was not contained in the original set, otherwise false.
+The return value indicates whether the size of the set has changed.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
+import Debug &quot;mo:base/Debug&quot;;
+
+persistent actor {
+  let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
+  let iter = Iter.fromArray([0, 2, 3]);
+  assert Set.insertAll(set, Nat.compare, iter);
+  Debug.print(debug_show(Iter.toArray(Set.values(set)))); // =&gt; [0, 1, 2, 3]
+}</code></pre>
+
+<p>Runtime: <code>O(m * log(n))</code>.
+Space: <code>O(1)</code> retained memory plus garbage, see the note below.
+where <code>m</code> and <code>n</code> denote the number of elements in <code>set</code> and <code>iter</code>, respectively,
+and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
+</p></div><div class="declaration"><h4 class="function" id="retainAll"><code><span class="keyword">public func </span><span class="fnname">retainAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Removes all values in <code>set</code> that do not satisfy the given predicate.
+Returns <code>true</code> if and only if the size of the set has changed.
 Modifies the set in place.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -630,10 +696,11 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see below.
 where <code>n</code> denotes the number of elements stored in the set.</p>
 <p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
-</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setIterator</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge a series of sets to a common new sets, i.e. all elements of
-the iterated sets are added to a combined set.
-Potential duplicates are ignored, i.e. if the same element occurs
-in multiple iterated sets, it only occurs once in the returned set.</p>
+</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setIterator</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Construct the union of a series of sets, i.e. all elements of
+each set are included in the result set.
+Any duplicates are ignored, i.e. if an element occurs
+in several of the iterated sets, it only occurs once in the result set.</p>
+<p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -654,11 +721,11 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>n</code> denotes the number of elements stored in the iterated sets,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setOfSets</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge the subsets of elements to a new set, i.e. all elements of
-the sub-sets of the set are added to a combined set that is returned.
-Potential duplicate elements in the sub-sets are ignored, i.e. if the
-same element occurs in multiple sub-sets, it only occurs once in the
-returned set.</p>
+</p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">setOfSets</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Construct the union of a set of element sets, i.e. all elements of
+each element set are included in the result set.
+Any duplicates are ignored, i.e. if the same element occurs in multiple element sets,
+it only occurs once in the result set.</p>
+<p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -684,8 +751,8 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see the note below.
 where <code>n</code> denotes the number of elements stored in all the sub-sets,
 and assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
-</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether all element in the set fulfil a predicate function, i.e.
-the predicate function returns <code>true</code> for all element in the set.
+</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether all elements in the set satisfy a predicate, i.e.
+the <code>predicate</code> function returns <code>true</code> for all elements in the set.
 Returns <code>true</code> for an empty set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -706,8 +773,8 @@ persistent actor {
 Space: <code>O(1)</code> retained memory plus garbage, see below.
 where <code>n</code> denotes the number of elements stored in the set.</p>
 <p>Note: Creates <code>O(log(n))</code> temporary objects that will be collected as garbage.</p>
-</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether at least one element in the set fulfils the predicate function, i.e.
-the predicate function returns <code>true</code> for at least one element in the set.
+</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Check whether at least one element in the set satisfies a predicate, i.e.
+the <code>predicate</code> function returns <code>true</code> for at least one element in the set.
 Returns <code>false</code> for an empty set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
@@ -745,7 +812,7 @@ persistent actor {
   Set.add(set, Nat.compare, 3);
 
   let text = Set.toText&lt;Nat&gt;(set, Nat.toText);
-  // `&quot;0, 1, 2&quot;`
+  // `&quot;{0, 1, 2}&quot;`
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

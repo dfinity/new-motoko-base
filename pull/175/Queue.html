@@ -33,37 +33,31 @@ persistent actor {
 <p>The internal implementation is a doubly-linked list.</p>
 <p>Performance:</p>
 <ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operations.</li><li>Space: <code>O(n)</code>.
-<code>n</code> denotes the number of elements stored in the queue.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Queue.type.Queue"><span class="type">Types.Queue.Queue</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a mutable queue to an immutable queue.</p>
+<code>n</code> denotes the number of elements stored in the queue.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Queue.type.Queue"><span class="type">Types.Queue.Queue</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts a mutable queue to an immutable, purely functional queue.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+
+persistent actor {
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let pureQueue = Queue.toPure&lt;Nat&gt;(queue);
+}</code></pre>
+
+<p>Runtime: O(n)
+Space: O(n)
+<code>n</code> denotes the number of elements stored in the queue.</p>
+</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">pureQueue</span> : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts an immutable, purely functional queue to a mutable queue.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
 import PureQueue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let mutableQueue = Queue.empty&lt;Nat&gt;();
-  Queue.pushBack(mutableQueue, 0);
-  Queue.pushBack(mutableQueue, 1);
-  Queue.pushBack(mutableQueue, 2);
-  let immutableQueue = Queue.toPure(mutableQueue);
-  assert(PureQueue.size(immutableQueue) == Queue.size(mutableQueue));
+  let pureQueue = PureQueue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let queue = Queue.fromPure&lt;Nat&gt;(pureQueue);
 }</code></pre>
 
-<p>Runtime: <code>O(n)</code>.
-Space: <code>O(n)</code>.
-where <code>n</code> denotes the number of elements stored in the queue.</p>
-</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable queue to a mutable queue.</p>
-<p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
-import PureQueue &quot;mo:base/pure/Queue&quot;;
-
-persistent actor {
-  let immutableQueue = PureQueue.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  let mutableQueue = Queue.fromPure(pureQueue);
-  assert(PureQueue.size(immutableQueue) == Queue.size(mutableQueue));
-}</code></pre>
-
-<p>Runtime: <code>O(n)</code>.
-Space: <code>O(n)</code>.
-where <code>n</code> denotes the number of elements stored in the queue.</p>
+<p>Runtime: O(n)
+Space: O(n)
+<code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty mutable double-ended queue.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
@@ -136,7 +130,7 @@ persistent actor {
 
 <p>Runtime: O(1)
 Space: O(1)</p>
-</p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equals</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Checks if an element exists in the queue using the provided equality function.</p>
+</p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Checks if an element exists in the queue using the provided equality function.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -357,7 +351,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert (Queue.toText(queue, Nat.toText) == &quot;(1, 2, 3)&quot;);
+  assert (Queue.toText(queue, Nat.toText) == &quot;Queue[1, 2, 3]&quot;);
 }</code></pre>
 
 <p>Runtime: O(n)

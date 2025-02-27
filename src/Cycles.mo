@@ -14,8 +14,7 @@
 /// actor {
 ///   public func main() : async() {
 ///     Debug.print("Main balance: " # debug_show(Cycles.balance()));
-///     Cycles.add<system>(15_000_000);
-///     await operation(); // accepts 10_000_000 cycles
+///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
 ///     Debug.print("Main refunded: " # debug_show(Cycles.refunded())); // 5_000_000
 ///     Debug.print("Main balance: " # debug_show(Cycles.balance())); // decreased by around 10_000_000
 ///   };
@@ -80,8 +79,7 @@ module {
   ///
   /// actor {
   ///   public func main() : async() {
-  ///     Cycles.add<system>(15_000_000);
-  ///     await operation(); // accepts 10_000_000 cycles
+  ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   ///   };
   ///
   ///   func operation() : async() {
@@ -113,8 +111,7 @@ module {
   ///   };
   ///
   ///   public func main() : async() {
-  ///     Cycles.add<system>(15_000_000);
-  ///     await operation();
+  ///     await (with cycles = 15_000_000) operation();
   ///   }
   /// }
   /// ```
@@ -137,8 +134,7 @@ module {
   ///   };
   ///
   ///   public func main() : async() {
-  ///     Cycles.add<system>(15_000_000);
-  ///     await operation(); // accepts 10_000_000 cycles
+  ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   ///     Debug.print("Refunded: " # debug_show(Cycles.refunded())); // 5_000_000
   ///   }
   /// }

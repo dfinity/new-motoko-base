@@ -771,7 +771,7 @@ module {
   /// where `n` denotes the number of elements stored on the stack and
   /// assuming that `format` has O(1) costs.
   public func toText<T>(stack : Stack<T>, format : T -> Text) : Text {
-    var text = "[";
+    var text = "Stack[";
     var sep = "";
     for (element in values(stack)) {
       text #= sep # format(element);

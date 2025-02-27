@@ -1,5 +1,7 @@
 /// Random number generation.
 
+import Array "Array";
+import VarArray "VarArray";
 import Nat8 "Nat8";
 import Nat64 "Nat64";
 import Int "Int";
@@ -7,6 +9,7 @@ import Nat "Nat";
 import Blob "Blob";
 import Iter "Iter";
 import Runtime "Runtime";
+import PRNG "internal/PRNG";
 import { todo } "Debug";
 
 module {
@@ -15,17 +18,33 @@ module {
 
   public let blob : shared () -> async Blob = rawRand;
 
-  /// Opinionated choice of PRNG from a given seed.
-  public func new(seed : Blob) : Random {
+  /// Creates a fast pseudo-random number generator using the SFC64 algorithm.
+  /// This provides statistical randomness suitable for simulations and testing,
+  /// but should not be used for cryptographic purposes.
+  /// The seed blob's first 8 bytes are used to initialize the PRNG.
+  public func fast(seed : Nat64) : Random {
+    let prng = PRNG.sfc64a();
+    prng.init(seed);
     Random(
       func() {
-        todo()
+        // Generate 8 bytes directly from a single 64-bit number
+        let n = prng.next();
+        let bytes = VarArray.repeat<Nat8>(0, 8);
+        bytes[0] := Nat8.fromNat(Nat64.toNat(n & 0xFF));
+        bytes[1] := Nat8.fromNat(Nat64.toNat((n >> 8) & 0xFF));
+        bytes[2] := Nat8.fromNat(Nat64.toNat((n >> 16) & 0xFF));
+        bytes[3] := Nat8.fromNat(Nat64.toNat((n >> 24) & 0xFF));
+        bytes[4] := Nat8.fromNat(Nat64.toNat((n >> 32) & 0xFF));
+        bytes[5] := Nat8.fromNat(Nat64.toNat((n >> 40) & 0xFF));
+        bytes[6] := Nat8.fromNat(Nat64.toNat((n >> 48) & 0xFF));
+        bytes[7] := Nat8.fromNat(Nat64.toNat((n >> 56) & 0xFF));
+        Blob.fromArray(Array.fromVarArray(bytes))
       }
     )
   };
 
   /// Uses entropy from the management canister with automatic resupply.
-  public func newAsync() : AsyncRandom {
+  public func crypto() : AsyncRandom {
     AsyncRandom(func() : async* Blob { await rawRand() })
   };
 
@@ -77,7 +96,7 @@ module {
           switch (iter.next()) {
             case (?byte) { byte };
             case null {
-              Runtime.trap("Random.byte(): generator produced empty Blob")
+              Runtime.trap("Random.nat8(): generator produced empty Blob")
             }
           }
         }
@@ -85,6 +104,9 @@ module {
     };
 
     // Helper function which returns a uniformly sampled `Nat64` in the range `[0, toExclusive)`.
+    // Uses rejection sampling to ensure uniform distribution even when the range
+    // doesn't divide evenly into 2^64. This avoids modulo bias that would occur
+    // from simply taking the modulo of a random 64-bit number.
     func uniform64(toExclusive : Nat64) : Nat64 {
       if (toExclusive <= 1) {
         return 0
@@ -191,16 +213,10 @@ module {
     };
 
     public func int(from : Int, toExclusive : Int) : async* Int {
-      if (from > toExclusive) {
-        Runtime.trap("AsyncRandom.intRange(): from > toExclusive")
-      };
       todo()
     };
 
     public func nat(from : Nat, toExclusive : Nat) : async* Nat {
-      if (from > toExclusive) {
-        Runtime.trap("AsyncRandom.natRange(): from > toExclusive")
-      };
       todo()
     };
 

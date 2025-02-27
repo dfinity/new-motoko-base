@@ -85,11 +85,6 @@ assert (List.size<X>(l1) == 0);
 assert (List.size<X>(l2) == 1);
 assert (List.size<X>(l3) == 2);
 
-// ## List functions
-assert (List.size<X>(l1) == 0);
-assert (List.size<X>(l2) == 1);
-assert (List.size<X>(l3) == 2);
-
 do {
   Debug.print("  flatten");
 
@@ -398,6 +393,11 @@ let size = Suite.suite(
       "threesome",
       List.size(?(1, ?(2, ?(3, null)))),
       M.equals(T.nat(3))
+    ),
+    Suite.test(
+      "many",
+      do { let l = List.repeat('Y', 20_000); List.size l },
+      M.equals(T.nat 20_000)
     )
   ]
 );

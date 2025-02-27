@@ -9,7 +9,7 @@ only supported a single memory region, without isolation between different appli
 <p>The <code>Region</code> type is stable and can be used in stable data structures.</p>
 <p>A new, empty <code>Region</code> is allocated using function <code>new()</code>.</p>
 <p>Regions are stateful objects and can be distinguished by the numeric identifier returned by function <code>id(region)</code>.
-Every region owns an initially empty, but growable sequence of virtual IC stable memory pages. 
+Every region owns an initially empty, but growable sequence of virtual IC stable memory pages.
 The current size, in pages, of a region is returned by function <code>size(region)</code>.
 The size of a region determines the range, [ 0, ..., size(region)*2^16 ), of valid byte-offsets into the region; these offsets are used as the source and destination of <code>load</code>/<code>store</code> operations on the region.</p>
 <p>Memory is allocated to a region, using function <code>grow(region, pages)</code>, sequentially and on demand, in units of 64KiB logical pages, starting with 0 allocated pages.

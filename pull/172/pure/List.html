@@ -24,7 +24,7 @@ List.size&lt;Nat&gt;(?(0, ?(1, null))) // =&gt; 2</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(1)</p>
-</p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">item</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Check if the list contains a given value. Uses the provided equality function to compare values.</p>
+</p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">item</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Check whether the list contains a given value. Uses the provided equality function to compare values.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
 import Nat &quot;mo:base/Nat&quot;;
@@ -46,7 +46,7 @@ List.get&lt;Nat&gt;(?(0, ?(1, null)), 1) // =&gt; ?1</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="push"><code><span class="keyword">public func </span><span class="fnname">push</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">item</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Add <code>item</code> to the head of <code>list</code>, and return the new list.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
-List.push&lt;Nat&gt;(0, null) // =&gt; ?(0, null);</code></pre>
+List.push&lt;Nat&gt;(null, 0) // =&gt; ?(0, null);</code></pre>
 
 <p>Runtime: O(1)</p>
 <p>Space: O(1)</p>
@@ -272,7 +272,7 @@ List.equal&lt;Nat&gt;(?(1, ?(2, null)), ?(1, ?(2, null)), Nat.equal) // =&gt; tr
 
 <p>Runtime: O(size)</p>
 <p>Space: O(1)</p>
-<p>*Runtime and space assumes that <code>equal</code> runs in O(1) time and space.</p>
+<p>*Runtime and space assumes that <code>equalFunc</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compare two lists using lexicographic ordering specified by argument function <code>compare</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
@@ -360,7 +360,7 @@ List.split&lt;Nat&gt;(
 <p>Space: O(n)</p>
 </p></div><div class="declaration"><h4 class="function" id="chunks"><code><span class="keyword">public func </span><span class="fnname">chunks</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;</code></h4><p><p>Split the given list into chunks of length <code>n</code>.
 The last chunk will be shorter if the length of the given list
-does not divide by <code>n</code> evenly.</p>
+does not divide by <code>n</code> evenly. Traps if <code>n</code> = 0.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
 List.chunks&lt;Nat&gt;(

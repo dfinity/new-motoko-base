@@ -417,7 +417,7 @@ let get = Suite.suite(
     Suite.test(
       "singleton-0",
       List.get(?(3, null), 0),
-      M.equals(T.optional(T.natTestable, ?3 : ?Nat))
+      M.equals(T.optional(T.natTestable, ?3))
     ),
     Suite.test(
       "singleton-1",
@@ -432,12 +432,12 @@ let get = Suite.suite(
     Suite.test(
       "threesome-0",
       List.get(?(1, ?(2, ?(3, null))), 0),
-      M.equals(T.optional(T.natTestable, ?1 : ?Nat))
+      M.equals(T.optional(T.natTestable, ?1))
     ),
     Suite.test(
       "threesome-1",
       List.get(?(1, ?(2, ?(3, null))), 1),
-      M.equals(T.optional(T.natTestable, ?2 : ?Nat))
+      M.equals(T.optional(T.natTestable, ?2))
     ),
     Suite.test(
       "threesome-3",
@@ -452,12 +452,12 @@ let get = Suite.suite(
     Suite.test(
       "many",
       List.get(hugeList, 99_999),
-      M.equals(T.optional(T.char 'Y', ?'Y' : ?Char))
+      M.equals(T.optional(T.charTestable, ?'Y'))
     ),
     Suite.test(
       "past many",
       List.get(hugeList, 100_000),
-      M.equals(T.optional(T.char 'Y', null : ?Char))
+      M.equals(T.optional(T.charTestable, null : ?Char))
     )
   ]
 );

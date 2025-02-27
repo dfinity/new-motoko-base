@@ -43,19 +43,66 @@
 import Iter "Iter";
 import Order "Order";
 import Types "Types";
+import PureQueue "pure/Queue";
 
 module {
   public type Queue<T> = Types.Queue.Queue<T>;
 
   type Node<T> = Types.Queue.Node<T>;
 
-  // public func toPure<T>(queue : Queue<T>) : PureQueue.Queue<T> {
-  //   todo();
-  // };
+  /// Converts a mutable queue to an immutable, purely functional queue.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/Queue";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let pureQueue = Queue.toPure<Nat>(queue);
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(n)
+  /// Space: O(n)
+  /// `n` denotes the number of elements stored in the queue.
+  public func toPure<T>(queue : Queue<T>) : PureQueue.Queue<T> {
+    let pureQueue = PureQueue.empty<T>();
+    let iter = values(queue);
+    var current = pureQueue;
+    loop {
+      switch(iter.next()) {
+        case null { return current };
+        case (?val) { current := PureQueue.pushBack(current, val) };
+      };
+    };
+  };
 
-  // public func fromPure<T>(queue : PureQueue.Queue<T>) : Queue<T> {
-  //   todo();
-  // };
+  /// Converts an immutable, purely functional queue to a mutable queue.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/Queue";
+  /// import PureQueue "mo:base/pure/Queue";
+  ///
+  /// persistent actor {
+  ///   let pureQueue = PureQueue.fromIter<Nat>([1, 2, 3].values());
+  ///   let queue = Queue.fromPure<Nat>(pureQueue);
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(n)
+  /// Space: O(n)
+  /// `n` denotes the number of elements stored in the queue.
+  public func fromPure<T>(pureQueue : PureQueue.Queue<T>) : Queue<T> {
+    let queue = empty<T>();
+    let iter = PureQueue.values(pureQueue);
+    loop {
+      switch(iter.next()) {
+        case null { return queue };
+        case (?val) { pushBack(queue, val) };
+      };
+    };
+  };
 
   /// Create a new empty mutable double-ended queue.
   ///
@@ -639,7 +686,7 @@ module {
   ///
   /// persistent actor {
   ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
-  ///   assert (Queue.toText(queue, Nat.toText) == "(1, 2, 3)");
+  ///   assert (Queue.toText(queue, Nat.toText) == "Queue[1, 2, 3]");
   /// }
   /// ```
   ///
@@ -647,13 +694,13 @@ module {
   /// Space: O(n)
   /// `n` denotes the number of elements stored in the queue.
   public func toText<T>(queue : Queue<T>, format : T -> Text) : Text {
-    var text = "(";
+    var text = "Queue[";
     var sep = "";
     for (element in values(queue)) {
       text #= sep # format(element);
       sep := ", "
     };
-    text #= ")";
+    text #= "]";
     text
   };
 

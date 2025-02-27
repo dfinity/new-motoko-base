@@ -133,6 +133,6 @@ suite(
           assert val >= from and val < toExclusive
         }
       }
-    );
+    )
   }
 )

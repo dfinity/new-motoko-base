@@ -378,6 +378,8 @@ let pop = Suite.suite(
   ]
 );
 
+let hugeList = List.repeat('Y', 100_000);
+
 let size = Suite.suite(
   "size",
   [
@@ -398,7 +400,7 @@ let size = Suite.suite(
     ),
     Suite.test(
       "many",
-      do { let l = List.repeat('Y', 100_000); List.size l },
+      List.size hugeList,
       M.equals(T.nat 100_000)
     )
   ]
@@ -446,6 +448,11 @@ let get = Suite.suite(
       "threesome-4",
       List.get(?(1, ?(2, ?(3, null))), 4),
       M.equals(T.optional(T.natTestable, null : ?Nat))
+    ),
+    Suite.test(
+      "many",
+      List.get(hugeList, 99_999),
+      M.equals(T.optional(T.char 'Y', ?'Y' : ?Char))
     )
   ]
 );

@@ -98,10 +98,11 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(1)
-  public func get<T>(list : List<T>, n : Nat) : ?T = switch list {
-    case null null;
-    case (?(h, t)) if (n == 0) ?h else get(t, n - 1)
-  };
+  public func get<T>(list : List<T>, n : Nat) : ?T =
+    switch list {
+      case (?(h, t)) if (n == 0) ?h else get(t, n - 1);
+      case null null
+    };
 
   /// Add `item` to the head of `list`, and return the new list.
   ///

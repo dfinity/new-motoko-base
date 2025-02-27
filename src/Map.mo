@@ -60,7 +60,7 @@ module {
   ///   Map.add(map, Nat.compare, 1, "One");
   ///   Map.add(map, Nat.compare, 2, "Two");
   ///   let pureMap = Map.toPure(map, Nat.compare);
-  ///   assert(PureMap.get(pureMap, 0) == Map.get(map, 0));
+  ///   assert(PureMap.get(pureMap, Nat.compare, 0) == Map.get(map, Nat.compare, 0));
   /// }
   /// ```
   ///

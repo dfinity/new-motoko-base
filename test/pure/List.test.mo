@@ -517,6 +517,15 @@ let forEach = Suite.suite(
         t
       },
       M.equals(T.text("123"))
+    ),
+    Suite.test(
+      "many",
+      do {
+        var c = 0;
+        List.forEach<Char>(hugeList, func _ = c += 1);
+        t
+      },
+      M.equals(T.nat 100_000)
     )
   ]
 );

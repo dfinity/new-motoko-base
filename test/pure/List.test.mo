@@ -992,6 +992,11 @@ let all = Suite.suite(
       "all empty",
       List.all<Nat>(null, func x = x >= 1),
       M.equals(T.bool(true))
+    ),
+    Suite.test(
+      "many",
+      List.all<Char>(hugeList, func c = c == 'Y'),
+      M.equals(T.bool true)
     )
   ]
 );
@@ -1013,6 +1018,11 @@ let any = Suite.suite(
       "empty",
       List.any<Nat>(null, func x = true),
       M.equals(T.bool(false))
+    ),
+    Suite.test(
+      "many",
+      List.any<Char>(hugeList, func c = c != 'Y'),
+      M.equals(T.bool false)
     )
   ]
 );

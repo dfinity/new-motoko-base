@@ -16,7 +16,7 @@ persistent actor {
 <p>The internal implementation is a B-tree with order 32.</p>
 <p>Performance:</p>
 <ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire set.
-<code>n</code> denotes the number of elements stored in the set.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Set"><span class="keyword">type </span><span class="type">Set</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Set.type.Set"><span class="type">Types.Set.Set</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert the mutable set to an immutable set.</p>
+<code>n</code> denotes the number of elements stored in the set.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Set"><span class="keyword">type </span><span class="type">Set</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Set.type.Set"><span class="type">Types.Set.Set</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert the mutable set to an immutable, purely functional set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import PureSet &quot;mo:base/pure/Set&quot;;
@@ -27,7 +27,7 @@ persistent actor {
   Set.add(set, Nat.compare, 1);
   Set.add(set, Nat.compare, 2);
   Set.add(set, Nat.compare, 3);
-  let pureSet = Set.toPure(set);
+  let pureSet = Set.toPure(set, Nat.compare);
   assert(PureSet.contains(pureSet, Nat.compare, 1));
 }</code></pre>
 
@@ -36,7 +36,7 @@ Space: <code>O(n)</code> retained memory plus garbage, see the note below.
 where <code>n</code> denotes the number of elements stored in the set and
 assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
 <p>Note: Creates <code>O(n * log(n))</code> temporary objects that will be collected as garbage.</p>
-</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable set to a mutable set.</p>
+</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable, purely functional set to a mutable set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import PureSet &quot;mo:base/pure/Set&quot;;
 import Set &quot;mo:base/Set&quot;;
@@ -47,7 +47,7 @@ persistent actor {
   pureSet := PureSet.add(pureSet, Nat.compare, 1);
   pureSet := PureSet.add(pureSet, Nat.compare, 2);
   pureSet := PureSet.add(pureSet, Nat.compare, 3);
-  let mutableSet = Set.fromPure(pureSet);
+  let mutableSet = Set.fromPure(pureSet, Nat.compare);
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.

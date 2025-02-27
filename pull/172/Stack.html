@@ -43,8 +43,8 @@ persistent actor {
   assert(PureList.size(immutableList) == Stack.size(mutableStack));
 }</code></pre>
 
-<p>Runtime: <code>O(n)</code>.
-Space: <code>O(n)</code>.
+<p>Runtime: <code>O(1)</code>.
+Space: <code>O(1)</code>.
 where <code>n</code> denotes the number of elements stored in the stack.</p>
 </p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable, purely functional list to a mutable stack.
 Please note that functional lists are ordered like stacks (FIFO).</p>

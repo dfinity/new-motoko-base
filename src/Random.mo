@@ -112,10 +112,16 @@ module {
       if (max == 0) {
         return 0
       };
+      // if (max == 1) {
+      //   return switch (bool()) {
+      //     case false 0;
+      //     case true 1
+      //   }
+      // };
       if (max == Nat64.maxValue) {
         return nat64()
       };
-      let toExclusive = max - 1;
+      let toExclusive = max + 1;
       // 2^64 - (2^64 % toExclusive) = (2^64-1) - (2^64-1 % toExclusive):
       let cutoff = Nat64.maxValue - (Nat64.maxValue % toExclusive);
       // 2^64 / toExclusive, with toExclusive > 1:

@@ -196,7 +196,27 @@ suite(
             }
           };
           assert count0 > 0;
-          assert count1 > 0
+          assert count1 > 0;
+
+          // (i, i + 3)
+          count0 := 0;
+          count1 := 0;
+          var count2 = 0;
+          for (i in Nat.range(0, 10)) {
+            let n = f(i, i + 3);
+            if (n == i) {
+              count0 += 1
+            } else if (n == i + 1) {
+              count1 += 1
+            } else if (n == i + 2) {
+              count2 += 1
+            } else {
+              assert false
+            }
+          };
+          assert count0 > 0;
+          assert count1 > 0;
+          assert count2 > 0
         }
       }
     )

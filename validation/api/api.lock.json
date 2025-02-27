@@ -552,6 +552,7 @@
       "public func foldRight<K, V, A>( map : Map<K, V>, base : A, combine : (K, V, A) -> A ) : A",
       "public func forEach<K, V>(map : Map<K, V>, operation : (K, V) -> ())",
       "public func fromIter<K, V>(iter : Types.Iter<(K, V)>, compare : (K, K) -> Order.Order) : Map<K, V>",
+      "public func fromPure<K, V>(map : PureMap.Map<K, V>, compare : (K, K) -> Order.Order) : Map<K, V>",
       "public func get<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V",
       "public func insert<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : Bool",
       "public func isEmpty<K, V>(map : Map<K, V>) : Bool",
@@ -567,6 +568,7 @@
       "public func size<K, V>(map : Map<K, V>) : Nat",
       "public func swap<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V",
       "public func take<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K) : ?V",
+      "public func toPure<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order) : PureMap.Map<K, V>",
       "public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text",
       "public func values<K, V>(map : Map<K, V>) : Types.Iter<V>"
     ]

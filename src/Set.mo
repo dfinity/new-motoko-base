@@ -48,7 +48,7 @@ module {
   type Internal<T> = Types.Set.Internal<T>;
   type Leaf<T> = Types.Set.Leaf<T>;
 
-  /// Convert the mutable set to an immutable set.
+  /// Convert the mutable set to an immutable, purely functional set.
   ///
   /// Example:
   /// ```motoko
@@ -61,7 +61,7 @@ module {
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
-  ///   let pureSet = Set.toPure(set);
+  ///   let pureSet = Set.toPure(set, Nat.compare);
   ///   assert(PureSet.contains(pureSet, Nat.compare, 1));
   /// }
   /// ```
@@ -76,7 +76,7 @@ module {
     PureSet.fromIter(values(set), compare)
   };
 
-  /// Convert an immutable set to a mutable set.
+  /// Convert an immutable, purely functional set to a mutable set.
   ///
   /// Example:
   /// ```motoko
@@ -89,7 +89,7 @@ module {
   ///   pureSet := PureSet.add(pureSet, Nat.compare, 1);
   ///   pureSet := PureSet.add(pureSet, Nat.compare, 2);
   ///   pureSet := PureSet.add(pureSet, Nat.compare, 3);
-  ///   let mutableSet = Set.fromPure(pureSet);
+  ///   let mutableSet = Set.fromPure(pureSet, Nat.compare);
   //    assert(Set.contains(mutableSet, Nat.compare, 1));
   /// }
   /// ```
@@ -2062,7 +2062,7 @@ module {
 
   func containsInLeaf<T>(leafNode : Leaf<T>, compare : (T, T) -> Order.Order, element : T) : Bool {
     switch (NodeUtil.getElementIndex<T>(leafNode.data, compare, element)) {
-      case (#elementFound(index)) {
+      case (#elementFound(_index)) {
         true
       };
       case _ false

@@ -42,7 +42,7 @@ module {
   type Node<T> = Types.Stack.Node<T>;
   public type Stack<T> = Types.Stack<T>;
 
-  /// Convert a mutable stack to an immutable (functional) list.
+  /// Convert a mutable stack to an immutable, purely functional list.
   /// Please note that functional lists are ordered like stacks (FIFO).
   ///
   /// Example:
@@ -67,7 +67,7 @@ module {
     PureList.fromIter(values(stack))
   };
 
-  /// Convert an immutable (functional) list to a mutable stack.
+  /// Convert an immutable, purely functional list to a mutable stack.
   /// Please note that functional lists are ordered like stacks (FIFO).
   ///
   /// Example:

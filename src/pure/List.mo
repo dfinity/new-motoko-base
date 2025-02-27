@@ -58,13 +58,12 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(1)
-  public func size<T>(list : List<T>) : Nat =
-    (func go(n : Nat, list : List<T>) : Nat =
-      switch list {
-        case (?(_, t)) go(n + 1, t);
-        case null n
-      }
-    )(0, list);
+  public func size<T>(list : List<T>) : Nat = (
+    func go(n : Nat, list : List<T>) : Nat = switch list {
+      case (?(_, t)) go(n + 1, t);
+      case null n
+    }
+  )(0, list);
 
   /// Check whether the list contains a given value. Uses the provided equality function to compare values.
   ///
@@ -98,11 +97,10 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(1)
-  public func get<T>(list : List<T>, n : Nat) : ?T =
-    switch list {
-      case (?(h, t)) if (n == 0) ?h else get(t, n - 1);
-      case null null
-    };
+  public func get<T>(list : List<T>, n : Nat) : ?T = switch list {
+    case (?(h, t)) if (n == 0) ?h else get(t, n - 1);
+    case null null
+  };
 
   /// Add `item` to the head of `list`, and return the new list.
   ///
@@ -157,12 +155,12 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func reverse<T>(list : List<T>) : List<T> =
-    (func go(acc : List<T>, list : List<T>) : List<T> =
-      switch list {
-        case (?(h, t)) go(?(h, acc), t);
-        case null acc
-      })(null, list);
+  public func reverse<T>(list : List<T>) : List<T> = (
+    func go(acc : List<T>, list : List<T>) : List<T> = switch list {
+      case (?(h, t)) go(?(h, acc), t);
+      case null acc
+    }
+  )(null, list);
 
   /// Call the given function for its side effect, with each list element in turn.
   ///
@@ -178,11 +176,10 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func forEach<T>(list : List<T>, f : T -> ()) =
-    switch list {
-      case (?(h, t)) { f h; forEach(t, f) };
-      case null ()
-    };
+  public func forEach<T>(list : List<T>, f : T -> ()) = switch list {
+    case (?(h, t)) { f h; forEach(t, f) };
+    case null ()
+  };
 
   /// Call the given function `f` on each list element and collect the results
   /// in a new list.
@@ -197,11 +194,10 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> =
-    switch list {
-      case null null;
-      case (?(h, t)) ?(f h, map(t, f))
-    };
+  public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> = switch list {
+    case null null;
+    case (?(h, t)) ?(f h, map(t, f))
+  };
 
   /// Create a new list with only those elements of the original list for which
   /// the given function (often called the _predicate_) returns true.
@@ -369,7 +365,7 @@ module {
   /// Space: O(1)
   public func drop<T>(list : List<T>, n : Nat) : List<T> = if (n == 0) list else switch list {
     case null null;
-    case (?(h, t)) drop(t, n - 1)
+    case (?(_, t)) drop(t, n - 1)
   };
 
   /// Collapses the elements in `list` into a single value by starting with `base`

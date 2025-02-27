@@ -58,10 +58,13 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(1)
-  public func size<T>(list : List<T>) : Nat = switch list {
-    case null 0;
-    case (?(_, t)) 1 + size t
-  };
+  public func size<T>(list : List<T>) : Nat =
+    (func go(n : Nat, list : List<T>) : Nat =
+      switch list {
+        case (?(_, t)) go(n + 1, t);
+        case null n
+      }
+    )(0, list);
 
   /// Check whether the list contains a given value. Uses the provided equality function to compare values.
   ///

@@ -95,7 +95,7 @@ suite(
         };
         let avg = sum / trials;
         let expectedAvg = Nat64.toNat(Nat64.maxValue) / 2;
-        assert Int.abs(avg - expectedAvg : Int) < expectedAvg / 20
+        assert Int.abs(avg - expectedAvg : Int) < expectedAvg / 100
       }
     );
     test(
@@ -120,6 +120,22 @@ suite(
           let val = random.natRange(from, toExclusive);
           assert val >= from and val < toExclusive
         }
+      }
+    );
+    test(
+      "natRange() has approximately uniform distribution",
+      func() {
+        let random = Random.fast(0);
+        let from = 1000;
+        let toExclusive = 2000;
+        let trials = 10000;
+        var sum = 0;
+        for (_ in Nat.range(0, trials - 1)) {
+          sum += random.natRange(from, toExclusive)
+        };
+        let avg = sum / trials;
+        let expectedAvg = from + (toExclusive - from : Nat) / 2;
+        assert Int.abs(avg - expectedAvg : Int) < (toExclusive - from : Nat) / 100
       }
     );
     test(

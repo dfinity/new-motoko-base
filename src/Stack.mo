@@ -34,12 +34,14 @@
 /// * Space: `O(n)`.
 /// `n` denotes the number of elements stored on the stack.
 
+// TODO: optimize or re-use pure/List operations (e.g. for `any` etc)
+
 import Order "Order";
 import Types "Types";
 import PureList "pure/List";
 
 module {
-  type Node<T> = Types.Stack.Node<T>;
+  type List<T> = Types.Pure.List<T>;
   public type Stack<T> = Types.Stack<T>;
 
   /// Convert a mutable stack to an immutable, purely functional list.
@@ -60,11 +62,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: `O(n)`.
-  /// Space: `O(n)`.
+  /// Runtime: `O(1)`.
+  /// Space: `O(1)`.
   /// where `n` denotes the number of elements stored in the stack.
   public func toPure<T>(stack : Stack<T>) : PureList.List<T> {
-    PureList.fromIter(values(stack))
+    stack.top
   };
 
   /// Convert an immutable, purely functional list to a mutable stack.
@@ -95,7 +97,19 @@ module {
   /// Space: `O(n)`.
   /// where `n` denotes the number of elements stored in the queue.
   public func fromPure<T>(list : PureList.List<T>) : Stack<T> {
-    fromIter(PureList.values(list))
+    var size = 0;
+    var cur = list;
+    loop {
+      switch cur {
+        case (?(_, next)) {
+          size += 1;
+          cur := next
+        };
+        case null {
+          return { var top = list; var size }
+        }
+      }
+    }
   };
 
   /// Create a new empty mutable stack.
@@ -301,11 +315,7 @@ module {
   /// Runtime: O(1)
   /// Space: O(1)
   public func push<T>(stack : Stack<T>, value : T) {
-    let node = {
-      value;
-      next = stack.top
-    };
-    stack.top := ?node;
+    stack.top := ?(value, stack.top);
     stack.size += 1
   };
 
@@ -330,7 +340,7 @@ module {
   public func peek<T>(stack : Stack<T>) : ?T {
     switch (stack.top) {
       case null null;
-      case (?node) ?node.value
+      case (?(value, _)) ?value
     }
   };
 
@@ -358,10 +368,10 @@ module {
   public func pop<T>(stack : Stack<T>) : ?T {
     switch (stack.top) {
       case null null;
-      case (?node) {
-        stack.top := node.next;
+      case (?(value, next)) {
+        stack.top := next;
         stack.size -= 1;
-        ?node.value
+        ?value
       }
     }
   };
@@ -395,15 +405,15 @@ module {
     while (index < position) {
       switch (current) {
         case null return null;
-        case (?node) {
-          current := node.next
+        case (?(_, next)) {
+          current := next
         }
       };
       index += 1
     };
     switch (current) {
       case null null;
-      case (?node) ?node.value
+      case (?(value, _)) ?value
     }
   };
 
@@ -430,12 +440,9 @@ module {
   /// Space: O(n)
   /// where `n` denotes the number of elements stored on the stack.
   public func reverse<T>(stack : Stack<T>) {
-    var last : ?Node<T> = null;
+    var last : List<T> = null;
     for (element in values(stack)) {
-      last := ?{
-        value = element;
-        next = last
-      }
+      last := ?(element, last)
     };
     stack.top := last
   };
@@ -473,9 +480,9 @@ module {
       public func next() : ?T {
         switch (current) {
           case null null;
-          case (?node) {
-            current := node.next;
-            ?node.value
+          case (?(value, next)) {
+            current := next;
+            ?value
           }
         }
       }

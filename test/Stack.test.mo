@@ -1,5 +1,4 @@
 import Stack "../src/Stack";
-import Array "../src/Array";
 import Nat "../src/Nat";
 import Iter "../src/Iter";
 import PureList "../src/pure/List";

@@ -18,7 +18,8 @@
         "any",
         "values",
         "fromIter",
-        "toText"
+        "toText",
+        "equal"
       ]
     },
     {

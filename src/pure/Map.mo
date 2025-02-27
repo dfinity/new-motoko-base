@@ -58,7 +58,6 @@ import Runtime "../Runtime";
 // TODO: Do we want clone or clear, just to match imperative API?
 // inline Tree type, remove Types.Pure.Tree?
 
-
 module {
 
   public type Map<K, V> = Types.Pure.Map<K, V>;

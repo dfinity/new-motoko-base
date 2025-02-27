@@ -136,17 +136,17 @@ module {
 
     public module Map {
       public type Map<K, V> = {
-	size : Nat;
-	root : Tree<K, V>
+        size : Nat;
+        root : Tree<K, V>
       };
       public type Tree<K, V> = {
-	#red : (Tree<K, V>, K, V, Tree<K, V>);
-	#black : (Tree<K, V>, K, V, Tree<K, V>);
-	#leaf
+        #red : (Tree<K, V>, K, V, Tree<K, V>);
+        #black : (Tree<K, V>, K, V, Tree<K, V>);
+        #leaf
       };
 
     };
-    public type Map<K,V> = Map.Map<K, V>;
+    public type Map<K, V> = Map.Map<K, V>;
 
     public type Queue<T> = (List<T>, Nat, List<T>);
 
@@ -157,7 +157,7 @@ module {
         #leaf
       };
 
-      public type Set<T> = { size : Nat; root : Tree<T> };
+      public type Set<T> = { size : Nat; root : Tree<T> }
     };
 
     public type Set<T> = Set.Set<T>;

@@ -70,15 +70,19 @@ suite(
         Stack.push(s, 1);
         Stack.push(s, 2);
         Stack.push(s, 3);
-        expect.array([Stack.pop(s), Stack.pop(s), Stack.pop(s)], func(x: ?Nat): Text {
-          switch(x) { case(null) "null"; case(?n) Nat.toText(n) }
-        }, func(a: ?Nat, b: ?Nat): Bool {
-          switch(a, b) {
-            case(null, null) true;
-            case(?x, ?y) x == y;
-            case(_, _) false;
+        expect.array(
+          [Stack.pop(s), Stack.pop(s), Stack.pop(s)],
+          func(x : ?Nat) : Text {
+            switch (x) { case (null) "null"; case (?n) Nat.toText(n) }
+          },
+          func(a : ?Nat, b : ?Nat) : Bool {
+            switch (a, b) {
+              case (null, null) true;
+              case (?x, ?y) x == y;
+              case (_, _) false
+            }
           }
-        }).equal([?3, ?2, ?1]);
+        ).equal([?3, ?2, ?1]);
         expect.nat(Stack.size(s)).equal(0)
       }
     );
@@ -304,22 +308,22 @@ suite(
         let random = Random(randomSeed);
         var expectedSum = 0;
         var actualSum = 0;
-        
+
         for (i in Nat.range(0, largeSize)) {
           let value = random.next();
           Stack.push(s, value);
           expectedSum += value
         };
-        
+
         expect.nat(Stack.size(s)).equal(largeSize);
-        
+
         while (not Stack.isEmpty(s)) {
           switch (Stack.pop(s)) {
             case (?value) { actualSum += value };
             case null { expect.bool(false).isTrue() }; // Should never happen
           }
         };
-        
+
         expect.bool(Stack.isEmpty(s) and expectedSum == actualSum).isTrue()
       }
     );
@@ -330,7 +334,7 @@ suite(
         let s = Stack.empty<Nat>();
         let random = Random(randomSeed);
         var count = 0;
-        
+
         for (i in Nat.range(0, largeSize)) {
           if (random.next() % 2 == 0) {
             Stack.push(s, i);
@@ -343,7 +347,7 @@ suite(
           };
           expect.nat(Stack.size(s)).equal(count)
         };
-        
+
         expect.bool(true).isTrue()
       }
     );
@@ -360,7 +364,7 @@ suite(
             if (x % 8 == 0) ?x else null
           }
         );
-        
+
         expect.nat(Stack.size(original)).equal(largeSize);
         expect.nat(Stack.size(doubled)).equal(largeSize);
         expect.nat(Stack.size(filtered)).equal(largeSize / 2);
@@ -374,12 +378,12 @@ suite(
         let s = Stack.tabulate<Nat>(largeSize, func(i) = i);
         var sum = 0;
         var count = 0;
-        
+
         for (value in Stack.values(s)) {
           sum += value;
           count += 1
         };
-        
+
         expect.nat(count).equal(largeSize);
         let expectedSum = (largeSize - 1 : Nat) * largeSize / 2;
         expect.nat(sum).equal(expectedSum)
@@ -391,9 +395,9 @@ suite(
       func() {
         let original = Stack.tabulate<Nat>(largeSize, func(i) = i);
         let clone = Stack.clone(original);
-        
+
         expect.bool(Stack.equal(original, clone, Nat.equal)).isTrue();
-        
+
         Stack.push(original, largeSize);
         expect.bool(Stack.equal(original, clone, Nat.equal)).isFalse();
         expect.bool(Stack.compare(clone, original, Nat.compare) == #less).isTrue()
@@ -412,15 +416,15 @@ suite(
         for (index in Nat.range(0, largeSize)) {
           Stack.push(stack, index)
         };
-        
+
         let pureList = Stack.toPure(stack);
         var index = largeSize;
-        
+
         for (element in PureList.values(pureList)) {
           index -= 1;
           expect.nat(element).equal(index)
         };
-        
+
         expect.nat(PureList.size(pureList)).equal(largeSize)
       }
     );
@@ -432,15 +436,15 @@ suite(
         for (index in Nat.range(0, largeSize)) {
           pureList := PureList.push(pureList, index)
         };
-        
+
         let stack = Stack.fromPure<Nat>(pureList);
         var index = largeSize;
-        
+
         for (element in PureList.values(pureList)) {
           index -= 1;
           expect.nat(element).equal(index)
         };
-        
+
         expect.nat(Stack.size(stack)).equal(largeSize)
       }
     )

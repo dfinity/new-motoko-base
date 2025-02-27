@@ -104,26 +104,27 @@ module {
       }
     };
 
-    // Helper function which returns a uniformly sampled `Nat64` in the range `[0, toExclusive)`.
+    // Helper function which returns a uniformly sampled `Nat64` in the range `[0, max]`.
     // Uses rejection sampling to ensure uniform distribution even when the range
     // doesn't divide evenly into 2^64. This avoids modulo bias that would occur
     // from simply taking the modulo of a random 64-bit number.
-    func uniform64(toExclusive : Nat64) : Nat64 {
-      if (toExclusive <= 1) {
+    func uniform64(max : Nat64) : Nat64 {
+      if (max == 0) {
         return 0
       };
+      if (max == Nat64.maxValue) {
+        return nat64()
+      };
+      let toExclusive = max - 1;
       // 2^64 - (2^64 % toExclusive) = (2^64-1) - (2^64-1 % toExclusive):
-      let cutOff = Nat64.maxValue - (Nat64.maxValue % toExclusive);
+      let cutoff = Nat64.maxValue - (Nat64.maxValue % toExclusive);
       // 2^64 / toExclusive, with toExclusive > 1:
-      let multiple = Nat64.fromNat(Nat.pow(2, 64) / Nat64.toNat(toExclusive));
+      let multiple = Nat64.fromNat(/* 2^64 */ 0x10000000000000000 / Nat64.toNat(toExclusive));
       loop {
         // Build up a random Nat64 from bytes
-        var number : Nat64 = 0;
-        for (_ in Nat8.range(0, 8)) {
-          number := (number << 8) | Nat64.fromNat(Nat8.toNat(nat8()))
-        };
+        var number = nat64();
         // If number is below cutoff, we can use it
-        if (number < cutOff) {
+        if (number < cutoff) {
           // Scale down to desired range
           return number / multiple
         };
@@ -132,28 +133,28 @@ module {
     };
 
     public func nat64() : Nat64 {
-      uniform64(Nat64.maxValue)
+      (Nat64.fromNat(Nat8.toNat(nat8())) << 56) | (Nat64.fromNat(Nat8.toNat(nat8())) << 48) | (Nat64.fromNat(Nat8.toNat(nat8())) << 40) | (Nat64.fromNat(Nat8.toNat(nat8())) << 32) | (Nat64.fromNat(Nat8.toNat(nat8())) << 24) | (Nat64.fromNat(Nat8.toNat(nat8())) << 16) | (Nat64.fromNat(Nat8.toNat(nat8())) << 8) | Nat64.fromNat(Nat8.toNat(nat8()))
     };
 
-    public func nat64Range(from : Nat64, toExclusive : Nat64) : Nat64 {
-      if (from > toExclusive) {
-        Runtime.trap("Random.nat64Range(): from > toExclusive")
+    public func nat64Range(fromInclusive : Nat64, toExclusive : Nat64) : Nat64 {
+      if (fromInclusive >= toExclusive) {
+        Runtime.trap("Random.nat64Range(): fromInclusive >= toExclusive")
       };
-      uniform64(toExclusive - from) + from
+      uniform64(toExclusive - fromInclusive - 1) + fromInclusive
     };
 
-    public func intRange(from : Int, toExclusive : Int) : Int {
-      switch (Nat.fromInt(toExclusive - from)) {
-        case (?range) Nat64.toNat(uniform64(Nat64.fromNat(range))) + from;
-        case _ Runtime.trap("Random.intRange(): from > toExclusive")
+    public func natRange(fromInclusive : Nat, toExclusive : Nat) : Nat {
+      if (fromInclusive >= toExclusive) {
+        Runtime.trap("Random.natRange(): fromInclusive >= toExclusive")
+      };
+      Nat64.toNat(uniform64(Nat64.fromNat(toExclusive - fromInclusive - 1))) + fromInclusive
+    };
+
+    public func intRange(fromInclusive : Int, toExclusive : Int) : Int {
+      switch (Nat.fromInt(toExclusive - fromInclusive - 1)) {
+        case null Runtime.trap("Random.intRange(): fromInclusive >= toExclusive");
+        case (?range) Nat64.toNat(uniform64(Nat64.fromNat(range))) + fromInclusive
       }
-    };
-
-    public func natRange(from : Nat, toExclusive : Nat) : Nat {
-      if (from > toExclusive) {
-        Runtime.trap("Random.natRange(): from > toExclusive")
-      };
-      Nat64.toNat(uniform64(Nat64.fromNat(toExclusive - from))) + from
     };
 
   };
@@ -211,14 +212,6 @@ module {
           }
         }
       }
-    };
-
-    public func natRange(from : Nat, toExclusive : Nat) : async* Nat {
-      todo()
-    };
-
-    public func intRange(from : Int, toExclusive : Int) : async* Int {
-      todo()
     };
 
   };

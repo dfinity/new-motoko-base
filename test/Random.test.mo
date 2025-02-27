@@ -33,7 +33,7 @@ suite(
         let random = Random.fast(0);
         var trueCount = 0;
         let trials = 10000;
-        for (_ in Nat.range(0, trials - 1)) {
+        for (_ in Nat.range(0, trials)) {
           if (random.bool()) trueCount += 1
         };
         let ratio = Float.fromInt(trueCount) / Float.fromInt(trials);
@@ -90,7 +90,7 @@ suite(
         let random = Random.fast(0);
         let trials = 10000;
         var sum = 0;
-        for (_ in Nat.range(0, trials - 1)) {
+        for (_ in Nat.range(0, trials)) {
           sum += Nat64.toNat(random.nat64())
         };
         let avg = sum / trials;
@@ -102,22 +102,10 @@ suite(
       "nat64Range() returns values within range",
       func() {
         let random = Random.fast(0);
-        let from : Nat64 = 1_000_000;
-        let toExclusive : Nat64 = 2_000_000;
+        let from : Nat64 = 10;
+        let toExclusive : Nat64 = 20;
         for (_ in Nat.range(0, 1000)) {
           let val = random.nat64Range(from, toExclusive);
-          assert val >= from and val < toExclusive
-        }
-      }
-    );
-    test(
-      "natRange() returns values within range",
-      func() {
-        let random = Random.fast(0);
-        let from = 1000;
-        let toExclusive = 2000;
-        for (_ in Nat.range(0, 1000)) {
-          let val = random.natRange(from, toExclusive);
           assert val >= from and val < toExclusive
         }
       }
@@ -130,7 +118,7 @@ suite(
         let toExclusive = 2000;
         let trials = 10000;
         var sum = 0;
-        for (_ in Nat.range(0, trials - 1)) {
+        for (_ in Nat.range(0, trials)) {
           sum += random.natRange(from, toExclusive)
         };
         let avg = sum / trials;
@@ -139,14 +127,76 @@ suite(
       }
     );
     test(
-      "intRange() returns values within range",
+      "natRange() returns values within range",
+      func() {
+        let random = Random.fast(0);
+        let from = 10;
+        let toExclusive = 20;
+        for (_ in Nat.range(0, 1000)) {
+          let val = random.natRange(from, toExclusive);
+          assert val >= from and val < toExclusive
+        }
+      }
+    );
+    test(
+      "intRange() has approximately uniform distribution",
       func() {
         let random = Random.fast(0);
         let from = -1000;
-        let toExclusive = 1000;
+        let toExclusive = +1000;
+        let trials = 10000;
+        var sum = +0;
+        for (_ in Nat.range(0, trials)) {
+          sum += random.intRange(from, toExclusive)
+        };
+        let avg = sum / trials;
+        let expectedAvg = from + (toExclusive - from) / 2;
+        assert Int.abs(avg - expectedAvg) < (toExclusive - from) / 100
+      }
+    );
+    test(
+      "intRange() returns values within range",
+      func() {
+        let random = Random.fast(0);
+        let from = -10;
+        let toExclusive = 10;
         for (_ in Nat.range(0, 1000)) {
           let val = random.intRange(from, toExclusive);
           assert val >= from and val < toExclusive
+        }
+      }
+    );
+    test(
+      "*range()",
+      func() {
+        let random = Random.fast(0);
+
+        let rangeFunctions : [(Nat, Nat) -> Int] = [
+          func(a, b) = Nat64.toNat(random.nat64Range(Nat64.fromNat(a), Nat64.fromNat(b))),
+          func(a, b) = Nat.toInt(random.natRange(a, b)),
+          random.intRange
+        ];
+        for (f in rangeFunctions.values()) {
+          // (i, i + 1)
+          for (i in Nat.range(0, 10)) {
+            assert f(i, i + 1) == i
+          };
+
+          // (i, i + 2)
+          var count0 = 0;
+          var count1 = 0;
+          for (i in Nat.range(0, 10)) {
+            let n = f(i, i + 2);
+            if (n == i) {
+              count0 += 1
+            } else if (n == i + 1) {
+              count1 += 1
+            } else {
+              assert false
+            }
+          };
+          assert count0 > 0;
+          assert count1 > 0
         }
       }
     )

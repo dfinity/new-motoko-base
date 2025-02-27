@@ -588,5 +588,3 @@ run(
     ]
   )
 )
-
-// TODO: Test conversion to/from `pure/Queue` when pure queue is implemented.

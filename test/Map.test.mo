@@ -5,9 +5,9 @@ import Map "../src/Map";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
 import Runtime "../src/Runtime";
-import Debug "../src/Debug";
 import Text "../src/Text";
 import Array "../src/Array";
+import PureMap "../src/pure/Map";
 
 let { run; test; suite } = Suite;
 
@@ -1499,6 +1499,46 @@ run(
           Map.get(map, Nat.compare, 0)
         },
         M.equals(T.optional(T.textTestable, ?"Zero"))
+      )
+    ]
+  )
+);
+
+run(
+  suite(
+    "map conversion",
+    [
+      test(
+        "toPure",
+        do {
+          let map = Map.empty<Nat, Text>();
+          for (index in Nat.range(0, numberOfEntries)) {
+            Map.add(map, Nat.compare, index, Nat.toText(index))
+          };
+          let pureMap = Map.toPure(map, Nat.compare);
+          for (index in Nat.range(0, numberOfEntries)) {
+            assert (PureMap.get(pureMap, Nat.compare, index) == ?Nat.toText(index))
+          };
+          PureMap.assertValid(pureMap, Nat.compare);
+          PureMap.size(pureMap)
+        },
+        M.equals(T.nat(numberOfEntries))
+      ),
+      test(
+        "fromPure",
+        do {
+          var pureMap = PureMap.empty<Nat, Text>();
+          for (index in Nat.range(0, numberOfEntries)) {
+            pureMap := PureMap.add(pureMap, Nat.compare, index, Nat.toText(index))
+          };
+          let map = Map.fromPure<Nat, Text>(pureMap, Nat.compare);
+          for (index in Nat.range(0, numberOfEntries)) {
+            assert (Map.get(map, Nat.compare, index) == ?Nat.toText(index))
+          };
+          Map.assertValid(map, Nat.compare);
+          Map.size(map)
+        },
+        M.equals(T.nat(numberOfEntries))
       )
     ]
   )

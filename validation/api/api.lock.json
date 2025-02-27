@@ -898,8 +898,8 @@
     "exports": [
       "public class AsyncRandom(generator : () -> async* Blob)",
       "public let blob : shared () -> async Blob",
-      "public func new(seed : Blob) : Random",
-      "public func newAsync() : AsyncRandom",
+      "public func crypto() : AsyncRandom",
+      "public func fast(seed : Nat64) : Random",
       "public class Random(generator : () -> Blob)"
     ]
   },
@@ -1207,6 +1207,13 @@
       "public func mergeParentWithChildrenAndDelete<T>( parentElement : ?T, childCount : Nat, leftChild : [var ?T], rightChild : [var ?T], deleteIndex : Nat, deletionSide : DeletionSide ) : ([var ?T], T)",
       "public func replaceTwoWithElementAndShift<T>(array : [var ?T], element : T, replaceIndex : Nat)",
       "public func splitArrayAndInsertTwo<T>(children : [var ?T], rebalancedChildIndex : Nat, leftChildInsert : T, rightChildInsert : T) : ([var ?T], [var ?T])"
+    ]
+  },
+  {
+    "name": "internal/PRNG",
+    "exports": [
+      "public class SFC64(p : Nat64, q : Nat64, r : Nat64)",
+      "public func sfc64a() : SFC64"
     ]
   },
   {

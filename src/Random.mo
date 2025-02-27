@@ -29,6 +29,7 @@ module {
       func() {
         // Generate 8 bytes directly from a single 64-bit number
         let n = prng.next();
+        // TODO: optimize using Array.tabulate or even better: a new primitive
         let bytes = VarArray.repeat<Nat8>(0, 8);
         bytes[0] := Nat8.fromNat(Nat64.toNat(n & 0xFF));
         bytes[1] := Nat8.fromNat(Nat64.toNat((n >> 8) & 0xFF));

@@ -3,7 +3,7 @@
 /// A red-black tree is a balanced binary search tree ordered by the elements.
 ///
 /// The tree data structure internally colors each of its nodes either red or black,
-/// and uses this information to balance the tree during the modifying operations.
+/// and uses this information to balance the tree during modifying operations.
 ///
 /// Performance:
 /// * Runtime: `O(log(n))` worst case cost per insertion, removal, and retrieval operation.
@@ -25,19 +25,16 @@ import Nat "../Nat";
 import Order "../Order";
 
 module {
-  /// Red-black tree of nodes with ordered set elements.
-  /// Leaves are considered implicitly black.
-  type Tree<T> = {
-    #red : (Tree<T>, T, Tree<T>);
-    #black : (Tree<T>, T, Tree<T>);
-    #leaf
-  };
 
   /// Ordered collection of unique elements of the generic type `T`.
   /// If type `T` is stable then `Set<T>` is also stable.
   /// To ensure that property the `Set<T>` does not have any methods,
   /// instead they are gathered in the functor-like class `Operations` (see example there).
-  public type Set<T> = { size : Nat; root : Tree<T> };
+  public type Set<T> = Types.Pure.Set<T>;
+
+  /// Red-black tree of nodes with ordered set elements.
+  /// Leaves are considered implicitly black.
+  type Tree<T> = Types.Pure.Set.Tree<T>;
 
   /// Create a set with the elements obtained from an iterator.
   /// Potential duplicate elements in the iterator are ignored, i.e.
@@ -678,7 +675,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func compare<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    // TODO: optimize
+    // TODO: optimize using recursion on set1?
     let iterator1 = values(set1);
     let iterator2 = values(set2);
     loop {

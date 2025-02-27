@@ -262,7 +262,7 @@ only supported a single memory region, without isolation between different appli
 <p>The <code>Region</code> type is stable and can be used in stable data structures.</p>
 <p>A new, empty <code>Region</code> is allocated using function <code>new()</code>.</p>
 <p>Regions are stateful objects and can be distinguished by the numeric identifier returned by function <code>id(region)</code>.
-Every region owns an initially empty, but growable sequence of virtual IC stable memory pages. 
+Every region owns an initially empty, but growable sequence of virtual IC stable memory pages.
 The current size, in pages, of a region is returned by function <code>size(region)</code>.
 The size of a region determines the range, [ 0, ..., size(region)*2^16 ), of valid byte-offsets into the region; these offsets are used as the source and destination of <code>load</code>/<code>store</code> operations on the region.</p>
 <p>Memory is allocated to a region, using function <code>grow(region, pages)</code>, sequentially and on demand, in units of 64KiB logical pages, starting with 0 allocated pages.
@@ -356,7 +356,17 @@ and reinstalls.</p>
 <p>For further usage information for timers on the IC, please consult
 <a href="https://internetcomputer.org/docs/current/developer-docs/backend/periodic-tasks#timers-library-limitations">the documentation</a>.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
+</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="internal/PRNG.html">internal/PRNG</a><div class="index-item-comment"><p>Collection of pseudo-random number generators</p>
+<p>The algorithms deliver deterministic statistical randomness,
+not cryptographic randomness.</p>
+<p>Algorithm 1: 128-bit Seiran PRNG
+See: https://github.com/andanteyk/prng-seiran</p>
+<p>Algorithm 2: SFC64 and SFC32 (Chris Doty-Humphrey’s Small Fast Chaotic PRNG)
+See: https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html</p>
+<p>Copyright: 2023 MR Research AG
+Main author: react0r-com
+Contributors: Timo Hanke (timohanke)</p>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
 A list of type <code>List&lt;T&gt;</code> is either <code>null</code> or an optional pair of a value of type <code>T</code> and a tail, itself of type <code>List&lt;T&gt;</code>.</p>
 <p>To use this library, import it using:</p>
 <pre><code>motoko name=initialize
@@ -411,5 +421,14 @@ that are dynamically size-balanced by splitting.</p>
 <ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
-</div></li></ul></div></html>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Stable ordered set implemented as a red-black tree.</p>
+<p>A red-black tree is a balanced binary search tree ordered by the elements.</p>
+<p>The tree data structure internally colors each of its nodes either red or black,
+and uses this information to balance the tree during the modifying operations.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree.
+<code>n</code> denotes the number of elements (i.e. nodes) stored in the tree.</li></ul>
+
+<p>Credits:</p>
+<p>The core of this implementation is derived from:</p>
+<ul><li>Ken Friis Larsen's <a href="https://github.com/kfl/mosml/blob/master/src/mosmllib/Redblackmap.sml">RedBlackMap.sml</a>, which itself is based on:</li><li>Stefan Kahrs, &quot;Red-black trees with types&quot;, Journal of Functional Programming, 11(4): 425-432 (2001), <a href="http://www.cs.ukc.ac.uk/people/staff/smk/redblack/rb.html">version 1 in web appendix</a>.</li></ul></div></li></ul></div></html>

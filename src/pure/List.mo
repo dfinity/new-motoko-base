@@ -178,10 +178,11 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func forEach<T>(list : List<T>, f : T -> ()) = switch list {
-    case null ();
-    case (?(h, t)) { f h; forEach(t, f) }
-  };
+  public func forEach<T>(list : List<T>, f : T -> ()) =
+    switch list {
+      case (?(h, t)) { f h; forEach(t, f) };
+      case null ()
+    };
 
   /// Call the given function `f` on each list element and collect the results
   /// in a new list.
@@ -196,10 +197,11 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> = switch list {
-    case null null;
-    case (?(h, t)) ?(f h, map(t, f))
-  };
+  public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> =
+    switch list {
+      case null null;
+      case (?(h, t)) ?(f h, map(t, f))
+    };
 
   /// Create a new list with only those elements of the original list for which
   /// the given function (often called the _predicate_) returns true.

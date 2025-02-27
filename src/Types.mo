@@ -118,10 +118,8 @@ module {
   public type Map<K, V> = Map.Map<K, V>;
 
   public module Stack {
-    public type Node<T> = ?(T, Node<T>); // a.k. Pure.List<T>
-
     public type Stack<T> = {
-      var top : Node<T>;
+      var top : Pure.List<T>;
       var size : Nat
     }
   };

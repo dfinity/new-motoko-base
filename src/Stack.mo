@@ -39,7 +39,7 @@ import Types "Types";
 import PureList "pure/List";
 
 module {
-  type Node<T> = Types.Stack.Node<T>;
+  type List<T> = Types.Pure.List<T>;
   public type Stack<T> = Types.Stack<T>;
 
   /// Convert a mutable stack to an immutable, purely functional list.
@@ -439,7 +439,7 @@ module {
   /// Space: O(n)
   /// where `n` denotes the number of elements stored on the stack.
   public func reverse<T>(stack : Stack<T>) {
-    var last : Node<T> = null;
+    var last : List<T> = null;
     for (element in values(stack)) {
       last := ?(element, last)
     };

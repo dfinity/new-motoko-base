@@ -469,7 +469,6 @@ let reverse = Suite.suite(
       "empty list",
       List.reverse(List.empty<Nat>()),
       M.equals(T.list(T.natTestable, null : List.List<Nat>))
-
     ),
     Suite.test(
       "singleton",
@@ -480,6 +479,11 @@ let reverse = Suite.suite(
       "threesome",
       List.reverse(?(1, ?(2, ?(3, null)))),
       M.equals(T.list(T.natTestable, ?(3, ?(2, ?(1, null)))))
+    ),
+    Suite.test(
+      "many",
+      List.reverse hugeList |> List.size _,
+      M.equals(T.nat 100_000)
     )
   ]
 );

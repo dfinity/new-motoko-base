@@ -619,7 +619,15 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
-  public func repeat<T>(item : T, n : Nat) : List<T> = if (n == 0) null else ?(item, repeat(item, n - 1));
+  public func repeat<T>(item : T, n : Nat) : List<T> {
+    var res : List<T> = null;
+    var i : Int = n;
+    while (i != 0) {
+      i -= 1;
+      res := ?(item, res)
+    };
+    res
+  };
 
   /// Create a list of pairs from a pair of lists.
   ///

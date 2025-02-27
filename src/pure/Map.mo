@@ -54,16 +54,15 @@ import Iter "../Iter";
 import Types "../Types";
 import Runtime "../Runtime";
 
-// inline Internal?
+// TODO: inline Internal?
+// TODO: Do we want clone or clear, just to match imperative API?
 // inline Tree type, remove Types.Pure.Tree?
-
-// Do we want clone and clear, just to match imperative API?
 
 module {
 
   public type Map<K, V> = Types.Pure.Map<K, V>;
 
-  type Tree<K, V> = Types.Pure.Tree<K, V>;
+  type Tree<K, V> = Types.Pure.Map.Tree<K, V>;
 
   /// Create a new empty immutable key-value map.
   ///
@@ -678,7 +677,6 @@ module {
     combine : (A, K, V) -> A
   ) : A = Internal.foldLeft(map.root, base, combine);
 
-  // TODO: base last?
   /// Collapses the elements in the `map` into a single value by starting with `base`
   /// and progressively combining keys and values into `base` with `combine`. Iteration runs
   /// right to left.
@@ -1140,7 +1138,7 @@ module {
     };
 
     public func forEach<K, V>(map : Map<K, V>, operation : (K, V) -> ()) {
-      func combine(acc : Null, key : K, value : V) : Null {
+      func combine(_acc : Null, key : K, value : V) : Null {
         operation(key, value);
         null
       };

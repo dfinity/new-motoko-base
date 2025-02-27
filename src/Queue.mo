@@ -40,10 +40,10 @@
 /// * Space: `O(n)`.
 /// `n` denotes the number of elements stored in the queue.
 
+import PureQueue "pure/Queue";
 import Iter "Iter";
 import Order "Order";
 import Types "Types";
-import PureQueue "pure/Queue";
 
 module {
   public type Queue<T> = Types.Queue.Queue<T>;

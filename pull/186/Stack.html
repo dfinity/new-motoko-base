@@ -28,7 +28,7 @@ persistent actor {
 <p>The internal implementation is a singly-linked list.</p>
 <p>Performance:</p>
 <ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operation.</li><li>Space: <code>O(n)</code>.
-<code>n</code> denotes the number of elements stored on the stack.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Stack"><span class="keyword">type </span><span class="type">Stack</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.Stack"><span class="type">Types.Stack</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a mutable stack to an immutable (functional) list.
+<code>n</code> denotes the number of elements stored on the stack.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Stack"><span class="keyword">type </span><span class="type">Stack</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.Stack"><span class="type">Types.Stack</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a mutable stack to an immutable, purely functional list.
 Please note that functional lists are ordered like stacks (FIFO).</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
@@ -46,7 +46,7 @@ persistent actor {
 <p>Runtime: <code>O(n)</code>.
 Space: <code>O(n)</code>.
 where <code>n</code> denotes the number of elements stored in the stack.</p>
-</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable (functional) list to a mutable stack.
+</p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable, purely functional list to a mutable stack.
 Please note that functional lists are ordered like stacks (FIFO).</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;

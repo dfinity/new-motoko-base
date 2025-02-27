@@ -21,11 +21,11 @@ suite(
       }
     );
     test(
-      "byte()",
+      "nat8()",
       func() {
         let random = Random.fast(0);
-        let expected = [];
-        expect.array(Array.tabulate<Bool>(10, func _ = random.bool()), Bool.toText, Bool.equal).equal(expected)
+        let expected : [Nat8] = [27, 58, 135, 48, 175, 107, 232, 146, 65, 96];
+        expect.array(Array.tabulate<Nat8>(10, func _ = random.nat8()), Nat8.toText, Nat8.equal).equal(expected)
       }
     );
 

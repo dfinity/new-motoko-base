@@ -44,7 +44,6 @@ import PureQueue "pure/Queue";
 import Iter "Iter";
 import Order "Order";
 import Types "Types";
-import PureQueue "pure/Queue";
 
 module {
   public type Queue<T> = Types.Queue.Queue<T>;
@@ -58,8 +57,8 @@ module {
   /// import Queue "mo:base/Queue";
   ///
   /// persistent actor {
-  ///   let mutableQueue = Queue.fromIter<Nat>([1, 2, 3].values());
-  ///   let immutableQueue = Queue.toPure<Nat>(mutableQueue);
+  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let pureQueue = Queue.toPure<Nat>(queue);
   /// }
   /// ```
   ///
@@ -86,8 +85,8 @@ module {
   /// import PureQueue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let immutableQueue = PureQueue.fromIter<Nat>([1, 2, 3].values());
-  ///   let mutableQueue = Queue.fromPure<Nat>(immutableQueue);
+  ///   let pureQueue = PureQueue.fromIter<Nat>([1, 2, 3].values());
+  ///   let queue = Queue.fromPure<Nat>(pureQueue);
   /// }
   /// ```
   ///

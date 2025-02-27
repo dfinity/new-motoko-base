@@ -523,7 +523,7 @@ let forEach = Suite.suite(
       do {
         var c = 0;
         List.forEach<Char>(hugeList, func _ = c += 1);
-        t
+        c
       },
       M.equals(T.nat 100_000)
     )

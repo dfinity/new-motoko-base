@@ -453,6 +453,11 @@ let get = Suite.suite(
       "many",
       List.get(hugeList, 99_999),
       M.equals(T.optional(T.char 'Y', ?'Y' : ?Char))
+    ),
+    Suite.test(
+      "past many",
+      List.get(hugeList, 100_000),
+      M.equals(T.optional(T.char 'Y', null : ?Char))
     )
   ]
 );

@@ -6,6 +6,15 @@
 ///
 /// **NOTE:** Since cycles measure computational resources, the value of  `balance()` can change from one call to the next.
 ///
+/// To attach an amount of cycles to be transferred in a call,
+/// that is, evaluation of a shared function call or `async`
+/// expression, one prefixes the expression with a parenthetical
+/// of the form `(with cycles = <amount>) <call>`.
+/// **NOTE:** Traps if the cycles specified would exceed `2 ** 128` cycles.
+///
+/// Upon the call, but not before, the amount of cycles is deducted from `balance()`.
+/// If this total exceeds `balance()`, the caller traps, aborting the call.
+///
 /// Example for use on the ICP:
 /// ```motoko no-repl
 /// import Cycles "mo:base/Cycles";

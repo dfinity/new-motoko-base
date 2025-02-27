@@ -97,17 +97,16 @@ module {
   public func fromPure<T>(list : PureList.List<T>) : Stack<T> {
     var size = 0;
     var cur = list;
-    label size loop {
+    loop {
       switch cur {
 	case (?(_, next)) {
 	  size += 1;
 	  cur := next
 	};
-        case null { break size }
+        case null {
+	  return { var top = list; var size }
+        }
       }
-    };
-    { var top = list;
-      var size;
     }
   };
 

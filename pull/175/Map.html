@@ -27,7 +27,7 @@ persistent actor {
   Map.add(map, Nat.compare, 1, &quot;One&quot;);
   Map.add(map, Nat.compare, 2, &quot;Two&quot;);
   let pureMap = Map.toPure(map, Nat.compare);
-  assert(PureMap.get(pureMap, 0) == Map.get(map, 0));
+  assert(PureMap.get(pureMap, Nat.compare, 0) == Map.get(map, Nat.compare, 0));
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.

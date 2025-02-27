@@ -43,7 +43,8 @@ module {
     )
   };
 
-  /// Uses entropy from the management canister with automatic resupply.
+  /// Creates a random number generator suitable for cryptography
+  /// using entropy from the ICP management canister with automatic resupply.
   public func crypto() : AsyncRandom {
     AsyncRandom(func() : async* Blob { await rawRand() })
   };

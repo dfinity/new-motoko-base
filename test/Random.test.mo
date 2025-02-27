@@ -109,6 +109,30 @@ suite(
           assert val >= from and val < toExclusive
         }
       }
-    )
+    );
+    test(
+      "natRange() returns values within range",
+      func() {
+        let random = Random.fast(0);
+        let from = 1000;
+        let toExclusive = 2000;
+        for (_ in Nat.range(0, 1000)) {
+          let val = random.natRange(from, toExclusive);
+          assert val >= from and val < toExclusive
+        }
+      }
+    );
+    test(
+      "intRange() returns values within range",
+      func() {
+        let random = Random.fast(0);
+        let from = -1000;
+        let toExclusive = 1000;
+        for (_ in Nat.range(0, 1000)) {
+          let val = random.intRange(from, toExclusive);
+          assert val >= from and val < toExclusive
+        }
+      }
+    );
   }
 )

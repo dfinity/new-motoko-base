@@ -212,11 +212,11 @@ module {
       }
     };
 
-    public func intRange(from : Int, toExclusive : Int) : async* Int {
+    public func natRange(from : Nat, toExclusive : Nat) : async* Nat {
       todo()
     };
 
-    public func natRange(from : Nat, toExclusive : Nat) : async* Nat {
+    public func intRange(from : Int, toExclusive : Int) : async* Int {
       todo()
     };
 

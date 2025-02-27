@@ -2062,7 +2062,7 @@ module {
 
   func containsInLeaf<T>(leafNode : Leaf<T>, compare : (T, T) -> Order.Order, element : T) : Bool {
     switch (NodeUtil.getElementIndex<T>(leafNode.data, compare, element)) {
-      case (#elementFound(index)) {
+      case (#elementFound(_index)) {
         true
       };
       case _ false

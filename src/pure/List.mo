@@ -98,7 +98,7 @@ module {
   ///
   /// Space: O(1)
   public func get<T>(list : List<T>, n : Nat) : ?T = switch list {
-    case (?(h, t)) if (n == 0) ?h else get(t, n - 1);
+    case (?(h, t)) if (n == 0) ?h else get(t, n - 1 : Nat);
     case null null
   };
 
@@ -347,7 +347,7 @@ module {
   /// Space: O(n)
   public func take<T>(list : List<T>, n : Nat) : List<T> = if (n == 0) null else switch list {
     case null null;
-    case (?(h, t)) ?(h, take(t, n - 1))
+    case (?(h, t)) ?(h, take(t, n - 1 : Nat))
   };
 
   /// Drop the first `n` elements from the given list.
@@ -364,8 +364,8 @@ module {
   ///
   /// Space: O(1)
   public func drop<T>(list : List<T>, n : Nat) : List<T> = if (n == 0) list else switch list {
-    case null null;
-    case (?(_, t)) drop(t, n - 1)
+    case (?(_, t)) drop(t, n - 1 : Nat);
+    case null null
   };
 
   /// Collapses the elements in `list` into a single value by starting with `base`
@@ -689,7 +689,7 @@ module {
   public func split<T>(list : List<T>, n : Nat) : (List<T>, List<T>) = if (n == 0) (null, list) else switch list {
     case null (null, null);
     case (?(h, t)) {
-      let (l1, l2) = split(t, n - 1);
+      let (l1, l2) = split(t, n - 1 : Nat);
       (?(h, l1), l2)
     }
   };

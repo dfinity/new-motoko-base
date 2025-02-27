@@ -1138,7 +1138,7 @@ module {
     };
 
     public func forEach<K, V>(map : Map<K, V>, operation : (K, V) -> ()) {
-      func combine(acc : Null, key : K, value : V) : Null {
+      func combine(_acc : Null, key : K, value : V) : Null {
         operation(key, value);
         null
       };

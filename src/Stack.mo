@@ -34,6 +34,8 @@
 /// * Space: `O(n)`.
 /// `n` denotes the number of elements stored on the stack.
 
+// TODO: optimize or re-use pure/List operations (e.g. for `any` etc)
+
 import Order "Order";
 import Types "Types";
 import PureList "pure/List";
@@ -99,17 +101,16 @@ module {
     var cur = list;
     loop {
       switch cur {
-	case (?(_, next)) {
-	  size += 1;
-	  cur := next
-	};
+        case (?(_, next)) {
+          size += 1;
+          cur := next
+        };
         case null {
-	  return { var top = list; var size }
+          return { var top = list; var size }
         }
       }
     }
   };
-
 
   /// Create a new empty mutable stack.
   ///

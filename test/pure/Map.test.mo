@@ -768,8 +768,10 @@ run(
         "repeated delete",
         do {
           let map = buildTestMap();
-          let (map1, true) = Map.delete(map, Nat.compare, 1);
-          let (map2, false) = Map.delete(map1, Nat.compare, 1);
+          let (map1, result1) = Map.delete(map, Nat.compare, 1);
+          assert result1;
+          let (map2, result2) = Map.delete(map1, Nat.compare, 1);
+          assert not result2;
           map2
         },
         MapMatcher(expectedEntries([0, 2]))
@@ -920,7 +922,7 @@ run(
         "not equal",
         do {
           let map1 = smallMap();
-          let (map2, _) = Map.delete(map1, Nat.compare, smallSize - 1);
+          let (map2, _) = Map.delete(map1, Nat.compare, smallSize - 1 : Nat);
           Map.equal(map1, map2, Nat.compare, Text.equal)
         },
         M.equals(T.bool(false))
@@ -931,7 +933,7 @@ run(
           let map = smallMap();
           Map.maxEntry(map)
         },
-        M.equals(T.optional(entryTestable, ?(smallSize - 1, Nat.toText(smallSize - 1))))
+        M.equals(T.optional(entryTestable, ?(smallSize - 1 : Nat, Nat.toText(smallSize - 1))))
       ),
       test(
         "minimum entry",
@@ -1017,7 +1019,7 @@ run(
             }
           );
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.get(output, Nat.compare, index) == +index)
+            assert (Map.get(output, Nat.compare, index) == ?index)
           };
           Map.size(output)
         },
@@ -1127,7 +1129,8 @@ run(
       test(
         "compare less key",
         do {
-          let (map1, true) = Map.delete(smallMap(), Nat.compare, smallSize - 1);
+          let (map1, result1) = Map.delete(smallMap(), Nat.compare, smallSize - 1 : Nat);
+          assert result1;
           let map2 = smallMap();
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #less);
           true
@@ -1138,7 +1141,7 @@ run(
         "compare less value",
         do {
           let map1 = smallMap();
-          let (map2, _) = Map.swap(smallMap(), Nat.compare, smallSize - 1, "Last");
+          let (map2, _) = Map.swap(smallMap(), Nat.compare, smallSize - 1 : Nat, "Last");
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #less);
           true
         },
@@ -1158,7 +1161,8 @@ run(
         "compare greater key",
         do {
           let map1 = smallMap();
-          let (map2, true) = Map.delete(smallMap(), Nat.compare, smallSize - 1);
+          let (map2, result2) = Map.delete(smallMap(), Nat.compare, smallSize - 1 : Nat);
+          assert result2;
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #greater);
           true
         },
@@ -1167,7 +1171,7 @@ run(
       test(
         "compare greater value",
         do {
-          let (map1, _) = Map.swap(smallMap(), Nat.compare, smallSize - 1, "Last");
+          let (map1, _) = Map.swap(smallMap(), Nat.compare, smallSize - 1 : Nat, "Last");
           let map2 = smallMap();
           assert (Map.compare(map1, map2, Nat.compare, Text.compare) == #greater);
           true

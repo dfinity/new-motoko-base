@@ -11,8 +11,6 @@ import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
 
-import Random2 "mo:base/Random";
-
 let { run; test; suite } = Suite;
 
 let c = Nat.compare;
@@ -38,7 +36,7 @@ object Random {
 
   public func nextNat(range : (Nat, Nat)) : Nat {
     let n = next();
-    let v = n % (range.1 - range.0 + 1) + range.0;
+    let v = n % (range.1 - range.0 + 1) : Nat + range.0;
     v
   };
 
@@ -141,7 +139,7 @@ func run_all_props(range : (Nat, Nat), size : Nat, map_samples : Nat, query_samp
               "get(add(add(m, c, k, v1), c, k, v2), c, k) == ?v2",
               func(m, k) {
                 let (v1, v2) = ("V1", "V2");
-                Map.get(Map.add(Map.add(m, c, k, v1), c, k, v2), c, k) == v2
+                Map.get(Map.add(Map.add(m, c, k, v1), c, k, v2), c, k) == ?v2
               }
             )
           ]
@@ -284,7 +282,7 @@ func run_all_props(range : (Nat, Nat), size : Nat, map_samples : Nat, query_samp
                 let k = Map.keys(m);
                 let v = Map.values(m);
                 for (e in Map.entries(m)) {
-                  if (e.0 != k.next() or e.1 != v.next()) return false
+                  if (?e.0 != k.next() or ?e.1 != v.next()) return false
                 };
                 return true
               }
@@ -372,14 +370,14 @@ func run_all_props(range : (Nat, Nat), size : Nat, map_samples : Nat, query_samp
             prop(
               "all through fold",
               func(m) {
-                let pred = func(k : Nat, v : Text) : Bool = (k <= range.1 - 2 and range.0 + 2 <= k);
+                let pred = func(k : Nat, v : Text) : Bool = (k <= (range.1 - 2 : Nat) and range.0 + 2 <= k);
                 Map.all(m, pred) == Map.foldLeft<Nat, Text, Bool>(m, true, func(acc, k, v) { acc and pred(k, v) })
               }
             ),
             prop(
               "any through fold",
               func(m) {
-                let pred = func(k : Nat, v : Text) : Bool = (k >= range.1 - 1 or range.0 + 1 >= k);
+                let pred = func(k : Nat, v : Text) : Bool = (k >= (range.1 - 1 : Nat) or range.0 + 1 >= k);
                 Map.any(m, pred) == Map.foldLeft<Nat, Text, Bool>(m, false, func(acc, k, v) { acc or pred(k, v) })
               }
             ),

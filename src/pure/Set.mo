@@ -17,7 +17,6 @@
 /// * Ken Friis Larsen's [RedBlackMap.sml](https://github.com/kfl/mosml/blob/master/src/mosmllib/Redblackmap.sml), which itself is based on:
 /// * Stefan Kahrs, "Red-black trees with types", Journal of Functional Programming, 11(4): 425-432 (2001), [version 1 in web appendix](http://www.cs.ukc.ac.uk/people/staff/smk/redblack/rb.html).
 
-import Debug "../Debug";
 import Runtime "../Runtime";
 import List "../List"; // NB: imperative!
 import Iter "../Iter";

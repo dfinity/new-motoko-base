@@ -1,3 +1,5 @@
+// @testmode wasi
+
 import Suite "mo:matchers/Suite";
 import M "mo:matchers/Matchers";
 import T "mo:matchers/Testable";
@@ -396,8 +398,8 @@ let size = Suite.suite(
     ),
     Suite.test(
       "many",
-      do { let l = List.repeat('Y', 20_000); List.size l },
-      M.equals(T.nat 20_000)
+      do { let l = List.repeat('Y', 100_000); List.size l },
+      M.equals(T.nat 100_000)
     )
   ]
 );

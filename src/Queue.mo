@@ -40,10 +40,10 @@
 /// * Space: `O(n)`.
 /// `n` denotes the number of elements stored in the queue.
 
+import PureQueue "pure/Queue";
 import Iter "Iter";
 import Order "Order";
 import Types "Types";
-import PureQueue "pure/Queue";
 
 module {
   public type Queue<T> = Types.Queue.Queue<T>;
@@ -70,11 +70,11 @@ module {
     let iter = values(queue);
     var current = pureQueue;
     loop {
-      switch(iter.next()) {
+      switch (iter.next()) {
         case null { return current };
-        case (?val) { current := PureQueue.pushBack(current, val) };
-      };
-    };
+        case (?val) { current := PureQueue.pushBack(current, val) }
+      }
+    }
   };
 
   /// Converts an immutable, purely functional queue to a mutable queue.
@@ -97,11 +97,11 @@ module {
     let queue = empty<T>();
     let iter = PureQueue.values(pureQueue);
     loop {
-      switch(iter.next()) {
+      switch (iter.next()) {
         case null { return queue };
-        case (?val) { pushBack(queue, val) };
-      };
-    };
+        case (?val) { pushBack(queue, val) }
+      }
+    }
   };
 
   /// Create a new empty mutable double-ended queue.

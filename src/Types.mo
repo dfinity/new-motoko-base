@@ -115,6 +115,7 @@ module {
       var size : Nat
     }
   };
+
   public type Map<K, V> = Map.Map<K, V>;
 
   public module Stack {
@@ -131,21 +132,35 @@ module {
   public type Stack<T> = Stack.Stack<T>;
 
   public module Pure {
-
     public type List<T> = ?(T, List<T>);
 
-    public type Map<K, V> = {
-      size : Nat;
-      root : Tree<K, V>
-    };
+    public module Map {
+      public type Map<K, V> = {
+        size : Nat;
+        root : Tree<K, V>
+      };
+      public type Tree<K, V> = {
+        #red : (Tree<K, V>, K, V, Tree<K, V>);
+        #black : (Tree<K, V>, K, V, Tree<K, V>);
+        #leaf
+      };
 
-    public type Tree<K, V> = {
-      #red : (Tree<K, V>, K, V, Tree<K, V>);
-      #black : (Tree<K, V>, K, V, Tree<K, V>);
-      #leaf
     };
+    public type Map<K, V> = Map.Map<K, V>;
 
     public type Queue<T> = (List<T>, Nat, List<T>);
-    public type Set<T> = () // Placeholder
+
+    public module Set {
+      public type Tree<T> = {
+        #red : (Tree<T>, T, Tree<T>);
+        #black : (Tree<T>, T, Tree<T>);
+        #leaf
+      };
+
+      public type Set<T> = { size : Nat; root : Tree<T> }
+    };
+
+    public type Set<T> = Set.Set<T>;
+
   }
 }

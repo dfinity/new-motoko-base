@@ -813,16 +813,13 @@ module {
 
   public func toText<T>(list : List<T>, f : T -> Text) : Text {
     var text = "[";
-    var first = false;
     forEach(
       list,
       func(item : T) {
-        if first {
+        if (text.size() > 1) {
           text #= ", "
-        } else {
-          first := true
         };
-        text #= f(item)
+        text #= f item
       }
     );
     text # "]"

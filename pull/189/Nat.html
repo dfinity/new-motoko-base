@@ -14,7 +14,7 @@ if the input is not a valid natural number.</p>
 <p>The textual representation <em>must not</em> contain underscores.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.fromText &quot;1234&quot; // =&gt; ?1234</code></pre></p></div><div class="declaration"><h4 class="function" id="fromInt"><code><span class="keyword">public func </span><span class="fnname">fromInt</span>(<span class="parameter">int</span> : <span class="type">Int</span>) : ?<a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
+Nat.fromText &quot;1234&quot; // =&gt; ?1234</code></pre></p></div><div class="declaration"><h4 class="function" id="fromInt"><code><span class="keyword">public func </span><span class="fnname">fromInt</span>(<span class="parameter">int</span> : <span class="type">Int</span>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Debug &quot;mo:base/Debug&quot;;

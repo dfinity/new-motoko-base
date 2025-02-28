@@ -586,11 +586,11 @@ module {
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func tabulate<T>(n : Nat, f : Nat -> T) : List<T> {
-    var i = n;
+    var i = 0;
     var l : List<T> = null;
-    while (i != 0) {
+    while (i < n) {
       l := ?(f i, l);
-      i -= 1
+      i += 1
     };
     reverse l
   };

@@ -6,9 +6,18 @@
 
 ---
 
-This repository contains the spec for a revamped [Motoko](https://github.com/dfinity/motoko) base library. 
+This repository contains the source code for a revamped [Motoko](https://github.com/dfinity/motoko) base library. 
 
-If you are new to Motoko, the current version of the base library is available [here](https://github.com/dfinity/motoko-base).
+If you are new to Motoko, the original base library is available [here](https://github.com/dfinity/motoko-base).
+
+## Quick Start
+
+A preview of the new base library is available as a [Mops package](https://mops.one/new-base).
+Try it out with the following change to your `mops.toml` config file:
+
+```toml
+base = "new-base"
+```
 
 ## Local Environment
 

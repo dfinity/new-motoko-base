@@ -207,7 +207,8 @@ let mapResult = Suite.suite(
     ),
     Suite.test(
       "large",
-      List.mapResult<Char, (), ()>(hugeList, func _ = #ok),
+      List.mapResult<Char, (), ()>(hugeList, func _ = #ok)
+      |> Result.mapOk<List.List<()>, List.List<()>, ()>(_, func _ = null),
       M.equals(T.result<List.List<()>, ()>(T.listTestable<()> unit, unit, #ok null))
     )
   ]

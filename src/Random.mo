@@ -147,10 +147,10 @@ module {
     };
 
     public func intRange(fromInclusive : Int, toExclusive : Int) : Int {
-      switch (Nat.fromInt(toExclusive - fromInclusive - 1)) {
-        case null Runtime.trap("Random.intRange(): fromInclusive >= toExclusive");
-        case (?range) Nat64.toNat(uniform64(Nat64.fromNat(range))) + fromInclusive
-      }
+      if (fromInclusive >= toExclusive) {
+        Runtime.trap("Random.intRange(): fromInclusive >= toExclusive")
+      };
+      Nat64.toNat(uniform64(Nat64.fromNat(Nat.fromInt(toExclusive - fromInclusive - 1)))) + fromInclusive
     };
 
   };

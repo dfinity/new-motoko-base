@@ -110,8 +110,12 @@ module {
   /// Debug.print(debug_show Int.toNat(-1)); // => null
   /// Debug.print(debug_show Int.toNat(1234)); // => ?1234
   /// ```
-  public func toNat(int : Int) : ?Nat {
-    if (int < 0) { null } else { ?abs(int) }
+  public func toNat(int : Int) : Nat {
+    if (int < 0) {
+      Runtime.trap("Int.toNat(): negative input value")
+    } else {
+      abs(int)
+    }
   };
 
   /// Converts a natural number to an integer.

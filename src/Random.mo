@@ -10,7 +10,6 @@ import Blob "Blob";
 import Iter "Iter";
 import Runtime "Runtime";
 import PRNG "internal/PRNG";
-import { todo } "Debug";
 
 module {
 
@@ -81,9 +80,7 @@ module {
           iter := generator().vals();
           switch (bitIter.next()) {
             case (?bit) { bit };
-            case null {
-              Runtime.trap("Random.bool(): generator produced empty Blob")
-            }
+            case null Runtime.trap("Random.bool(): generator produced empty Blob")
           }
         }
       }
@@ -97,9 +94,7 @@ module {
           iter := generator().vals();
           switch (iter.next()) {
             case (?byte) { byte };
-            case null {
-              Runtime.trap("Random.nat8(): generator produced empty Blob")
-            }
+            case null Runtime.trap("Random.nat8(): generator produced empty Blob")
           }
         }
       }
@@ -113,12 +108,6 @@ module {
       if (max == 0) {
         return 0
       };
-      // if (max == 1) {
-      //   return switch (bool()) {
-      //     case false 0;
-      //     case true 1
-      //   }
-      // };
       if (max == Nat64.maxValue) {
         return nat64()
       };
@@ -158,10 +147,10 @@ module {
     };
 
     public func intRange(fromInclusive : Int, toExclusive : Int) : Int {
-      switch (Nat.fromInt(toExclusive - fromInclusive - 1)) {
-        case null Runtime.trap("Random.intRange(): fromInclusive >= toExclusive");
-        case (?range) Nat64.toNat(uniform64(Nat64.fromNat(range))) + fromInclusive
-      }
+      if (fromInclusive >= toExclusive) {
+        Runtime.trap("Random.intRange(): fromInclusive >= toExclusive")
+      };
+      Nat64.toNat(uniform64(Nat64.fromNat(Nat.fromInt(toExclusive - fromInclusive - 1)))) + fromInclusive
     };
 
   };
@@ -174,7 +163,7 @@ module {
       public func next() : ?Bool {
         if (0 : Nat8 == mask) {
           switch (iter.next()) {
-            case null { null };
+            case null null;
             case (?w) {
               byte := w;
               mask := 0x40;
@@ -197,9 +186,7 @@ module {
           iter := (await* generator()).vals();
           switch (bitIter.next()) {
             case (?bit) { bit };
-            case null {
-              Runtime.trap("AsyncRandom.bool(): generator produced empty Blob")
-            }
+            case null Runtime.trap("AsyncRandom.bool(): generator produced empty Blob")
           }
         }
       }

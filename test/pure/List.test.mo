@@ -223,6 +223,8 @@ let repeat = Suite.suite(
   ]
 );
 
+let hugeList = List.repeat('Y', 100_000);
+
 let tabulate = Suite.suite(
   "tabulate",
   [
@@ -242,9 +244,9 @@ let tabulate = Suite.suite(
     ),
     Suite.test(
       "large-list",
-      List.tabulate<Nat>(10000, func i = 0),
+      List.tabulate<Char>(100_000, func _ = 'Y'),
       M.equals(
-        T.list<Nat>(T.natTestable, List.repeat(0, 10000))
+        T.list<Char>(T.charTestable, hugeList)
       )
     )
   ]
@@ -377,8 +379,6 @@ let pop = Suite.suite(
     )
   ]
 );
-
-let hugeList = List.repeat('Y', 100_000);
 
 let size = Suite.suite(
   "size",

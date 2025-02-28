@@ -1222,7 +1222,7 @@
       "public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool",
       "public func drop<T>(list : List<T>, n : Nat) : List<T>",
       "public func empty<T>() : List<T>",
-      "public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool",
+      "public func equal<T>(list1 : List<T>, list2 : List<T>, equalItem : (T, T) -> Bool) : Bool",
       "public func filter<T>(list : List<T>, f : T -> Bool) : List<T>",
       "public func filterMap<T, R>(list : List<T>, f : T -> ?R) : List<R>",
       "public func find<T>(list : List<T>, f : T -> Bool) : ?T",

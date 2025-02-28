@@ -1,6 +1,6 @@
 import Result "../src/Result";
 import Int "../src/Int";
-import { suite; test } = "mo:test";
+import { suite; test } "mo:test";
 
 func makeNatural(x : Int) : Result.Result<Nat, Text> = if (x >= 0) {
   #ok(Int.abs(x))

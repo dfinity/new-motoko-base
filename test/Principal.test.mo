@@ -1,7 +1,7 @@
 import Principal "../src/Principal";
 import Text "../src/Text";
 import Blob "../src/Blob";
-import { suite; test; expect } = "mo:test";
+import { suite; test; expect } "mo:test";
 
 let principal1 = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
 let defaultAccount1 : Blob = "\57\4E\66\E1\B5\DD\EF\EA\78\73\6B\E4\6C\4F\61\21\31\98\88\90\08\2E\E8\0F\97\F6\B6\DB\ED\72\84\1E";

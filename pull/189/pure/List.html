@@ -259,16 +259,16 @@ List.any&lt;Nat&gt;(
 <p>Runtime: O(size(list))</p>
 <p>Space: O(1)</p>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
-</p></div><div class="declaration"><h4 class="function" id="merge"><code><span class="keyword">public func </span><span class="fnname">merge</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">lessThanOrEqual</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge two ordered lists into a single ordered list.
+</p></div><div class="declaration"><h4 class="function" id="merge"><code><span class="keyword">public func </span><span class="fnname">merge</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Merge two ordered lists into a single ordered list.
 This function requires both list to be ordered as specified
-by the given relation <code>lessThanOrEqual</code>.</p>
+by the given relation <code>compare</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
 
 List.merge&lt;Nat&gt;(
   ?(1, ?(2, ?(4, null))),
   ?(2, ?(4, ?(6, null))),
-  func (n1, n2) = n1 &lt;= n2
+  Nat.compare
 ); // =&gt; ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))))),</code></pre>
 
 <p>Runtime: O(size(l1) + size(l2))</p>

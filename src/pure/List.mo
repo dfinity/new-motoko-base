@@ -8,6 +8,8 @@
 /// import List "mo:base/List";
 /// ```
 
+// TODO: future: all examples are meant to be self-contained actors, don't include common code either.
+// TODO: future: many switches test for incommon null case first - reorder for perf.
 import { Array_tabulate } "mo:⛔";
 import Array "../Array";
 import Iter "../Iter";
@@ -193,6 +195,7 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  // TODO: future: make TR - wasn't TR in base either
   public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> = switch list {
     case null null;
     case (?(h, t)) ?(f h, map(t, f))
@@ -209,6 +212,7 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
+  // TODO: future: make TR - wasn't TR in base either
   public func filter<T>(list : List<T>, f : T -> Bool) : List<T> = switch list {
     case null null;
     case (?(h, t)) if (f h) ?(h, filter(t, f)) else filter(t, f)
@@ -230,6 +234,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  // TODO: future: make TR - wasn't TR in base either
   public func filterMap<T, R>(list : List<T>, f : T -> ?R) : List<R> = switch list {
     case null null;
     case (?(h, t)) {
@@ -254,6 +259,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  // TODO: now: make TR - was TR in base
   public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
     case null #ok null;
     case (?(h, t)) {
@@ -280,6 +286,7 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  // TODO: future: make TR - wasn't TR in base either
   public func partition<T>(list : List<T>, f : T -> Bool) : (List<T>, List<T>) = switch list {
     case null (null, null);
     case (?(h, t)) {
@@ -302,11 +309,13 @@ module {
   /// Runtime: O(size(l))
   ///
   /// Space: O(size(l))
+  // TODO: now make TR - append was TR in base
   public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T> = switch list1 {
     case null list2;
     case (?(h, t)) ?(h, concat(t, list2))
   };
 
+  // TODO: documentation
   public func join<T>(list : Iter.Iter<List<T>>) : List<T> {
     let ?l = list.next() else return null;
     let ls = join list;
@@ -344,6 +353,7 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
+  // TODO: future: make TR - wasn't TR in base either
   public func take<T>(list : List<T>, n : Nat) : List<T> = if (n == 0) null else switch list {
     case null null;
     case (?(h, t)) ?(h, take(t, n - 1 : Nat))
@@ -503,6 +513,7 @@ module {
   ///
   /// *Runtime and space assumes that `lessThanOrEqual` runs in O(1) time and space.
   // TODO: replace by merge taking a compare : (T, T) -> Order.Order function?
+  // TODO: now ^^^
   public func merge<T>(list1 : List<T>, list2 : List<T>, lessThanOrEqual : (T, T) -> Bool) : List<T> = switch (list1, list2) {
     case (?(h1, t1), ?(h2, t2)) {
       if (lessThanOrEqual(h1, h2)) {
@@ -530,6 +541,7 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that `equalFunc` runs in O(1) time and space.
+  // TODO: rename equalFunc equalItem
   public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool = switch (list1, list2) {
     case (null, null) true;
     case (?(h1, t1), ?(h2, t2)) equalFunc(h1, h2) and equal(t1, t2, equalFunc);
@@ -554,6 +566,7 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
+  // TODO: rename compare compareItem
   public func compare<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : Order.Order {
     type Order = Order.Order;
     func go(list1 : List<T>, list2 : List<T>, comp : (T, T) -> Order) : Order = switch (list1, list2) {
@@ -584,6 +597,7 @@ module {
   /// Space: O(n)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  // TODO: now: make TR - was TR in base
   public func tabulate<T>(n : Nat, f : Nat -> T) : List<T> {
     func go(at : Nat, n : Nat) : List<T> = if (n == 0) null else ?(f at, go(at + 1, n - 1));
     go(0, n)
@@ -616,6 +630,7 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
+  // TODO: now: make TR - was TR in base (see replicate)
   public func repeat<T>(item : T, n : Nat) : List<T> = if (n == 0) null else ?(item, repeat(item, n - 1 : Nat));
 
   /// Create a list of pairs from a pair of lists.
@@ -677,6 +692,7 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
+  // TODO: future: make TR
   public func split<T>(list : List<T>, n : Nat) : (List<T>, List<T>) = if (n == 0) (null, list) else switch list {
     case null (null, null);
     case (?(h, t)) {
@@ -705,6 +721,7 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
+  // TODO: future: make TR
   public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> = switch (split(list, n)) {
     case (null, _) { if (n == 0) trap "pure/List.chunks()"; null };
     case (pre, null) ?(pre, null);
@@ -742,6 +759,7 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
+  // TODO: future: make TR  (not TR in base either)
   public func fromArray<T>(array : [T]) : List<T> {
     func go(from : Nat) : List<T> = if (from < array.size()) ?(array.get from, go(from + 1)) else null;
     go 0
@@ -758,6 +776,7 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
+  // TODO: future: optimize to avoid array copy
   public func fromVarArray<T>(array : [var T]) : List<T> = fromArray<T>(Array.fromVarArray<T>(array));
 
   /// Create an array from a list.
@@ -785,6 +804,7 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
+  // TODO: future: optimize to avoid array copy
   public func toVarArray<T>(list : List<T>) : [var T] = Array.toVarArray<T>(toArray<T>(list));
 
   /// Turn an iterator into a list, consuming it.
@@ -797,6 +817,7 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
+  // TODO: make TR was TR in base
   public func fromIter<T>(iter : Iter.Iter<T>) : List<T> = switch (iter.next()) {
     case null null;
     case (?item) ?(item, fromIter iter)

@@ -145,7 +145,17 @@ List.concat&lt;Nat&gt;(
 
 <p>Runtime: O(size(l))</p>
 <p>Space: O(size(l))</p>
-</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Flatten, or repatedly concatenate, a list of lists as a list.</p>
+</p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Flatten, or repatedly concatenate, an iterator of lists as a list.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+List.join&lt;Nat&gt;(
+  [ ?(0, ?(1, ?(2, null))),
+    ?(3, ?(4, ?(5, null))) ] |&gt; Iter.fromArray _)
+); // =&gt; ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))))</code></pre>
+
+<p>Runtime: O(size*size)</p>
+<p>Space: O(size*size)</p>
+</p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Flatten, or repatedly concatenate, a list of lists as a list.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize
 List.flatten&lt;Nat&gt;(

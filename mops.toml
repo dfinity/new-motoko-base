@@ -1,5 +1,5 @@
 [package]
-name = "core"
+name = "new-base"
 version = "0.0.0"
 description = "The Motoko new-base library (replaces `base`)"
 repository = "https://github.com/dfinity/new-motoko-base"

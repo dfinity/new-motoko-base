@@ -1,4 +1,4 @@
-name: publish on mops
+name: publish on Mops
 
 on:
   workflow_dispatch:

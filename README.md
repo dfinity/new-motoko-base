@@ -12,22 +12,22 @@ If you are new to Motoko, the original base library is available [here](https://
 
 ## Quick Start
 
-A preview of the new base library is available as a [Mops package](https://mops.one/new-base).
-Try it out by making the following change to your `mops.toml` config file:
-
-```toml
-base = "https://github.com/dfinity/new-motoko-base"
-```
-
-It's also possible to start using the new base library in parallel:
+A preview of the new base library is available via the [`new-base`](https://mops.one/new-base) Mops package.
+It's possible to start using both versions in parallel:
 
 ```toml
 base = "0.14.2"
 new-base = "0.1.0"
 ```
 
-Since this is a preview release for community feedback, please expect breaking changes and
-make sure to report any bugs or inconsistencies by opening a [GitHub issue](https://github.com/dfinity/new-motoko-base/issues). 
+You can quickly try out the new base library by making the following change to your `mops.toml` config file:
+
+```toml
+base = "https://github.com/dfinity/new-motoko-base"
+```
+
+Since this is a preview release for community feedback, expect breaking changes.
+Please report any bugs or inconsistencies by opening a [GitHub issue](https://github.com/dfinity/new-motoko-base/issues). 
 
 ## Local Environment
 

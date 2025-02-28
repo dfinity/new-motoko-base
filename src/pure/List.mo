@@ -586,8 +586,13 @@ module {
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func tabulate<T>(n : Nat, f : Nat -> T) : List<T> {
-    func go(at : Nat, n : Nat) : List<T> = if (n == 0) null else ?(f at, go(at + 1, n - 1));
-    go(0, n)
+    var i = n;
+    var l : List<T> = null;
+    while (i != 0) {
+      l := ?(f i, l);
+      i -= 1
+    };
+    reverse l
   };
 
   /// Create a list with exactly one element.

@@ -309,6 +309,19 @@ module {
     }
   )(reverse list1, list2);
 
+  /// Flatten, or repatedly concatenate, an iterator of lists as a list.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// List.join<Nat>(
+  ///   [ ?(0, ?(1, ?(2, null))),
+  ///     ?(3, ?(4, ?(5, null))) ] |> Iter.fromArray _)
+  /// ); // => ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))))
+  /// ```
+  ///
+  /// Runtime: O(size*size)
+  ///
+  /// Space: O(size*size)
   public func join<T>(list : Iter.Iter<List<T>>) : List<T> {
     let ?l = list.next() else return null;
     let ls = join list;

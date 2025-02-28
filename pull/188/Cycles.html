@@ -5,14 +5,12 @@ This library provides imperative operations for observing cycles, transferring c
 observing refunds of cycles.</p>
 <p><strong>NOTE:</strong> Since cycles measure computational resources, the value of  <code>balance()</code> can change from one call to the next.</p>
 <p>Cycles can be transferred from the current actor to another actor with the evaluation of certain forms of expression.
-In particular, the expression must be a call to a shared function, a call to a local function with an <code>async</code> return type, or a simple <code>async</code> expression. 
-To attach an amount of cycles to an expression, simply prefix the expression <code>&lt;exp&gt; with </code>(with cycles = &lt;amount&gt;)<code>, that is </code>(with cycles = &lt;amount&gt;) &lt;exp&gt;<code>. 
-
-**NOTE:** Attaching cycles will trap if the amount specified exceeds </code>2 ** 128<code>cycles.
-
-Upon the call, but not before, the amount of cycles is deducted from</code>balance()<code>.
-If this total exceeds </code>balance()<code>, the caller traps, aborting the call without consuming the cycles.
-Note that attaching cycles to a call to a local function call or </code>async` expression just transfers cycles from the current actor to itself.</p>
+In particular, the expression must be a call to a shared function, a call to a local function with an <code>async</code> return type, or a simple <code>async</code> expression.
+To attach an amount of cycles to an expression <code>&lt;exp&gt;</code>, simply prefix the expression with <code>(with cycles = &lt;amount&gt;)</code>, that is, <code>(with cycles = &lt;amount&gt;) &lt;exp&gt;</code>.</p>
+<p><strong>NOTE:</strong> Attaching cycles will trap if the amount specified exceeds <code>2 ** 128</code> cycles.</p>
+<p>Upon the call, but not before, the amount of cycles is deducted from <code>balance()</code>.
+If this total exceeds <code>balance()</code>, the caller traps, aborting the call without consuming the cycles.
+Note that attaching cycles to a call to a local function call or <code>async</code> expression just transfers cycles from the current actor to itself.</p>
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;

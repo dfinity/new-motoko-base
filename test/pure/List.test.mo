@@ -274,6 +274,11 @@ let concat = Suite.suite(
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(20000, func i = i))
       )
+    ),
+    Suite.test(
+      "huge-list",
+      List.concat(hugeList, List.singleton 'N') |> List.last _,
+      M.equals(T.optional(T.charTestable, ?'N'))
     )
   ]
 );

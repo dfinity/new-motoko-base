@@ -85,8 +85,7 @@ module {
   /// Queries and unbounded-time update messages return null.
   public func replyDeadline() : ?Nat {
     let raw = Prim.replyDeadline();
-    if (raw == 0) null
-    else ?Prim.nat64ToNat(raw)
+    if (raw == 0) null else ?Prim.nat64ToNat(raw)
   };
 
 }

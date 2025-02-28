@@ -1,5 +1,3 @@
-// @  testXmode wasi
-
 import Suite "mo:matchers/Suite";
 import M "mo:matchers/Matchers";
 import T "mo:matchers/Testable";

@@ -6,14 +6,15 @@
 ///
 /// **NOTE:** Since cycles measure computational resources, the value of  `balance()` can change from one call to the next.
 ///
-/// To attach an amount of cycles to be transferred in a call,
-/// that is, evaluation of a shared function call or `async`
-/// expression, one prefixes the expression with a parenthetical
-/// of the form `(with cycles = <amount>) <call>`.
-/// **NOTE:** Traps if the cycles specified would exceed `2 ** 128` cycles.
+/// Cycles can be transferred from the current actor to another actor with the evaluation of certain forms of expression.
+/// In particular, the expression must be a call to a shared function, a call to a local function with an `async` return type, or a simple `async` expression. 
+/// To attach an amount of cycles to an expression, simply prefix the expression `<exp> with `(with cycles = <amount>)`, that is `(with cycles = <amount>) <exp>`. 
+///
+/// **NOTE:** Attaching cycles will trap if the amount specified exceeds `2 ** 128` cycles.
 ///
 /// Upon the call, but not before, the amount of cycles is deducted from `balance()`.
-/// If this total exceeds `balance()`, the caller traps, aborting the call.
+/// If this total exceeds `balance()`, the caller traps, aborting the call without consuming the cycles.
+/// Note that attaching cycles to a call to a local function call or `async` expression just transfers cycles from the current actor to itself.
 ///
 /// Example for use on the ICP:
 /// ```motoko no-repl

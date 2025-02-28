@@ -919,7 +919,7 @@ module {
     deleteAll(
       set,
       compare,
-      Iter.filter<T>(array.values(), func(element : T) : Bool = not predicate(element))
+      Iter.filter<T>(array.vals(), func(element : T) : Bool = not predicate(element))
     )
   };
 

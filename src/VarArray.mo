@@ -124,7 +124,7 @@ module {
   ///
   /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func find<T>(array : [var T], predicate : T -> Bool) : ?T {
-    for (element in array.values()) {
+    for (element in array.vals()) {
       if (predicate element) {
         return ?element
       }
@@ -317,7 +317,7 @@ module {
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func forEach<T>(array : [var T], f : T -> ()) {
-    for (item in array.values()) {
+    for (item in array.vals()) {
       f(item)
     }
   };
@@ -615,7 +615,7 @@ module {
   /// *Runtime and space assumes that `combine` runs in O(1) time and space.
   public func foldLeft<T, A>(array : [var T], base : A, combine : (A, T) -> A) : A {
     var acc = base;
-    for (element in array.values()) {
+    for (element in array.vals()) {
       acc := combine(acc, element)
     };
     acc
@@ -682,7 +682,7 @@ module {
   /// Space: O(number of elements in array)
   public func flatten<T>(arrays : [var [var T]]) : [var T] {
     var flatSize = 0;
-    for (subArray in arrays.values()) {
+    for (subArray in arrays.vals()) {
       flatSize += subArray.size()
     };
 
@@ -800,7 +800,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func values<T>(array : [var T]) : Types.Iter<T> = array.values();
+  public func values<T>(array : [var T]) : Types.Iter<T> = array.vals();
 
   /// Iterator provides a single method `next()`, which returns
   /// pairs of (index, element) in order, or `null` when out of elements to iterate over.
@@ -844,7 +844,7 @@ module {
   ///
   /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func all<T>(array : [var T], predicate : T -> Bool) : Bool {
-    for (element in array.values()) {
+    for (element in array.vals()) {
       if (not predicate(element)) {
         return false
       }
@@ -865,7 +865,7 @@ module {
   ///
   /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
   public func any<T>(array : [var T], predicate : T -> Bool) : Bool {
-    for (element in array.values()) {
+    for (element in array.vals()) {
       if (predicate(element)) {
         return true
       }

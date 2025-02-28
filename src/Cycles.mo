@@ -100,33 +100,6 @@ module {
   /// ```
   public let accept : <system>(amount : Nat) -> (accepted : Nat) = Prim.cyclesAccept;
 
-  /// Indicates additional `amount` of cycles to be transferred in
-  /// the next call, that is, evaluation of a shared function call or
-  /// async expression.
-  /// Traps if the current total would exceed `2 ** 128` cycles.
-  /// Upon the call, but not before, the total amount of cycles ``add``ed since
-  /// the last call is deducted from `balance()`.
-  /// If this total exceeds `balance()`, the caller traps, aborting the call.
-  ///
-  /// **Note**: The implicit register of added amounts is reset to zero on entry to
-  /// a shared function and after each shared function call or resume from an await.
-  ///
-  /// Example for use on the ICP (for simplicity, only transferring cycles to itself):
-  /// ```motoko no-repl
-  /// import Cycles "mo:base/Cycles";
-  ///
-  /// actor {
-  ///   func operation() : async() {
-  ///     ignore Cycles.accept<system>(10_000_000);
-  ///   };
-  ///
-  ///   public func main() : async() {
-  ///     await (with cycles = 15_000_000) operation();
-  ///   }
-  /// }
-  /// ```
-  public let add : <system>(amount : Nat) -> () = Prim.cyclesAdd;
-
   /// Reports `amount` of cycles refunded in the last `await` of the current
   /// context, or zero if no await has occurred yet.
   /// Calling `refunded()` is solely informational and does not affect `balance()`.

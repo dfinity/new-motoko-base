@@ -2044,7 +2044,7 @@ module {
 
   func containsInInternal<T>(internalNode : Internal<T>, compare : (T, T) -> Order.Order, element : T) : Bool {
     switch (NodeUtil.getElementIndex<T>(internalNode.data, compare, element)) {
-      case (#elementFound(_index)) {
+      case (#elementFound _index) {
         true
       };
       case (#notFound(index)) {

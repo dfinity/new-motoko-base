@@ -303,10 +303,12 @@ module {
   /// Runtime: O(size(l))
   ///
   /// Space: O(size(l))
-  public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T> = switch list1 {
-    case null list2;
-    case (?(h, t)) ?(h, concat(t, list2))
-  };
+  public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T> = (
+    func revAppend<T>(l : List<T>, m : List<T>) : List<T> = switch l {
+      case (?(h, t)) revAppend(t, ?(h, m));
+      case null m
+    }
+  )(reverse list1, list2);
 
   public func join<T>(list : Iter.Iter<List<T>>) : List<T> {
     let ?l = list.next() else return null;

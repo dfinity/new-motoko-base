@@ -501,7 +501,7 @@ module {
 
   /// Merge two ordered lists into a single ordered list.
   /// This function requires both list to be ordered as specified
-  /// by the given relation `lessThanOrEqual`.
+  /// by the given relation `compare`.
   ///
   /// Example:
   /// ```motoko include=initialize
@@ -509,7 +509,7 @@ module {
   /// List.merge<Nat>(
   ///   ?(1, ?(2, ?(4, null))),
   ///   ?(2, ?(4, ?(6, null))),
-  ///   func (n1, n2) = n1 <= n2
+  ///   Nat.compare
   /// ); // => ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))))),
   /// ```
   ///
@@ -519,14 +519,14 @@ module {
   ///
   /// *Runtime and space assumes that `lessThanOrEqual` runs in O(1) time and space.
   // TODO: replace by merge taking a compare : (T, T) -> Order.Order function?
-  public func merge<T>(list1 : List<T>, list2 : List<T>, lessThanOrEqual : (T, T) -> Bool) : List<T> = switch (list1, list2) {
+  public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T> = switch (list1, list2) {
     case (?(h1, t1), ?(h2, t2)) {
-      if (lessThanOrEqual(h1, h2)) {
-        ?(h1, merge(t1, list2, lessThanOrEqual))
-      } else if (lessThanOrEqual(h2, h1)) {
-        ?(h2, merge(list1, t2, lessThanOrEqual))
+      if (compare(h1, h2) != #greater) {
+        ?(h1, merge(t1, list2, compare))
+      } else if (compare(h2, h1) != #greater) {
+        ?(h2, merge(list1, t2, compare))
       } else {
-        ?(h1, ?(h2, merge(list1, list2, lessThanOrEqual)))
+        ?(h1, ?(h2, merge(list1, list2, compare)))
       }
     };
     case (null, _) list2;

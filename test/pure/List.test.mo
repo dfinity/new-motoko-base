@@ -15,7 +15,6 @@ FIXME: (CHECK these)
 
 * flatten is quadratic
 * Array.mo doesn't implement `all`, `any`, `compare`
-* merge takes lte predicate of type (T,T)-> Bool, not comparison of type: (T,T) -> Ord
 * split is not tail recursive and calls redundant helpers
 
 TODO:
@@ -1049,7 +1048,7 @@ let merge = Suite.suite(
       List.merge<Nat>(
         List.tabulate<Nat>(10, func i = 2 * i),
         List.tabulate<Nat>(10, func i = 2 * i + 1),
-        func(i, j) { i <= j }
+        Nat.compare
       ),
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(20, func i = i))
@@ -1072,7 +1071,7 @@ let merge = Suite.suite(
             { 2 * i } else { 2 * i + 1 }
           }
         ),
-        func(i, j) { i <= j }
+        Nat.compare
       ),
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(20, func i = i))
@@ -1084,7 +1083,7 @@ let merge = Suite.suite(
       List.merge<Nat>(
         List.tabulate<Nat>(10, func i = 2 * i),
         List.tabulate<Nat>(10, func i = 2 * i),
-        func(i, j) { i <= j }
+        Nat.compare
       ),
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(20, func i = 2 * (i / 2)))
@@ -1096,7 +1095,7 @@ let merge = Suite.suite(
       List.merge<Nat>(
         List.tabulate<Nat>(1000, func i = 2 * i),
         List.tabulate<Nat>(1000, func i = 2 * i + 1),
-        func(i, j) { i <= j }
+        Nat.compare
       ),
       M.equals(
         T.list(T.natTestable, List.tabulate<Nat>(2000, func i = i))

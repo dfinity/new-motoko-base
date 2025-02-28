@@ -1234,7 +1234,7 @@
       "public type List<T>",
       "public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2>",
       "public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E>",
-      "public func merge<T>(list1 : List<T>, list2 : List<T>, lessThanOrEqual : (T, T) -> Bool) : List<T>",
+      "public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T>",
       "public func partition<T>(list : List<T>, f : T -> Bool) : (List<T>, List<T>)",
       "public func pop<T>(list : List<T>) : (?T, List<T>)",
       "public func push<T>(list : List<T>, item : T) : List<T>",

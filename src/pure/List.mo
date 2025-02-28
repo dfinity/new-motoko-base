@@ -260,8 +260,7 @@ module {
     case (?(h, t)) {
       switch (f h, mapResult(t, f)) {
         case (#ok r, #ok l) #ok(?(r, l));
-        case (#err e, _) #err e;
-        case (_, #err e) #err e
+        case ((#err e, _) or (_, #err e)) #err e
       }
     }
   };

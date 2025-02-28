@@ -1567,6 +1567,19 @@ let fromIter = Suite.suite(
   ]
 );
 
+let toText = Suite.suite(
+  "toText",
+  [
+    Suite.test(
+      "small",
+      List.toText<Nat>(?(0, ?(1, null)), Nat.toText),
+      M.equals(
+        T.text "[0, 1]"
+      )
+    )
+  ]
+);
+
 Suite.run(
   Suite.suite(
     "List",
@@ -1603,7 +1616,8 @@ Suite.run(
       zip,
       split,
       chunks,
-      fromIter
+      fromIter,
+      toText
     ]
   )
 )

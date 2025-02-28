@@ -833,10 +833,13 @@ module {
 
   public func toText<T>(list : List<T>, f : T -> Text) : Text {
     var text = "[";
+    var first = true;
     forEach(
       list,
       func(item : T) {
-        if (text.size() > 1) {
+        if first {
+          first := false
+        } else {
           text #= ", "
         };
         text #= f item

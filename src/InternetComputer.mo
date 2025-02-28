@@ -1,11 +1,10 @@
 /// Low-level interface to the Internet Computer.
 
 import Prim "mo:⛔";
-import { todo } "Debug";
 
 module {
 
-  /// Calls ``canister``'s update or query function, `name`, with the binary contents of `data` as IC argument.
+  /// Calls `canister`'s update or query function, `name`, with the binary contents of `data` as IC argument.
   /// Returns the response to the call, an IC _reply_ or _reject_, as a Motoko future:
   ///
   /// * The message data of an IC reply determines the binary contents of `reply`.
@@ -84,6 +83,6 @@ module {
   /// Returns the time (in nanoseconds from the epoch start) by when the update message should
   /// reply to the best effort message so that it can be received by the requesting canister.
   /// Queries and non-best-effort update messages return zero.
-  public func replyDeadline() : Nat = todo();
+  public func replyDeadline() : Nat = Prim.nat64ToNat(Prim.replyDeadline());
 
 }

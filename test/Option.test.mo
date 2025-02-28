@@ -273,6 +273,5 @@ do {
   assert (Option.equal<Int>(?0, ?0, Int.equal));
   assert (not Option.equal<Int>(?0, ?1, Int.equal));
   assert (not Option.equal<Int>(?0, null, Int.equal));
-  assert (not Option.equal<Int>(null, ?0, Int.equal));
+  assert (not Option.equal<Int>(null, ?0, Int.equal))
 }
-

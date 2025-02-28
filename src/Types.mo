@@ -46,8 +46,48 @@ module {
     var blockIndex : Nat;
     var elementIndex : Nat
   };
-  public type Queue<T> = { var pure : Pure.Queue<T> };
-  public type Set<T> = { var pure : Pure.Set<T> };
+
+  public module Queue {
+    public type Queue<T> = {
+      var front : ?Node<T>;
+      var back : ?Node<T>;
+      var size : Nat
+    };
+
+    public type Node<T> = {
+      value : T;
+      var next : ?Node<T>;
+      var previous : ?Node<T>
+    }
+  };
+  public type Queue<T> = Queue.Queue<T>;
+
+  public module Set {
+    public type Node<T> = {
+      #leaf : Leaf<T>;
+      #internal : Internal<T>
+    };
+
+    public type Data<T> = {
+      elements : [var ?T];
+      var count : Nat
+    };
+
+    public type Internal<T> = {
+      data : Data<T>;
+      children : [var ?Node<T>]
+    };
+
+    public type Leaf<T> = {
+      data : Data<T>
+    };
+
+    public type Set<T> = {
+      var root : Node<T>;
+      var size : Nat
+    }
+  };
+  public type Set<T> = Set.Set<T>;
 
   public module Map {
     public type Node<K, V> = {
@@ -65,7 +105,8 @@ module {
       children : [var ?Node<K, V>]
     };
 
-    public type Leaf<K, V> = { // why the extra indirection?
+    public type Leaf<K, V> = {
+      // why the extra indirection?
       data : Data<K, V>
     };
 
@@ -74,6 +115,7 @@ module {
       var size : Nat
     }
   };
+
   public type Map<K, V> = Map.Map<K, V>;
 
   public module Stack {
@@ -90,21 +132,35 @@ module {
   public type Stack<T> = Stack.Stack<T>;
 
   public module Pure {
-
     public type List<T> = ?(T, List<T>);
 
-    public type Map<K, V> = {
-     size : Nat;
-     root : Tree<K, V>
+    public module Map {
+      public type Map<K, V> = {
+        size : Nat;
+        root : Tree<K, V>
+      };
+      public type Tree<K, V> = {
+        #red : (Tree<K, V>, K, V, Tree<K, V>);
+        #black : (Tree<K, V>, K, V, Tree<K, V>);
+        #leaf
+      };
+
+    };
+    public type Map<K, V> = Map.Map<K, V>;
+
+    public type Queue<T> = (List<T>, Nat, List<T>);
+
+    public module Set {
+      public type Tree<T> = {
+        #red : (Tree<T>, T, Tree<T>);
+        #black : (Tree<T>, T, Tree<T>);
+        #leaf
+      };
+
+      public type Set<T> = { size : Nat; root : Tree<T> }
     };
 
-    public type Tree<K, V> = {
-      #red : (Tree<K, V>, K, V, Tree<K, V>);
-      #black : (Tree<K, V>, K, V, Tree<K, V>);
-      #leaf
-    };
+    public type Set<T> = Set.Set<T>;
 
-    public type Queue<T> = (Stack.Stack<T>, Stack.Stack<T>); // FIX ME
-    public type Set<T> = () // Placeholder
   }
 }

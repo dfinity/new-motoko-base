@@ -384,7 +384,17 @@ and reinstalls.</p>
 <p>For further usage information for timers on the IC, please consult
 <a href="https://internetcomputer.org/docs/current/developer-docs/backend/periodic-tasks#timers-library-limitations">the documentation</a>.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
+</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="internal/PRNG.html">internal/PRNG</a><div class="index-item-comment"><p>Collection of pseudo-random number generators</p>
+<p>The algorithms deliver deterministic statistical randomness,
+not cryptographic randomness.</p>
+<p>Algorithm 1: 128-bit Seiran PRNG
+See: https://github.com/andanteyk/prng-seiran</p>
+<p>Algorithm 2: SFC64 and SFC32 (Chris Doty-Humphrey’s Small Fast Chaotic PRNG)
+See: https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html</p>
+<p>Copyright: 2023 MR Research AG
+Main author: react0r-com
+Contributors: Timo Hanke (timohanke)</p>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
 A list of type <code>List&lt;T&gt;</code> is either <code>null</code> or an optional pair of a value of type <code>T</code> and a tail, itself of type <code>List&lt;T&gt;</code>.</p>
 <p>To use this library, import it using:</p>
 <pre><code>motoko name=initialize

@@ -811,9 +811,13 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func fromIter<T>(iter : Iter.Iter<T>) : List<T> = switch (iter.next()) {
-    case null null;
-    case (?item) ?(item, fromIter iter)
+  public func fromIter<T>(iter : Iter.Iter<T>) : List<T> {
+    var result : List<T> = null;
+    Iter.forEach<T>(
+      iter,
+      func x = result := ?(x, result)
+    );
+    reverse result
   };
 
   public func toText<T>(list : List<T>, f : T -> Text) : Text {

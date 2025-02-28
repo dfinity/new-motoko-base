@@ -1534,6 +1534,16 @@ let fromIter = Suite.suite(
   "fromIter",
   [
     Suite.test(
+      "small",
+      List.fromIter<Nat>(Nat.range(0, 100)),
+      M.equals(
+        T.list(
+          T.natTestable,
+          List.tabulate<Nat>(100, func i = i)
+        )
+      )
+    ),
+    Suite.test(
       "large",
       List.fromIter<Nat>(Nat.range(0, 100_000)) |> List.size _,
       M.equals(T.nat 100_000)

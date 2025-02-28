@@ -1,4 +1,4 @@
-// @testmode wasi
+// @  testXmode wasi
 
 import Suite "mo:matchers/Suite";
 import M "mo:matchers/Matchers";

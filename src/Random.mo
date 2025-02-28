@@ -58,7 +58,7 @@ module {
       public func next() : ?Bool {
         if (0 : Nat8 == mask) {
           switch (iter.next()) {
-            case null { null };
+            case null null;
             case (?w) {
               byte := w;
               mask := 0x40;

@@ -255,6 +255,18 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
+
+  public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = (
+    func rev(acc : List<R>, list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
+      case null #ok acc;
+      case (?(h, t)) switch (f h) {
+        case (#ok fh) rev(?(fh, acc), t, f);
+        case (#err e) #err e
+      }
+    }
+  )(null, list, f) |> Result.mapOk(_, func(l : List<R>) : List<R> = reverse l);
+
+  /*
   public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
     case null #ok null;
     case (?(h, t)) {
@@ -263,7 +275,7 @@ module {
         case ((#err e, _) or (_, #err e)) #err e
       }
     }
-  };
+  };*/
 
   /// Create two new lists from the results of a given function (`f`).
   /// The first list only includes the elements for which the given

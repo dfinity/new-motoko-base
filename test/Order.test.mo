@@ -1,39 +1,41 @@
 import Order "../src/Order";
-import Debug "../src/Debug";
+import { test } "mo:test";
 
-Debug.print("Order");
+test(
+  "isLess",
+  func() {
+    assert (Order.isLess(#less));
+    assert (not Order.isLess(#equal));
+    assert (not Order.isLess(#greater))
+  }
+);
 
-do {
-  Debug.print("  isLess");
+test(
+  "isEqual",
+  func() {
+    assert (not Order.isEqual(#less));
+    assert (Order.isEqual(#equal));
+    assert (not Order.isEqual(#greater))
+  }
+);
 
-  assert (Order.isLess(#less));
-  assert (not Order.isLess(#equal));
-  assert (not Order.isLess(#greater))
-};
+test(
+  "isGreater",
+  func() {
+    assert (not Order.isGreater(#less));
+    assert (not Order.isGreater(#equal));
+    assert (Order.isGreater(#greater))
+  }
+);
 
-do {
-  Debug.print("  isEqual");
-
-  assert (not Order.isEqual(#less));
-  assert (Order.isEqual(#equal));
-  assert (not Order.isEqual(#greater))
-};
-
-do {
-  Debug.print("  isGreater");
-
-  assert (not Order.isGreater(#less));
-  assert (not Order.isGreater(#equal));
-  assert (Order.isGreater(#greater))
-};
-
-do {
-  Debug.print("  allValues");
-
-  let iter = Order.allValues();
-  assert (iter.next() == ?#less);
-  assert (iter.next() == ?#equal);
-  assert (iter.next() == ?#greater);
-  assert (iter.next() == null);
-  assert (iter.next() == null)
-}
+test(
+  "allValues",
+  func() {
+    let iter = Order.allValues();
+    assert (iter.next() == ?#less);
+    assert (iter.next() == ?#equal);
+    assert (iter.next() == ?#greater);
+    assert (iter.next() == null);
+    assert (iter.next() == null)
+  }
+)

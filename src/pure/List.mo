@@ -266,17 +266,6 @@ module {
     }
   )(null, list, f) |> Result.mapOk(_, func(l : List<R>) : List<R> = reverse l);
 
-  /*
-  public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
-    case null #ok null;
-    case (?(h, t)) {
-      switch (f h, mapResult(t, f)) {
-        case (#ok r, #ok l) #ok(?(r, l));
-        case ((#err e, _) or (_, #err e)) #err e
-      }
-    }
-  };*/
-
   /// Create two new lists from the results of a given function (`f`).
   /// The first list only includes the elements for which the given
   /// function `f` returns true and the second list only includes

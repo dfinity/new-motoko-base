@@ -16,7 +16,14 @@ A preview of the new base library is available as a [Mops package](https://mops.
 Try it out with the following change to your `mops.toml` config file:
 
 ```toml
-base = "new-base"
+base = "new-base@0.1.0"
+```
+
+For a gradual migration, it's also possible to start using the new base library in parallel:
+
+```toml
+base = "0.14.2"
+new-base = "0.1.0"
 ```
 
 ## Local Environment

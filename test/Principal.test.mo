@@ -1,9 +1,6 @@
 import Principal "../src/Principal";
 import Text "../src/Text";
 import Blob "../src/Blob";
-import Suite "mo:matchers/Suite";
-import T "mo:matchers/Testable";
-import M "mo:matchers/Matchers";
 import { suite; test; expect } = "mo:test";
 
 let principal1 = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");

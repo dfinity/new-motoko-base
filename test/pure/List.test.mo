@@ -174,6 +174,14 @@ func listRes(itm : Result.Result<List.List<Nat>, Text>) : T.TestableItem<Result.
   { display = resT.display; equals = resT.equals; item = itm }
 };
 
+object unit : T.TestableItem<()> {
+  public let item = ();
+  public func display(()) : Text = "()";
+  public func equals((), ()) : Bool = true
+};
+
+let hugeList = List.repeat('Y', 100_000);
+
 let mapResult = Suite.suite(
   "mapResult",
   [
@@ -196,6 +204,11 @@ let mapResult = Suite.suite(
       "fail last",
       List.mapResult<Int, Nat, Text>(?(1, ?(2, ?(-3, null))), makeNatural),
       M.equals(listRes(#err("-3 is not a natural number.")))
+    ),
+    Suite.test(
+      "large",
+      List.mapResult<Char, (), ()>(hugeList, func _ = #ok),
+      M.equals(T.result<List.List<()>, ()>(T.listTestable<()> unit, unit, #ok null))
     )
   ]
 );
@@ -221,8 +234,6 @@ let repeat = Suite.suite(
     )
   ]
 );
-
-let hugeList = List.repeat('Y', 100_000);
 
 let tabulate = Suite.suite(
   "tabulate",

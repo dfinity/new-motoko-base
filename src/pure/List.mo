@@ -569,18 +569,14 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
-  public func compare<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    type Order = Order.Order;
-    func go(list1 : List<T>, list2 : List<T>, comp : (T, T) -> Order) : Order = switch (list1, list2) {
-      case (?(h1, t1), ?(h2, t2)) switch (comp(h1, h2)) {
-        case (#equal) go(t1, t2, comp);
-        case o o
-      };
-      case (null, null) #equal;
-      case (null, _) #less;
-      case _ #greater
+  public func compare<T>(list1 : List<T>, list2 : List<T>, compareItem : (T, T) -> Order.Order) : Order.Order = switch (list1, list2) {
+    case (?(h1, t1), ?(h2, t2)) switch (compareItem(h1, h2)) {
+      case (#equal) compare(t1, t2, compareItem);
+      case o o
     };
-    go(list1, list2, compare) // FIXME: only needed because of above shadowing
+    case (null, null) #equal;
+    case (null, _) #less;
+    case _ #greater
   };
 
   /// Generate a list based on a length and a function that maps from

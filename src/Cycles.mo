@@ -7,8 +7,8 @@
 /// **NOTE:** Since cycles measure computational resources, the value of  `balance()` can change from one call to the next.
 ///
 /// Cycles can be transferred from the current actor to another actor with the evaluation of certain forms of expression.
-/// In particular, the expression must be a call to a shared function, a call to a local function with an `async` return type, or a simple `async` expression. 
-/// To attach an amount of cycles to an expression, simply prefix the expression `<exp> with `(with cycles = <amount>)`, that is `(with cycles = <amount>) <exp>`. 
+/// In particular, the expression must be a call to a shared function, a call to a local function with an `async` return type, or a simple `async` expression.
+/// To attach an amount of cycles to an expression `<exp>`, simply prefix the expression with `(with cycles = <amount>)`, that is, `(with cycles = <amount>) <exp>`.
 ///
 /// **NOTE:** Attaching cycles will trap if the amount specified exceeds `2 ** 128` cycles.
 ///

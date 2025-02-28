@@ -446,7 +446,7 @@
       "public let call : (canister : Principal, name : Text, data : Blob) -> async (reply : Blob)",
       "public func countInstructions(comp : () -> ()) : Nat64",
       "public let performanceCounter : (counter : Nat32) -> (value : Nat64)",
-      "public func replyDeadline() : Nat"
+      "public func replyDeadline() : ?Nat"
     ]
   },
   {

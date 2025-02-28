@@ -2,8 +2,8 @@
 <html><head title="Motoko docs"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><div class="index-container"><h1 class="index-header">Index of modules</h1><ul class="index-listing"><li class="index-item"><a class="index-item-link" href="Array.html">Array</a><div class="index-item-comment"><p>Provides extended utility functions on Arrays.</p>
 <p>Note the difference between mutable and non-mutable arrays below.</p>
 <p>WARNING: If you are looking for a list that can grow and shrink in size,
-it is recommended you use either the Buffer class or the List class for
-those purposes. Arrays must be created with a fixed size.</p>
+it is recommended you use <code>List</code> for those purposes.
+Arrays must be created with a fixed size.</p>
 <p>Import from the base library to use this module.</p>
 <pre><code>motoko name=import
 import Array &quot;mo:base/Array&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Blob.html">Blob</a><div class="index-item-comment"><p>Module for working with Blobs (immutable sequences of bytes).</p>
@@ -47,6 +47,13 @@ calls to your canister tamperproof.</p>
 This library provides imperative operations for observing cycles, transferring cycles, and
 observing refunds of cycles.</p>
 <p><strong>NOTE:</strong> Since cycles measure computational resources, the value of  <code>balance()</code> can change from one call to the next.</p>
+<p>Cycles can be transferred from the current actor to another actor with the evaluation of certain forms of expression.
+In particular, the expression must be a call to a shared function, a call to a local function with an <code>async</code> return type, or a simple <code>async</code> expression.
+To attach an amount of cycles to an expression <code>&lt;exp&gt;</code>, simply prefix the expression with <code>(with cycles = &lt;amount&gt;)</code>, that is, <code>(with cycles = &lt;amount&gt;) &lt;exp&gt;</code>.</p>
+<p><strong>NOTE:</strong> Attaching cycles will trap if the amount specified exceeds <code>2 ** 128</code> cycles.</p>
+<p>Upon the call, but not before, the amount of cycles is deducted from <code>balance()</code>.
+If this total exceeds <code>balance()</code>, the caller traps, aborting the call without consuming the cycles.
+Note that attaching cycles to a call to a local function call or <code>async</code> expression just transfers cycles from the current actor to itself.</p>
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
@@ -55,8 +62,7 @@ import Debug &quot;mo:base/Debug&quot;;
 actor {
   public func main() : async() {
     Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance()));
-    Cycles.add&lt;system&gt;(15_000_000);
-    await operation(); // accepts 10_000_000 cycles
+    await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
     Debug.print(&quot;Main refunded: &quot; # debug_show(Cycles.refunded())); // 5_000_000
     Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance())); // decreased by around 10_000_000
   };
@@ -112,7 +118,6 @@ Floating point numbers have limited precision and operations may inherently resu
  sign bit for NaN results.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Func.html">Func</a><div class="index-item-comment"><p>Functions on functions, creating functions from simpler inputs.</p>
 <p>(Most commonly used when programming in functional style using higher-order
 functions.)</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Hash.html">Hash</a><div class="index-item-comment"><p>Hash values</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Int.html">Int</a><div class="index-item-comment"><p>Signed integer numbers with infinite precision (also called big integers).</p>
 <p>Most operations on integer numbers (e.g. addition) are available as built-in operators (e.g. <code>-1 + 1</code>).
 This module provides equivalent functions and <code>Text</code> conversion.</p>
@@ -136,7 +141,13 @@ import Int64 &quot;mo:base/Int64&quot;;</code></pre></div></li><li class="index-
 <pre><code>motoko name=import
 import Int8 &quot;mo:base/Int8&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="InternetComputer.html">InternetComputer</a><div class="index-item-comment"><p>Low-level interface to the Internet Computer.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Iter.html">Iter</a><div class="index-item-comment"><p>Utilities for <code>Iter</code> (iterator) values</p>
-</div></li><li class="index-item"><a class="index-item-link" href="List.html">List</a><div class="index-item-comment"><p>Original: <code>vector</code> Mops package?</p>
+</div></li><li class="index-item"><a class="index-item-link" href="List.html">List</a><div class="index-item-comment"><p>Resizable array with <code>O(sqrt(n))</code> memory overhead.
+Static type <code>List</code> that can be declared <code>stable</code>.
+For the <code>List</code> class see the file Class.mo.</p>
+<p>This implementation is adapted with permission from the <code>vector</code> Mops package created by Research AG.</p>
+<p>Copyright: 2023 MR Research AG
+Main author: Andrii Stepanov
+Contributors: Timo Hanke (timohanke), Andy Gura (andygura), react0r-com</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Map.html">Map</a><div class="index-item-comment"><p>An imperative key-value map based on order/comparison of the keys.
 The map data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>
@@ -152,7 +163,7 @@ persistent actor {
 
 <p>The internal implementation is a B-tree with order 32.</p>
 <p>Performance:</p>
-<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree.
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire map.
 <code>n</code> denotes the number of key-value entries stored in the map.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Nat.html">Nat</a><div class="index-item-comment"><p>Natural numbers with infinite precision.</p>
 <p>Most operations on natural numbers (e.g. addition) are available as built-in operators (e.g. <code>1 + 1</code>).
 This module provides equivalent functions and <code>Text</code> conversion.</p>
@@ -212,21 +223,41 @@ shared(msg) func foo() {
 <p>Then, you can use this module to work with the <code>Principal</code>.</p>
 <p>Import from the base library to use this module.</p>
 <pre><code>motoko name=import
-import Principal &quot;mo:base/Principal&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Queue.html">Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
-<p>The interface is imperative, not purely functional.
-In particular, Queue operations such as push and pop update their input queue instead of returning the
-value of the modified Queue.</p>
-<p>Examples of use-cases:
-Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.
-Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</p>
-<p>A Queue is internally implemented as two lists, a head access list and a (reversed) tail access list,
-that are dynamically size-balanced by splitting.</p>
-<p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
-<p>Note on the costs of push and pop functions:</p>
-<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
+import Principal &quot;mo:base/Principal&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Queue.html">Queue</a><div class="index-item-comment"><p>A mutable double-ended queue of elements.
+The queue has two ends, front and back.
+Elements can be added and removed at the two ends.</p>
+<p>This can be used for different use cases, such as:</p>
+<ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code></li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li></ul>
 
-<p><code>n</code> denotes the number of elements stored in the queue.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Random.html">Random</a><div class="index-item-comment"><p>Random number generation.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Queue &quot;Queue&quot;;
+import Debug &quot;Debug&quot;;
+
+persistent actor {
+  let orders = Queue.empty&lt;Text&gt;();
+  Queue.pushBack(orders, &quot;Antipasta&quot;);
+  Queue.pushBack(orders, &quot;Spaghetti&quot;);
+  Queue.pushBack(orders, &quot;Bistecca&quot;);
+  Queue.pushBack(orders, &quot;Dolce&quot;);
+  label iteration loop {
+    switch (Queue.popFront(orders)) {
+      case null { break iteration };
+      case (?description) {
+        Debug.print(description)
+      }
+    }
+  }
+  // prints:
+  // `Antipasta`
+  // `Spaghetti`
+  // `Bistecca`
+  // `Dolce`
+}</code></pre>
+
+<p>The internal implementation is a doubly-linked list.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operations.</li><li>Space: <code>O(n)</code>.
+<code>n</code> denotes the number of elements stored in the queue.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Random.html">Random</a><div class="index-item-comment"><p>Random number generation.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Region.html">Region</a><div class="index-item-comment"><p>Byte-level access to isolated, virtual stable memory regions.</p>
 <p>This is a moderately lightweight abstraction over IC <em>stable memory</em> and supports persisting
 regions of binary data across Motoko upgrades.
@@ -237,7 +268,7 @@ only supported a single memory region, without isolation between different appli
 <p>The <code>Region</code> type is stable and can be used in stable data structures.</p>
 <p>A new, empty <code>Region</code> is allocated using function <code>new()</code>.</p>
 <p>Regions are stateful objects and can be distinguished by the numeric identifier returned by function <code>id(region)</code>.
-Every region owns an initially empty, but growable sequence of virtual IC stable memory pages. 
+Every region owns an initially empty, but growable sequence of virtual IC stable memory pages.
 The current size, in pages, of a region is returned by function <code>size(region)</code>.
 The size of a region determines the range, [ 0, ..., size(region)*2^16 ), of valid byte-offsets into the region; these offsets are used as the source and destination of <code>load</code>/<code>store</code> operations on the region.</p>
 <p>Memory is allocated to a region, using function <code>grow(region, pages)</code>, sequentially and on demand, in units of 64KiB logical pages, starting with 0 allocated pages.
@@ -263,9 +294,53 @@ All applications should reserve at least one page for stable variable data, even
 <p>Usage:</p>
 <pre><code>motoko no-repl
 import Region &quot;mo:base/Region&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Result.html">Result</a><div class="index-item-comment"><p>Error handling with the Result type.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>Mutable stack data structure.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Text.html">Text</a><div class="index-item-comment"><p>Utility functions for <code>Text</code> values.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>An imperative set based on order/comparison of the elements.
+A set is a collection of elements without duplicates.
+The set data structure type is stable and can be used for orthogonal persistence.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let userIds = Set.empty&lt;Nat&gt;();
+  Set.add(userIds, Nat.compare, 1);
+  Set.add(userIds, Nat.compare, 2);
+  Set.add(userIds, Nat.compare, 3);
+}</code></pre>
+
+<p>The internal implementation is a B-tree with order 32.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire set.
+<code>n</code> denotes the number of elements stored in the set.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>A mutable stack data structure.
+Elements can be pushed on top of the stack
+and removed from top of the stack (LIFO).</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Stack &quot;Stack&quot;;
+import Debug &quot;Debug&quot;;
+
+persistent actor {
+  let levels = Stack.empty&lt;Text&gt;();
+  Stack.push(levels, &quot;Inner&quot;);
+  Stack.push(levels, &quot;Middle&quot;);
+  Stack.push(levels, &quot;Outer&quot;);
+  label iteration loop {
+    switch (Stack.pop(levels)) {
+      case null { break iteration };
+      case (?name) {
+        Debug.print(name)
+      }
+    }
+  }
+  // prints:
+  // `Outer`
+  // `Middle`
+  // `Inner`
+}</code></pre>
+
+<p>The internal implementation is a singly-linked list.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operation.</li><li>Space: <code>O(n)</code>.
+<code>n</code> denotes the number of elements stored on the stack.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Text.html">Text</a><div class="index-item-comment"><p>Utility functions for <code>Text</code> values.</p>
 <p>A <code>Text</code> value represents human-readable text as a sequence of characters of type <code>Char</code>.</p>
 <pre class="motoko"><code class="motoko">let text = &quot;Hello!&quot;;
 let size = text.size(); // 6
@@ -314,9 +389,58 @@ to consider reentrancy issues as well as the vanishing of timers on upgrades
 and reinstalls.</p>
 <p>For further usage information for timers on the IC, please consult
 <a href="https://internetcomputer.org/docs/current/developer-docs/backend/periodic-tasks#timers-library-limitations">the documentation</a>.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Map.html">immutable/Map</a><div class="index-item-comment"><p>Original: <code>OrderedMap.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Queue.html">immutable/Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="internal/PRNG.html">internal/PRNG</a><div class="index-item-comment"><p>Collection of pseudo-random number generators</p>
+<p>The algorithms deliver deterministic statistical randomness,
+not cryptographic randomness.</p>
+<p>Algorithm 1: 128-bit Seiran PRNG
+See: https://github.com/andanteyk/prng-seiran</p>
+<p>Algorithm 2: SFC64 and SFC32 (Chris Doty-Humphrey’s Small Fast Chaotic PRNG)
+See: https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html</p>
+<p>Copyright: 2023 MR Research AG
+Main author: react0r-com
+Contributors: Timo Hanke (timohanke)</p>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
+A list of type <code>List&lt;T&gt;</code> is either <code>null</code> or an optional pair of a value of type <code>T</code> and a tail, itself of type <code>List&lt;T&gt;</code>.</p>
+<p>To use this library, import it using:</p>
+<pre><code>motoko name=initialize
+import List &quot;mo:base/List&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Map.html">pure/Map</a><div class="index-item-comment"><p>Immutable, ordered key-value maps.</p>
+<p>The map type is stable whenever the key and value types are stable, allowing
+map values to be stored in stable variables.</p>
+<p>Keys are ordered by an explicit <code>compare</code> function, which <em>must</em> be the same
+across all operations on a given map.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  // creation
+  let empty = Map.empty&lt;Nat, Text&gt;();
+  // insertion
+  let map1 = Map.add(empty, Nat.compare, 0, &quot;Zero&quot;);
+  // retrieval
+  let null = Map.get(empty, Nat.compare, 0);
+  let ?&quot;Zero&quot; = Map.get(map1, Nat.compare, 0);
+  // deletion
+  let map2 = Map.delete(map1, Nat.compare, 0);
+  assert not Map.isEmpty(map1);
+  assert Map.isEmpty(map2);
+}</code></pre>
+
+<p>The internal representation is a red-black tree.</p>
+<p>A red-black tree is a balanced binary search tree ordered by the keys.</p>
+<p>The tree data structure internally colors each of its nodes either red or black,
+and uses this information to balance the tree during the modifying operations.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree.
+<code>n</code> denotes the number of key-value entries (i.e. nodes) stored in the tree.</li></ul>
+
+<p>Note:</p>
+<ul><li>Map operations, such as retrieval, insertion, and removal create <code>O(log(n))</code> temporary objects that become garbage.</li></ul>
+
+<p>Credits:</p>
+<p>The core of this implementation is derived from:</p>
+<ul><li>Ken Friis Larsen's <a href="https://github.com/kfl/mosml/blob/master/src/mosmllib/Redblackmap.sml">RedBlackMap.sml</a>, which itself is based on:</li><li>Stefan Kahrs, &quot;Red-black trees with types&quot;, Journal of Functional Programming, 11(4): 425-432 (2001), <a href="http://www.cs.ukc.ac.uk/people/staff/smk/redblack/rb.html">version 1 in web appendix</a>.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="pure/Queue.html">pure/Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
 <p>The interface is purely functional, not imperative, and queues are immutable values.
 In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
 value of the modified Queue, alongside any other data.
@@ -331,7 +455,14 @@ that are dynamically size-balanced by splitting.</p>
 <ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Set.html">immutable/Set</a><div class="index-item-comment"><p>Original: <code>OrderedSet.mo</code></p>
-</div></li><li class="index-item"><a class="index-item-link" href="immutable/Stack.html">immutable/Stack</a><div class="index-item-comment"><p>Immutable singly-linked list</p>
-</div></li><li class="index-item"><a class="index-item-link" href="type/Iter.html">type/Iter</a><div class="index-item-comment"><p>The Iterator type</p>
-</div></li></ul></div></html>
+</div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Stable ordered set implemented as a red-black tree.</p>
+<p>A red-black tree is a balanced binary search tree ordered by the elements.</p>
+<p>The tree data structure internally colors each of its nodes either red or black,
+and uses this information to balance the tree during modifying operations.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree.
+<code>n</code> denotes the number of elements (i.e. nodes) stored in the tree.</li></ul>
+
+<p>Credits:</p>
+<p>The core of this implementation is derived from:</p>
+<ul><li>Ken Friis Larsen's <a href="https://github.com/kfl/mosml/blob/master/src/mosmllib/Redblackmap.sml">RedBlackMap.sml</a>, which itself is based on:</li><li>Stefan Kahrs, &quot;Red-black trees with types&quot;, Journal of Functional Programming, 11(4): 425-432 (2001), <a href="http://www.cs.ukc.ac.uk/people/staff/smk/redblack/rb.html">version 1 in web appendix</a>.</li></ul></div></li></ul></div></html>

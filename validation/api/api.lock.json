@@ -213,7 +213,7 @@
       "public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int>",
       "public func rem(x : Int, y : Int) : Int",
       "public func sub(x : Int, y : Int) : Int",
-      "public func toNat(int : Int) : ?Nat",
+      "public func toNat(int : Int) : Nat",
       "public func toText(x : Int) : Text"
     ]
   },
@@ -583,7 +583,7 @@
       "public func compare(x : Nat, y : Nat) : { #less; #equal; #greater }",
       "public func div(x : Nat, y : Nat) : Nat",
       "public func equal(x : Nat, y : Nat) : Bool",
-      "public func fromInt(int : Int) : ?Nat",
+      "public func fromInt(int : Int) : Nat",
       "public func fromText(text : Text) : ?Nat",
       "public func greater(x : Nat, y : Nat) : Bool",
       "public func greaterOrEqual(x : Nat, y : Nat) : Bool",

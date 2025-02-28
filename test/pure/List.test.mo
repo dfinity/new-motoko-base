@@ -9,7 +9,6 @@ import Nat "../../src/Nat";
 import Order "../../src/Order";
 import Debug "../../src/Debug";
 import Int "../../src/Int";
-import Iter "../../src/Iter";
 import Result "../../src/Result";
 
 /*

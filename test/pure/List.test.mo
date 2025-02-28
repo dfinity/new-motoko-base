@@ -1530,6 +1530,17 @@ let chunks = Suite.suite(
   ]
 );
 
+let fromIter = Suite.suite(
+  "fromIter",
+  [
+    Suite.test(
+      "large",
+      List.fromIter<Nat>(Nat.range(0, 100_000)) |> List.size _,
+      M.equals(T.nat 100_000)
+    )
+  ]
+);
+
 Suite.run(
   Suite.suite(
     "List",
@@ -1565,7 +1576,8 @@ Suite.run(
       zipWith,
       zip,
       split,
-      chunks
+      chunks,
+      fromIter
     ]
   )
 )

@@ -1,9 +1,9 @@
 [package]
-name = "base"
-version = "1.0.0"
-description = "The Motoko base library"
-repository = "https://github.com/dfinity/motoko-base"
-keywords = [ "base" ]
+name = "core"
+version = "0.0.0"
+description = "The Motoko core library (replaces `base`)"
+repository = "https://github.com/dfinity/new-motoko-base"
+keywords = [ "core", "base" ]
 license = "Apache-2.0"
 
 [dev-dependencies]

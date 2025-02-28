@@ -108,7 +108,6 @@
     "name": "Cycles",
     "exports": [
       "public let accept : <system>(amount : Nat) -> (accepted : Nat)",
-      "public let add : <system>(amount : Nat) -> ()",
       "public let available : () -> (amount : Nat)",
       "public let balance : () -> (amount : Nat)",
       "public let refunded : () -> (amount : Nat)"

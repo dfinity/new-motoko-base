@@ -47,13 +47,15 @@ calls to your canister tamperproof.</p>
 This library provides imperative operations for observing cycles, transferring cycles, and
 observing refunds of cycles.</p>
 <p><strong>NOTE:</strong> Since cycles measure computational resources, the value of  <code>balance()</code> can change from one call to the next.</p>
-<p>To attach an amount of cycles to be transferred in a call,
-that is, evaluation of a shared function call or <code>async</code>
-expression, one prefixes the expression with a parenthetical
-of the form <code>(with cycles = &lt;amount&gt;) &lt;call&gt;</code>.
-<strong>NOTE:</strong> Traps if the cycles specified would exceed <code>2 ** 128</code> cycles.</p>
-<p>Upon the call, but not before, the amount of cycles is deducted from <code>balance()</code>.
-If this total exceeds <code>balance()</code>, the caller traps, aborting the call.</p>
+<p>Cycles can be transferred from the current actor to another actor with the evaluation of certain forms of expression.
+In particular, the expression must be a call to a shared function, a call to a local function with an <code>async</code> return type, or a simple <code>async</code> expression. 
+To attach an amount of cycles to an expression, simply prefix the expression <code>&lt;exp&gt; with </code>(with cycles = &lt;amount&gt;)<code>, that is </code>(with cycles = &lt;amount&gt;) &lt;exp&gt;<code>. 
+
+**NOTE:** Attaching cycles will trap if the amount specified exceeds </code>2 ** 128<code>cycles.
+
+Upon the call, but not before, the amount of cycles is deducted from</code>balance()<code>.
+If this total exceeds </code>balance()<code>, the caller traps, aborting the call without consuming the cycles.
+Note that attaching cycles to a call to a local function call or </code>async` expression just transfers cycles from the current actor to itself.</p>
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
@@ -311,8 +313,36 @@ persistent actor {
 <p>The internal implementation is a B-tree with order 32.</p>
 <p>Performance:</p>
 <ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire set.
-<code>n</code> denotes the number of elements stored in the set.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>Mutable stack data structure.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Text.html">Text</a><div class="index-item-comment"><p>Utility functions for <code>Text</code> values.</p>
+<code>n</code> denotes the number of elements stored in the set.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>A mutable stack data structure.
+Elements can be pushed on top of the stack
+and removed from top of the stack (LIFO).</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Stack &quot;Stack&quot;;
+import Debug &quot;Debug&quot;;
+
+persistent actor {
+  let levels = Stack.empty&lt;Text&gt;();
+  Stack.push(levels, &quot;Inner&quot;);
+  Stack.push(levels, &quot;Middle&quot;);
+  Stack.push(levels, &quot;Outer&quot;);
+  label iteration loop {
+    switch (Stack.pop(levels)) {
+      case null { break iteration };
+      case (?name) {
+        Debug.print(name)
+      }
+    }
+  }
+  // prints:
+  // `Outer`
+  // `Middle`
+  // `Inner`
+}</code></pre>
+
+<p>The internal implementation is a singly-linked list.</p>
+<p>Performance:</p>
+<ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operation.</li><li>Space: <code>O(n)</code>.
+<code>n</code> denotes the number of elements stored on the stack.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Text.html">Text</a><div class="index-item-comment"><p>Utility functions for <code>Text</code> values.</p>
 <p>A <code>Text</code> value represents human-readable text as a sequence of characters of type <code>Char</code>.</p>
 <pre class="motoko"><code class="motoko">let text = &quot;Hello!&quot;;
 let size = text.size(); // 6

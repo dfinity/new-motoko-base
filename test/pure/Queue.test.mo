@@ -3,7 +3,7 @@ import Array "../../src/Array";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";
 import Prim "mo:prim";
-import { suite; test; expect } = "mo:test";
+import { suite; test; expect } "mo:test";
 
 func iterateForward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> {
   var current = queue;

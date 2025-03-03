@@ -344,8 +344,35 @@ module Queue {
     return false
   };
 
+  /// Call the given function for its side effect, with each queue element in turn.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// var sum = 0;
+  /// Queue.forEach<Nat>((?(0, ?(1, ?(2, null))), 3, null), func n = sum += n);
+  /// sum // => 3
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func forEach<T>(queue : Queue<T>, f : T -> ()) = for (item in values queue) f item;
 
+  /// Call the given function `f` on each queue element and collect the results
+  /// in a new queue.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat = "mo:base/Nat"
+  /// Queue.map<Nat, Text>(Queue.fromIter([0, 1, 2].values()), Nat.toText) // => (?("0", null), 3, ?("2", ?("1", null)))
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
     let (fr, n, b) = queue;
     (List.map(fr, f), n, List.map(b, f))

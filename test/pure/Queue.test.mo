@@ -408,6 +408,41 @@ suite(
   }
 );
 
+queue := Queue.filter<Nat>(Queue.fromIter([1, 2, 3, 4, 5].values()), func n = n < 3);
+
+suite(
+  "filter invariants",
+  func() {
+    test(
+      "not empty",
+      func() {
+        expect.bool(Queue.isEmpty(queue)).isFalse()
+      }
+    );
+
+    test(
+      "peek front",
+      func() {
+        expect.option(Queue.peekFront(queue), Nat.toText, Nat.equal).equal(?1)
+      }
+    );
+
+    test(
+      "peek back",
+      func() {
+        expect.option(Queue.peekBack(queue), Nat.toText, Nat.equal).equal(?2)
+      }
+    );
+
+    test(
+      "empty after back removal",
+      func() {
+        expect.bool(Queue.isEmpty(reduceBack(queue, testSize))).isTrue()
+      }
+    )
+  }
+);
+
 object Random {
   var number = 4711;
   public func next() : Int {

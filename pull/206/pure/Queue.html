@@ -174,7 +174,27 @@ Queue.any&lt;Nat&gt;(
 <p>Runtime: O(size)</p>
 <p>Space: O(1)</p>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
-</p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p></p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T1</span>, <span class="type">T2</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T1</span>&gt;, <span class="parameter">f</span> : <span class="type">T1</span> -&gt; <span class="type">T2</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T2</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new queue with only those elements of the original queue for which
+</p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Call the given function for its side effect, with each queue element in turn.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+var sum = 0;
+Queue.forEach&lt;Nat&gt;((?(0, ?(1, ?(2, null))), 3, null), func n = sum += n);
+sum // =&gt; 3</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+<p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T1</span>, <span class="type">T2</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T1</span>&gt;, <span class="parameter">f</span> : <span class="type">T1</span> -&gt; <span class="type">T2</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T2</span>&gt;</code></h4><p><p>Call the given function <code>f</code> on each queue element and collect the results
+in a new queue.</p>
+<p>Example:</p>
+<pre><code>motoko include=initialize
+import Nat = &quot;mo:base/Nat&quot;
+Queue.map&lt;Nat, Text&gt;(Queue.fromIter([0, 1, 2].values()), Nat.toText) // =&gt; (?(&quot;0&quot;, null), 3, ?(&quot;2&quot;, ?(&quot;1&quot;, null)))</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)
+*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new queue with only those elements of the original queue for which
 the given function (often called the <em>predicate</em>) returns true.</p>
 <p>Example:</p>
 <pre><code>motoko include=initialize

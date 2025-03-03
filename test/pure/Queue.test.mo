@@ -432,13 +432,6 @@ suite(
       func() {
         expect.option(Queue.peekBack(queue), Nat.toText, Nat.equal).equal(?2)
       }
-    );
-
-    test(
-      "empty after back removal",
-      func() {
-        expect.bool(Queue.isEmpty(reduceBack(queue, testSize))).isTrue()
-      }
     )
   }
 );

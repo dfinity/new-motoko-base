@@ -25,7 +25,7 @@ import List "List";
 import Order "../Order";
 import Types "../Types";
 
-module {
+module Queue {
   type List<T> = Types.Pure.List<T>;
 
   /// Double-ended queue data type.
@@ -369,6 +369,22 @@ module {
     check(front, List.size front + List.size back, back)
   };
 
+  /// Call the given function on each queue element, and collect the non-null results
+  /// in a new queue.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// Queue.filterMap<Nat, Nat>(
+  ///   (?(1, ?(2, ?(3, null))), 3, null)
+  ///   func n = if (n > 1) ?(n * 2) else null
+  /// ) // => (?(4, null), 2, ?(6, null))
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
     let (fr, _n, b) = queue;
     let front = List.filterMap(fr, f);

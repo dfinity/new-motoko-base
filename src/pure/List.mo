@@ -552,7 +552,7 @@ module {
     case _ false
   };
 
-  /// Compare two lists using lexicographic ordering specified by argument function `compare`.
+  /// Compare two lists using lexicographic ordering specified by argument function `compareItem`.
   ///
   /// Example:
   /// ```motoko include=initialize

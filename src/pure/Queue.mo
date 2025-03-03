@@ -142,6 +142,7 @@ module {
     }
   };
 
+  // helper to rebalance the queue after getting lopsided
   func check<T>(q : Queue<T>) : Queue<T> {
     switch q {
       case (null, n, r) {
@@ -266,6 +267,16 @@ module {
     case _ popBack(check queue)
   };
 
+  /// Turn an iterator into a queue, consuming it.
+  /// Example:
+  /// ```motoko include=initialize
+  /// Queue.fromIter<Nat>([0, 1, 2, 3, 4].values())
+  /// // => (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func fromIter<T>(iter : Iter.Iter<T>) : Queue<T> {
     let list = List.fromIter iter;
     check((list, List.size list, null))

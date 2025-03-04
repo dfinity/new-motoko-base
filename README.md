@@ -23,8 +23,8 @@ base = "https://github.com/dfinity/new-motoko-base"
 It's also possible to start using both versions in parallel:
 
 ```toml
-base = "0.14.2"
-new-base = "0.2.1"
+base = "0.14.3"
+new-base = "0.2.2"
 ```
 
 Since this is a preview release for community feedback, expect breaking changes.

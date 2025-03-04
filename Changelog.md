@@ -3,6 +3,7 @@
 ## 0.2.2
 
 * Added `isRetryPossible : Error -> Bool` to `Error` (#211).
+* Added `isReplicated : () -> Bool` to `InternetComputer` (#213).
 
 ## 0.2.1
 

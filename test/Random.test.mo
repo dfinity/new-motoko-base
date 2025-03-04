@@ -176,7 +176,7 @@ suite(
           func(a, b) = Nat.toInt(random.natRange(a, b)),
           random.intRange
         ];
-        for (f in rangeFunctions.values()) {
+        for (f in rangeFunctions.vals()) {
           // (i, i + 1)
           for (i in Nat.range(0, 10)) {
             assert f(i, i + 1) == i

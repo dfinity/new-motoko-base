@@ -57,3 +57,9 @@ We automatically generate previews for each pull request.
 ## Contributing
 
 PRs are welcome! Please check out the [contributor guidelines](.github/CONTRIBUTING.md) for more information.
+
+Big thanks to the following community contributors:
+
+* @timohanke: [research-ag/vector](https://github.com/research-ag/vector), [research-ag/prng](https://github.com/research-ag/prng)
+* @ByronBecker: [canscale/StableHeapBTreeMap](https://github.com/canscale/StableHeapBTreeMap)
+* @ZenVoich: [ZenVoich/test](https://github.com/ZenVoich/test)

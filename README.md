@@ -60,6 +60,6 @@ PRs are welcome! Please check out the [contributor guidelines](.github/CONTRIBUT
 
 Big thanks to the following community contributors:
 
-* @timohanke: [research-ag/vector](https://github.com/research-ag/vector), [research-ag/prng](https://github.com/research-ag/prng)
-* @ByronBecker: [canscale/StableHeapBTreeMap](https://github.com/canscale/StableHeapBTreeMap)
-* @ZenVoich: [ZenVoich/test](https://github.com/ZenVoich/test)
+* [Timo Hanke](https://github.com/timohanke): [`vector`](https://github.com/research-ag/vector), [`prng`](https://github.com/research-ag/prng)
+* [Byron Becker](https://github.com/ByronBecker): [`StableHeapBTreeMap`](https://github.com/canscale/StableHeapBTreeMap)
+* [Zen Voich](https://github.com/ZenVoich): [`test`](https://github.com/ZenVoich/test)

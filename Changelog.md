@@ -2,6 +2,7 @@
 
 ## 0.2.2
 
+* Added range functions to `Random.crypto()` (#215).
 * Added `isRetryPossible : Error -> Bool` to `Error` (#211).
 
 ## 0.2.1

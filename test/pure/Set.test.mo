@@ -711,7 +711,7 @@ run(
         "repeated delete",
         do {
           var set = buildTestSet();
-          let (set1, true) = Set.delete(set, Nat.compare, 1) else Runtime.trap("repeated delete");
+          let (set1, true) = Set.delete(set, Nat.compare, 1) else Runtime.unreachable();
           let (_, changed) = Set.delete(set1, Nat.compare, 1);
           changed
         },

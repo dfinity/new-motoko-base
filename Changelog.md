@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.3
+
+* Added `isReplicated : () -> Bool` to `InternetComputer` (#213).
+
 ## 0.2.2
 
 * Added range functions to `Random.crypto()` (#215).

@@ -108,7 +108,6 @@
     "name": "Cycles",
     "exports": [
       "public let accept : <system>(amount : Nat) -> (accepted : Nat)",
-      "public let add : <system>(amount : Nat) -> ()",
       "public let available : () -> (amount : Nat)",
       "public let balance : () -> (amount : Nat)",
       "public let refunded : () -> (amount : Nat)"
@@ -127,6 +126,7 @@
       "public let code : (error : Error) -> ErrorCode",
       "public type Error",
       "public type ErrorCode",
+      "public func isRetryPossible(error : Error) : Bool",
       "public let message : (error : Error) -> Text",
       "public let reject : (message : Text) -> Error"
     ]
@@ -213,7 +213,7 @@
       "public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int>",
       "public func rem(x : Int, y : Int) : Int",
       "public func sub(x : Int, y : Int) : Int",
-      "public func toNat(int : Int) : ?Nat",
+      "public func toNat(int : Int) : Nat",
       "public func toText(x : Int) : Text"
     ]
   },
@@ -447,7 +447,7 @@
       "public let call : (canister : Principal, name : Text, data : Blob) -> async (reply : Blob)",
       "public func countInstructions(comp : () -> ()) : Nat64",
       "public let performanceCounter : (counter : Nat32) -> (value : Nat64)",
-      "public func replyDeadline() : Nat"
+      "public func replyDeadline() : ?Nat"
     ]
   },
   {
@@ -583,7 +583,7 @@
       "public func compare(x : Nat, y : Nat) : { #less; #equal; #greater }",
       "public func div(x : Nat, y : Nat) : Nat",
       "public func equal(x : Nat, y : Nat) : Bool",
-      "public func fromInt(int : Int) : ?Nat",
+      "public func fromInt(int : Int) : Nat",
       "public func fromText(text : Text) : ?Nat",
       "public func greater(x : Nat, y : Nat) : Bool",
       "public func greaterOrEqual(x : Nat, y : Nat) : Bool",
@@ -870,7 +870,7 @@
       "public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool",
       "public func clear<T>(queue : Queue<T>)",
       "public func clone<T>(queue : Queue<T>) : Queue<T>",
-      "public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order",
+      "public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compareItem : (T, T) -> Order.Order) : Order.Order",
       "public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, element : T) : Bool",
       "public func empty<T>() : Queue<T>",
       "public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equal : (T, T) -> Bool) : Bool",
@@ -900,8 +900,8 @@
     "exports": [
       "public class AsyncRandom(generator : () -> async* Blob)",
       "public let blob : shared () -> async Blob",
-      "public func new(seed : Blob) : Random",
-      "public func newAsync() : AsyncRandom",
+      "public func crypto() : AsyncRandom",
+      "public func fast(seed : Nat64) : Random",
       "public class Random(generator : () -> Blob)"
     ]
   },
@@ -1013,46 +1013,33 @@
   {
     "name": "Stack",
     "exports": [
-      "public func all<T>(stack : Stack<T>, f : T -> Bool) : Bool",
-      "public func any<T>(stack : Stack<T>, f : T -> Bool) : Bool",
-      "public func chunks<T>(stack : Stack<T>, n : Nat) : Stack<Stack<T>>",
+      "public func all<T>(stack : Stack<T>, predicate : T -> Bool) : Bool",
+      "public func any<T>(stack : Stack<T>, predicate : T -> Bool) : Bool",
       "public func clear<T>(stack : Stack<T>)",
       "public func clone<T>(stack : Stack<T>) : Stack<T>",
       "public func compare<T>(stack1 : Stack<T>, stack2 : Stack<T>, compare : (T, T) -> Order.Order) : Order.Order",
-      "public func concat<T>(stack1 : Stack<T>, stack2 : Stack<T>) : Stack<T>",
-      "public func contains<T>(stack : Stack<T>, item : T) : Bool",
-      "public func drop<T>(stack : Stack<T>, n : Nat) : Stack<T>",
+      "public func contains<T>(stack : Stack<T>, element : T, equal : (T, T) -> Bool) : Bool",
       "public func empty<T>() : Stack<T>",
-      "public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>) : Bool",
-      "public func filter<T>(stack : Stack<T>, f : T -> Bool) : Stack<T>",
-      "public func filterMap<T, U>(stack : Stack<T>, f : T -> ?U) : Stack<U>",
-      "public func find<T>(stack : Stack<T>, f : T -> Bool) : ?T",
-      "public func flatten<T>(stack : Stack<Stack<T>>) : Stack<T>",
-      "public func foldLeft<T, A>(stack : Stack<T>, base : A, combine : (A, T) -> A) : A",
-      "public func foldRight<T, A>(stack : Stack<T>, base : A, combine : (T, A) -> A) : A",
-      "public func forEach<T>(stack : Stack<T>, f : T -> ())",
+      "public func equal<T>(stack1 : Stack<T>, stack2 : Stack<T>, equal : (T, T) -> Bool) : Bool",
+      "public func filter<T>(stack : Stack<T>, predicate : T -> Bool) : Stack<T>",
+      "public func filterMap<T, U>(stack : Stack<T>, project : T -> ?U) : Stack<U>",
+      "public func forEach<T>(stack : Stack<T>, operation : T -> ())",
       "public func fromIter<T>(iter : Types.Iter<T>) : Stack<T>",
-      "public func get<T>(stack : Stack<T>, n : Nat) : ?T",
+      "public func fromPure<T>(list : PureList.List<T>) : Stack<T>",
+      "public func get<T>(stack : Stack<T>, position : Nat) : ?T",
       "public func isEmpty<T>(stack : Stack<T>) : Bool",
-      "public func join<T>(stack : Types.Iter<Stack<T>>) : Stack<T>",
-      "public func map<T1, T2>(stack : Stack<T1>, f : T1 -> T2) : Stack<T2>",
-      "public func merge<T>(stack1 : Stack<T>, stack2 : Stack<T>, lessThanOrEqual : (T, T) -> Bool) : Stack<T>",
-      "public func partition<T>(stack : Stack<T>, f : T -> Bool) : (Stack<T>, Stack<T>)",
+      "public func map<T, U>(stack : Stack<T>, project : T -> U) : Stack<U>",
       "public func peek<T>(stack : Stack<T>) : ?T",
       "public func pop<T>(stack : Stack<T>) : ?T",
       "public func push<T>(stack : Stack<T>, value : T)",
-      "public func repeat<T>(item : T, n : Nat) : Stack<T>",
-      "public func reverse<T>(stack : Stack<T>) : ()",
-      "public func singleton<T>(item : T) : Stack<T>",
+      "public func reverse<T>(stack : Stack<T>)",
+      "public func singleton<T>(element : T) : Stack<T>",
       "public func size<T>(stack : Stack<T>) : Nat",
-      "public func split<T>(stack : Stack<T>, n : Nat) : (Stack<T>, Stack<T>)",
       "public type Stack<T>",
       "public func tabulate<T>(size : Nat, generator : Nat -> T) : Stack<T>",
-      "public func take<T>(stack : Stack<T>, n : Nat) : Stack<T>",
-      "public func toText<T>(stack : Stack<T>, f : T -> Text) : Text",
-      "public func values<T>(stack : Stack<T>) : Types.Iter<T>",
-      "public func zip<T, U>(stack1 : Stack<T>, stack2 : Stack<U>) : Stack<(T, U)>",
-      "public func zipWith<T, U, V>(stack1 : Stack<T>, stack2 : Stack<U>, f : (T, U) -> V) : Stack<V>"
+      "public func toPure<T>(stack : Stack<T>) : PureList.List<T>",
+      "public func toText<T>(stack : Stack<T>, format : T -> Text) : Text",
+      "public func values<T>(stack : Stack<T>) : Types.Iter<T>"
     ]
   },
   {
@@ -1212,17 +1199,24 @@
     ]
   },
   {
+    "name": "internal/PRNG",
+    "exports": [
+      "public class SFC64(p : Nat64, q : Nat64, r : Nat64)",
+      "public func sfc64a() : SFC64"
+    ]
+  },
+  {
     "name": "pure/List",
     "exports": [
       "public func all<T>(list : List<T>, f : T -> Bool) : Bool",
       "public func any<T>(list : List<T>, f : T -> Bool) : Bool",
       "public func chunks<T>(list : List<T>, n : Nat) : List<List<T>>",
-      "public func compare<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : Order.Order",
+      "public func compare<T>(list1 : List<T>, list2 : List<T>, compareItem : (T, T) -> Order.Order) : Order.Order",
       "public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T>",
       "public func contains<T>(list : List<T>, equal : (T, T) -> Bool, item : T) : Bool",
       "public func drop<T>(list : List<T>, n : Nat) : List<T>",
       "public func empty<T>() : List<T>",
-      "public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool",
+      "public func equal<T>(list1 : List<T>, list2 : List<T>, equalItem : (T, T) -> Bool) : Bool",
       "public func filter<T>(list : List<T>, f : T -> Bool) : List<T>",
       "public func filterMap<T, R>(list : List<T>, f : T -> ?R) : List<R>",
       "public func find<T>(list : List<T>, f : T -> Bool) : ?T",
@@ -1240,10 +1234,10 @@
       "public type List<T>",
       "public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2>",
       "public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E>",
-      "public func merge<T>(list1 : List<T>, list2 : List<T>, lessThanOrEqual : (T, T) -> Bool) : List<T>",
+      "public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T>",
       "public func partition<T>(list : List<T>, f : T -> Bool) : (List<T>, List<T>)",
-      "public func pop<T>(list : List<T>) : (?T, List<T>)",
-      "public func push<T>(list : List<T>, item : T) : List<T>",
+      "public func popFront<T>(list : List<T>) : (?T, List<T>)",
+      "public func pushFront<T>(list : List<T>, item : T) : List<T>",
       "public func repeat<T>(item : T, n : Nat) : List<T>",
       "public func reverse<T>(list : List<T>) : List<T>",
       "public func singleton<T>(item : T) : List<T>",
@@ -1302,7 +1296,7 @@
     "exports": [
       "public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool",
       "public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool",
-      "public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order",
+      "public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compareItem : (T, T) -> Order.Order) : Order.Order",
       "public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, item : T) : Bool",
       "public func empty<T>() : Queue<T>",
       "public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equal : (T, T) -> Bool) : Bool",

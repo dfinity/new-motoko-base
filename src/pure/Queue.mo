@@ -142,6 +142,7 @@ module {
     }
   };
 
+  // helper to rebalance the queue after getting lopsided
   func check<T>(q : Queue<T>) : Queue<T> {
     switch q {
       case (null, n, r) {
@@ -266,9 +267,19 @@ module {
     case _ popBack(check queue)
   };
 
+  /// Turn an iterator into a queue, consuming it.
+  /// Example:
+  /// ```motoko include=initialize
+  /// Queue.fromIter<Nat>([0, 1, 2, 3, 4].values())
+  /// // => (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func fromIter<T>(iter : Iter.Iter<T>) : Queue<T> {
     let list = List.fromIter iter;
-    check((list, List.size list, null))
+    check(list, List.size list, null)
   };
 
   public func values<T>(queue : Queue<T>) : Iter.Iter<T> = Iter.concat(List.values(queue.0), List.values(List.reverse(queue.2)));
@@ -289,35 +300,123 @@ module {
     }
   };
 
+  /// Return true if the given predicate `f` is true for all queue
+  /// elements.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  ///
+  /// Queue.all<Nat>(
+  ///   (?(1, ?(2, ?(3, null))), 3, null),
+  ///   func n = n > 1
+  /// ); // => false
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     for (item in values queue) if (not (predicate item)) return false;
     return true
   };
 
+  /// Return true if there exists a queue element for which
+  /// the given predicate `f` is true.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  ///
+  /// Queue.any<Nat>(
+  ///   (null, 3, ?(1, ?(2, ?(3, null)))),
+  ///   func n = n > 1
+  /// ) // => true
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     for (item in values queue) if (predicate item) return true;
     return false
   };
 
+  /// Call the given function for its side effect, with each queue element in turn.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// var sum = 0;
+  /// Queue.forEach<Nat>((?(0, ?(1, ?(2, null))), 3, null), func n = sum += n);
+  /// sum // => 3
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func forEach<T>(queue : Queue<T>, f : T -> ()) = for (item in values queue) f item;
 
+  /// Call the given function `f` on each queue element and collect the results
+  /// in a new queue.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat = "mo:base/Nat"
+  /// Queue.map<Nat, Text>(Queue.fromIter([0, 1, 2].values()), Nat.toText) // => (?("0", null), 3, ?("2", ?("1", null)))
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
     let (fr, n, b) = queue;
     (List.map(fr, f), n, List.map(b, f))
   };
 
+  /// Create a new queue with only those elements of the original queue for which
+  /// the given function (often called the _predicate_) returns true.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// Queue.filter<Nat>((?(0, ?(1, ?(2, null))), 4, ?(1, null)), func n = n != 1) // => ?(0, ?(2, null))
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T> {
     let (fr, _, b) = queue;
     let front = List.filter(fr, f);
     let back = List.filter(b, f);
-    (front, List.size front + List.size back, back)
+    check(front, List.size front + List.size back, back)
   };
 
+  /// Call the given function on each queue element, and collect the non-null results
+  /// in a new queue.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// Queue.filterMap<Nat, Nat>(
+  ///   (?(1, ?(2, ?(3, null))), 3, null)
+  ///   func n = if (n > 1) ?(n * 2) else null
+  /// ) // => (?(4, null), 2, ?(6, null))
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
     let (fr, _n, b) = queue;
     let front = List.filterMap(fr, f);
     let back = List.filterMap(b, f);
-    (front, List.size front + List.size back, back)
+    check(front, List.size front + List.size back, back)
   };
 
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
@@ -331,10 +430,28 @@ module {
     text # "]"
   };
 
-  public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compare : (T, T) -> Order.Order) : Order.Order {
+  /// Compare two queues using lexicographic ordering specified by argument function `compareItem`.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// import Nat "mo:base/Nat";
+  ///
+  /// Queue.compare<Nat>(
+  ///   (?(1, ?(2, null)), 2, null),
+  ///   (null, 2, ?(2, ?(1, null))),
+  ///   Nat.compare
+  /// ) // => #equal
+  /// ```
+  ///
+  /// Runtime: O(size(l1))
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
+  public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compareItem : (T, T) -> Order.Order) : Order.Order {
     let (i1, i2) = (values queue1, values queue2);
     loop switch (i1.next(), i2.next()) {
-      case (?v1, ?v2) switch (compare(v1, v2)) {
+      case (?v1, ?v2) switch (compareItem(v1, v2)) {
         case (#equal) ();
         case c return c
       };

@@ -6,6 +6,16 @@
 ///
 /// **NOTE:** Since cycles measure computational resources, the value of  `balance()` can change from one call to the next.
 ///
+/// Cycles can be transferred from the current actor to another actor with the evaluation of certain forms of expression.
+/// In particular, the expression must be a call to a shared function, a call to a local function with an `async` return type, or a simple `async` expression.
+/// To attach an amount of cycles to an expression `<exp>`, simply prefix the expression with `(with cycles = <amount>)`, that is, `(with cycles = <amount>) <exp>`.
+///
+/// **NOTE:** Attaching cycles will trap if the amount specified exceeds `2 ** 128` cycles.
+///
+/// Upon the call, but not before, the amount of cycles is deducted from `balance()`.
+/// If this total exceeds `balance()`, the caller traps, aborting the call without consuming the cycles.
+/// Note that attaching cycles to a call to a local function call or `async` expression just transfers cycles from the current actor to itself.
+///
 /// Example for use on the ICP:
 /// ```motoko no-repl
 /// import Cycles "mo:base/Cycles";
@@ -14,8 +24,7 @@
 /// actor {
 ///   public func main() : async() {
 ///     Debug.print("Main balance: " # debug_show(Cycles.balance()));
-///     Cycles.add<system>(15_000_000);
-///     await operation(); // accepts 10_000_000 cycles
+///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
 ///     Debug.print("Main refunded: " # debug_show(Cycles.refunded())); // 5_000_000
 ///     Debug.print("Main balance: " # debug_show(Cycles.balance())); // decreased by around 10_000_000
 ///   };
@@ -80,8 +89,7 @@ module {
   ///
   /// actor {
   ///   public func main() : async() {
-  ///     Cycles.add<system>(15_000_000);
-  ///     await operation(); // accepts 10_000_000 cycles
+  ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   ///   };
   ///
   ///   func operation() : async() {
@@ -91,34 +99,6 @@ module {
   /// }
   /// ```
   public let accept : <system>(amount : Nat) -> (accepted : Nat) = Prim.cyclesAccept;
-
-  /// Indicates additional `amount` of cycles to be transferred in
-  /// the next call, that is, evaluation of a shared function call or
-  /// async expression.
-  /// Traps if the current total would exceed `2 ** 128` cycles.
-  /// Upon the call, but not before, the total amount of cycles ``add``ed since
-  /// the last call is deducted from `balance()`.
-  /// If this total exceeds `balance()`, the caller traps, aborting the call.
-  ///
-  /// **Note**: The implicit register of added amounts is reset to zero on entry to
-  /// a shared function and after each shared function call or resume from an await.
-  ///
-  /// Example for use on the ICP (for simplicity, only transferring cycles to itself):
-  /// ```motoko no-repl
-  /// import Cycles "mo:base/Cycles";
-  ///
-  /// actor {
-  ///   func operation() : async() {
-  ///     ignore Cycles.accept<system>(10_000_000);
-  ///   };
-  ///
-  ///   public func main() : async() {
-  ///     Cycles.add<system>(15_000_000);
-  ///     await operation();
-  ///   }
-  /// }
-  /// ```
-  public let add : <system>(amount : Nat) -> () = Prim.cyclesAdd;
 
   /// Reports `amount` of cycles refunded in the last `await` of the current
   /// context, or zero if no await has occurred yet.
@@ -137,8 +117,7 @@ module {
   ///   };
   ///
   ///   public func main() : async() {
-  ///     Cycles.add<system>(15_000_000);
-  ///     await operation(); // accepts 10_000_000 cycles
+  ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   ///     Debug.print("Refunded: " # debug_show(Cycles.refunded())); // 5_000_000
   ///   }
   /// }

@@ -919,7 +919,7 @@ module {
     deleteAll(
       set,
       compare,
-      Iter.filter<T>(array.values(), func(element : T) : Bool = not predicate(element))
+      Iter.filter<T>(array.vals(), func(element : T) : Bool = not predicate(element))
     )
   };
 
@@ -2044,7 +2044,7 @@ module {
 
   func containsInInternal<T>(internalNode : Internal<T>, compare : (T, T) -> Order.Order, element : T) : Bool {
     switch (NodeUtil.getElementIndex<T>(internalNode.data, compare, element)) {
-      case (#elementFound(index)) {
+      case (#elementFound _index) {
         true
       };
       case (#notFound(index)) {

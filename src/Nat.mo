@@ -12,6 +12,7 @@ import Int "Int";
 import Prim "mo:⛔";
 import Char "Char";
 import Iter "Iter";
+import Runtime "Runtime";
 
 module {
 
@@ -60,8 +61,12 @@ module {
   /// Debug.print(debug_show Nat.fromInt(-1)); // => null
   /// Debug.print(debug_show Nat.fromInt(1234)); // => ?1234
   /// ```
-  public func fromInt(int : Int) : ?Nat {
-    if (int < 0) { null } else { ?Int.abs(int) }
+  public func fromInt(int : Int) : Nat {
+    if (int < 0) {
+      Runtime.trap("Nat.fromInt(): negative input value")
+    } else {
+      Int.abs(int)
+    }
   };
 
   /// Converts a natural number to an integer.

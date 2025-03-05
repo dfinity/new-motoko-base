@@ -58,10 +58,12 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(1)
-  public func size<T>(list : List<T>) : Nat = switch list {
-    case null 0;
-    case (?(_, t)) 1 + size t
-  };
+  public func size<T>(list : List<T>) : Nat = (
+    func go(n : Nat, list : List<T>) : Nat = switch list {
+      case (?(_, t)) go(n + 1, t);
+      case null n
+    }
+  )(0, list);
 
   /// Check whether the list contains a given value. Uses the provided equality function to compare values.
   ///
@@ -96,8 +98,8 @@ module {
   ///
   /// Space: O(1)
   public func get<T>(list : List<T>, n : Nat) : ?T = switch list {
-    case null null;
-    case (?(h, t)) if (n == 0) ?h else get(t, n - 1 : Nat)
+    case (?(h, t)) if (n == 0) ?h else get(t, n - 1 : Nat);
+    case null null
   };
 
   /// Add `item` to the head of `list`, and return the new list.
@@ -110,7 +112,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func push<T>(list : List<T>, item : T) : List<T> = ?(item, list);
+  public func pushFront<T>(list : List<T>, item : T) : List<T> = ?(item, list);
 
   /// Return the last element of the list, if present.
   /// Example:
@@ -138,7 +140,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func pop<T>(list : List<T>) : (?T, List<T>) = switch list {
+  public func popFront<T>(list : List<T>) : (?T, List<T>) = switch list {
     case null (null, null);
     case (?(h, t)) (?h, t)
   };
@@ -153,13 +155,12 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func reverse<T>(list : List<T>) : List<T> {
+  public func reverse<T>(list : List<T>) : List<T> = (
     func go(acc : List<T>, list : List<T>) : List<T> = switch list {
-      case null acc;
-      case (?(h, t)) go(?(h, acc), t)
-    };
-    go(null, list)
-  };
+      case (?(h, t)) go(?(h, acc), t);
+      case null acc
+    }
+  )(null, list);
 
   /// Call the given function for its side effect, with each list element in turn.
   ///
@@ -176,8 +177,8 @@ module {
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func forEach<T>(list : List<T>, f : T -> ()) = switch list {
-    case null ();
-    case (?(h, t)) { f h; forEach(t, f) }
+    case (?(h, t)) { f h; forEach(t, f) };
+    case null ()
   };
 
   /// Call the given function `f` on each list element and collect the results
@@ -254,16 +255,16 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
-    case null #ok null;
-    case (?(h, t)) {
-      switch (f h, mapResult(t, f)) {
-        case (#ok r, #ok l) #ok(?(r, l));
-        case (#err e, _) #err e;
-        case (_, #err e) #err e
+
+  public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = (
+    func rev(acc : List<R>, list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
+      case null #ok acc;
+      case (?(h, t)) switch (f h) {
+        case (#ok fh) rev(?(fh, acc), t, f);
+        case (#err e) #err e
       }
     }
-  };
+  )(null, list, f) |> Result.mapOk(_, func(l : List<R>) : List<R> = reverse l);
 
   /// Create two new lists from the results of a given function (`f`).
   /// The first list only includes the elements for which the given
@@ -302,11 +303,26 @@ module {
   /// Runtime: O(size(l))
   ///
   /// Space: O(size(l))
-  public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T> = switch list1 {
-    case null list2;
-    case (?(h, t)) ?(h, concat(t, list2))
-  };
+  public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T> = (
+    func revAppend<T>(l : List<T>, m : List<T>) : List<T> = switch l {
+      case (?(h, t)) revAppend(t, ?(h, m));
+      case null m
+    }
+  )(reverse list1, list2);
 
+  /// Flatten, or repatedly concatenate, an iterator of lists as a list.
+  ///
+  /// Example:
+  /// ```motoko include=initialize
+  /// List.join<Nat>(
+  ///   [ ?(0, ?(1, ?(2, null))),
+  ///     ?(3, ?(4, ?(5, null))) ] |> Iter.fromArray _)
+  /// ); // => ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))))
+  /// ```
+  ///
+  /// Runtime: O(size*size)
+  ///
+  /// Space: O(size*size)
   public func join<T>(list : Iter.Iter<List<T>>) : List<T> {
     let ?l = list.next() else return null;
     let ls = join list;
@@ -363,8 +379,8 @@ module {
   ///
   /// Space: O(1)
   public func drop<T>(list : List<T>, n : Nat) : List<T> = if (n == 0) list else switch list {
-    case null null;
-    case (?(_h, t)) drop(t, n - 1 : Nat)
+    case (?(_, t)) drop(t, n - 1 : Nat);
+    case null null
   };
 
   /// Collapses the elements in `list` into a single value by starting with `base`
@@ -485,7 +501,7 @@ module {
 
   /// Merge two ordered lists into a single ordered list.
   /// This function requires both list to be ordered as specified
-  /// by the given relation `lessThanOrEqual`.
+  /// by the given relation `compare`.
   ///
   /// Example:
   /// ```motoko include=initialize
@@ -493,7 +509,7 @@ module {
   /// List.merge<Nat>(
   ///   ?(1, ?(2, ?(4, null))),
   ///   ?(2, ?(4, ?(6, null))),
-  ///   func (n1, n2) = n1 <= n2
+  ///   Nat.compare
   /// ); // => ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))))),
   /// ```
   ///
@@ -503,14 +519,14 @@ module {
   ///
   /// *Runtime and space assumes that `lessThanOrEqual` runs in O(1) time and space.
   // TODO: replace by merge taking a compare : (T, T) -> Order.Order function?
-  public func merge<T>(list1 : List<T>, list2 : List<T>, lessThanOrEqual : (T, T) -> Bool) : List<T> = switch (list1, list2) {
+  public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T> = switch (list1, list2) {
     case (?(h1, t1), ?(h2, t2)) {
-      if (lessThanOrEqual(h1, h2)) {
-        ?(h1, merge(t1, list2, lessThanOrEqual))
-      } else if (lessThanOrEqual(h2, h1)) {
-        ?(h2, merge(list1, t2, lessThanOrEqual))
+      if (compare(h1, h2) != #greater) {
+        ?(h1, merge(t1, list2, compare))
+      } else if (compare(h2, h1) != #greater) {
+        ?(h2, merge(list1, t2, compare))
       } else {
-        ?(h1, ?(h2, merge(list1, list2, lessThanOrEqual)))
+        ?(h1, ?(h2, merge(list1, list2, compare)))
       }
     };
     case (null, _) list2;
@@ -529,14 +545,14 @@ module {
   ///
   /// Space: O(1)
   ///
-  /// *Runtime and space assumes that `equalFunc` runs in O(1) time and space.
-  public func equal<T>(list1 : List<T>, list2 : List<T>, equalFunc : (T, T) -> Bool) : Bool = switch (list1, list2) {
+  /// *Runtime and space assumes that `equalItem` runs in O(1) time and space.
+  public func equal<T>(list1 : List<T>, list2 : List<T>, equalItem : (T, T) -> Bool) : Bool = switch (list1, list2) {
     case (null, null) true;
-    case (?(h1, t1), ?(h2, t2)) equalFunc(h1, h2) and equal(t1, t2, equalFunc);
+    case (?(h1, t1), ?(h2, t2)) equalItem(h1, h2) and equal(t1, t2, equalItem);
     case _ false
   };
 
-  /// Compare two lists using lexicographic ordering specified by argument function `compare`.
+  /// Compare two lists using lexicographic ordering specified by argument function `compareItem`.
   ///
   /// Example:
   /// ```motoko include=initialize
@@ -554,18 +570,14 @@ module {
   /// Space: O(1)
   ///
   /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
-  public func compare<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : Order.Order {
-    type Order = Order.Order;
-    func go(list1 : List<T>, list2 : List<T>, comp : (T, T) -> Order) : Order = switch (list1, list2) {
-      case (?(h1, t1), ?(h2, t2)) switch (comp(h1, h2)) {
-        case (#equal) go(t1, t2, comp);
-        case o o
-      };
-      case (null, null) #equal;
-      case (null, _) #less;
-      case _ #greater
+  public func compare<T>(list1 : List<T>, list2 : List<T>, compareItem : (T, T) -> Order.Order) : Order.Order = switch (list1, list2) {
+    case (?(h1, t1), ?(h2, t2)) switch (compareItem(h1, h2)) {
+      case (#equal) compare(t1, t2, compareItem);
+      case o o
     };
-    go(list1, list2, compare) // FIXME: only needed because of above shadowing
+    case (null, null) #equal;
+    case (null, _) #less;
+    case _ #greater
   };
 
   /// Generate a list based on a length and a function that maps from
@@ -585,8 +597,13 @@ module {
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func tabulate<T>(n : Nat, f : Nat -> T) : List<T> {
-    func go(at : Nat, n : Nat) : List<T> = if (n == 0) null else ?(f at, go(at + 1, n - 1));
-    go(0, n)
+    var i = 0;
+    var l : List<T> = null;
+    while (i < n) {
+      l := ?(f i, l);
+      i += 1
+    };
+    reverse l
   };
 
   /// Create a list with exactly one element.
@@ -616,7 +633,15 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
-  public func repeat<T>(item : T, n : Nat) : List<T> = if (n == 0) null else ?(item, repeat(item, n - 1 : Nat));
+  public func repeat<T>(item : T, n : Nat) : List<T> {
+    var res : List<T> = null;
+    var i : Int = n;
+    while (i != 0) {
+      i -= 1;
+      res := ?(item, res)
+    };
+    res
+  };
 
   /// Create a list of pairs from a pair of lists.
   ///
@@ -797,23 +822,27 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func fromIter<T>(iter : Iter.Iter<T>) : List<T> = switch (iter.next()) {
-    case null null;
-    case (?item) ?(item, fromIter iter)
+  public func fromIter<T>(iter : Iter.Iter<T>) : List<T> {
+    var result : List<T> = null;
+    Iter.forEach<T>(
+      iter,
+      func x = result := ?(x, result)
+    );
+    reverse result
   };
 
   public func toText<T>(list : List<T>, f : T -> Text) : Text {
     var text = "[";
-    var first = false;
+    var first = true;
     forEach(
       list,
       func(item : T) {
         if first {
-          text #= ", "
+          first := false
         } else {
-          first := true
+          text #= ", "
         };
-        text #= f(item)
+        text #= f item
       }
     );
     text # "]"

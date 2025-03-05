@@ -95,7 +95,7 @@ jobs:
         node: [20]
     steps:
       - uses: actions/checkout@v4
-      - name: Check for Motoko file changes in src directory
+      - name: Check for Motoko file changes in 'src' directory
         id: check_mo_changes
         run: |
           if ! git diff --name-only ${{ github.event.pull_request.base.sha || 'HEAD^' }} HEAD | grep -q '\.mo$'; then

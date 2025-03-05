@@ -47,8 +47,8 @@ func opnatEq(a : ?Nat, b : ?Nat) : Bool {
 
 // ## Construction
 let l1 = List.empty<X>();
-let l2 = List.push<X>(l1, 2);
-let l3 = List.push<X>(l2, 3);
+let l2 = List.pushFront<X>(l1, 2);
+let l3 = List.pushFront<X>(l2, 3);
 
 // ## Projection -- use nth
 assert (opnatEq(List.get<X>(l3, 0), ?3));
@@ -69,11 +69,11 @@ assert (opnatEq(List.get<X>(l3, 2), null));
    */
 
 // ## Deconstruction
-let (a1, _t1) = List.pop<X>(l3);
+let (a1, _t1) = List.popFront<X>(l3);
 assert (opnatEq(a1, ?3));
-let (a2, _t2) = List.pop<X>(l2);
+let (a2, _t2) = List.popFront<X>(l2);
 assert (opnatEq(a2, ?2));
-let (a3, t3) = List.pop<X>(l1);
+let (a3, t3) = List.popFront<X>(l1);
 assert (opnatEq(a3, null));
 assert (List.isEmpty<X>(t3));
 
@@ -310,17 +310,17 @@ let push = suite(
   [
     test(
       "empty",
-      List.push(List.empty<Nat>(), 0),
+      List.pushFront(List.empty<Nat>(), 0),
       M.equals(T.list(T.natTestable, ?(0, null)))
     ),
     test(
       "singleton",
-      List.push(List.push(List.empty<Nat>(), 0), 1),
+      List.pushFront(List.pushFront(List.empty<Nat>(), 0), 1),
       M.equals(T.list(T.natTestable, ?(1, ?(0, null))))
     ),
     test(
       "nary",
-      List.push(List.push(List.push(List.empty<Nat>(), 0), 1), 2),
+      List.pushFront(List.pushFront(List.pushFront(List.empty<Nat>(), 0), 1), 2),
       M.equals(T.list(T.natTestable, ?(2, ?(1, ?(0, null)))))
     )
   ]
@@ -352,7 +352,7 @@ let pop = suite(
   [
     test(
       "empty list",
-      List.pop(List.empty<Nat>()),
+      List.popFront(List.empty<Nat>()),
       M.equals(
         T.tuple2(
           T.optionalTestable(T.natTestable),
@@ -363,7 +363,7 @@ let pop = suite(
     ),
     test(
       "singleton",
-      List.pop(?(3, null)),
+      List.popFront(?(3, null)),
       M.equals(
         T.tuple2(
           T.optionalTestable(T.natTestable),
@@ -374,7 +374,7 @@ let pop = suite(
     ),
     test(
       "threesome",
-      List.pop(?(1, ?(2, ?(3, null)))),
+      List.popFront(?(1, ?(2, ?(3, null)))),
       M.equals(
         T.tuple2(
           T.optionalTestable(T.natTestable),

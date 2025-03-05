@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  validate:
+  validate-changelog:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -19,7 +19,37 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm run validate
+      - run: npm run validate:changelog
+
+  validate-version:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-24.04]
+        node: [20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run validate:version
+
+  validate-api:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-24.04]
+        node: [20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run validate:api
       - name: Check for API changes
         run: |
           DIFF=$(git diff -- validation/api)

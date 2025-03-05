@@ -127,7 +127,7 @@ module {
           var i = 1;
           while (i < n) {
             ignore iter.next();
-            i += 1;
+            i += 1
           };
           item
         }

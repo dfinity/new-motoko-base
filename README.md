@@ -23,8 +23,8 @@ base = "https://github.com/dfinity/new-motoko-base"
 It's also possible to start using both versions in parallel:
 
 ```toml
-base = "0.14.2"
-new-base = "0.2.0"
+base = "0.14.3"
+new-base = "0.2.2"
 ```
 
 Since this is a preview release for community feedback, expect breaking changes.
@@ -57,3 +57,9 @@ We automatically generate previews for each pull request.
 ## Contributing
 
 PRs are welcome! Please check out the [contributor guidelines](.github/CONTRIBUTING.md) for more information.
+
+Big thanks to the following community contributors:
+
+* [Timo Hanke](https://github.com/timohanke): [`vector`](https://github.com/research-ag/vector), [`prng`](https://github.com/research-ag/prng)
+* [Byron Becker](https://github.com/ByronBecker): [`StableHeapBTreeMap`](https://github.com/canscale/StableHeapBTreeMap)
+* [Zen Voich](https://github.com/ZenVoich): [`test`](https://github.com/ZenVoich/test)

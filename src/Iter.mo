@@ -126,7 +126,8 @@ module {
           let item = iter.next();
           var i = 1;
           while (i < n) {
-            ignore iter.next()
+            ignore iter.next();
+            i += 1;
           };
           item
         }

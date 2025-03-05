@@ -258,4 +258,94 @@ do {
   let iter3 = Iter.reverse(array3.vals());
   assert (?'a' == iter3.next());
   assert (null == iter3.next())
-}
+};
+
+do {
+  Debug.print("  empty");
+
+  // Test empty iterator returns null
+  let emptyIter = Iter.empty<Nat>();
+  assert(null == emptyIter.next());
+};
+
+do {
+  Debug.print("  size");
+
+  assert(0 == Iter.size(Iter.empty<Nat>()));
+  assert(3 == Iter.size([1, 2, 3].vals()));
+  let boundedIter = object {
+    var count = 0;
+    public func next() : ?Nat {
+      if (count >= 5) { null }
+      else {
+        count += 1;
+        ?1
+      }
+    }
+  };
+  assert(5 == Iter.size(boundedIter));
+};
+
+do {
+  Debug.print("  enumerate");
+
+  let emptyEnum = Iter.enumerate(Iter.empty<Text>());
+  assert(null == emptyEnum.next());
+
+  let singleEnum = Iter.enumerate(["a"].vals());
+  assert(?(0, "a") == singleEnum.next());
+  assert(null == singleEnum.next());
+
+  let multiEnum = Iter.enumerate([10, 20, 30].vals());
+  assert(?(0, 10) == multiEnum.next());
+  assert(?(1, 20) == multiEnum.next());
+  assert(?(2, 30) == multiEnum.next());
+  assert(null == multiEnum.next());
+};
+
+do {
+  Debug.print("  step");
+
+  let step0 = Iter.step([1, 2, 3, 4, 5].vals(), 0);
+  assert(null == step0.next());
+
+  let step1 = Iter.step([1, 2, 3].vals(), 1);
+  assert(?1 == step1.next());
+  assert(?2 == step1.next());
+  assert(?3 == step1.next());
+  assert(null == step1.next());
+
+  let step2 = Iter.step([1, 2, 3, 4, 5].vals(), 2);
+  assert(?1 == step2.next());
+  assert(?3 == step2.next());
+  assert(?5 == step2.next());
+  assert(null == step2.next());
+
+  let stepBig = Iter.step([1, 2, 3].vals(), 4);
+  assert(?1 == stepBig.next());
+  assert(null == stepBig.next());
+};
+
+do {
+  Debug.print("  concat");
+
+  let emptyConcat = Iter.concat(Iter.empty(), Iter.empty());
+  assert(null == emptyConcat.next());
+
+  let leftEmpty = Iter.concat(Iter.empty<Nat>(), [1, 2].vals());
+  assert(?1 == leftEmpty.next());
+  assert(?2 == leftEmpty.next());
+  assert(null == leftEmpty.next());
+
+  let rightEmpty = Iter.concat([1, 2].vals(), Iter.empty());
+  assert(?1 == rightEmpty.next());
+  assert(?2 == rightEmpty.next());
+  assert(null == rightEmpty.next());
+
+  let fullConcat = Iter.concat([1, 2].vals(), [3, 4].vals());
+  assert(?1 == fullConcat.next());
+  assert(?2 == fullConcat.next());
+  assert(?3 == fullConcat.next());
+  assert(?4 == fullConcat.next());
+  assert(null == fullConcat.next());
+};

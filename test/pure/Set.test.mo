@@ -567,7 +567,7 @@ func rebalanceTests(buildTestSet : () -> Set.Set<Nat>) : [Suite.Suite] = [
     "compare greater key",
     do {
       let set1 = buildTestSet();
-      let set2 = buildTestSet() |> Set.remove(_, Nat.compare, Set.size(_) - 1);
+      let set2 = buildTestSet() |> Set.remove(_, Nat.compare, Set.size(_) - 1 : Nat);
 
       assert (Set.compare(set1, set2, Nat.compare) == #greater);
       true
@@ -711,7 +711,7 @@ run(
         "repeated delete",
         do {
           var set = buildTestSet();
-          let (set1, true) = Set.delete(set, Nat.compare, 1);
+          let (set1, true) = Set.delete(set, Nat.compare, 1) else Runtime.trap("repeated delete");
           let (_, changed) = Set.delete(set1, Nat.compare, 1);
           changed
         },

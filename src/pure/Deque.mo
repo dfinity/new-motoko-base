@@ -120,7 +120,7 @@ module {
   };
 
   class Stacks<T>(left : List<T>, right : List<T>) = self {
-    public func push(t : T) : Stacks<T> = Stacks(List.push(left, t), right);
+    public func push(t : T) : Stacks<T> = Stacks(?(t, left), right);
 
     // pop (Stack (x # left) right) = Stack left right
     // pop (Stack [] (x # right)) = Stack [] right

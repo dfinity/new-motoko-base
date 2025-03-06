@@ -13,6 +13,64 @@ module {
     #rebal : States<T>
   };
 
+  public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
+    case (#empty) #one(element);
+    case (#one(y)) #two(element, y);
+    case (#two(y, z)) #three(element, y, z);
+    case (#three(a, b, c)) {
+      let i1 = (Stacks<T>(?(element, ?(a, null)), null), 2);
+      let i2 = (Stacks<T>(?(c, ?(b, null)), null), 2);
+      #idles(i1, i2)
+    };
+    case (#idles(l0, (r, nR))) {
+      let (l1, nL1) = Idle.push(l0, element); // enque the element to the left end
+      // check if the size invariant still holds
+      if (nL1 <= 3 * nR) #idles((l1, nL1), (r, nR)) else {
+        // initiate the rebalancing process
+        let nL2 = nL1 - nR - 1 : Nat;
+        let nR2 = 2 * nL2 + 1;
+        let big = #big1(Current(null, 0, l1, nL2), l1, null, nL2);
+        let small = #small1(Current(null, 0, r, nR2), r, null);
+        let states = (#right, big, small);
+        let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
+        #rebal(states6)
+      }
+    };
+    // if the deque is in the middle of a rebalancing process: push the element and advance the rebalancing process by 4 steps
+    // move back into the idle state if the rebalancing is done
+    case (#rebal((dir, big0, small0))) switch dir {
+      case (#left) {
+        let small = SmallState.push(small0, element);
+        let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
+        switch states4 {
+          case (#left, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(small, big); // todo: swapped big with small
+          case _ #rebal(states4)
+        }
+      };
+      case (#right) {
+        let big = BigState.push(big0, element);
+        let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
+        switch states4 {
+          case (#right, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(big, small); // todo: swapped big with small
+          case _ #rebal(states4)
+        }
+      }
+    }
+  };
+
+  public func pushBack<T>(deque : Deque<T>, element : T) : Deque<T> = reverse(pushFront(reverse(deque), element));
+
+  // todo: correct? make it public?
+  func reverse<T>(deque : Deque<T>) : Deque<T> = switch deque {
+    case (#empty) deque;
+    case (#one(_)) deque;
+    case (#two(x, y)) #two(y, x);
+    case (#three(x, y, z)) #three(z, y, x);
+    case (#idles(l, r)) #idles(r, l);
+    case (#rebal(#left, big, small)) #rebal(#right, big, small);
+    case (#rebal(#right, big, small)) #rebal(#left, big, small)
+  };
+
   class Stacks<T>(left : List<T>, right : List<T>) = self {
     public func push(t : T) : Stacks<T> = Stacks(List.push(left, t), right);
 
@@ -42,11 +100,12 @@ module {
   };
 
   /// Represents an end of the deque that is not in a rebalancing process.
-  class Idle<T>(stacks : Stacks<T>, size : Nat) = self {
-    debug assert stacks.size() == size;
+  type Idle<T> = (stacks : Stacks<T>, size : Nat);
+  module Idle {
+    // debug assert stacks.size() == size; // todo: where to put it?
 
-    public func push(t : T) : Idle<T> = Idle(stacks.push(t), 1 + size);
-    public func pop() : (T, Idle<T>) = (stacks.unsafeFirst(), Idle(stacks.pop(), size - 1 : Nat))
+    public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (stacks.push(t), 1 + size);
+    public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (stacks.unsafeFirst(), (stacks.pop(), size - 1 : Nat))
   };
 
   /// Stores information about operations that happen during rebalancing but which have not become part of the old state that is being rebalanced.
@@ -148,12 +207,12 @@ module {
     public func norm<T>(copy : CopyState<T>) : CommonState<T> {
       let #copy(cur, _, new, n) = copy;
       let (ext, extSize, _, targetSize) = cur.this;
-      if (targetSize <= n) #idle(cur, (Idle(Stacks<T>(ext, new), extSize + n))) else copy
+      if (targetSize <= n) #idle(cur, (Stacks<T>(ext, new), extSize + n)) else copy
     };
 
     public func push<T>(common : CommonState<T>, t : T) : CommonState<T> = switch common {
       case (#copy(cur, aux, new, n)) #copy(cur.push(t), aux, new, n);
-      case (#idle(cur, idle)) #idle(cur.push(t), idle.push(t)) // yes, push to both
+      case (#idle(cur, idle)) #idle(cur.push(t), Idle.push(idle, t)) // yes, push to both
     };
 
     public func pop<T>(common : CommonState<T>) : (T, CommonState<T>) = switch common {
@@ -162,7 +221,7 @@ module {
         (t, norm(#copy(cur2, aux, new, n)))
       };
       case (#idle(cur, idle)) {
-        let (t, idle2) = idle.pop();
+        let (t, idle2) = Idle.pop(idle);
         (t, #idle(cur.pop().1, idle2)) // todo: in the paper: `fst (pop cur)` but that is an element...
       }
     }

@@ -433,7 +433,7 @@ suite(
       func() {
         var pureList = PureList.empty<Nat>();
         for (index in Nat.range(0, largeSize)) {
-          pureList := PureList.push(pureList, index)
+          pureList := PureList.pushFront(pureList, index)
         };
 
         let stack = Stack.fromPure<Nat>(pureList);

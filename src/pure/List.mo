@@ -112,7 +112,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func push<T>(list : List<T>, item : T) : List<T> = ?(item, list);
+  public func pushFront<T>(list : List<T>, item : T) : List<T> = ?(item, list);
 
   /// Return the last element of the list, if present.
   /// Example:
@@ -140,7 +140,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func pop<T>(list : List<T>) : (?T, List<T>) = switch list {
+  public func popFront<T>(list : List<T>) : (?T, List<T>) = switch list {
     case null (null, null);
     case (?(h, t)) (?h, t)
   };

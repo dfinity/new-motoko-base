@@ -1,9 +1,13 @@
 # Changelog
 
+## 0.3.0
+
+* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()`
+
 ## 0.2.2
 
-* Added range functions to `Random.crypto()` (#215).
-* Added `isRetryPossible : Error -> Bool` to `Error` (#211).
+* Add range functions to `Random.crypto()` (#215).
+* Add `isRetryPossible : Error -> Bool` to `Error` (#211).
 
 ## 0.2.1
 

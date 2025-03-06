@@ -63,14 +63,6 @@ module {
     }
   };
 
-  type States<T> = {
-    direction : Direction;
-    bigState : BigState<T>;
-    smallState : SmallState<T>
-  };
-
-  type Direction = { #left; #right };
-
   type BigState<T> = {
     #big1 : (Current<T>, Stacks<T>, List<T>, Nat);
     #big2 : CommonState<T>
@@ -108,7 +100,36 @@ module {
   };
 
   module SmallState {
+    public func push<T>(state : SmallState<T>, t : T) : SmallState<T> = switch state {
+      case (#small1(cur, small, aux)) #small1(cur.push(t), small, aux);
+      case (#small2(cur, aux, big, new, n)) #small2(cur.push(t), aux, big, new, n);
+      case (#small3(common)) #small3(CommonState.push(common, t))
+    };
 
+    public func pop<T>(state : SmallState<T>) : (T, SmallState<T>) = switch state {
+      case (#small1(cur0, small, aux)) {
+        let (t, cur) = cur0.pop();
+        (t, #small1(cur, small, aux))
+      };
+      case (#small2(cur0, aux, big, new, n)) {
+        let (t, cur) = cur0.pop();
+        (t, #small2(cur, aux, big, new, n))
+      };
+      case (#small3(common0)) {
+        let (t, common) = CommonState.pop(common0);
+        (t, #small3(common))
+      }
+    };
+
+    public func step<T>(state : SmallState<T>) : SmallState<T> = switch state {
+      case (#small1(cur, small, aux)) {
+        if (small.isEmpty()) #small1(cur, small, aux) else #small1(cur, small.pop(), ?(small.unsafeFirst(), aux))
+      };
+      case (#small2(cur, aux, big, new, n)) {
+        if (big.isEmpty()) #small3(CommonState.norm(#copy(cur, aux, new, n))) else #small2(cur, aux, big.pop(), ?(big.unsafeFirst(), new), 1 + n)
+      };
+      case (#small3(common)) #small3(CommonState.step(common))
+    }
   };
 
   type CopyState<T> = { #copy : (Current<T>, List<T>, List<T>, Nat) };
@@ -118,15 +139,15 @@ module {
   module CommonState {
     public func step<T>(common : CommonState<T>) : CommonState<T> = switch common {
       case (#copy(cur, aux, new, n)) {
-        let (ext, extSize, old, targetSize) = cur.this;
+        let (_, _, _, targetSize) = cur.this;
         norm(if (n < targetSize) #copy(cur, unsafeTail(aux), ?(unsafeHead(aux), new), 1 + n) else #copy(cur, aux, new, n))
       };
       case (#idle(_, _)) common
     };
 
     public func norm<T>(copy : CopyState<T>) : CommonState<T> {
-      let #copy(cur, aux, new, n) = copy;
-      let (ext, extSize, old, targetSize) = cur.this;
+      let #copy(cur, _, new, n) = copy;
+      let (ext, extSize, _, targetSize) = cur.this;
       if (targetSize <= n) #idle(cur, (Idle(Stacks<T>(ext, new), extSize + n))) else copy
     };
 
@@ -146,6 +167,23 @@ module {
       }
     }
   };
+
+  type States<T> = (
+    direction : Direction,
+    bigState : BigState<T>,
+    smallState : SmallState<T>
+  );
+
+  module States {
+    public func step<T>(states : States<T>) : States<T> = switch states {
+      case (dir, #big1(currentB, big, auxB, 0), #small1(currentS, _, auxS)) {
+        (dir, BigState.step(#big1(currentB, big, auxB, 0)), #small2(currentS, auxS, big, null, 0))
+      };
+      case (dir, big, small) (dir, BigState.step(big), SmallState.step(small))
+    }
+  };
+
+  type Direction = { #left; #right };
 
   type List<T> = Types.Pure.List<T>;
   func unsafeHead<T>(l : List<T>) : T = Option.unwrap(l).0; // todo: avoid

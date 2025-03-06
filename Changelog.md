@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.1
+## Next
 
 * Fix bug in `Iter.step()` implementation
 

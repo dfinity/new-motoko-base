@@ -10,10 +10,11 @@
     "test": "run-s test:ts test:mops",
     "test:ts": "cd test/ts && tsx .",
     "test:mops": "mops test",
-    "validate": "run-s validate:changelog validate:version validate:api",
+    "validate": "run-s validate:changelog validate:version validate:api validate:docs",
     "validate:changelog": "cd test/ts/validate && tsx changelog",
     "validate:version": "cd test/ts/validate && tsx version",
     "validate:api": "cd test/ts/validate && tsx api",
+    "validate:docs": "cd test/ts/validate && tsx docs",
     "docs": "$(dfx cache show)/mo-doc"
   },
   "repository": {

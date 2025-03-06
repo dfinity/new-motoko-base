@@ -257,7 +257,7 @@ suite(
       "negative indices are handled correctly",
       func() {
         let input : [Nat] = [4, 3, 1, 2, 5];
-        
+
         let sNegStart = Array.range(input, -2, 5);
         assert (sNegStart.next() == ?2);
         assert (sNegStart.next() == ?5);
@@ -280,7 +280,7 @@ suite(
       "out-of-bounds indices are clamped",
       func() {
         let input : [Nat] = [4, 3, 1, 2, 5];
-        
+
         let sOobStart = Array.range(input, -10, 2);
         assert (sOobStart.next() == ?4);
         assert (sOobStart.next() == ?3);
@@ -386,7 +386,7 @@ suite(
       func() {
         expect.nat(Iter.size(Iter.empty<Nat>())).equal(0);
         expect.nat(Iter.size([1, 2, 3].vals())).equal(3);
-        
+
         let boundedIter = object {
           var count = 0;
           public func next() : ?Nat {

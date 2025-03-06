@@ -2,6 +2,7 @@
 import Types "../Types";
 import List "List";
 import Option "../Option";
+import { trap } "../Runtime";
 
 module {
   public type Deque<T> = {
@@ -9,7 +10,7 @@ module {
     #one : T;
     #two : (T, T);
     #three : (T, T, T);
-    #idles : (Idle<T>, Idle<T>);
+    #idles : (Idle<T>, Idle<T>); // todo: add invariant assert that the sizes are correct
     #rebal : States<T>
   };
 
@@ -43,7 +44,7 @@ module {
         let small = SmallState.push(small0, element);
         let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
         switch states4 {
-          case (#left, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(small, big); // todo: swapped big with small
+          case (#left, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(small, big); // swapped because dir=left
           case _ #rebal(states4)
         }
       };
@@ -51,7 +52,7 @@ module {
         let big = BigState.push(big0, element);
         let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
         switch states4 {
-          case (#right, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(big, small); // todo: swapped big with small
+          case (#right, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(big, small);
           case _ #rebal(states4)
         }
       }
@@ -59,6 +60,53 @@ module {
   };
 
   public func pushBack<T>(deque : Deque<T>, element : T) : Deque<T> = reverse(pushFront(reverse(deque), element));
+
+  // todo: check line by line if correct
+  public func popFront<T>(deque : Deque<T>) : ?(T, Deque<T>) = switch deque {
+    case (#empty) null;
+    case (#one(x)) ?(x, #empty);
+    case (#two(x, y)) ?(x, #one(y));
+    case (#three(x, y, z)) ?(x, #two(y, z));
+    case (#idles(l0, (r0, nR0))) {
+      let (x, (l1, nL1)) = Idle.pop(l0);
+      if (nR0 <= 3 * nL1) {
+        ?(x, #idles((l1, nL1), (r0, nR0)))
+      } else if (1 <= nL1) {
+        let nL2 = 2 * nL1 + 1;
+        let nR2 = nR0 - nL2 - 1 : Nat;
+        let small = #small1(Current(null, 0, l1, nL2), l1, null);
+        let big = #big1(Current(null, 0, r0, nR2), r0, null, nR2);
+        let states = (#left, big, small);
+        let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
+        ?(x, #rebal(states6))
+      } else {
+        ?(x, r0.smallDeque())
+      }
+    };
+    case (#rebal((dir, big0, small0))) switch dir {
+      case (#left) {
+        let (x, small) = SmallState.pop(small0);
+        let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
+        switch states4 {
+          case (#right, #big2(#idle(_, big)), #small3(#idle(_, small))) ?(x, #idles(big, small)); // todo: same as below?
+          case _ ?(x, #rebal(states4))
+        }
+      };
+      case (#right) {
+        let (x, big) = BigState.pop(big0);
+        let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
+        switch states4 {
+          case (#right, #big2(#idle(_, big)), #small3(#idle(_, small))) ?(x, #idles(big, small)); // todo: same as above?
+          case _ ?(x, #rebal(states4))
+        }
+      }
+    }
+  };
+
+  public func popBack<T>(deque : Deque<T>) : ?(T, Deque<T>) = do ? {
+    let (x, deque2) = popFront(reverse(deque))!;
+    (x, reverse(deque2))
+  };
 
   // todo: correct? make it public?
   func reverse<T>(deque : Deque<T>) : Deque<T> = switch deque {
@@ -96,7 +144,21 @@ module {
 
     public func isEmpty() : Bool = List.isEmpty(left) and List.isEmpty(right);
 
-    public func size() : Nat = List.size(left) + List.size(right)
+    public func size() : Nat = List.size(left) + List.size(right);
+
+    public func smallDeque() : Deque<T> = switch (left, right) {
+      case (null, null) #empty;
+      case (null, ?(x, null)) #one(x);
+      case (?(x, null), null) #one(x);
+      case (null, ?(x, ?(y, null))) #two(y, x);
+      case (?(x, null), ?(y, null)) #two(y, x);
+      case (?(x, ?(y, null)), null) #two(y, x);
+      case (null, ?(x, ?(y, ?(z, null)))) #three(z, y, x);
+      case (?(x, ?(y, ?(z, null))), null) #three(z, y, x);
+      case (?(x, ?(y, null)), ?(z, null)) #three(z, y, x);
+      case (?(x, null), ?(y, ?(z, null))) #three(z, y, x);
+      case _ (trap "Illegal smallDeque invocation")
+    }
   };
 
   /// Represents an end of the deque that is not in a rebalancing process.

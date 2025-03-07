@@ -45,8 +45,8 @@ module {
     case (#one(y)) #two(element, y);
     case (#two(y, z)) #three(element, y, z);
     case (#three(a, b, c)) {
-      let i1 = (Stacks<T>(?(element, ?(a, null)), null), 2);
-      let i2 = (Stacks<T>(?(c, ?(b, null)), null), 2);
+      let i1 = ((?(element, ?(a, null)), null), 2);
+      let i2 = ((?(c, ?(b, null)), null), 2);
       #idles(i1, i2)
     };
     case (#idles(l0, (r, nR))) {
@@ -57,8 +57,8 @@ module {
         let remainedL = nL - nR - 1 : Nat;
         let remainedR = 2 * nR + 1;
         debug assert remainedL + remainedR == nL + nR;
-        let big = #big1(Current(null, 0, l, remainedL), l, null, remainedL);
-        let small = #small1(Current(null, 0, r, remainedR), r, null);
+        let big = #big1(Current<T>(null, 0, l, remainedL), l, null, remainedL);
+        let small = #small1(Current<T>(null, 0, r, remainedR), r, null);
         let states = (#right, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         #rebal(states6)
@@ -104,13 +104,13 @@ module {
         let remainedL = 2 * nL + 1;
         let remainedR = nR - nL - 1 : Nat;
         debug assert remainedL + remainedR == nL + nR;
-        let small = #small1(Current(null, 0, l, remainedL), l, null);
-        let big = #big1(Current(null, 0, r, remainedR), r, null, remainedR);
+        let small = #small1(Current<T>(null, 0, l, remainedL), l, null);
+        let big = #big1(Current<T>(null, 0, r, remainedR), r, null, remainedR);
         let states = (#left, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         ?(x, #rebal(states6))
       } else {
-        ?(x, r.smallDeque())
+        ?(x, Stacks.smallDeque(r))
       }
     };
     case (#rebal((dir, big0, small0))) switch dir {
@@ -151,34 +151,33 @@ module {
     case (#rebal(#right, big, small)) #rebal(#left, big, small)
   };
 
-  class Stacks<T>(left : List<T>, right : List<T>) = self {
-    public func push(t : T) : Stacks<T> = Stacks(?(t, left), right);
+  type Stacks<T> = (left : List<T>, right : List<T>);
 
-    // pop (Stack (x # left) right) = Stack left right
-    // pop (Stack [] (x # right)) = Stack [] right
-    // pop (Stack [] []) = Stack [] []
-    public func pop() : Stacks<T> = switch (left, right) {
-      case (?(_, leftTail), _) Stacks(leftTail, right);
-      case (null, ?(_, rightTail)) Stacks(null, rightTail);
-      case (null, null) self; // avoids allocation
+  module Stacks {
+    public func push<T>((left, right) : Stacks<T>, t : T) : Stacks<T> = (?(t, left), right);
+
+    public func pop<T>(stacks : Stacks<T>) : Stacks<T> = switch stacks {
+      case (?(_, leftTail), right) (leftTail, right);
+      case (null, ?(_, rightTail)) (null, rightTail);
+      case (null, null) stacks // avoids allocation
     };
 
-    public func first() : ?T = switch (left) {
+    public func first<T>((left, right) : Stacks<T>) : ?T = switch (left) {
       case (?(h, _)) ?h;
       case (null) do ? { right!.0 }
     };
 
     // todo: try avoid
-    public func unsafeFirst() : T = switch (left) {
+    public func unsafeFirst<T>((left, right) : Stacks<T>) : T = switch (left) {
       case (?(h, _)) h;
       case (null) Option.unwrap(right).0
     };
 
-    public func isEmpty() : Bool = List.isEmpty(left) and List.isEmpty(right);
+    public func isEmpty<T>((left, right) : Stacks<T>) : Bool = List.isEmpty(left) and List.isEmpty(right);
 
-    public func size() : Nat = List.size(left) + List.size(right);
+    public func size<T>((left, right) : Stacks<T>) : Nat = List.size(left) + List.size(right);
 
-    public func smallDeque() : Deque<T> = switch (left, right) {
+    public func smallDeque<T>((left, right) : Stacks<T>) : Deque<T> = switch (left, right) {
       case (null, null) #empty;
       case (null, ?(x, null)) #one(x);
       case (?(x, null), null) #one(x);
@@ -198,8 +197,8 @@ module {
   module Idle {
     // debug assert stacks.size() == size; // todo: where to put it?
 
-    public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (stacks.push(t), 1 + size);
-    public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (stacks.unsafeFirst(), (stacks.pop(), size - 1 : Nat))
+    public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (Stacks.push(stacks, t), 1 + size);
+    public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (Stacks.unsafeFirst(stacks), (Stacks.pop(stacks), size - 1 : Nat))
   };
 
   /// Stores information about operations that happen during rebalancing but which have not become part of the old state that is being rebalanced.
@@ -217,7 +216,7 @@ module {
     public func push(t : T) : Current<T> = Current(?(t, extra), 1 + extraSize, old, remained);
     public func pop() : (T, Current<T>) = switch (extra) {
       case (?(h, t)) (h, Current(t, extraSize - 1 : Nat, old, remained));
-      case (null) (old.unsafeFirst(), Current(null, extraSize, old.pop(), remained - 1 : Nat))
+      case (null) (Stacks.unsafeFirst(old), Current(null, extraSize, Stacks.pop(old), remained - 1 : Nat))
     };
 
     public func size() : Nat = extraSize + remained
@@ -248,10 +247,10 @@ module {
     public func step<T>(big : BigState<T>) : BigState<T> = switch big {
       case (#big1(cur, big, aux, n)) {
         if (n == 0) {
-          debug assert big.isEmpty();
+          debug assert Stacks.isEmpty(big);
           #big2(CommonState.norm(#copy(cur, aux, null, 0))) // todo: we ignore 'big' here, is that exaclty the size of the big stack?
         } else
-        #big1(cur, big.pop(), ?(big.unsafeFirst(), aux), n - 1 : Nat) // todo: refactor pop to return the element and the new state
+        #big1(cur, Stacks.pop(big), ?(Stacks.unsafeFirst(big), aux), n - 1 : Nat) // todo: refactor pop to return the element and the new state
       };
       case (#big2(state)) #big2(CommonState.step(state))
     };
@@ -292,10 +291,10 @@ module {
 
     public func step<T>(state : SmallState<T>) : SmallState<T> = switch state {
       case (#small1(cur, small, aux)) {
-        if (small.isEmpty()) #small1(cur, small, aux) else #small1(cur, small.pop(), ?(small.unsafeFirst(), aux))
+        if (Stacks.isEmpty(small)) #small1(cur, small, aux) else #small1(cur, Stacks.pop(small), ?(Stacks.unsafeFirst(small), aux))
       };
       case (#small2(cur, aux, big, new, n)) {
-        if (big.isEmpty()) #small3(CommonState.norm(#copy(cur, aux, new, n))) else #small2(cur, aux, big.pop(), ?(big.unsafeFirst(), new), 1 + n)
+        if (Stacks.isEmpty(big)) #small3(CommonState.norm(#copy(cur, aux, new, n))) else #small2(cur, aux, Stacks.pop(big), ?(Stacks.unsafeFirst(big), new), 1 + n)
       };
       case (#small3(common)) #small3(CommonState.step(common))
     };
@@ -325,7 +324,7 @@ module {
       let #copy(cur, _, new, moved) = copy;
       let (extra, extraSize, _, remained) = cur.this;
       debug assert moved <= remained;
-      if (moved >= remained) #idle(cur, (Stacks<T>(extra, new), extraSize + moved)) else copy
+      if (moved >= remained) #idle(cur, ((extra, new), extraSize + moved)) else copy
     };
 
     public func push<T>(common : CommonState<T>, t : T) : CommonState<T> = switch common {

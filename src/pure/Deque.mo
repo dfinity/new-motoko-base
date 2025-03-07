@@ -57,8 +57,8 @@ module {
         let remainedL = nL - nR - 1 : Nat;
         let remainedR = 2 * nR + 1;
         debug assert remainedL + remainedR == nL + nR;
-        let big = #big1(Current<T>(null, 0, l, remainedL), l, null, remainedL);
-        let small = #small1(Current<T>(null, 0, r, remainedR), r, null);
+        let big = #big1(Current.new(null, 0, l, remainedL), l, null, remainedL);
+        let small = #small1(Current.new(null, 0, r, remainedR), r, null);
         let states = (#right, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         #rebal(states6)
@@ -104,8 +104,8 @@ module {
         let remainedL = 2 * nL + 1;
         let remainedR = nR - nL - 1 : Nat;
         debug assert remainedL + remainedR == nL + nR;
-        let small = #small1(Current<T>(null, 0, l, remainedL), l, null);
-        let big = #big1(Current<T>(null, 0, r, remainedR), r, null, remainedR);
+        let small = #small1(Current.new(null, 0, l, remainedL), l, null);
+        let big = #big1(Current.new(null, 0, r, remainedR), r, null, remainedR);
         let states = (#left, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         ?(x, #rebal(states6))
@@ -207,19 +207,22 @@ module {
   /// - `extraSize`: size of `extra`
   /// - `old`: elements contained before the rebalancing process
   /// - `remained`: the number of elements which will be contained after the rebalancing is finished
-  class Current<T>(_this : (extra : List<T>, extraSize : Nat, old : Stacks<T>, remained : Nat)) {
-    public let this = _this;
-    let (extra, extraSize, old, remained) = _this;
+  type Current<T> = (extra : List<T>, extraSize : Nat, old : Stacks<T>, remained : Nat);
 
-    debug assert List.size(extra) == extraSize;
-
-    public func push(t : T) : Current<T> = Current(?(t, extra), 1 + extraSize, old, remained);
-    public func pop() : (T, Current<T>) = switch (extra) {
-      case (?(h, t)) (h, Current(t, extraSize - 1 : Nat, old, remained));
-      case (null) (Stacks.unsafeFirst(old), Current(null, extraSize, Stacks.pop(old), remained - 1 : Nat))
+  module Current {
+    public func new<T>(extra : List<T>, extraSize : Nat, old : Stacks<T>, remained : Nat) : Current<T> {
+      debug assert List.size(extra) == extraSize;
+      (extra, extraSize, old, remained)
     };
 
-    public func size() : Nat = extraSize + remained
+    public func push<T>((extra, extraSize, old, remained) : Current<T>, t : T) : Current<T> = (?(t, extra), 1 + extraSize, old, remained);
+
+    public func pop<T>((extra, extraSize, old, remained) : Current<T>) : (T, Current<T>) = switch (extra) {
+      case (?(h, t)) (h, (t, extraSize - 1 : Nat, old, remained));
+      case (null) (Stacks.unsafeFirst(old), (null, extraSize, Stacks.pop(old), remained - 1 : Nat))
+    };
+
+    public func size<T>((_, extraSize, _, remained) : Current<T>) : Nat = extraSize + remained
   };
 
   type BigState<T> = {
@@ -229,13 +232,13 @@ module {
 
   module BigState {
     public func push<T>(big : BigState<T>, t : T) : BigState<T> = switch big {
-      case (#big1(cur, big, aux, n)) #big1(cur.push(t), big, aux, n);
+      case (#big1(cur, big, aux, n)) #big1(Current.push(cur, t), big, aux, n);
       case (#big2(state)) #big2(CommonState.push(state, t))
     };
 
     public func pop<T>(big : BigState<T>) : (T, BigState<T>) = switch big {
       case (#big1(cur, big, aux, n)) {
-        let (x, cur2) = cur.pop();
+        let (x, cur2) = Current.pop(cur);
         (x, #big1(cur2, big, aux, n))
       };
       case (#big2(state)) {
@@ -256,7 +259,7 @@ module {
     };
 
     public func size<T>(big : BigState<T>) : Nat = switch big {
-      case (#big1(cur, _, _, _)) cur.size();
+      case (#big1(cur, _, _, _)) Current.size(cur);
       case (#big2(state)) CommonState.size(state)
     }
   };
@@ -269,18 +272,18 @@ module {
 
   module SmallState {
     public func push<T>(state : SmallState<T>, t : T) : SmallState<T> = switch state {
-      case (#small1(cur, small, aux)) #small1(cur.push(t), small, aux);
-      case (#small2(cur, aux, big, new, n)) #small2(cur.push(t), aux, big, new, n);
+      case (#small1(cur, small, aux)) #small1(Current.push(cur, t), small, aux);
+      case (#small2(cur, aux, big, new, n)) #small2(Current.push(cur, t), aux, big, new, n);
       case (#small3(common)) #small3(CommonState.push(common, t))
     };
 
     public func pop<T>(state : SmallState<T>) : (T, SmallState<T>) = switch state {
       case (#small1(cur0, small, aux)) {
-        let (t, cur) = cur0.pop();
+        let (t, cur) = Current.pop(cur0);
         (t, #small1(cur, small, aux))
       };
       case (#small2(cur0, aux, big, new, n)) {
-        let (t, cur) = cur0.pop();
+        let (t, cur) = Current.pop(cur0);
         (t, #small2(cur, aux, big, new, n))
       };
       case (#small3(common0)) {
@@ -300,8 +303,8 @@ module {
     };
 
     public func size<T>(state : SmallState<T>) : Nat = switch state {
-      case (#small1(cur, _, _)) cur.size();
-      case (#small2(cur, _, _, _, _)) cur.size();
+      case (#small1(cur, _, _)) Current.size(cur);
+      case (#small2(cur, _, _, _, _)) Current.size(cur);
       case (#small3(common)) CommonState.size(common)
     }
   };
@@ -314,7 +317,7 @@ module {
     public func step<T>(common : CommonState<T>) : CommonState<T> = switch common {
       case (#copy copy) {
         let (cur, aux, new, moved) = copy;
-        let (_, _, _, remained) = cur.this;
+        let (_, _, _, remained) = cur;
         norm(if (moved < remained) #copy(cur, unsafeTail(aux), ?(unsafeHead(aux), new), 1 + moved) else #copy copy)
       };
       case (#idle(_, _)) common
@@ -322,29 +325,29 @@ module {
 
     public func norm<T>(copy : CopyState<T>) : CommonState<T> {
       let #copy(cur, _, new, moved) = copy;
-      let (extra, extraSize, _, remained) = cur.this;
+      let (extra, extraSize, _, remained) = cur;
       debug assert moved <= remained;
       if (moved >= remained) #idle(cur, ((extra, new), extraSize + moved)) else copy
     };
 
     public func push<T>(common : CommonState<T>, t : T) : CommonState<T> = switch common {
-      case (#copy(cur, aux, new, n)) #copy(cur.push(t), aux, new, n);
-      case (#idle(cur, idle)) #idle(cur.push(t), Idle.push(idle, t)) // yes, push to both
+      case (#copy(cur, aux, new, n)) #copy(Current.push(cur, t), aux, new, n);
+      case (#idle(cur, idle)) #idle(Current.push(cur, t), Idle.push(idle, t)) // yes, push to both
     };
 
     public func pop<T>(common : CommonState<T>) : (T, CommonState<T>) = switch common {
       case (#copy(cur, aux, new, n)) {
-        let (t, cur2) = cur.pop();
+        let (t, cur2) = Current.pop(cur);
         (t, norm(#copy(cur2, aux, new, n)))
       };
       case (#idle(cur, idle)) {
         let (t, idle2) = Idle.pop(idle);
-        (t, #idle(cur.pop().1, idle2))
+        (t, #idle(Current.pop(cur).1, idle2))
       }
     };
 
     public func size<T>(common : CommonState<T>) : Nat = switch common {
-      case (#copy(cur, aux, _, moved)) cur.size(); // todo: check if correct
+      case (#copy(cur, aux, _, moved)) Current.size(cur); // todo: check if correct
       case (#idle(_, (_, size))) size
     }
   };

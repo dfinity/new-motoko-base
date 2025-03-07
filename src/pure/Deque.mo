@@ -57,8 +57,8 @@ module {
         let remainedL = nL - nR - 1 : Nat;
         let remainedR = 2 * nR + 1;
         debug assert remainedL + remainedR == nL + nR;
-        let big = #big1(Current.new(null, 0, l, remainedL), l, null, remainedL);
-        let small = #small1(Current.new(null, 0, r, remainedR), r, null);
+        let big = #big1(Current.new(l, remainedL), l, null, remainedL);
+        let small = #small1(Current.new(r, remainedR), r, null);
         let states = (#right, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         #rebal(states6)
@@ -104,8 +104,8 @@ module {
         let remainedL = 2 * nL + 1;
         let remainedR = nR - nL - 1 : Nat;
         debug assert remainedL + remainedR == nL + nR;
-        let small = #small1(Current.new(null, 0, l, remainedL), l, null);
-        let big = #big1(Current.new(null, 0, r, remainedR), r, null, remainedR);
+        let small = #small1(Current.new(l, remainedL), l, null);
+        let big = #big1(Current.new(r, remainedR), r, null, remainedR);
         let states = (#left, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         ?(x, #rebal(states6))
@@ -210,10 +210,7 @@ module {
   type Current<T> = (extra : List<T>, extraSize : Nat, old : Stacks<T>, remained : Nat);
 
   module Current {
-    public func new<T>(extra : List<T>, extraSize : Nat, old : Stacks<T>, remained : Nat) : Current<T> {
-      debug assert List.size(extra) == extraSize;
-      (extra, extraSize, old, remained)
-    };
+    public func new<T>(old : Stacks<T>, remained : Nat) : Current<T> = (null, 0, old, remained);
 
     public func push<T>((extra, extraSize, old, remained) : Current<T>, t : T) : Current<T> = (?(t, extra), 1 + extraSize, old, remained);
 
@@ -347,7 +344,7 @@ module {
     };
 
     public func size<T>(common : CommonState<T>) : Nat = switch common {
-      case (#copy(cur, aux, _, moved)) Current.size(cur); // todo: check if correct
+      case (#copy(cur, _, _, _)) Current.size(cur);
       case (#idle(_, (_, size))) size
     }
   };

@@ -40,6 +40,15 @@ module {
     case (#rebal((_, big, small))) BigState.size(big) + SmallState.size(small)
   };
 
+  // public func contains<T>(deque : Deque<T>, equal : (T, T) -> Bool, item : T) : Bool = switch deque {
+  //   case (#empty) false;
+  //   case (#one(x)) equal(x, item);
+  //   case (#two(x, y)) equal(x, item) or equal(y, item);
+  //   case (#three(x, y, z)) equal(x, item) or equal(y, item) or equal(z, item);
+  //   case (#idles((l, _), (r, _))) Stacks.contains(l, equal, item) or Stacks.contains(r, equal, item);
+  //   case (#rebal((_, big, small))) BigState.contains(big, equal, item) or SmallState.contains(small, equal, item)
+  // };
+
   public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
     case (#empty) #one(element);
     case (#one(y)) #two(element, y);
@@ -54,11 +63,11 @@ module {
       // check if the size invariant still holds
       if (3 * nR >= nL) #idles((l, nL), (r, nR)) else {
         // initiate the rebalancing process
-        let remainedL = nL - nR - 1 : Nat;
-        let remainedR = 2 * nR + 1;
-        debug assert remainedL + remainedR == nL + nR;
-        let big = #big1(Current.new(l, remainedL), l, null, remainedL);
-        let small = #small1(Current.new(r, remainedR), r, null);
+        let targetSizeL = nL - nR - 1 : Nat;
+        let targetSizeR = 2 * nR + 1;
+        debug assert targetSizeL + targetSizeR == nL + nR;
+        let big = #big1(Current.new(l, targetSizeL), l, null, targetSizeL);
+        let small = #small1(Current.new(r, targetSizeR), r, null);
         let states = (#right, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         #rebal(states6)
@@ -101,11 +110,11 @@ module {
       if (3 * nL >= nR) {
         ?(x, #idles((l, nL), (r, nR)))
       } else if (nL >= 1) {
-        let remainedL = 2 * nL + 1;
-        let remainedR = nR - nL - 1 : Nat;
-        debug assert remainedL + remainedR == nL + nR;
-        let small = #small1(Current.new(l, remainedL), l, null);
-        let big = #big1(Current.new(r, remainedR), r, null, remainedR);
+        let targetSizeL = 2 * nL + 1;
+        let targetSizeR = nR - nL - 1 : Nat;
+        debug assert targetSizeL + targetSizeR == nL + nR;
+        let small = #small1(Current.new(l, targetSizeL), l, null);
+        let big = #big1(Current.new(r, targetSizeR), r, null, targetSizeR);
         let states = (#left, big, small);
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         ?(x, #rebal(states6))
@@ -189,7 +198,9 @@ module {
       case (?(x, ?(y, null)), ?(z, null)) #three(z, y, x);
       case (?(x, null), ?(y, ?(z, null))) #three(z, y, x);
       case _ (trap "Illegal smallDeque invocation")
-    }
+    };
+
+    public func contains<T>(stacks : Stacks<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(stacks.0, equal, item) or List.contains(stacks.1, equal, item)
   };
 
   /// Represents an end of the deque that is not in a rebalancing process. It is a stack and its size.
@@ -198,7 +209,9 @@ module {
     // debug assert stacks.size() == size; // todo: where to put it?
 
     public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (Stacks.push(stacks, t), 1 + size);
-    public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (Stacks.unsafeFirst(stacks), (Stacks.pop(stacks), size - 1 : Nat))
+    public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (Stacks.unsafeFirst(stacks), (Stacks.pop(stacks), size - 1 : Nat));
+
+    public func contains<T>((stacks, _) : Idle<T>, equal : (T, T) -> Bool, item : T) : Bool = Stacks.contains(stacks, equal, item)
   };
 
   /// Stores information about operations that happen during rebalancing but which have not become part of the old state that is being rebalanced.
@@ -206,22 +219,28 @@ module {
   /// - `extra`: newly added elements
   /// - `extraSize`: size of `extra`
   /// - `old`: elements contained before the rebalancing process
-  /// - `remained`: the number of elements which will be contained after the rebalancing is finished
-  type Current<T> = (extra : List<T>, extraSize : Nat, old : Stacks<T>, remained : Nat);
+  /// - `targetSize`: the number of elements which will be contained after the rebalancing is finished
+  type Current<T> = (extra : List<T>, extraSize : Nat, old : Stacks<T>, targetSize : Nat);
 
   module Current {
-    public func new<T>(old : Stacks<T>, remained : Nat) : Current<T> = (null, 0, old, remained);
+    public func new<T>(old : Stacks<T>, targetSize : Nat) : Current<T> = (null, 0, old, targetSize);
 
-    public func push<T>((extra, extraSize, old, remained) : Current<T>, t : T) : Current<T> = (?(t, extra), 1 + extraSize, old, remained);
+    public func push<T>((extra, extraSize, old, targetSize) : Current<T>, t : T) : Current<T> = (?(t, extra), 1 + extraSize, old, targetSize);
 
-    public func pop<T>((extra, extraSize, old, remained) : Current<T>) : (T, Current<T>) = switch (extra) {
-      case (?(h, t)) (h, (t, extraSize - 1 : Nat, old, remained));
-      case (null) (Stacks.unsafeFirst(old), (null, extraSize, Stacks.pop(old), remained - 1 : Nat))
+    public func pop<T>((extra, extraSize, old, targetSize) : Current<T>) : (T, Current<T>) = switch (extra) {
+      case (?(h, t)) (h, (t, extraSize - 1 : Nat, old, targetSize));
+      case (null) (Stacks.unsafeFirst(old), (null, extraSize, Stacks.pop(old), targetSize - 1 : Nat))
     };
 
-    public func size<T>((_, extraSize, _, remained) : Current<T>) : Nat = extraSize + remained
+    public func size<T>((_, extraSize, _, targetSize) : Current<T>) : Nat = extraSize + targetSize;
+
+    // public func contains<T>((extra, _, old, _) : Current<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(extra, equal, item) or Stacks.contains(old, equal, item) // todo: should be limited to the first `targetSize` elements?
   };
 
+  /// The bigger end of the deque during rebalancing. It is used to split the bigger end of the deque into the new big end and a portion to be added to the small end. Can be in one of the following states:
+  ///
+  /// - `#big1(cur, big, aux, n)`: Initial stage. Using the step function it takes `n`-elements from the `big` stack and puts them to `aux` in reversed order. `#big1(cur, x1 .. xn : bigTail, [], n) ->* #big1(cur, bigTail, xn .. x1, 0)`. The `bigTail` is later given to the `small` end.
+  /// - `#big2(common)`: Is used to reverse the elements from the previous phase to restore the original order. `common = #copy(cur, xn .. x1, [], 0) ->* #copy(cur, [], x1 .. xn, n)`.
   type BigState<T> = {
     #big1 : (Current<T>, Stacks<T>, List<T>, Nat);
     #big2 : CommonState<T>
@@ -246,10 +265,8 @@ module {
 
     public func step<T>(big : BigState<T>) : BigState<T> = switch big {
       case (#big1(cur, big, aux, n)) {
-        if (n == 0) {
-          debug assert Stacks.isEmpty(big);
-          #big2(CommonState.norm(#copy(cur, aux, null, 0))) // todo: we ignore 'big' here, is that exaclty the size of the big stack?
-        } else
+        if (n == 0)
+        #big2(CommonState.norm(#copy(cur, aux, null, 0))) else
         #big1(cur, Stacks.pop(big), ?(Stacks.unsafeFirst(big), aux), n - 1 : Nat) // todo: refactor pop to return the element and the new state
       };
       case (#big2(state)) #big2(CommonState.step(state))
@@ -258,9 +275,19 @@ module {
     public func size<T>(big : BigState<T>) : Nat = switch big {
       case (#big1(cur, _, _, _)) Current.size(cur);
       case (#big2(state)) CommonState.size(state)
-    }
+    };
+
+    // public func contains<T>(big : BigState<T>, equal : (T, T) -> Bool, item : T) : Bool = switch big {
+    //   case (#big1(cur, big, _, _)) Current.contains(cur, equal, item);
+    //   case (#big2(state)) CommonState.contains(state, equal, item)
+    // }
   };
 
+  /// The smaller end of the deque during rebalancing. Can be in one of the following states:
+  ///
+  /// - `#small1(cur, small, aux)`: Initial stage. Using the step function the original elements are reversed. `#small1(cur, s1 .. sn, []) ->* #small1(cur, [], sn .. s1)`, note that `aux` is initially empty, at the end contains the reversed elements from the small stack.
+  /// - `#small2(cur, aux, big, new, size)`: Using the step function the newly transfered tail from the bigger end is reversed on top of the `new` list. `#small2(cur, sn .. s1, b1 .. bm, [], 0) ->* #small2(cur, sn .. s1, [], bm .. b1, m)`, note that `aux` is the reversed small stack from the previous phase, `new` is initially empty, `size` corresponds to the size of `new`.
+  /// - `#small3(common)`: Is used to reverse the elements from the two previous phases again to get them again in the original order. `#copy(cur, sn .. s1, bm .. b1, m) ->* #copy(cur, [], s1 .. sn : bm .. b1, n + m)`, note that the correct order of the elements from the big stack is reversed.
   type SmallState<T> = {
     #small1 : (Current<T>, Stacks<T>, List<T>);
     #small2 : (Current<T>, List<T>, Stacks<T>, List<T>, Nat);
@@ -270,7 +297,7 @@ module {
   module SmallState {
     public func push<T>(state : SmallState<T>, t : T) : SmallState<T> = switch state {
       case (#small1(cur, small, aux)) #small1(Current.push(cur, t), small, aux);
-      case (#small2(cur, aux, big, new, n)) #small2(Current.push(cur, t), aux, big, new, n);
+      case (#small2(cur, aux, big, new, newN)) #small2(Current.push(cur, t), aux, big, new, newN);
       case (#small3(common)) #small3(CommonState.push(common, t))
     };
 
@@ -279,9 +306,9 @@ module {
         let (t, cur) = Current.pop(cur0);
         (t, #small1(cur, small, aux))
       };
-      case (#small2(cur0, aux, big, new, n)) {
+      case (#small2(cur0, aux, big, new, newN)) {
         let (t, cur) = Current.pop(cur0);
-        (t, #small2(cur, aux, big, new, n))
+        (t, #small2(cur, aux, big, new, newN))
       };
       case (#small3(common0)) {
         let (t, common) = CommonState.pop(common0);
@@ -291,10 +318,10 @@ module {
 
     public func step<T>(state : SmallState<T>) : SmallState<T> = switch state {
       case (#small1(cur, small, aux)) {
-        if (Stacks.isEmpty(small)) #small1(cur, small, aux) else #small1(cur, Stacks.pop(small), ?(Stacks.unsafeFirst(small), aux))
+        if (Stacks.isEmpty(small)) state else #small1(cur, Stacks.pop(small), ?(Stacks.unsafeFirst(small), aux))
       };
-      case (#small2(cur, aux, big, new, n)) {
-        if (Stacks.isEmpty(big)) #small3(CommonState.norm(#copy(cur, aux, new, n))) else #small2(cur, aux, Stacks.pop(big), ?(Stacks.unsafeFirst(big), new), 1 + n)
+      case (#small2(cur, aux, big, new, newN)) {
+        if (Stacks.isEmpty(big)) #small3(CommonState.norm(#copy(cur, aux, new, newN))) else #small2(cur, aux, Stacks.pop(big), ?(Stacks.unsafeFirst(big), new), 1 + newN)
       };
       case (#small3(common)) #small3(CommonState.step(common))
     };
@@ -308,34 +335,41 @@ module {
 
   type CopyState<T> = { #copy : (Current<T>, List<T>, List<T>, Nat) };
 
+  /// Represents the last rebalancing phase of both small and big ends of the deque. It is used to reverse the elements from the previous phases to restore the original order. It can be in one of the following states:
+  ///
+  /// - `#copy(cur, aux, new, sizeOfNew)`: Puts the elements from `aux` in reversed order on top of `new`. `#copy(cur, xn .. x1, new, sizeOfNew) ->* #copy(cur, [], x1 .. xn : new, n + sizeOfNew)`.
+  /// - `#idle(cur, idle)`: The rebalancing process is done and the deque is in the idle state.
   type CommonState<T> = CopyState<T> or { #idle : (Current<T>, Idle<T>) };
 
   module CommonState {
     public func step<T>(common : CommonState<T>) : CommonState<T> = switch common {
       case (#copy copy) {
-        let (cur, aux, new, moved) = copy;
-        let (_, _, _, remained) = cur;
-        norm(if (moved < remained) #copy(cur, unsafeTail(aux), ?(unsafeHead(aux), new), 1 + moved) else #copy copy)
+        let (cur, aux, new, sizeOfNew) = copy;
+        let (_, _, _, targetSize) = cur;
+        norm(if (sizeOfNew < targetSize) #copy(cur, unsafeTail(aux), ?(unsafeHead(aux), new), 1 + sizeOfNew) else #copy copy)
       };
       case (#idle(_, _)) common
     };
 
     public func norm<T>(copy : CopyState<T>) : CommonState<T> {
-      let #copy(cur, _, new, moved) = copy;
-      let (extra, extraSize, _, remained) = cur;
-      debug assert moved <= remained;
-      if (moved >= remained) #idle(cur, ((extra, new), extraSize + moved)) else copy
+      let #copy(cur, aux, new, sizeOfNew) = copy;
+      let (extra, extraSize, _, targetSize) = cur;
+      debug assert sizeOfNew <= targetSize;
+      if (sizeOfNew >= targetSize) {
+        debug assert List.isEmpty(aux); // todo: is that the case?
+        #idle(cur, ((extra, new), extraSize + sizeOfNew))
+      } else copy
     };
 
     public func push<T>(common : CommonState<T>, t : T) : CommonState<T> = switch common {
-      case (#copy(cur, aux, new, n)) #copy(Current.push(cur, t), aux, new, n);
+      case (#copy(cur, aux, new, sizeOfNew)) #copy(Current.push(cur, t), aux, new, sizeOfNew);
       case (#idle(cur, idle)) #idle(Current.push(cur, t), Idle.push(idle, t)) // yes, push to both
     };
 
     public func pop<T>(common : CommonState<T>) : (T, CommonState<T>) = switch common {
-      case (#copy(cur, aux, new, n)) {
+      case (#copy(cur, aux, new, sizeOfNew)) {
         let (t, cur2) = Current.pop(cur);
-        (t, norm(#copy(cur2, aux, new, n)))
+        (t, norm(#copy(cur2, aux, new, sizeOfNew)))
       };
       case (#idle(cur, idle)) {
         let (t, idle2) = Idle.pop(idle);
@@ -346,7 +380,12 @@ module {
     public func size<T>(common : CommonState<T>) : Nat = switch common {
       case (#copy(cur, _, _, _)) Current.size(cur);
       case (#idle(_, (_, size))) size
-    }
+    };
+
+    // public func contains<T>(common : CommonState<T>, equal : (T, T) -> Bool, item : T) : Bool = switch common {
+    //   case (#copy(cur, aux, _, _)) Current.contains(cur, equal, item) or List.contains(aux, equal, item); // todo: is this correct?
+    //   case (#idle(_, idle)) Idle.contains(idle, equal, item)
+    // }
   };
 
   type States<T> = (
@@ -357,8 +396,8 @@ module {
 
   module States {
     public func step<T>(states : States<T>) : States<T> = switch states {
-      case (dir, #big1(_, big, _, 0), #small1(currentS, _, auxS)) {
-        (dir, BigState.step(states.1), #small2(currentS, auxS, big, null, 0))
+      case (dir, #big1(_, bigTail, _, 0), #small1(currentS, _, auxS)) {
+        (dir, BigState.step(states.1), #small2(currentS, auxS, bigTail, null, 0))
       };
       case (dir, big, small) (dir, BigState.step(big), SmallState.step(small))
     }

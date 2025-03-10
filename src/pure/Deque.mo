@@ -390,12 +390,11 @@ module {
     };
 
     public func norm<T>(copy : CopyState<T>) : CommonState<T> {
-      let #copy(cur, aux, new, sizeOfNew) = copy;
+      let #copy(cur, _, new, sizeOfNew) = copy;
       let (extra, extraSize, _, targetSize) = cur;
       debug assert sizeOfNew <= targetSize;
       if (sizeOfNew >= targetSize) {
-        debug assert List.isEmpty(aux); // todo: how it that not empty?
-        #idle(cur, ((extra, new), extraSize + sizeOfNew))
+        #idle(cur, ((extra, new), extraSize + sizeOfNew)) // note: aux can be non-empty, thus ignored here, when the target size decreases after pop operations
       } else copy
     };
 

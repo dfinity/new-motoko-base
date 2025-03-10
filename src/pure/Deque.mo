@@ -3,6 +3,7 @@ import Types "../Types";
 import List "List";
 import Option "../Option";
 import { trap } "../Runtime";
+import Iter "../Iter";
 
 module {
   /// The real-time deque data structure can be in one of the following states:
@@ -161,11 +162,76 @@ module {
     (reverse(deque2), x)
   };
 
+  public func fromIter<T>(iter : Iter.Iter<T>) : Deque<T> {
+    var deque = empty<T>();
+    Iter.forEach(iter, func(t : T) = deque := pushBack(deque, t));
+    deque
+  };
+
+  public func values<T>(deque : Deque<T>) : Iter.Iter<T> {
+    object {
+      var current = deque;
+      public func next() : ?T {
+        switch (popFront(current)) {
+          case null null;
+          case (?result) {
+            current := result.1;
+            ?result.0
+          }
+        }
+      }
+    }
+  };
+
   // todo: check tail call optimization
   public func equal<T>(deque1 : Deque<T>, deque2 : Deque<T>, equality : (T, T) -> Bool) : Bool = switch (popFront deque1, popFront deque2) {
     case (null, null) true;
     case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality);
     case _ false
+  };
+
+  public func all<T>(deque : Deque<T>, predicate : T -> Bool) : Bool {
+    for (t in values deque) if (not (predicate t)) return false;
+    return true
+  };
+
+  public func any<T>(deque : Deque<T>, predicate : T -> Bool) : Bool {
+    for (t in values deque) if (predicate t) return true;
+    return false
+  };
+
+  public func forEach<T>(deque : Deque<T>, f : T -> ()) = for (item in values deque) f item;
+
+  public func map<T1, T2>(deque : Deque<T1>, f : T1 -> T2) : Deque<T2> = switch deque {
+    case (#empty) #empty;
+    case (#one(x)) #one(f x);
+    case (#two(x, y)) #two(f x, f y);
+    case (#three(x, y, z)) #three(f x, f y, f z);
+    case (#idles(l, r)) #idles(Idle.map(l, f), Idle.map(r, f));
+    case (#rebal(_)) {
+      // No reason to rebuild the #rebal state.
+      // future work: It could be further optimized by building a balanced #idles state directly.
+      var q = empty<T2>();
+      for (t in values deque) q := pushBack(q, f t);
+      q
+    }
+  };
+
+  public func filter<T>(deque : Deque<T>, predicate : T -> Bool) : Deque<T> {
+    var q = empty<T>();
+    for (t in values deque) if (predicate t) q := pushBack(q, t);
+    q
+  };
+
+  public func filterMap<T, U>(deque : Deque<T>, f : T -> ?U) : Deque<U> {
+    var q = empty<U>();
+    for (t in values deque) {
+      switch (f t) {
+        case (?x) q := pushBack(q, x);
+        case null ()
+      }
+    };
+    q
   };
 
   public func toText<T>(deque : Deque<T>, f : T -> Text) : Text {
@@ -238,7 +304,9 @@ module {
       case _ (trap "Illegal smallDeque invocation")
     };
 
-    public func contains<T>(stacks : Stacks<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(stacks.0, equal, item) or List.contains(stacks.1, equal, item)
+    public func contains<T>(stacks : Stacks<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(stacks.0, equal, item) or List.contains(stacks.1, equal, item);
+
+    public func map<T, U>((left, right) : Stacks<T>, f : T -> U) : Stacks<U> = (List.map(left, f), List.map(right, f))
   };
 
   /// Represents an end of the deque that is not in a rebalancing process. It is a stack and its size.
@@ -249,7 +317,9 @@ module {
     public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (Stacks.push(stacks, t), 1 + size);
     public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (Stacks.unsafeFirst(stacks), (Stacks.pop(stacks), size - 1 : Nat));
 
-    public func contains<T>((stacks, _) : Idle<T>, equal : (T, T) -> Bool, item : T) : Bool = Stacks.contains(stacks, equal, item)
+    public func contains<T>((stacks, _) : Idle<T>, equal : (T, T) -> Bool, item : T) : Bool = Stacks.contains(stacks, equal, item);
+
+    public func map<T, U>((stacks, size) : Idle<T>, f : T -> U) : Idle<U> = (Stacks.map(stacks, f), size)
   };
 
   /// Stores information about operations that happen during rebalancing but which have not become part of the old state that is being rebalanced.

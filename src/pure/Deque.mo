@@ -49,6 +49,18 @@ module {
   //   case (#rebal((_, big, small))) BigState.contains(big, equal, item) or SmallState.contains(small, equal, item)
   // };
 
+  public func peekFront<T>(deque : Deque<T>) : ?T = do ? { popFront(deque)!.0 }; // todo: improve?
+  // switch deque {
+  //   case (#empty) null;
+  //   case (#one(x)) ?x;
+  //   case (#two(x, _)) ?x;
+  //   case (#three(x, _, _)) ?x;
+  //   case (#idles((l, _), _)) Stacks.first(l);
+  //   case (#rebal((_, big, _))) BigState.first(big)
+  // };
+
+  public func peekBack<T>(deque : Deque<T>) : ?T = do ? { popBack(deque)!.1 }; // todo: improve?
+
   public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
     case (#empty) #one(element);
     case (#one(y)) #two(element, y);
@@ -144,9 +156,35 @@ module {
     }
   };
 
-  public func popBack<T>(deque : Deque<T>) : ?(T, Deque<T>) = do ? {
+  public func popBack<T>(deque : Deque<T>) : ?(Deque<T>, T) = do ? {
     let (x, deque2) = popFront(reverse(deque))!;
-    (x, reverse(deque2))
+    (reverse(deque2), x)
+  };
+
+  // todo: check tail call optimization
+  public func equal<T>(deque1 : Deque<T>, deque2 : Deque<T>, equality : (T, T) -> Bool) : Bool = switch (popFront deque1, popFront deque2) {
+    case (null, null) true;
+    case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality);
+    case _ false
+  };
+
+  public func toText<T>(deque : Deque<T>, f : T -> Text) : Text {
+    var text = "PureQueue[";
+    func add(item : T) {
+      if (text.size() > 10) text #= ", ";
+      text #= f(item)
+    };
+    func iter(q : Deque<T>) {
+      switch (popFront q) {
+        case (null) ();
+        case (?(x, q2)) {
+          add(x);
+          iter(q2)
+        }
+      }
+    };
+    iter(deque); // todo: avoid recursion, use let-else
+    text # "]"
   };
 
   // todo: make it public?
@@ -356,7 +394,7 @@ module {
       let (extra, extraSize, _, targetSize) = cur;
       debug assert sizeOfNew <= targetSize;
       if (sizeOfNew >= targetSize) {
-        debug assert List.isEmpty(aux); // todo: is that the case?
+        debug assert List.isEmpty(aux); // todo: how it that not empty?
         #idle(cur, ((extra, new), extraSize + sizeOfNew))
       } else copy
     };

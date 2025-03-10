@@ -39,7 +39,7 @@ async function main() {
   const testFilter = process.argv[2];
 
   const virtualBaseDirectory = "motoko-base";
-  motoko.usePackage("base", virtualBaseDirectory); // Register `mo:base`
+  motoko.usePackage("base", join(virtualBaseDirectory, "src")); // Register `mo:base`
 
   const snippets: Snippet[] = (
     await Promise.all(
@@ -172,12 +172,13 @@ const runSnippet = async (
   pocketIc: PocketIc,
   sourcePrincipal: Principal
 ) => {
-  console.log("Running snippet:");
   const tripleBacktick = "```";
   console.log(
-    `${tripleBacktick}${snippet.language || ""}${
-      snippet.config.length ? ` ${snippet.config.join(" ")}` : ""
-    }\n${snippet.sourceCode}${tripleBacktick}`
+    chalk.gray(
+      `${tripleBacktick}${snippet.language || ""}${
+        snippet.config.length ? ` ${snippet.config.join(" ")}` : ""
+      }\n${snippet.sourceCode}\n${tripleBacktick}`
+    )
   );
 
   // Set canister alias

@@ -41,26 +41,32 @@ module {
     case (#rebal((_, big, small))) BigState.size(big) + SmallState.size(small)
   };
 
-  // public func contains<T>(deque : Deque<T>, equal : (T, T) -> Bool, item : T) : Bool = switch deque {
-  //   case (#empty) false;
-  //   case (#one(x)) equal(x, item);
-  //   case (#two(x, y)) equal(x, item) or equal(y, item);
-  //   case (#three(x, y, z)) equal(x, item) or equal(y, item) or equal(z, item);
-  //   case (#idles((l, _), (r, _))) Stacks.contains(l, equal, item) or Stacks.contains(r, equal, item);
-  //   case (#rebal((_, big, small))) BigState.contains(big, equal, item) or SmallState.contains(small, equal, item)
-  // };
+  public func contains<T>(deque : Deque<T>, eq : (T, T) -> Bool, item : T) : Bool = switch deque {
+    case (#empty) false;
+    case (#one(x)) eq(x, item);
+    case (#two(x, y)) eq(x, item) or eq(y, item);
+    case (#three(x, y, z)) eq(x, item) or eq(y, item) or eq(z, item);
+    case (#idles(l, r)) Idle.contains(l, eq, item) or Idle.contains(r, eq, item); // note that the order of the right stack is reversed, but for the contains operation it does not matter
+    case (#rebal(_)) any<T>(deque, func(t : T) = eq(t, item)); // future work: avoid allocation
+  };
 
-  public func peekFront<T>(deque : Deque<T>) : ?T = do ? { popFront(deque)!.0 }; // todo: improve?
-  // switch deque {
-  //   case (#empty) null;
-  //   case (#one(x)) ?x;
-  //   case (#two(x, _)) ?x;
-  //   case (#three(x, _, _)) ?x;
-  //   case (#idles((l, _), _)) Stacks.first(l);
-  //   case (#rebal((_, big, _))) BigState.first(big)
-  // };
+  public func peekFront<T>(deque : Deque<T>) : ?T = switch deque {
+    case (#empty) null;
+    case (#one(x)) ?x;
+    case (#two(x, _)) ?x;
+    case (#three(x, _, _)) ?x;
+    case (#idles((l, _), _)) Stacks.first(l);
+    case (#rebal(_)) do ? { popFront(deque)!.0 } // future work: avoid allocation
+  };
 
-  public func peekBack<T>(deque : Deque<T>) : ?T = do ? { popBack(deque)!.1 }; // todo: improve?
+  public func peekBack<T>(deque : Deque<T>) : ?T = switch deque {
+    case (#empty) null;
+    case (#one(x)) ?x;
+    case (#two(_, y)) ?y;
+    case (#three(_, _, z)) ?z;
+    case (#idles(_, (r, _))) Stacks.first(r);
+    case (#rebal(_)) do ? { popBack(deque)!.1 } // future work: avoid allocation
+  };
 
   public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
     case (#empty) #one(element);
@@ -112,7 +118,6 @@ module {
 
   public func pushBack<T>(deque : Deque<T>, element : T) : Deque<T> = reverse(pushFront(reverse(deque), element));
 
-  // todo: check line by line if correct
   public func popFront<T>(deque : Deque<T>) : ?(T, Deque<T>) = switch deque {
     case (#empty) null;
     case (#one(x)) ?(x, #empty);
@@ -169,6 +174,7 @@ module {
   };
 
   public func values<T>(deque : Deque<T>) : Iter.Iter<T> {
+    // future work: iteration using 'popFront' is wasteful, try avoiding extra allocations
     object {
       var current = deque;
       public func next() : ?T {
@@ -183,24 +189,49 @@ module {
     }
   };
 
-  // todo: check tail call optimization
   public func equal<T>(deque1 : Deque<T>, deque2 : Deque<T>, equality : (T, T) -> Bool) : Bool = switch (popFront deque1, popFront deque2) {
     case (null, null) true;
-    case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality);
+    case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
     case _ false
   };
 
-  public func all<T>(deque : Deque<T>, predicate : T -> Bool) : Bool {
-    for (t in values deque) if (not (predicate t)) return false;
-    return true
+  public func all<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
+    case (#empty) true;
+    case (#one(x)) predicate x;
+    case (#two(x, y)) predicate x and predicate y;
+    case (#three(x, y, z)) predicate x and predicate y and predicate z;
+    case (#idles(((l1, l2), _), ((r1, r2), _))) List.all(l1, predicate) and List.all(l2, predicate) and List.all(r1, predicate) and List.all(r2, predicate); // note that the order of the right stack is reversed, but for the all operation it does not matter
+    case (#rebal(_)) {
+      // future work: avoid allocation
+      for (t in values deque) if (not predicate t) return false;
+      return true
+    }
   };
 
-  public func any<T>(deque : Deque<T>, predicate : T -> Bool) : Bool {
-    for (t in values deque) if (predicate t) return true;
-    return false
+  public func any<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
+    case (#empty) false;
+    case (#one(x)) predicate x;
+    case (#two(x, y)) predicate x or predicate y;
+    case (#three(x, y, z)) predicate x or predicate y or predicate z;
+    case (#idles(((l1, l2), _), ((r1, r2), _))) List.any(l1, predicate) or List.any(l2, predicate) or List.any(r1, predicate) or List.any(r2, predicate); // note that the order of the right stack is reversed, but for the any operation it does not matter
+    case (#rebal(_)) {
+      // future work: avoid allocation
+      for (t in values deque) if (predicate t) return true;
+      return false
+    }
   };
 
-  public func forEach<T>(deque : Deque<T>, f : T -> ()) = for (item in values deque) f item;
+  public func forEach<T>(deque : Deque<T>, f : T -> ()) = switch deque {
+    case (#empty) ();
+    case (#one(x)) f x;
+    case (#two(x, y)) { f x; f y };
+    case (#three(x, y, z)) { f x; f y; f z };
+    // Preserve the order when visiting the elements. Note that the #idles case would require reversing the second stack.
+    case _ {
+      // future work: avoid allocation
+      for (t in values deque) f t
+    }
+  };
 
   public func map<T1, T2>(deque : Deque<T1>, f : T1 -> T2) : Deque<T2> = switch deque {
     case (#empty) #empty;
@@ -210,7 +241,7 @@ module {
     case (#idles(l, r)) #idles(Idle.map(l, f), Idle.map(r, f));
     case (#rebal(_)) {
       // No reason to rebuild the #rebal state.
-      // future work: It could be further optimized by building a balanced #idles state directly.
+      // future work: It could be further optimized by building a balanced #idles state directly since we know the sizes.
       var q = empty<T2>();
       for (t in values deque) q := pushBack(q, f t);
       q
@@ -236,25 +267,15 @@ module {
 
   public func toText<T>(deque : Deque<T>, f : T -> Text) : Text {
     var text = "PureQueue[";
-    func add(item : T) {
-      if (text.size() > 10) text #= ", ";
-      text #= f(item)
+    var first = true;
+    for (t in values deque) {
+      if (first) first := false else text #= ", ";
+      text #= f(t)
     };
-    func iter(q : Deque<T>) {
-      switch (popFront q) {
-        case (null) ();
-        case (?(x, q2)) {
-          add(x);
-          iter(q2)
-        }
-      }
-    };
-    iter(deque); // todo: avoid recursion, use let-else
     text # "]"
   };
 
-  // todo: make it public?
-  func reverse<T>(deque : Deque<T>) : Deque<T> = switch deque {
+  public func reverse<T>(deque : Deque<T>) : Deque<T> = switch deque {
     case (#empty) deque;
     case (#one(_)) deque;
     case (#two(x, y)) #two(y, x);
@@ -272,7 +293,7 @@ module {
     public func pop<T>(stacks : Stacks<T>) : Stacks<T> = switch stacks {
       case (?(_, leftTail), right) (leftTail, right);
       case (null, ?(_, rightTail)) (null, rightTail);
-      case (null, null) stacks // avoids allocation
+      case (null, null) stacks
     };
 
     public func first<T>((left, right) : Stacks<T>) : ?T = switch (left) {
@@ -515,5 +536,4 @@ module {
   type List<T> = Types.Pure.List<T>;
   func unsafeHead<T>(l : List<T>) : T = Option.unwrap(l).0; // todo: avoid
   func unsafeTail<T>(l : List<T>) : List<T> = Option.unwrap(l).1; // todo: avoid
-  func undefined<T>() : T = trap "undefined"
 }

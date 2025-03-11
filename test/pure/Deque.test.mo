@@ -603,7 +603,7 @@ suite(
 );
 
 suite(
-  "untested functions",
+  "code coverage",
   func() {
     test(
       "singleton",
@@ -665,6 +665,46 @@ suite(
       func() {
         let q = Deque.fromIter([1, 2, 3].vals());
         expect.text(Deque.toText(q, Nat.toText)).equal("PureQueue[1, 2, 3]")
+      }
+    );
+
+    test(
+      "size",
+      func() {
+        let q = Deque.fromIter([1, 2, 3].vals());
+        expect.nat(Deque.size(q)).equal(3);
+        expect.nat(Deque.size(Deque.empty())).equal(0)
+      }
+    );
+
+    test(
+      "contains",
+      func() {
+        let q = Deque.fromIter([1, 2, 3].vals());
+        expect.bool(Deque.contains(q, Nat.equal, 2)).isTrue();
+        expect.bool(Deque.contains(q, Nat.equal, 4)).isFalse()
+      }
+    );
+
+    test(
+      "any",
+      func() {
+        let q = Deque.fromIter([1, 2, 3].vals());
+        expect.bool(Deque.any<Nat>(q, func n = n > 2)).isTrue();
+        expect.bool(Deque.any<Nat>(q, func n = n > 3)).isFalse()
+      }
+    );
+
+    test(
+      "map",
+      func() {
+        let q = Deque.fromIter([1, 2, 3].vals());
+        let mapped = Deque.map<Nat, Nat>(q, func n = n * 2);
+        expect.array(
+          Iter.toArray(Deque.values(mapped)),
+          Nat.toText,
+          Nat.equal
+        ).equal([2, 4, 6])
       }
     )
   }

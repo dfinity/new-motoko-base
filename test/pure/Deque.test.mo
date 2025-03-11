@@ -4,6 +4,7 @@ import Nat "../../src/Nat";
 import Iter "../../src/Iter";
 import Prim "mo:prim";
 import { suite; test; expect } "mo:test";
+import Text "../../src/Text";
 
 type Deque<T> = Deque.Deque<T>;
 
@@ -596,6 +597,74 @@ suite(
       "random insertion and deletion",
       func() {
         expect.bool(isSorted(randomInsertionDeletion(1000))).isTrue()
+      }
+    )
+  }
+);
+
+suite(
+  "untested functions",
+  func() {
+    test(
+      "singleton",
+      func() {
+        let q = Deque.singleton(1);
+        expect.bool(Deque.isEmpty(q)).isFalse();
+        expect.option(Deque.peekFront(q), Nat.toText, Nat.equal).equal(?1);
+        expect.option(Deque.peekBack(q), Nat.toText, Nat.equal).equal(?1)
+      }
+    );
+
+    test(
+      "all",
+      func() {
+        let q = Deque.fromIter([1, 2, 2, 3, 3, 4].vals());
+        expect.bool(Deque.all<Nat>(q, func n = n > 0)).isTrue();
+        expect.bool(Deque.all<Nat>(q, func n = n < 3)).isFalse()
+      }
+    );
+
+    test(
+      "filterMap",
+      func() {
+        let q = Deque.fromIter([1, 2, 3, 4, 5, 6, 7].vals());
+        let mapped = Deque.filterMap<Nat, Text>(
+          q,
+          func n = if (n % 2 == 0) ?Nat.toText(n) else null
+        );
+        expect.array<Text>(
+          Iter.toArray(Deque.values(mapped)),
+          func t = t,
+          Text.equal
+        ).equal(["2", "4", "6"])
+      }
+    );
+
+    test(
+      "forEach",
+      func() {
+        let q = Deque.fromIter([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].vals());
+        var sum = 0;
+        var lastSeen = 0;
+        Deque.forEach<Nat>(
+          q,
+          func n {
+            // Check if elements are visited in order
+            expect.nat(n).equal(lastSeen + 1);
+            lastSeen := n;
+            sum += n
+          }
+        );
+        expect.nat(lastSeen).equal(10);
+        expect.nat(sum).equal(55)
+      }
+    );
+
+    test(
+      "toText",
+      func() {
+        let q = Deque.fromIter([1, 2, 3].vals());
+        expect.text(Deque.toText(q, Nat.toText)).equal("PureQueue[1, 2, 3]")
       }
     )
   }

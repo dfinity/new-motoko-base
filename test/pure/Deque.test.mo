@@ -618,93 +618,161 @@ suite(
     test(
       "all",
       func() {
-        let q = Deque.fromIter([1, 2, 2, 3, 3, 4].vals());
-        expect.bool(Deque.all<Nat>(q, func n = n > 0)).isTrue();
-        expect.bool(Deque.all<Nat>(q, func n = n < 3)).isFalse()
+        let testAll = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          expect.bool(Deque.all<Nat>(q, func n = n > 0)).isTrue();
+          expect.bool(Deque.all<Nat>(q, func n = n < 3)).isFalse()
+        };
+        testAll([4]);
+        testAll([1, 5]);
+        testAll([1, 2, 6]);
+        testAll([1, 2, 3, 4]);
+        testAll([1, 2, 2, 3, 3, 4]);
+        testAll([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     );
 
     test(
       "filterMap",
       func() {
-        let q = Deque.fromIter([1, 2, 3, 4, 5, 6, 7].vals());
-        let mapped = Deque.filterMap<Nat, Text>(
-          q,
-          func n = if (n % 2 == 0) ?Nat.toText(n) else null
-        );
-        expect.array<Text>(
-          Iter.toArray(Deque.values(mapped)),
-          func t = t,
-          Text.equal
-        ).equal(["2", "4", "6"])
+        let testFilterMap = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          let mapped = Deque.filterMap<Nat, Text>(
+            q,
+            func n = if (n % 2 == 0) ?Nat.toText(n) else null
+          );
+          expect.array<Text>(
+            Iter.toArray(Deque.values(mapped)),
+            func t = t,
+            Text.equal
+          ).equal(Array.filterMap<Nat, Text>(testElements, func n = if (n % 2 == 0) ?Nat.toText(n) else null))
+        };
+        testFilterMap([]);
+        testFilterMap([1]);
+        testFilterMap([1, 2]);
+        testFilterMap([1, 2, 3]);
+        testFilterMap([1, 2, 3, 4]);
+        testFilterMap([1, 2, 2, 3, 3, 4]);
+        testFilterMap([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     );
 
     test(
       "forEach",
       func() {
-        let q = Deque.fromIter([1, 2, 3, 4, 5, 6, 7, 8, 9, 10].vals());
-        var sum = 0;
-        var lastSeen = 0;
-        Deque.forEach<Nat>(
-          q,
-          func n {
-            // Check if elements are visited in order
-            expect.nat(n).equal(lastSeen + 1);
-            lastSeen := n;
-            sum += n
-          }
-        );
-        expect.nat(lastSeen).equal(10);
-        expect.nat(sum).equal(55)
+        let testForEach = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          var result = "";
+          Deque.forEach<Nat>(
+            q,
+            func n {
+              result #= Nat.toText n
+            }
+          );
+          expect.text(result).equal(Array.foldLeft<Nat, Text>(testElements, "", func(acc, n) = acc # Nat.toText n))
+        };
+        testForEach([]);
+        testForEach([1]);
+        testForEach([1, 2]);
+        testForEach([1, 2, 3]);
+        testForEach([1, 2, 3, 4]);
+        testForEach([1, 2, 2, 3, 3, 4]);
+        testForEach([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     );
 
     test(
       "toText",
       func() {
-        let q = Deque.fromIter([1, 2, 3].vals());
-        expect.text(Deque.toText(q, Nat.toText)).equal("PureQueue[1, 2, 3]")
+        let testToText = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          expect.text(Deque.toText(q, Nat.toText)).equal("PureQueue" # Array.toText<Nat>(testElements, Nat.toText))
+        };
+        testToText([]);
+        testToText([1]);
+        testToText([1, 2]);
+        testToText([1, 2, 3]);
+        testToText([1, 2, 3, 4]);
+        testToText([1, 2, 2, 3, 3, 4]);
+        testToText([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     );
 
     test(
       "size",
       func() {
-        let q = Deque.fromIter([1, 2, 3].vals());
-        expect.nat(Deque.size(q)).equal(3);
-        expect.nat(Deque.size(Deque.empty())).equal(0)
+        let testSize = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          expect.nat(Deque.size(q)).equal(testElements.size())
+        };
+        testSize([]);
+        testSize([1]);
+        testSize([1, 2]);
+        testSize([1, 2, 3]);
+        testSize([1, 2, 3, 4]);
+        testSize([1, 2, 2, 3, 3, 4]);
+        testSize([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     );
 
     test(
       "contains",
       func() {
-        let q = Deque.fromIter([1, 2, 3].vals());
-        expect.bool(Deque.contains(q, Nat.equal, 2)).isTrue();
-        expect.bool(Deque.contains(q, Nat.equal, 4)).isFalse()
+        let testContains = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          let alwaysThere = 1;
+          let neverThere = 123;
+          expect.bool(Deque.contains(q, Nat.equal, alwaysThere)).equal(Array.find<Nat>(testElements, func n = Nat.equal(n, alwaysThere)) != null);
+          expect.bool(Deque.contains(q, Nat.equal, neverThere)).equal(Array.find<Nat>(testElements, func n = Nat.equal(n, neverThere)) != null)
+        };
+        testContains([]);
+        testContains([1]);
+        testContains([1, 2]);
+        testContains([1, 2, 3]);
+        testContains([1, 2, 3, 4]);
+        testContains([1, 2, 2, 3, 3, 4]);
+        testContains([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     );
 
     test(
       "any",
       func() {
-        let q = Deque.fromIter([1, 2, 3].vals());
-        expect.bool(Deque.any<Nat>(q, func n = n > 2)).isTrue();
-        expect.bool(Deque.any<Nat>(q, func n = n > 3)).isFalse()
+        let testAny = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          expect.bool(Deque.any<Nat>(q, func n = n > 2)).equal(Array.any<Nat>(testElements, func n = n > 2));
+          expect.bool(Deque.any<Nat>(q, func n = n > 3)).equal(Array.any<Nat>(testElements, func n = n > 3))
+        };
+        testAny([]);
+        testAny([3]);
+        testAny([1, 3]);
+        testAny([1, 2, 3]);
+        testAny([1, 2, 3, 2]);
+        testAny([1, 2, 3, 2, 1]);
+        testAny([1, 2, 0, 2, 1, 3]);
+        testAny([1, 2, 0, 2, 1, 3, 1])
       }
     );
 
     test(
       "map",
       func() {
-        let q = Deque.fromIter([1, 2, 3].vals());
-        let mapped = Deque.map<Nat, Nat>(q, func n = n * 2);
-        expect.array(
-          Iter.toArray(Deque.values(mapped)),
-          Nat.toText,
-          Nat.equal
-        ).equal([2, 4, 6])
+        let testMap = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          let mapped = Deque.map<Nat, Nat>(q, func n = n * 2);
+          expect.array(
+            Iter.toArray(Deque.values(mapped)),
+            Nat.toText,
+            Nat.equal
+          ).equal(Array.map<Nat, Nat>(testElements, func n = n * 2))
+        };
+        testMap([]);
+        testMap([1]);
+        testMap([1, 2]);
+        testMap([1, 2, 3]);
+        testMap([1, 2, 3, 4]);
+        testMap([1, 2, 2, 3, 3, 4]);
+        testMap([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     )
   }

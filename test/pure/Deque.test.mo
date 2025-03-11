@@ -410,33 +410,33 @@ suite(
   }
 );
 
-// queue := Deque.filter<Nat>(Deque.fromIter([1, 2, 3, 4, 5].vals()), func n = n < 3);
+queue := Deque.filter<Nat>(Deque.fromIter([1, 2, 3, 4, 5].vals()), func n = n < 3);
 
-// suite(
-//   "filter invariants",
-//   func() {
-//     test(
-//       "not empty",
-//       func() {
-//         expect.bool(Deque.isEmpty(queue)).isFalse()
-//       }
-//     );
+suite(
+  "filter invariants",
+  func() {
+    test(
+      "not empty",
+      func() {
+        expect.bool(Deque.isEmpty(queue)).isFalse()
+      }
+    );
 
-//     test(
-//       "peek front",
-//       func() {
-//         expect.option(Deque.peekFront(queue), Nat.toText, Nat.equal).equal(?1)
-//       }
-//     );
+    test(
+      "peek front",
+      func() {
+        expect.option(Deque.peekFront(queue), Nat.toText, Nat.equal).equal(?1)
+      }
+    );
 
-//     test(
-//       "peek back",
-//       func() {
-//         expect.option(Deque.peekBack(queue), Nat.toText, Nat.equal).equal(?2)
-//       }
-//     )
-//   }
-// );
+    test(
+      "peek back",
+      func() {
+        expect.option(Deque.peekBack(queue), Nat.toText, Nat.equal).equal(?2)
+      }
+    )
+  }
+);
 
 object Random {
   var number = 4711;

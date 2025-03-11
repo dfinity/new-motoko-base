@@ -1,12 +1,10 @@
 import { Principal } from "@dfinity/principal";
+import { PocketIc, PocketIcServer } from "@hadronous/pic";
 import chalk from "chalk";
-import { existsSync, readdirSync, statSync } from "fs";
 import { readFile } from "fs/promises";
 import { glob } from "glob";
 import motoko from "motoko";
 import { join, relative } from "path";
-import { PocketIc, PocketIcServer } from "@hadronous/pic";
-import { dirname, basename } from "path";
 
 interface TestResult {
   snippet: Snippet;
@@ -159,12 +157,6 @@ async function main() {
     !testResults.length ||
     testResults.some((result) => result.status === "failed");
   process.exit(hasError ? 1 : 0);
-}
-
-function extractVersionFromFilename(filePath: string): number | null {
-  const pattern = /\.(\d+)\.test\.mo$/;
-  const match = filePath.match(pattern);
-  return match ? Number(match[1]) : null;
 }
 
 const runSnippet = async (

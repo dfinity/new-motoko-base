@@ -774,6 +774,29 @@ suite(
         testMap([1, 2, 2, 3, 3, 4]);
         testMap([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
+    );
+
+    test(
+      "reverse",
+      func() {
+        let testReverse = func(testElements : [Nat]) {
+          let q = Deque.fromIter(testElements.vals());
+          let reversed = Deque.reverse(q);
+          expect.array(
+            Iter.toArray(Deque.values(reversed)),
+            Nat.toText,
+            Nat.equal
+          ).equal(Array.reverse(testElements))
+        };
+
+        testReverse([]);
+        testReverse([1]);
+        testReverse([1, 2]);
+        testReverse([1, 2, 3]);
+        testReverse([1, 2, 3, 4]);
+        testReverse([1, 2, 2, 3, 3, 4]);
+        testReverse([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
     )
   }
 )

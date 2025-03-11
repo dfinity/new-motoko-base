@@ -799,4 +799,74 @@ suite(
       }
     )
   }
+);
+
+suite(
+  "edge cases",
+  func() {
+    test(
+      "empty queue operations",
+      func() {
+        let q = Deque.empty<Nat>();
+        expect.bool(Deque.isEmpty(q)).isTrue();
+        expect.nat(Deque.size(q)).equal(0);
+        expect.option(Deque.peekFront(q), Nat.toText, Nat.equal).isNull();
+        expect.option(Deque.peekBack(q), Nat.toText, Nat.equal).isNull();
+        expect.option(
+          Deque.popFront(q),
+          frontToText,
+          frontEqual
+        ).isNull();
+        expect.option(
+          Deque.popBack(q),
+          backToText,
+          backEqual
+        ).isNull()
+      }
+    );
+
+    test(
+      "rebalancing threshold",
+      func() {
+        // Create a queue that's exactly at the rebalancing threshold
+        var q = Deque.empty<Nat>();
+        for (i in Nat.range(1, 4)) {
+          q := Deque.pushFront(q, i)
+        };
+        for (i in Nat.range(5, 12)) {
+          q := Deque.pushBack(q, i)
+        };
+        let #rebal(_) = q else Prim.trap "Should be in rebalancing state";
+        // Test operations during rebalancing
+        q := Deque.pushFront(q, 0);
+        q := Deque.pushBack(q, 13);
+        expect.bool(Deque.isEmpty(q)).isFalse();
+        expect.option(Deque.peekFront(q), Nat.toText, Nat.equal).equal(?0);
+        expect.option(Deque.peekBack(q), Nat.toText, Nat.equal).equal(?13)
+      }
+    );
+
+    test(
+      "alternating operations",
+      func() {
+        var q = Deque.empty<Nat>();
+        // Alternating pushes
+        for (i in Nat.range(0, 5)) {
+          q := Deque.pushFront(q, i);
+          q := Deque.pushBack(q, i + 100)
+        };
+        // Mixed operations
+        expect.option(Deque.popFront(q), frontToText, frontEqual).equal(?(4, Deque.fromIter([3, 2, 1, 0, 100, 101, 102, 103, 104].vals())));
+        q := Deque.pushBack(q, 200);
+        expect.option(Deque.popBack(q), backToText, backEqual).equal(?(Deque.fromIter([4, 3, 2, 1, 0, 100, 101, 102, 103, 104].vals()), 200));
+        q := Deque.pushFront(q, 300);
+        // Verify order is maintained
+        expect.array(
+          Iter.toArray(Deque.values(q)),
+          Nat.toText,
+          Nat.equal
+        ).equal([300, 4, 3, 2, 1, 0, 100, 101, 102, 103, 104, 200])
+      }
+    )
+  }
 )

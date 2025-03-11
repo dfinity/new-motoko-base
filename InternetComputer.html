@@ -48,7 +48,7 @@ import IC &quot;mo:base/InternetComputer&quot;;
 
 let c1 = IC.performanceCounter(1);
 work();
-let diff : Nat64 = IC.performanceCounter(1) - c1;</code></pre></p></div><div class="declaration"><h4 class="function" id="replyDeadline"><code><span class="keyword">public func </span><span class="fnname">replyDeadline</span>() : <span class="type">Nat</span></code></h4><p><p>Returns the time (in nanoseconds from the epoch start) by when the update message should
+let diff : Nat64 = IC.performanceCounter(1) - c1;</code></pre></p></div><div class="declaration"><h4 class="function" id="replyDeadline"><code><span class="keyword">public func </span><span class="fnname">replyDeadline</span>() : ?<span class="type">Nat</span></code></h4><p><p>Returns the time (in nanoseconds from the epoch start) by when the update message should
 reply to the best effort message so that it can be received by the requesting canister.
-Queries and non-best-effort update messages return zero.</p>
+Queries and unbounded-time update messages return null.</p>
 </p></div></div></body></html>

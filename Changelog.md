@@ -3,6 +3,7 @@
 ## Next
 
 * Fix bug in `Iter.step()` implementation
+* Adjust `Random` representation to allow persistence in stable memory
 
 ## 0.3.0
 

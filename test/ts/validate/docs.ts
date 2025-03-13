@@ -36,7 +36,7 @@ const testStatusEmojis: Record<TestResult["status"], string> = {
 const rootDirectory = join(__dirname, "../../..");
 
 async function main() {
-  const testFilter = process.argv[2];
+  const testFilters = process.argv.slice(2);
 
   const virtualBaseDirectory = "motoko-base";
   motoko.usePackage("base", join(virtualBaseDirectory, "src")); // Register `mo:base`
@@ -52,7 +52,10 @@ async function main() {
         const content = await readFile(path, "utf8");
         motoko.write(join(virtualBaseDirectory, virtualPath), content);
 
-        if (testFilter && !virtualPath.includes(testFilter)) {
+        // Require matching at least one test filter
+        if (
+          testFilters.every((testFilter) => !virtualPath.includes(testFilter))
+        ) {
           return [];
         }
 
@@ -264,10 +267,35 @@ const runSnippet = async (
     snippet.sourceCode,
   ].join("\n");
   let actorSource = snippetSource;
+
+  // Wrap in persistent actor if not otherwise specified
   // TODO: more sophisticated check
   if (!/^(persistent +)?actor.*\{$/m.test(actorSource)) {
     const [imports, nonImports] = extractImports(snippetSource);
     actorSource = `${imports}\n\npersistent actor { ignore do {\n${nonImports}\n} }`;
+  }
+
+  // Rewrite `// => ...` comments as assertions
+  actorSource = actorSource
+    .split("\n")
+    .map((line) => {
+      const match = line.match(
+        /^(\s*(?:(?:let|var)\s+\S+\s*=\s*)?)(.*)\s*\/\/ => (.+)$/
+      );
+      if (match) {
+        const [_, pre, statement, expected] = match;
+        return `${pre}do { let _result_ = do { ${statement} }; assert _result_ == ${expected}; _result_ }`;
+      }
+      return line;
+    })
+    .join("\n");
+
+  // Check for incorrectly-formatted assertion comment
+  const assertionCommentMatch = actorSource.match(/\/\/ ?[=-]>/);
+  if (assertionCommentMatch) {
+    throw new Error(
+      `${snippet.path}:${snippet.line} Unable to parse assertion comment: ${assertionCommentMatch[0]}`
+    );
   }
 
   // Write to virtual file system

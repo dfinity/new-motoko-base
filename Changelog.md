@@ -2,7 +2,7 @@
 
 ## NEXT
 
-* Add `burn : <system>Nat -> Nat` to `Cycles` (#211).
+* Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
 
 ## 0.3.0
 

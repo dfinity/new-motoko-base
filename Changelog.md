@@ -1,8 +1,9 @@
 # Changelog
 
-## NEXT
+## Next
 
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
+* Fix bug in `Iter.step()` implementation
 
 ## 0.3.0
 

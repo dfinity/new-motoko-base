@@ -60,18 +60,8 @@ async function main() {
           return [];
         }
 
-        const docComments = content
-          .split("\n")
-          .map((line) => {
-            // TODO: optimize or something
-            const lineTrimmed = line.trimStart();
-            return lineTrimmed.startsWith("///")
-              ? lineTrimmed.startsWith("/// ")
-                ? lineTrimmed.substring("/// ".length)
-                : lineTrimmed.substring("///".length)
-              : line;
-          })
-          .join("\n");
+        // Empty non-doc-comment lines to preserve line numbers
+        const docComments = content.replace(/^[ \t]*\/\/\/ ?/gm, "");
 
         const codeBlocks: {
           line: number;
@@ -281,7 +271,7 @@ const runSnippet = async (
     .split("\n")
     .map((line) => {
       const match = line.match(
-        /^(\s*(?:(?:let|var)\s+\S+\s*=\s*)?)(.*)\s*\/\/ => (.+)$/
+        /^(\s*(?:(?:let|var)\s+\S+\s*=|ignore)?)\s*(.*)\s*\/\/ => (.+)$/
       );
       if (match) {
         const [_, pre, statement, expected] = match;

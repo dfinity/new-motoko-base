@@ -215,7 +215,7 @@ ordering of the elements.</p>
 <pre><code>motoko include=import
 
 let arrays = [[0, 1, 2], [2, 3], [], [4]];
-Array.flatten&lt;Nat&gt;(arrays)) // =&gt; [0, 1, 2, 2, 3, 4]</code></pre>
+Array.flatten&lt;Nat&gt;(arrays) // =&gt; [0, 1, 2, 2, 3, 4]</code></pre>
 
 <p>Runtime: O(number of elements in array)</p>
 <p>Space: O(number of elements in array)</p>
@@ -387,8 +387,9 @@ the shorter array is considered #less than the longer array.</p>
 import Nat &quot;mo:base/Nat&quot;;
 let array1 = [1, 2, 3];
 let array2 = [1, 2, 4];
-Array.compare&lt;Nat&gt;(array1, array2, Nat.compare) // =&gt; #less
+Array.compare&lt;Nat&gt;(array1, array2, Nat.compare) // =&gt; #less</code></pre>
 
+<pre><code>motoko include=import
 let array3 = [1, 2];
 let array4 = [1, 2, 3];
 Array.compare&lt;Nat&gt;(array3, array4, Nat.compare) // =&gt; #less (shorter array)</code></pre>

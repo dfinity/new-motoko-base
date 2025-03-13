@@ -190,6 +190,16 @@ async function main() {
       testResults.push(result);
 
       // Display test output
+      if (result.error) {
+        const tripleBacktick = "```";
+        console.log(
+          chalk.gray(
+            `${tripleBacktick}${snippet.language || ""}${
+              snippet.attrs.length ? ` ${snippet.attrs.join(" ")}` : ""
+            }\n${snippet.sourceCode}\n${tripleBacktick}`
+          )
+        );
+      }
       console.log(
         testStatusEmojis[status],
         `${snippet.path}:${snippet.line}`,
@@ -222,15 +232,6 @@ const runSnippet = async (
   pocketIc: PocketIc,
   sourcePrincipal: Principal
 ) => {
-  const tripleBacktick = "```";
-  console.log(
-    chalk.gray(
-      `${tripleBacktick}${snippet.language || ""}${
-        snippet.attrs.length ? ` ${snippet.attrs.join(" ")}` : ""
-      }\n${snippet.sourceCode}\n${tripleBacktick}`
-    )
-  );
-
   // Set canister alias
   const sourceCanisterName = "snippet";
   motoko.setAliases(".", { [sourceCanisterName]: sourcePrincipal.toText() });

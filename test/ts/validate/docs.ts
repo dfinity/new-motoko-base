@@ -77,17 +77,13 @@ async function main() {
 
         const snippets: Snippet[] = [];
         for (const { language, config, sourceCode } of codeBlocks) {
-          if (language === "motoko") {
-            snippets.push({
-              path: virtualPath,
-              index,
-              language,
-              config,
-              sourceCode,
-            });
-          } else {
-            throw new Error(`Unexpected language for code block: ${language}`);
-          }
+          snippets.push({
+            path: virtualPath,
+            index,
+            language,
+            config,
+            sourceCode,
+          });
         }
         return snippets;
       })
@@ -119,33 +115,42 @@ async function main() {
   console.log("Running snippets...");
   const testResults: TestResult[] = [];
   for (const snippet of snippets) {
-    const startTime = Date.now();
-    let status: TestResult["status"];
-    let error;
-    try {
-      await runSnippet(snippet, pocketIc, sourcePrincipal);
-      status = "passed";
-    } catch (err) {
-      error = err;
-      status = "failed";
-    }
-    const result: TestResult = {
-      snippet,
-      status,
-      error,
-      time: Date.now() - startTime,
-    };
-    testResults.push(result);
+    if (snippet.language === "motoko") {
+      const startTime = Date.now();
+      let status: TestResult["status"];
+      let error;
+      try {
+        await runSnippet(snippet, pocketIc, sourcePrincipal);
+        status = "passed";
+      } catch (err) {
+        error = err;
+        status = "failed";
+      }
+      const result: TestResult = {
+        snippet,
+        status,
+        error,
+        time: Date.now() - startTime,
+      };
+      testResults.push(result);
 
-    // Display test output
-    console.log(
-      testStatusEmojis[result.status],
-      result.snippet.path,
-      result.snippet.index,
-      chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
-    );
-    if (result.error) {
-      console.error(chalk.red(result.error));
+      // Display test output
+      console.log(
+        testStatusEmojis[status],
+        snippet.path,
+        snippet.index,
+        chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
+      );
+      if (result.error) {
+        console.error(chalk.red(result.error));
+      }
+    } else {
+      console.log(
+        testStatusEmojis["skipped"],
+        snippet.path,
+        snippet.index,
+        chalk.grey("skipped")
+      );
     }
   }
 
@@ -184,9 +189,6 @@ const runSnippet = async (
   // Compile source Wasm
   const sourceResult = motoko.wasm(virtualPath, "ic");
   motoko.write(`${sourcePrincipal.toText()}.did`, sourceResult.candid);
-
-  // Compile test Wasm
-  //   const testResult = motoko.wasm(`${snippet.file}.test.mo`, "ic");
 
   // Install Wasm files
   await pocketIc.reinstallCode({

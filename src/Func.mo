@@ -5,7 +5,7 @@
 ///
 /// Import from the base library to use this module.
 ///
-/// ```motoko
+/// ```motoko name=import
 /// import Func = "mo:base/Func";
 /// ```
 

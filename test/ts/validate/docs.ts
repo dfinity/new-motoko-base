@@ -21,7 +21,9 @@ interface Snippet {
   path: string;
   index: number;
   language: string;
-  config: string[];
+  attrs: string[];
+  name: string | undefined;
+  includes: Snippet[];
   sourceCode: string;
 }
 
@@ -61,29 +63,58 @@ async function main() {
         const codeBlocks: {
           language: string | undefined;
           sourceCode: string;
-          config: string[];
+          attrs: string[];
         }[] = [];
 
         for (const match of docComments.matchAll(
           /```(\S+)?(?:\s([^\n]+))?\n([\s\S]*?)```/g
         )) {
-          const [_, language, config, sourceCode] = match;
+          const [_, language, attrs, sourceCode] = match;
           codeBlocks.push({
             language,
-            config: config?.trim() ? config.trim().split(/\s+/) : [],
+            attrs: attrs?.trim() ? attrs.trim().split(/\s+/) : [],
             sourceCode: sourceCode.trim(),
           });
         }
 
         const snippets: Snippet[] = [];
-        for (const { language, config, sourceCode } of codeBlocks) {
-          snippets.push({
+        const snippetMap = new Map<string, Snippet>();
+        for (const { language, attrs, sourceCode } of codeBlocks) {
+          const snippet: Snippet = {
             path: virtualPath,
             index,
             language,
-            config,
+            attrs,
+            name: attrs
+              .find((attr) => attr.startsWith("name="))
+              ?.substring("name=".length),
+            includes: [],
             sourceCode,
-          });
+          };
+          snippets.push(snippet);
+          if (snippet.name) {
+            if (snippetMap.has(snippet.name)) {
+              throw new Error(
+                `${snippet.path}: duplicate snippet name: ${snippet.name}`
+              );
+            }
+            snippetMap.set(snippet.name, snippet);
+          }
+        }
+        // Resolve "include=..." references
+        for (const snippet of snippets) {
+          for (const attr of snippet.attrs) {
+            if (attr.startsWith("include=")) {
+              const name = attr.substring("include=".length);
+              const include = snippetMap.get(name);
+              if (!include) {
+                throw new Error(
+                  `${snippet.path}: unresolved snippet attribute: ${attr}`
+                );
+              }
+              snippet.includes.push(include);
+            }
+          }
         }
         return snippets;
       })
@@ -173,7 +204,7 @@ const runSnippet = async (
   console.log(
     chalk.gray(
       `${tripleBacktick}${snippet.language || ""}${
-        snippet.config.length ? ` ${snippet.config.join(" ")}` : ""
+        snippet.attrs.length ? ` ${snippet.attrs.join(" ")}` : ""
       }\n${snippet.sourceCode}\n${tripleBacktick}`
     )
   );
@@ -182,9 +213,39 @@ const runSnippet = async (
   const sourceCanisterName = "snippet";
   motoko.setAliases(".", { [sourceCanisterName]: sourcePrincipal.toText() });
 
+  const extractImports = (source: string) => {
+    const importLines = [];
+    const nonImportLines = [];
+    let doneWithImports = false;
+    for (const line of source.split("\n")) {
+      // Basic import detection
+      if (line.startsWith("import ")) {
+        if (doneWithImports) {
+          throw new Error("Unexpected import line");
+        }
+        importLines.push(line);
+      } else {
+        nonImportLines.push(line);
+        const trimmedLine = line.trim();
+        if (trimmedLine && !trimmedLine.startsWith("//")) {
+          doneWithImports = true;
+        }
+      }
+    }
+    return [importLines.join("\n"), nonImportLines.join("\n")];
+  };
+
+  const snippetSource = [
+    // Prepend source code included from other snippets
+    ...snippet.includes.map((include) => include.sourceCode),
+    snippet.sourceCode,
+  ].join("\n");
+  const [imports, nonImports] = extractImports(snippetSource);
+  const actorSource = `${imports}\nactor { public func example() : async () { ignore do {\n${nonImports} } } }`;
+
   // Write to virtual file system
   const virtualPath = join("snippet", `${snippet.path}${snippet.index}.mo`);
-  motoko.write(virtualPath, snippet.sourceCode);
+  motoko.write(virtualPath, actorSource);
 
   // Compile source Wasm
   const sourceResult = motoko.wasm(virtualPath, "ic");

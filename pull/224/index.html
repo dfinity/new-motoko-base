@@ -463,7 +463,8 @@ that are dynamically size-balanced by splitting.</p>
 <ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Stable ordered set implemented as a red-black tree.</p>
+<pre><code>motoko name=initialize
+import Queue &quot;mo:base/Queue&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Stable ordered set implemented as a red-black tree.</p>
 <p>A red-black tree is a balanced binary search tree ordered by the elements.</p>
 <p>The tree data structure internally colors each of its nodes either red or black,
 and uses this information to balance the tree during modifying operations.</p>

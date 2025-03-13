@@ -54,6 +54,7 @@ async function main() {
 
         // Require matching at least one test filter
         if (
+          testFilters.length &&
           testFilters.every((testFilter) => !virtualPath.includes(testFilter))
         ) {
           return [];

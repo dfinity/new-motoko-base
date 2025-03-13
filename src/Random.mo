@@ -24,7 +24,7 @@ module {
   public func fast(seed : Nat64) : Random {
     let prng = PRNG.sfc64a();
     prng.init(seed);
-    Random(
+    fromGenerator(
       func() {
         // Generate 8 bytes directly from a single 64-bit number
         let n = prng.next();
@@ -46,10 +46,10 @@ module {
   /// Creates a random number generator suitable for cryptography
   /// using entropy from the ICP management canister with automatic resupply.
   public func crypto() : AsyncRandom {
-    AsyncRandom(func() : async* Blob { await rawRand() })
+    fromAsyncGenerator(func() : async* Blob { await rawRand() })
   };
 
-  public class Random(generator : () -> Blob) {
+  public func fromGenerator(generator : () -> Blob) : Random {
     var iter : Iter.Iter<Nat8> = Iter.empty();
     let bitIter : Iter.Iter<Bool> = object {
       var mask = 0x00 : Nat8;
@@ -71,34 +71,93 @@ module {
         }
       }
     };
-
-    /// Random choice between `true` and `false`.
-    public func bool() : Bool {
-      switch (bitIter.next()) {
-        case (?bit) { bit };
-        case null {
-          iter := generator().vals();
-          switch (bitIter.next()) {
-            case (?bit) { bit };
-            case null Runtime.trap("Random.bool(): generator produced empty Blob")
+    Random({
+      nextBit = func() {
+        switch (bitIter.next()) {
+          case (?bit) { bit };
+          case null {
+            iter := generator().vals();
+            switch (bitIter.next()) {
+              case (?bit) { bit };
+              case null Runtime.trap("Random.bool(): generator produced empty Blob")
+            }
+          }
+        }
+      };
+      nextByte = func() {
+        switch (iter.next()) {
+          case (?byte) { byte };
+          case null {
+            iter := generator().vals();
+            switch (iter.next()) {
+              case (?byte) { byte };
+              case null Runtime.trap("Random.nat8(): generator produced empty Blob")
+            }
           }
         }
       }
+    })
+  };
+
+  public func fromAsyncGenerator(generator : () -> async* Blob) : AsyncRandom {
+    var iter : Iter.Iter<Nat8> = Iter.empty();
+    let bitIter : Iter.Iter<Bool> = object {
+      var mask = 0x00 : Nat8;
+      var byte = 0x00 : Nat8;
+      public func next() : ?Bool {
+        if (0 : Nat8 == mask) {
+          switch (iter.next()) {
+            case null null;
+            case (?w) {
+              byte := w;
+              mask := 0x40;
+              ?(0 : Nat8 != byte & (0x80 : Nat8))
+            }
+          }
+        } else {
+          let m = mask;
+          mask >>= (1 : Nat8);
+          ?(0 : Nat8 != byte & m)
+        }
+      }
     };
+    AsyncRandom({
+      nextBit = func() : async* Bool {
+        switch (bitIter.next()) {
+          case (?bit) { bit };
+          case null {
+            iter := (await* generator()).vals();
+            switch (bitIter.next()) {
+              case (?bit) { bit };
+              case null Runtime.trap("Random.bool(): generator produced empty Blob")
+            }
+          }
+        }
+      };
+      nextByte = func() : async* Nat8 {
+        switch (iter.next()) {
+          case (?byte) { byte };
+          case null {
+            iter := (await* generator()).vals();
+            switch (iter.next()) {
+              case (?byte) { byte };
+              case null Runtime.trap("Random.nat8(): generator produced empty Blob")
+            }
+          }
+        }
+      }
+    })
+  };
+
+  public class Random({
+    nextBit : () -> Bool;
+    nextByte : () -> Nat8
+  }) {
+    /// Random choice between `true` and `false`.
+    public let bool = nextBit;
 
     /// Random `Nat8` value in the range [0, 256).
-    public func nat8() : Nat8 {
-      switch (iter.next()) {
-        case (?byte) { byte };
-        case null {
-          iter := generator().vals();
-          switch (iter.next()) {
-            case (?byte) { byte };
-            case null Runtime.trap("Random.nat8(): generator produced empty Blob")
-          }
-        }
-      }
-    };
+    public let nat8 = nextByte;
 
     // Helper function which returns a uniformly sampled `Nat64` in the range `[0, max]`.
     // Uses rejection sampling to ensure uniform distribution even when the range
@@ -163,58 +222,15 @@ module {
 
   };
 
-  public class AsyncRandom(generator : () -> async* Blob) {
-    var iter = Iter.empty<Nat8>();
-    let bitIter : Iter.Iter<Bool> = object {
-      var mask = 0x00 : Nat8;
-      var byte = 0x00 : Nat8;
-      public func next() : ?Bool {
-        if (0 : Nat8 == mask) {
-          switch (iter.next()) {
-            case null null;
-            case (?w) {
-              byte := w;
-              mask := 0x40;
-              ?(0 : Nat8 != byte & (0x80 : Nat8))
-            }
-          }
-        } else {
-          let m = mask;
-          mask >>= (1 : Nat8);
-          ?(0 : Nat8 != byte & m)
-        }
-      }
-    };
-
+  public class AsyncRandom({
+    nextBit : () -> async* Bool;
+    nextByte : () -> async* Nat8
+  }) {
     /// Random choice between `true` and `false`.
-    public func bool() : async* Bool {
-      switch (bitIter.next()) {
-        case (?bit) { bit };
-        case null {
-          iter := (await* generator()).vals();
-          switch (bitIter.next()) {
-            case (?bit) { bit };
-            case null Runtime.trap("AsyncRandom.bool(): generator produced empty Blob")
-          }
-        }
-      }
-    };
+    public let bool = nextBit;
 
     /// Random `Nat8` value in the range [0, 256).
-    public func nat8() : async* Nat8 {
-      switch (iter.next()) {
-        case (?byte) { byte };
-        case null {
-          iter := (await* generator()).vals();
-          switch (iter.next()) {
-            case (?byte) { byte };
-            case null {
-              Runtime.trap("AsyncRandom.byte(): generator produced empty Blob")
-            }
-          }
-        }
-      }
-    };
+    public let nat8 = nextByte;
 
     // Helper function which returns a uniformly sampled `Nat64` in the range `[0, max]`.
     // Uses rejection sampling to ensure uniform distribution even when the range

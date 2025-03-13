@@ -285,7 +285,7 @@ const runSnippet = async (
       );
       if (match) {
         const [_, pre, statement, expected] = match;
-        return `${pre}do { let _result_ = do { ${statement} }; assert _result_ == ${expected}; _result_ }`;
+        return `${pre}do { let _result_ = do { ${statement} }; assert _result_ == (${expected}); _result_ }`;
       }
       return line;
     })

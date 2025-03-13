@@ -110,6 +110,7 @@
       "public let accept : <system>(amount : Nat) -> (accepted : Nat)",
       "public let available : () -> (amount : Nat)",
       "public let balance : () -> (amount : Nat)",
+      "public let burn : <system>(amount : Nat) -> (burned : Nat)",
       "public let refunded : () -> (amount : Nat)"
     ]
   },

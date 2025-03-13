@@ -2,6 +2,7 @@
 
 ## Next
 
+* Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
 * Fix bug in `Iter.step()` implementation
 * Adjust `Random` representation to allow persistence in stable memory
 

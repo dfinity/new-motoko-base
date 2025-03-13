@@ -155,7 +155,7 @@ async function main() {
   // Start PocketIC
   const pocketIcServer = await PocketIcServer.start({
     showRuntimeLogs: false,
-    showCanisterLogs: true,
+    showCanisterLogs: false, // TODO: enable with --verbose flag?
   });
   const pocketIc = await PocketIc.create(pocketIcServer.getUrl());
 

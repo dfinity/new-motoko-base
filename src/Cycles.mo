@@ -130,7 +130,7 @@ module {
   ///
   /// Example for use on the IC:
   /// ```motoko no-repl
-  /// import Cycles "mo:base/ExperimentalCycles";
+  /// import Cycles "mo:base/Cycles";
   /// import Debug "mo:base/Debug";
   ///
   /// actor {

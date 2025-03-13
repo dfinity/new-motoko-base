@@ -119,7 +119,7 @@ async function main() {
           if (snippet.name) {
             if (snippetMap.has(snippet.name)) {
               throw new Error(
-                `${snippet.path}: duplicate snippet name: ${snippet.name}`
+                `${snippet.path}:${snippet.line} Duplicate snippet name: ${snippet.name}`
               );
             }
             snippetMap.set(snippet.name, snippet);
@@ -133,7 +133,7 @@ async function main() {
               const include = snippetMap.get(name);
               if (!include) {
                 throw new Error(
-                  `${snippet.path}: unresolved snippet attribute: ${attr}`
+                  `${snippet.path}:${snippet.line} Unresolved snippet attribute: ${attr}`
                 );
               }
               snippet.includes.push(include);

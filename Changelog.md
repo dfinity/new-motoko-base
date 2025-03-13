@@ -1,5 +1,9 @@
 # Changelog
 
+## NEXT
+
+* Add `burn : <system>Nat -> Nat` to `Cycles` (#211).
+
 ## 0.3.0
 
 * Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()`

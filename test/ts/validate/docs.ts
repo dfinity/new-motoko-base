@@ -90,7 +90,7 @@ async function main() {
         };
 
         for (const match of docComments.matchAll(
-          /```(\S+)?(?:\s([^\n]+))?\n([\s\S]*?)```/g
+          /```(\S+)?(?:[ \t]+([^\n]+)?)?\n([\s\S]*?)```/g
         )) {
           const [_, language, attrs, sourceCode] = match;
           codeBlocks.push({
@@ -263,10 +263,10 @@ const runSnippet = async (
     snippet.sourceCode,
   ].join("\n");
   let actorSource = snippetSource;
-  if (!actorSource.includes("actor {")) {
-    // TODO: more sophisticated check
+  // TODO: more sophisticated check
+  if (!/^(persistent +)?actor.*\{$/m.test(actorSource)) {
     const [imports, nonImports] = extractImports(snippetSource);
-    actorSource = `${imports}\nactor { public func example() : async () { ignore do {\n${nonImports} } } }`;
+    actorSource = `${imports}\n\npersistent actor { ignore do {\n${nonImports}\n} }`;
   }
 
   // Write to virtual file system
@@ -286,10 +286,10 @@ const runSnippet = async (
   // Call `example()` method
   const actor: ExampleActor = pocketIc.createActor(({ IDL }) => {
     return IDL.Service({
-      example: IDL.Func([], []),
+      // example: IDL.Func([], []),
     });
   }, sourcePrincipal);
-  await actor.example();
+  // await actor.example();
 };
 
 main().catch((err) => {

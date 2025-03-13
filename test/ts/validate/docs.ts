@@ -19,7 +19,7 @@ interface ExampleActor {
 
 interface Snippet {
   path: string;
-  index: number;
+  line: number;
   language: string;
   attrs: string[];
   name: string | undefined;
@@ -45,7 +45,7 @@ async function main() {
     await Promise.all(
       (
         await glob(join(rootDirectory, "src/**/*.mo"))
-      ).map(async (path, index) => {
+      ).map(async (path) => {
         const virtualPath = relative(rootDirectory, path);
 
         // Write to virtual file system
@@ -56,21 +56,45 @@ async function main() {
           return [];
         }
 
-        const docComments = [...content.matchAll(/^\s*\/\/\/ ?([^\n]+)*\s*$/gm)]
-          .map((match) => match[1])
+        const docComments = content
+          .split("\n")
+          .map((line) => {
+            // TODO: optimize or something
+            const lineTrimmed = line.trimStart();
+            return lineTrimmed.startsWith("///")
+              ? lineTrimmed.startsWith("/// ")
+                ? lineTrimmed.substring("/// ".length)
+                : lineTrimmed.substring("///".length)
+              : line;
+          })
           .join("\n");
 
         const codeBlocks: {
+          line: number;
           language: string | undefined;
           sourceCode: string;
           attrs: string[];
         }[] = [];
+
+        const getLineNumber = (text: string, charIndex: number): number => {
+          if (!text || charIndex < 0 || charIndex >= text.length) {
+            return -1;
+          }
+          let line = 1;
+          for (let i = 0; i < charIndex; i++) {
+            if (text[i] === "\n") {
+              line++;
+            }
+          }
+          return line;
+        };
 
         for (const match of docComments.matchAll(
           /```(\S+)?(?:\s([^\n]+))?\n([\s\S]*?)```/g
         )) {
           const [_, language, attrs, sourceCode] = match;
           codeBlocks.push({
+            line: getLineNumber(docComments, match.index),
             language,
             attrs: attrs?.trim() ? attrs.trim().split(/\s+/) : [],
             sourceCode: sourceCode.trim(),
@@ -79,10 +103,10 @@ async function main() {
 
         const snippets: Snippet[] = [];
         const snippetMap = new Map<string, Snippet>();
-        for (const { language, attrs, sourceCode } of codeBlocks) {
+        for (const { line, language, attrs, sourceCode } of codeBlocks) {
           const snippet: Snippet = {
             path: virtualPath,
-            index,
+            line,
             language,
             attrs,
             name: attrs
@@ -168,8 +192,7 @@ async function main() {
       // Display test output
       console.log(
         testStatusEmojis[status],
-        snippet.path,
-        snippet.index,
+        `${snippet.path}:${snippet.line}`,
         chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
       );
       if (result.error) {
@@ -178,8 +201,7 @@ async function main() {
     } else {
       console.log(
         testStatusEmojis["skipped"],
-        snippet.path,
-        snippet.index,
+        `${snippet.path}:${snippet.line}`,
         chalk.grey("skipped")
       );
     }
@@ -240,11 +262,15 @@ const runSnippet = async (
     ...snippet.includes.map((include) => include.sourceCode),
     snippet.sourceCode,
   ].join("\n");
-  const [imports, nonImports] = extractImports(snippetSource);
-  const actorSource = `${imports}\nactor { public func example() : async () { ignore do {\n${nonImports} } } }`;
+  let actorSource = snippetSource;
+  if (!actorSource.includes("actor {")) {
+    // TODO: more sophisticated check
+    const [imports, nonImports] = extractImports(snippetSource);
+    actorSource = `${imports}\nactor { public func example() : async () { ignore do {\n${nonImports} } } }`;
+  }
 
   // Write to virtual file system
-  const virtualPath = join("snippet", `${snippet.path}${snippet.index}.mo`);
+  const virtualPath = join("snippet", `${snippet.path}_${snippet.line}.mo`);
   motoko.write(virtualPath, actorSource);
 
   // Compile source Wasm

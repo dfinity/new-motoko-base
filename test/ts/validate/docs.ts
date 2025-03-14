@@ -43,99 +43,99 @@ async function main() {
 
   const snippets: Snippet[] = (
     await Promise.all(
-      (
-        await glob(join(rootDirectory, "src/**/*.mo"))
-      ).map(async (path) => {
-        const virtualPath = relative(rootDirectory, path);
+      (await glob(join(rootDirectory, "src/**/*.mo")))
+        .sort()
+        .map(async (path) => {
+          const virtualPath = relative(rootDirectory, path);
 
-        // Write to virtual file system
-        const content = await readFile(path, "utf8");
-        motoko.write(join(virtualBaseDirectory, virtualPath), content);
+          // Write to virtual file system
+          const content = await readFile(path, "utf8");
+          motoko.write(join(virtualBaseDirectory, virtualPath), content);
 
-        // Require matching at least one test filter
-        if (
-          testFilters.length &&
-          testFilters.every((testFilter) => !virtualPath.includes(testFilter))
-        ) {
-          return [];
-        }
-
-        // Empty non-doc-comment lines to preserve line numbers
-        const docComments = content.replace(/^[ \t]*\/\/\/ ?/gm, "");
-
-        const codeBlocks: {
-          line: number;
-          language: string | undefined;
-          sourceCode: string;
-          attrs: string[];
-        }[] = [];
-
-        const getLineNumber = (text: string, charIndex: number): number => {
-          if (!text || charIndex < 0 || charIndex >= text.length) {
-            return -1;
+          // Require matching at least one test filter
+          if (
+            testFilters.length &&
+            testFilters.every((testFilter) => !virtualPath.includes(testFilter))
+          ) {
+            return [];
           }
-          let line = 1;
-          for (let i = 0; i < charIndex; i++) {
-            if (text[i] === "\n") {
-              line++;
+
+          // Empty non-doc-comment lines to preserve line numbers
+          const docComments = content.replace(/^[ \t]*\/\/\/ ?/gm, "");
+
+          const codeBlocks: {
+            line: number;
+            language: string | undefined;
+            sourceCode: string;
+            attrs: string[];
+          }[] = [];
+
+          const getLineNumber = (text: string, charIndex: number): number => {
+            if (!text || charIndex < 0 || charIndex >= text.length) {
+              return -1;
             }
-          }
-          return line;
-        };
-
-        for (const match of docComments.matchAll(
-          /```(\S+)?(?:[ \t]+([^\n]+)?)?\n([\s\S]*?)```/g
-        )) {
-          const [_, language, attrs, sourceCode] = match;
-          codeBlocks.push({
-            line: getLineNumber(docComments, match.index),
-            language,
-            attrs: attrs?.trim() ? attrs.trim().split(/\s+/) : [],
-            sourceCode: sourceCode.trim(),
-          });
-        }
-
-        const snippets: Snippet[] = [];
-        const snippetMap = new Map<string, Snippet>();
-        for (const { line, language, attrs, sourceCode } of codeBlocks) {
-          const snippet: Snippet = {
-            path: virtualPath,
-            line,
-            language,
-            attrs,
-            name: attrs
-              .find((attr) => attr.startsWith("name="))
-              ?.substring("name=".length),
-            includes: [],
-            sourceCode,
+            let line = 1;
+            for (let i = 0; i < charIndex; i++) {
+              if (text[i] === "\n") {
+                line++;
+              }
+            }
+            return line;
           };
-          snippets.push(snippet);
-          if (snippet.name) {
-            if (snippetMap.has(snippet.name)) {
-              throw new Error(
-                `${snippet.path}:${snippet.line} Duplicate snippet name: ${snippet.name}`
-              );
-            }
-            snippetMap.set(snippet.name, snippet);
+
+          for (const match of docComments.matchAll(
+            /```(\S+)?(?:[ \t]+([^\n]+)?)?\n([\s\S]*?)```/g
+          )) {
+            const [_, language, attrs, sourceCode] = match;
+            codeBlocks.push({
+              line: getLineNumber(docComments, match.index),
+              language,
+              attrs: attrs?.trim() ? attrs.trim().split(/\s+/) : [],
+              sourceCode: sourceCode.trim(),
+            });
           }
-        }
-        // Resolve "include=..." references
-        for (const snippet of snippets) {
-          for (const attr of snippet.attrs) {
-            if (attr.startsWith("include=")) {
-              const name = attr.substring("include=".length);
-              const include = snippetMap.get(name);
-              if (!include) {
+
+          const snippets: Snippet[] = [];
+          const snippetMap = new Map<string, Snippet>();
+          for (const { line, language, attrs, sourceCode } of codeBlocks) {
+            const snippet: Snippet = {
+              path: virtualPath,
+              line,
+              language,
+              attrs,
+              name: attrs
+                .find((attr) => attr.startsWith("name="))
+                ?.substring("name=".length),
+              includes: [],
+              sourceCode,
+            };
+            snippets.push(snippet);
+            if (snippet.name) {
+              if (snippetMap.has(snippet.name)) {
                 throw new Error(
-                  `${snippet.path}:${snippet.line} Unresolved snippet attribute: ${attr}`
+                  `${snippet.path}:${snippet.line} Duplicate snippet name: ${snippet.name}`
                 );
               }
-              snippet.includes.push(include);
+              snippetMap.set(snippet.name, snippet);
             }
           }
-        }
-        return snippets;
-      })
+          // Resolve "include=..." references
+          for (const snippet of snippets) {
+            for (const attr of snippet.attrs) {
+              if (attr.startsWith("include=")) {
+                const name = attr.substring("include=".length);
+                const include = snippetMap.get(name);
+                if (!include) {
+                  throw new Error(
+                    `${snippet.path}:${snippet.line} Unresolved snippet attribute: ${attr}`
+                  );
+                }
+                snippet.includes.push(include);
+              }
+            }
+          }
+          return snippets;
+        })
     )
   ).flatMap((snippets) => snippets);
 

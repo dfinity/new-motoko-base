@@ -6,9 +6,9 @@
 /// The input deque is left unchanged.
 ///
 /// Examples of use-cases:
-/// Queue (FIFO) by using `pushBack()` and `popFront()`.
-/// Stack (LIFO) by using `pushFront()` and `popFront()`.
-/// Deque (double-ended queue) by using any combination of push/pop operations on either end.
+/// - Queue (FIFO) by using `pushBack()` and `popFront()`.
+/// - Stack (LIFO) by using `pushFront()` and `popFront()`.
+/// - Deque (double-ended queue) by using any combination of push/pop operations on either end.
 ///
 /// A Deque is internally implemented as a real-time double-ended queue based on the paper
 /// "Real-Time Double-Ended Queue Verified (Proof Pearl)". The implementation maintains
@@ -209,9 +209,9 @@ module {
   /// Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1) // deque with elements [1, 2]
   /// ```
   ///
-  /// Runtime: `O(1)` worst-case
+  /// Runtime: `O(1)` worst-case!
   ///
-  /// Space: `O(1)` worst-case
+  /// Space: `O(1)` worst-case!
   public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
     case (#empty) #one(element);
     case (#one(y)) #two(element, y);
@@ -279,9 +279,9 @@ module {
   /// Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2) // deque with elements [1, 2]
   /// ```
   ///
-  /// Runtime: `O(1)` worst-case
+  /// Runtime: `O(1)` worst-case!
   ///
-  /// Space: `O(1)` worst-case
+  /// Space: `O(1)` worst-case!
   public func pushBack<T>(deque : Deque<T>, element : T) : Deque<T> = reverse(pushFront(reverse(deque), element));
 
   /// Remove the element on the front end of a deque.
@@ -293,23 +293,13 @@ module {
   /// import Deque "mo:new-base/Deque";
   /// import Debug "mo:new-base/Debug";
   ///
-  /// let initial = Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1);
-  /// // initial deque with elements [1, 2]
-  /// let reduced = Deque.popFront(initial);
-  /// switch reduced {
-  ///   case null {
-  ///     Debug.trap "Empty deque impossible"
-  ///   };
-  ///   case (?result) {
-  ///     let removedElement = result.0; // 1
-  ///     let reducedDeque = result.1; // deque with element [2]
-  ///   }
-  /// }
+  /// let initial = Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1); // initial deque with elements [1, 2]
+  /// Deque.popFront(initial) // => ?(1, [2])
   /// ```
   ///
-  /// Runtime: `O(1)` worst-case
+  /// Runtime: `O(1)` worst-case!
   ///
-  /// Space: `O(1)` worst-case
+  /// Space: `O(1)` worst-case!
   public func popFront<T>(deque : Deque<T>) : ?(T, Deque<T>) = switch deque {
     case (#empty) null;
     case (#one(x)) ?(x, #empty);
@@ -370,23 +360,13 @@ module {
   /// import Deque "mo:new-base/Deque";
   /// import Debug "mo:new-base/Debug";
   ///
-  /// let initial = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2);
-  /// // initial deque with elements [1, 2]
-  /// let reduced = Deque.popBack(initial);
-  /// switch reduced {
-  ///   case null {
-  ///     Debug.trap "Empty deque impossible"
-  ///   };
-  ///   case (?result) {
-  ///     let reducedDeque = result.0; // deque with element [1]
-  ///     let removedElement = result.1; // 2
-  ///   }
-  /// }
+  /// let initial = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2); // initial deque with elements [1, 2]
+  /// Deque.popBack(initial) // => ?(2, [1])
   /// ```
   ///
-  /// Runtime: `O(1)` worst-case
+  /// Runtime: `O(1)` worst-case!
   ///
-  /// Space: `O(1)` worst-case
+  /// Space: `O(1)` worst-case!
   public func popBack<T>(deque : Deque<T>) : ?(Deque<T>, T) = do ? {
     let (x, deque2) = popFront(reverse(deque))!;
     (reverse(deque2), x)
@@ -398,7 +378,7 @@ module {
   /// ```motoko
   /// import Deque "mo:new-base/Deque";
   ///
-  /// Deque.fromIter([1, 2, 3].vals())
+  /// Deque.fromIter([1, 2, 3].vals()) // deque with elements [1, 2, 3], 1 at the front, 3 at the back
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -418,7 +398,7 @@ module {
   ///
   /// let deque = Deque.fromIter([1, 2, 3].vals());
   /// let iter = Deque.values(deque);
-  /// iter.next() // => ?1
+  /// Array.fromIter(iter) // => [1, 2, 3]
   /// ```
   ///
   /// Runtime: `O(1)`
@@ -627,7 +607,7 @@ module {
     q
   };
 
-  /// Create a Text representation of a deque for debugging purposes.
+  /// Create a `Text` representation of a deque for debugging purposes.
   ///
   /// Example:
   /// ```motoko

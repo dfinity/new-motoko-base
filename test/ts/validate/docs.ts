@@ -196,7 +196,7 @@ async function main() {
       }
       console.log(
         testStatusEmojis[status],
-        `${snippet.path}:${snippet.line}`,
+        `${snippet.path}:${snippet.line}`.padEnd(30),
         chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
       );
       if (result.error) {
@@ -271,11 +271,11 @@ const runSnippet = async (
     .split("\n")
     .map((line) => {
       const match = line.match(
-        /^(\s*(?:(?:let|var)\s+\S+\s*=|ignore)?)\s*(.*)\s*\/\/ => (.+)$/
+        /^(\s*(?:(?:let|var)\s+\S+\s*=\s*|ignore\s+)?)(.*)\s*\/\/ => (.+)$/
       );
       if (match) {
         const [_, pre, statement, expected] = match;
-        return `${pre}do { let _result_ = do { ${statement} }; assert _result_ == (${expected}); _result_ }`;
+        return `${pre} do { let _value_ = do { ${statement} }; assert _value_ == (${expected}); _value_ };`;
       }
       return line;
     })

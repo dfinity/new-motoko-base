@@ -37,7 +37,10 @@ module {
     case (#one(_)) 1;
     case (#two(_, _)) 2;
     case (#three(_, _, _)) 3;
-    case (#idles((_, n), (_, m))) n + m;
+    case (#idles((l, nL), (r, nR))) {
+      debug assert Stacks.size(l) == nL and Stacks.size(r) == nR;
+      nL + nR
+    };
     case (#rebal((_, big, small))) BigState.size(big) + SmallState.size(small)
   };
 
@@ -80,7 +83,10 @@ module {
     case (#idles(l0, (r, nR))) {
       let (l, nL) = Idle.push(l0, element); // enque the element to the left end
       // check if the size invariant still holds
-      if (3 * nR >= nL) #idles((l, nL), (r, nR)) else {
+      if (3 * nR >= nL) {
+        debug assert 3 * nL >= nR;
+        #idles((l, nL), (r, nR))
+      } else {
         // initiate the rebalancing process
         let targetSizeL = nL - nR - 1 : Nat;
         let targetSizeR = 2 * nR + 1;
@@ -100,7 +106,10 @@ module {
         let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
         debug assert states4.0 == #right;
         switch states4 {
-          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(big, small);
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(big, small);
+            #idles(big, small)
+          };
           case _ #rebal(states4)
         }
       };
@@ -109,7 +118,10 @@ module {
         let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
         debug assert states4.0 == #left;
         switch states4 {
-          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) #idles(small, big); // swapped because dir=left
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(small, big);
+            #idles(small, big) // swapped because dir=left
+          };
           case _ #rebal(states4)
         }
       }
@@ -146,7 +158,10 @@ module {
         let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
         debug assert states4.0 == #left;
         switch states4 {
-          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) ?(x, #idles(small, big));
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(small, big);
+            ?(x, #idles(small, big))
+          };
           case _ ?(x, #rebal(states4))
         }
       };
@@ -155,7 +170,10 @@ module {
         let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
         debug assert states4.0 == #right;
         switch states4 {
-          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) ?(x, #idles(big, small));
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(big, small);
+            ?(x, #idles(big, small))
+          };
           case _ ?(x, #rebal(states4))
         }
       }
@@ -532,6 +550,8 @@ module {
   };
 
   type Direction = { #left; #right };
+
+  public func idlesInvariant<T>(((l, nL), (r, nR)) : (Idle<T>, Idle<T>)) : Bool = Stacks.size(l) == nL and Stacks.size(r) == nR and 3 * nL >= nR and 3 * nR >= nL;
 
   type List<T> = Types.Pure.List<T>;
   func unsafeHead<T>(l : List<T>) : T = Option.unwrap(l).0; // todo: avoid

@@ -183,8 +183,13 @@ async function main() {
       };
       testResults.push(result);
 
-      // Display test output
+      console.log(
+        testStatusEmojis[status],
+        `${snippet.path}:${snippet.line}`.padEnd(30),
+        chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
+      );
       if (result.error) {
+        // Display test output
         const tripleBacktick = "```";
         console.log(
           chalk.gray(
@@ -193,13 +198,6 @@ async function main() {
             }\n${snippet.sourceCode}\n${tripleBacktick}`
           )
         );
-      }
-      console.log(
-        testStatusEmojis[status],
-        `${snippet.path}:${snippet.line}`.padEnd(30),
-        chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
-      );
-      if (result.error) {
         console.error(chalk.red(result.error));
       }
     } else {

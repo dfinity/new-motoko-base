@@ -19,7 +19,7 @@ module {
     #one : T;
     #two : (T, T);
     #three : (T, T, T);
-    #idles : (Idle<T>, Idle<T>); // todo: add invariant assert that the sizes are correct
+    #idles : (Idle<T>, Idle<T>);
     #rebal : States<T>
   };
 
@@ -319,7 +319,6 @@ module {
       case (null) do ? { right!.0 }
     };
 
-    // todo: try avoid
     public func unsafeFirst<T>((left, right) : Stacks<T>) : T = switch (left) {
       case (?(h, _)) h;
       case (null) Option.unwrap(right).0
@@ -351,8 +350,6 @@ module {
   /// Represents an end of the deque that is not in a rebalancing process. It is a stack and its size.
   type Idle<T> = (stacks : Stacks<T>, size : Nat);
   module Idle {
-    // debug assert stacks.size() == size; // todo: where to put it?
-
     public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (Stacks.push(stacks, t), 1 + size);
     public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (Stacks.unsafeFirst(stacks), (Stacks.pop(stacks), size - 1 : Nat));
 
@@ -414,7 +411,7 @@ module {
       case (#big1(cur, big, aux, n)) {
         if (n == 0)
         #big2(CommonState.norm(#copy(cur, aux, null, 0))) else
-        #big1(cur, Stacks.pop(big), ?(Stacks.unsafeFirst(big), aux), n - 1 : Nat) // todo: refactor pop to return the element and the new state
+        #big1(cur, Stacks.pop(big), ?(Stacks.unsafeFirst(big), aux), n - 1 : Nat)
       };
       case (#big2(state)) #big2(CommonState.step(state))
     };
@@ -554,6 +551,6 @@ module {
   public func idlesInvariant<T>(((l, nL), (r, nR)) : (Idle<T>, Idle<T>)) : Bool = Stacks.size(l) == nL and Stacks.size(r) == nR and 3 * nL >= nR and 3 * nR >= nL;
 
   type List<T> = Types.Pure.List<T>;
-  func unsafeHead<T>(l : List<T>) : T = Option.unwrap(l).0; // todo: avoid
-  func unsafeTail<T>(l : List<T>) : List<T> = Option.unwrap(l).1; // todo: avoid
+  func unsafeHead<T>(l : List<T>) : T = Option.unwrap(l).0;
+  func unsafeTail<T>(l : List<T>) : List<T> = Option.unwrap(l).1
 }

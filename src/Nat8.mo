@@ -158,7 +158,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.lessOrEqual(1, 2); // => true
+  /// ignore Nat8.lessOrEqual(1, 2); // => true
   /// 1 <= 2 // => true
   /// ```
   ///

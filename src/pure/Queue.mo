@@ -19,6 +19,10 @@
 /// * Space: `O(1)` amortized costs, `O(n)` worst case cost per single call.
 ///
 /// `n` denotes the number of elements stored in the queue.
+///
+/// ```motoko name=initialize
+/// import Queue "mo:base/Queue";
+/// ```
 
 import Iter "../Iter";
 import List "List";

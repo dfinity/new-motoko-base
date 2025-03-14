@@ -550,7 +550,7 @@ module {
   /// ```motoko include=import
   ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flatten<Nat>(arrays)) // => [0, 1, 2, 2, 3, 4]
+  /// Array.flatten<Nat>(arrays) // => [0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -972,7 +972,9 @@ module {
   /// let array1 = [1, 2, 3];
   /// let array2 = [1, 2, 4];
   /// Array.compare<Nat>(array1, array2, Nat.compare) // => #less
+  /// ```
   ///
+  /// ```motoko include=import
   /// let array3 = [1, 2];
   /// let array4 = [1, 2, 3];
   /// Array.compare<Nat>(array3, array4, Nat.compare) // => #less (shorter array)

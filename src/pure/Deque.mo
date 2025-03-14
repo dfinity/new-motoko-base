@@ -59,7 +59,10 @@ module {
     case (#two(x, _)) ?x;
     case (#three(x, _, _)) ?x;
     case (#idles((l, _), _)) Stacks.first(l);
-    case (#rebal(_)) do ? { popFront(deque)!.0 } // future work: avoid allocation
+    case (#rebal((dir, big, small))) switch dir {
+      case (#left) ?SmallState.peek(small);
+      case (#right) ?BigState.peek(big)
+    }
   };
 
   public func peekBack<T>(deque : Deque<T>) : ?T = switch deque {
@@ -68,7 +71,10 @@ module {
     case (#two(_, y)) ?y;
     case (#three(_, _, z)) ?z;
     case (#idles(_, (r, _))) Stacks.first(r);
-    case (#rebal(_)) do ? { popBack(deque)!.1 } // future work: avoid allocation
+    case (#rebal((dir, big, small))) switch dir {
+      case (#left) ?BigState.peek(big);
+      case (#right) ?SmallState.peek(small)
+    }
   };
 
   public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
@@ -352,6 +358,7 @@ module {
   module Idle {
     public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (Stacks.push(stacks, t), 1 + size);
     public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (Stacks.unsafeFirst(stacks), (Stacks.pop(stacks), size - 1 : Nat));
+    public func peek<T>((stacks, _) : Idle<T>) : T = Stacks.unsafeFirst(stacks);
 
     public func contains<T>((stacks, _) : Idle<T>, equal : (T, T) -> Bool, item : T) : Bool = Stacks.contains(stacks, equal, item);
 
@@ -374,6 +381,11 @@ module {
     public func pop<T>((extra, extraSize, old, targetSize) : Current<T>) : (T, Current<T>) = switch (extra) {
       case (?(h, t)) (h, (t, extraSize - 1 : Nat, old, targetSize));
       case (null) (Stacks.unsafeFirst(old), (null, extraSize, Stacks.pop(old), targetSize - 1 : Nat))
+    };
+
+    public func peek<T>((extra, _, old, _) : Current<T>) : T = switch (extra) {
+      case (?(h, _)) h;
+      case (null) Stacks.unsafeFirst(old)
     };
 
     public func size<T>((_, extraSize, _, targetSize) : Current<T>) : Nat = extraSize + targetSize;
@@ -405,6 +417,11 @@ module {
         let (x, state2) = CommonState.pop(state);
         (x, #big2(state2))
       }
+    };
+
+    public func peek<T>(big : BigState<T>) : T = switch big {
+      case (#big1(cur, _, _, _)) Current.peek(cur);
+      case (#big2(state)) CommonState.peek(state)
     };
 
     public func step<T>(big : BigState<T>) : BigState<T> = switch big {
@@ -458,6 +475,12 @@ module {
         let (t, common) = CommonState.pop(common0);
         (t, #small3(common))
       }
+    };
+
+    public func peek<T>(state : SmallState<T>) : T = switch state {
+      case (#small1(cur, _, _)) Current.peek(cur);
+      case (#small2(cur, _, _, _, _)) Current.peek(cur);
+      case (#small3(common)) CommonState.peek(common)
     };
 
     public func step<T>(state : SmallState<T>) : SmallState<T> = switch state {
@@ -518,6 +541,11 @@ module {
         let (t, idle2) = Idle.pop(idle);
         (t, #idle(Current.pop(cur).1, idle2))
       }
+    };
+
+    public func peek<T>(common : CommonState<T>) : T = switch common {
+      case (#copy(cur, aux, _, _)) Current.peek(cur);
+      case (#idle(cur, idle)) Idle.peek(idle)
     };
 
     public func size<T>(common : CommonState<T>) : Nat = switch common {

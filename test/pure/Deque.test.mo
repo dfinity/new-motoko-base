@@ -686,7 +686,7 @@ suite(
       func() {
         let testToText = func(testElements : [Nat]) {
           let q = Deque.fromIter(testElements.vals());
-          expect.text(Deque.toText(q, Nat.toText)).equal("PureQueue" # Array.toText<Nat>(testElements, Nat.toText))
+          expect.text(Deque.toText(q, Nat.toText)).equal("PureDeque" # Array.toText<Nat>(testElements, Nat.toText))
         };
         testToText([]);
         testToText([1]);

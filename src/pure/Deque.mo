@@ -1,9 +1,35 @@
-/// Based on [Real-Time Double-Ended Queue Verified (Proof Pearl)](https://drops.dagstuhl.de/storage/00lipics/lipics-vol268-itp2023/LIPIcs.ITP.2023.29/LIPIcs.ITP.2023.29.pdf)
+/// Double-ended queue of a generic element type `T`.
+///
+/// The interface is purely functional, not imperative, and deques are immutable values.
+/// In particular, Deque operations such as push and pop do not update their input deque but, instead, return the
+/// value of the modified Deque, alongside any other data.
+/// The input deque is left unchanged.
+///
+/// Examples of use-cases:
+/// Queue (FIFO) by using `pushBack()` and `popFront()`.
+/// Stack (LIFO) by using `pushFront()` and `popFront()`.
+/// Deque (double-ended queue) by using any combination of push/pop operations on either end.
+///
+/// A Deque is internally implemented as a real-time double-ended queue based on the paper
+/// "Real-Time Double-Ended Queue Verified (Proof Pearl)". The implementation maintains
+/// worst-case constant time `O(1)` for push/pop operations through gradual rebalancing steps.
+///
+/// Construction: Create a new deque with the `empty<T>()` function.
+///
+/// Note on the costs of push, pop and peek functions:
+/// * Runtime: `O(1)`
+/// * Space: `O(1)`
+///
 import Types "../Types";
 import List "List";
 import Option "../Option";
 import { trap } "../Runtime";
 import Iter "../Iter";
+
+// todo: check Time and Space complexity of all functions in docs
+// todo: add notes about short comings of the implementation in the rebal state
+// todo: order of visiting elements is tricky, add notes about it. Also it might be better to remove operations that are not efficient in rebal state (like contains, all, any, etc.).
+//       In these operations the price is paid for the rebalancing steps but the results are lost...
 
 module {
   /// The real-time deque data structure can be in one of the following states:
@@ -23,15 +49,66 @@ module {
     #rebal : States<T>
   };
 
+  /// Create a new empty deque.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// Deque.empty<Nat>()
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
   public func empty<T>() : Deque<T> = #empty;
 
+  /// Determine whether a deque is empty.
+  /// Returns true if `deque` is empty, otherwise `false`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.empty<Nat>();
+  /// Deque.isEmpty(deque) // => true
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
   public func isEmpty<T>(deque : Deque<T>) : Bool = switch deque {
     case (#empty) true;
     case _ false
   };
 
+  /// Create a new deque comprising a single element.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// Deque.singleton<Nat>(25)
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
   public func singleton<T>(element : T) : Deque<T> = #one(element);
 
+  /// Determine the number of elements contained in a deque.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import {singleton; size} "mo:new-base/Deque";
+  ///
+  /// let deque = singleton<Nat>(42);
+  /// size(deque) // => 1
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
   public func size<T>(deque : Deque<T>) : Nat = switch deque {
     case (#empty) 0;
     case (#one(_)) 1;
@@ -44,6 +121,23 @@ module {
     case (#rebal((_, big, small))) BigState.size(big) + SmallState.size(small)
   };
 
+  /// Test if a deque contains a given value.
+  /// Returns true if the deque contains the item, otherwise false.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  /// import Nat "mo:new-base/Nat";
+  ///
+  /// let deque = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2);
+  /// Deque.contains(deque, Nat.equal, 1) // => true
+  /// ```
+  ///
+  /// Note that the order in which the elements from the `deque` are checked is undefined and may vary.
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
   public func contains<T>(deque : Deque<T>, eq : (T, T) -> Bool, item : T) : Bool = switch deque {
     case (#empty) false;
     case (#one(x)) eq(x, item);
@@ -53,6 +147,20 @@ module {
     case (#rebal(_)) any<T>(deque, func(t : T) = eq(t, item)); // future work: avoid allocation
   };
 
+  /// Inspect the optional element on the front end of a deque.
+  /// Returns `null` if `deque` is empty. Otherwise, the front element of `deque`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1);
+  /// Deque.peekFront(deque) // => ?1
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
   public func peekFront<T>(deque : Deque<T>) : ?T = switch deque {
     case (#empty) null;
     case (#one(x)) ?x;
@@ -65,6 +173,20 @@ module {
     }
   };
 
+  /// Inspect the optional element on the back end of a deque.
+  /// Returns `null` if `deque` is empty. Otherwise, the back element of `deque`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2);
+  /// Deque.peekBack(deque) // => ?2
+  /// ```
+  ///
+  /// Runtime: `O(1)`.
+  ///
+  /// Space: `O(1)`.
   public func peekBack<T>(deque : Deque<T>) : ?T = switch deque {
     case (#empty) null;
     case (#one(x)) ?x;
@@ -77,6 +199,19 @@ module {
     }
   };
 
+  /// Insert a new element on the front end of a deque.
+  /// Returns the new deque with `element` in the front followed by the elements of `deque`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1) // deque with elements [1, 2]
+  /// ```
+  ///
+  /// Runtime: `O(1)` worst-case
+  ///
+  /// Space: `O(1)` worst-case
   public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
     case (#empty) #one(element);
     case (#one(y)) #two(element, y);
@@ -134,8 +269,47 @@ module {
     }
   };
 
+  /// Insert a new element on the back end of a deque.
+  /// Returns the new deque with all the elements of `deque`, followed by `element` on the back.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2) // deque with elements [1, 2]
+  /// ```
+  ///
+  /// Runtime: `O(1)` worst-case
+  ///
+  /// Space: `O(1)` worst-case
   public func pushBack<T>(deque : Deque<T>, element : T) : Deque<T> = reverse(pushFront(reverse(deque), element));
 
+  /// Remove the element on the front end of a deque.
+  /// Returns `null` if `deque` is empty. Otherwise, it returns a pair of
+  /// the first element and a new deque that contains all the remaining elements of `deque`.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  /// import Debug "mo:new-base/Debug";
+  ///
+  /// let initial = Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1);
+  /// // initial deque with elements [1, 2]
+  /// let reduced = Deque.popFront(initial);
+  /// switch reduced {
+  ///   case null {
+  ///     Debug.trap "Empty deque impossible"
+  ///   };
+  ///   case (?result) {
+  ///     let removedElement = result.0; // 1
+  ///     let reducedDeque = result.1; // deque with element [2]
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(1)` worst-case
+  ///
+  /// Space: `O(1)` worst-case
   public func popFront<T>(deque : Deque<T>) : ?(T, Deque<T>) = switch deque {
     case (#empty) null;
     case (#one(x)) ?(x, #empty);
@@ -186,17 +360,70 @@ module {
     }
   };
 
+  /// Remove the element on the back end of a deque.
+  /// Returns `null` if `deque` is empty. Otherwise, it returns a pair of
+  /// a new deque that contains the remaining elements of `deque`
+  /// and, as the second pair item, the removed back element.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  /// import Debug "mo:new-base/Debug";
+  ///
+  /// let initial = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2);
+  /// // initial deque with elements [1, 2]
+  /// let reduced = Deque.popBack(initial);
+  /// switch reduced {
+  ///   case null {
+  ///     Debug.trap "Empty deque impossible"
+  ///   };
+  ///   case (?result) {
+  ///     let reducedDeque = result.0; // deque with element [1]
+  ///     let removedElement = result.1; // 2
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(1)` worst-case
+  ///
+  /// Space: `O(1)` worst-case
   public func popBack<T>(deque : Deque<T>) : ?(Deque<T>, T) = do ? {
     let (x, deque2) = popFront(reverse(deque))!;
     (reverse(deque2), x)
   };
 
+  /// Turn an iterator into a deque, consuming it.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// Deque.fromIter([1, 2, 3].vals())
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(size)`
   public func fromIter<T>(iter : Iter.Iter<T>) : Deque<T> {
     var deque = empty<T>();
     Iter.forEach(iter, func(t : T) = deque := pushBack(deque, t));
     deque
   };
 
+  /// Create an iterator over the elements in the deque.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3].vals());
+  /// let iter = Deque.values(deque);
+  /// iter.next() // => ?1
+  /// ```
+  ///
+  /// Runtime: `O(1)`
+  ///
+  /// Space: `O(1)`
   public func values<T>(deque : Deque<T>) : Iter.Iter<T> {
     // future work: iteration using 'popFront' is wasteful, try avoiding extra allocations
     object {
@@ -213,12 +440,42 @@ module {
     }
   };
 
+  /// Compare two deques for equality using a provided equality function to compare their elements.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  /// import Nat "mo:new-base/Nat";
+  ///
+  /// let deque1 = Deque.fromIter([1, 2, 3].vals());
+  /// let deque2 = Deque.fromIter([1, 2, 3].vals());
+  /// Deque.equal(deque1, deque2, Nat.equal) // => true
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(size)`
   public func equal<T>(deque1 : Deque<T>, deque2 : Deque<T>, equality : (T, T) -> Bool) : Bool = switch (popFront deque1, popFront deque2) {
     case (null, null) true;
     case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
     case _ false
-  };
+  }; // todo: confusing high Space complexity...
 
+  /// Return true if the given predicate is true for all deque elements.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([2, 4, 6].vals());
+  /// Deque.all(deque, func n = n % 2 == 0) // => true
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
+  ///
+  /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
   public func all<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
     case (#empty) true;
     case (#one(x)) predicate x;
@@ -232,6 +489,21 @@ module {
     }
   };
 
+  /// Return true if the given predicate is true for any deque element.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3].vals());
+  /// Deque.any(deque, func n = n > 2) // => true
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
+  ///
+  /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
   public func any<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
     case (#empty) false;
     case (#one(x)) predicate x;
@@ -245,6 +517,23 @@ module {
     }
   };
 
+  /// Call the given function for its side effect on each deque element in turn.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// var sum = 0;
+  /// let deque = Deque.fromIter([1, 2, 3].vals());
+  /// Deque.forEach(deque, func n = sum += n);
+  /// sum // => 6
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
+  ///
+  /// *Runtime and space assumes that f runs in `O(1)` time and space.
   public func forEach<T>(deque : Deque<T>, f : T -> ()) = switch deque {
     case (#empty) ();
     case (#one(x)) f x;
@@ -257,6 +546,23 @@ module {
     }
   };
 
+  /// Call the given function on each deque element and collect the results
+  /// in a new deque.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  /// import Nat "mo:new-base/Nat";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3].vals());
+  /// let mapped = Deque.map(deque, func n = n * 2) // deque with elements [2, 4, 6]
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that f runs in `O(1)` time and space.
   public func map<T1, T2>(deque : Deque<T1>, f : T1 -> T2) : Deque<T2> = switch deque {
     case (#empty) #empty;
     case (#one(x)) #one(f x);
@@ -272,12 +578,44 @@ module {
     }
   };
 
+  /// Create a new deque with only those elements of the original deque for which
+  /// the given predicate returns true.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3, 4].vals());
+  /// let filtered = Deque.filter(deque, func n = n % 2 == 0) // deque with elements [2, 4]
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
   public func filter<T>(deque : Deque<T>, predicate : T -> Bool) : Deque<T> {
     var q = empty<T>();
     for (t in values deque) if (predicate t) q := pushBack(q, t);
     q
   };
 
+  /// Create a new deque by applying the given function to each element of the original deque
+  /// and collecting the results for which the function returns a non-null value.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3, 4].vals());
+  /// let filtered = Deque.filterMap(deque, func n = if n % 2 == 0 then ?n else null) // deque with elements [2, 4]
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that f runs in `O(1)` time and space.
   public func filterMap<T, U>(deque : Deque<T>, f : T -> ?U) : Deque<U> {
     var q = empty<U>();
     for (t in values deque) {
@@ -289,8 +627,23 @@ module {
     q
   };
 
+  /// Create a Text representation of a deque for debugging purposes.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3].vals());
+  /// Deque.toText(deque, Nat.toText) // => "PureDeque[1, 2, 3]"
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that f runs in `O(1)` time and space.
   public func toText<T>(deque : Deque<T>, f : T -> Text) : Text {
-    var text = "PureQueue[";
+    var text = "PureDeque[";
     var first = true;
     for (t in values deque) {
       if (first) first := false else text #= ", ";
@@ -299,6 +652,20 @@ module {
     text # "]"
   };
 
+  /// Reverse the order of elements in a deque.
+  /// This operation is cheap, it does NOT require copying the elements.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3].vals());
+  /// Deque.toText(Deque.reverse(deque), Nat.toText) // => "PureDeque[3, 2, 1]"
+  /// ```
+  ///
+  /// Runtime: `O(1)`
+  ///
+  /// Space: `O(1)`
   public func reverse<T>(deque : Deque<T>) : Deque<T> = switch deque {
     case (#empty) deque;
     case (#one(_)) deque;

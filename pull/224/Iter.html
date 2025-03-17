@@ -12,7 +12,7 @@ iterators between consumers.</p>
 the results. If you're looking to keep these results use <code>map</code> instead.</p>
 <pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
 var sum = 0;
-Iter.forEach&lt;Nat&gt;(Iter.range(1, 3), func(x) {
+Iter.forEach&lt;Nat&gt;(Iter.fromArray([1, 2, 3]), func(x) {
   sum += x;
 });
 assert(6 == sum)</code></pre></p></div><div class="declaration"><h4 class="function" id="enumerate"><code><span class="keyword">public func </span><span class="fnname">enumerate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;(<span class="type">Nat</span>, <span class="type">T</span>)&gt;</code></h4><p><p>Takes an iterator and returns a new iterator that pairs each element with its index.

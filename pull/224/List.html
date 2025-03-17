@@ -15,11 +15,12 @@ has <code>O(size)</code> memory waste.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new empty List for elements of type T.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.new&lt;Nat&gt;(); // Creates a new List</code></pre></p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new list with capacity and size 1, containing <code>element</code>.</p>
-<p>Example: include=import</p>
-<pre class="motoko"><code class="motoko">import Nat &quot;mo:base/Nat&quot;;
+let list = List.empty&lt;Nat&gt;(); // Creates a new List</code></pre></p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new list with capacity and size 1, containing <code>element</code>.</p>
+<p>Example:</p>
+<pre><code>motoko include=import
+import Nat &quot;mo:base/Nat&quot;;
 
-let list = List.make&lt;Nat&gt;(1);
+let list = List.singleton&lt;Nat&gt;(1);
 List.toText&lt;Nat&gt;(list, Nat.toText); // =&gt; &quot;[1]&quot;</code></pre>
 
 <p>Runtime: <code>O(1)</code></p>
@@ -56,6 +57,7 @@ List.addRepeat(list, 2, 1); // [2, 2, 2, 2, 1, 1]</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="clear"><code><span class="keyword">public func </span><span class="fnname">clear</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Resets the list to size 0, de-referencing all elements.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -66,7 +68,8 @@ List.toArray(list) // =&gt; []</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="clone"><code><span class="keyword">public func </span><span class="fnname">clone</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a copy of a List, with the same size.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-list.add(1);
+let list = List.empty&lt;Nat&gt;();
+List.add(list, 1);
 
 let clone = List.clone(list);
 List.toArray(clone); // =&gt; [1]</code></pre>
@@ -75,10 +78,11 @@ List.toArray(clone); // =&gt; [1]</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">R</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">R</span>&gt;</code></h4><p><p>Creates and returns a new list, populated with the results of calling a provided function on every element in the provided list</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-list.add(1);
+import Nat &quot;mo:base/Nat&quot;;
 
-let t = List.map&lt;Nat, Text&gt;(list, Nat.toText);
-List.toArray(t); // =&gt; [&quot;1&quot;]</code></pre>
+let list = List.singleton&lt;Nat&gt;(123);
+let textList = List.map&lt;Nat, Text&gt;(list, Nat.toText);
+List.toArray(textList) // =&gt; [&quot;123&quot;]</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new list containing only the elements from <code>list</code> for which the predicate returns true.</p>
@@ -114,6 +118,7 @@ allocating a new internal data block if needed,
 and resizing the internal index block if needed.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 0); // add 0 to list
 List.add(list, 1);
 List.add(list, 2);
@@ -167,6 +172,8 @@ List.toArray(list) // =&gt; [20]</code></pre>
 Sort is deterministic, stable, and in-place.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+import Nat &quot;mo:base/Nat&quot;;
+
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 3);
 List.add(list, 1);
@@ -181,13 +188,15 @@ List.toArray(list) // =&gt; [1, 2, 3]</code></pre>
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+import Nat &quot;mo:base/Nat&quot;;
+
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
 
-List.indexOf&lt;Nat&gt;(3, list, Nat.equal); // =&gt; ?2</code></pre>
+List.indexOf&lt;Nat&gt;(list, Nat.equal, 3); // =&gt; ?2</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>*Runtime and space assumes that <code>equal</code> runs in <code>O(1)</code> time and space.</p>
@@ -195,15 +204,11 @@ List.indexOf&lt;Nat&gt;(3, list, Nat.equal); // =&gt; ?2</code></pre>
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.empty&lt;Nat&gt;();
-List.add(list, 1);
-List.add(list, 2);
-List.add(list, 3);
-List.add(list, 4);
-List.add(list, 2);
-List.add(list, 2);
+import Nat &quot;mo:base/Nat&quot;;
 
-List.lastIndexOf&lt;Nat&gt;(2, list, Nat.equal); // =&gt; ?5</code></pre>
+let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4, 2, 2]);
+
+List.lastIndexOf&lt;Nat&gt;(list, Nat.equal, 2); // =&gt; ?5</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>*Runtime and space assumes that <code>equal</code> runs in <code>O(1)</code> time and space.</p>
@@ -286,11 +291,13 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
-Iter.toArray(List.entries(list)); // [(10, 0), (11, 1), (12, 2)]</code></pre>
+Iter.toArray(List.entries(list)) // =&gt; [(10, 0), (11, 1), (12, 2)]</code></pre>
 
 <p>Note: This does not create a snapshot. If the returned iterator is not consumed at once,
 and instead the consumption of the iterator is interleaved with other operations on the
@@ -320,6 +327,8 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in reverse order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
@@ -335,11 +344,13 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
+
 let list = List.empty&lt;Text&gt;();
 List.add(list, &quot;A&quot;);
 List.add(list, &quot;B&quot;);
 List.add(list, &quot;C&quot;);
-Iter.toArray(List.keys(list)); // [0, 1, 2]</code></pre>
+Iter.toArray(List.keys(list)) // [0, 1, 2]</code></pre>
 
 <p>Note: This does not create a snapshot. If the returned iterator is not consumed at once,
 and instead the consumption of the iterator is interleaved with other operations on the
@@ -353,7 +364,8 @@ import Nat &quot;mo:base/Nat&quot;;
 let array = [1, 1, 1];
 let iter = array.vals();
 
-let list = List.fromIter&lt;Nat&gt;(iter); // =&gt; [1, 1, 1]</code></pre>
+let list = List.fromIter&lt;Nat&gt;(iter);
+List.toText(list, Nat.toText) // =&gt; &quot;[1, 1, 1]&quot;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="addAll"><code><span class="keyword">public func </span><span class="fnname">addAll</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">iter</span> : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Adds elements to a List from <code>iter</code>.</p>
@@ -365,15 +377,14 @@ let array = [1, 1, 1];
 let iter = array.vals();
 let list = List.repeat&lt;Nat&gt;(2, 1);
 
-let list = List.addAll&lt;Nat&gt;(list, iter); // =&gt; [2, 1, 1, 1]</code></pre>
+List.addAll&lt;Nat&gt;(list, iter);
+List.toText(list, Nat.toText) // =&gt; &quot;[2, 1, 1, 1]&quot;</code></pre>
 
 <p>Runtime: <code>O(size)</code>, where n is the size of iter.</p>
 </p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p><p>Creates an immutable array containing elements from a List.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.add(list, 1);
-List.add(list, 2);
-List.add(list, 3);
+let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
 
 List.toArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]</code></pre>
 
@@ -384,17 +395,19 @@ List.toArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]</code></pre>
 import Nat &quot;mo:base/Nat&quot;;
 
 let array = [2, 3];
-let list = List.fromArray&lt;Nat&gt;(array); // =&gt; [2, 3]</code></pre>
+let list = List.fromArray&lt;Nat&gt;(array);
+List.toText(list, Nat.toText) // =&gt; &quot;[2, 3]&quot;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Creates a mutable Array containing elements from a List.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.add(list, 1);
-List.add(list, 2);
-List.add(list, 3);
+import Array &quot;mo:base/Array&quot;;
 
-List.toVarArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]</code></pre>
+let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
+
+let varArray = List.toVarArray&lt;Nat&gt;(list);
+Array.fromVarArray(varArray) // =&gt; [1, 2, 3]</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a List containing elements from a mutable Array.</p>
@@ -403,8 +416,9 @@ List.toVarArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]</code></pre>
 import Nat &quot;mo:base/Nat&quot;;
 
 let array = [var 2, 3];
+let list = List.fromVarArray&lt;Nat&gt;(array);
 
-let list = List.fromVarArray&lt;Nat&gt;(array); // =&gt; [2, 3]</code></pre>
+List.toText(list, Nat.toText) // =&gt; &quot;[2, 3]&quot;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="first"><code><span class="keyword">public func </span><span class="fnname">first</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the first element of <code>list</code>  is empty.</p>
@@ -418,10 +432,9 @@ List.first(list); // =&gt; ?1</code></pre>
 <p>Space: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="last"><code><span class="keyword">public func </span><span class="fnname">last</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the last element of <code>list</code>. Traps if <code>list</code> is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
-
-List.last(list); // =&gt; 3</code></pre>
+List.last(list) // =&gt; ?3</code></pre>
 
 <p>Runtime: <code>O(1)</code></p>
 <p>Space: <code>O(1)</code></p>
@@ -495,6 +508,7 @@ defined by <code>equal</code>.</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 2);
 List.add(list, 0);
 List.add(list, 3);
@@ -510,6 +524,7 @@ Returns <code>null</code> if <code>list</code> is empty.</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 
@@ -524,6 +539,7 @@ Returns <code>null</code> if <code>list</code> is empty.</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 
@@ -541,9 +557,9 @@ index.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 let list1 = List.fromArray&lt;Nat&gt;([1,2]);
-let list2 = List.new&lt;Nat&gt;();
-list2.add(1);
-list2.add(2);
+let list2 = List.empty&lt;Nat&gt;();
+List.add(list2, 1);
+List.add(list2, 2);
 
 List.equal&lt;Nat&gt;(list1, list2, Nat.equal); // =&gt; true</code></pre>
 
@@ -556,10 +572,8 @@ lists. Comparison is defined lexicographically.</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
-let list1 = List.fromArray&lt;Nat&gt;([1,2]);
-let list2 = List.new&lt;Nat&gt;();
-list2.add(1);
-list2.add(2);
+let list1 = List.fromArray&lt;Nat&gt;([0, 1, 2]);
+let list2 = List.fromArray&lt;Nat&gt;([1, 2]);
 
 List.compare&lt;Nat&gt;(list1, list2, Nat.compare); // =&gt; #less</code></pre>
 

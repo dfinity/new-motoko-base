@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html><head title="Doc"><meta charset="UTF-8"/><link href="../styles.css" rel="stylesheet"/></head><body><nav class="sidebar"><h3>Modules</h3><ul><li><li><a href="../Array.html">Array</a></li></li><li><li><a href="../Blob.html">Blob</a></li></li><li><li><a href="../Bool.html">Bool</a></li></li><li><li><a href="../CertifiedData.html">CertifiedData</a></li></li><li><li><a href="../Char.html">Char</a></li></li><li><li><a href="../Cycles.html">Cycles</a></li></li><li><li><a href="../Debug.html">Debug</a></li></li><li><li><a href="../Error.html">Error</a></li></li><li><li><a href="../Float.html">Float</a></li></li><li><li><a href="../Func.html">Func</a></li></li><li><li><a href="../Int.html">Int</a></li></li><li><li><a href="../Int16.html">Int16</a></li></li><li><li><a href="../Int32.html">Int32</a></li></li><li><li><a href="../Int64.html">Int64</a></li></li><li><li><a href="../Int8.html">Int8</a></li></li><li><li><a href="../InternetComputer.html">InternetComputer</a></li></li><li><li><a href="../Iter.html">Iter</a></li></li><li><li><a href="../List.html">List</a></li></li><li><li><a href="../Map.html">Map</a></li></li><li><li><a href="../Nat.html">Nat</a></li></li><li><li><a href="../Nat16.html">Nat16</a></li></li><li><li><a href="../Nat32.html">Nat32</a></li></li><li><li><a href="../Nat64.html">Nat64</a></li></li><li><li><a href="../Nat8.html">Nat8</a></li></li><li><li><a href="../Option.html">Option</a></li></li><li><li><a href="../Order.html">Order</a></li></li><li><li><a href="../Principal.html">Principal</a></li></li><li><li><a href="../Queue.html">Queue</a></li></li><li><li><a href="../Random.html">Random</a></li></li><li><li><a href="../Region.html">Region</a></li></li><li><li><a href="../Result.html">Result</a></li></li><li><li><a href="../Runtime.html">Runtime</a></li></li><li><li><a href="../Set.html">Set</a></li></li><li><li><a href="../Stack.html">Stack</a></li></li><li><li><a href="../Text.html">Text</a></li></li><li><li><a href="../Time.html">Time</a></li></li><li><li><a href="../Timer.html">Timer</a></li></li><li><li><a href="../Types.html">Types</a></li></li><li><li><a href="../VarArray.html">VarArray</a></li></li><li><li><a href="../internal/BTreeHelper.html">internal/BTreeHelper</a></li></li><li><li><a href="../internal/PRNG.html">internal/PRNG</a></li></li><li><li><a href="../pure/Deque.html">pure/Deque</a></li></li><li><li><a href="../pure/List.html">pure/List</a></li></li><li><li><a href="../pure/Map.html">pure/Map</a></li></li><li><li><a href="../pure/Queue.html">pure/Queue</a></li></li><li><li><a href="../pure/Set.html">pure/Set</a></li></li></ul><h3>Declarations</h3><ul><li><li><a href="#type.Deque">Deque</a></li></li><li><li><a href="#empty">empty</a></li></li><li><li><a href="#isEmpty">isEmpty</a></li></li><li><li><a href="#singleton">singleton</a></li></li><li><li><a href="#size">size</a></li></li><li><li><a href="#contains">contains</a></li></li><li><li><a href="#peekFront">peekFront</a></li></li><li><li><a href="#peekBack">peekBack</a></li></li><li><li><a href="#pushFront">pushFront</a></li></li><li><li><a href="#pushBack">pushBack</a></li></li><li><li><a href="#popFront">popFront</a></li></li><li><li><a href="#popBack">popBack</a></li></li><li><li><a href="#fromIter">fromIter</a></li></li><li><li><a href="#values">values</a></li></li><li><li><a href="#equal">equal</a></li></li><li><li><a href="#all">all</a></li></li><li><li><a href="#any">any</a></li></li><li><li><a href="#forEach">forEach</a></li></li><li><li><a href="#map">map</a></li></li><li><li><a href="#filter">filter</a></li></li><li><li><a href="#filterMap">filterMap</a></li></li><li><li><a href="#toText">toText</a></li></li><li><li><a href="#reverse">reverse</a></li></li><li><li><a href="#idlesInvariant">idlesInvariant</a></li></li></ul></nav><div class="documentation"><h1>pure/Deque</h1><p>Double-ended queue of a generic element type <code>T</code>.</p>
+<p>The interface is purely functional, not imperative, and deques are immutable values.
+In particular, Deque operations such as push and pop do not update their input deque but, instead, return the
+value of the modified Deque, alongside any other data.
+The input deque is left unchanged.</p>
+<p>Examples of use-cases:</p>
+<ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.</li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li><li>Deque (double-ended queue) by using any combination of push/pop operations on either end.</li></ul>
+
+<p>A Deque is internally implemented as a real-time double-ended queue based on the paper
+&quot;Real-Time Double-Ended Queue Verified (Proof Pearl)&quot;. The implementation maintains
+worst-case constant time <code>O(1)</code> for push/pop operations through gradual rebalancing steps.</p>
+<p>Construction: Create a new deque with the <code>empty&lt;T&gt;()</code> function.</p>
+<p>Note that some operations that traverse the elements of the deque (e.g. <code>forEach</code>, <code>values</code>) preserve the order of the elements,
+whereas others (e.g. <code>map</code>, <code>contains</code>, <code>any</code>) do NOT guarantee that the elements are visited in any order.
+The order is undefined to avoid allocations, making these operations more efficient.</p>
+<div class="declaration"><h4 class="type-declaration" id="type.Deque"><span class="keyword">type </span><span class="type">Deque</span>&lt;<span class="type">T</span>&gt; = {#empty; #one : <span class="type">T</span>; #two : (<span class="type">T</span>, <span class="type">T</span>); #three : (<span class="type">T</span>, <span class="type">T</span>, <span class="type">T</span>); #idles : (<a href="#type.Idle"><span class="type">Idle</span></a>&lt;<span class="type">T</span>&gt;, <a href="#type.Idle"><span class="type">Idle</span></a>&lt;<span class="type">T</span>&gt;); #rebal : <a href="#type.States"><span class="type">States</span></a>&lt;<span class="type">T</span>&gt;}</h4><p><p>The real-time deque data structure can be in one of the following states:</p>
+<ul><li><code>#empty</code>: the deque is empty</li><li><code>#one</code>: the deque contains a single element</li><li><code>#two</code>: the deque contains two elements</li><li><code>#three</code>: the deque contains three elements</li><li><code>#idles</code>: the deque is in the idle state, where <code>l</code> and <code>r</code> are non-empty stacks of elements fulfilling the size invariant</li><li><code>#rebal</code>: the deque is in the rebalancing state</li></ul></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty deque.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+Deque.empty&lt;Nat&gt;()</code></pre>
+
+<p>Runtime: <code>O(1)</code>.</p>
+<p>Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Bool</span></code></h4><p><p>Determine whether a deque is empty.
+Returns true if <code>deque</code> is empty, otherwise <code>false</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.empty&lt;Nat&gt;();
+Deque.isEmpty(deque) // =&gt; true</code></pre>
+
+<p>Runtime: <code>O(1)</code>.</p>
+<p>Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new deque comprising a single element.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+Deque.singleton&lt;Nat&gt;(25)</code></pre>
+
+<p>Runtime: <code>O(1)</code>.</p>
+<p>Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Determine the number of elements contained in a deque.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import {singleton; size} &quot;mo:new-base/Deque&quot;;
+
+let deque = singleton&lt;Nat&gt;(42);
+size(deque) // =&gt; 1</code></pre>
+
+<p>Runtime: <code>O(1)</code>.</p>
+<p>Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">eq</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">item</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Test if a deque contains a given value.
+Returns true if the deque contains the item, otherwise false.
+Note that this operation traverses the elements in arbitrary order.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+import Nat &quot;mo:new-base/Nat&quot;;
+
+let deque = Deque.pushBack(Deque.pushBack(Deque.empty&lt;Nat&gt;(), 1), 2);
+Deque.contains(deque, Nat.equal, 1) // =&gt; true</code></pre>
+
+<p>Note that the order in which the elements from the <code>deque</code> are checked is undefined and may vary.</p>
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(1)</code></p>
+</p></div><div class="declaration"><h4 class="function" id="peekFront"><code><span class="keyword">public func </span><span class="fnname">peekFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Inspect the optional element on the front end of a deque.
+Returns <code>null</code> if <code>deque</code> is empty. Otherwise, the front element of <code>deque</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.pushFront(Deque.pushFront(Deque.empty&lt;Nat&gt;(), 2), 1);
+Deque.peekFront(deque) // =&gt; ?1</code></pre>
+
+<p>Runtime: <code>O(1)</code>.</p>
+<p>Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="peekBack"><code><span class="keyword">public func </span><span class="fnname">peekBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Inspect the optional element on the back end of a deque.
+Returns <code>null</code> if <code>deque</code> is empty. Otherwise, the back element of <code>deque</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.pushBack(Deque.pushBack(Deque.empty&lt;Nat&gt;(), 1), 2);
+Deque.peekBack(deque) // =&gt; ?2</code></pre>
+
+<p>Runtime: <code>O(1)</code>.</p>
+<p>Space: <code>O(1)</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="pushFront"><code><span class="keyword">public func </span><span class="fnname">pushFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Insert a new element on the front end of a deque.
+Returns the new deque with <code>element</code> in the front followed by the elements of <code>deque</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+Deque.pushFront(Deque.pushFront(Deque.empty&lt;Nat&gt;(), 2), 1) // deque with elements [1, 2]</code></pre>
+
+<p>Runtime: <code>O(1)</code> worst-case!</p>
+<p>Space: <code>O(1)</code> worst-case!</p>
+</p></div><div class="declaration"><h4 class="function" id="pushBack"><code><span class="keyword">public func </span><span class="fnname">pushBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Insert a new element on the back end of a deque.
+Returns the new deque with all the elements of <code>deque</code>, followed by <code>element</code> on the back.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+Deque.pushBack(Deque.pushBack(Deque.empty&lt;Nat&gt;(), 1), 2) // deque with elements [1, 2]</code></pre>
+
+<p>Runtime: <code>O(1)</code> worst-case!</p>
+<p>Space: <code>O(1)</code> worst-case!</p>
+</p></div><div class="declaration"><h4 class="function" id="popFront"><code><span class="keyword">public func </span><span class="fnname">popFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : ?(<span class="type">T</span>, <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Remove the element on the front end of a deque.
+Returns <code>null</code> if <code>deque</code> is empty. Otherwise, it returns a pair of
+the first element and a new deque that contains all the remaining elements of <code>deque</code>.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+import Debug &quot;mo:new-base/Debug&quot;;
+
+let initial = Deque.pushFront(Deque.pushFront(Deque.empty&lt;Nat&gt;(), 2), 1); // initial deque with elements [1, 2]
+Deque.popFront(initial) // =&gt; ?(1, [2])</code></pre>
+
+<p>Runtime: <code>O(1)</code> worst-case!</p>
+<p>Space: <code>O(1)</code> worst-case!</p>
+</p></div><div class="declaration"><h4 class="function" id="popBack"><code><span class="keyword">public func </span><span class="fnname">popBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : ?(<a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="type">T</span>)</code></h4><p><p>Remove the element on the back end of a deque.
+Returns <code>null</code> if <code>deque</code> is empty. Otherwise, it returns a pair of
+a new deque that contains the remaining elements of <code>deque</code>
+and, as the second pair item, the removed back element.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+import Debug &quot;mo:new-base/Debug&quot;;
+
+let initial = Deque.pushBack(Deque.pushBack(Deque.empty&lt;Nat&gt;(), 1), 2); // initial deque with elements [1, 2]
+Deque.popBack(initial) // =&gt; ?(2, [1])</code></pre>
+
+<p>Runtime: <code>O(1)</code> worst-case!</p>
+<p>Space: <code>O(1)</code> worst-case!</p>
+</p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Turn an iterator into a deque, consuming it.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+Deque.fromIter([1, 2, 3].vals()) // deque with elements [1, 2, 3], 1 at the front, 3 at the back</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(size)</code></p>
+</p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create an iterator over the elements in the deque. The order of the elements is from front to back.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.fromIter([1, 2, 3].vals());
+let iter = Deque.values(deque);
+Array.fromIter(iter) // =&gt; [1, 2, 3]</code></pre>
+
+<p>Runtime: <code>O(1)</code> to create the iterator and for each <code>next()</code> call.</p>
+<p>Space: <code>O(1)</code> to create the iterator and for each <code>next()</code> call.</p>
+</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">deque1</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">deque2</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equality</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Compare two deques for equality using a provided equality function to compare their elements.
+Two deques are considered equal if they contain the same elements in the same order.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+import Nat &quot;mo:new-base/Nat&quot;;
+
+let deque1 = Deque.fromIter([1, 2, 3].vals());
+let deque2 = Deque.fromIter([1, 2, 3].vals());
+Deque.equal(deque1, deque2, Nat.equal) // =&gt; true</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(size)</code></p>
+</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if the given predicate is true for all deque elements.
+Note that this operation traverses the elements in arbitrary order.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.fromIter([2, 4, 6].vals());
+Deque.all(deque, func n = n % 2 == 0) // =&gt; true</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(1)</code></p>
+<p>*Runtime and space assumes that predicate runs in <code>O(1)</code> time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if the given predicate is true for any deque element.
+Note that this operation traverses the elements in arbitrary order.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.fromIter([1, 2, 3].vals());
+Deque.any(deque, func n = n &gt; 2) // =&gt; true</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(1)</code></p>
+<p>*Runtime and space assumes that predicate runs in <code>O(1)</code> time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Call the given function for its side effect on each deque element in order: from front to back.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+var sum = 0;
+let deque = Deque.fromIter([1, 2, 3].vals());
+Deque.forEach(deque, func n = sum += n);
+sum // =&gt; 6</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(size)</code></p>
+<p>*Runtime and space assumes that f runs in <code>O(1)</code> time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T1</span>, <span class="type">T2</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T1</span>&gt;, <span class="parameter">f</span> : <span class="type">T1</span> -&gt; <span class="type">T2</span>) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T2</span>&gt;</code></h4><p><p>Create a new deque by applying the given function to each element of the original deque.
+Note that this operation traverses the elements in arbitrary order.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+import Nat &quot;mo:new-base/Nat&quot;;
+
+let deque = Deque.fromIter([1, 2, 3].vals());
+let mapped = Deque.map(deque, func n = n * 2) // deque with elements [2, 4, 6]</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(size)</code></p>
+<p>*Runtime and space assumes that f runs in <code>O(1)</code> time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new deque with only those elements of the original deque for which
+the given predicate returns true.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.fromIter([1, 2, 3, 4].vals());
+let filtered = Deque.filter(deque, func n = n % 2 == 0) // deque with elements [2, 4]</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(size)</code></p>
+<p>*Runtime and space assumes that predicate runs in <code>O(1)</code> time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="filterMap"><code><span class="keyword">public func </span><span class="fnname">filterMap</span>&lt;<span class="type">T</span>, <span class="type">U</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ?<span class="type">U</span>) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">U</span>&gt;</code></h4><p><p>Create a new deque by applying the given function to each element of the original deque
+and collecting the results for which the function returns a non-null value.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.fromIter([1, 2, 3, 4].vals());
+let filtered = Deque.filterMap(deque, func n = if n % 2 == 0 then ?n else null) // deque with elements [2, 4]</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(size)</code></p>
+<p>*Runtime and space assumes that f runs in <code>O(1)</code> time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Create a <code>Text</code> representation of a deque for debugging purposes.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.fromIter([1, 2, 3].vals());
+Deque.toText(deque, Nat.toText) // =&gt; &quot;PureDeque[1, 2, 3]&quot;</code></pre>
+
+<p>Runtime: <code>O(size)</code></p>
+<p>Space: <code>O(size)</code></p>
+<p>*Runtime and space assumes that f runs in <code>O(1)</code> time and space.</p>
+</p></div><div class="declaration"><h4 class="function" id="reverse"><code><span class="keyword">public func </span><span class="fnname">reverse</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">deque</span> : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Deque"><span class="type">Deque</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Reverse the order of elements in a deque.
+This operation is cheap, it does NOT require copying the elements.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Deque &quot;mo:new-base/Deque&quot;;
+
+let deque = Deque.fromIter([1, 2, 3].vals());
+Deque.toText(Deque.reverse(deque), Nat.toText) // =&gt; &quot;PureDeque[3, 2, 1]&quot;</code></pre>
+
+<p>Runtime: <code>O(1)</code></p>
+<p>Space: <code>O(1)</code></p>
+</p></div><div class="declaration"><h4 class="function" id="idlesInvariant"><code><span class="keyword">public func </span><span class="fnname">idlesInvariant</span>&lt;<span class="type">T</span>&gt;() : <span class="type">Bool</span></code></h4><p></p></div></div></body></html>

@@ -321,7 +321,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Int32, Int32>([1, -2, -3], 0, Int32.sub) // => 6
+  /// Array.foldLeft<Int32, Int32>([1, -2, -3], 0, Int32.sub) // => 4
   /// ```
   public func sub(x : Int32, y : Int32) : Int32 { x - y };
 

@@ -205,6 +205,7 @@ async function main() {
   await pocketIc.tearDown();
   await pocketIcServer.stop();
 
+  console.log("---");
   ["passed", "failed", "skipped"].forEach((status: TestResult["status"]) => {
     console.log(
       testStatusEmojis[status],

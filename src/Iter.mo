@@ -258,6 +258,51 @@ module {
     }
   };
 
+  public func take<T>(iter : Iter<T>, n : Nat) : Iter<T> = object {
+    var remaining = n;
+    public func next() : ?T {
+      if (remaining == 0) return null;
+      remaining -= 1;
+      iter.next()
+    }
+  };
+
+  public func takeWhile<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> = object {
+    var done = false;
+    public func next() : ?T {
+      if done return null;
+      let ?x = iter.next() else return null;
+      if (f x) return ?x;
+      done := true;
+      null
+    }
+  };
+
+  public func drop<T>(iter : Iter<T>, n : Nat) : Iter<T> = object {
+    var remaining = n;
+    public func next() : ?T {
+      while (remaining > 0) {
+        let ?_ = iter.next() else return null;
+        remaining -= 1
+      };
+      iter.next()
+    }
+  };
+
+  public func dropWhile<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> = object {
+    var dropping = true;
+    public func next() : ?T {
+      while dropping {
+        let ?x = iter.next() else return null;
+        if (not f x) {
+          dropping := false;
+          return ?x
+        }
+      };
+      iter.next()
+    }
+  };
+
   /// Creates an iterator that produces an infinite sequence of `x`.
   /// ```motoko
   /// import Iter "mo:new-base/Iter";

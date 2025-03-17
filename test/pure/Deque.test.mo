@@ -5,6 +5,7 @@ import Iter "../../src/Iter";
 import Prim "mo:prim";
 import { suite; test; expect } "mo:test";
 import Text "../../src/Text";
+import Debug "../../src/Debug";
 
 type Deque<T> = Deque.Deque<T>;
 
@@ -838,6 +839,8 @@ suite(
         };
         let #rebal(_) = q else Prim.trap "Should be in rebalancing state";
         // Test operations during rebalancing
+        Debug.print(debug_show (q));
+        expect.text(Deque.toText(q, Nat.toText)).equal("PureDeque[3, 2, 1, 5, 6, 7, 8, 9, 10, 11]");
         q := Deque.pushFront(q, 0);
         q := Deque.pushBack(q, 13);
         expect.bool(Deque.isEmpty(q)).isFalse();

@@ -16,10 +16,10 @@
 ///
 /// Construction: Create a new deque with the `empty<T>()` function.
 ///
-/// Note on the costs of push, pop and peek functions:
-/// * Runtime: `O(1)`
-/// * Space: `O(1)`
-///
+/// Note that some operations that traverse the elements of the deque (e.g. `forEach`, `values`) preserve the order of the elements,
+/// whereas others (e.g. `map`, `contains`, `any`) do NOT guarantee that the elements are visited in any order.
+/// The order is undefined to avoid allocations, making these operations more efficient.
+
 import Types "../Types";
 import List "List";
 import Option "../Option";
@@ -123,6 +123,7 @@ module {
 
   /// Test if a deque contains a given value.
   /// Returns true if the deque contains the item, otherwise false.
+  /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
@@ -137,14 +138,19 @@ module {
   ///
   /// Runtime: `O(size)`
   ///
-  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
+  /// Space: `O(1)`
   public func contains<T>(deque : Deque<T>, eq : (T, T) -> Bool, item : T) : Bool = switch deque {
     case (#empty) false;
     case (#one(x)) eq(x, item);
     case (#two(x, y)) eq(x, item) or eq(y, item);
     case (#three(x, y, z)) eq(x, item) or eq(y, item) or eq(z, item);
-    case (#idles(l, r)) Idle.contains(l, eq, item) or Idle.contains(r, eq, item); // note that the order of the right stack is reversed, but for the contains operation it does not matter
-    case (#rebal(_)) any<T>(deque, func(t : T) = eq(t, item)); // future work: avoid allocation
+    case (#idles(((l1, l2), _), ((r1, r2), _))) List.contains(l1, eq, item) or List.contains(l2, eq, item) or List.contains(r2, eq, item) or List.contains(r1, eq, item); // note that the order of the right stack is reversed, but for this operation it does not matter
+    case (#rebal((_, big, small))) {
+      let (extraB, _, (oldB1, oldB2), _) = BigState.current(big);
+      let (extraS, _, (oldS1, oldS2), _) = SmallState.current(small);
+      // note that the order is one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
+      List.contains(extraB, eq, item) or List.contains(oldB1, eq, item) or List.contains(oldB2, eq, item) or List.contains(extraS, eq, item) or List.contains(oldS1, eq, item) or List.contains(oldS2, eq, item)
+    }
   };
 
   /// Inspect the optional element on the front end of a deque.
@@ -384,13 +390,13 @@ module {
   /// Runtime: `O(size)`
   ///
   /// Space: `O(size)`
-  public func fromIter<T>(iter : Iter.Iter<T>) : Deque<T> {
+  public func fromIter<T>(iter : Iter<T>) : Deque<T> {
     var deque = empty<T>();
     Iter.forEach(iter, func(t : T) = deque := pushBack(deque, t));
     deque
   };
 
-  /// Create an iterator over the elements in the deque.
+  /// Create an iterator over the elements in the deque. The order of the elements is from front to back.
   ///
   /// Example:
   /// ```motoko
@@ -401,11 +407,10 @@ module {
   /// Array.fromIter(iter) // => [1, 2, 3]
   /// ```
   ///
-  /// Runtime: `O(1)`
+  /// Runtime: `O(1)` to create the iterator and for each `next()` call.
   ///
-  /// Space: `O(1)`
+  /// Space: `O(1)` to create the iterator and for each `next()` call.
   public func values<T>(deque : Deque<T>) : Iter.Iter<T> {
-    // future work: iteration using 'popFront' is wasteful, try avoiding extra allocations
     object {
       var current = deque;
       public func next() : ?T {
@@ -421,6 +426,7 @@ module {
   };
 
   /// Compare two deques for equality using a provided equality function to compare their elements.
+  /// Two deques are considered equal if they contain the same elements in the same order.
   ///
   /// Example:
   /// ```motoko
@@ -439,9 +445,10 @@ module {
     case (null, null) true;
     case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
     case _ false
-  }; // todo: confusing high Space complexity...
+  }; // todo: confusing high Space complexity, but it cannot be avoided -- consider removing the operation all together
 
   /// Return true if the given predicate is true for all deque elements.
+  /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
@@ -453,7 +460,7 @@ module {
   ///
   /// Runtime: `O(size)`
   ///
-  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
+  /// Space: `O(1)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
   public func all<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
@@ -461,15 +468,17 @@ module {
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x and predicate y;
     case (#three(x, y, z)) predicate x and predicate y and predicate z;
-    case (#idles(((l1, l2), _), ((r1, r2), _))) List.all(l1, predicate) and List.all(l2, predicate) and List.all(r1, predicate) and List.all(r2, predicate); // note that the order of the right stack is reversed, but for the all operation it does not matter
-    case (#rebal(_)) {
-      // future work: avoid allocation
-      for (t in values deque) if (not predicate t) return false;
-      return true
+    case (#idles(((l1, l2), _), ((r1, r2), _))) List.all(l1, predicate) and List.all(l2, predicate) and List.all(r2, predicate) and List.all(r1, predicate); // note that the order of the right stack is reversed, but for thisation it does not matter
+    case (#rebal(_, big, small)) {
+      let (extraB, _, (oldB1, oldB2), _) = BigState.current(big);
+      let (extraS, _, (oldS1, oldS2), _) = SmallState.current(small);
+      // note that the order is one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
+      List.all(extraB, predicate) and List.all(oldB1, predicate) and List.all(oldB2, predicate) and List.all(extraS, predicate) and List.all(oldS1, predicate) and List.all(oldS2, predicate)
     }
   };
 
   /// Return true if the given predicate is true for any deque element.
+  /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
@@ -481,7 +490,7 @@ module {
   ///
   /// Runtime: `O(size)`
   ///
-  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
+  /// Space: `O(1)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
   public func any<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
@@ -489,15 +498,16 @@ module {
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x or predicate y;
     case (#three(x, y, z)) predicate x or predicate y or predicate z;
-    case (#idles(((l1, l2), _), ((r1, r2), _))) List.any(l1, predicate) or List.any(l2, predicate) or List.any(r1, predicate) or List.any(r2, predicate); // note that the order of the right stack is reversed, but for the any operation it does not matter
-    case (#rebal(_)) {
-      // future work: avoid allocation
-      for (t in values deque) if (predicate t) return true;
-      return false
+    case (#idles(((l1, l2), _), ((r1, r2), _))) List.any(l1, predicate) or List.any(l2, predicate) or List.any(r2, predicate) or List.any(r1, predicate); // note that the order of the right stack is reversed, but for thisation it does not matter
+    case (#rebal(_, big, small)) {
+      let (extraB, _, (oldB1, oldB2), _) = BigState.current(big);
+      let (extraS, _, (oldS1, oldS2), _) = SmallState.current(small);
+      // note that the order is one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
+      List.any(extraB, predicate) or List.any(oldB1, predicate) or List.any(oldB2, predicate) or List.any(extraS, predicate) or List.any(oldS1, predicate) or List.any(oldS2, predicate)
     }
   };
 
-  /// Call the given function for its side effect on each deque element in turn.
+  /// Call the given function for its side effect on each deque element in order: from front to back.
   ///
   /// Example:
   /// ```motoko
@@ -511,7 +521,7 @@ module {
   ///
   /// Runtime: `O(size)`
   ///
-  /// Space: `O(1)` or `O(size)` if the deque is in the rebalancing state
+  /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
   public func forEach<T>(deque : Deque<T>, f : T -> ()) = switch deque {
@@ -523,11 +533,11 @@ module {
     case _ {
       // future work: avoid allocation
       for (t in values deque) f t
-    }
+    } // todo: consider removing this operation, users can use Iter.forEach instead as this is not efficient
   };
 
-  /// Call the given function on each deque element and collect the results
-  /// in a new deque.
+  /// Create a new deque by applying the given function to each element of the original deque.
+  /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
@@ -695,8 +705,6 @@ module {
       case _ (trap "Illegal smallDeque invocation")
     };
 
-    public func contains<T>(stacks : Stacks<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(stacks.0, equal, item) or List.contains(stacks.1, equal, item);
-
     public func map<T, U>((left, right) : Stacks<T>, f : T -> U) : Stacks<U> = (List.map(left, f), List.map(right, f))
   };
 
@@ -706,8 +714,6 @@ module {
     public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (Stacks.push(stacks, t), 1 + size);
     public func pop<T>((stacks, size) : Idle<T>) : (T, Idle<T>) = (Stacks.unsafeFirst(stacks), (Stacks.pop(stacks), size - 1 : Nat));
     public func peek<T>((stacks, _) : Idle<T>) : T = Stacks.unsafeFirst(stacks);
-
-    public func contains<T>((stacks, _) : Idle<T>, equal : (T, T) -> Bool, item : T) : Bool = Stacks.contains(stacks, equal, item);
 
     public func map<T, U>((stacks, size) : Idle<T>, f : T -> U) : Idle<U> = (Stacks.map(stacks, f), size)
   };
@@ -735,9 +741,7 @@ module {
       case (null) Stacks.unsafeFirst(old)
     };
 
-    public func size<T>((_, extraSize, _, targetSize) : Current<T>) : Nat = extraSize + targetSize;
-
-    // public func contains<T>((extra, _, old, _) : Current<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(extra, equal, item) or Stacks.contains(old, equal, item) // todo: should be limited to the first `targetSize` elements?
+    public func size<T>((_, extraSize, _, targetSize) : Current<T>) : Nat = extraSize + targetSize
   };
 
   /// The bigger end of the deque during rebalancing. It is used to split the bigger end of the deque into the new big end and a portion to be added to the small end. Can be in one of the following states:
@@ -785,10 +789,10 @@ module {
       case (#big2(state)) CommonState.size(state)
     };
 
-    // public func contains<T>(big : BigState<T>, equal : (T, T) -> Bool, item : T) : Bool = switch big {
-    //   case (#big1(cur, big, _, _)) Current.contains(cur, equal, item);
-    //   case (#big2(state)) CommonState.contains(state, equal, item)
-    // }
+    public func current<T>(big : BigState<T>) : Current<T> = switch big {
+      case (#big1(cur, _, _, _)) cur;
+      case (#big2(state)) CommonState.current(state)
+    }
   };
 
   /// The smaller end of the deque during rebalancing. Can be in one of the following states:
@@ -844,6 +848,12 @@ module {
       case (#small1(cur, _, _)) Current.size(cur);
       case (#small2(cur, _, _, _, _)) Current.size(cur);
       case (#small3(common)) CommonState.size(common)
+    };
+
+    public func current<T>(state : SmallState<T>) : Current<T> = switch state {
+      case (#small1(cur, _, _)) cur;
+      case (#small2(cur, _, _, _, _)) cur;
+      case (#small3(common)) CommonState.current(common)
     }
   };
 
@@ -891,8 +901,8 @@ module {
     };
 
     public func peek<T>(common : CommonState<T>) : T = switch common {
-      case (#copy(cur, aux, _, _)) Current.peek(cur);
-      case (#idle(cur, idle)) Idle.peek(idle)
+      case (#copy(cur, _, _, _)) Current.peek(cur);
+      case (#idle(_, idle)) Idle.peek(idle)
     };
 
     public func size<T>(common : CommonState<T>) : Nat = switch common {
@@ -900,10 +910,10 @@ module {
       case (#idle(_, (_, size))) size
     };
 
-    // public func contains<T>(common : CommonState<T>, equal : (T, T) -> Bool, item : T) : Bool = switch common {
-    //   case (#copy(cur, aux, _, _)) Current.contains(cur, equal, item) or List.contains(aux, equal, item); // todo: is this correct?
-    //   case (#idle(_, idle)) Idle.contains(idle, equal, item)
-    // }
+    public func current<T>(common : CommonState<T>) : Current<T> = switch common {
+      case (#copy(cur, _, _, _)) cur;
+      case (#idle(cur, _)) cur
+    }
   };
 
   type States<T> = (
@@ -926,6 +936,21 @@ module {
   public func idlesInvariant<T>(((l, nL), (r, nR)) : (Idle<T>, Idle<T>)) : Bool = Stacks.size(l) == nL and Stacks.size(r) == nR and 3 * nL >= nR and 3 * nR >= nL;
 
   type List<T> = Types.Pure.List<T>;
+  type Iter<T> = Types.Iter<T>;
   func unsafeHead<T>(l : List<T>) : T = Option.unwrap(l).0;
-  func unsafeTail<T>(l : List<T>) : List<T> = Option.unwrap(l).1
+  func unsafeTail<T>(l : List<T>) : List<T> = Option.unwrap(l).1;
+
+  // func concatValues<T>(lists : List<List<T>>) : Iter<T> = object {
+  //   var ll = lists;
+  //   public func next() : ?T {
+  //     let ?(list, tailL) = ll else return null;
+  //     let ?(h, t) = list else { ll := tailL; return next() };
+  //     ll := ?(t, tailL);
+  //     ?h
+  //   }
+  // };
+
+  // // todo: make these reverse operations lazy in the object
+  // func concatIdles<T>(((l1, l2), _) : Idle<T>, ((r1, r2), _) : Idle<T>) : Iter<T> = concatValues(?(l1, ?(l2, ?(List.reverse r2, ?(List.reverse r1, null)))));
+  // func concatCurrents<T>((extraL, _, (oldL1, oldL2), _) : Current<T>, (extraR, _, (oldR1, oldR2), _) : Current<T>) : Iter<T> = concatValues(?(extraL, ?(oldL1, ?(oldL2, ?(List.reverse oldR2, ?(List.reverse oldR1, ?(List.reverse extraR, null)))))))
 }

@@ -10,13 +10,20 @@ Returns the response to the call, an IC <em>reply</em> or <em>reject</em>, as a 
 import IC &quot;mo:base/InternetComputer&quot;;
 import Principal &quot;mo:base/Principal&quot;;
 
-let ledger = Principal.fromText(&quot;ryjl3-tyaaa-aaaaa-aaaba-cai&quot;);
-let method = &quot;decimals&quot;;
-let input = ();
-type OutputType = { decimals : Nat32 };
+persistent actor {
+  type OutputType = { decimals : Nat32 };
 
-let rawReply = await IC.call(ledger, method, to_candid(input)); // serialized Candid
-let output : ?OutputType = from_candid(rawReply); // =&gt; ?{ decimals = 8 }</code></pre>
+  public func example() : async ?OutputType {
+    let ledger = Principal.fromText(&quot;ryjl3-tyaaa-aaaaa-aaaba-cai&quot;);
+    let method = &quot;decimals&quot;;
+    let input = ();
+
+    let rawReply = await IC.call(ledger, method, to_candid (input)); // serialized Candid
+    let output : ?OutputType = from_candid (rawReply);
+    assert output == ?{ decimals = 8 };
+    output
+  }
+}</code></pre>
 
 <p><a href="https://internetcomputer.org/docs/current/motoko/main/reference/language-manual#candid-serialization">Learn more about Candid serialization</a></p>
 </p></div><div class="declaration"><h4 class="function" id="countInstructions"><code><span class="keyword">public func </span><span class="fnname">countInstructions</span>(<span class="parameter">comp</span> : () -&gt; ()) : <span class="type">Nat64</span></code></h4><p><p>Given computation, <code>comp</code>, counts the number of actual and (for IC system calls) notional WebAssembly
@@ -47,7 +54,7 @@ let count = IC.countInstructions(func() {
 import IC &quot;mo:base/InternetComputer&quot;;
 
 let c1 = IC.performanceCounter(1);
-work();
+// ...
 let diff : Nat64 = IC.performanceCounter(1) - c1;</code></pre></p></div><div class="declaration"><h4 class="function" id="replyDeadline"><code><span class="keyword">public func </span><span class="fnname">replyDeadline</span>() : ?<span class="type">Nat</span></code></h4><p><p>Returns the time (in nanoseconds from the epoch start) by when the update message should
 reply to the best effort message so that it can be received by the requesting canister.
 Queries and unbounded-time update messages return null.</p>

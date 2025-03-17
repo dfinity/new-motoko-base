@@ -206,13 +206,16 @@ async function main() {
   await pocketIcServer.stop();
 
   console.log("---");
-  ["passed", "failed", "skipped"].forEach((status: TestResult["status"]) => {
-    console.log(
-      testStatusEmojis[status],
-      testResults.filter((result) => result.status === status).length,
-      status
-    );
-  });
+  console.log(
+    ["passed", "failed", "skipped"]
+      .map(
+        (status: TestResult["status"]) =>
+          `${
+            testResults.filter((result) => result.status === status).length
+          } ${status}`
+      )
+      .join(", ")
+  );
 
   // Exit code 1 for failed tests
   const hasError =

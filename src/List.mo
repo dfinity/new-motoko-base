@@ -283,7 +283,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let list = List.fromArray<Nat>([1, 2, 3, 4]);
-  /// let doubled = List.filterMap<Nat, Nat>(list, func x = if (x % 2 == 0) ?x * 2 else null);
+  /// let doubled = List.filterMap<Nat, Nat>(list, func x = if (x % 2 == 0) ?(x * 2) else null);
   /// List.toArray(doubled); // => [4, 8]
   /// ```
   ///
@@ -310,6 +310,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.size(list) // => 0
   /// ```
   ///
@@ -429,9 +430,10 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.add(list, 11);
-  /// List.removeLast(list); // => ?11
+  /// List.removeLast(list) // => ?11
   /// ```
   ///
   /// Amortized Runtime: `O(1)`, Worst Case Runtime: `O(sqrt(n))`
@@ -485,6 +487,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// List.get(list, 0); // => 10
@@ -518,6 +521,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// let x = List.getOpt(list, 0); // => ?10
@@ -539,6 +543,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.put(list, 0, 20); // overwrites 10 at index 0 with 20
   /// List.toArray(list) // => [20]
@@ -557,6 +562,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 3);
   /// List.add(list, 1);
   /// List.add(list, 2);
@@ -582,7 +588,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let list = List.new<Nat>();
+  /// let list = List.empty<Nat>();
   /// List.add(list, 1);
   /// List.add(list, 2);
   /// List.add(list, 3);
@@ -604,7 +610,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let list = List.new<Nat>();
+  /// let list = List.empty<Nat>();
   /// List.add(list, 1);
   /// List.add(list, 2);
   /// List.add(list, 3);
@@ -628,7 +634,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let list = List.new<Nat>();
+  /// let list = List.empty<Nat>();
   /// List.add(list, 1);
   /// List.add(list, 2);
   /// List.add(list, 3);
@@ -671,7 +677,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let list = List.new<Nat>();
+  /// let list = List.empty<Nat>();
   /// List.add(list, 1);
   /// List.add(list, 2);
   /// List.add(list, 3);
@@ -717,6 +723,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 2);
   /// List.add(list, 3);
   /// List.add(list, 4);
@@ -738,6 +745,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 2);
   /// List.add(list, 3);
   /// List.add(list, 4);
@@ -762,6 +770,7 @@ module {
   /// elements in order, or `null` when out of elements to iterate over.
   ///
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// List.add(list, 12);
@@ -785,6 +794,7 @@ module {
   /// elements in order, or `null` when out of elements to iterate over.
   ///
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// List.add(list, 12);
@@ -832,6 +842,7 @@ module {
   /// elements in reverse order, or `null` when out of elements to iterate over.
   ///
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// List.add(list, 12);
@@ -876,6 +887,7 @@ module {
   /// elements in reverse order, or `null` when out of elements to iterate over.
   ///
   /// ```motoko include=import
+  /// let list = List.empty<Nat>();
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// List.add(list, 12);
@@ -923,10 +935,11 @@ module {
   /// elements in order, or `null` when out of elements to iterate over.
   ///
   /// ```motoko include=import
-  /// List.add(list, 10);
-  /// List.add(list, 11);
-  /// List.add(list, 12);
-  /// Iter.toArray(List.values(list)); // [0, 1, 2]
+  /// let list = List.empty<Text>();
+  /// List.add(list, "A");
+  /// List.add(list, "B");
+  /// List.add(list, "C");
+  /// Iter.toArray(List.keys(list)); // [0, 1, 2]
   /// ```
   ///
   /// Note: This does not create a snapshot. If the returned iterator is not consumed at once,

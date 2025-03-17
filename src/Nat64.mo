@@ -561,7 +561,7 @@ module {
   public func powWrap(x : Nat64, y : Nat64) : Nat64 { x **% y };
 
   /// Returns an iterator over `Nat64` values from the first to second argument with an exclusive upper bound.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat64.range(1, 4);

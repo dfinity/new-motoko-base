@@ -13,7 +13,7 @@
 ///
 /// ```motoko no-repl
 /// persistent actor {
-///   shared(msg) func foo() {
+///   public shared(msg) func foo() {
 ///     let caller : Principal = msg.caller;
 ///   };
 /// }
@@ -58,7 +58,7 @@ module {
   /// ```motoko include=import
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
   /// let subAccount : Blob = "\4A\8D\3F\2B\6E\01\C8\7D\9E\03\B4\56\7C\F8\9A\01\D2\34\56\78\9A\BC\DE\F0\12\34\56\78\9A\BC\DE\F0";
-  /// let account = Principal.toLedgerAccount(principal, ?subAccount); // => \8C\5C\20\C6\15\3F\7F\51\E2\0D\0F\0F\B5\08\51\5B\47\65\63\A9\62\B4\A9\91\5F\4F\02\70\8A\ED\4F\82
+  /// let account = Principal.toLedgerAccount(principal, ?subAccount); // => "\8C\5C\20\C6\15\3F\7F\51\E2\0D\0F\0F\B5\08\51\5B\47\65\63\A9\62\B4\A9\91\5F\4F\02\70\8A\ED\4F\82"
   /// ```
   public func toLedgerAccount(principal : Principal, subAccount : ?Blob) : Blob {
     let sha224 = SHA224();

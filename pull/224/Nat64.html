@@ -332,7 +332,8 @@ to the existing <code>**%</code> operator) is so that you can use it as a functi
 value to pass to a higher order function. It is not possible to use <code>**%</code>
 as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat64</code> values from the first to second argument with an exclusive upper bound.</p>
-<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat64.range(1, 4);
 assert(?1 == iter.next());

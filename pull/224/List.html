@@ -6,7 +6,7 @@ For the <code>List</code> class see the file Class.mo.</p>
 <p>Copyright: 2023 MR Research AG
 Main author: Andrii Stepanov
 Contributors: Timo Hanke (timohanke), Andy Gura (andygura), react0r-com</p>
-<pre><code>motoko include=import
+<pre><code>motoko name=import
 import List &quot;mo:base/List&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.List"><span class="keyword">type </span><span class="type">List</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.List"><span class="type">Types.List</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p><code>List&lt;T&gt;</code> provides a mutable list of elements of type <code>T</code>.
 Based on the paper &quot;Resizable Arrays in Optimal Time and Space&quot; by Brodnik, Carlsson, Demaine, Munro and Sedgewick (1999).
 Since this is internally a two-dimensional array the access times for put and get operations
@@ -96,7 +96,7 @@ Discards all elements for which the function returns null.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4]);
-let doubled = List.filterMap&lt;Nat, Nat&gt;(list, func x = if (x % 2 == 0) ?x * 2 else null);
+let doubled = List.filterMap&lt;Nat, Nat&gt;(list, func x = if (x % 2 == 0) ?(x * 2) else null);
 List.toArray(doubled); // =&gt; [4, 8]</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
@@ -105,6 +105,7 @@ List.toArray(doubled); // =&gt; [4, 8]</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Returns the current number of elements in the list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.size(list) // =&gt; 0</code></pre>
 
 <p>Runtime: <code>O(1)</code> (with some internal calculations)</p>
@@ -124,9 +125,10 @@ List.toArray(list) // =&gt; [0, 1, 2, 3]</code></pre>
 the list is empty.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
-List.removeLast(list); // =&gt; ?11</code></pre>
+List.removeLast(list) // =&gt; ?11</code></pre>
 
 <p>Amortized Runtime: <code>O(1)</code>, Worst Case Runtime: <code>O(sqrt(n))</code></p>
 <p>Amortized Space: <code>O(1)</code>, Worst Case Space: <code>O(sqrt(n))</code></p>
@@ -134,6 +136,7 @@ List.removeLast(list); // =&gt; ?11</code></pre>
 Traps if <code>index &gt;= size</code>, error message may not be descriptive.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 List.get(list, 0); // =&gt; 10</code></pre>
@@ -143,6 +146,7 @@ List.get(list, 0); // =&gt; 10</code></pre>
 Returns <code>null</code> when <code>index &gt;= size</code>. Indexing is zero-based.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 let x = List.getOpt(list, 0); // =&gt; ?10
@@ -153,6 +157,7 @@ let y = List.getOpt(list, 2); // =&gt; null</code></pre>
 <code>index</code> &gt;= size. Indexing is zero-based.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.put(list, 0, 20); // overwrites 10 at index 0 with 20
 List.toArray(list) // =&gt; [20]</code></pre>
@@ -162,6 +167,7 @@ List.toArray(list) // =&gt; [20]</code></pre>
 Sort is deterministic, stable, and in-place.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 3);
 List.add(list, 1);
 List.add(list, 2);
@@ -175,7 +181,7 @@ List.toArray(list) // =&gt; [1, 2, 3]</code></pre>
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.new&lt;Nat&gt;();
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 List.add(list, 3);
@@ -189,7 +195,7 @@ List.indexOf&lt;Nat&gt;(3, list, Nat.equal); // =&gt; ?2</code></pre>
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.new&lt;Nat&gt;();
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 List.add(list, 3);
@@ -205,7 +211,7 @@ List.lastIndexOf&lt;Nat&gt;(2, list, Nat.equal); // =&gt; ?5</code></pre>
 Returns <code>null</code> if no such element is found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.new&lt;Nat&gt;();
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 List.add(list, 3);
@@ -219,7 +225,7 @@ List.firstIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }); // =&gt; ?1</code
 Returns <code>null</code> if no such element is found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.new&lt;Nat&gt;();
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 List.add(list, 3);
@@ -233,6 +239,7 @@ List.lastIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }); // =&gt; ?3</code>
 In particular, if <code>list</code> is empty the function returns <code>true</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
@@ -246,6 +253,7 @@ List.all&lt;Nat&gt;(list, func x { x &gt; 1 }); // =&gt; true</code></pre>
 In particular, if <code>list</code> is empty the function returns <code>false</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
@@ -259,6 +267,7 @@ List.any&lt;Nat&gt;(list, func x { x &gt; 3 }); // =&gt; true</code></pre>
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -277,6 +286,7 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -291,6 +301,7 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in reverse order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -309,6 +320,7 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in reverse order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
+let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -323,10 +335,11 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
-List.add(list, 10);
-List.add(list, 11);
-List.add(list, 12);
-Iter.toArray(List.values(list)); // [0, 1, 2]</code></pre>
+let list = List.empty&lt;Text&gt;();
+List.add(list, &quot;A&quot;);
+List.add(list, &quot;B&quot;);
+List.add(list, &quot;C&quot;);
+Iter.toArray(List.keys(list)); // [0, 1, 2]</code></pre>
 
 <p>Note: This does not create a snapshot. If the returned iterator is not consumed at once,
 and instead the consumption of the iterator is interleaved with other operations on the

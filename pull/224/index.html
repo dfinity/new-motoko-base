@@ -26,7 +26,7 @@ import Nat8 &quot;mo:base/Nat8&quot;;
 let blob = &quot;\00\00\00\ff&quot; : Blob; // blob literals, where each byte is delimited by a back-slash and represented in hex
 let blob2 = &quot;charsもあり&quot; : Blob; // you can also use characters in the literals
 let numBytes = blob.size(); // =&gt; 4 (returns the number of bytes in the Blob)
-for (byte : Nat8 in blob.values()) { // iterator over the Blob
+for (byte in blob.values()) { // iterator over the Blob
   Debug.print(Nat8.toText(byte))
 }</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Bool.html">Bool</a><div class="index-item-comment"><p>Boolean type and operations.</p>
 <p>While boolean operators <code>_ and _</code> and <code>_ or _</code> are short-circuiting,
@@ -150,7 +150,7 @@ For the <code>List</code> class see the file Class.mo.</p>
 <p>Copyright: 2023 MR Research AG
 Main author: Andrii Stepanov
 Contributors: Timo Hanke (timohanke), Andy Gura (andygura), react0r-com</p>
-<pre><code>motoko include=import
+<pre><code>motoko name=import
 import List &quot;mo:base/List&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Map.html">Map</a><div class="index-item-comment"><p>An imperative key-value map based on order/comparison of the keys.
 The map data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>
@@ -220,7 +220,7 @@ of where you might see Principals, you can access the Principal of the
 caller of your shared function.</p>
 <pre><code>motoko no-repl
 persistent actor {
-  shared(msg) func foo() {
+  public shared(msg) func foo() {
     let caller : Principal = msg.caller;
   };
 }</code></pre>

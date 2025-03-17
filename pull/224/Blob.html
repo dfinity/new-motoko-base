@@ -19,7 +19,7 @@ import Nat8 &quot;mo:base/Nat8&quot;;
 let blob = &quot;\00\00\00\ff&quot; : Blob; // blob literals, where each byte is delimited by a back-slash and represented in hex
 let blob2 = &quot;charsもあり&quot; : Blob; // you can also use characters in the literals
 let numBytes = blob.size(); // =&gt; 4 (returns the number of bytes in the Blob)
-for (byte : Nat8 in blob.values()) { // iterator over the Blob
+for (byte in blob.values()) { // iterator over the Blob
   Debug.print(Nat8.toText(byte))
 }</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Blob"><span class="keyword">type </span><span class="type">Blob</span> = <span class="type">Prim.Types.Blob</span></h4><p></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>() : <a href="#type.Blob"><span class="type">Blob</span></a></code></h4><p><p>Returns an empty <code>Blob</code> (equivalent to <code>&quot;&quot;</code>).</p>
 </p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <span class="type">Nat</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>(<span class="parameter">bytes</span> : [<span class="type">Nat8</span>]) : <a href="#type.Blob"><span class="type">Blob</span></a></code></h4><p><p>Creates a <code>Blob</code> from an array of bytes (<code>[Nat8]</code>), by copying each element.</p>

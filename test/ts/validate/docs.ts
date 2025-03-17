@@ -205,6 +205,14 @@ async function main() {
   await pocketIc.tearDown();
   await pocketIcServer.stop();
 
+  ["passed", "failed", "skipped"].forEach((status: TestResult["status"]) => {
+    console.log(
+      testStatusEmojis[status],
+      testResults.filter((result) => result.status === status),
+      status
+    );
+  });
+
   // Exit code 1 for failed tests
   const hasError =
     !testResults.length ||

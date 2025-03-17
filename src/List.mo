@@ -1580,8 +1580,8 @@ module {
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
   ///
-  /// let list1 = List.fromArray<Nat>([1, 2]);
-  /// let list2 = List.fromArray<Nat>([0, 1, 2]);
+  /// let list1 = List.fromArray<Nat>([0, 1, 2]);
+  /// let list2 = List.fromArray<Nat>([1, 2]);
   ///
   /// List.compare<Nat>(list1, list2, Nat.compare); // => #less
   /// ```
@@ -1607,8 +1607,7 @@ module {
       };
       i += 1
     };
-
-    return Nat.compare(size1, size2)
+    Nat.compare(size1, size2)
   };
 
   /// Creates a textual representation of `list`, using `toText` to recursively

@@ -303,6 +303,91 @@ module {
     }
   };
 
+  public func zip<T, U>(a : Iter<T>, b : Iter<U>) : Iter<(T, U)> = object {
+    public func next() : ?(T, U) {
+      let ?t = a.next() else return null;
+      let ?u = b.next() else return null;
+      ?(t, u)
+    }
+  };
+
+  public func zipWith<T, U, R>(a : Iter<T>, b : Iter<U>, f : (T, U) -> R) : Iter<R> = object {
+    public func next() : ?R {
+      let ?t = a.next() else return null;
+      let ?u = b.next() else return null;
+      ?f(t, u)
+    }
+  };
+
+  public func all<T>(iter : Iter<T>, f : T -> Bool) : Bool {
+    for (x in iter) {
+      if (not f x) return false
+    };
+    true
+  };
+
+  public func any<T>(iter : Iter<T>, f : T -> Bool) : Bool {
+    for (x in iter) {
+      if (f x) return true
+    };
+    false
+  };
+
+  public func find<T>(iter : Iter<T>, f : T -> Bool) : ?T {
+    for (x in iter) {
+      if (f x) return ?x
+    };
+    null
+  };
+
+  public func contains<T>(iter : Iter<T>, equal : (T, T) -> Bool, value : T) : Bool {
+    for (x in iter) {
+      if (equal(x, value)) return true
+    };
+    false
+  };
+
+  public func foldLeft<T, R>(iter : Iter<T>, initial : R, combine : (R, T) -> R) : R {
+    var acc = initial;
+    for (x in iter) {
+      acc := combine(acc, x)
+    };
+    acc
+  };
+
+  public func foldRight<T, R>(iter : Iter<T>, initial : R, combine : (T, R) -> R) : R {
+    foldLeft<T, R>(reverse(iter), initial, func(acc, x) = combine(x, acc))
+  };
+
+  public func reduce<T>(iter : Iter<T>, combine : (T, T) -> T) : ?T {
+    let ?first = iter.next() else return null;
+    ?foldLeft(iter, first, combine)
+  };
+
+  public func max<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
+    reduce<T>(
+      iter,
+      func(a, b) {
+        switch (compare(a, b)) {
+          case (#less) b;
+          case _ a
+        }
+      }
+    )
+  };
+
+  public func min<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
+    reduce<T>(
+      iter,
+      func(a, b) {
+        switch (compare(a, b)) {
+          case (#greater) b;
+          case _ a
+        }
+      }
+    )
+  };
+
   /// Creates an iterator that produces an infinite sequence of `x`.
   /// ```motoko
   /// import Iter "mo:new-base/Iter";

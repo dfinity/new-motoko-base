@@ -33,12 +33,12 @@ Applications that plan to use Motoko stable variables sparingly or not at all ca
 increase <code>--max-stable-pages</code> as desired, approaching the IC maximum (initially 8GiB, then 32Gib, currently 64Gib).
 All applications should reserve at least one page for stable variable data, even when no stable variables are used.</p>
 <p>Usage:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl name=import
 import Region &quot;mo:base/Region&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Region"><span class="keyword">type </span><span class="type">Region</span> = <span class="type">Prim.Types.Region</span></h4><p><p>A stateful handle to an isolated region of IC stable memory.
 <code>Region</code> is a stable type and regions can be stored in stable variables.</p>
 </p></div><div class="declaration"><h4 class="value-declaration" id="new"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">new</span> : () -&gt; <a href="#type.Region"><span class="type">Region</span></a></code></h4><p><p>Allocate a new, isolated Region of size 0.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 assert Region.size(region) == 0;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="id"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">id</span> : <a href="#type.Region"><span class="type">Region</span></a> -&gt; <span class="type">Nat</span></code></h4><p><p>Return a Nat identifying the given region.
 May be used for equality, comparison and hashing.
@@ -46,7 +46,7 @@ NB: Regions returned by <code>new()</code> are numbered from 16
 (regions 0..15 are currently reserved for internal use).
 Allocate a new, isolated Region of size 0.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 assert Region.id(region) == 16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="size"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">size</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>) -&gt; (<span class="parameter">pages</span> : <span class="type">Nat64</span>)</code></h4><p><p>Current size of <code>region</code>, in pages.
 Each page is 64KiB (65536 bytes).
@@ -54,7 +54,7 @@ Initially <code>0</code>.
 Preserved across upgrades, together with contents of allocated
 stable memory.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let beforeSize = Region.size(region);
 ignore Region.grow(region, 10);
@@ -67,7 +67,7 @@ Every new page is zero-initialized, containing byte 0x00 at every offset.
 Function <code>grow</code> is capped by a soft limit on <code>size</code> controlled by compile-time flag
  <code>--max-stable-pages &lt;n&gt;</code> (the default is 65536, or 4GiB).</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 import Error &quot;mo:base/Error&quot;;
 
 let region = Region.new();
@@ -79,7 +79,7 @@ let afterSize = Region.size(region);
 afterSize - beforeSize // =&gt; 10</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadNat8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadNat8</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Nat8</span></code></h4><p><p>Within <code>region</code>, load a <code>Nat8</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -87,7 +87,7 @@ Region.storeNat8(region, offset, value);
 Region.loadNat8(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeNat8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeNat8</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Nat8</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Nat8</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -95,7 +95,7 @@ Region.storeNat8(region, offset, value);
 Region.loadNat8(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadNat16</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Nat16</span></code></h4><p><p>Within <code>region</code>, load a <code>Nat16</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -103,7 +103,7 @@ Region.storeNat16(region, offset, value);
 Region.loadNat16(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeNat16</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Nat16</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Nat16</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -111,7 +111,7 @@ Region.storeNat16(region, offset, value);
 Region.loadNat16(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadNat32</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Nat32</span></code></h4><p><p>Within <code>region</code>, load a <code>Nat32</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -119,7 +119,7 @@ Region.storeNat32(region, offset, value);
 Region.loadNat32(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeNat32</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Nat32</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Nat32</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -127,7 +127,7 @@ Region.storeNat32(region, offset, value);
 Region.loadNat32(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadNat64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadNat64</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Nat64</span></code></h4><p><p>Within <code>region</code>, load a <code>Nat64</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -135,7 +135,7 @@ Region.storeNat64(region, offset, value);
 Region.loadNat64(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeNat64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeNat64</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Nat64</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Nat64</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -143,7 +143,7 @@ Region.storeNat64(region, offset, value);
 Region.loadNat64(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadInt8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadInt8</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Int8</span></code></h4><p><p>Within <code>region</code>, load a <code>Int8</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -151,7 +151,7 @@ Region.storeInt8(region, offset, value);
 Region.loadInt8(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeInt8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeInt8</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Int8</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Int8</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -159,7 +159,7 @@ Region.storeInt8(region, offset, value);
 Region.loadInt8(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadInt16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadInt16</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Int16</span></code></h4><p><p>Within <code>region</code>, load a <code>Int16</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -167,7 +167,7 @@ Region.storeInt16(region, offset, value);
 Region.loadInt16(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeInt16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeInt16</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Int16</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Int16</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -175,7 +175,7 @@ Region.storeInt16(region, offset, value);
 Region.loadInt16(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadInt32</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Int32</span></code></h4><p><p>Within <code>region</code>, load a <code>Int32</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -183,7 +183,7 @@ Region.storeInt32(region, offset, value);
 Region.loadInt32(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeInt32</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Int32</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Int32</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -191,7 +191,7 @@ Region.storeInt32(region, offset, value);
 Region.loadInt32(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadInt64</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Int64</span></code></h4><p><p>Within <code>region</code>, load a <code>Int64</code> value from <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -199,7 +199,7 @@ Region.storeInt64(region, offset, value);
 Region.loadInt64(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeInt64</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Int64</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store a <code>Int64</code> value at <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 123;
@@ -207,7 +207,7 @@ Region.storeInt64(region, offset, value);
 Region.loadInt64(region, offset) // =&gt; 123</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadFloat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadFloat</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>) -&gt; <span class="type">Float</span></code></h4><p><p>Within <code>region</code>, loads a <code>Float</code> value from the given <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 1.25;
@@ -215,7 +215,7 @@ Region.storeFloat(region, offset, value);
 Region.loadFloat(region, offset) // =&gt; 1.25</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeFloat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeFloat</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Float</span>) -&gt; ()</code></h4><p><p>Within <code>region</code>, store float <code>value</code> at the given <code>offset</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 let region = Region.new();
 let offset = 0;
 let value = 1.25;
@@ -223,7 +223,7 @@ Region.storeFloat(region, offset, value);
 Region.loadFloat(region, offset) // =&gt; 1.25</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="loadBlob"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">loadBlob</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">size</span> : <span class="type">Nat</span>) -&gt; <span class="type">Blob</span></code></h4><p><p>Within <code>region,</code> load <code>size</code> bytes starting from <code>offset</code> as a <code>Blob</code>.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 import Blob &quot;mo:base/Blob&quot;;
 
 let region = Region.new();
@@ -234,7 +234,7 @@ Region.storeBlob(region, offset, value);
 Blob.toArray(Region.loadBlob(region, offset, size)) // =&gt; [1, 2, 3]</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="storeBlob"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">storeBlob</span> : (<span class="parameter">region</span> : <a href="#type.Region"><span class="type">Region</span></a>, <span class="parameter">offset</span> : <span class="type">Nat64</span>, <span class="parameter">value</span> : <span class="type">Blob</span>) -&gt; ()</code></h4><p><p>Within <code>region, write </code>blob.size()<code>bytes of</code>blob<code>beginning at</code>offset`.
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl include=import
 import Blob &quot;mo:base/Blob&quot;;
 
 let region = Region.new();

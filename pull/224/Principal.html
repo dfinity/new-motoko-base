@@ -8,9 +8,11 @@ Computer. These entities are either users or canisters.</p>
 of where you might see Principals, you can access the Principal of the
 caller of your shared function.</p>
 <pre><code>motoko no-repl
-shared(msg) func foo() {
-  let caller : Principal = msg.caller;
-};</code></pre>
+persistent actor {
+  shared(msg) func foo() {
+    let caller : Principal = msg.caller;
+  };
+}</code></pre>
 
 <p>Then, you can use this module to work with the <code>Principal</code>.</p>
 <p>Import from the base library to use this module.</p>
@@ -31,7 +33,7 @@ let account = Principal.toLedgerAccount(principal, ?subAccount); // =&gt; \8C\5C
 <p>Example:</p>
 <pre><code>motoko include=import
 let principal = Principal.fromText(&quot;un4fu-tqaaa-aaaab-qadjq-cai&quot;);
-let blob = Principal.toBlob(principal); // =&gt; \00\00\00\00\00\30\00\D3\01\01</code></pre></p></div><div class="declaration"><h4 class="function" id="fromBlob"><code><span class="keyword">public func </span><span class="fnname">fromBlob</span>(<span class="parameter">b</span> : <span class="type">Blob</span>) : <a href="#type.Principal"><span class="type">Principal</span></a></code></h4><p><p>Converts a <code>Blob</code> (bytes) representation of a <code>Principal</code> to a <code>Principal</code> value.</p>
+let blob = Principal.toBlob(principal); // =&gt; &quot;\00\00\00\00\00\30\00\D3\01\01&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromBlob"><code><span class="keyword">public func </span><span class="fnname">fromBlob</span>(<span class="parameter">b</span> : <span class="type">Blob</span>) : <a href="#type.Principal"><span class="type">Principal</span></a></code></h4><p><p>Converts a <code>Blob</code> (bytes) representation of a <code>Principal</code> to a <code>Principal</code> value.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob = &quot;\00\00\00\00\00\30\00\D3\01\01&quot; : Blob;
@@ -98,11 +100,9 @@ value to pass to a higher order function. It is not possible to use <code>==</co
 as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Buffer &quot;mo:base/Buffer&quot;;
-
-let buffer1 = Buffer.Buffer&lt;Principal&gt;(3);
-let buffer2 = Buffer.Buffer&lt;Principal&gt;(3);
-Buffer.equal(buffer1, buffer2, Principal.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">principal1</span> : <a href="#type.Principal"><span class="type">Principal</span></a>, <span class="parameter">principal2</span> : <a href="#type.Principal"><span class="type">Principal</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Principal types.
+let principal1 = Principal.anonymous();
+let principal2 = Principal.fromBlob(Principal.anonymousBlob);
+Principal.equal(principal1, principal2, Principal.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">principal1</span> : <a href="#type.Principal"><span class="type">Principal</span></a>, <span class="parameter">principal2</span> : <a href="#type.Principal"><span class="type">Principal</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Principal types.
 This is equivalent to <code>principal1 != principal2</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

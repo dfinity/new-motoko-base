@@ -6,18 +6,18 @@ For the <code>List</code> class see the file Class.mo.</p>
 <p>Copyright: 2023 MR Research AG
 Main author: Andrii Stepanov
 Contributors: Timo Hanke (timohanke), Andy Gura (andygura), react0r-com</p>
-<div class="declaration"><h4 class="type-declaration" id="type.List"><span class="keyword">type </span><span class="type">List</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.List"><span class="type">Types.List</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p><code>List&lt;T&gt;</code> provides a mutable list of elements of type <code>T</code>.
+<pre><code>motoko include=import
+import List &quot;mo:base/List&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.List"><span class="keyword">type </span><span class="type">List</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.List"><span class="type">Types.List</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p><code>List&lt;T&gt;</code> provides a mutable list of elements of type <code>T</code>.
 Based on the paper &quot;Resizable Arrays in Optimal Time and Space&quot; by Brodnik, Carlsson, Demaine, Munro and Sedgewick (1999).
 Since this is internally a two-dimensional array the access times for put and get operations
 will naturally be 2x slower than Buffer and Array. However, Array is not resizable and Buffer
 has <code>O(size)</code> memory waste.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new empty List for elements of type T.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.new&lt;Nat&gt;(); // Creates a new List</code></pre></p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new list with capacity and size 1, containing <code>element</code>.</p>
-<p>Example:</p>
-<pre class="motoko"><code class="motoko">
-import Nat &quot;mo:base/Nat&quot;;
+<p>Example: include=import</p>
+<pre class="motoko"><code class="motoko">import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.make&lt;Nat&gt;(1);
 List.toText&lt;Nat&gt;(list, Nat.toText); // =&gt; &quot;[1]&quot;</code></pre>
@@ -25,19 +25,22 @@ List.toText&lt;Nat&gt;(list, Nat.toText); // =&gt; &quot;[1]&quot;</code></pre>
 <p>Runtime: <code>O(1)</code></p>
 <p>Space: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="repeat"><code><span class="keyword">public func </span><span class="fnname">repeat</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">initValue</span> : <span class="type">T</span>, <span class="parameter">size</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a List with <code>size</code> copies of the initial value.</p>
-<pre><code>let list = List.repeat&lt;Nat&gt;(2, 4); // [2, 2, 2, 2]</code></pre>
+<pre><code>motoko include=import
+let list = List.repeat&lt;Nat&gt;(2, 4); // [2, 2, 2, 2]</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts a mutable <code>List</code> to a purely functional <code>PureList</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
+<pre><code>motoko include=import
+let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
 let pureList = List.toPure&lt;Nat&gt;(list); // converts to immutable PureList</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>Space: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">pure</span> : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts a purely functional <code>List</code> to a mutable <code>List</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import PureList &quot;mo:base/pure/List&quot;;
+<pre><code>motoko include=import
+import PureList &quot;mo:base/pure/List&quot;;
 
 let pureList = PureList.fromArray&lt;Nat&gt;([1, 2, 3]);
 let list = List.fromPure&lt;Nat&gt;(pureList); // converts to mutable List</code></pre>
@@ -45,13 +48,14 @@ let list = List.fromPure&lt;Nat&gt;(pureList); // converts to mutable List</code
 <p>Runtime: <code>O(size)</code></p>
 <p>Space: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="addRepeat"><code><span class="keyword">public func </span><span class="fnname">addRepeat</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">initValue</span> : <span class="type">T</span>, <br/>  <span class="parameter">count</span> : <span class="type">Nat</span><br/>)</code></h4><p><p>Add to list <code>count</code> copies of the initial value.</p>
-<pre><code>let list = List.repeat&lt;Nat&gt;(2, 4); // [2, 2, 2, 2]
+<pre><code>motoko include=import
+let list = List.repeat&lt;Nat&gt;(2, 4); // [2, 2, 2, 2]
 List.addRepeat(list, 2, 1); // [2, 2, 2, 2, 1, 1]</code></pre>
 
 <p>Runtime: <code>O(count)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="clear"><code><span class="keyword">public func </span><span class="fnname">clear</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Resets the list to size 0, de-referencing all elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -61,7 +65,7 @@ List.toArray(list) // =&gt; []</code></pre>
 <p>Runtime: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="clone"><code><span class="keyword">public func </span><span class="fnname">clone</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a copy of a List, with the same size.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 list.add(1);
 
 let clone = List.clone(list);
@@ -70,7 +74,7 @@ List.toArray(clone); // =&gt; [1]</code></pre>
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">R</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">R</span>&gt;</code></h4><p><p>Creates and returns a new list, populated with the results of calling a provided function on every element in the provided list</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 list.add(1);
 
 let t = List.map&lt;Nat, Text&gt;(list, Nat.toText);
@@ -79,7 +83,8 @@ List.toArray(t); // =&gt; [&quot;1&quot;]</code></pre>
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new list containing only the elements from <code>list</code> for which the predicate returns true.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4]);
+<pre><code>motoko include=import
+let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4]);
 let evenNumbers = List.filter&lt;Nat&gt;(list, func x = x % 2 == 0);
 List.toArray(evenNumbers); // =&gt; [2, 4]</code></pre>
 
@@ -89,7 +94,8 @@ List.toArray(evenNumbers); // =&gt; [2, 4]</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="filterMap"><code><span class="keyword">public func </span><span class="fnname">filterMap</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ?<span class="type">R</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">R</span>&gt;</code></h4><p><p>Returns a new list containing all elements from <code>list</code> for which the function returns ?element.
 Discards all elements for which the function returns null.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4]);
+<pre><code>motoko include=import
+let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4]);
 let doubled = List.filterMap&lt;Nat, Nat&gt;(list, func x = if (x % 2 == 0) ?x * 2 else null);
 List.toArray(doubled); // =&gt; [4, 8]</code></pre>
 
@@ -98,7 +104,7 @@ List.toArray(doubled); // =&gt; [4, 8]</code></pre>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Returns the current number of elements in the list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.size(list) // =&gt; 0</code></pre>
 
 <p>Runtime: <code>O(1)</code> (with some internal calculations)</p>
@@ -106,7 +112,7 @@ List.size(list) // =&gt; 0</code></pre>
 allocating a new internal data block if needed,
 and resizing the internal index block if needed.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 0); // add 0 to list
 List.add(list, 1);
 List.add(list, 2);
@@ -117,7 +123,7 @@ List.toArray(list) // =&gt; [0, 1, 2, 3]</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="removeLast"><code><span class="keyword">public func </span><span class="fnname">removeLast</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Removes and returns the last item in the list or <code>null</code> if
 the list is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.removeLast(list); // =&gt; ?11</code></pre>
@@ -127,7 +133,7 @@ List.removeLast(list); // =&gt; ?11</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="get"><code><span class="keyword">public func </span><span class="fnname">get</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">index</span> : <span class="type">Nat</span>) : <span class="type">T</span></code></h4><p><p>Returns the element at index <code>index</code>. Indexing is zero-based.
 Traps if <code>index &gt;= size</code>, error message may not be descriptive.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.get(list, 0); // =&gt; 10</code></pre>
@@ -136,7 +142,7 @@ List.get(list, 0); // =&gt; 10</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="getOpt"><code><span class="keyword">public func </span><span class="fnname">getOpt</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">index</span> : <span class="type">Nat</span>) : ?<span class="type">T</span></code></h4><p><p>Returns the element at index <code>index</code> as an option.
 Returns <code>null</code> when <code>index &gt;= size</code>. Indexing is zero-based.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 let x = List.getOpt(list, 0); // =&gt; ?10
@@ -146,7 +152,7 @@ let y = List.getOpt(list, 2); // =&gt; null</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="put"><code><span class="keyword">public func </span><span class="fnname">put</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">index</span> : <span class="type">Nat</span>, <br/>  <span class="parameter">value</span> : <span class="type">T</span><br/>)</code></h4><p><p>Overwrites the current element at <code>index</code> with <code>element</code>. Traps if
 <code>index</code> &gt;= size. Indexing is zero-based.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 10);
 List.put(list, 0, 20); // overwrites 10 at index 0 with 20
 List.toArray(list) // =&gt; [20]</code></pre>
@@ -155,7 +161,7 @@ List.toArray(list) // =&gt; [20]</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="sort"><code><span class="keyword">public func </span><span class="fnname">sort</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>)</code></h4><p><p>Sorts the elements in the list according to <code>compare</code>.
 Sort is deterministic, stable, and in-place.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 3);
 List.add(list, 1);
 List.add(list, 2);
@@ -168,7 +174,7 @@ List.toArray(list) // =&gt; [1, 2, 3]</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="indexOf"><code><span class="keyword">public func </span><span class="fnname">indexOf</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : ?<span class="type">Nat</span></code></h4><p><p>Finds the first index of <code>element</code> in <code>list</code> using equality of elements defined
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.new&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
@@ -182,7 +188,7 @@ List.indexOf&lt;Nat&gt;(3, list, Nat.equal); // =&gt; ?2</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="lastIndexOf"><code><span class="keyword">public func </span><span class="fnname">lastIndexOf</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : ?<span class="type">Nat</span></code></h4><p><p>Finds the last index of <code>element</code> in <code>list</code> using equality of elements defined
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.new&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
@@ -198,7 +204,7 @@ List.lastIndexOf&lt;Nat&gt;(2, list, Nat.equal); // =&gt; ?5</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="firstIndexWhere"><code><span class="keyword">public func </span><span class="fnname">firstIndexWhere</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : ?<span class="type">Nat</span></code></h4><p><p>Finds the index of the first element in <code>list</code> for which <code>predicate</code> is true.
 Returns <code>null</code> if no such element is found.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.new&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
@@ -212,7 +218,7 @@ List.firstIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }); // =&gt; ?1</code
 </p></div><div class="declaration"><h4 class="function" id="lastIndexWhere"><code><span class="keyword">public func </span><span class="fnname">lastIndexWhere</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : ?<span class="type">Nat</span></code></h4><p><p>Finds the index of the last element in <code>list</code> for which <code>predicate</code> is true.
 Returns <code>null</code> if no such element is found.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.new&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
@@ -226,7 +232,7 @@ List.lastIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }); // =&gt; ?3</code>
 </p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Returns true iff every element in <code>list</code> satisfies <code>predicate</code>.
 In particular, if <code>list</code> is empty the function returns <code>true</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
@@ -239,7 +245,7 @@ List.all&lt;Nat&gt;(list, func x { x &gt; 1 }); // =&gt; true</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Returns true iff some element in <code>list</code> satisfies <code>predicate</code>.
 In particular, if <code>list</code> is empty the function returns <code>false</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
@@ -252,8 +258,7 @@ List.any&lt;Nat&gt;(list, func x { x &gt; 3 }); // =&gt; true</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an Iterator (<code>Iter</code>) over the elements of a List.
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
-<pre><code>
-
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -271,8 +276,7 @@ List, then this may lead to unexpected results.</p>
 </p></div><div class="declaration"><h4 class="function" id="entries"><code><span class="keyword">public func </span><span class="fnname">entries</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;(<span class="type">T</span>, <span class="type">Nat</span>)&gt;</code></h4><p><p>Returns an Iterator (<code>Iter</code>) over the items, i.e. pairs of value and index of a List.
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
-<pre><code>
-
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -286,8 +290,7 @@ List, then this may lead to unexpected results.</p>
 </p></div><div class="declaration"><h4 class="function" id="valuesRev"><code><span class="keyword">public func </span><span class="fnname">valuesRev</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an Iterator (<code>Iter</code>) over the elements of a List in reverse order.
 Iterator provides a single method <code>next()</code>, which returns
 elements in reverse order, or <code>null</code> when out of elements to iterate over.</p>
-<pre><code>
-
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -305,8 +308,7 @@ List, then this may lead to unexpected results.</p>
 </p></div><div class="declaration"><h4 class="function" id="entriesRev"><code><span class="keyword">public func </span><span class="fnname">entriesRev</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;(<span class="type">T</span>, <span class="type">Nat</span>)&gt;</code></h4><p><p>Returns an Iterator (<code>Iter</code>) over the items in reverse order, i.e. pairs of value and index of a List.
 Iterator provides a single method <code>next()</code>, which returns
 elements in reverse order, or <code>null</code> when out of elements to iterate over.</p>
-<pre><code>
-
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -320,8 +322,7 @@ List, then this may lead to unexpected results.</p>
 </p></div><div class="declaration"><h4 class="function" id="keys"><code><span class="keyword">public func </span><span class="fnname">keys</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">Nat</span>&gt;</code></h4><p><p>Returns an Iterator (<code>Iter</code>) over the keys (indices) of a List.
 Iterator provides a single method <code>next()</code>, which returns
 elements in order, or <code>null</code> when out of elements to iterate over.</p>
-<pre><code>
-
+<pre><code>motoko include=import
 List.add(list, 10);
 List.add(list, 11);
 List.add(list, 12);
@@ -333,7 +334,7 @@ List, then this may lead to unexpected results.</p>
 <p>Runtime: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a List containing elements from <code>iter</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let array = [1, 1, 1];
@@ -344,7 +345,7 @@ let list = List.fromIter&lt;Nat&gt;(iter); // =&gt; [1, 1, 1]</code></pre>
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="addAll"><code><span class="keyword">public func </span><span class="fnname">addAll</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">iter</span> : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Adds elements to a List from <code>iter</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let array = [1, 1, 1];
@@ -356,41 +357,36 @@ let list = List.addAll&lt;Nat&gt;(list, iter); // =&gt; [2, 1, 1, 1]</code></pre
 <p>Runtime: <code>O(size)</code>, where n is the size of iter.</p>
 </p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p><p>Creates an immutable array containing elements from a List.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 1);
 List.add(list, 2);
 List.add(list, 3);
 
-List.toArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]
-
-</code></pre>
+List.toArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a List containing elements from an Array.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let array = [2, 3];
-
 let list = List.fromArray&lt;Nat&gt;(array); // =&gt; [2, 3]</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Creates a mutable Array containing elements from a List.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 List.add(list, 1);
 List.add(list, 2);
 List.add(list, 3);
 
-List.toVarArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]
-
-</code></pre>
+List.toVarArray&lt;Nat&gt;(list); // =&gt; [1, 2, 3]</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a List containing elements from a mutable Array.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let array = [var 2, 3];
@@ -400,7 +396,7 @@ let list = List.fromVarArray&lt;Nat&gt;(array); // =&gt; [2, 3]</code></pre>
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="first"><code><span class="keyword">public func </span><span class="fnname">first</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the first element of <code>list</code>  is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.repeat&lt;Nat&gt;(1, 10);
 
 List.first(list); // =&gt; ?1</code></pre>
@@ -418,7 +414,7 @@ List.last(list); // =&gt; 3</code></pre>
 <p>Space: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Applies <code>f</code> to each element in <code>list</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
@@ -434,7 +430,7 @@ List.forEach&lt;Nat&gt;(list, func(x) {
 </p></div><div class="declaration"><h4 class="function" id="forEachEntry"><code><span class="keyword">public func </span><span class="fnname">forEachEntry</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : (<span class="type">Nat</span>, <span class="type">T</span>) -&gt; ())</code></h4><p><p>Applies <code>f</code> to each item <code>(i, x)</code> in <code>list</code> where <code>i</code> is the key
 and <code>x</code> is the value.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
@@ -451,7 +447,7 @@ List.forEachEntry&lt;Nat&gt;(list, func (i,x) {
 </p></div><div class="declaration"><h4 class="function" id="forEachEntryRev"><code><span class="keyword">public func </span><span class="fnname">forEachEntryRev</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : (<span class="type">Nat</span>, <span class="type">T</span>) -&gt; ())</code></h4><p><p>Like <code>forEachEntryRev</code> but iterates through the list in reverse order,
 from end to beginning.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
@@ -467,7 +463,7 @@ List.forEachEntryRev&lt;Nat&gt;(list, func (i,x) {
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="forEachRev"><code><span class="keyword">public func </span><span class="fnname">forEachRev</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Applies <code>f</code> to each element in <code>list</code> in reverse order.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
@@ -483,7 +479,7 @@ List.forEachRev&lt;Nat&gt;(list, func (x) {
 </p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Returns true if List contains element with respect to equality
 defined by <code>equal</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 List.add(list, 2);
@@ -498,7 +494,7 @@ List.contains&lt;Nat&gt;(list, Nat.equal, 2); // =&gt; true</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : ?<span class="type">T</span></code></h4><p><p>Finds the greatest element in <code>list</code> defined by <code>compare</code>.
 Returns <code>null</code> if <code>list</code> is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 List.add(list, 1);
@@ -512,7 +508,7 @@ List.max&lt;Nat&gt;(list, Nat.compare); // =&gt; ?2</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : ?<span class="type">T</span></code></h4><p><p>Finds the least element in <code>list</code> defined by <code>compare</code>.
 Returns <code>null</code> if <code>list</code> is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 List.add(list, 1);
@@ -528,7 +524,7 @@ lists. Returns true iff the two lists are of the same size, and <code>equal</cod
 evaluates to true for every pair of elements in the two lists of the same
 index.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let list1 = List.fromArray&lt;Nat&gt;([1,2]);
@@ -544,7 +540,7 @@ List.equal&lt;Nat&gt;(list1, list2, Nat.equal); // =&gt; true</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Defines comparison for two lists, using <code>compare</code> to recursively compare elements in the
 lists. Comparison is defined lexicographically.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let list1 = List.fromArray&lt;Nat&gt;([1,2]);
@@ -560,7 +556,7 @@ List.compare&lt;Nat&gt;(list1, list2, Nat.compare); // =&gt; #less</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Creates a textual representation of <code>list</code>, using <code>toText</code> to recursively
 convert the elements into Text.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3,4]);
@@ -574,7 +570,7 @@ List.toText&lt;Nat&gt;(list, Nat.toText); // =&gt; &quot;[1, 2, 3, 4]&quot;</cod
 and progessively combining elements into <code>base</code> with <code>combine</code>. Iteration runs
 left to right.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
@@ -588,7 +584,7 @@ List.foldLeft&lt;Text, Nat&gt;(list, &quot;&quot;, func (acc, x) { acc # Nat.toT
 and progessively combining elements into <code>base</code> with <code>combine</code>. Iteration runs
 right to left.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
@@ -600,7 +596,7 @@ List.foldRight&lt;Nat, Text&gt;(list, &quot;&quot;, func (x, acc) { Nat.toText(x
 <p>*Runtime and space assumes that <code>combine</code> runs in O(1)` time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="reverseInPlace"><code><span class="keyword">public func </span><span class="fnname">reverseInPlace</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Reverses the order of elements in <code>list</code> by overwriting in place.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
@@ -612,7 +608,7 @@ List.toText&lt;Nat&gt;(list, Nat.toText); // =&gt; &quot;[3, 2, 1]&quot;</code><
 <p>Space: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="reverse"><code><span class="keyword">public func </span><span class="fnname">reverse</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new List with the elements from <code>list</code> in reverse order.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
@@ -624,7 +620,7 @@ List.toText&lt;Nat&gt;(rlist, Nat.toText); // =&gt; &quot;[3, 2, 1]&quot;</code>
 <p>Space: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Bool</span></code></h4><p><p>Returns true if and only if the list is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">
+<pre><code>motoko include=import
 let list = List.fromArray&lt;Nat&gt;([2,0,3]);
 List.isEmpty&lt;Nat&gt;(list); // =&gt; false</code></pre>
 

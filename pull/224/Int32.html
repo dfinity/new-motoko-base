@@ -69,13 +69,9 @@ value to pass to a higher order function. It is not possible to use <code>==</co
 as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Buffer &quot;mo:base/Buffer&quot;;
-
-let buffer1 = Buffer.Buffer&lt;Int32&gt;(1);
-buffer1.add(-3);
-let buffer2 = Buffer.Buffer&lt;Int32&gt;(1);
-buffer2.add(-3);
-Buffer.equal(buffer1, buffer2, Int32.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Int32"><span class="type">Int32</span></a>, <span class="parameter">y</span> : <a href="#type.Int32"><span class="type">Int32</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Int32 types.
+let a : Int32 = -123;
+let b : Int32 = 123;
+Int32.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Int32"><span class="type">Int32</span></a>, <span class="parameter">y</span> : <a href="#type.Int32"><span class="type">Int32</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Int32 types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

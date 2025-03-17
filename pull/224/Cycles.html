@@ -16,7 +16,7 @@ Note that attaching cycles to a call to a local function call or <code>async</co
 import Cycles &quot;mo:base/Cycles&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance()));
     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
@@ -38,7 +38,7 @@ actor {
 import Cycles &quot;mo:base/Cycles&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     let balance = Cycles.balance();
     Debug.print(&quot;Balance: &quot; # debug_show(balance));
@@ -53,7 +53,7 @@ any remaining available amount is automatically refunded to the caller/context.<
 import Cycles &quot;mo:base/Cycles&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     let available = Cycles.available();
     Debug.print(&quot;Available: &quot; # debug_show(available));
@@ -66,7 +66,7 @@ requested, for example, if less is available, or if canister balance limits are 
 import Cycles &quot;mo:base/Cycles&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   };
@@ -85,7 +85,7 @@ whether or not <code>refunded</code> is used to observe them.</p>
 import Cycles &quot;mo:base/Cycles&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   func operation() : async() {
     ignore Cycles.accept&lt;system&gt;(10_000_000);
   };

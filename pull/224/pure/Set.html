@@ -477,10 +477,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set0 = Set.empty&lt;Nat&gt;();
-  let set1 = Set.add(set0, Nat.compare, 1);
-  let set2 = Set.add(set1, Nat.compare, 2);
-  let set3 = Set.add(set2, Nat.compare, 3);
+  let set = Set.fromArray&lt;Nat&gt;([1, 2, 3]);
 
   for (number in Set.reverseValues(set)) {
      Debug.print(debug_show(number));
@@ -526,10 +523,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromArray&lt;Nat&gt;([1, 2, 3]);
 
   Debug.print(Nat.toText(Set.size(set))); // prints `3`
 }</code></pre>
@@ -544,13 +538,10 @@ import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set0 = Set.empty&lt;Nat&gt;();
-  let set1 = Set.add(set0, Nat.compare, 1);
-  let set2 = Set.add(set1, Nat.compare, 2);
-  let set3 = Set.add(set2, Nat.compare, 3);
+  let set = Set.fromArray&lt;Nat&gt;([1, 2, 3]);
 
   let text = Set.foldRight&lt;Nat, Text&gt;(
-     set3,
+     set,
      &quot;&quot;,
      func (element, accumulator) {
        let separator = if (accumulator != &quot;&quot;) { &quot;, &quot; } else { &quot;&quot; };
@@ -599,10 +590,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromArray&lt;Nat&gt;([1, 2, 3]);
 
   Debug.print(debug_show(Set.isEmpty(set))); // prints `false`
   Set.clear(set);
@@ -619,12 +607,9 @@ Returns <code>true</code> for an empty set.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set0 = Set.empty&lt;Nat&gt;();
-  let set1 = Set.add(set0, Nat.compare, 1);
-  let set2 = Set.add(set1, Nat.compare, 2);
-  let set3 = Set.add(set3, Nat.compare, 3);
+  let set = Set.fromArray&lt;Nat&gt;([1, 2, 3]);
 
-  let belowTen = Set.all&lt;Nat&gt;(set3, func (number) {
+  let belowTen = Set.all&lt;Nat&gt;(set, func (number) {
     number &lt; 10
   }); // `true`
 }</code></pre>
@@ -662,12 +647,9 @@ The elements are formatted according to <code>elementFormat</code>.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  let set1 = Set.add(set0, Nat.compare, 1);
-  let set2 = Set.add(set1, Nat.compare, 2);
-  let set3 = Set.add(set2, Nat.compare, 3);
+  let set = Set.fromArray&lt;Nat&gt;([1, 2, 3]);
 
-  let text = Set.toText&lt;Nat&gt;(set3, Nat.toText);
+  let text = Set.toText&lt;Nat&gt;(set, Nat.toText);
   // `&quot;{0, 1, 2}&quot;`
 }</code></pre>
 

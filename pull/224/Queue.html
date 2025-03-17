@@ -6,8 +6,8 @@ Elements can be added and removed at the two ends.</p>
 <ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code></li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li></ul>
 
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;Queue&quot;;
-import Debug &quot;Debug&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
   let orders = Queue.empty&lt;Text&gt;();

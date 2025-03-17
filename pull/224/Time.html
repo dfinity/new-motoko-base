@@ -4,8 +4,9 @@
 <pre class="motoko"><code class="motoko">import Int = &quot;mo:base/Int&quot;;
 import Time = &quot;mo:base/Time&quot;;
 
-actor {
+persistent actor {
   var lastTime = Time.now();
+
   public func greet(name : Text) : async Text {
     let now = Time.now();
     let elapsedSeconds = (now - lastTime) / 1000_000_000;

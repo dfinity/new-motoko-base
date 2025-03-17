@@ -10,7 +10,7 @@ descriptive message.</p>
 <pre class="motoko"><code class="motoko">import Debug &quot;mo:base/Debug&quot;;
 import Error &quot;mo:base/Error&quot;;
 
-actor {
+persistent actor {
   func fail() : async () {
     Debug.trap(&quot;user provided error message&quot;);
   };

@@ -514,7 +514,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let iterator = Iter.fromArray([(0, &quot;Zero&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;)]);
+  transient let iterator = Iter.fromArray([(0, &quot;Zero&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;)]);
   let map = Map.fromIter&lt;Nat, Text&gt;(iterator, Nat.compare);
 }</code></pre>
 

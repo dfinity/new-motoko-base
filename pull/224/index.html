@@ -59,7 +59,7 @@ Note that attaching cycles to a call to a local function call or <code>async</co
 import Cycles &quot;mo:base/Cycles&quot;;
 import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance()));
     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
@@ -150,7 +150,8 @@ For the <code>List</code> class see the file Class.mo.</p>
 <p>Copyright: 2023 MR Research AG
 Main author: Andrii Stepanov
 Contributors: Timo Hanke (timohanke), Andy Gura (andygura), react0r-com</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Map.html">Map</a><div class="index-item-comment"><p>An imperative key-value map based on order/comparison of the keys.
+<pre><code>motoko include=import
+import List &quot;mo:base/List&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Map.html">Map</a><div class="index-item-comment"><p>An imperative key-value map based on order/comparison of the keys.
 The map data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;
@@ -218,9 +219,11 @@ Computer. These entities are either users or canisters.</p>
 of where you might see Principals, you can access the Principal of the
 caller of your shared function.</p>
 <pre><code>motoko no-repl
-shared(msg) func foo() {
-  let caller : Principal = msg.caller;
-};</code></pre>
+persistent actor {
+  shared(msg) func foo() {
+    let caller : Principal = msg.caller;
+  };
+}</code></pre>
 
 <p>Then, you can use this module to work with the <code>Principal</code>.</p>
 <p>Import from the base library to use this module.</p>
@@ -232,8 +235,8 @@ Elements can be added and removed at the two ends.</p>
 <ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code></li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li></ul>
 
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;Queue&quot;;
-import Debug &quot;Debug&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
   let orders = Queue.empty&lt;Text&gt;();
@@ -294,7 +297,7 @@ Applications that plan to use Motoko stable variables sparingly or not at all ca
 increase <code>--max-stable-pages</code> as desired, approaching the IC maximum (initially 8GiB, then 32Gib, currently 64Gib).
 All applications should reserve at least one page for stable variable data, even when no stable variables are used.</p>
 <p>Usage:</p>
-<pre><code>motoko no-repl
+<pre><code>motoko no-repl name=import
 import Region &quot;mo:base/Region&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Result.html">Result</a><div class="index-item-comment"><p>Error handling with the Result type.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>An imperative set based on order/comparison of the elements.
 A set is a collection of elements without duplicates.
@@ -360,8 +363,9 @@ import Text &quot;mo:base/Text&quot;;</code></pre>
 <pre class="motoko"><code class="motoko">import Int = &quot;mo:base/Int&quot;;
 import Time = &quot;mo:base/Time&quot;;
 
-actor {
+persistent actor {
   var lastTime = Time.now();
+
   public func greet(name : Text) : async Text {
     let now = Time.now();
     let elapsedSeconds = (now - lastTime) / 1000_000_000;
@@ -411,8 +415,8 @@ Contributors: Timo Hanke (timohanke)</p>
 </div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
 A list of type <code>List&lt;T&gt;</code> is either <code>null</code> or an optional pair of a value of type <code>T</code> and a tail, itself of type <code>List&lt;T&gt;</code>.</p>
 <p>To use this library, import it using:</p>
-<pre><code>motoko name=initialize
-import List &quot;mo:base/List&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Map.html">pure/Map</a><div class="index-item-comment"><p>Immutable, ordered key-value maps.</p>
+<pre><code>motoko name=import
+import List &quot;mo:base/pure/List&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Map.html">pure/Map</a><div class="index-item-comment"><p>Immutable, ordered key-value maps.</p>
 <p>The map type is stable whenever the key and value types are stable, allowing
 map values to be stored in stable variables.</p>
 <p>Keys are ordered by an explicit <code>compare</code> function, which <em>must</em> be the same
@@ -463,8 +467,8 @@ that are dynamically size-balanced by splitting.</p>
 <ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-<pre><code>motoko name=initialize
-import Queue &quot;mo:base/Queue&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Stable ordered set implemented as a red-black tree.</p>
+<pre><code>motoko name=import
+import Queue &quot;mo:base/pure/Queue&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Stable ordered set implemented as a red-black tree.</p>
 <p>A red-black tree is a balanced binary search tree ordered by the elements.</p>
 <p>The tree data structure internally colors each of its nodes either red or black,
 and uses this information to balance the tree during modifying operations.</p>

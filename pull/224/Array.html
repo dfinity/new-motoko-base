@@ -9,8 +9,8 @@ Arrays must be created with a fixed size.</p>
 import Array &quot;mo:base/Array&quot;;</code></pre><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : [<span class="type">T</span>]</code></h4><p><p>Creates an empty array (equivalent to <code>[]</code>).</p>
 </p></div><div class="declaration"><h4 class="function" id="repeat"><code><span class="keyword">public func </span><span class="fnname">repeat</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>, <span class="parameter">size</span> : <span class="type">Nat</span>) : [<span class="type">T</span>]</code></h4><p><p>Creates an array containing <code>item</code> repeated <code>size</code> times.</p>
 <pre><code>motoko include=import
-let array = Array.repeat&lt;Nat&gt;(&quot;Echo&quot;, 3);
-assert array == [var &quot;Echo&quot;, &quot;Echo&quot;, &quot;Echo&quot;];</code></pre>
+let array = Array.repeat&lt;Text&gt;(&quot;Echo&quot;, 3);
+assert array == [&quot;Echo&quot;, &quot;Echo&quot;, &quot;Echo&quot;];</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
@@ -104,9 +104,8 @@ Array.forEach&lt;Nat&gt;(array, func(x) {
 each element it is applied to of type <code>X</code> to an element of type <code>Y</code>.
 Retains original ordering of elements.</p>
 <pre><code>motoko include=import
-
 let array1 = [0, 1, 2, 3];
-let array2 = Array.map&lt;Nat, Nat&gt;(array1, func x = x * 3)
+let array2 = Array.map&lt;Nat, Nat&gt;(array1, func x = x * 3);
 assert array2 == [0, 2, 4, 6];</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -162,12 +161,8 @@ Array.mapEntries&lt;Nat, Nat&gt;(array, func (x, i) = i * x)</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="flatMap"><code><span class="keyword">public func </span><span class="fnname">flatMap</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">k</span> : <span class="type">T</span> -&gt; <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">R</span>&gt;) : [<span class="type">R</span>]</code></h4><p><p>Creates a new array by applying <code>k</code> to each element in <code>array</code>,
 and concatenating the resulting arrays in order.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-
 let array = [1, 2, 3, 4];
-Array.flatMap&lt;Nat, Int&gt;(array, func x = [x, -x])
-
-</code></pre><p>Runtime: O(size)</p>
+Array.flatMap&lt;Nat, Int&gt;(array, func x = [x, -x].iter()) // =&gt; [1, -1, 2, -2, 3, -3, 4, -4]</code></pre><p>Runtime: O(size)</p>
 <p>Space: O(size)
 *Runtime and space assumes that <code>k</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="foldLeft"><code><span class="keyword">public func </span><span class="fnname">foldLeft</span>&lt;<span class="type">T</span>, <span class="type">A</span>&gt;(<br/>  <span class="parameter">array</span> : [<span class="type">T</span>], <br/>  <span class="parameter">base</span> : <span class="type">A</span>, <br/>  <span class="parameter">combine</span> : (<span class="type">A</span>, <span class="type">T</span>) -&gt; <span class="type">A</span><br/>) : <span class="type">A</span></code></h4><p><p>Collapses the elements in <code>array</code> into a single value by starting with <code>base</code>
@@ -203,9 +198,8 @@ let bookTitle = Array.foldRight&lt;Nat, Text&gt;(array, &quot;&quot;, func(x, ac
 ordering of the elements.</p>
 <p>Consider using <code>Array.flatten()</code> where possible for better performance.</p>
 <pre><code>motoko include=import
-
 let arrays = [[0, 1, 2], [2, 3], [], [4]];
-Array.join&lt;Nat&gt;(Array.fromIter(arrays))) // =&gt; [0, 1, 2, 2, 3, 4]</code></pre>
+Array.join&lt;Nat&gt;(arrays.iter()) // =&gt; [0, 1, 2, 2, 3, 4]</code></pre>
 
 <p>Runtime: O(number of elements in array)</p>
 <p>Space: O(number of elements in array)</p>
@@ -372,6 +366,7 @@ assert slice2 == [2, 3, 4];</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Converts the array to its textual representation using <code>f</code> to convert each element to <code>Text</code>.</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+
 let array = [1, 2, 3];
 Array.toText&lt;Nat&gt;(array, Nat.toText) // =&gt; &quot;[1, 2, 3]&quot;</code></pre>
 
@@ -385,14 +380,17 @@ or greater than <code>array2</code> respectively.</p>
 the shorter array is considered #less than the longer array.</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+
 let array1 = [1, 2, 3];
 let array2 = [1, 2, 4];
 Array.compare&lt;Nat&gt;(array1, array2, Nat.compare) // =&gt; #less</code></pre>
 
 <pre><code>motoko include=import
+import Nat &quot;mo:base/Nat&quot;;
+
 let array3 = [1, 2];
 let array4 = [1, 2, 3];
-Array.compare&lt;Nat&gt;(array3, array4, Nat.compare) // =&gt; #less (shorter array)</code></pre>
+Array.compare&lt;Nat&gt;(array3, array4, Nat.compare) // =&gt; #less /* shorter array */</code></pre>
 
 <p>Runtime: O(min(size1, size2))</p>
 <p>Space: O(1)</p>

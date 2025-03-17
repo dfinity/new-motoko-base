@@ -555,7 +555,6 @@ module {
     case (#three(x, y, z)) { f x; f y; f z };
     // Preserve the order when visiting the elements. Note that the #idles case would require reversing the second stack.
     case _ {
-      // future work: avoid allocation
       for (t in values deque) f t
     } // todo: consider removing this operation, users can use Iter.forEach instead as this is not efficient
   };

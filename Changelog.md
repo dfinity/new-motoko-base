@@ -1,5 +1,10 @@
 # Changelog
 
+## Next
+
+* Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
+* Fix bug in `Iter.step()` implementation
+
 ## 0.3.0
 
 * Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()`

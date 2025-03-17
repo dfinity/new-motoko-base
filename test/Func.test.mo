@@ -1,60 +1,52 @@
 import Function "../src/Func";
-import { print } = "../src/Debug";
 import Text "../src/Text";
-
-import { run; test; suite } "mo:matchers/Suite";
-import T "mo:matchers/Testable";
-import M "mo:matchers/Matchers";
-
-print("Function");
+import { suite; test; expect } "mo:test";
 
 func isEven(x : Int) : Bool { x % 2 == 0 };
 func not_(x : Bool) : Bool { not x };
 let isOdd = Function.compose<Int, Bool, Bool>(not_, isEven);
 
-/* --------------------------------------- */
+suite(
+  "compose",
+  func() {
+    test(
+      "not even is odd",
+      func() {
+        expect.bool(isOdd(0)).equal(false)
+      }
+    );
 
-run(
-  suite(
-    "compose",
-    [
-      test(
-        "not even is odd",
-        isOdd(0),
-        M.equals(T.bool(false))
-      ),
-      test(
-        "one is odd",
-        isOdd(1),
-        M.equals(T.bool(true))
-      )
-    ]
-  )
+    test(
+      "one is odd",
+      func() {
+        expect.bool(isOdd(1)).equal(true)
+      }
+    )
+  }
 );
 
-/* --------------------------------------- */
+suite(
+  "const",
+  func() {
+    test(
+      "abc is ignored",
+      func() {
+        expect.bool(Function.const<Bool, Text>(true)("abc")).equal(true)
+      }
+    );
 
-run(
-  suite(
-    "const",
-    [
-      test(
-        "abc is ignored",
-        Function.const<Bool, Text>(true)("abc"),
-        M.equals(T.bool(true))
-      ),
-      test(
-        "same for flipped const",
-        Function.const<Bool, Text>(false)("abc"),
-        M.equals(T.bool(false))
-      ),
-      test(
-        "same for structured ignoree",
-        Function.const<Bool, (Text, Text)>(false)("abc", "abc"),
-        M.equals(T.bool(false))
-      )
-    ]
-  )
-);
+    test(
+      "same for flipped const",
+      func() {
+        expect.bool(Function.const<Bool, Text>(false)("abc")).equal(false)
+      }
+    );
 
-/* --------------------------------------- */
+    test(
+      "same for structured ignoree",
+      func() {
+        expect.bool(Function.const<Bool, (Text, Text)>(false)("abc", "abc")).equal(false)
+      }
+    )
+  }
+)

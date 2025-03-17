@@ -59,3 +59,5 @@ jobs:
           node-version: ${{ matrix.node }}
       - run: npm ci
       - run: npm run validate:docs
+        env:
+          FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106

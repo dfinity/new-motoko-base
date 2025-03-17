@@ -26,8 +26,8 @@ module {
   /// Creates an array containing `item` repeated `size` times.
   ///
   /// ```motoko include=import
-  /// let array = Array.repeat<Nat>("Echo", 3);
-  /// assert array == [var "Echo", "Echo", "Echo"];
+  /// let array = Array.repeat<Text>("Echo", 3);
+  /// assert array == ["Echo", "Echo", "Echo"];
   /// ```
   ///
   /// Runtime: O(size)
@@ -235,9 +235,8 @@ module {
   /// Retains original ordering of elements.
   ///
   /// ```motoko include=import
-  ///
   /// let array1 = [0, 1, 2, 3];
-  /// let array2 = Array.map<Nat, Nat>(array1, func x = x * 3)
+  /// let array2 = Array.map<Nat, Nat>(array1, func x = x * 3);
   /// assert array2 == [0, 2, 4, 6];
   /// ```
   ///
@@ -429,11 +428,8 @@ module {
   /// and concatenating the resulting arrays in order.
   ///
   /// ```motoko include=import
-  /// import Nat "mo:base/Nat";
-  ///
   /// let array = [1, 2, 3, 4];
-  /// Array.flatMap<Nat, Int>(array, func x = [x, -x])
-  ///
+  /// Array.flatMap<Nat, Int>(array, func x = [x, -x].iter()) // => [1, -1, 2, -2, 3, -3, 4, -4]
   /// ```
   /// Runtime: O(size)
   ///
@@ -530,9 +526,8 @@ module {
   /// Consider using `Array.flatten()` where possible for better performance.
   ///
   /// ```motoko include=import
-  ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.join<Nat>(Array.fromIter(arrays))) // => [0, 1, 2, 2, 3, 4]
+  /// Array.join<Nat>(arrays.iter()) // => [0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -935,6 +930,7 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  ///
   /// let array = [1, 2, 3];
   /// Array.toText<Nat>(array, Nat.toText) // => "[1, 2, 3]"
   /// ```
@@ -969,15 +965,18 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  ///
   /// let array1 = [1, 2, 3];
   /// let array2 = [1, 2, 4];
   /// Array.compare<Nat>(array1, array2, Nat.compare) // => #less
   /// ```
   ///
   /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  ///
   /// let array3 = [1, 2];
   /// let array4 = [1, 2, 3];
-  /// Array.compare<Nat>(array3, array4, Nat.compare) // => #less (shorter array)
+  /// Array.compare<Nat>(array3, array4, Nat.compare) // => #less /* shorter array */
   /// ```
   ///
   /// Runtime: O(min(size1, size2))

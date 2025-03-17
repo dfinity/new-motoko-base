@@ -53,7 +53,7 @@ module {
   /// ```motoko
   /// import Iter "mo:base/Iter";
   /// var sum = 0;
-  /// Iter.forEach<Nat>(Iter.range(1, 3), func(x) {
+  /// Iter.forEach<Nat>(Iter.fromArray([1, 2, 3]), func(x) {
   ///   sum += x;
   /// });
   /// assert(6 == sum)

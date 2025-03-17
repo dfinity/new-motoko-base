@@ -26,11 +26,6 @@ import Option "../Option";
 import { trap } "../Runtime";
 import Iter "../Iter";
 
-// todo: check Time and Space complexity of all functions in docs
-// todo: add notes about short comings of the implementation in the rebal state
-// todo: order of visiting elements is tricky, add notes about it. Also it might be better to remove operations that are not efficient in rebal state (like contains, all, any, etc.).
-//       In these operations the price is paid for the rebalancing steps but the results are lost...
-
 module {
   /// The real-time deque data structure can be in one of the following states:
   ///
@@ -419,6 +414,35 @@ module {
           case (?result) {
             current := result.1;
             ?result.0
+          }
+        }
+      }
+    }
+  };
+
+  /// Create an iterator over the elements in the deque. The order of the elements is from back to front.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Deque "mo:new-base/Deque";
+  ///
+  /// let deque = Deque.fromIter([1, 2, 3].vals());
+  /// let iter = Deque.valuesRev(deque);
+  /// Array.fromIter(iter) // => [3, 2, 1]
+  /// ```
+  ///
+  /// Runtime: `O(1)` to create the iterator and for each `next()` call.
+  ///
+  /// Space: `O(1)` to create the iterator and for each `next()` call.
+  public func valuesRev<T>(deque : Deque<T>) : Iter.Iter<T> {
+    object {
+      var current = deque;
+      public func next() : ?T {
+        switch (popBack(current)) {
+          case null null;
+          case (?result) {
+            current := result.0;
+            ?result.1
           }
         }
       }

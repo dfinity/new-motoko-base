@@ -229,8 +229,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let list = List.singleton<Nat>(123);
+  /// import Nat "mo:base/Nat";
   ///
+  /// let list = List.singleton<Nat>(123);
   /// let textList = List.map<Nat, Text>(list, Nat.toText);
   /// List.toArray(textList) // => ["123"]
   /// ```
@@ -619,15 +620,9 @@ module {
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
   ///
-  /// let list = List.empty<Nat>();
-  /// List.add(list, 1);
-  /// List.add(list, 2);
-  /// List.add(list, 3);
-  /// List.add(list, 4);
-  /// List.add(list, 2);
-  /// List.add(list, 2);
+  /// let list = List.fromArray<Nat>([1, 2, 3, 4, 2, 2]);
   ///
-  /// List.lastIndexOf<Nat>(2, list, Nat.equal); // => ?5
+  /// List.lastIndexOf<Nat>(list, Nat.equal, 2); // => ?5
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -948,11 +943,13 @@ module {
   /// elements in order, or `null` when out of elements to iterate over.
   ///
   /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
   /// let list = List.empty<Text>();
   /// List.add(list, "A");
   /// List.add(list, "B");
   /// List.add(list, "C");
-  /// Iter.toArray(List.keys(list)); // [0, 1, 2]
+  /// Iter.toArray(List.keys(list)) // [0, 1, 2]
   /// ```
   ///
   /// Note: This does not create a snapshot. If the returned iterator is not consumed at once,
@@ -992,7 +989,8 @@ module {
   /// let iter = array.vals();
   /// let list = List.repeat<Nat>(2, 1);
   ///
-  /// let list = List.addAll<Nat>(list, iter); // => [2, 1, 1, 1]
+  /// List.addAll<Nat>(list, iter);
+  /// List.toText(list, Nat.toText) // => "[2, 1, 1, 1]"
   /// ```
   ///
   /// Runtime: `O(size)`, where n is the size of iter.
@@ -1004,9 +1002,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.add(list, 1);
-  /// List.add(list, 2);
-  /// List.add(list, 3);
+  /// let list = List.fromArray<Nat>([1, 2, 3]);
   ///
   /// List.toArray<Nat>(list); // => [1, 2, 3]
   /// ```
@@ -1141,11 +1137,12 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.add(list, 1);
-  /// List.add(list, 2);
-  /// List.add(list, 3);
+  /// import Array "mo:base/Array";
   ///
-  /// List.toVarArray<Nat>(list); // => [var 1, 2, 3]
+  /// let list = List.fromArray<Nat>([1, 2, 3]);
+  ///
+  /// let varArray = List.toVarArray<Nat>(list);
+  /// Array.fromVarArray(varArray) // => [1, 2, 3]
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1230,9 +1227,9 @@ module {
   /// Returns the last element of `list`. Traps if `list` is empty.
   ///
   /// Example:
-  /// ```motoko
+  /// ```motoko include=import
   /// let list = List.fromArray<Nat>([1, 2, 3]);
-  /// List.last(list); // => 3
+  /// List.last(list) // => ?3
   /// ```
   ///
   /// Runtime: `O(1)`
@@ -1548,8 +1545,8 @@ module {
   ///
   /// let list1 = List.fromArray<Nat>([1,2]);
   /// let list2 = List.empty<Nat>();
-  /// list2.add(1);
-  /// list2.add(2);
+  /// List.add(list2, 1);
+  /// List.add(list2, 2);
   ///
   /// List.equal<Nat>(list1, list2, Nat.equal); // => true
   /// ```
@@ -1583,10 +1580,8 @@ module {
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
   ///
-  /// let list1 = List.fromArray<Nat>([1,2]);
-  /// let list2 = List.empty<Nat>();
-  /// list2.add(1);
-  /// list2.add(2);
+  /// let list1 = List.fromArray<Nat>([1, 2]);
+  /// let list2 = List.fromArray<Nat>([0, 1, 2]);
   ///
   /// List.compare<Nat>(list1, list2, Nat.compare); // => #less
   /// ```

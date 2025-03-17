@@ -9,16 +9,15 @@ import Nat &quot;mo:base/Nat&quot;;</code></pre><div class="declaration"><h4 cla
 representation <em>do not</em> contain underscores to represent commas.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.toText 1234 // =&gt; &quot;1234&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromText"><code><span class="keyword">public func </span><span class="fnname">fromText</span>(<span class="parameter">text</span> : <span class="type">Text</span>) : ?<a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Creates a natural number from its textual representation. Returns <code>null</code>
+Nat.toText(1234) // =&gt; &quot;1234&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromText"><code><span class="keyword">public func </span><span class="fnname">fromText</span>(<span class="parameter">text</span> : <span class="type">Text</span>) : ?<a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Creates a natural number from its textual representation. Returns <code>null</code>
 if the input is not a valid natural number.</p>
 <p>The textual representation <em>must not</em> contain underscores.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.fromText &quot;1234&quot; // =&gt; ?1234</code></pre></p></div><div class="declaration"><h4 class="function" id="fromInt"><code><span class="keyword">public func </span><span class="fnname">fromInt</span>(<span class="parameter">int</span> : <span class="type">Int</span>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
+Nat.fromText(&quot;1234&quot;) // =&gt; ?1234</code></pre></p></div><div class="declaration"><h4 class="function" id="fromInt"><code><span class="keyword">public func </span><span class="fnname">fromInt</span>(<span class="parameter">int</span> : <span class="type">Int</span>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Nat.fromInt(-1) == null;
-assert Nat.fromInt(1234) == ?1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="toInt"><code><span class="keyword">public func </span><span class="fnname">toInt</span>(<span class="parameter">nat</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Int</span></code></h4><p><p>Converts a natural number to an integer.</p>
+Nat.fromInt(1234) // =&gt; 1234 : Nat</code></pre></p></div><div class="declaration"><h4 class="function" id="toInt"><code><span class="keyword">public func </span><span class="fnname">toInt</span>(<span class="parameter">nat</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Int</span></code></h4><p><p>Converts a natural number to an integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 assert Nat.toInt(1234) == 1234</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>
@@ -42,7 +41,7 @@ as a function value at the moment.</p>
 <pre><code>motoko include=import
 let a = 111;
 let b = 222;
-Nat.equal(a, b) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat types.
+Nat.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

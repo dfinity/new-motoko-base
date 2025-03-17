@@ -18,22 +18,21 @@ if the input is not a valid integer.</p>
 begin with a '+' or '-' character.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.fromText &quot;-1234&quot; // =&gt; ?-1234</code></pre></p></div><div class="declaration"><h4 class="function" id="toNat"><code><span class="keyword">public func </span><span class="fnname">toNat</span>(<span class="parameter">int</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Nat</span></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
+Int.fromText(&quot;-1234&quot;) // =&gt; ?-1234</code></pre></p></div><div class="declaration"><h4 class="function" id="toNat"><code><span class="keyword">public func </span><span class="fnname">toNat</span>(<span class="parameter">int</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Nat</span></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Debug &quot;mo:base/Debug&quot;;
-Debug.print(debug_show Int.toNat(-1)); // =&gt; null
-Debug.print(debug_show Int.toNat(1234)); // =&gt; ?1234</code></pre></p></div><div class="declaration"><h4 class="function" id="fromNat"><code><span class="keyword">public func </span><span class="fnname">fromNat</span>(<span class="parameter">nat</span> : <span class="type">Nat</span>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Converts a natural number to an integer.</p>
+assert Int.toNat(-1) == null;
+assert Int.toNat(1234) == ?1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromNat"><code><span class="keyword">public func </span><span class="fnname">fromNat</span>(<span class="parameter">nat</span> : <span class="type">Nat</span>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Converts a natural number to an integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Debug &quot;mo:base/Debug&quot;;
-Debug.print(debug_show Int.fromNat(1234)); // =&gt; 1234</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>
+Int.fromNat(1234); // =&gt; 1234</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Int.min(2, -3) // =&gt; -3</code></pre></p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Returns the maximum of <code>x</code> and <code>y</code>.</p>
+Int.min(2, -3); // =&gt; -3</code></pre></p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Returns the maximum of <code>x</code> and <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Int.max(2, -3) // =&gt; 2</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for Int types.
+Int.max(2, -3); // =&gt; 2</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for Int types.
 This is equivalent to <code>x == y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -45,13 +44,9 @@ value to pass to a higher order function. It is not possible to use <code>==</co
 as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Buffer &quot;mo:base/Buffer&quot;;
-
-let buffer1 = Buffer.Buffer&lt;Int&gt;(1);
-buffer1.add(-3);
-let buffer2 = Buffer.Buffer&lt;Int&gt;(1);
-buffer2.add(-3);
-Buffer.equal(buffer1, buffer2, Int.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Int types.
+let a = 1 : Int;
+let b = -1 : Int;
+Int.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Int types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -238,7 +233,8 @@ assert(?3 == iter.next());
 assert(null == iter.next());</code></pre>
 
 <p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
-<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Int.rangeInclusive(3, 1);
 assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeByInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeByInclusive</span>(<br/>  <span class="parameter">from</span> : <a href="#type.Int"><span class="type">Int</span></a>, <br/>  <span class="parameter">to</span> : <a href="#type.Int"><span class="type">Int</span></a>, <br/>  <span class="parameter">step</span> : <a href="#type.Int"><span class="type">Int</span></a><br/>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Int"><span class="type">Int</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument, inclusive,

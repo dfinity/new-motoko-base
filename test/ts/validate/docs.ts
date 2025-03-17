@@ -287,7 +287,10 @@ const runSnippet = async (
   }
 
   // Write to virtual file system
-  const virtualPath = join("snippet", `${snippet.path}_${snippet.line}.mo`);
+  const virtualPath = join(
+    "snippet",
+    `${snippet.path.replace(/\.mo$/, "")}_${snippet.line}.mo`
+  );
   motoko.write(virtualPath, actorSource);
 
   // Compile source Wasm

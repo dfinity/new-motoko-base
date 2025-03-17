@@ -24,7 +24,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.toText 1234 // => "1234"
+  /// Nat.toText(1234) // => "1234"
   /// ```
   public func toText(n : Nat) : Text = Int.toText n;
 
@@ -35,7 +35,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.fromText "1234" // => ?1234
+  /// Nat.fromText("1234") // => ?1234
   /// ```
   public func fromText(text : Text) : ?Nat {
     if (text == "") {
@@ -57,8 +57,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// assert Nat.fromInt(-1) == null;
-  /// assert Nat.fromInt(1234) == ?1234;
+  /// Nat.fromInt(1234) // => 1234 : Nat
   /// ```
   public func fromInt(int : Int) : Nat {
     if (int < 0) {
@@ -116,7 +115,7 @@ module {
   /// ```motoko include=import
   /// let a = 111;
   /// let b = 222;
-  /// Nat.equal(a, b) // => true
+  /// Nat.equal(a, b) // => false
   /// ```
   public func equal(x : Nat, y : Nat) : Bool { x == y };
 

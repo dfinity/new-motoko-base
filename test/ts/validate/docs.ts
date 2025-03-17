@@ -189,15 +189,7 @@ async function main() {
         chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
       );
       if (result.error) {
-        // Display test output
-        const tripleBacktick = "```";
-        console.log(
-          chalk.gray(
-            `${tripleBacktick}${snippet.language || ""}${
-              snippet.attrs.length ? ` ${snippet.attrs.join(" ")}` : ""
-            }\n${snippet.sourceCode}\n${tripleBacktick}`
-          )
-        );
+        console.log(chalk.grey(displaySnippet(snippet)));
         console.error(chalk.red(result.error));
       }
     } else {
@@ -206,6 +198,7 @@ async function main() {
         `${snippet.path}:${snippet.line}`,
         chalk.grey("skipped")
       );
+      console.log(chalk.grey(displaySnippet(snippet)));
     }
   }
 
@@ -250,7 +243,10 @@ const runSnippet = async (
     return [importLines.join("\n"), nonImportLines.join("\n")];
   };
 
-  if (snippet.sourceCode.startsWith("\n") || snippet.sourceCode.endsWith("\n")) {
+  if (
+    snippet.sourceCode.startsWith("\n") ||
+    snippet.sourceCode.endsWith("\n")
+  ) {
     throw new Error("Unexpected leading / trailing newline");
   }
   const snippetSource = [
@@ -272,7 +268,7 @@ const runSnippet = async (
     .split("\n")
     .map((line) => {
       const match = line.match(
-        /^(\s*(?:(?:let|var)\s+\S+\s*=\s*|ignore\s+)?)(.*)\s*\/\/ => (.+)(?:\/\/.*)?$/
+        /^(\s*(?:(?:let|var)\s+\S+\s*=\s*|ignore\s+)?)(.*)\s*\/\/ => (.+?)(?:\s*\/\/.*)?$/
       );
       if (match) {
         const [_, pre, statement, expected] = match;
@@ -317,3 +313,10 @@ main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
+
+const displaySnippet = (snippet: Snippet) => {
+  const tripleBacktick = "```";
+  return `${tripleBacktick}${snippet.language || ""}${
+    snippet.attrs.length ? ` ${snippet.attrs.join(" ")}` : ""
+  }\n${snippet.sourceCode}\n${tripleBacktick}`;
+};

@@ -147,7 +147,7 @@ module {
   /// the function to every element produced by the argument iterator.
   /// ```motoko
   /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
+  /// let iter = Iter.fromArray([1, 2, 3]);
   /// let mappedIter = Iter.map(iter, func (x : Nat) : Nat { x * 2 });
   /// assert(?2 == mappedIter.next());
   /// assert(?4 == mappedIter.next());
@@ -171,7 +171,7 @@ module {
   /// elements from the original iterator if and only if the predicate is true.
   /// ```motoko
   /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
+  /// let iter = Iter.fromArray([1, 2, 3]);
   /// let mappedIter = Iter.filter(iter, func (x : Nat) : Bool { x % 2 == 1 });
   /// assert(?1 == mappedIter.next());
   /// assert(?3 == mappedIter.next());
@@ -198,7 +198,7 @@ module {
   /// Creates an iterator that produces an infinite sequence of `x`.
   /// ```motoko
   /// import Iter "mo:base/Iter";
-  /// let iter = Iter.make(10);
+  /// let iter = Iter.infinite(10);
   /// assert(?10 == iter.next());
   /// assert(?10 == iter.next());
   /// assert(?10 == iter.next());
@@ -214,8 +214,8 @@ module {
   /// elements from the original iterators sequentally.
   /// ```motoko
   /// import Iter "mo:base/Iter";
-  /// let iter1 = Iter.range(1, 2);
-  /// let iter2 = Iter.range(5, 6);
+  /// let iter1 = Iter.fromArray([1, 2]);
+  /// let iter2 = Iter.fromArray([5, 6]);
   /// let concatenatedIter = Iter.concat(iter1, iter2);
   /// assert(?1 == concatenatedIter.next());
   /// assert(?2 == concatenatedIter.next());
@@ -288,7 +288,7 @@ module {
   /// Consumes an iterator and collects its produced elements in an Array.
   /// ```motoko
   /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
+  /// let iter = Iter.fromArray([1, 2, 3]);
   /// assert([1, 2, 3] == Iter.toArray(iter));
   /// ```
   public func toArray<T>(iter : Iter<T>) : [T] {

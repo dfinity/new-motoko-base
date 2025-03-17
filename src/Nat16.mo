@@ -19,7 +19,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat16.maxValue; // => 65536 : Nat16
+  /// Nat16.maxValue; // => 65535 : Nat16
   /// ```
   public let maxValue : Nat16 = 65535;
 
@@ -142,11 +142,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Nat16>(3);
-  /// let buffer2 = Buffer.Buffer<Nat16>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat16.equal) // => true
+  /// let a : Nat16 = 111;
+  /// let b : Nat16 = 222;
+  /// Nat16.equal(a, b) // => false
   /// ```
   public func equal(x : Nat16, y : Nat16) : Bool { x == y };
 
@@ -613,7 +611,7 @@ module {
   };
 
   /// Returns an iterator over `Nat16` values from the first to second argument, inclusive.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat16.rangeInclusive(1, 3);

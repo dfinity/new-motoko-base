@@ -20,8 +20,8 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Prng "mo:prng";
-  /// let rng = Prng.SFC64(24, 11, 3);
+  /// import PRNG "mo:base/internal/prng";
+  /// let rng = PRNG.SFC64(24, 11, 3);
   /// ```
   /// For convenience, the function `SFC64a()` returns a generator constructed
   /// with the recommended parameter set (24, 11, 3).

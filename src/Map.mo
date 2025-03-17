@@ -882,7 +882,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let iterator = Iter.fromArray([(0, "Zero"), (1, "One"), (2, "Two")]);
+  ///   transient let iterator = Iter.fromArray([(0, "Zero"), (1, "One"), (2, "Two")]);
   ///   let map = Map.fromIter<Nat, Text>(iterator, Nat.compare);
   /// }
   /// ```

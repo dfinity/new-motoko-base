@@ -19,7 +19,7 @@ module {
   /// import Debug "mo:base/Debug";
   /// import Error "mo:base/Error";
   ///
-  /// actor {
+  /// persistent actor {
   ///   func fail() : async () {
   ///     Debug.trap("user provided error message");
   ///   };

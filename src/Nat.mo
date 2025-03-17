@@ -57,9 +57,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Nat.fromInt(-1)); // => null
-  /// Debug.print(debug_show Nat.fromInt(1234)); // => ?1234
+  /// assert Nat.fromInt(-1) == null;
+  /// assert Nat.fromInt(1234) == ?1234;
   /// ```
   public func fromInt(int : Int) : Nat {
     if (int < 0) {
@@ -73,8 +72,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Nat.toInt(1234)); // => 1234
+  /// assert Nat.toInt(1234) == 1234
   /// ```
   public func toInt(nat : Nat) : Int {
     nat : Int
@@ -116,11 +114,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Nat>(3);
-  /// let buffer2 = Buffer.Buffer<Nat>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat.equal) // => true
+  /// let a = 111;
+  /// let b = 222;
+  /// Nat.equal(a, b) // => true
   /// ```
   public func equal(x : Nat, y : Nat) : Bool { x == y };
 
@@ -372,7 +368,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat.range(4, 1);
@@ -459,7 +455,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat.rangeInclusive(3, 1);

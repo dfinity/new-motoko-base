@@ -45,7 +45,7 @@
 /// All applications should reserve at least one page for stable variable data, even when no stable variables are used.
 ///
 /// Usage:
-/// ```motoko no-repl
+/// ```motoko no-repl name=import
 /// import Region "mo:base/Region";
 /// ```
 
@@ -61,7 +61,7 @@ module {
   ///
   /// Example:
   ///
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// assert Region.size(region) == 0;
   /// ```
@@ -75,7 +75,7 @@ module {
   ///
   /// Example:
   ///
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// assert Region.id(region) == 16;
   /// ```
@@ -88,7 +88,7 @@ module {
   /// stable memory.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let beforeSize = Region.size(region);
   /// ignore Region.grow(region, 10);
@@ -106,7 +106,7 @@ module {
   ///  `--max-stable-pages <n>` (the default is 65536, or 4GiB).
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// import Error "mo:base/Error";
   ///
   /// let region = Region.new();
@@ -123,7 +123,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -136,7 +136,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -149,7 +149,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -162,7 +162,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -175,7 +175,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -188,7 +188,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -201,7 +201,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -214,7 +214,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -227,7 +227,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -240,7 +240,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -253,7 +253,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -266,7 +266,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -279,7 +279,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -292,7 +292,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -305,7 +305,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -318,7 +318,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 123;
@@ -331,7 +331,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 1.25;
@@ -344,7 +344,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// let region = Region.new();
   /// let offset = 0;
   /// let value = 1.25;
@@ -357,7 +357,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// import Blob "mo:base/Blob";
   ///
   /// let region = Region.new();
@@ -373,7 +373,7 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// import Blob "mo:base/Blob";
   ///
   /// let region = Region.new();

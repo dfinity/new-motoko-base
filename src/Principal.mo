@@ -12,9 +12,11 @@
 /// caller of your shared function.
 ///
 /// ```motoko no-repl
-/// shared(msg) func foo() {
-///   let caller : Principal = msg.caller;
-/// };
+/// persistent actor {
+///   shared(msg) func foo() {
+///     let caller : Principal = msg.caller;
+///   };
+/// }
 /// ```
 ///
 /// Then, you can use this module to work with the `Principal`.
@@ -86,7 +88,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
-  /// let blob = Principal.toBlob(principal); // => \00\00\00\00\00\30\00\D3\01\01
+  /// let blob = Principal.toBlob(principal); // => "\00\00\00\00\00\30\00\D3\01\01"
   /// ```
   public func toBlob(p : Principal) : Blob = Prim.blobOfPrincipal p;
 
@@ -241,11 +243,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Principal>(3);
-  /// let buffer2 = Buffer.Buffer<Principal>(3);
-  /// Buffer.equal(buffer1, buffer2, Principal.equal) // => true
+  /// let principal1 = Principal.anonymous();
+  /// let principal2 = Principal.fromBlob(Principal.anonymousBlob);
+  /// Principal.equal(principal1, principal2, Principal.equal) // => true
   /// ```
   public func equal(principal1 : Principal, principal2 : Principal) : Bool {
     principal1 == principal2

@@ -8,8 +8,8 @@
 ///
 /// Example:
 /// ```motoko
-/// import Queue "Queue";
-/// import Debug "Debug";
+/// import Queue "mo:base/Queue";
+/// import Debug "mo:base/Debug";
 ///
 /// persistent actor {
 ///   let orders = Queue.empty<Text>();

@@ -23,7 +23,7 @@ module {
   /// type OutputType = { decimals : Nat32 };
   ///
   /// let rawReply = await IC.call(ledger, method, to_candid(input)); // serialized Candid
-  /// let output : ?OutputType = from_candid(rawReply); // { decimals = 8 }
+  /// let output : ?OutputType = from_candid(rawReply); // => ?{ decimals = 8 }
   /// ```
   ///
   /// [Learn more about Candid serialization](https://internetcomputer.org/docs/current/motoko/main/reference/language-manual#candid-serialization)

@@ -388,7 +388,7 @@ module {
   public func pow(x : Int, y : Int) : Int { x ** y };
 
   /// Returns an iterator over the integers from the first to second argument with an exclusive upper bound.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int.range(1, 4);
@@ -399,7 +399,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int.range(4, 1);
@@ -422,7 +422,7 @@ module {
 
   /// Returns an iterator over `Int` values from the first to second argument with an exclusive upper bound,
   /// incrementing by the specified step size.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// // Positive step
@@ -476,7 +476,7 @@ module {
   };
 
   /// Returns an iterator over the integers from the first to second argument, inclusive.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int.rangeInclusive(1, 3);
@@ -510,7 +510,7 @@ module {
 
   /// Returns an iterator over the integers from the first to second argument, inclusive,
   /// incrementing by the specified step size.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// // Positive step

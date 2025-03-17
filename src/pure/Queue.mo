@@ -20,8 +20,8 @@
 ///
 /// `n` denotes the number of elements stored in the queue.
 ///
-/// ```motoko name=initialize
-/// import Queue "mo:base/Queue";
+/// ```motoko name=import
+/// import Queue "mo:base/pure/Queue";
 /// ```
 
 import Iter "../Iter";
@@ -39,7 +39,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
   /// Queue.empty<Nat>()
   /// ```
@@ -54,7 +54,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
   /// let queue = Queue.empty<Nat>();
   /// Queue.isEmpty(queue) // => true
@@ -69,7 +69,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
   /// Queue.singleton<Nat>(25)
   /// ```
@@ -83,10 +83,10 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import {singleton, size} "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
-  /// let queue = singleton<Nat>(42);
-  /// size(queue) // => 1
+  /// let queue = Queue.singleton<Nat>(42);
+  /// Queue.size(queue) // => 1
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -104,7 +104,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
   /// let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
   /// Queue.peekFront(queue) // => ?1
@@ -123,7 +123,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
   /// let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
   /// Queue.peekBack(queue) // => ?2
@@ -168,7 +168,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
   /// Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1) // queue with elements [1, 2]
   /// ```
@@ -187,7 +187,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   ///
   /// Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2) // queue with elements [1, 2]
   /// ```
@@ -207,7 +207,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   /// import Debug "mo:base/Debug";
   /// let initial = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
   /// // initial queue with elements [1, 2]
@@ -243,7 +243,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Queue "mo:base/Queue";
+  /// import Queue "mo:base/pure/Queue";
   /// import Debug "mo:base/Debug";
   ///
   /// let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
@@ -273,7 +273,7 @@ module {
 
   /// Turn an iterator into a queue, consuming it.
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   /// Queue.fromIter<Nat>([0, 1, 2, 3, 4].values())
   /// // => (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))
   /// ```
@@ -308,7 +308,7 @@ module {
   /// elements.
   ///
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   ///
   /// Queue.all<Nat>(
   ///   (?(1, ?(2, ?(3, null))), 3, null),
@@ -330,7 +330,7 @@ module {
   /// the given predicate `f` is true.
   ///
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   ///
   /// Queue.any<Nat>(
   ///   (null, 3, ?(1, ?(2, ?(3, null)))),
@@ -351,7 +351,7 @@ module {
   /// Call the given function for its side effect, with each queue element in turn.
   ///
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   /// var sum = 0;
   /// Queue.forEach<Nat>((?(0, ?(1, ?(2, null))), 3, null), func n = sum += n);
   /// sum // => 3
@@ -368,7 +368,7 @@ module {
   /// in a new queue.
   ///
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   /// import Nat = "mo:base/Nat"
   /// Queue.map<Nat, Text>(Queue.fromIter([0, 1, 2].values()), Nat.toText) // => (?("0", null), 3, ?("2", ?("1", null)))
   /// ```
@@ -386,7 +386,7 @@ module {
   /// the given function (often called the _predicate_) returns true.
   ///
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   /// Queue.filter<Nat>((?(0, ?(1, ?(2, null))), 4, ?(1, null)), func n = n != 1) // => ?(0, ?(2, null))
   /// ```
   ///
@@ -404,7 +404,7 @@ module {
   /// in a new queue.
   ///
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   /// Queue.filterMap<Nat, Nat>(
   ///   (?(1, ?(2, ?(3, null))), 3, null)
   ///   func n = if (n > 1) ?(n * 2) else null
@@ -437,7 +437,7 @@ module {
   /// Compare two queues using lexicographic ordering specified by argument function `compareItem`.
   ///
   /// Example:
-  /// ```motoko include=initialize
+  /// ```motoko include=import
   /// import Nat "mo:base/Nat";
   ///
   /// Queue.compare<Nat>(

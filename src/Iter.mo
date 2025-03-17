@@ -1,4 +1,27 @@
-/// Utilities for `Iter` (iterator) values
+/// Utilities for `Iter` (iterator) values.
+///
+/// Iterators are a way to represent sequences of values that can be lazily produced.
+/// They can be used to:
+/// - Iterate over collections.
+/// - Represent collections that are too large to fit in memory or that are produced incrementally.
+/// - Transform collections without creating intermediate collections.
+///
+/// Iterators are inherently stateful. Calling `next` "consumes" a value from
+/// the Iterator that cannot be put back, so keep that in mind when sharing
+/// iterators between consumers.
+///
+/// An iterator `i` can be iterated over using
+/// ```motoko
+/// for (x in i) {
+///   …do something with x…
+/// }
+/// ```
+///
+/// Iterators can be:
+/// - created from other collections (e.g. using `values` or `keys` function on a `Map`) or from scratch (e.g. using `empty` or `singleton`).
+/// - transformed using `map`, `filter`, `concat`, etc. Which can be used to compose several transformations together without materializing intermediate collections.
+/// - consumed using `forEach`, `size`, `toArray`, etc.
+/// - combined using `concat`.
 
 import Order "Order";
 import Array "Array";
@@ -24,6 +47,13 @@ module {
   /// ```
   public type Iter<T> = Types.Iter<T>;
 
+  /// Creates an empty iterator.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// for (x in Iter.empty<Nat>())
+  ///   assert false; // This loop body will never run
+  /// ```
   public func empty<T>() : Iter<T> {
     object {
       public func next() : ?T {
@@ -32,6 +62,15 @@ module {
     }
   };
 
+  /// Creates an iterator that produces a single value.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// var sum = 0;
+  /// for (x in Iter.singleton(3))
+  ///   sum += x;
+  /// assert(3 == sum);
+  /// ```
   public func singleton<T>(value : T) : Iter<T> {
     object {
       var state = ?value;
@@ -51,9 +90,10 @@ module {
   /// the results. If you're looking to keep these results use `map` instead.
   ///
   /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:new-base/Iter";
+  /// import Nat "mo:new-base/Nat";
   /// var sum = 0;
-  /// Iter.forEach<Nat>(Iter.range(1, 3), func(x) {
+  /// Iter.forEach<Nat>(Nat.range(1, 4), func(x) {
   ///   sum += x;
   /// });
   /// assert(6 == sum)
@@ -78,13 +118,10 @@ module {
   /// The index starts at 0 and increments by 1 for each element.
   ///
   /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:new-base/Iter";
   /// let iter = Iter.fromArray(["A", "B", "C"]);
   /// let enumerated = Iter.enumerate(iter);
-  /// assert(?(0, "A") == enumerated.next());
-  /// assert(?(1, "B") == enumerated.next());
-  /// assert(?(2, "C") == enumerated.next());
-  /// assert(null == enumerated.next());
+  /// Array.toArray(enumerated) // => [(0, "A"), (1, "B"), (2, "C")];
   /// ```
   public func enumerate<T>(iter : Iter<T>) : Iter<(Nat, T)> {
     object {
@@ -107,7 +144,7 @@ module {
   /// For any other positive interval, returns an iterator that skips `interval - 1` elements after each yielded element.
   ///
   /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:new-base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3, 4, 5, 6]);
   /// let steppedIter = Iter.step(iter, 2); // Take every 2nd element
   /// assert(?1 == steppedIter.next());
@@ -135,8 +172,13 @@ module {
     }
   };
 
-  /// Consumes an iterator and counts how many elements were produced
-  /// (discarding them in the process).
+  /// Consumes an iterator and counts how many elements were produced (discarding them in the process).
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// import Nat "mo:new-base/Nat";
+  /// let iter = Nat.range(1, 4);
+  /// assert(3 == Iter.size(iter));
+  /// ```
   public func size<T>(iter : Iter<T>) : Nat {
     var len = 0;
     forEach<T>(iter, func(x) { len += 1 });
@@ -146,8 +188,9 @@ module {
   /// Takes a function and an iterator and returns a new iterator that lazily applies
   /// the function to every element produced by the argument iterator.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
+  /// import Iter "mo:new-base/Iter";
+  /// import Nat "mo:new-base/Nat";
+  /// let iter = Nat.range(1, 4);
   /// let mappedIter = Iter.map(iter, func (x : Nat) : Nat { x * 2 });
   /// assert(?2 == mappedIter.next());
   /// assert(?4 == mappedIter.next());
@@ -170,8 +213,9 @@ module {
   /// Takes a function and an iterator and returns a new iterator that produces
   /// elements from the original iterator if and only if the predicate is true.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
+  /// import Iter "mo:new-base/Iter";
+  /// import Nat "mo:new-base/Nat";
+  /// let iter = Nat.range(1, 4);
   /// let mappedIter = Iter.filter(iter, func (x : Nat) : Bool { x % 2 == 1 });
   /// assert(?1 == mappedIter.next());
   /// assert(?3 == mappedIter.next());
@@ -180,24 +224,43 @@ module {
   public func filter<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> = object {
     public func next() : ?T {
       loop {
-        switch (iter.next()) {
-          case (null) {
-            return null
-          };
-          case (?x) {
-            if (f(x)) {
-              return ?x
-            }
-          }
-        }
+        let ?x = iter.next() else return null;
+        if (f x) return ?x
       };
       null
     }
   };
 
+  public func filterMap<T, R>(iter : Iter<T>, f : T -> ?R) : Iter<R> = object {
+    public func next() : ?R {
+      loop {
+        let ?x = iter.next() else return null;
+        switch (f x) {
+          case (?r) return ?r;
+          case null {} // continue
+        }
+      }
+    }
+  };
+
+  public func flatMap<T, R>(iter : Iter<T>, f : T -> Iter<R>) : Iter<R> = object {
+    var current : Iter<R> = empty();
+    public func next() : ?R {
+      loop {
+        switch (current.next()) {
+          case (?x) return ?x;
+          case null {
+            let ?next = iter.next() else return null;
+            current := f(next)
+          }
+        }
+      }
+    }
+  };
+
   /// Creates an iterator that produces an infinite sequence of `x`.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:new-base/Iter";
   /// let iter = Iter.make(10);
   /// assert(?10 == iter.next());
   /// assert(?10 == iter.next());
@@ -213,9 +276,10 @@ module {
   /// Takes two iterators and returns a new iterator that produces
   /// elements from the original iterators sequentally.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
-  /// let iter1 = Iter.range(1, 2);
-  /// let iter2 = Iter.range(5, 6);
+  /// import Iter "mo:new-base/Iter";
+  /// import Nat "mo:new-base/Nat";
+  /// let iter1 = Nat.range(1, 2);
+  /// let iter2 = Nat.range(5, 6);
   /// let concatenatedIter = Iter.concat(iter1, iter2);
   /// assert(?1 == concatenatedIter.next());
   /// assert(?2 == concatenatedIter.next());
@@ -243,7 +307,7 @@ module {
 
   /// Creates an iterator that produces the elements of an Array in ascending index order.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:new-base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3]);
   /// assert(?1 == iter.next());
   /// assert(?2 == iter.next());
@@ -287,8 +351,9 @@ module {
 
   /// Consumes an iterator and collects its produced elements in an Array.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
-  /// let iter = Iter.range(1, 3);
+  /// import Iter "mo:new-base/Iter";
+  /// import Nat "mo:new-base/Nat";
+  /// let iter = Nat.range(1, 4);
   /// assert([1, 2, 3] == Iter.toArray(iter));
   /// ```
   public func toArray<T>(iter : Iter<T>) : [T] {
@@ -347,7 +412,7 @@ module {
 
   /// Creates an iterator that produces a given item a specified number of times.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:new-base/Iter";
   ///
   /// let iter = Iter.repeat<Nat>(3, 2);
   /// assert(?3 == iter.next());
@@ -373,7 +438,7 @@ module {
   /// Creates a new iterator that produces elements from the original iterator in reverse order.
   /// Note: This function needs to consume the entire iterator to reverse it.
   /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:new-base/Iter";
   ///
   /// let iter = Iter.fromArray([1, 2, 3]);
   /// let reversed = Iter.reverse(iter);

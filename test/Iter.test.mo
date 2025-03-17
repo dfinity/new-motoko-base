@@ -4,6 +4,8 @@ import Nat "../src/Nat";
 import Int "../src/Int";
 import { suite; test; expect } "mo:test";
 
+// todo: add missing tests for Iter
+
 suite(
   "forEach",
   func() {

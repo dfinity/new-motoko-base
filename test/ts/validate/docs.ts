@@ -84,7 +84,7 @@ async function main() {
           };
 
           for (const match of docComments.matchAll(
-            /```(\S+)?(?:[ \t]+([^\n]+)?)?\n([\s\S]*?)```/g
+            /```(\S*)?(?:[ \t]+([^\n]+)?)?\n([\s\S]*?)\n[ \t]*```/g
           )) {
             const [_, language, attrs, sourceCode] = match;
             codeBlocks.push({
@@ -250,6 +250,9 @@ const runSnippet = async (
     return [importLines.join("\n"), nonImportLines.join("\n")];
   };
 
+  if (snippet.sourceCode.startsWith("\n") || snippet.sourceCode.endsWith("\n")) {
+    throw new Error("Unexpected leading / trailing newline");
+  }
   const snippetSource = [
     // Prepend source code included from other snippets
     ...snippet.includes.map((include) => include.sourceCode),
@@ -269,7 +272,7 @@ const runSnippet = async (
     .split("\n")
     .map((line) => {
       const match = line.match(
-        /^(\s*(?:(?:let|var)\s+\S+\s*=\s*|ignore\s+)?)(.*)\s*\/\/ => (.+)$/
+        /^(\s*(?:(?:let|var)\s+\S+\s*=\s*|ignore\s+)?)(.*)\s*\/\/ => (.+)(?:\/\/.*)?$/
       );
       if (match) {
         const [_, pre, statement, expected] = match;

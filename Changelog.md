@@ -2,8 +2,10 @@
 
 ## Next
 
+* Improve code examples in doc comments
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
-* Fix bug in `Iter.step()` implementation
+* Fix bug in `Iter.step()`
+* Fix bug in `Array.enumerate()` / `VarArray.enumerate()`
 
 ## 0.3.0
 

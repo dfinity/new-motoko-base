@@ -820,7 +820,7 @@ module {
   /// let array = [var 10, 11, 12];
   ///
   /// var sum = 0;
-  /// for ((index, element) in Array.enumerate(array)) {
+  /// for ((index, element) in VarArray.enumerate(array)) {
   ///   sum += element;
   /// };
   /// sum // => 33
@@ -833,7 +833,7 @@ module {
     let size = array.size();
     var index = 0;
     public func next() : ?(Nat, T) {
-      if (index > size) {
+      if (index >= size) {
         return null
       };
       let i = index;

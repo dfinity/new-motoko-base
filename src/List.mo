@@ -8,7 +8,7 @@
 /// Main author: Andrii Stepanov
 /// Contributors: Timo Hanke (timohanke), Andy Gura (andygura), react0r-com
 ///
-/// ```motoko include=import
+/// ```motoko name=import
 /// import List "mo:base/List";
 /// ```
 

@@ -236,7 +236,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array1 = [0, 1, 2, 3];
-  /// let array2 = Array.map<Nat, Nat>(array1, func x = x * 3);
+  /// let array2 = Array.map<Nat, Nat>(array1, func x = x * 2);
   /// assert array2 == [0, 2, 4, 6];
   /// ```
   ///
@@ -429,7 +429,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4];
-  /// Array.flatMap<Nat, Int>(array, func x = [x, -x].iter()) // => [1, -1, 2, -2, 3, -3, 4, -4]
+  /// Array.flatMap<Nat, Int>(array, func x = [x, -x].values()) // => [1, -1, 2, -2, 3, -3, 4, -4]
   /// ```
   /// Runtime: O(size)
   ///
@@ -527,7 +527,7 @@ module {
   ///
   /// ```motoko include=import
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.join<Nat>(arrays.iter()) // => [0, 1, 2, 2, 3, 4]
+  /// Array.join<Nat>(arrays.values()) // => [0, 1, 2, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -689,11 +689,11 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func enumerate<T>(array : [var T]) : Types.Iter<(Nat, T)> = object {
+  public func enumerate<T>(array : [T]) : Types.Iter<(Nat, T)> = object {
     let size = array.size();
     var index = 0;
     public func next() : ?(Nat, T) {
-      if (index > size) {
+      if (index >= size) {
         return null
       };
       let i = index;

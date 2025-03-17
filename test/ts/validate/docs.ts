@@ -208,7 +208,7 @@ async function main() {
   ["passed", "failed", "skipped"].forEach((status: TestResult["status"]) => {
     console.log(
       testStatusEmojis[status],
-      testResults.filter((result) => result.status === status),
+      testResults.filter((result) => result.status === status).length,
       status
     );
   });

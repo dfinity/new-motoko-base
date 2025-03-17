@@ -469,7 +469,7 @@ module {
     case (null, null) true;
     case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
     case _ false
-  }; // todo: confusing high Space complexity, but it cannot be avoided -- consider removing the operation all together
+  };
 
   /// Return true if the given predicate is true for all deque elements.
   /// Note that this operation traverses the elements in arbitrary order.
@@ -556,7 +556,7 @@ module {
     // Preserve the order when visiting the elements. Note that the #idles case would require reversing the second stack.
     case _ {
       for (t in values deque) f t
-    } // todo: consider removing this operation, users can use Iter.forEach instead as this is not efficient
+    }
   };
 
   /// Create a new deque by applying the given function to each element of the original deque.
@@ -961,19 +961,5 @@ module {
   type List<T> = Types.Pure.List<T>;
   type Iter<T> = Types.Iter<T>;
   func unsafeHead<T>(l : List<T>) : T = Option.unwrap(l).0;
-  func unsafeTail<T>(l : List<T>) : List<T> = Option.unwrap(l).1;
-
-  // func concatValues<T>(lists : List<List<T>>) : Iter<T> = object {
-  //   var ll = lists;
-  //   public func next() : ?T {
-  //     let ?(list, tailL) = ll else return null;
-  //     let ?(h, t) = list else { ll := tailL; return next() };
-  //     ll := ?(t, tailL);
-  //     ?h
-  //   }
-  // };
-
-  // // todo: make these reverse operations lazy in the object
-  // func concatIdles<T>(((l1, l2), _) : Idle<T>, ((r1, r2), _) : Idle<T>) : Iter<T> = concatValues(?(l1, ?(l2, ?(List.reverse r2, ?(List.reverse r1, null)))));
-  // func concatCurrents<T>((extraL, _, (oldL1, oldL2), _) : Current<T>, (extraR, _, (oldR1, oldR2), _) : Current<T>) : Iter<T> = concatValues(?(extraL, ?(oldL1, ?(oldL2, ?(List.reverse oldR2, ?(List.reverse oldR1, ?(List.reverse extraR, null)))))))
+  func unsafeTail<T>(l : List<T>) : List<T> = Option.unwrap(l).1
 }

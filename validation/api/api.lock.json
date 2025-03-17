@@ -1206,6 +1206,36 @@
     ]
   },
   {
+    "name": "pure/Deque",
+    "exports": [
+      "public func all<T>(deque : Deque<T>, predicate : T -> Bool) : Bool",
+      "public func any<T>(deque : Deque<T>, predicate : T -> Bool) : Bool",
+      "public func contains<T>(deque : Deque<T>, eq : (T, T) -> Bool, item : T) : Bool",
+      "public type Deque<T>",
+      "public func empty<T>() : Deque<T>",
+      "public func equal<T>(deque1 : Deque<T>, deque2 : Deque<T>, equality : (T, T) -> Bool) : Bool",
+      "public func filter<T>(deque : Deque<T>, predicate : T -> Bool) : Deque<T>",
+      "public func filterMap<T, U>(deque : Deque<T>, f : T -> ?U) : Deque<U>",
+      "public func forEach<T>(deque : Deque<T>, f : T -> ())",
+      "public func fromIter<T>(iter : Iter<T>) : Deque<T>",
+      "public func idlesInvariant<T>(((l, nL), (r, nR)) : (Idle<T>, Idle<T>)) : Bool",
+      "public func isEmpty<T>(deque : Deque<T>) : Bool",
+      "public func map<T1, T2>(deque : Deque<T1>, f : T1 -> T2) : Deque<T2>",
+      "public func peekBack<T>(deque : Deque<T>) : ?T",
+      "public func peekFront<T>(deque : Deque<T>) : ?T",
+      "public func popBack<T>(deque : Deque<T>) : ?(Deque<T>, T)",
+      "public func popFront<T>(deque : Deque<T>) : ?(T, Deque<T>)",
+      "public func pushBack<T>(deque : Deque<T>, element : T) : Deque<T>",
+      "public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T>",
+      "public func reverse<T>(deque : Deque<T>) : Deque<T>",
+      "public func singleton<T>(element : T) : Deque<T>",
+      "public func size<T>(deque : Deque<T>) : Nat",
+      "public func toText<T>(deque : Deque<T>, f : T -> Text) : Text",
+      "public func values<T>(deque : Deque<T>) : Iter.Iter<T>",
+      "public func valuesRev<T>(deque : Deque<T>) : Iter.Iter<T>"
+    ]
+  },
+  {
     "name": "pure/List",
     "exports": [
       "public func all<T>(list : List<T>, f : T -> Bool) : Bool",

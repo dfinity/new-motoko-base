@@ -255,7 +255,7 @@ module {
   ///   };
   ///   case (?result) {
   ///     let reducedQueue = result.0; // queue with element [1].
-  ///     let removedElement = result.1; // 2
+  ///     let removedElement = result.1; // => 2
   ///   }
   /// }
   /// ```
@@ -274,8 +274,7 @@ module {
   /// Turn an iterator into a queue, consuming it.
   /// Example:
   /// ```motoko include=import
-  /// Queue.fromIter<Nat>([0, 1, 2, 3, 4].values())
-  /// // => (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))
+  /// Queue.fromIter<Nat>([0, 1, 2, 3, 4].values()) // => (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))
   /// ```
   ///
   /// Runtime: O(size)

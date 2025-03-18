@@ -610,9 +610,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.singleton<Nat>(
-  ///   0
-  /// ) // => ?(0, null)
+  /// List.singleton<Nat>(0) // => ?(0, null)
   /// ```
   ///
   /// Runtime: O(1)
@@ -624,10 +622,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.repeat<Nat>(
-  ///   3,
-  ///   0
-  /// ) // => ?(0, ?(0, ?(0, null)))
+  /// List.repeat<Nat>(3, 0) // => ?(0, ?(0, ?(0, null)))
   /// ```
   ///
   /// Runtime: O(n)
@@ -650,10 +645,11 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.zip<Nat, Text>(
+  /// let list = List.zip<Nat, Text>(
   ///   ?(0, ?(1, ?(2, null))),
   ///   ?("0", ?("1", null)),
-  /// ) // => ?((0, "0"), ?((1, "1"), null))
+  /// );
+  /// list // == ?((0, "0"), ?((1, "1"), null))
   /// ```
   ///
   /// Runtime: O(min(size(xs), size(ys)))
@@ -672,11 +668,12 @@ module {
   /// import Nat = "mo:base/Nat";
   /// import Char = "mo:base/Char";
   ///
-  /// List.zipWith<Nat, Char, Text>(
+  /// let list = List.zipWith<Nat, Char, Text>(
   ///   ?(0, ?(1, ?(2, null))),
   ///   ?('a', ?('b', null)),
   ///   func (n, c) = Nat.toText(n) # Char.toText(c)
-  /// ) // => ?("0a", ?("1b", null))
+  /// );
+  /// list // => ?("0a", ?("1b", null))
   /// ```
   ///
   /// Runtime: O(min(size(xs), size(ys)))
@@ -693,10 +690,11 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.split<Nat>(
+  /// let list = List.split<Nat>(
   ///   2,
   ///   ?(0, ?(1, ?(2, null)))
-  /// ) // => (?(0, ?(1, null)), ?(2, null))
+  /// );
+  /// list // => (?(0, ?(1, null)), ?(2, null))
   /// ```
   ///
   /// Runtime: O(n)
@@ -716,15 +714,11 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.chunks<Nat>(
+  /// let list = List.chunks<Nat>(
   ///   2,
   ///   ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
-  /// )
-  /// /* => ?(?(0, ?(1, null)),
-  ///         ?(?(2, ?(3, null)),
-  ///           ?(?(4, null),
-  ///             null)))
-  /// */
+  /// );
+  /// list // => ?(?(0, ?(1, null)), ?(?(2, ?(3, null)), ?(?(4, null), null)))
   /// ```
   ///
   /// Runtime: O(size)
@@ -740,10 +734,12 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// var p = "";
-  /// for (e in List.values([3, 1, 4]))
-  ///   p #= debug_show e;
-  /// p // => "314"
+  /// var text = "";
+  /// let list = List.fromArray<Nat>([3, 1, 4]);
+  /// for (item in List.values(list)) {
+  ///   text #= debug_show item;
+  /// };
+  /// text // => "314"
   /// ```
   public func values<T>(list : List<T>) : Iter.Iter<T> = object {
     var l = list;
@@ -760,8 +756,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.fromArray<Nat>([0, 1, 2, 3, 4])
-  /// // =>  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
+  /// let list = List.fromArray<Nat>([0, 1, 2, 3, 4]);
+  /// list // =>  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
   /// ```
   ///
   /// Runtime: O(size)
@@ -776,8 +772,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// List.fromVarArray<Nat>([var 0, 1, 2, 3, 4])
-  /// // =>  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
+  /// let list = List.fromVarArray<Nat>([var 0, 1, 2, 3, 4]);
+  /// list // =>  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
   /// ```
   ///
   /// Runtime: O(size)
@@ -788,8 +784,8 @@ module {
   /// Create an array from a list.
   /// Example:
   /// ```motoko include=import
-  /// List.toArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))))
-  /// // => [0, 1, 2, 3, 4]
+  /// let list = List.toArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  /// list // => [0, 1, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(size)
@@ -803,8 +799,8 @@ module {
   /// Create a mutable array from a list.
   /// Example:
   /// ```motoko include=import
-  /// List.toVarArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))))
-  /// // => [var 0, 1, 2, 3, 4]
+  /// let list = List.toVarArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  /// list // => [var 0, 1, 2, 3, 4]
   /// ```
   ///
   /// Runtime: O(size)
@@ -815,8 +811,8 @@ module {
   /// Turn an iterator into a list, consuming it.
   /// Example:
   /// ```motoko include=import
-  /// List.fromIter<Nat>([0, 1, 2, 3, 4].values())
-  /// // => ?(0, ?(1, ?(2, ?(3, ?(4, null))))))
+  /// let list = List.fromIter<Nat>([0, 1, 2, 3, 4].values());
+  /// list // => ?(0, ?(1, ?(2, ?(3, ?(4, null))))))
   /// ```
   ///
   /// Runtime: O(size)

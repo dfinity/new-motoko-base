@@ -249,12 +249,12 @@ module {
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
   ///
-  ///   let (map1, old1) = Map.swap(map0, Nat.compare, 0, "Nil");
+  ///   transient let (map1, old1) = Map.swap(map0, Nat.compare, 0, "Nil");
   ///
   ///   assert Iter.toArray(Map.entries(map1)) == [(0, "Nil"), (1, "One"), (2, "Two")];
   ///   assert old1 == ?"Zero";
   ///
-  ///   let (map2, old2) = Map.swap(map0, Nat.compare, 3, "Three");
+  ///   transient let (map2, old2) = Map.swap(map0, Nat.compare, 3, "Three");
   ///
   ///   assert Iter.toArray(Map.entries(map2)) == [(0, "Zero"), (1, "One"), (2, "Two"), (3, "Three")];
   ///   assert old2 == null;
@@ -287,12 +287,12 @@ module {
   /// persistent actor {
   ///   let singleton = Map.singleton(0, "Null");
   ///
-  ///   let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
+  ///   transient let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
   ///   assert oldZero == ?"Null";
   ///   assert Map.get(map1, Nat.compare, 0) == ?"Zero";
 
   ///   let empty = Map.empty<Nat, Text>();
-  ///   let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, "One");  // no effect, key is absent
+  ///   transient let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, "One");  // no effect, key is absent
   ///   assert oldOne == null;
   ///   assert Map.get(map2, Nat.compare, 0) == null;
   /// }

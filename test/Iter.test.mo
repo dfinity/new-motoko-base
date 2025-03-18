@@ -3,8 +3,8 @@ import Array "../src/Array";
 import Nat "../src/Nat";
 import Int "../src/Int";
 import { suite; test; expect } "mo:test";
-
-// todo: add missing tests for Iter
+import Runtime "../src/Runtime";
+import Tuple "../src/Tuple";
 
 suite(
   "forEach",
@@ -70,6 +70,168 @@ suite(
         expect.array<Nat>(Array.fromVarArray(actual), Nat.toText, Nat.equal).equal([1, 3])
       }
     )
+  }
+);
+
+suite(
+  "filterMap",
+  func() {
+    func mk(inputs : [Nat], expected : [Nat]) {
+      let actual = Iter.filterMap<Nat, Nat>(inputs.vals(), func(x) = if (x % 2 == 0) ?(x * 10) else null);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 4], [20, 40]));
+    test("none", func() = mk([1, 3, 5, 7], []));
+    test("empty", func() = mk([], []))
+  }
+);
+
+suite(
+  "flatten",
+  func() {
+    func mk(inputs : [[Nat]], expected : [Nat]) {
+      let actual = Iter.flatten(Iter.map<[Nat], Iter.Iter<Nat>>(inputs.vals(), func(x) = Iter.fromArray<Nat>(x)));
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([[1, 2], [3], [4, 5, 6]], [1, 2, 3, 4, 5, 6]));
+    test("none", func() = mk([[], []], []));
+    test("empty", func() = mk([], []))
+  }
+);
+
+suite(
+  "flatMap",
+  func() {
+    func mk(inputs : [Nat], expected : [Nat]) {
+      let actual = Iter.flatMap<Nat, Nat>(inputs.vals(), func(x) = [x, x * 10].vals());
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3], [1, 10, 2, 20, 3, 30]));
+    test("none", func() = mk([], []))
+  }
+);
+
+suite(
+  "take",
+  func() {
+    func mk(inputs : [Nat], n : Nat, expected : [Nat]) {
+      let actual = Iter.take<Nat>(inputs.vals(), n);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 4, 5], 3, [1, 2, 3]));
+    test("zero", func() = mk([1, 2, 3], 0, []));
+    test("more", func() = mk([1, 2, 3], 5, [1, 2, 3]));
+    test("empty", func() = mk([], 3, []));
+    test("exact", func() = mk([1, 2, 3], 3, [1, 2, 3]))
+  }
+);
+
+suite(
+  "drop",
+  func() {
+    func mk(inputs : [Nat], n : Nat, expected : [Nat]) {
+      let actual = Iter.drop<Nat>(inputs.vals(), n);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 4, 5], 3, [4, 5]));
+    test("zero", func() = mk([1, 2, 3], 0, [1, 2, 3]));
+    test("more", func() = mk([1, 2, 3], 5, []));
+    test("empty", func() = mk([], 3, []));
+    test("exact", func() = mk([1, 2, 3], 3, []))
+  }
+);
+
+suite(
+  "takeWhile",
+  func() {
+    func mk(inputs : [Nat], expected : [Nat]) {
+      let actual = Iter.takeWhile<Nat>(inputs.vals(), func(x) = x < 4);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 4, 5, 4, 3, 2, 1], [1, 2, 3]));
+    test("none", func() = mk([4, 5, 6], []));
+    test("empty", func() = mk([], []));
+    test("all", func() = mk([1, 2, 3], [1, 2, 3]))
+  }
+);
+
+suite(
+  "dropWhile",
+  func() {
+    func mk(inputs : [Nat], expected : [Nat]) {
+      let actual = Iter.dropWhile<Nat>(inputs.vals(), func(x) = x < 4);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 4, 5, 4, 3, 2, 1], [4, 5, 4, 3, 2, 1]));
+    test("all", func() = mk([4, 5, 6], [4, 5, 6]));
+    test("empty", func() = mk([], []));
+    test("none", func() = mk([1, 2, 3], []))
+  }
+);
+
+suite(
+  "zip",
+  func() {
+    func mk(input1 : [Nat], input2 : [Nat], expected : [(Nat, Nat)]) {
+      let actual = Iter.zip<Nat, Nat>(input1.vals(), input2.vals());
+      expect.array<(Nat, Nat)>(Iter.toArray(actual), Tuple.makeToText<Nat, Nat>(Nat.toText, Nat.toText), Tuple.makeEqual<Nat, Nat>(Nat.equal, Nat.equal)).equal(expected)
+    };
+    test("matched", func() = mk([1, 2, 3], [4, 5, 6], [(1, 4), (2, 5), (3, 6)]));
+    test("left skipped", func() = mk([1, 2, 3], [4, 5], [(1, 4), (2, 5)]));
+    test("right skipped", func() = mk([1, 2], [4, 5, 6], [(1, 4), (2, 5)]));
+    test("empty left", func() = mk([], [1, 2], []));
+    test("empty right", func() = mk([1, 2], [], []));
+    test("empty both", func() = mk([], [], []))
+  }
+);
+
+suite(
+  "zipWith",
+  func() {
+    func mk(input1 : [Nat], input2 : [Nat], expected : [Nat]) {
+      let actual = Iter.zipWith<Nat, Nat, Nat>(input1.vals(), input2.vals(), func(x, y) = x + y);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("matched", func() = mk([1, 2, 3], [4, 5, 6], [5, 7, 9]));
+    test("left skipped", func() = mk([1, 2, 3], [4, 5], [5, 7]));
+    test("right skipped", func() = mk([1, 2], [4, 5, 6], [5, 7]));
+    test("empty left", func() = mk([], [1, 2], []));
+    test("empty right", func() = mk([1, 2], [], []));
+    test("empty both", func() = mk([], [], []))
+  }
+);
+
+suite(
+  "zip3",
+  func() {
+    func mk(input1 : [Nat], input2 : [Nat], input3 : [Nat], expected : [(Nat, Nat, Nat)]) {
+      let actual = Iter.zip3<Nat, Nat, Nat>(input1.vals(), input2.vals(), input3.vals());
+      expect.array<(Nat, Nat, Nat)>(Iter.toArray(actual), Tuple.makeToText3<Nat, Nat, Nat>(Nat.toText, Nat.toText, Nat.toText), Tuple.makeEqual3<Nat, Nat, Nat>(Nat.equal, Nat.equal, Nat.equal)).equal(expected)
+    };
+    test("matched", func() = mk([1, 2, 3], [4, 5, 6], [7, 8, 9], [(1, 4, 7), (2, 5, 8), (3, 6, 9)]));
+    test("left skipped", func() = mk([1, 2, 3], [4, 5], [7, 8, 9], [(1, 4, 7), (2, 5, 8)]));
+    test("right skipped", func() = mk([1, 2], [4, 5, 6], [7, 8, 9], [(1, 4, 7), (2, 5, 8)]));
+    test("empty left", func() = mk([], [1, 2], [7, 8, 9], []));
+    test("empty middle", func() = mk([1, 2], [], [7, 8, 9], []));
+    test("empty right", func() = mk([1, 2], [4, 5, 6], [], []));
+    test("empty all", func() = mk([], [], [], []))
+  }
+);
+
+suite(
+  "zipWith3",
+  func() {
+    func mk(input1 : [Nat], input2 : [Nat], input3 : [Nat], expected : [Nat]) {
+      let actual = Iter.zipWith3<Nat, Nat, Nat, Nat>(input1.vals(), input2.vals(), input3.vals(), func(x, y, z) = x + y + z);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("matched", func() = mk([1, 2, 3], [4, 5, 6], [7, 8, 9], [12, 15, 18]));
+    test("left skipped", func() = mk([1, 2, 3], [4, 5], [7, 8, 9], [12, 15]));
+    test("right skipped", func() = mk([1, 2], [4, 5, 6], [7, 8, 9], [12, 15]));
+    test("empty left", func() = mk([], [1, 2], [7, 8, 9], []));
+    test("empty middle", func() = mk([1, 2], [], [7, 8, 9], []));
+    test("empty right", func() = mk([1, 2], [4, 5, 6], [], []));
+    test("empty all", func() = mk([], [], [], []))
   }
 );
 
@@ -522,6 +684,87 @@ suite(
         assert (fullConcat.next() == ?4);
         assert (fullConcat.next() == null)
       }
+    )
+  }
+);
+
+suite(
+  "all",
+  func() {
+    test(
+      "empty iterator returns true",
+      func() = expect.bool(Iter.all<Nat>(Iter.empty<Nat>(), func(x) = Runtime.unreachable())).isTrue()
+    );
+    test(
+      "all elements satisfy predicate",
+      func() = expect.bool(Iter.all<Nat>([2, 4, 6].vals(), func(x) = x % 2 == 0)).isTrue()
+    );
+    test(
+      "not all elements satisfy predicate",
+      func() = expect.bool(Iter.all<Nat>([2, 4, 5].vals(), func(x) = x % 2 == 0)).isFalse()
+    )
+  }
+);
+
+suite(
+  "any",
+  func() {
+    test(
+      "empty iterator returns false",
+      func() = expect.bool(Iter.any<Nat>(Iter.empty<Nat>(), func(x) = Runtime.unreachable())).isFalse()
+    );
+    test(
+      "some elements satisfy predicate",
+      func() = expect.bool(Iter.any<Nat>([2, 4, 5].vals(), func(x) = x % 2 == 0)).isTrue()
+    );
+    test(
+      "no elements satisfy predicate",
+      func() = expect.bool(Iter.any<Nat>([1, 3, 5].vals(), func(x) = x % 2 == 0)).isFalse()
+    )
+  }
+);
+
+suite(
+  "find",
+  func() {
+    test(
+      "empty iterator returns null",
+      func() {
+        let emptyFind = Iter.find<Nat>(Iter.empty<Nat>(), func(x) = Runtime.unreachable());
+        expect.option(emptyFind, Nat.toText, Nat.equal).equal(null)
+      }
+    );
+    test(
+      "element satisfying predicate is found",
+      func() {
+        let found = Iter.find<Nat>([1, 2, 3, 4].vals(), func(x) = x % 2 == 0);
+        expect.option(found, Nat.toText, Nat.equal).equal(?2)
+      }
+    );
+    test(
+      "no element satisfies predicate",
+      func() {
+        let notFound = Iter.find<Nat>([1, 3, 5].vals(), func(x) = x % 2 == 0);
+        expect.option(notFound, Nat.toText, Nat.equal).equal(null)
+      }
+    )
+  }
+);
+
+suite(
+  "contains",
+  func() {
+    test(
+      "empty iterator returns false",
+      func() = expect.bool(Iter.contains<Nat>(Iter.empty<Nat>(), Nat.equal, 42)).isFalse()
+    );
+    test(
+      "element is found",
+      func() = expect.bool(Iter.contains<Nat>([1, 2, 3].vals(), Nat.equal, 2)).isTrue()
+    );
+    test(
+      "element is not found",
+      func() = expect.bool(Iter.contains<Nat>([1, 2, 3].vals(), Nat.equal, 4)).isFalse()
     )
   }
 )

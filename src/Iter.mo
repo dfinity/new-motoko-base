@@ -388,11 +388,31 @@ module {
   /// let zipped = Iter.zip(iter1, iter2);
   /// Iter.toArray(zipped) // => [(1, "A"), (2, "B")] note that the third element from iter1 is not included, because iter2 is exhausted
   /// ```
-  public func zip<T, U>(a : Iter<T>, b : Iter<U>) : Iter<(T, U)> = object {
-    public func next() : ?(T, U) {
-      let ?t = a.next() else return null;
-      let ?u = b.next() else return null;
-      ?(t, u)
+  public func zip<A, B>(a : Iter<A>, b : Iter<B>) : Iter<(A, B)> = object {
+    public func next() : ?(A, B) {
+      let ?x = a.next() else return null;
+      let ?y = b.next() else return null;
+      ?(x, y)
+    }
+  };
+
+  /// Zips three iterators into a single iterator that produces triples of elements.
+  /// The resulting iterator will stop producing elements when any of the input iterators is exhausted.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter1 = ["A", "B"].values();
+  /// let iter2 = ["1", "2", "3"].values();
+  /// let iter3 = ["x", "y", "z", "xd"].values();
+  /// let zipped = Iter.zip3(iter1, iter2, iter3);
+  /// Iter.toArray(zipped) // => [("A", "1", "x"), ("B", "2", "y")] note that the unmatched elements from iter2 and iter3 are not included
+  /// ```
+  public func zip3<A, B, C>(a : Iter<A>, b : Iter<B>, c : Iter<C>) : Iter<(A, B, C)> = object {
+    public func next() : ?(A, B, C) {
+      let ?x = a.next() else return null;
+      let ?y = b.next() else return null;
+      let ?z = c.next() else return null;
+      ?(x, y, z)
     }
   };
 
@@ -406,11 +426,31 @@ module {
   /// let zipped = Iter.zipWith<Text, Text, Text>(iter1, iter2, func (a, b) = a # b);
   /// Iter.toArray(zipped) // => ["A1", "B2"] note that the third element from iter2 is not included, because iter1 is exhausted
   /// ```
-  public func zipWith<T, U, R>(a : Iter<T>, b : Iter<U>, f : (T, U) -> R) : Iter<R> = object {
+  public func zipWith<A, B, R>(a : Iter<A>, b : Iter<B>, f : (A, B) -> R) : Iter<R> = object {
     public func next() : ?R {
-      let ?t = a.next() else return null;
-      let ?u = b.next() else return null;
-      ?f(t, u)
+      let ?x = a.next() else return null;
+      let ?y = b.next() else return null;
+      ?f(x, y)
+    }
+  };
+
+  /// Zips three iterators into a single iterator by applying a function to zipped triples of elements.
+  /// The resulting iterator will stop producing elements when any of the input iterators is exhausted.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter1 = ["A", "B"].values();
+  /// let iter2 = ["1", "2", "3"].values();
+  /// let iter3 = ["x", "y", "z", "xd"].values();
+  /// let zipped = Iter.zipWith3<Text, Text, Text, Text>(iter1, iter2, iter3, func (a, b, c) = a # b # c);
+  /// Iter.toArray(zipped) // => ["A1x", "B2y"] note that the unmatched elements from iter2 and iter3 are not included
+  /// ```
+  public func zipWith3<A, B, C, R>(a : Iter<A>, b : Iter<B>, c : Iter<C>, f : (A, B, C) -> R) : Iter<R> = object {
+    public func next() : ?R {
+      let ?x = a.next() else return null;
+      let ?y = b.next() else return null;
+      let ?z = c.next() else return null;
+      ?f(x, y, z)
     }
   };
 

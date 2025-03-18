@@ -91,9 +91,8 @@ module {
   ///
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
-  /// import Nat "mo:new-base/Nat";
   /// var sum = 0;
-  /// Iter.forEach<Nat>(Nat.range(1, 4), func(x) {
+  /// Iter.forEach<Nat>([1, 2, 3].values(), func(x) {
   ///   sum += x;
   /// });
   /// assert(6 == sum)
@@ -175,8 +174,7 @@ module {
   /// Consumes an iterator and counts how many elements were produced (discarding them in the process).
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
-  /// import Nat "mo:new-base/Nat";
-  /// let iter = Nat.range(1, 4);
+  /// let iter = [1, 2, 3].values();
   /// assert(3 == Iter.size(iter));
   /// ```
   public func size<T>(iter : Iter<T>) : Nat {
@@ -189,8 +187,7 @@ module {
   /// the function to every element produced by the argument iterator.
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
-  /// import Nat "mo:new-base/Nat";
-  /// let iter = Nat.range(1, 4);
+  /// let iter = [1, 2, 3].values();
   /// let mappedIter = Iter.map(iter, func (x : Nat) : Nat { x * 2 });
   /// assert(?2 == mappedIter.next());
   /// assert(?4 == mappedIter.next());
@@ -214,8 +211,7 @@ module {
   /// elements from the original iterator if and only if the predicate is true.
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
-  /// import Nat "mo:new-base/Nat";
-  /// let iter = Nat.range(1, 4);
+  /// let iter = [1, 2, 3].values();
   /// let mappedIter = Iter.filter(iter, func (x : Nat) : Bool { x % 2 == 1 });
   /// assert(?1 == mappedIter.next());
   /// assert(?3 == mappedIter.next());
@@ -231,6 +227,14 @@ module {
     }
   };
 
+  /// Takes a function and an iterator and returns a new iterator that lazily applies the function to every element produced by the argument iterator.
+  /// If the function returns `null`, the element is skipped.
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = [1, 2, 3].values();
+  /// let mappedIter = Iter.filterMap<Nat, Nat>(iter, func (x) = if (x % 2 == 0) ?x else null);
+  /// Iter.toArray(mappedIter) // => [2]
+  /// ```
   public func filterMap<T, R>(iter : Iter<T>, f : T -> ?R) : Iter<R> = object {
     public func next() : ?R {
       loop {
@@ -243,6 +247,35 @@ module {
     }
   };
 
+  /// Flattens an iterator of iterators into a single iterator by concatenating the inner iterators.
+  ///
+  /// Possible optimization: Use `flatMap` when you need to transform elements before calling `flatten`. Example: use `flatMap(...)` instead of `flatten(map(...))`.
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.flatten([[1, 2].values(), [3].values(), [4, 5, 6].values()].values());
+  /// Iter.toArray(iter) // => [1, 2, 3, 4, 5, 6]
+  /// ```
+  public func flatten<T>(iter : Iter<Iter<T>>) : Iter<T> = object {
+    var current : Iter<T> = empty();
+    public func next() : ?T {
+      loop {
+        switch (current.next()) {
+          case (?x) return ?x;
+          case null {
+            let ?next = iter.next() else return null;
+            current := next
+          }
+        }
+      }
+    }
+  };
+
+  /// Transforms every element of an iterator into an iterator and concatenates the results.
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.flatMap<Nat, Nat>([1, 3, 5].values(), func (x) = [x, x + 1].values());
+  /// Iter.toArray(iter) // => [1, 2, 3, 4, 5, 6]
+  /// ```
   public func flatMap<T, R>(iter : Iter<T>, f : T -> Iter<R>) : Iter<R> = object {
     var current : Iter<R> = empty();
     public func next() : ?R {
@@ -407,15 +440,10 @@ module {
   /// elements from the original iterators sequentally.
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
-  /// import Nat "mo:new-base/Nat";
-  /// let iter1 = Nat.range(1, 2);
-  /// let iter2 = Nat.range(5, 6);
+  /// let iter1 = [1, 2].values();
+  /// let iter2 = [5, 6, 7].values();
   /// let concatenatedIter = Iter.concat(iter1, iter2);
-  /// assert(?1 == concatenatedIter.next());
-  /// assert(?2 == concatenatedIter.next());
-  /// assert(?5 == concatenatedIter.next());
-  /// assert(?6 == concatenatedIter.next());
-  /// assert(null == concatenatedIter.next());
+  /// Iter.toArray(concatenatedIter) // => [1, 2, 5, 6, 7]
   /// ```
   public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T> {
     var aEnded : Bool = false;
@@ -482,8 +510,7 @@ module {
   /// Consumes an iterator and collects its produced elements in an Array.
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
-  /// import Nat "mo:new-base/Nat";
-  /// let iter = Nat.range(1, 4);
+  /// let iter = [1, 2, 3].values();
   /// assert([1, 2, 3] == Iter.toArray(iter));
   /// ```
   public func toArray<T>(iter : Iter<T>) : [T] {

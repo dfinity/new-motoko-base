@@ -692,81 +692,64 @@ suite(
 suite(
   "all",
   func() {
-    test(
-      "empty iterator returns true",
-      func() = expect.bool(Iter.all<Nat>(Iter.empty<Nat>(), func(x) = Runtime.unreachable())).isTrue()
-    );
-    test(
-      "all elements satisfy predicate",
-      func() = expect.bool(Iter.all<Nat>([2, 4, 6].vals(), func(x) = x % 2 == 0)).isTrue()
-    );
-    test(
-      "not all elements satisfy predicate",
-      func() = expect.bool(Iter.all<Nat>([2, 4, 5].vals(), func(x) = x % 2 == 0)).isFalse()
-    )
+    func mk(inputs : [Nat], expected : Bool, rest : [Nat]) {
+      let iter = inputs.vals();
+      let actual = Iter.all<Nat>(iter, func(x) = x % 2 == 0);
+      expect.bool(actual).equal(expected);
+      let remaining = Iter.toArray(iter);
+      expect.array<Nat>(remaining, Nat.toText, Nat.equal).equal(rest)
+    };
+    test("empty", func() = mk([], true, []));
+    test("all", func() = mk([2, 4, 6], true, []));
+    test("some", func() = mk([1, 2, 3, 4], false, [2, 3, 4]))
   }
 );
 
 suite(
   "any",
   func() {
-    test(
-      "empty iterator returns false",
-      func() = expect.bool(Iter.any<Nat>(Iter.empty<Nat>(), func(x) = Runtime.unreachable())).isFalse()
-    );
-    test(
-      "some elements satisfy predicate",
-      func() = expect.bool(Iter.any<Nat>([2, 4, 5].vals(), func(x) = x % 2 == 0)).isTrue()
-    );
-    test(
-      "no elements satisfy predicate",
-      func() = expect.bool(Iter.any<Nat>([1, 3, 5].vals(), func(x) = x % 2 == 0)).isFalse()
-    )
+    func mk(inputs : [Nat], expected : Bool, rest : [Nat]) {
+      let iter = inputs.vals();
+      let actual = Iter.any<Nat>(iter, func(x) = x % 2 == 0);
+      expect.bool(actual).equal(expected);
+      let remaining = Iter.toArray(iter);
+      expect.array<Nat>(remaining, Nat.toText, Nat.equal).equal(rest)
+    };
+    test("empty", func() = mk([], false, []));
+    test("some", func() = mk([1, 2, 3, 4], true, [3, 4]));
+    test("none", func() = mk([1, 3, 5], false, []))
   }
 );
 
 suite(
   "find",
   func() {
-    test(
-      "empty iterator returns null",
-      func() {
-        let emptyFind = Iter.find<Nat>(Iter.empty<Nat>(), func(x) = Runtime.unreachable());
-        expect.option(emptyFind, Nat.toText, Nat.equal).equal(null)
-      }
-    );
-    test(
-      "element satisfying predicate is found",
-      func() {
-        let found = Iter.find<Nat>([1, 2, 3, 4].vals(), func(x) = x % 2 == 0);
-        expect.option(found, Nat.toText, Nat.equal).equal(?2)
-      }
-    );
-    test(
-      "no element satisfies predicate",
-      func() {
-        let notFound = Iter.find<Nat>([1, 3, 5].vals(), func(x) = x % 2 == 0);
-        expect.option(notFound, Nat.toText, Nat.equal).equal(null)
-      }
-    )
+    func mk(inputs : [Nat], expected : ?Nat, rest : [Nat]) {
+      let iter = inputs.vals();
+      let actual = Iter.find<Nat>(iter, func(x) = x % 2 == 0);
+      expect.option(actual, Nat.toText, Nat.equal).equal(expected);
+      let remaining = Iter.toArray(iter);
+      expect.array<Nat>(remaining, Nat.toText, Nat.equal).equal(rest)
+    };
+    test("empty", func() = mk([], null, []));
+    test("some", func() = mk([1, 2, 3, 4], ?2, [3, 4]));
+    test("none", func() = mk([1, 3, 5], null, []))
   }
 );
 
 suite(
   "contains",
   func() {
-    test(
-      "empty iterator returns false",
-      func() = expect.bool(Iter.contains<Nat>(Iter.empty<Nat>(), Nat.equal, 42)).isFalse()
-    );
-    test(
-      "element is found",
-      func() = expect.bool(Iter.contains<Nat>([1, 2, 3].vals(), Nat.equal, 2)).isTrue()
-    );
-    test(
-      "element is not found",
-      func() = expect.bool(Iter.contains<Nat>([1, 2, 3].vals(), Nat.equal, 4)).isFalse()
-    )
+    func mk(inputs : [Nat], x : Nat, expected : Bool, rest : [Nat]) {
+      let iter = inputs.vals();
+      let actual = Iter.contains<Nat>(iter, Nat.equal, x);
+      expect.bool(actual).equal(expected);
+      let remaining = Iter.toArray(iter);
+      expect.array<Nat>(remaining, Nat.toText, Nat.equal).equal(rest)
+    };
+    test("empty", func() = mk([], 1, false, []));
+    test("found", func() = mk([1, 2, 3, 4], 2, true, [3, 4]));
+    test("not found", func() = mk([1, 3, 5], 2, false, []))
   }
 );
 

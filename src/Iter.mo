@@ -207,15 +207,14 @@ module {
     }
   };
 
-  /// Takes a function and an iterator and returns a new iterator that produces
-  /// elements from the original iterator if and only if the predicate is true.
+  /// Creates a new iterator that only includes elements from the original iterator
+  /// for which the predicate function returns true.
+  ///
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
-  /// let iter = [1, 2, 3].values();
-  /// let mappedIter = Iter.filter(iter, func (x : Nat) : Bool { x % 2 == 1 });
-  /// assert(?1 == mappedIter.next());
-  /// assert(?3 == mappedIter.next());
-  /// assert(null == mappedIter.next());
+  /// let iter = [1, 2, 3, 4, 5].values();
+  /// let evenNumbers = Iter.filter<Nat>(iter, func (x) = x % 2 == 0);
+  /// Iter.toArray(evenNumbers) // => [2, 4]
   /// ```
   public func filter<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> = object {
     public func next() : ?T {
@@ -227,13 +226,15 @@ module {
     }
   };
 
-  /// Takes a function and an iterator and returns a new iterator that lazily applies the function to every element produced by the argument iterator.
-  /// If the function returns `null`, the element is skipped.
+  /// Creates a new iterator by applying a transformation function to each element
+  /// of the original iterator. Elements for which the function returns null are
+  /// excluded from the result.
+  ///
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
   /// let iter = [1, 2, 3].values();
-  /// let mappedIter = Iter.filterMap<Nat, Nat>(iter, func (x) = if (x % 2 == 0) ?x else null);
-  /// Iter.toArray(mappedIter) // => [2]
+  /// let evenNumbers = Iter.filterMap<Nat, Nat>(iter, func (x) = if (x % 2 == 0) ?x else null);
+  /// Iter.toArray(evenNumbers) // => [2]
   /// ```
   public func filterMap<T, R>(iter : Iter<T>, f : T -> ?R) : Iter<R> = object {
     public func next() : ?R {

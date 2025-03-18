@@ -3,7 +3,6 @@ import Array "../src/Array";
 import Nat "../src/Nat";
 import Int "../src/Int";
 import { suite; test; expect } "mo:test";
-import Runtime "../src/Runtime";
 import Tuple "../src/Tuple";
 import Text "../src/Text";
 

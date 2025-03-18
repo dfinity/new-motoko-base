@@ -467,8 +467,36 @@ module {
   /// Space: `O(size)`
   public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equality : (T, T) -> Bool) : Bool = switch (popFront queue1, popFront queue2) {
     case (null, null) true;
-    case (?((x1, queue1Tail)), ?((x2, queue2Tail))) equality(x1, x2) and equal(queue1Tail, queue2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
+    case (?(x1, queue1Tail), ?(x2, queue2Tail)) equality(x1, x2) and equal(queue1Tail, queue2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
     case _ false
+  };
+
+  /// Compare two queues lexicographically using a provided comparison function to compare their elements.
+  /// Returns `#less` if `queue1` is lexicographically less than `queue2`, `#equal` if they are equal, and `#greater` otherwise.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:new-base/Queue";
+  /// import Nat "mo:new-base/Nat";
+  ///
+  /// let queue1 = Queue.fromIter([1, 2, 3].vals());
+  /// let queue2 = Queue.fromIter([1, 2, 4].vals());
+  /// Queue.compare(queue1, queue2, Nat.compare) // => #less
+  /// ```
+  ///
+  /// Runtime: `O(size)`
+  ///
+  /// Space: `O(size)`
+  public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, comparison : (T, T) -> Types.Order) : Types.Order = switch (popFront queue1, popFront queue2) {
+    case (null, null) #equal;
+    case (null, _) #less;
+    case (_, null) #greater;
+    case (?(x1, queue1Tail), ?(x2, queue2Tail)) {
+      switch (comparison(x1, x2)) {
+        case (#equal) compare(queue1Tail, queue2Tail, comparison);
+        case order order
+      }
+    }
   };
 
   /// Return true if the given predicate is true for all queue elements.
@@ -647,7 +675,7 @@ module {
   /// import Queue "mo:new-base/Queue";
   ///
   /// let queue = Queue.fromIter([1, 2, 3].vals());
-  /// Queue.toText(queue, Nat.toText) // => "Purequeue[1, 2, 3]"
+  /// Queue.toText(queue, Nat.toText) // => "PureQueue[1, 2, 3]"
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -656,7 +684,7 @@ module {
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
-    var text = "Purequeue[";
+    var text = "PureQueue[";
     var first = true;
     for (t in values queue) {
       if (first) first := false else text #= ", ";
@@ -673,7 +701,7 @@ module {
   /// import Queue "mo:new-base/Queue";
   ///
   /// let queue = Queue.fromIter([1, 2, 3].vals());
-  /// Queue.toText(Queue.reverse(queue), Nat.toText) // => "Purequeue[3, 2, 1]"
+  /// Queue.toText(Queue.reverse(queue), Nat.toText) // => "PureQueue[3, 2, 1]"
   /// ```
   ///
   /// Runtime: `O(1)`

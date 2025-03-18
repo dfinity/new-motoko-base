@@ -1,4 +1,4 @@
-import Queue "../../src/pure/Deque";
+import Queue "../../src/pure/Queue";
 import Array "../../src/Array";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";
@@ -819,6 +819,33 @@ suite(
         testValuesRev([1, 2, 3, 4]);
         testValuesRev([1, 2, 2, 3, 3, 4]);
         testValuesRev([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "compare",
+      func() {
+        let testCompare = func(testElements1 : [Nat], testElements2 : [Nat]) {
+          let q1 = Queue.fromIter(testElements1.vals());
+          let q2 = Queue.fromIter(testElements2.vals());
+          expect.bool(Queue.compare(q1, q2, Nat.compare) == Array.compare<Nat>(testElements1, testElements2, Nat.compare)).isTrue()
+        };
+
+        testCompare([], []);
+        testCompare([1], []);
+        testCompare([], [1]);
+        testCompare([1], [1]);
+        testCompare([1], [2]);
+        testCompare([1, 2], [1]);
+        testCompare([1], [1, 2]);
+        testCompare([1, 2], [1, 2]);
+        testCompare([1, 2], [2, 1]);
+        testCompare([1, 2, 4], [1, 2, 3]);
+        testCompare([1, 2, 3], [1, 2, 4]);
+        testCompare([1, 2, 3], [1, 3, 3]);
+        testCompare([1, 2, 3], [2, 2, 3]);
+        testCompare([1, 2, 3], [2, 3, 3]);
+        testCompare([1, 2, 3], [2, 3, 4])
       }
     )
   }

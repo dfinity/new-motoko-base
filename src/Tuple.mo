@@ -17,7 +17,7 @@ module {
   /// ```motoko
   /// import Tuple "mo:new-base/Tuple";
   /// import Nat "mo:new-base/Nat";
-  /// assert Tuple.toText((1, "hello"), Nat.toText, func x = x) == "(1, hello)";
+  /// assert Tuple.toText((1, "hello"), Nat.toText, func (x: Text): Text = x) == "(1, hello)";
   /// ```
   public func toText<A, B>(t : (A, B), toTextA : A -> Text, toTextB : B -> Text) : Text = "(" # toTextA(t.0) # ", " # toTextB(t.1) # ")";
 

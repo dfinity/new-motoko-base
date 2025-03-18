@@ -5,6 +5,7 @@ import Int "../src/Int";
 import { suite; test; expect } "mo:test";
 import Runtime "../src/Runtime";
 import Tuple "../src/Tuple";
+import Text "../src/Text";
 
 suite(
   "forEach",
@@ -766,5 +767,66 @@ suite(
       "element is not found",
       func() = expect.bool(Iter.contains<Nat>([1, 2, 3].vals(), Nat.equal, 4)).isFalse()
     )
+  }
+);
+
+suite(
+  "foldLeft",
+  func() {
+    func mk(inputs : [Text], expected : Text) {
+      let actual = Iter.foldLeft<Text, Text>(inputs.vals(), "S", func(acc, x) = "(" # acc # x # ")");
+      expect.text(actual).equal(expected)
+    };
+    test("some", func() = mk(["A", "B", "C"], "(((SA)B)C)"));
+    test("empty", func() = mk([], "S"))
+  }
+);
+
+suite(
+  "foldRight",
+  func() {
+    func mk(inputs : [Text], expected : Text) {
+      let actual = Iter.foldRight<Text, Text>(inputs.vals(), "S", func(x, acc) = "(" # x # acc # ")");
+      expect.text(actual).equal(expected)
+    };
+    test("some", func() = mk(["A", "B", "C"], "(A(B(CS)))"));
+    test("empty", func() = mk([], "S"))
+  }
+);
+
+suite(
+  "reduce",
+  func() {
+    func mk(inputs : [Text], expected : ?Text) {
+      let actual = Iter.reduce<Text>(inputs.vals(), func(x, acc) = "(" # x # acc # ")");
+      expect.option(actual, func(x : Text) : Text = x, Text.equal).equal(expected)
+    };
+    test("some", func() = mk(["A", "B", "C"], ?"((AB)C)"));
+    test("empty", func() = mk([], null));
+    test("single", func() = mk(["A"], ?"A"))
+  }
+);
+
+suite(
+  "max",
+  func() {
+    func mk(inputs : [Nat], expected : ?Nat) {
+      let actual = Iter.max<Nat>(inputs.vals(), Nat.compare);
+      expect.option(actual, Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 2, 3], ?3));
+    test("empty", func() = mk([], null))
+  }
+);
+
+suite(
+  "min",
+  func() {
+    func mk(inputs : [Nat], expected : ?Nat) {
+      let actual = Iter.min<Nat>(inputs.vals(), Nat.compare);
+      expect.option(actual, Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 1, 4], ?1));
+    test("empty", func() = mk([], null))
   }
 )

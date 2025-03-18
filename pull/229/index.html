@@ -400,21 +400,6 @@ See: https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html</p>
 <p>Copyright: 2023 MR Research AG
 Main author: react0r-com
 Contributors: Timo Hanke (timohanke)</p>
-</div></li><li class="index-item"><a class="index-item-link" href="pure/Deque.html">pure/Deque</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
-<p>The interface is purely functional, not imperative, and deques are immutable values.
-In particular, Deque operations such as push and pop do not update their input deque but, instead, return the
-value of the modified Deque, alongside any other data.
-The input deque is left unchanged.</p>
-<p>Examples of use-cases:</p>
-<ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.</li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li><li>Deque (double-ended queue) by using any combination of push/pop operations on either end.</li></ul>
-
-<p>A Deque is internally implemented as a real-time double-ended queue based on the paper
-&quot;Real-Time Double-Ended Queue Verified (Proof Pearl)&quot;. The implementation maintains
-worst-case constant time <code>O(1)</code> for push/pop operations through gradual rebalancing steps.</p>
-<p>Construction: Create a new deque with the <code>empty&lt;T&gt;()</code> function.</p>
-<p>Note that some operations that traverse the elements of the deque (e.g. <code>forEach</code>, <code>values</code>) preserve the order of the elements,
-whereas others (e.g. <code>map</code>, <code>contains</code>, <code>any</code>) do NOT guarantee that the elements are visited in any order.
-The order is undefined to avoid allocations, making these operations more efficient.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
 A list of type <code>List&lt;T&gt;</code> is either <code>null</code> or an optional pair of a value of type <code>T</code> and a tail, itself of type <code>List&lt;T&gt;</code>.</p>
 <p>To use this library, import it using:</p>
@@ -460,16 +445,16 @@ and uses this information to balance the tree during the modifying operations.</
 In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
 value of the modified Queue, alongside any other data.
 The input queue is left unchanged.</p>
-<p>Examples of use-cases:
-Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.
-Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</p>
-<p>A Queue is internally implemented as two lists, a head access list and a (reversed) tail access list,
-that are dynamically size-balanced by splitting.</p>
-<p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
-<p>Note on the costs of push and pop functions:</p>
-<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
+<p>Examples of use-cases:</p>
+<ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.</li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li><li>Deque (double-ended queue) by using any combination of push/pop operations on either end.</li></ul>
 
-<p><code>n</code> denotes the number of elements stored in the queue.</p>
+<p>A Queue is internally implemented as a real-time double-ended queue based on the paper
+&quot;Real-Time Double-Ended Queue Verified (Proof Pearl)&quot;. The implementation maintains
+worst-case constant time <code>O(1)</code> for push/pop operations through gradual rebalancing steps.</p>
+<p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
+<p>Note that some operations that traverse the elements of the queue (e.g. <code>forEach</code>, <code>values</code>) preserve the order of the elements,
+whereas others (e.g. <code>map</code>, <code>contains</code>, <code>any</code>) do NOT guarantee that the elements are visited in any order.
+The order is undefined to avoid allocations, making these operations more efficient.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Stable ordered set implemented as a red-black tree.</p>
 <p>A red-black tree is a balanced binary search tree ordered by the elements.</p>
 <p>The tree data structure internally colors each of its nodes either red or black,

@@ -170,12 +170,12 @@ persistent actor {
     Iter.fromArray([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)]),
     Nat.compare);
 
-  let (map1, old1) = Map.swap(map0, Nat.compare, 0, &quot;Nil&quot;);
+  transient let (map1, old1) = Map.swap(map0, Nat.compare, 0, &quot;Nil&quot;);
 
   assert Iter.toArray(Map.entries(map1)) == [(0, &quot;Nil&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;)];
   assert old1 == ?&quot;Zero&quot;;
 
-  let (map2, old2) = Map.swap(map0, Nat.compare, 3, &quot;Three&quot;);
+  transient let (map2, old2) = Map.swap(map0, Nat.compare, 3, &quot;Three&quot;);
 
   assert Iter.toArray(Map.entries(map2)) == [(0, &quot;Zero&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;), (3, &quot;Three&quot;)];
   assert old2 == null;
@@ -197,11 +197,11 @@ import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
   let singleton = Map.singleton(0, &quot;Null&quot;);
 
-  let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, &quot;Zero&quot;); // overwrites the value for existing key.
+  transient let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, &quot;Zero&quot;); // overwrites the value for existing key.
   assert oldZero == ?&quot;Null&quot;;
   assert Map.get(map1, Nat.compare, 0) == ?&quot;Zero&quot;;
   let empty = Map.empty&lt;Nat, Text&gt;();
-  let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, &quot;One&quot;);  // no effect, key is absent
+  transient let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, &quot;One&quot;);  // no effect, key is absent
   assert oldOne == null;
   assert Map.get(map2, Nat.compare, 0) == null;
 }</code></pre>

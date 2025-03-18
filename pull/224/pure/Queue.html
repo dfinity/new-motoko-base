@@ -134,7 +134,7 @@ switch reduced {
   };
   case (?result) {
     let reducedQueue = result.0; // queue with element [1].
-    let removedElement = result.1; // 2
+    let removedElement = result.1; // =&gt; 2
   }
 }</code></pre>
 
@@ -144,8 +144,7 @@ switch reduced {
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Turn an iterator into a queue, consuming it.
 Example:</p>
 <pre><code>motoko include=import
-Queue.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].values())
-// =&gt; (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))</code></pre>
+Queue.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].values()) // =&gt; (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>

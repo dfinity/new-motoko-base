@@ -312,19 +312,14 @@ List.tabulate&lt;Nat&gt;(
 </p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a list with exactly one element.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.singleton&lt;Nat&gt;(
-  0
-) // =&gt; ?(0, null)</code></pre>
+List.singleton&lt;Nat&gt;(0) // =&gt; ?(0, null)</code></pre>
 
 <p>Runtime: O(1)</p>
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="repeat"><code><span class="keyword">public func </span><span class="fnname">repeat</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a list of the given length with the same value in each position.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.repeat&lt;Nat&gt;(
-  3,
-  0
-) // =&gt; ?(0, ?(0, ?(0, null)))</code></pre>
+List.repeat&lt;Nat&gt;(3, 0) // =&gt; ?(0, ?(0, ?(0, null)))</code></pre>
 
 <p>Runtime: O(n)</p>
 <p>Space: O(n)</p>
@@ -333,10 +328,11 @@ List.repeat&lt;Nat&gt;(
 length equal to the length of the smaller list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.zip&lt;Nat, Text&gt;(
+let list = List.zip&lt;Nat, Text&gt;(
   ?(0, ?(1, ?(2, null))),
   ?(&quot;0&quot;, ?(&quot;1&quot;, null)),
-) // =&gt; ?((0, &quot;0&quot;), ?((1, &quot;1&quot;), null))</code></pre>
+);
+list // == ?((0, &quot;0&quot;), ?((1, &quot;1&quot;), null))</code></pre>
 
 <p>Runtime: O(min(size(xs), size(ys)))</p>
 <p>Space: O(min(size(xs), size(ys)))</p>
@@ -349,11 +345,12 @@ length equal to the length of the smaller list.</p>
 import Nat = &quot;mo:base/Nat&quot;;
 import Char = &quot;mo:base/Char&quot;;
 
-List.zipWith&lt;Nat, Char, Text&gt;(
+let list = List.zipWith&lt;Nat, Char, Text&gt;(
   ?(0, ?(1, ?(2, null))),
   ?('a', ?('b', null)),
   func (n, c) = Nat.toText(n) # Char.toText(c)
-) // =&gt; ?(&quot;0a&quot;, ?(&quot;1b&quot;, null))</code></pre>
+);
+list // =&gt; ?(&quot;0a&quot;, ?(&quot;1b&quot;, null))</code></pre>
 
 <p>Runtime: O(min(size(xs), size(ys)))</p>
 <p>Space: O(min(size(xs), size(ys)))</p>
@@ -361,10 +358,11 @@ List.zipWith&lt;Nat, Char, Text&gt;(
 </p></div><div class="declaration"><h4 class="function" id="split"><code><span class="keyword">public func </span><span class="fnname">split</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : (<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Split the given list at the given zero-based index.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.split&lt;Nat&gt;(
+let list = List.split&lt;Nat&gt;(
   2,
   ?(0, ?(1, ?(2, null)))
-) // =&gt; (?(0, ?(1, null)), ?(2, null))</code></pre>
+);
+list // =&gt; (?(0, ?(1, null)), ?(2, null))</code></pre>
 
 <p>Runtime: O(n)</p>
 <p>Space: O(n)</p>
@@ -373,61 +371,59 @@ The last chunk will be shorter if the length of the given list
 does not divide by <code>n</code> evenly. Traps if <code>n</code> = 0.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.chunks&lt;Nat&gt;(
+let list = List.chunks&lt;Nat&gt;(
   2,
   ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
-)
-/* =&gt; ?(?(0, ?(1, null)),
-        ?(?(2, ?(3, null)),
-          ?(?(4, null),
-            null)))
-*/</code></pre>
+);
+list // =&gt; ?(?(0, ?(1, null)), ?(?(2, ?(3, null)), ?(?(4, null), null)))</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator to the elements in the list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-var p = &quot;&quot;;
-for (e in List.values([3, 1, 4]))
-  p #= debug_show e;
-p // =&gt; &quot;314&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an array into a list.</p>
+var text = &quot;&quot;;
+let list = List.fromArray&lt;Nat&gt;([3, 1, 4]);
+for (item in List.values(list)) {
+  text #= debug_show item;
+};
+text // =&gt; &quot;314&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an array into a list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.fromArray&lt;Nat&gt;([0, 1, 2, 3, 4])
-// =&gt;  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))</code></pre>
+let list = List.fromArray&lt;Nat&gt;([0, 1, 2, 3, 4]);
+list // =&gt;  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a mutable array into a list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-List.fromVarArray&lt;Nat&gt;([var 0, 1, 2, 3, 4])
-// =&gt;  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))</code></pre>
+let list = List.fromVarArray&lt;Nat&gt;([var 0, 1, 2, 3, 4]);
+list // =&gt;  ?(0, ?(1, ?(2, ?(3, ?(4, null)))))</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p><p>Create an array from a list.
 Example:</p>
 <pre><code>motoko include=import
-List.toArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))))
-// =&gt; [0, 1, 2, 3, 4]</code></pre>
+let list = List.toArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+list // =&gt; [0, 1, 2, 3, 4]</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Create a mutable array from a list.
 Example:</p>
 <pre><code>motoko include=import
-List.toVarArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))))
-// =&gt; [var 0, 1, 2, 3, 4]</code></pre>
+let list = List.toVarArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+list // =&gt; [var 0, 1, 2, 3, 4]</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Turn an iterator into a list, consuming it.
 Example:</p>
 <pre><code>motoko include=import
-List.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].values())
-// =&gt; ?(0, ?(1, ?(2, ?(3, ?(4, null))))))</code></pre>
+let list = List.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].values());
+list // =&gt; ?(0, ?(1, ?(2, ?(3, ?(4, null))))))</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>

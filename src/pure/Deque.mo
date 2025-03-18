@@ -1,22 +1,22 @@
 /// Double-ended queue of a generic element type `T`.
 ///
-/// The interface is purely functional, not imperative, and deques are immutable values.
-/// In particular, Deque operations such as push and pop do not update their input deque but, instead, return the
-/// value of the modified Deque, alongside any other data.
-/// The input deque is left unchanged.
+/// The interface is purely functional, not imperative, and queues are immutable values.
+/// In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
+/// value of the modified Queue, alongside any other data.
+/// The input queue is left unchanged.
 ///
 /// Examples of use-cases:
 /// - Queue (FIFO) by using `pushBack()` and `popFront()`.
 /// - Stack (LIFO) by using `pushFront()` and `popFront()`.
 /// - Deque (double-ended queue) by using any combination of push/pop operations on either end.
 ///
-/// A Deque is internally implemented as a real-time double-ended queue based on the paper
+/// A Queue is internally implemented as a real-time double-ended queue based on the paper
 /// "Real-Time Double-Ended Queue Verified (Proof Pearl)". The implementation maintains
 /// worst-case constant time `O(1)` for push/pop operations through gradual rebalancing steps.
 ///
-/// Construction: Create a new deque with the `empty<T>()` function.
+/// Construction: Create a new queue with the `empty<T>()` function.
 ///
-/// Note that some operations that traverse the elements of the deque (e.g. `forEach`, `values`) preserve the order of the elements,
+/// Note that some operations that traverse the elements of the queue (e.g. `forEach`, `values`) preserve the order of the elements,
 /// whereas others (e.g. `map`, `contains`, `any`) do NOT guarantee that the elements are visited in any order.
 /// The order is undefined to avoid allocations, making these operations more efficient.
 
@@ -27,15 +27,15 @@ import { trap } "../Runtime";
 import Iter "../Iter";
 
 module {
-  /// The real-time deque data structure can be in one of the following states:
+  /// The real-time queue data structure can be in one of the following states:
   ///
-  /// - `#empty`: the deque is empty
-  /// - `#one`: the deque contains a single element
-  /// - `#two`: the deque contains two elements
-  /// - `#three`: the deque contains three elements
-  /// - `#idles`: the deque is in the idle state, where `l` and `r` are non-empty stacks of elements fulfilling the size invariant
-  /// - `#rebal`: the deque is in the rebalancing state
-  public type Deque<T> = {
+  /// - `#empty`: the queue is empty
+  /// - `#one`: the queue contains a single element
+  /// - `#two`: the queue contains two elements
+  /// - `#three`: the queue contains three elements
+  /// - `#idles`: the queue is in the idle state, where `l` and `r` are non-empty stacks of elements fulfilling the size invariant
+  /// - `#rebal`: the queue is in the rebalancing state
+  public type Queue<T> = {
     #empty;
     #one : T;
     #two : (T, T);
@@ -44,67 +44,67 @@ module {
     #rebal : States<T>
   };
 
-  /// Create a new empty deque.
+  /// Create a new empty queue.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// Deque.empty<Nat>()
+  /// Queue.empty<Nat>()
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func empty<T>() : Deque<T> = #empty;
+  public func empty<T>() : Queue<T> = #empty;
 
-  /// Determine whether a deque is empty.
-  /// Returns true if `deque` is empty, otherwise `false`.
+  /// Determine whether a queue is empty.
+  /// Returns true if `queue` is empty, otherwise `false`.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.empty<Nat>();
-  /// Deque.isEmpty(deque) // => true
+  /// let queue = Queue.empty<Nat>();
+  /// Queue.isEmpty(queue) // => true
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func isEmpty<T>(deque : Deque<T>) : Bool = switch deque {
+  public func isEmpty<T>(queue : Queue<T>) : Bool = switch queue {
     case (#empty) true;
     case _ false
   };
 
-  /// Create a new deque comprising a single element.
+  /// Create a new queue comprising a single element.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// Deque.singleton<Nat>(25)
+  /// Queue.singleton<Nat>(25)
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func singleton<T>(element : T) : Deque<T> = #one(element);
+  public func singleton<T>(element : T) : Queue<T> = #one(element);
 
-  /// Determine the number of elements contained in a deque.
+  /// Determine the number of elements contained in a queue.
   ///
   /// Example:
   /// ```motoko
-  /// import {singleton; size} "mo:new-base/Deque";
+  /// import {singleton; size} "mo:new-base/Queue";
   ///
-  /// let deque = singleton<Nat>(42);
-  /// size(deque) // => 1
+  /// let queue = singleton<Nat>(42);
+  /// size(queue) // => 1
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func size<T>(deque : Deque<T>) : Nat = switch deque {
+  public func size<T>(queue : Queue<T>) : Nat = switch queue {
     case (#empty) 0;
     case (#one(_)) 1;
     case (#two(_, _)) 2;
@@ -116,25 +116,25 @@ module {
     case (#rebal((_, big, small))) BigState.size(big) + SmallState.size(small)
   };
 
-  /// Test if a deque contains a given value.
-  /// Returns true if the deque contains the item, otherwise false.
+  /// Test if a queue contains a given value.
+  /// Returns true if the queue contains the item, otherwise false.
   /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   /// import Nat "mo:new-base/Nat";
   ///
-  /// let deque = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2);
-  /// Deque.contains(deque, Nat.equal, 1) // => true
+  /// let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  /// Queue.contains(queue, Nat.equal, 1) // => true
   /// ```
   ///
-  /// Note that the order in which the elements from the `deque` are checked is undefined and may vary.
+  /// Note that the order in which the elements from the `queue` are checked is undefined and may vary.
   ///
   /// Runtime: `O(size)`
   ///
   /// Space: `O(1)`
-  public func contains<T>(deque : Deque<T>, eq : (T, T) -> Bool, item : T) : Bool = switch deque {
+  public func contains<T>(queue : Queue<T>, eq : (T, T) -> Bool, item : T) : Bool = switch queue {
     case (#empty) false;
     case (#one(x)) eq(x, item);
     case (#two(x, y)) eq(x, item) or eq(y, item);
@@ -148,21 +148,21 @@ module {
     }
   };
 
-  /// Inspect the optional element on the front end of a deque.
-  /// Returns `null` if `deque` is empty. Otherwise, the front element of `deque`.
+  /// Inspect the optional element on the front end of a queue.
+  /// Returns `null` if `queue` is empty. Otherwise, the front element of `queue`.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1);
-  /// Deque.peekFront(deque) // => ?1
+  /// let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  /// Queue.peekFront(queue) // => ?1
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekFront<T>(deque : Deque<T>) : ?T = switch deque {
+  public func peekFront<T>(queue : Queue<T>) : ?T = switch queue {
     case (#empty) null;
     case (#one(x)) ?x;
     case (#two(x, _)) ?x;
@@ -174,21 +174,21 @@ module {
     }
   };
 
-  /// Inspect the optional element on the back end of a deque.
-  /// Returns `null` if `deque` is empty. Otherwise, the back element of `deque`.
+  /// Inspect the optional element on the back end of a queue.
+  /// Returns `null` if `queue` is empty. Otherwise, the back element of `queue`.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2);
-  /// Deque.peekBack(deque) // => ?2
+  /// let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  /// Queue.peekBack(queue) // => ?2
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekBack<T>(deque : Deque<T>) : ?T = switch deque {
+  public func peekBack<T>(queue : Queue<T>) : ?T = switch queue {
     case (#empty) null;
     case (#one(x)) ?x;
     case (#two(_, y)) ?y;
@@ -200,20 +200,20 @@ module {
     }
   };
 
-  /// Insert a new element on the front end of a deque.
-  /// Returns the new deque with `element` in the front followed by the elements of `deque`.
+  /// Insert a new element on the front end of a queue.
+  /// Returns the new queue with `element` in the front followed by the elements of `queue`.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1) // deque with elements [1, 2]
+  /// Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1) // queue with elements [1, 2]
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func pushFront<T>(deque : Deque<T>, element : T) : Deque<T> = switch deque {
+  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> = switch queue {
     case (#empty) #one(element);
     case (#one(y)) #two(element, y);
     case (#two(y, z)) #three(element, y, z);
@@ -240,7 +240,7 @@ module {
         #rebal(states6)
       }
     };
-    // if the deque is in the middle of a rebalancing process: push the element and advance the rebalancing process by 4 steps
+    // if the queue is in the middle of a rebalancing process: push the element and advance the rebalancing process by 4 steps
     // move back into the idle state if the rebalancing is done
     case (#rebal((dir, big0, small0))) switch dir {
       case (#right) {
@@ -270,38 +270,38 @@ module {
     }
   };
 
-  /// Insert a new element on the back end of a deque.
-  /// Returns the new deque with all the elements of `deque`, followed by `element` on the back.
+  /// Insert a new element on the back end of a queue.
+  /// Returns the new queue with all the elements of `queue`, followed by `element` on the back.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2) // deque with elements [1, 2]
+  /// Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2) // queue with elements [1, 2]
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func pushBack<T>(deque : Deque<T>, element : T) : Deque<T> = reverse(pushFront(reverse(deque), element));
+  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> = reverse(pushFront(reverse(queue), element));
 
-  /// Remove the element on the front end of a deque.
-  /// Returns `null` if `deque` is empty. Otherwise, it returns a pair of
-  /// the first element and a new deque that contains all the remaining elements of `deque`.
+  /// Remove the element on the front end of a queue.
+  /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of
+  /// the first element and a new queue that contains all the remaining elements of `queue`.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   /// import Debug "mo:new-base/Debug";
   ///
-  /// let initial = Deque.pushFront(Deque.pushFront(Deque.empty<Nat>(), 2), 1); // initial deque with elements [1, 2]
-  /// Deque.popFront(initial) // => ?(1, [2])
+  /// let initial = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1); // initial queue with elements [1, 2]
+  /// Queue.popFront(initial) // => ?(1, [2])
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func popFront<T>(deque : Deque<T>) : ?(T, Deque<T>) = switch deque {
+  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) = switch queue {
     case (#empty) null;
     case (#one(x)) ?(x, #empty);
     case (#two(x, y)) ?(x, #one(y));
@@ -320,7 +320,7 @@ module {
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         ?(x, #rebal(states6))
       } else {
-        ?(x, Stacks.smallDeque(r))
+        ?(x, Stacks.smallqueue(r))
       }
     };
     case (#rebal((dir, big0, small0))) switch dir {
@@ -351,63 +351,63 @@ module {
     }
   };
 
-  /// Remove the element on the back end of a deque.
-  /// Returns `null` if `deque` is empty. Otherwise, it returns a pair of
-  /// a new deque that contains the remaining elements of `deque`
+  /// Remove the element on the back end of a queue.
+  /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of
+  /// a new queue that contains the remaining elements of `queue`
   /// and, as the second pair item, the removed back element.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   /// import Debug "mo:new-base/Debug";
   ///
-  /// let initial = Deque.pushBack(Deque.pushBack(Deque.empty<Nat>(), 1), 2); // initial deque with elements [1, 2]
-  /// Deque.popBack(initial) // => ?(2, [1])
+  /// let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2); // initial queue with elements [1, 2]
+  /// Queue.popBack(initial) // => ?(2, [1])
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func popBack<T>(deque : Deque<T>) : ?(Deque<T>, T) = do ? {
-    let (x, deque2) = popFront(reverse(deque))!;
-    (reverse(deque2), x)
+  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) = do ? {
+    let (x, queue2) = popFront(reverse(queue))!;
+    (reverse(queue2), x)
   };
 
-  /// Turn an iterator into a deque, consuming it.
+  /// Turn an iterator into a queue, consuming it.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// Deque.fromIter([1, 2, 3].vals()) // deque with elements [1, 2, 3], 1 at the front, 3 at the back
+  /// Queue.fromIter([1, 2, 3].vals()) // queue with elements [1, 2, 3], 1 at the front, 3 at the back
   /// ```
   ///
   /// Runtime: `O(size)`
   ///
   /// Space: `O(size)`
-  public func fromIter<T>(iter : Iter<T>) : Deque<T> {
-    var deque = empty<T>();
-    Iter.forEach(iter, func(t : T) = deque := pushBack(deque, t));
-    deque
+  public func fromIter<T>(iter : Iter<T>) : Queue<T> {
+    var queue = empty<T>();
+    Iter.forEach(iter, func(t : T) = queue := pushBack(queue, t));
+    queue
   };
 
-  /// Create an iterator over the elements in the deque. The order of the elements is from front to back.
+  /// Create an iterator over the elements in the queue. The order of the elements is from front to back.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3].vals());
-  /// let iter = Deque.values(deque);
+  /// let queue = Queue.fromIter([1, 2, 3].vals());
+  /// let iter = Queue.values(queue);
   /// Array.fromIter(iter) // => [1, 2, 3]
   /// ```
   ///
   /// Runtime: `O(1)` to create the iterator and for each `next()` call.
   ///
   /// Space: `O(1)` to create the iterator and for each `next()` call.
-  public func values<T>(deque : Deque<T>) : Iter.Iter<T> {
+  public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
     object {
-      var current = deque;
+      var current = queue;
       public func next() : ?T {
         switch (popFront(current)) {
           case null null;
@@ -420,23 +420,23 @@ module {
     }
   };
 
-  /// Create an iterator over the elements in the deque. The order of the elements is from back to front.
+  /// Create an iterator over the elements in the queue. The order of the elements is from back to front.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3].vals());
-  /// let iter = Deque.valuesRev(deque);
+  /// let queue = Queue.fromIter([1, 2, 3].vals());
+  /// let iter = Queue.valuesRev(queue);
   /// Array.fromIter(iter) // => [3, 2, 1]
   /// ```
   ///
   /// Runtime: `O(1)` to create the iterator and for each `next()` call.
   ///
   /// Space: `O(1)` to create the iterator and for each `next()` call.
-  public func valuesRev<T>(deque : Deque<T>) : Iter.Iter<T> {
+  public func valuesRev<T>(queue : Queue<T>) : Iter.Iter<T> {
     object {
-      var current = deque;
+      var current = queue;
       public func next() : ?T {
         switch (popBack(current)) {
           case null null;
@@ -449,37 +449,37 @@ module {
     }
   };
 
-  /// Compare two deques for equality using a provided equality function to compare their elements.
-  /// Two deques are considered equal if they contain the same elements in the same order.
+  /// Compare two queues for equality using a provided equality function to compare their elements.
+  /// Two queues are considered equal if they contain the same elements in the same order.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   /// import Nat "mo:new-base/Nat";
   ///
-  /// let deque1 = Deque.fromIter([1, 2, 3].vals());
-  /// let deque2 = Deque.fromIter([1, 2, 3].vals());
-  /// Deque.equal(deque1, deque2, Nat.equal) // => true
+  /// let queue1 = Queue.fromIter([1, 2, 3].vals());
+  /// let queue2 = Queue.fromIter([1, 2, 3].vals());
+  /// Queue.equal(queue1, queue2, Nat.equal) // => true
   /// ```
   ///
   /// Runtime: `O(size)`
   ///
   /// Space: `O(size)`
-  public func equal<T>(deque1 : Deque<T>, deque2 : Deque<T>, equality : (T, T) -> Bool) : Bool = switch (popFront deque1, popFront deque2) {
+  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equality : (T, T) -> Bool) : Bool = switch (popFront queue1, popFront queue2) {
     case (null, null) true;
-    case (?((x1, deque1Tail)), ?((x2, deque2Tail))) equality(x1, x2) and equal(deque1Tail, deque2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
+    case (?((x1, queue1Tail)), ?((x2, queue2Tail))) equality(x1, x2) and equal(queue1Tail, queue2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
     case _ false
   };
 
-  /// Return true if the given predicate is true for all deque elements.
+  /// Return true if the given predicate is true for all queue elements.
   /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([2, 4, 6].vals());
-  /// Deque.all(deque, func n = n % 2 == 0) // => true
+  /// let queue = Queue.fromIter([2, 4, 6].vals());
+  /// Queue.all(queue, func n = n % 2 == 0) // => true
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -487,7 +487,7 @@ module {
   /// Space: `O(1)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
-  public func all<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
+  public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool = switch queue {
     case (#empty) true;
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x and predicate y;
@@ -501,15 +501,15 @@ module {
     }
   };
 
-  /// Return true if the given predicate is true for any deque element.
+  /// Return true if the given predicate is true for any queue element.
   /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3].vals());
-  /// Deque.any(deque, func n = n > 2) // => true
+  /// let queue = Queue.fromIter([1, 2, 3].vals());
+  /// Queue.any(queue, func n = n > 2) // => true
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -517,7 +517,7 @@ module {
   /// Space: `O(1)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
-  public func any<T>(deque : Deque<T>, predicate : T -> Bool) : Bool = switch deque {
+  public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool = switch queue {
     case (#empty) false;
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x or predicate y;
@@ -531,15 +531,15 @@ module {
     }
   };
 
-  /// Call the given function for its side effect on each deque element in order: from front to back.
+  /// Call the given function for its side effect on each queue element in order: from front to back.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
   /// var sum = 0;
-  /// let deque = Deque.fromIter([1, 2, 3].vals());
-  /// Deque.forEach(deque, func n = sum += n);
+  /// let queue = Queue.fromIter([1, 2, 3].vals());
+  /// Queue.forEach(queue, func n = sum += n);
   /// sum // => 6
   /// ```
   ///
@@ -548,27 +548,27 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func forEach<T>(deque : Deque<T>, f : T -> ()) = switch deque {
+  public func forEach<T>(queue : Queue<T>, f : T -> ()) = switch queue {
     case (#empty) ();
     case (#one(x)) f x;
     case (#two(x, y)) { f x; f y };
     case (#three(x, y, z)) { f x; f y; f z };
     // Preserve the order when visiting the elements. Note that the #idles case would require reversing the second stack.
     case _ {
-      for (t in values deque) f t
+      for (t in values queue) f t
     }
   };
 
-  /// Create a new deque by applying the given function to each element of the original deque.
+  /// Create a new queue by applying the given function to each element of the original queue.
   /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   /// import Nat "mo:new-base/Nat";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3].vals());
-  /// let mapped = Deque.map(deque, func n = n * 2) // deque with elements [2, 4, 6]
+  /// let queue = Queue.fromIter([1, 2, 3].vals());
+  /// let mapped = Queue.map(queue, func n = n * 2) // queue with elements [2, 4, 6]
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -576,7 +576,7 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func map<T1, T2>(deque : Deque<T1>, f : T1 -> T2) : Deque<T2> = switch deque {
+  public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> = switch queue {
     case (#empty) #empty;
     case (#one(x)) #one(f x);
     case (#two(x, y)) #two(f x, f y);
@@ -586,20 +586,20 @@ module {
       // No reason to rebuild the #rebal state.
       // future work: It could be further optimized by building a balanced #idles state directly since we know the sizes.
       var q = empty<T2>();
-      for (t in values deque) q := pushBack(q, f t);
+      for (t in values queue) q := pushBack(q, f t);
       q
     }
   };
 
-  /// Create a new deque with only those elements of the original deque for which
+  /// Create a new queue with only those elements of the original queue for which
   /// the given predicate returns true.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3, 4].vals());
-  /// let filtered = Deque.filter(deque, func n = n % 2 == 0) // deque with elements [2, 4]
+  /// let queue = Queue.fromIter([1, 2, 3, 4].vals());
+  /// let filtered = Queue.filter(queue, func n = n % 2 == 0) // queue with elements [2, 4]
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -607,21 +607,21 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
-  public func filter<T>(deque : Deque<T>, predicate : T -> Bool) : Deque<T> {
+  public func filter<T>(queue : Queue<T>, predicate : T -> Bool) : Queue<T> {
     var q = empty<T>();
-    for (t in values deque) if (predicate t) q := pushBack(q, t);
+    for (t in values queue) if (predicate t) q := pushBack(q, t);
     q
   };
 
-  /// Create a new deque by applying the given function to each element of the original deque
+  /// Create a new queue by applying the given function to each element of the original queue
   /// and collecting the results for which the function returns a non-null value.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3, 4].vals());
-  /// let filtered = Deque.filterMap(deque, func n = if n % 2 == 0 then ?n else null) // deque with elements [2, 4]
+  /// let queue = Queue.fromIter([1, 2, 3, 4].vals());
+  /// let filtered = Queue.filterMap(queue, func n = if n % 2 == 0 then ?n else null) // queue with elements [2, 4]
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -629,9 +629,9 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func filterMap<T, U>(deque : Deque<T>, f : T -> ?U) : Deque<U> {
+  public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
     var q = empty<U>();
-    for (t in values deque) {
+    for (t in values queue) {
       switch (f t) {
         case (?x) q := pushBack(q, x);
         case null ()
@@ -640,14 +640,14 @@ module {
     q
   };
 
-  /// Create a `Text` representation of a deque for debugging purposes.
+  /// Create a `Text` representation of a queue for debugging purposes.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3].vals());
-  /// Deque.toText(deque, Nat.toText) // => "PureDeque[1, 2, 3]"
+  /// let queue = Queue.fromIter([1, 2, 3].vals());
+  /// Queue.toText(queue, Nat.toText) // => "Purequeue[1, 2, 3]"
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -655,33 +655,33 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func toText<T>(deque : Deque<T>, f : T -> Text) : Text {
-    var text = "PureDeque[";
+  public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
+    var text = "Purequeue[";
     var first = true;
-    for (t in values deque) {
+    for (t in values queue) {
       if (first) first := false else text #= ", ";
       text #= f(t)
     };
     text # "]"
   };
 
-  /// Reverse the order of elements in a deque.
+  /// Reverse the order of elements in a queue.
   /// This operation is cheap, it does NOT require copying the elements.
   ///
   /// Example:
   /// ```motoko
-  /// import Deque "mo:new-base/Deque";
+  /// import Queue "mo:new-base/Queue";
   ///
-  /// let deque = Deque.fromIter([1, 2, 3].vals());
-  /// Deque.toText(Deque.reverse(deque), Nat.toText) // => "PureDeque[3, 2, 1]"
+  /// let queue = Queue.fromIter([1, 2, 3].vals());
+  /// Queue.toText(Queue.reverse(queue), Nat.toText) // => "Purequeue[3, 2, 1]"
   /// ```
   ///
   /// Runtime: `O(1)`
   ///
   /// Space: `O(1)`
-  public func reverse<T>(deque : Deque<T>) : Deque<T> = switch deque {
-    case (#empty) deque;
-    case (#one(_)) deque;
+  public func reverse<T>(queue : Queue<T>) : Queue<T> = switch queue {
+    case (#empty) queue;
+    case (#one(_)) queue;
     case (#two(x, y)) #two(y, x);
     case (#three(x, y, z)) #three(z, y, x);
     case (#idles(l, r)) #idles(r, l);
@@ -714,7 +714,7 @@ module {
 
     public func size<T>((left, right) : Stacks<T>) : Nat = List.size(left) + List.size(right);
 
-    public func smallDeque<T>((left, right) : Stacks<T>) : Deque<T> = switch (left, right) {
+    public func smallqueue<T>((left, right) : Stacks<T>) : Queue<T> = switch (left, right) {
       case (null, null) #empty;
       case (null, ?(x, null)) #one(x);
       case (?(x, null), null) #one(x);
@@ -725,13 +725,13 @@ module {
       case (?(x, ?(y, ?(z, null))), null) #three(z, y, x);
       case (?(x, ?(y, null)), ?(z, null)) #three(z, y, x);
       case (?(x, null), ?(y, ?(z, null))) #three(z, y, x);
-      case _ (trap "Illegal smallDeque invocation")
+      case _ (trap "Illegal smallqueue invocation")
     };
 
     public func map<T, U>((left, right) : Stacks<T>, f : T -> U) : Stacks<U> = (List.map(left, f), List.map(right, f))
   };
 
-  /// Represents an end of the deque that is not in a rebalancing process. It is a stack and its size.
+  /// Represents an end of the queue that is not in a rebalancing process. It is a stack and its size.
   type Idle<T> = (stacks : Stacks<T>, size : Nat);
   module Idle {
     public func push<T>((stacks, size) : Idle<T>, t : T) : Idle<T> = (Stacks.push(stacks, t), 1 + size);
@@ -767,7 +767,7 @@ module {
     public func size<T>((_, extraSize, _, targetSize) : Current<T>) : Nat = extraSize + targetSize
   };
 
-  /// The bigger end of the deque during rebalancing. It is used to split the bigger end of the deque into the new big end and a portion to be added to the small end. Can be in one of the following states:
+  /// The bigger end of the queue during rebalancing. It is used to split the bigger end of the queue into the new big end and a portion to be added to the small end. Can be in one of the following states:
   ///
   /// - `#big1(cur, big, aux, n)`: Initial stage. Using the step function it takes `n`-elements from the `big` stack and puts them to `aux` in reversed order. `#big1(cur, x1 .. xn : bigTail, [], n) ->* #big1(cur, bigTail, xn .. x1, 0)`. The `bigTail` is later given to the `small` end.
   /// - `#big2(common)`: Is used to reverse the elements from the previous phase to restore the original order. `common = #copy(cur, xn .. x1, [], 0) ->* #copy(cur, [], x1 .. xn, n)`.
@@ -818,7 +818,7 @@ module {
     }
   };
 
-  /// The smaller end of the deque during rebalancing. Can be in one of the following states:
+  /// The smaller end of the queue during rebalancing. Can be in one of the following states:
   ///
   /// - `#small1(cur, small, aux)`: Initial stage. Using the step function the original elements are reversed. `#small1(cur, s1 .. sn, []) ->* #small1(cur, [], sn .. s1)`, note that `aux` is initially empty, at the end contains the reversed elements from the small stack.
   /// - `#small2(cur, aux, big, new, size)`: Using the step function the newly transfered tail from the bigger end is reversed on top of the `new` list. `#small2(cur, sn .. s1, b1 .. bm, [], 0) ->* #small2(cur, sn .. s1, [], bm .. b1, m)`, note that `aux` is the reversed small stack from the previous phase, `new` is initially empty, `size` corresponds to the size of `new`.
@@ -882,10 +882,10 @@ module {
 
   type CopyState<T> = { #copy : (Current<T>, List<T>, List<T>, Nat) };
 
-  /// Represents the last rebalancing phase of both small and big ends of the deque. It is used to reverse the elements from the previous phases to restore the original order. It can be in one of the following states:
+  /// Represents the last rebalancing phase of both small and big ends of the queue. It is used to reverse the elements from the previous phases to restore the original order. It can be in one of the following states:
   ///
   /// - `#copy(cur, aux, new, sizeOfNew)`: Puts the elements from `aux` in reversed order on top of `new`. `#copy(cur, xn .. x1, new, sizeOfNew) ->* #copy(cur, [], x1 .. xn : new, n + sizeOfNew)`.
-  /// - `#idle(cur, idle)`: The rebalancing process is done and the deque is in the idle state.
+  /// - `#idle(cur, idle)`: The rebalancing process is done and the queue is in the idle state.
   type CommonState<T> = CopyState<T> or { #idle : (Current<T>, Idle<T>) };
 
   module CommonState {

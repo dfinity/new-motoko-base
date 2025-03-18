@@ -188,11 +188,8 @@ module {
   /// ```motoko
   /// import Iter "mo:new-base/Iter";
   /// let iter = [1, 2, 3].values();
-  /// let mappedIter = Iter.map(iter, func (x : Nat) : Nat { x * 2 });
-  /// assert(?2 == mappedIter.next());
-  /// assert(?4 == mappedIter.next());
-  /// assert(?6 == mappedIter.next());
-  /// assert(null == mappedIter.next());
+  /// let mappedIter = Iter.map<Nat, Nat>(iter, func (x) = x * 2);
+  /// Iter.toArray(mappedIter) // => [2, 4, 6]
   /// ```
   public func map<T, R>(iter : Iter<T>, f : T -> R) : Iter<R> = object {
     public func next() : ?R {
@@ -292,6 +289,23 @@ module {
     }
   };
 
+  /// Returns a new iterator that yields at most, first `n` elements from the original iterator.
+  /// After `n` elements have been produced or the original iterator is exhausted,
+  /// subsequent calls to `next()` will return `null`.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.fromArray([1, 2, 3, 4, 5]);
+  /// let first3 = Iter.take(iter, 3);
+  /// Iter.toArray(first3) // => [1, 2, 3]
+  /// ```
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.fromArray([1, 2, 3]);
+  /// let first5 = Iter.take(iter, 5);
+  /// Iter.toArray(first5) // => [1, 2, 3] only 3 elements in the original iterator
+  /// ```
   public func take<T>(iter : Iter<T>, n : Nat) : Iter<T> = object {
     var remaining = n;
     public func next() : ?T {
@@ -301,6 +315,15 @@ module {
     }
   };
 
+  /// Returns a new iterator that yields elements from the original iterator until the predicate function returns false.
+  /// The first element for which the predicate returns false is not included in the result.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.fromArray([1, 2, 3, 4, 5, 4, 3, 2, 1]);
+  /// let result = Iter.takeWhile<Nat>(iter, func (x) = x < 4);
+  /// Iter.toArray(result) // => [1, 2, 3] note the difference between `takeWhile` and `filter`
+  /// ```
   public func takeWhile<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> = object {
     var done = false;
     public func next() : ?T {
@@ -312,6 +335,15 @@ module {
     }
   };
 
+  /// Returns a new iterator that skips the first `n` elements from the original iterator.
+  /// If the original iterator has fewer than `n` elements, the result will be an empty iterator.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.fromArray([1, 2, 3, 4, 5]);
+  /// let skipped = Iter.drop(iter, 3);
+  /// Iter.toArray(skipped) // => [4, 5]
+  /// ```
   public func drop<T>(iter : Iter<T>, n : Nat) : Iter<T> = object {
     var remaining = n;
     public func next() : ?T {
@@ -323,6 +355,15 @@ module {
     }
   };
 
+  /// Returns a new iterator that skips elements from the original iterator until the predicate function returns false.
+  /// The first element for which the predicate returns false is the first element produced by the new iterator.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.fromArray([1, 2, 3, 4, 5, 4, 3, 2, 1]);
+  /// let result = Iter.dropWhile<Nat>(iter, func (x) = x < 4);
+  /// Iter.toArray(result) // => [4, 5, 4, 3, 2, 1] notice that `takeWhile` and `dropWhile` are complementary
+  /// ```
   public func dropWhile<T>(iter : Iter<T>, f : T -> Bool) : Iter<T> = object {
     var dropping = true;
     public func next() : ?T {
@@ -337,6 +378,16 @@ module {
     }
   };
 
+  /// Zips two iterators into a single iterator that produces pairs of elements.
+  /// The resulting iterator will stop producing elements when either of the input iterators is exhausted.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter1 = [1, 2, 3].values();
+  /// let iter2 = ["A", "B"].values();
+  /// let zipped = Iter.zip(iter1, iter2);
+  /// Iter.toArray(zipped) // => [(1, "A"), (2, "B")] note that the third element from iter1 is not included, because iter2 is exhausted
+  /// ```
   public func zip<T, U>(a : Iter<T>, b : Iter<U>) : Iter<(T, U)> = object {
     public func next() : ?(T, U) {
       let ?t = a.next() else return null;
@@ -345,6 +396,16 @@ module {
     }
   };
 
+  /// Zips two iterators into a single iterator by applying a function to zipped pairs of elements.
+  /// The resulting iterator will stop producing elements when either of the input iterators is exhausted.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter1 = ["A", "B"].values();
+  /// let iter2 = ["1", "2", "3"].values();
+  /// let zipped = Iter.zipWith<Text, Text, Text>(iter1, iter2, func (a, b) = a # b);
+  /// Iter.toArray(zipped) // => ["A1", "B2"] note that the third element from iter2 is not included, because iter1 is exhausted
+  /// ```
   public func zipWith<T, U, R>(a : Iter<T>, b : Iter<U>, f : (T, U) -> R) : Iter<R> = object {
     public func next() : ?R {
       let ?t = a.next() else return null;
@@ -353,6 +414,14 @@ module {
     }
   };
 
+  /// Checks if a predicate function is true for all elements produced by an iterator.
+  /// It stops consuming elements from the original iterator as soon as the predicate returns false.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.all<Nat>([1, 2, 3].values(), func (x) = x < 4) // => true
+  /// Iter.all<Nat>([1, 2, 3].values(), func (x) = x < 3) // => false
+  /// ```
   public func all<T>(iter : Iter<T>, f : T -> Bool) : Bool {
     for (x in iter) {
       if (not f x) return false
@@ -360,6 +429,14 @@ module {
     true
   };
 
+  /// Checks if a predicate function is true for any element produced by an iterator.
+  /// It stops consuming elements from the original iterator as soon as the predicate returns true.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.any<Nat>([1, 2, 3].values(), func (x) = x == 2) // => true
+  /// Iter.any<Nat>([1, 2, 3].values(), func (x) = x == 4) // => false
+  /// ```
   public func any<T>(iter : Iter<T>, f : T -> Bool) : Bool {
     for (x in iter) {
       if (f x) return true
@@ -367,6 +444,14 @@ module {
     false
   };
 
+  /// Finds the first element produced by an iterator for which a predicate function returns true.
+  /// Returns `null` if no such element is found.
+  /// It stops consuming elements from the original iterator as soon as the predicate returns true.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.find<Nat>([1, 2, 3, 4].values(), func (x) = x % 2 == 0) // => ?2
+  /// ```
   public func find<T>(iter : Iter<T>, f : T -> Bool) : ?T {
     for (x in iter) {
       if (f x) return ?x
@@ -374,6 +459,14 @@ module {
     null
   };
 
+  /// Checks if an element is produced by an iterator.
+  /// It stops consuming elements from the original iterator as soon as the predicate returns true.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// import Nat "mo:new-base/Nat";
+  /// Iter.contains<Nat>([1, 2, 3].values(), Nat.equal, 2) // => true
+  /// ```
   public func contains<T>(iter : Iter<T>, equal : (T, T) -> Bool, value : T) : Bool {
     for (x in iter) {
       if (equal(x, value)) return true
@@ -381,6 +474,14 @@ module {
     false
   };
 
+  /// Reduces an iterator to a single value by applying a function to each element and an accumulator.
+  /// The accumulator is initialized with the `initial` value.
+  /// It starts applying the `combine` function starting from the `initial` accumulator value and the first elements produced by the iterator.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.foldLeft<Text>(["A", "B", "C"].values(), "S", func (acc, x) = "(" # acc # x # ")") // => ?"(((SA)B)C)"
+  /// ```
   public func foldLeft<T, R>(iter : Iter<T>, initial : R, combine : (R, T) -> R) : R {
     var acc = initial;
     for (x in iter) {
@@ -389,15 +490,42 @@ module {
     acc
   };
 
+  /// Reduces an iterator to a single value by applying a function to each element in reverse order and an accumulator.
+  /// The accumulator is initialized with the `initial` value and it is first combined with the last element produced by the iterator.
+  /// It starts applying the `combine` function starting from the last elements produced by the iterator.
+  ///
+  /// **Performance note**: Since this function needs to consume the entire iterator to reverse it,
+  /// it has to materialize the entire iterator in memory to get to the last element to start applying the `combine` function.
+  /// **Use `foldLeft` or `reduce` when possible to avoid the extra memory overhead**.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.foldRight<Text>(["A", "B", "C"].values(), "S", func (x, acc) = "(" # x # acc # ")") // => ?"(A(B(CS)))"
+  /// ```
   public func foldRight<T, R>(iter : Iter<T>, initial : R, combine : (T, R) -> R) : R {
     foldLeft<T, R>(reverse(iter), initial, func(acc, x) = combine(x, acc))
   };
 
+  /// Reduces an iterator to a single value by applying a function to each element, starting with the first elements.
+  /// The accumulator is initialized with the first element produced by the iterator.
+  /// When the iterator is empty, it returns `null`.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.reduce<Nat>([1, 2, 3].values(), Nat.add) // => ?6
+  /// ```
   public func reduce<T>(iter : Iter<T>, combine : (T, T) -> T) : ?T {
     let ?first = iter.next() else return null;
     ?foldLeft(iter, first, combine)
   };
 
+  /// Consumes an iterator and returns the first maximum element produced by the iterator.
+  /// If the iterator is empty, it returns `null`.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.max<Nat>([1, 2, 3].values(), Nat.compare) // => ?3
+  /// ```
   public func max<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
     reduce<T>(
       iter,
@@ -410,6 +538,13 @@ module {
     )
   };
 
+  /// Consumes an iterator and returns the first minimum element produced by the iterator.
+  /// If the iterator is empty, it returns `null`.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// Iter.min<Nat>([1, 2, 3].values(), Nat.compare) // => ?1
+  /// ```
   public func min<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
     reduce<T>(
       iter,

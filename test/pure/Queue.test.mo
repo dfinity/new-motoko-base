@@ -921,4 +921,19 @@ suite(
       }
     )
   }
+);
+
+suite(
+  "regression: stack overflow should not happen when iterating over large queues",
+  func() {
+    let queue = populateForward(1, 17_001);
+    let actual = Iter.toArray(iterateBackward(queue));
+    expect.array(
+      actual,
+      Nat.toText,
+      Nat.equal
+    ).equal(
+      Array.tabulate<Nat>(17_000, func i = i + 1)
+    )
+  }
 )

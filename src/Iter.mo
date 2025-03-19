@@ -23,12 +23,13 @@
 /// - consumed using `forEach`, `size`, `toArray`, etc.
 /// - combined using `concat`.
 
-import Order "Order";
-import Array "Array";
-import VarArray "VarArray";
 import Prim "mo:prim";
+
+import Array "Array";
+import Order "Order";
 import Runtime "Runtime";
 import Types "Types";
+import VarArray "VarArray";
 
 module {
 
@@ -648,26 +649,12 @@ module {
   /// assert(?3 == iter.next());
   /// assert(null == iter.next());
   /// ```
-  public func fromArray<T>(array : [T]) : Iter<T> = array.values();
+  public func fromArray<T>(array : [T]) : Iter<T> = array.vals();
 
   /// Like `fromArray` but for Arrays with mutable elements. Captures
   /// the elements of the Array at the time the iterator is created, so
   /// further modifications won't be reflected in the iterator.
-  public func fromVarArray<T>(array : [var T]) : Iter<T> {
-    var i : Nat = 0;
-    let size = array.size();
-    object {
-      public func next() : ?T {
-        if (i >= size) {
-          return null
-        } else {
-          let res = ?(array[i]);
-          i += 1;
-          return res
-        }
-      }
-    }
-  };
+  public func fromVarArray<T>(array : [var T]) : Iter<T> = array.vals();
 
   /// Consumes an iterator and collects its produced elements in an Array.
   /// ```motoko

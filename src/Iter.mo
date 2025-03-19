@@ -560,6 +560,67 @@ module {
     ?foldLeft(iter, first, combine)
   };
 
+  /// Produces an iterator containing cumulative results of applying the `combine` operator going left to right, including the `initial` value.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = [1, 2, 3].values();
+  /// let scanned = Iter.scanLeft<Nat, Nat>(iter, 0, Nat.add);
+  /// Iter.toArray(scanned) // => [0, 1, 3, 6]
+  /// ```
+  public func scanLeft<T, R>(iter : Iter<T>, initial : R, combine : (R, T) -> R) : Iter<R> = object {
+    var acc = initial;
+    var isInitial = true;
+    public func next() : ?R {
+      if (isInitial) {
+        isInitial := false;
+        return ?acc
+      };
+      switch (iter.next()) {
+        case (?x) {
+          acc := combine(acc, x);
+          ?acc
+        };
+        case null null
+      }
+    }
+  };
+
+  /// Produces an iterator containing cumulative results of applying the `combine` operator going right to left, including the `initial` value.
+  ///
+  /// **Performance note**: Since this function needs to consume the entire iterator to reverse it,
+  /// it has to materialize the entire iterator in memory to get to the last element to start applying the `combine` function.
+  /// **Use `scanLeft` when possible to avoid the extra memory overhead**.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = [1, 2, 3].values();
+  /// let scanned = Iter.scanRight<Nat, Nat>(iter, 0, Nat.add);
+  /// Iter.toArray(scanned) // => [0, 3, 5, 6]
+  /// ```
+  public func scanRight<T, R>(iter : Iter<T>, initial : R, combine : (T, R) -> R) : Iter<R> {
+    scanLeft<T, R>(reverse(iter), initial, func(x, acc) = combine(acc, x))
+  };
+
+  /// Creates an iterator that produces elements using the `step` function starting from the `initial` value.
+  /// The `step` function takes the current state and returns the next element and the next state, or `null` if the iteration is finished.
+  ///
+  /// ```motoko
+  /// import Iter "mo:new-base/Iter";
+  /// let iter = Iter.unfold<Nat, Nat>(1, func (x) = if (x <= 3) ?(x, x + 1) else null);
+  /// Iter.toArray(iter) // => [1, 2, 3]
+  /// ```
+  public func unfold<T, S>(initial : S, step : S -> ?(T, S)) : Iter<T> = object {
+    var state = initial;
+    public func next() : ?T {
+      let ?(t, next) = step(state) else return null;
+      state := next;
+      ?t
+    }
+  };
+
+  // todo: unfold, iterate, cycle, range, rangeStep, rangeStepTo, rangeStepToExclusive
+
   /// Consumes an iterator and returns the first maximum element produced by the iterator.
   /// If the iterator is empty, it returns `null`.
   ///

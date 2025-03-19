@@ -790,6 +790,42 @@ suite(
 );
 
 suite(
+  "scanLeft",
+  func() {
+    func mk(inputs : [Nat], expected : [Nat]) {
+      let actual = Iter.scanLeft<Nat, Nat>(inputs.vals(), 0, func(acc, x) = acc + x);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 4], [0, 1, 3, 6, 10]));
+    test("empty", func() = mk([], [0]))
+  }
+);
+
+suite(
+  "scanRight",
+  func() {
+    func mk(inputs : [Nat], expected : [Nat]) {
+      let actual = Iter.scanRight<Nat, Nat>(inputs.vals(), 0, func(x, acc) = acc + x);
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk([1, 2, 3, 4], [0, 4, 7, 9, 10]));
+    test("empty", func() = mk([], [0]))
+  }
+);
+
+suite(
+  "unfold",
+  func() {
+    func mk(n : Nat, expected : [Nat]) {
+      let actual = Iter.unfold<Nat, Nat>(n, func(x) = if (x == 0) null else ?(x, x - 1));
+      expect.array<Nat>(Iter.toArray(actual), Nat.toText, Nat.equal).equal(expected)
+    };
+    test("some", func() = mk(5, [5, 4, 3, 2, 1]));
+    test("zero", func() = mk(0, []))
+  }
+);
+
+suite(
   "max",
   func() {
     func mk(inputs : [Nat], expected : ?Nat) {

@@ -1132,28 +1132,8 @@
     ]
   },
   {
-    "name": "Tuple",
-    "exports": [
-      "public func compare<A, B>(t1 : (A, B), t2 : (A, B), aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order) : Types.Order",
-      "public func compare3<A, B, C>(t1 : (A, B, C), t2 : (A, B, C), aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order, cCompare : (C, C) -> Types.Order) : Types.Order",
-      "public func compare4<A, B, C, D>(t1 : (A, B, C, D), t2 : (A, B, C, D), aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order, cCompare : (C, C) -> Types.Order, dCompare : (D, D) -> Types.Order) : Types.Order",
-      "public func equal<A, B>(t1 : (A, B), t2 : (A, B), aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool) : Bool",
-      "public func equal3<A, B, C>(t1 : (A, B, C), t2 : (A, B, C), aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool, cEqual : (C, C) -> Bool) : Bool",
-      "public func equal4<A, B, C, D>(t1 : (A, B, C, D), t2 : (A, B, C, D), aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool, cEqual : (C, C) -> Bool, dEqual : (D, D) -> Bool) : Bool",
-      "public func makeCompare<A, B>(aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order) : ((A, B), (A, B)) -> Types.Order",
-      "public func makeCompare3<A, B, C>(aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order, cCompare : (C, C) -> Types.Order) : ((A, B, C), (A, B, C)) -> Types.Order",
-      "public func makeCompare4<A, B, C, D>(aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order, cCompare : (C, C) -> Types.Order, dCompare : (D, D) -> Types.Order) : ((A, B, C, D), (A, B, C, D)) -> Types.Order",
-      "public func makeEqual<A, B>(aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool) : ((A, B), (A, B)) -> Bool",
-      "public func makeEqual3<A, B, C>(aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool, cEqual : (C, C) -> Bool) : ((A, B, C), (A, B, C)) -> Bool",
-      "public func makeEqual4<A, B, C, D>(aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool, cEqual : (C, C) -> Bool, dEqual : (D, D) -> Bool) : ((A, B, C, D), (A, B, C, D)) -> Bool",
-      "public func makeToText<A, B>(toTextA : A -> Text, toTextB : B -> Text) : ((A, B)) -> Text",
-      "public func makeToText3<A, B, C>(toTextA : A -> Text, toTextB : B -> Text, toTextC : C -> Text) : ((A, B, C)) -> Text",
-      "public func makeToText4<A, B, C, D>(toTextA : A -> Text, toTextB : B -> Text, toTextC : C -> Text, toTextD : D -> Text) : ((A, B, C, D)) -> Text",
-      "public func swap<A, B>((a, b) : (A, B)) : (B, A)",
-      "public func toText<A, B>(t : (A, B), toTextA : A -> Text, toTextB : B -> Text) : Text",
-      "public func toText3<A, B, C>(t : (A, B, C), toTextA : A -> Text, toTextB : B -> Text, toTextC : C -> Text) : Text",
-      "public func toText4<A, B, C, D>(t : (A, B, C, D), toTextA : A -> Text, toTextB : B -> Text, toTextC : C -> Text, toTextD : D -> Text) : Text"
-    ]
+    "name": "Tuples",
+    "exports": []
   },
   {
     "name": "Types",

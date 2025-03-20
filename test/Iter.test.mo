@@ -1,10 +1,11 @@
-import Iter "../src/Iter";
+import { expect; suite; test } "mo:test";
+
 import Array "../src/Array";
-import Nat "../src/Nat";
 import Int "../src/Int";
-import { suite; test; expect } "mo:test";
-import Tuple "../src/Tuple";
+import Iter "../src/Iter";
+import Nat "../src/Nat";
 import Text "../src/Text";
+import { Tuple2; Tuple3 } "../src/Tuples";
 
 suite(
   "forEach",
@@ -174,7 +175,7 @@ suite(
   func() {
     func mk(input1 : [Nat], input2 : [Nat], expected : [(Nat, Nat)]) {
       let actual = Iter.zip<Nat, Nat>(input1.vals(), input2.vals());
-      expect.array<(Nat, Nat)>(Iter.toArray(actual), Tuple.makeToText<Nat, Nat>(Nat.toText, Nat.toText), Tuple.makeEqual<Nat, Nat>(Nat.equal, Nat.equal)).equal(expected)
+      expect.array<(Nat, Nat)>(Iter.toArray(actual), Tuple2.makeToText<Nat, Nat>(Nat.toText, Nat.toText), Tuple2.makeEqual<Nat, Nat>(Nat.equal, Nat.equal)).equal(expected)
     };
     test("matched", func() = mk([1, 2, 3], [4, 5, 6], [(1, 4), (2, 5), (3, 6)]));
     test("left skipped", func() = mk([1, 2, 3], [4, 5], [(1, 4), (2, 5)]));
@@ -206,7 +207,7 @@ suite(
   func() {
     func mk(input1 : [Nat], input2 : [Nat], input3 : [Nat], expected : [(Nat, Nat, Nat)]) {
       let actual = Iter.zip3<Nat, Nat, Nat>(input1.vals(), input2.vals(), input3.vals());
-      expect.array<(Nat, Nat, Nat)>(Iter.toArray(actual), Tuple.makeToText3<Nat, Nat, Nat>(Nat.toText, Nat.toText, Nat.toText), Tuple.makeEqual3<Nat, Nat, Nat>(Nat.equal, Nat.equal, Nat.equal)).equal(expected)
+      expect.array<(Nat, Nat, Nat)>(Iter.toArray(actual), Tuple3.makeToText<Nat, Nat, Nat>(Nat.toText, Nat.toText, Nat.toText), Tuple3.makeEqual<Nat, Nat, Nat>(Nat.equal, Nat.equal, Nat.equal)).equal(expected)
     };
     test("matched", func() = mk([1, 2, 3], [4, 5, 6], [7, 8, 9], [(1, 4, 7), (2, 5, 8), (3, 6, 9)]));
     test("left skipped", func() = mk([1, 2, 3], [4, 5], [7, 8, 9], [(1, 4, 7), (2, 5, 8)]));

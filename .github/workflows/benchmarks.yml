@@ -1,0 +1,75 @@
+name: Comment Benchmarks
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    name: Run Benchmarks and Comment
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Cache Node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Cache mops packages
+        uses: actions/cache@v3
+        with:
+          key: mops-packages-${{ hashFiles('mops.toml') }}
+          path: |
+            ~/.cache/mops
+            ~/mops
+
+      - name: Install dfx
+        uses: dfinity/setup-dfx@main
+      - name: Confirm successful installation
+        run: dfx --version
+
+      - name: Install dfx cache
+        run: dfx cache install
+
+      - name: Install mops & mocv
+        run: |
+          npm --yes -g i ic-mops
+          mops i
+          mops toolchain init
+          mops toolchain use moc latest
+
+          # set moc path for dfx to use
+          echo "DFX_MOC_PATH=$(mops toolchain bin moc)" >> $GITHUB_ENV
+
+      - name: Benchmarks
+        id: benchmarks
+        run: |
+          mops bench  --gc incremental 2>&1 | tee benchmark_results.txt
+
+          # Process the output to remove everything up to the last occurrence of \033[2K
+          awk '/\x1b\[2K/ { buffer = "" } { buffer = buffer $0 "\n" } END { print buffer }' benchmark_results.txt > intermediate_results.txt
+          sed 's/\x1b\[[0-9;]*[a-zA-Z]//g' intermediate_results.txt > processed_results.txt
+
+          # Set the processed output as an environment variable
+          echo "BENCHMARK_OUTPUT<<EOF" >> $GITHUB_ENV
+          cat processed_results.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: unsplash/comment-on-pr@v1.3.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "# Benchmark Results\n\n${{ env.BENCHMARK_OUTPUT }}\n"
+          check_for_duplicate_msg: false

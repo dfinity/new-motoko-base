@@ -698,7 +698,7 @@ module {
     let size = array.size();
     var index = 0;
     public func next() : ?(Nat, T) {
-      if (index > size) {
+      if (index >= size) {
         return null
       };
       let i = index;

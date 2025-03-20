@@ -4,6 +4,7 @@
 
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
 * Fix bug in `Iter.step()` implementation
+* Fix bug in `Array.enumerate()` and `VarArray.enumerate()`
 
 ## 0.3.0
 

@@ -44,7 +44,7 @@ jobs:
       - name: Install mops & mocv
         run: |
           npm --yes -g i ic-mops
-          mops i
+          mops install
           mops toolchain init
           mops toolchain use moc latest
 

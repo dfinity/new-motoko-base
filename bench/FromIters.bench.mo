@@ -2,9 +2,9 @@ import Bench "mo:bench";
 import Fuzz "mo:fuzz";
 
 import Array "../src/Array";
-import Iter "../src/Iter";
 import List "../src/pure/List";
 import Runtime "../src/Runtime";
+import Nat "../src/Nat";
 
 module {
   public func init() : Bench.Bench {
@@ -18,7 +18,7 @@ module {
 
     let fuzz = Fuzz.fromSeed(27850937); // fix seed for reproducibility
 
-    func input(n : Nat) : Iter.Iter<Nat> = fuzz.array.randomArray(n, fuzz.nat.random).vals();
+    func input(n : Nat) : [Nat] = fuzz.array.randomArray(n, fuzz.nat.random);
 
     let array1 = input(100);
     let array2 = input(10_000);
@@ -26,16 +26,16 @@ module {
 
     bench.runner(
       func(row, col) {
-        let xs = switch col {
+        let array = switch col {
           case "100" array1;
           case "10_000" array2;
           case "100_000" array3;
           case _ Runtime.unreachable()
         };
         switch (row) {
-          case "Array.fromIter" ignore Array.fromIter(xs);
-          case "List.fromIter" ignore List.fromIter(xs);
-          case _ Runtime.unreachable()
+          case "List.fromIter" ignore List.fromIter(array.vals());
+          case "Array.fromIter" ignore Array.fromIter(array.vals());
+          case _ return ()
         }
       }
     );

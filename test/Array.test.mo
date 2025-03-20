@@ -519,20 +519,20 @@ let suite = Suite.suite(
     Suite.test(
       "enumerate empty array",
       do {
-        var sum = 0;
-        for ((i, x) in Array.enumerate([var])) {
-          sum += i + x;
+        var hasItem = false;
+        for (_ in Array.enumerate([])) {
+          hasItem := true
         };
-        sum
+        hasItem
       },
-      M.equals(T.nat(0))
+      M.equals(T.bool(false))
     ),
     Suite.test(
       "enumerate non-empty array",
       do {
         var sum = 0;
-        for ((i, x) in Array.enumerate([var 10, 20, 30])) {
-          sum += i + x;
+        for ((i, x) in Array.enumerate([10, 20, 30])) {
+          sum += i + x
         };
         sum // Should be (0+10) + (1+20) + (2+30) = 63
       },
@@ -542,8 +542,8 @@ let suite = Suite.suite(
       "enumerate preserves indices",
       do {
         var indices = "";
-        for ((i, _) in Array.enumerate([var 'a', 'b', 'c'])) {
-          indices #= Nat.toText(i);
+        for ((i, _) in Array.enumerate(['a', 'b', 'c'])) {
+          indices #= Nat.toText(i)
         };
         indices
       },
@@ -553,8 +553,8 @@ let suite = Suite.suite(
       "enumerate preserves values",
       do {
         var values = "";
-        for ((_, x) in Array.enumerate([var 'a', 'b', 'c'])) {
-          values #= Char.toText(x);
+        for ((_, x) in Array.enumerate(['a', 'b', 'c'])) {
+          values #= Char.toText(x)
         };
         values
       },

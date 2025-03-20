@@ -694,7 +694,7 @@ module {
   /// Runtime: O(1)
   ///
   /// Space: O(1)
-  public func enumerate<T>(array : [var T]) : Types.Iter<(Nat, T)> = object {
+  public func enumerate<T>(array : [T]) : Types.Iter<(Nat, T)> = object {
     let size = array.size();
     var index = 0;
     public func next() : ?(Nat, T) {

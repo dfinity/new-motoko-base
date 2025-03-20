@@ -65,11 +65,30 @@ jobs:
           cat processed_results.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
-      - name: Comment PR
-        if: github.event_name == 'pull_request'
-        uses: unsplash/comment-on-pr@v1.3.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Comment PR
+      #   if: github.event_name == 'pull_request'
+      #   uses: unsplash/comment-on-pr@v1.3.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     msg: "# Benchmark Results\n\n${{ env.BENCHMARK_OUTPUT }}\n"
+      #     check_for_duplicate_msg: false
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
         with:
-          msg: "# Benchmark Results\n\n${{ env.BENCHMARK_OUTPUT }}\n"
-          check_for_duplicate_msg: false
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Benchmark Results
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            # Benchmark Results
+
+            ${{ env.BENCHMARK_OUTPUT }}
+          edit-mode: replace

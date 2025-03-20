@@ -402,8 +402,21 @@ to consider reentrancy issues as well as the vanishing of timers on upgrades
 and reinstalls.</p>
 <p>For further usage information for timers on the IC, please consult
 <a href="https://internetcomputer.org/docs/current/developer-docs/backend/periodic-tasks#timers-library-limitations">the documentation</a>.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Tuple.html">Tuple</a><div class="index-item-comment"><p>Contains modules for working with tuples of different sizes.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Tuples.html">Tuples</a><div class="index-item-comment"><p>Contains modules for working with tuples of different sizes.</p>
+<p>Usage: either import the whole module and use the <code>TupleN</code> modules, or import the specific <code>TupleN</code> module directly.</p>
+<pre class="motoko"><code class="motoko">import Tuples &quot;mo:new-base/Tuples&quot;; // imports all TupleN modules
+import Nat &quot;mo:new-base/Nat&quot;;
+import Text &quot;mo:new-base/Text&quot;;
+
+Tuples.Tuple2.swap((1, &quot;hello&quot;));
+Tuples.Tuple3.toText((1, &quot;hello&quot;, 3), Nat.toText, Text.toText, Nat.toText);</code></pre>
+
+<pre class="motoko"><code class="motoko">import { Tuple2, Tuple3 } &quot;mo:new-base/Tuples&quot;;
+import Nat &quot;mo:new-base/Nat&quot;;
+import Text &quot;mo:new-base/Text&quot;;
+
+Tuple2.swap((1, &quot;hello&quot;));
+Tuple3.toText((1, &quot;hello&quot;, 3), Nat.toText, Text.toText, Nat.toText);</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="internal/PRNG.html">internal/PRNG</a><div class="index-item-comment"><p>Collection of pseudo-random number generators</p>
 <p>The algorithms deliver deterministic statistical randomness,
 not cryptographic randomness.</p>

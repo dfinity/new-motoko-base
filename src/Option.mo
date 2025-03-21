@@ -55,14 +55,14 @@ module {
   };
 
   /// Applies a function to the wrapped value, but discards the result. Use
-  /// `iterate` if you're only interested in the side effect `f` produces.
+  /// `forEach` if you're only interested in the side effect `f` produces.
   ///
   /// ```motoko
   /// import Option "mo:base/Option";
   /// var counter : Nat = 0;
-  /// Option.iterate(?5, func (x : Nat) { counter += x });
+  /// Option.forEach(?5, func (x : Nat) { counter += x });
   /// assert counter == 5;
-  /// Option.iterate(null, func (x : Nat) { counter += x });
+  /// Option.forEach(null, func (x : Nat) { counter += x });
   /// assert counter == 5;
   /// ```
   public func forEach<A>(x : ?A, f : A -> ()) = switch x {
@@ -102,7 +102,7 @@ module {
   /// Creates an optional value from a definite value.
   /// ```motoko
   /// import Option "mo:base/Option";
-  /// assert Option.make(42) == ?42;
+  /// assert Option.some(42) == ?42;
   /// ```
   public func some<A>(x : A) : ?A = ?x;
 

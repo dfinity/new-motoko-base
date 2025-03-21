@@ -735,10 +735,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set0 = Set.empty<Nat>();
-  ///   let set1 = Set.add(set0, Nat.compare, 1);
-  ///   let set2 = Set.add(set1, Nat.compare, 2);
-  ///   let set3 = Set.add(set2, Nat.compare, 3);
+  ///   let set = Set.fromArray<Nat>([1, 2, 3]);
   ///
   ///   for (number in Set.reverseValues(set)) {
   ///      Debug.print(debug_show(number));
@@ -806,10 +803,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
+  ///   let set = Set.fromArray<Nat>([1, 2, 3]);
   ///
   ///   Debug.print(Nat.toText(Set.size(set))); // prints `3`
   /// }
@@ -829,13 +823,10 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set0 = Set.empty<Nat>();
-  ///   let set1 = Set.add(set0, Nat.compare, 1);
-  ///   let set2 = Set.add(set1, Nat.compare, 2);
-  ///   let set3 = Set.add(set2, Nat.compare, 3);
+  ///   let set = Set.fromArray<Nat>([1, 2, 3]);
   ///
   ///   let text = Set.foldRight<Nat, Text>(
-  ///      set3,
+  ///      set,
   ///      "",
   ///      func (element, accumulator) {
   ///        let separator = if (accumulator != "") { ", " } else { "" };
@@ -902,10 +893,7 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
+  ///   let set = Set.fromArray<Nat>([1, 2, 3]);
   ///
   ///   Debug.print(debug_show(Set.isEmpty(set))); // prints `false`
   ///   Set.clear(set);
@@ -932,12 +920,9 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set0 = Set.empty<Nat>();
-  ///   let set1 = Set.add(set0, Nat.compare, 1);
-  ///   let set2 = Set.add(set1, Nat.compare, 2);
-  ///   let set3 = Set.add(set3, Nat.compare, 3);
+  ///   let set = Set.fromArray<Nat>([1, 2, 3]);
   ///
-  ///   let belowTen = Set.all<Nat>(set3, func (number) {
+  ///   let belowTen = Set.all<Nat>(set, func (number) {
   ///     number < 10
   ///   }); // `true`
   /// }
@@ -989,12 +974,9 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   let set1 = Set.add(set0, Nat.compare, 1);
-  ///   let set2 = Set.add(set1, Nat.compare, 2);
-  ///   let set3 = Set.add(set2, Nat.compare, 3);
+  ///   let set = Set.fromArray<Nat>([1, 2, 3]);
   ///
-  ///   let text = Set.toText<Nat>(set3, Nat.toText);
+  ///   let text = Set.toText<Nat>(set, Nat.toText);
   ///   // `"{0, 1, 2}"`
   /// }
   /// ```

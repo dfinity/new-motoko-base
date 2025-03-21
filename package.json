@@ -14,7 +14,8 @@
     "validate:changelog": "cd test/ts/validate && tsx changelog",
     "validate:version": "cd test/ts/validate && tsx version",
     "validate:api": "cd test/ts/validate && tsx api",
-    "docs": "$(dfx cache show)/mo-doc"
+    "docs": "$(dfx cache show)/mo-doc",
+    "bench": "mops bench"
   },
   "repository": {
     "type": "git",

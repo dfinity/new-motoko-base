@@ -110,6 +110,7 @@
       "public let accept : <system>(amount : Nat) -> (accepted : Nat)",
       "public let available : () -> (amount : Nat)",
       "public let balance : () -> (amount : Nat)",
+      "public let burn : <system>(amount : Nat) -> (burned : Nat)",
       "public let refunded : () -> (amount : Nat)"
     ]
   },
@@ -899,11 +900,13 @@
   {
     "name": "Random",
     "exports": [
-      "public class AsyncRandom(generator : () -> async* Blob)",
+      "public class AsyncRandom(",
       "public let blob : shared () -> async Blob",
       "public func crypto() : AsyncRandom",
       "public func fast(seed : Nat64) : Random",
-      "public class Random(generator : () -> Blob)"
+      "public func fromAsyncGenerator(generator : () -> async* Blob) : AsyncRandom",
+      "public func fromGenerator(generator : () -> Blob) : Random",
+      "public class Random("
     ]
   },
   {
@@ -1237,8 +1240,8 @@
       "public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E>",
       "public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T>",
       "public func partition<T>(list : List<T>, f : T -> Bool) : (List<T>, List<T>)",
-      "public func pop<T>(list : List<T>) : (?T, List<T>)",
-      "public func push<T>(list : List<T>, item : T) : List<T>",
+      "public func popFront<T>(list : List<T>) : (?T, List<T>)",
+      "public func pushFront<T>(list : List<T>, item : T) : List<T>",
       "public func repeat<T>(item : T, n : Nat) : List<T>",
       "public func reverse<T>(list : List<T>) : List<T>",
       "public func singleton<T>(item : T) : List<T>",

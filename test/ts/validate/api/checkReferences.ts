@@ -4,7 +4,7 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import glob from "fast-glob";
 
-const srcDirectory = join(__dirname, "../../../src");
+const srcDirectory = join(__dirname, "../../../../src");
 
 const moFiles = glob.sync(join(srcDirectory, "**/*.mo"));
 if (moFiles.length === 0) {

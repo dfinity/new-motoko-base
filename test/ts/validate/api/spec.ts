@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 
-const rootDir = join(__dirname, "../../..");
+const rootDir = join(__dirname, "../../../..");
 const srcDir = join(rootDir, "src");
 const validationDir = join(rootDir, "validation");
 const apiDir = join(validationDir, "api");

@@ -1,10 +1,6 @@
 import Principal "../src/Principal";
-import Text "../src/Text";
 import Blob "../src/Blob";
-import Suite "mo:matchers/Suite";
-import T "mo:matchers/Testable";
-import M "mo:matchers/Matchers";
-import { suite; test; expect } = "mo:test";
+import { suite; test; expect } "mo:test";
 
 let principal1 = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
 let defaultAccount1 : Blob = "\57\4E\66\E1\B5\DD\EF\EA\78\73\6B\E4\6C\4F\61\21\31\98\88\90\08\2E\E8\0F\97\F6\B6\DB\ED\72\84\1E";
@@ -17,31 +13,31 @@ let subAccount2 : Blob = "\4F\8B\12\A5\C3\E6\07\D9\1F\A2\B0\C4\67\E8\90\23\4A\B6
 let accountWithSubAccount2 : Blob = "\D4\40\35\AF\5D\1D\6A\37\5F\F6\26\E6\9E\17\FA\44\B3\9C\31\FE\17\D3\3A\54\FF\4C\E4\C6\F0\FA\DA\EC";
 
 suite(
-  "Principal",
+  "toLedgerAccount",
   func() {
     test(
-      "toLedgerAccount, default sub-account 1",
+      "default sub-account 1",
       func() {
         expect.blob(Principal.toLedgerAccount(principal1, null)).equal(defaultAccount1)
       }
     );
 
     test(
-      "toLedgerAccount, with sub-account 1",
+      "with sub-account 1",
       func() {
         expect.blob(Principal.toLedgerAccount(principal1, ?subAccount1)).equal(accountWithSubAccount1)
       }
     );
 
     test(
-      "toAccount, default sub-account 2",
+      "default sub-account 2",
       func() {
         expect.blob(Principal.toLedgerAccount(principal2, null)).equal(defaultAccount2)
       }
     );
 
     test(
-      "toLedgerAccount, with sub-account 2",
+      "with sub-account 2",
       func() {
         expect.blob(Principal.toLedgerAccount(principal2, ?subAccount2)).equal(accountWithSubAccount2)
       }

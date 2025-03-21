@@ -515,6 +515,50 @@ let suite = Suite.suite(
       "Iter conversions empty",
       Array.fromIter<Nat>(Array.values([])),
       M.equals(T.array<Nat>(T.natTestable, []))
+    ),
+    Suite.test(
+      "enumerate empty array",
+      do {
+        var hasItem = false;
+        for (_ in Array.enumerate([])) {
+          hasItem := true
+        };
+        hasItem
+      },
+      M.equals(T.bool(false))
+    ),
+    Suite.test(
+      "enumerate non-empty array",
+      do {
+        var sum = 0;
+        for ((i, x) in Array.enumerate([10, 20, 30])) {
+          sum += i + x
+        };
+        sum // Should be (0+10) + (1+20) + (2+30) = 63
+      },
+      M.equals(T.nat(63))
+    ),
+    Suite.test(
+      "enumerate preserves indices",
+      do {
+        var indices = "";
+        for ((i, _) in Array.enumerate(['a', 'b', 'c'])) {
+          indices #= Nat.toText(i)
+        };
+        indices
+      },
+      M.equals(T.text("012"))
+    ),
+    Suite.test(
+      "enumerate preserves values",
+      do {
+        var values = "";
+        for ((_, x) in Array.enumerate(['a', 'b', 'c'])) {
+          values #= Char.toText(x)
+        };
+        values
+      },
+      M.equals(T.text("abc"))
     )
   ]
 );

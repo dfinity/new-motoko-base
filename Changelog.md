@@ -1,13 +1,21 @@
 # Changelog
 
-## 0.2.3
+## Next
 
 * Added `isReplicated : () -> Bool` to `InternetComputer` (#213).
+* Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
+* Fix bug in `Iter.step()` (#???).
+* Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#???).
+* Adjust `Random` representation to allow persistence in stable memory (#???).
+
+## 0.3.0
+
+* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()` (#???).
 
 ## 0.2.2
 
-* Added range functions to `Random.crypto()` (#215).
-* Added `isRetryPossible : Error -> Bool` to `Error` (#211).
+* Add range functions to `Random.crypto()` (#215).
+* Add `isRetryPossible : Error -> Bool` to `Error` (#211).
 
 ## 0.2.1
 

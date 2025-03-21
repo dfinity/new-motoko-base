@@ -2,7 +2,7 @@
 
 ## Next
 
-* Added `isReplicated : () -> Bool` to `InternetComputer` (#213).
+* Add `isReplicated : () -> Bool` to `InternetComputer` (#213).
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
 * Fix bug in `Iter.step()` (#???).
 * Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#???).

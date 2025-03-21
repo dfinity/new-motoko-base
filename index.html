@@ -140,8 +140,21 @@ import Int64 &quot;mo:base/Int64&quot;;</code></pre></div></li><li class="index-
 <p>Import from the base library to use this module.</p>
 <pre><code>motoko name=import
 import Int8 &quot;mo:base/Int8&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="InternetComputer.html">InternetComputer</a><div class="index-item-comment"><p>Low-level interface to the Internet Computer.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Iter.html">Iter</a><div class="index-item-comment"><p>Utilities for <code>Iter</code> (iterator) values</p>
-</div></li><li class="index-item"><a class="index-item-link" href="List.html">List</a><div class="index-item-comment"><p>Resizable array with <code>O(sqrt(n))</code> memory overhead.
+</div></li><li class="index-item"><a class="index-item-link" href="Iter.html">Iter</a><div class="index-item-comment"><p>Utilities for <code>Iter</code> (iterator) values.</p>
+<p>Iterators are a way to represent sequences of values that can be lazily produced.
+They can be used to:</p>
+<ul><li>Iterate over collections.</li><li>Represent collections that are too large to fit in memory or that are produced incrementally.</li><li>Transform collections without creating intermediate collections.</li></ul>
+
+<p>Iterators are inherently stateful. Calling <code>next</code> &quot;consumes&quot; a value from
+the Iterator that cannot be put back, so keep that in mind when sharing
+iterators between consumers.</p>
+<p>An iterator <code>i</code> can be iterated over using</p>
+<pre class="motoko"><code class="motoko">for (x in i) {
+  …do something with x…
+}</code></pre>
+
+<p>Iterators can be:</p>
+<ul><li>created from other collections (e.g. using <code>values</code> or <code>keys</code> function on a <code>Map</code>) or from scratch (e.g. using <code>empty</code> or <code>singleton</code>).</li><li>transformed using <code>map</code>, <code>filter</code>, <code>concat</code>, etc. Which can be used to compose several transformations together without materializing intermediate collections.</li><li>consumed using <code>forEach</code>, <code>size</code>, <code>toArray</code>, etc.</li><li>combined using <code>concat</code>.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="List.html">List</a><div class="index-item-comment"><p>Resizable array with <code>O(sqrt(n))</code> memory overhead.
 Static type <code>List</code> that can be declared <code>stable</code>.
 For the <code>List</code> class see the file Class.mo.</p>
 <p>This implementation is adapted with permission from the <code>vector</code> Mops package created by Research AG.</p>
@@ -389,7 +402,21 @@ to consider reentrancy issues as well as the vanishing of timers on upgrades
 and reinstalls.</p>
 <p>For further usage information for timers on the IC, please consult
 <a href="https://internetcomputer.org/docs/current/developer-docs/backend/periodic-tasks#timers-library-limitations">the documentation</a>.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Tuples.html">Tuples</a><div class="index-item-comment"><p>Contains modules for working with tuples of different sizes.</p>
+<p>Usage: either import the whole module and use the <code>TupleN</code> modules, or import the specific <code>TupleN</code> module directly.</p>
+<pre class="motoko"><code class="motoko">import Tuples &quot;mo:new-base/Tuples&quot;; // imports all TupleN modules
+import Nat &quot;mo:new-base/Nat&quot;;
+import Text &quot;mo:new-base/Text&quot;;
+
+Tuples.Tuple2.swap((1, &quot;hello&quot;));
+Tuples.Tuple3.toText((1, &quot;hello&quot;, 3), Nat.toText, Text.toText, Nat.toText);</code></pre>
+
+<pre class="motoko"><code class="motoko">import { Tuple2, Tuple3 } &quot;mo:new-base/Tuples&quot;;
+import Nat &quot;mo:new-base/Nat&quot;;
+import Text &quot;mo:new-base/Text&quot;;
+
+Tuple2.swap((1, &quot;hello&quot;));
+Tuple3.toText((1, &quot;hello&quot;, 3), Nat.toText, Text.toText, Nat.toText);</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Mutable array utilities.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="internal/BTreeHelper.html">internal/BTreeHelper</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="internal/PRNG.html">internal/PRNG</a><div class="index-item-comment"><p>Collection of pseudo-random number generators</p>
 <p>The algorithms deliver deterministic statistical randomness,
 not cryptographic randomness.</p>

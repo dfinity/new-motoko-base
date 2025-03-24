@@ -61,11 +61,7 @@ jobs:
       - name: Validate changed files
         run: |
           CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep '^src/.*\.mo$' || true)
-          if [ -n "$CHANGED_FILES" ]; then
-            echo "$CHANGED_FILES" | xargs npm run validate:docs
-          else
-            echo "No Motoko files changed; skipping docs validation"
-          fi
+          echo "$CHANGED_FILES" | xargs npm run validate:docs
         env:
           FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106
 

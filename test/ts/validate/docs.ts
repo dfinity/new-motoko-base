@@ -139,8 +139,11 @@ async function main() {
     )
   ).flatMap((snippets) => snippets);
 
+  const allPaths = [...new Set(snippets.map((snippet) => snippet.path))];
   console.log(
-    `Found ${snippets.length} code snippet${snippets.length === 1 ? "" : "s"}.`
+    `Found ${snippets.length} code snippet${
+      snippets.length === 1 ? "" : "s"
+    } in ${allPaths.length} file${allPaths.length === 1 ? "" : "s"}.`
   );
   if (snippets.length == 0) {
     process.exit(1);

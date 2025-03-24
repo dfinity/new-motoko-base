@@ -220,18 +220,12 @@ async function main() {
     console.log("---");
     failedPaths.forEach((path) => {
       console.log(
-        `${path}:`,
-        ["passed", "failed", "skipped"]
-          .map(
-            (status: TestResult["status"]) =>
-              `${
-                testResults.filter(
-                  (result) =>
-                    result.status === status && result.snippet.path === path
-                ).length
-              } ${status}`
-          )
-          .join(", ")
+        `${path} ${testStatusEmojis["failed"]} ${
+          testResults.filter(
+            (result) =>
+              result.status === "failed" && result.snippet.path === path
+          ).length
+        }`
       );
     });
   }

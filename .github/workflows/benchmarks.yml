@@ -1,4 +1,4 @@
-name: Benchmarks (Comment and Upload)
+name: Benchmarks
 
 on:
   push:
@@ -76,21 +76,23 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.benchmarks.outputs.result }}
+          body: |
+            ${{ steps.benchmarks.outputs.result }}
+            Renamed benchmarks cannot be compared. Refer to the [current baseline](https://github.com/dfinity/new-motoko-base/tree/benchmark-results) for manual comparison.
           edit-mode: replace
       
       - name: Generate Benchmark Results
-        # if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request'
         run: | # Make sure to use the same flags as in the `mops bench` command above!
           mops bench --save 2>&1 | tee bench-results.md 
       - name: Move Generated Results
-        # if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request'
         run: |
           mkdir .bench-br
           mv .bench .bench-br/.bench
           mv bench-results.md .bench-br/README.md
       - name: Upload benchmark results
-        # if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

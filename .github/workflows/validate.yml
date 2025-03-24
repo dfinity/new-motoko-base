@@ -7,6 +7,8 @@ on:
 
 jobs:
   changelog:
+    # Temporary condition
+    if: ${{ github.event.pull_request.base.ref != 'ai-docs' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true

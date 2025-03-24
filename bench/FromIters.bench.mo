@@ -13,8 +13,15 @@ module {
     bench.name("Benchmarking the fromIter functions");
     bench.description("Columns describe the number of elements in the input iter.");
 
-    bench.rows(["Array.fromIter", "List.fromIter"]);
-    bench.cols(["100", "10_000", "100_000"]);
+    bench.rows([
+      "Array.fromIter",
+      "List.fromIter"
+    ]);
+    bench.cols([
+      "100",
+      "10_000",
+      "100_000"
+    ]);
 
     let fuzz = Fuzz.fromSeed(27850937); // fix seed for reproducibility
 

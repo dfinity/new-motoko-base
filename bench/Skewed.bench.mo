@@ -12,13 +12,15 @@ module {
     let bench = Bench.Bench();
 
     bench.name("Compare pure/Queue with base:Deque");
-    bench.description("TODO");
+    bench.description("");
 
     bench.rows([
       "Initialize with 2 elements",
       "Push 500 elements",
       "Pop front 2 elements",
-      "Pop back 2 elements"
+      "Pop back 2 elements",
+      "Push 10 front&back; Pop 5 front&back",
+      "Pop 150 front&back"
     ]);
     bench.cols([
       "Real-Time",
@@ -74,6 +76,40 @@ module {
             oldQ := OldQueue.popBack<Nat>(OldQueue.popBack<Nat>(oldQ)!.0)!.0
           }
         );
+        case ("Real-Time", "Push 10 front&back; Pop 5 front&back") {
+          for (i in Nat.range(0, 10)) {
+            newQ := NewQueue.pushBack<Nat>(NewQueue.pushFront<Nat>(newQ, i), i)
+          };
+          for (i in Nat.range(0, 5)) Option.unwrap(
+            do ? {
+              newQ := NewQueue.popBack<Nat>(NewQueue.popFront<Nat>(newQ)!.1)!.0
+            }
+          )
+        };
+        case ("Amortized", "Push 10 front&back; Pop 5 front&back") {
+          for (i in Nat.range(0, 10)) {
+            oldQ := OldQueue.pushBack<Nat>(OldQueue.pushFront<Nat>(oldQ, i), i)
+          };
+          for (i in Nat.range(0, 5)) Option.unwrap(
+            do ? {
+              oldQ := OldQueue.popBack<Nat>(OldQueue.popFront<Nat>(oldQ)!.1)!.0
+            }
+          )
+        };
+        case ("Real-Time", "Pop 150 front&back") {
+          for (i in Nat.range(0, 150)) Option.unwrap(
+            do ? {
+              newQ := NewQueue.popBack<Nat>(NewQueue.popFront<Nat>(newQ)!.1)!.0
+            }
+          )
+        };
+        case ("Amortized", "Pop 150 front&back") {
+          for (i in Nat.range(0, 150)) Option.unwrap(
+            do ? {
+              oldQ := OldQueue.popBack<Nat>(OldQueue.popFront<Nat>(oldQ)!.1)!.0
+            }
+          )
+        };
         case _ Runtime.unreachable()
       }
     );

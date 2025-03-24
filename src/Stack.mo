@@ -12,18 +12,18 @@
 ///   Stack.push(levels, "Inner");
 ///   Stack.push(levels, "Middle");
 ///   Stack.push(levels, "Outer");
+///   let expected = ["Outer", "Middle", "Inner"];
+///   var i = 0;
 ///   label iteration loop {
 ///     switch (Stack.pop(levels)) {
 ///       case null { break iteration };
 ///       case (?name) {
-///         Debug.print(name)
+///         assert name == expected[i];
+///         i += 1;
 ///       }
 ///     }
-///   }
-///   // prints:
-///   // `Outer`
-///   // `Middle`
-///   // `Inner`
+///   };
+///   assert i == expected.size();
 /// }
 /// ```
 ///
@@ -58,7 +58,10 @@ module {
   ///   Stack.push(mutableStack, 1);
   ///   Stack.push(mutableStack, 2);
   ///   let immutableList = Stack.toPure(mutableStack);
-  ///   assert(PureList.size(immutableList) == Stack.size(mutableStack));
+  ///   assert PureList.size(immutableList) == Stack.size(mutableStack);
+  ///   assert PureList.get(immutableList, 0) == ?2;
+  ///   assert PureList.get(immutableList, 1) == ?1;
+  ///   assert PureList.get(immutableList, 2) == ?0;
   /// }
   /// ```
   ///
@@ -77,19 +80,14 @@ module {
   /// import Stack "mo:base/Stack";
   /// import PureList "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let immutableList = PureList.fromIter<Nat>([1, 2, 3].values());
-  ///   // pure (functional) list is a FIFO data structure, similar to imperative stack.
   ///   let mutableStack = Stack.fromPure<Nat>(immutableList);
-  ///   for (element in Stack.values(mutableStack)) {
-  ///     Debug.print(Nat.toText(element));
-  ///   }
-  ///   // prints:
-  ///   // `3`
-  ///   // `2`
-  ///   // `1`
+  ///   assert Stack.pop(mutableStack) == ?3;
+  ///   assert Stack.pop(mutableStack) == ?2;
+  ///   assert Stack.pop(mutableStack) == ?1;
+  ///   assert Stack.pop(mutableStack) == null;
   /// }
   /// ```
   ///
@@ -118,11 +116,10 @@ module {
   /// ```motoko
   /// import Stack "mo:base/Stack";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let stack = Stack.empty<Text>();
-  ///   Debug.print(Nat.toText(Stack.size(stack))); // prints `0`
+  ///   assert Stack.size(stack) == 0;
   /// }
   /// ```
   ///
@@ -141,18 +138,14 @@ module {
   /// Example:
   /// ```motoko
   /// import Stack "mo:base/Stack";
-  /// import Debug "mo:base/Debug";
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
   ///   let stack = Stack.tabulate<Nat>(3, func(i) { 2 * i });
-  ///   for (number in Stack.values(stack)) {
-  ///     Debug.print(Nat.toText(number))
-  ///   }
-  ///   // prints:
-  ///   // `4`
-  ///   // `2`
-  ///   // `0`
+  ///   assert Stack.pop(stack) == ?4;
+  ///   assert Stack.pop(stack) == ?2;
+  ///   assert Stack.pop(stack) == ?0;
+  ///   assert Stack.pop(stack) == null;
   /// }
   /// ```
   ///
@@ -179,7 +172,7 @@ module {
   ///
   /// persistent actor {
   ///   let stack = Stack.singleton<Text>("motoko");
-  ///   assert (Stack.peek(stack) ==?"motoko");
+  ///   assert Stack.peek(stack) == ?"motoko";
   /// }
   /// ```
   ///
@@ -200,7 +193,7 @@ module {
   /// persistent actor {
   ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
   ///   Stack.clear(stack);
-  ///   assert (Stack.isEmpty(stack));
+  ///   assert Stack.isEmpty(stack);
   /// }
   /// ```
   ///
@@ -221,7 +214,7 @@ module {
   /// persistent actor {
   ///   let original = Stack.fromIter<Nat>([1, 2, 3].values());
   ///   let copy = Stack.clone(original);
-  ///   assert (Stack.equal(copy, original, Nat.equal))
+  ///   assert Stack.equal(copy, original, Nat.equal);
   /// }
   /// ```
   ///
@@ -245,7 +238,7 @@ module {
   ///
   /// persistent actor {
   ///   let stack = Stack.empty<Nat>();
-  ///   assert (Stack.isEmpty(stack));
+  ///   assert Stack.isEmpty(stack);
   /// }
   /// ```
   ///
@@ -263,7 +256,7 @@ module {
   ///
   /// persistent actor {
   ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
-  ///   assert (Stack.size(stack) == 3);
+  ///   assert Stack.size(stack) == 3;
   /// }
   /// ```
   ///
@@ -283,7 +276,7 @@ module {
   ///
   /// persistent actor {
   ///   let stack = Stack.fromIter<Nat>([1, 2, 3].values());
-  ///   assert (Stack.contains(stack, 2, Nat.equal));
+  ///   assert Stack.contains(stack, 2, Nat.equal);
   /// }
   /// ```
   ///
@@ -331,7 +324,7 @@ module {
   ///   Stack.push(stack, 1);
   ///   Stack.push(stack, 2);
   ///   Stack.push(stack, 3);
-  ///   assert (Stack.peek(stack) == ?3);
+  ///   assert Stack.peek(stack) == ?3;
   /// }
   /// ```
   ///
@@ -453,20 +446,19 @@ module {
   /// ```motoko
   /// import Stack "mo:base/Stack";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let stack = Stack.empty<Nat>();
   ///   Stack.push(stack, 1);
   ///   Stack.push(stack, 2);
   ///   Stack.push(stack, 3);
+  ///   let expected = [3, 2, 1];
+  ///   var i = 0;
   ///   for (element in Stack.values(stack)) {
-  ///     Debug.print(Nat.toText(element));
+  ///     assert element == expected[i];
+  ///     i += 1;
   ///   };
-  ///   // prints:
-  ///   // `3`
-  ///   // `2`
-  ///   // `1`
+  ///   assert i == expected.size();
   /// }
   /// ```
   ///
@@ -760,7 +752,6 @@ module {
   /// ```motoko
   /// import Stack "mo:base/Stack";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let stack = Stack.empty<Nat>();
@@ -768,8 +759,7 @@ module {
   ///   Stack.push(stack, 2);
   ///   Stack.push(stack, 3);
   ///   let text = Stack.toText(stack, Nat.toText);
-  ///   Debug.print(text);
-  ///   // prints `[3, 2, 1]`
+  ///   assert text == "[3, 2, 1]";
   /// }
   /// ```
   ///
@@ -798,7 +788,7 @@ module {
   /// persistent actor {
   ///   let stack1 = Stack.fromIter<Nat>([1, 2].values());
   ///   let stack2 = Stack.fromIter<Nat>([1, 2, 3].values());
-  ///   assert (Stack.compare(stack1, stack2, Nat.compare) == #less);
+  ///   assert Stack.compare(stack1, stack2, Nat.compare) == #less;
   /// }
   /// ```
   ///

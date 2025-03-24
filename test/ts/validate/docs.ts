@@ -205,7 +205,31 @@ async function main() {
   await pocketIc.tearDown();
   await pocketIcServer.stop();
 
-  console.log("---");
+  const paths = new Set(snippets.map((snippet) => snippet.path));
+  const failedPaths = new Set(
+    testResults
+      .filter((result) => result.status === "failed")
+      .map((result) => result.snippet.path)
+  );
+  if (paths.size > 1 && failedPaths.size) {
+    console.log("---");
+    failedPaths.forEach((path) => {
+      console.log(
+        `${path}:`,
+        ["passed", "failed", "skipped"]
+          .map(
+            (status: TestResult["status"]) =>
+              `${
+                testResults.filter(
+                  (result) =>
+                    result.status === status && result.snippet.path === path
+                ).length
+              } ${status}`
+          )
+          .join(", ")
+      );
+    });
+  }
   console.log(
     ["passed", "failed", "skipped"]
       .map(

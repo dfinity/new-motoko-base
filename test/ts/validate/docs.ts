@@ -14,7 +14,7 @@ interface TestResult {
 }
 
 interface ExampleActor {
-  example(): Promise<void>;
+  main?(): Promise<void>;
 }
 
 interface Snippet {
@@ -342,12 +342,17 @@ const runSnippet = async (
   });
 
   // Call `example()` method
+  const hasMain = actorSource.includes("func main"); // TODO: more robust?
   const actor: ExampleActor = pocketIc.createActor(({ IDL }) => {
-    return IDL.Service({
-      // example: IDL.Func([], []),
-    });
+    return IDL.Service(
+      hasMain
+        ? {
+            main: IDL.Func([], []),
+          }
+        : {}
+    );
   }, sourcePrincipal);
-  // await actor.example();
+  await actor.main?.();
 };
 
 main().catch((err) => {

@@ -14,10 +14,11 @@ module {
   /// For example, given a function `createUser(user : User) : Result<Id, String>`
   /// where `String` is an error message we could use it like so:
   /// ```motoko no-repl
-  /// switch(createUser(myUser)) {
-  ///   case (#ok(id)) { Debug.print("Created new user with id: " # id) };
-  ///   case (#err(msg)) { Debug.print("Failed to create user with the error: " # msg) };
-  /// }
+  /// let res1 = createUser(myUser1);
+  /// assert res1 == #ok("user_123");
+  ///
+  /// let res2 = createUser(myUser2);
+  /// assert res2 == #err("Invalid email format");
   /// ```
   public type Result<Ok, Err> = Types.Result<Ok, Err>;
 
@@ -73,9 +74,9 @@ module {
   /// func between10And20(x : Nat) : Result<Nat, Text> =
   ///   Result.chain(largerThan10(x), smallerThan20);
   ///
-  /// assert(between10And20(15) == #ok(15));
-  /// assert(between10And20(9) == #err("Not larger than 10."));
-  /// assert(between10And20(21) == #err("Not smaller than 20."));
+  /// assert between10And20(15) == #ok(15);
+  /// assert between10And20(9) == #err("Not larger than 10.");
+  /// assert between10And20(21) == #err("Not smaller than 20.");
   /// ```
   public func chain<Ok1, Ok2, Err>(
     result : Result<Ok1, Err>,
@@ -91,9 +92,9 @@ module {
   ///
   /// ```motoko
   /// import Result "mo:base/Result";
-  /// assert(Result.flatten<Nat, Text>(#ok(#ok(10))) == #ok(10));
-  /// assert(Result.flatten<Nat, Text>(#err("Wrong")) == #err("Wrong"));
-  /// assert(Result.flatten<Nat, Text>(#ok(#err("Wrong"))) == #err("Wrong"));
+  /// assert Result.flatten<Nat, Text>(#ok(#ok(10))) == #ok(10);
+  /// assert Result.flatten<Nat, Text>(#err("Wrong")) == #err("Wrong");
+  /// assert Result.flatten<Nat, Text>(#ok(#err("Wrong"))) == #err("Wrong");
   /// ```
   public func flatten<Ok, Err>(
     result : Result<Result<Ok, Err>, Err>
@@ -129,8 +130,8 @@ module {
   /// Create a result from an option, including an error value to handle the `null` case.
   /// ```motoko
   /// import Result "mo:base/Result";
-  /// assert(Result.fromOption(?42, "err") == #ok(42));
-  /// assert(Result.fromOption(null, "err") == #err("err"));
+  /// assert Result.fromOption(?42, "err") == #ok(42);
+  /// assert Result.fromOption(null, "err") == #err("err");
   /// ```
   public func fromOption<Ok, Err>(x : ?Ok, err : Err) : Result<Ok, Err> {
     switch x {
@@ -142,8 +143,8 @@ module {
   /// Create an option from a result, turning all #err into `null`.
   /// ```motoko
   /// import Result "mo:base/Result";
-  /// assert(Result.toOption(#ok(42)) == ?42);
-  /// assert(Result.toOption(#err("err")) == null);
+  /// assert Result.toOption(#ok(42)) == ?42;
+  /// assert Result.toOption(#err("err")) == null;
   /// ```
   public func toOption<Ok, Err>(result : Result<Ok, Err>) : ?Ok {
     switch result {
@@ -159,9 +160,9 @@ module {
   /// import Result "mo:base/Result";
   /// var counter : Nat = 0;
   /// Result.forOk<Nat, Text>(#ok(5), func (x : Nat) { counter += x });
-  /// assert(counter == 5);
+  /// assert counter == 5;
   /// Result.forOk<Nat, Text>(#err("Error"), func (x : Nat) { counter += x });
-  /// assert(counter == 5);
+  /// assert counter == 5;
   /// ```
   public func forOk<Ok, Err>(result : Result<Ok, Err>, f : Ok -> ()) {
     switch result {
@@ -177,9 +178,9 @@ module {
   /// import Result "mo:base/Result";
   /// var counter : Nat = 0;
   /// Result.forErr<Nat, Text>(#err("Error"), func (x : Text) { counter += 1 });
-  /// assert(counter == 1);
+  /// assert counter == 1;
   /// Result.forErr<Nat, Text>(#ok(5), func (x : Text) { counter += 1 });
-  /// assert(counter == 1);
+  /// assert counter == 1;
   /// ```
   public func forErr<Ok, Err>(result : Result<Ok, Err>, f : Err -> ()) {
     switch result {

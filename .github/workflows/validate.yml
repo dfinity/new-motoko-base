@@ -58,6 +58,8 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm run validate:docs
+      - run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep '^src/.*\.mo$' || true)
+          npm run validate:docs ${CHANGED_FILES}
         env:
           FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106

@@ -25,6 +25,7 @@
 /// with optionals that can be more succinct than using pattern matching.
 
 import Runtime "Runtime";
+import Types "Types";
 
 module {
 
@@ -122,12 +123,32 @@ module {
     case (_, _) { false }
   };
 
+  /// Compares two optional values using the provided comparison function.
+  ///
+  /// Returns:
+  /// - `#equal` if both values are `null`,
+  /// - `#less` if the first value is `null` and the second is not,
+  /// - `#greater` if the first value is not `null` and the second is,
+  /// - the result of the comparison function when both values are not `null`.
+  public func compare<A>(x : ?A, y : ?A, cmp : (A, A) -> Types.Order) : Types.Order = switch (x, y) {
+    case (null, null) #equal;
+    case (null, _) #less;
+    case (_, null) #greater;
+    case (?x_, ?y_) { cmp(x_, y_) }
+  };
+
   /// Unwraps an optional value, i.e. `unwrap(?x) = x`.
   ///
   /// `Option.unwrap()` fails if the argument is null. Consider using a `switch` or `do?` expression instead.
   public func unwrap<T>(x : ?T) : T = switch x {
     case null { Runtime.trap("Option.unwrap()") };
     case (?x_) { x_ }
+  };
+
+  /// Returns the textural representation of an optional value for debugging purposes.
+  public func toText<A>(x : ?A, toText : A -> Text) : Text = switch x {
+    case null { "null" };
+    case (?x_) { "?" # toText(x_) }
   };
 
 }

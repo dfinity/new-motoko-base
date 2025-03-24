@@ -4,8 +4,8 @@
 ///
 /// Example:
 /// ```motoko
-/// import Stack "Stack";
-/// import Debug "Debug";
+/// import Stack "mo:base/Stack";
+/// import Debug "mo:base/Debug";
 ///
 /// persistent actor {
 ///   let levels = Stack.empty<Text>();
@@ -84,9 +84,9 @@ module {
   /// persistent actor {
   ///   let immutableList = PureList.fromIter<Nat>([1, 2, 3].values());
   ///   let mutableStack = Stack.fromPure<Nat>(immutableList);
-  ///   assert Stack.pop(mutableStack) == ?3;
-  ///   assert Stack.pop(mutableStack) == ?2;
   ///   assert Stack.pop(mutableStack) == ?1;
+  ///   assert Stack.pop(mutableStack) == ?2;
+  ///   assert Stack.pop(mutableStack) == ?3;
   ///   assert Stack.pop(mutableStack) == null;
   /// }
   /// ```
@@ -759,7 +759,7 @@ module {
   ///   Stack.push(stack, 2);
   ///   Stack.push(stack, 3);
   ///   let text = Stack.toText(stack, Nat.toText);
-  ///   assert text == "[3, 2, 1]";
+  ///   assert text == "Stack[3, 2, 1]";
   /// }
   /// ```
   ///

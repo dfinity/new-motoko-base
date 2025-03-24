@@ -77,9 +77,12 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// import Nat8 "mo:base/Nat8";
+  /// import VarArray "mo:base/VarArray";
+  ///
   /// let blob = "\00\FF\00" : Blob;
   /// let bytes = Blob.toVarArray(blob);
-  /// assert bytes == [var 0, 255, 0];
+  /// assert VarArray.equal<Nat8>(bytes, [var 0, 255, 0], Nat8.equal);
   /// ```
   public func toVarArray(blob : Blob) : [var Nat8] = Prim.blobToArrayMut blob;
 

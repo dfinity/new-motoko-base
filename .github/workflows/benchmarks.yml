@@ -21,6 +21,7 @@ jobs:
         with:
           cache: 'npm'
       - run: npm ci
+      - run: npx mops toolchain init
       - name: Install dfx
         uses: dfinity/setup-dfx@main
       - name: Install dfx cache

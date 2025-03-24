@@ -22,9 +22,9 @@ jobs:
       - run: npm run validate:changelog
       - name: Check for Motoko file changes
         run: |
-          if git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep -q '^src/.*\.mo$'; then
+          if git diff --name-only ${{ github.event.pull_request.base.ref || 'origin/main' }} HEAD | grep -q '^src/.*\.mo$'; then
             echo "Found modified Motoko files, checking for Changelog.md update..."
-            if ! git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep -q '^Changelog\.md$'; then
+            if ! git diff --name-only ${{ github.event.pull_request.base.ref || 'origin/main' }} HEAD | grep -q '^Changelog\.md$'; then
               echo "Error: Motoko files were modified but Changelog.md was not updated"
               exit 1
             fi
@@ -60,7 +60,7 @@ jobs:
       - run: npm ci
       - name: Validate changed files
         run: |
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep '^src/.*\.mo$' || true)
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.ref || 'origin/main' }} HEAD | grep '^src/.*\.mo$' || true)
           echo "$CHANGED_FILES" | xargs npm run validate:docs
         env:
           FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106

@@ -81,12 +81,14 @@ jobs:
       
       - name: Generate Benchmark Results
         # if: github.event_name != 'pull_request'
-        run: mops bench --save 2>&1 | tee README.md  # Make sure to use the same flags as in the `mops bench` command above!
+        run: | # Make sure to use the same flags as in the `mops bench` command above!
+          mops bench --save 2>&1 | tee bench-results.md 
       - name: Move Generated Results
         # if: github.event_name != 'pull_request'
         run: |
           mkdir .bench-br
           mv .bench .bench-br/.bench
+          mv bench-results.md .bench-br/README.md
       - name: Upload benchmark results
         # if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4

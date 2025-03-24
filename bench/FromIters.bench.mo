@@ -14,8 +14,8 @@ module {
     bench.description("Columns describe the number of elements in the input iter.");
 
     bench.rows([
-      "Array.fromIter2",
-      "List.fromIter2"
+      "Array.fromIter",
+      "List.fromIter"
     ]);
     bench.cols([
       "100",

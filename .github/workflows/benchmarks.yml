@@ -58,7 +58,7 @@ jobs:
         if: github.event_name == 'pull_request'
         id: benchmarks
         run: |  # Make sure to use the same flags as in the `mops bench` command below!
-          mops bench --compare 2>&1 | tee benchmark_results.txt
+          npx mops bench --compare 2>&1 | tee benchmark_results.txt
           echo "result<<EOF" >> $GITHUB_OUTPUT
           cat benchmark_results.txt >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -84,7 +84,7 @@ jobs:
       - name: Generate Benchmark Results
         if: github.event_name != 'pull_request'
         run: | # Make sure to use the same flags as in the `mops bench` command above!
-          mops bench --save 2>&1 | tee bench-results.md 
+          npx mops bench --save 2>&1 | tee bench-results.md 
       - name: Move Generated Results
         if: github.event_name != 'pull_request'
         run: |

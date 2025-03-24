@@ -161,9 +161,13 @@ async function main() {
     controllers: [Principal.anonymous() /* , testPrincipal */],
   });
 
-  console.log("Running snippets...");
+  console.log(`Running snippets...`);
   const testResults: TestResult[] = [];
+  let previousSnippet: Snippet | undefined;
   for (const snippet of snippets) {
+    if (snippet.path !== previousSnippet?.path) {
+      console.log(chalk.gray(snippet.path));
+    }
     if (snippet.language === "motoko") {
       const startTime = Date.now();
       let status: TestResult["status"];
@@ -182,12 +186,13 @@ async function main() {
         time: Date.now() - startTime,
       };
       testResults.push(result);
-
-      console.log(
-        testStatusEmojis[status],
-        `${snippet.path}:${snippet.line}`.padEnd(30),
-        chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
-      );
+      if (testFilters.length || status !== "passed") {
+        console.log(
+          testStatusEmojis[status],
+          `${snippet.path}:${snippet.line}`.padEnd(30),
+          chalk.grey(`${(result.time / 1000).toFixed(1)}s`)
+        );
+      }
       if (result.error) {
         console.log(chalk.grey(displaySnippet(snippet)));
         console.error(chalk.red(result.error));
@@ -200,8 +205,8 @@ async function main() {
       );
       console.log(chalk.grey(displaySnippet(snippet)));
     }
+    previousSnippet = snippet;
   }
-
   await pocketIc.tearDown();
   await pocketIcServer.stop();
 

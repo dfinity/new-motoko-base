@@ -1,6 +1,7 @@
 import Option "../src/Option";
 import Int "../src/Int";
-import { suite; test } "mo:test";
+import { suite; test; expect } "mo:test";
+import Nat "../src/Nat";
 
 suite(
   "apply",
@@ -165,5 +166,25 @@ test(
     assert (not Option.equal<Int>(?0, ?1, Int.equal));
     assert (not Option.equal<Int>(?0, null, Int.equal));
     assert (not Option.equal<Int>(null, ?0, Int.equal))
+  }
+);
+
+test(
+  "compare",
+  func() {
+    expect.bool(Option.compare<Nat>(null, null, Nat.compare) == #equal).isTrue();
+    expect.bool(Option.compare<Nat>(null, ?0, Nat.compare) == #less).isTrue();
+    expect.bool(Option.compare<Nat>(?0, null, Nat.compare) == #greater).isTrue();
+    expect.bool(Option.compare<Nat>(?0, ?0, Nat.compare) == #equal).isTrue();
+    expect.bool(Option.compare<Nat>(?0, ?1, Nat.compare) == #less).isTrue();
+    expect.bool(Option.compare<Nat>(?1, ?0, Nat.compare) == #greater).isTrue()
+  }
+);
+
+test(
+  "toText",
+  func() {
+    expect.text(Option.toText<Nat>(null, Nat.toText)).equal("null");
+    expect.text(Option.toText<Nat>(?0, Nat.toText)).equal("?0")
   }
 )

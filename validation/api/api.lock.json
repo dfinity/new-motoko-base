@@ -7,7 +7,7 @@
       "public func compare<T>(array1 : [T], array2 : [T], compare : (T, T) -> Order.Order) : Order.Order",
       "public func concat<T>(array1 : [T], array2 : [T]) : [T]",
       "public func empty<T>() : [T]",
-      "public func enumerate<T>(array : [var T]) : Types.Iter<(Nat, T)>",
+      "public func enumerate<T>(array : [T]) : Types.Iter<(Nat, T)>",
       "public func equal<T>(array1 : [T], array2 : [T], equal : (T, T) -> Bool) : Bool",
       "public func filter<T>(array : [T], f : T -> Bool) : [T]",
       "public func filterMap<T, R>(array : [T], f : T -> ?R) : [R]",
@@ -454,24 +454,47 @@
   {
     "name": "Iter",
     "exports": [
+      "public func all<T>(iter : Iter<T>, f : T -> Bool) : Bool",
+      "public func any<T>(iter : Iter<T>, f : T -> Bool) : Bool",
       "public func concat<T>(a : Iter<T>, b : Iter<T>) : Iter<T>",
+      "public func contains<T>(iter : Iter<T>, equal : (T, T) -> Bool, value : T) : Bool",
+      "public func drop<T>(iter : Iter<T>, n : Nat) : Iter<T>",
+      "public func dropWhile<T>(iter : Iter<T>, f : T -> Bool) : Iter<T>",
       "public func empty<T>() : Iter<T>",
       "public func enumerate<T>(iter : Iter<T>) : Iter<(Nat, T)>",
       "public func filter<T>(iter : Iter<T>, f : T -> Bool) : Iter<T>",
+      "public func filterMap<T, R>(iter : Iter<T>, f : T -> ?R) : Iter<R>",
+      "public func find<T>(iter : Iter<T>, f : T -> Bool) : ?T",
+      "public func flatMap<T, R>(iter : Iter<T>, f : T -> Iter<R>) : Iter<R>",
+      "public func flatten<T>(iter : Iter<Iter<T>>) : Iter<T>",
+      "public func foldLeft<T, R>(iter : Iter<T>, initial : R, combine : (R, T) -> R) : R",
+      "public func foldRight<T, R>(iter : Iter<T>, initial : R, combine : (T, R) -> R) : R",
       "public func forEach<T>( iter : Iter<T>, f : (T) -> () )",
       "public func fromArray<T>(array : [T]) : Iter<T>",
       "public func fromVarArray<T>(array : [var T]) : Iter<T>",
       "public func infinite<T>(item : T) : Iter<T>",
       "public type Iter<T>",
       "public func map<T, R>(iter : Iter<T>, f : T -> R) : Iter<R>",
+      "public func max<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T",
+      "public func min<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T",
+      "public func reduce<T>(iter : Iter<T>, combine : (T, T) -> T) : ?T",
       "public func repeat<T>(item : T, count : Nat) : Iter<T>",
       "public func reverse<T>(iter : Iter<T>) : Iter<T>",
+      "public func scanLeft<T, R>(iter : Iter<T>, initial : R, combine : (R, T) -> R) : Iter<R>",
+      "public func scanRight<T, R>(iter : Iter<T>, initial : R, combine : (T, R) -> R) : Iter<R>",
       "public func singleton<T>(value : T) : Iter<T>",
       "public func size<T>(iter : Iter<T>) : Nat",
       "public func sort<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : Iter<T>",
       "public func step<T>(iter : Iter<T>, n : Nat) : Iter<T>",
+      "public func take<T>(iter : Iter<T>, n : Nat) : Iter<T>",
+      "public func takeWhile<T>(iter : Iter<T>, f : T -> Bool) : Iter<T>",
       "public func toArray<T>(iter : Iter<T>) : [T]",
-      "public func toVarArray<T>(iter : Iter<T>) : [var T]"
+      "public func toVarArray<T>(iter : Iter<T>) : [var T]",
+      "public func unfold<T, S>(initial : S, step : S -> ?(T, S)) : Iter<T>",
+      "public func zip<A, B>(a : Iter<A>, b : Iter<B>) : Iter<(A, B)>",
+      "public func zip3<A, B, C>(a : Iter<A>, b : Iter<B>, c : Iter<C>) : Iter<(A, B, C)>",
+      "public func zipWith<A, B, R>(a : Iter<A>, b : Iter<B>, f : (A, B) -> R) : Iter<R>",
+      "public func zipWith3<A, B, C, R>(a : Iter<A>, b : Iter<B>, c : Iter<C>, f : (A, B, C) -> R) : Iter<R>"
     ]
   },
   {
@@ -815,6 +838,7 @@
     "exports": [
       "public func apply<A, B>(x : ?A, f : ?(A -> B)) : ?B",
       "public func chain<A, B>(x : ?A, f : A -> ?B) : ?B",
+      "public func compare<A>(x : ?A, y : ?A, cmp : (A, A) -> Types.Order) : Types.Order",
       "public func equal<A>(x : ?A, y : ?A, eq : (A, A) -> Bool) : Bool",
       "public func flatten<A>(x : ??A) : ?A",
       "public func forEach<A>(x : ?A, f : A -> ())",
@@ -824,6 +848,7 @@
       "public func isSome(x : ?Any) : Bool",
       "public func map<A, B>(x : ?A, f : A -> B) : ?B",
       "public func some<A>(x : A) : ?A",
+      "public func toText<A>(x : ?A, toText : A -> Text) : Text",
       "public func unwrap<T>(x : ?T) : T"
     ]
   },
@@ -899,11 +924,13 @@
   {
     "name": "Random",
     "exports": [
-      "public class AsyncRandom(generator : () -> async* Blob)",
+      "public class AsyncRandom(",
       "public let blob : shared () -> async Blob",
       "public func crypto() : AsyncRandom",
       "public func fast(seed : Nat64) : Random",
-      "public class Random(generator : () -> Blob)"
+      "public func fromAsyncGenerator(generator : () -> async* Blob) : AsyncRandom",
+      "public func fromGenerator(generator : () -> Blob) : Random",
+      "public class Random("
     ]
   },
   {
@@ -1103,6 +1130,10 @@
       "public func setTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId",
       "public type TimerId"
     ]
+  },
+  {
+    "name": "Tuples",
+    "exports": []
   },
   {
     "name": "Types",

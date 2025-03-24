@@ -16,24 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Environment
+        uses: ./.github/workflows/setup-env.yml
         with:
-          cache: 'npm'
-      - name: Cache mops packages
-        uses: actions/cache@v4
-        with:
-          key: mops-packages-${{ hashFiles('mops.toml') }}
-          restore-keys: |
-            mops-packages-${{ hashFiles('mops.toml') }}
-            mops-packages-
-          path: |
-            ~/.cache/mops
-      - run: npm ci
-      - run: npx mops toolchain init
-      - name: Install dfx
-        uses: dfinity/setup-dfx@main
-      - name: Install dfx cache
-        run: dfx cache install
+          dfx: true
 
       - name: Checkout out the branch with benchmark results
         if: github.event_name == 'pull_request'
@@ -70,7 +56,7 @@ jobs:
             ${{ steps.benchmarks.outputs.result }}
             **Note**: Renamed benchmarks cannot be compared. Refer to the [current baseline](https://github.com/dfinity/new-motoko-base/tree/benchmark-results) for manual comparison.
           edit-mode: replace
-      
+
       - name: Generate Benchmark Results
         if: github.event_name != 'pull_request'
         run: | # Make sure to use the same flags as in the `mops bench` command above!

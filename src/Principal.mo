@@ -12,9 +12,11 @@
 /// caller of your shared function.
 ///
 /// ```motoko no-repl
-/// shared(msg) func foo() {
-///   let caller : Principal = msg.caller;
-/// };
+/// persistent actor {
+///   public shared(msg) func foo() {
+///     let caller : Principal = msg.caller;
+///   };
+/// }
 /// ```
 ///
 /// Then, you can use this module to work with the `Principal`.
@@ -56,7 +58,7 @@ module {
   /// ```motoko include=import
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
   /// let subAccount : Blob = "\4A\8D\3F\2B\6E\01\C8\7D\9E\03\B4\56\7C\F8\9A\01\D2\34\56\78\9A\BC\DE\F0\12\34\56\78\9A\BC\DE\F0";
-  /// let account = Principal.toLedgerAccount(principal, ?subAccount); // => \8C\5C\20\C6\15\3F\7F\51\E2\0D\0F\0F\B5\08\51\5B\47\65\63\A9\62\B4\A9\91\5F\4F\02\70\8A\ED\4F\82
+  /// let account = Principal.toLedgerAccount(principal, ?subAccount); // => "\8C\5C\20\C6\15\3F\7F\51\E2\0D\0F\0F\B5\08\51\5B\47\65\63\A9\62\B4\A9\91\5F\4F\02\70\8A\ED\4F\82"
   /// ```
   public func toLedgerAccount(principal : Principal, subAccount : ?Blob) : Blob {
     let sha224 = SHA224();
@@ -86,7 +88,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let principal = Principal.fromText("un4fu-tqaaa-aaaab-qadjq-cai");
-  /// let blob = Principal.toBlob(principal); // => \00\00\00\00\00\30\00\D3\01\01
+  /// let blob = Principal.toBlob(principal); // => "\00\00\00\00\00\30\00\D3\01\01"
   /// ```
   public func toBlob(p : Principal) : Blob = Prim.blobOfPrincipal p;
 
@@ -241,11 +243,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Principal>(3);
-  /// let buffer2 = Buffer.Buffer<Principal>(3);
-  /// Buffer.equal(buffer1, buffer2, Principal.equal) // => true
+  /// let principal1 = Principal.anonymous();
+  /// let principal2 = Principal.fromBlob(Principal.anonymousBlob);
+  /// Principal.equal(principal1, principal2, Principal.equal) // => true
   /// ```
   public func equal(principal1 : Principal, principal2 : Principal) : Bool {
     principal1 == principal2

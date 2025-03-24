@@ -787,7 +787,7 @@ module {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let difference = Set.difference(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(difference)))); // => [1, 2]
+  ///   assert Iter.toArray(Set.values(difference)) == [1, 2];
   /// }
   /// ```
   ///
@@ -819,7 +819,7 @@ module {
   ///   let set = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let iter = Iter.fromArray([3, 4, 5]);
   ///   Set.addAll(set, Nat.compare, iter);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [1, 2, 3, 4, 5]
+  ///   assert Iter.toArray(Set.values(set)) == [1, 2, 3, 4, 5];
   /// }
   /// ```
   ///

@@ -142,11 +142,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Nat32>(3);
-  /// let buffer2 = Buffer.Buffer<Nat32>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat32.equal) // => true
+  /// let a : Nat32 = 111;
+  /// let b : Nat32 = 222;
+  /// Nat32.equal(a, b) // => false
   /// ```
   public func equal(x : Nat32, y : Nat32) : Bool { x == y };
 

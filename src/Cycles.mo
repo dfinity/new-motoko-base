@@ -21,7 +21,7 @@
 /// import Cycles "mo:base/Cycles";
 /// import Debug "mo:base/Debug";
 ///
-/// actor {
+/// persistent actor {
 ///   public func main() : async() {
 ///     Debug.print("Main balance: " # debug_show(Cycles.balance()));
 ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
@@ -49,7 +49,7 @@ module {
   /// import Cycles "mo:base/Cycles";
   /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   public func main() : async() {
   ///     let balance = Cycles.balance();
   ///     Debug.print("Balance: " # debug_show(balance));
@@ -69,7 +69,7 @@ module {
   /// import Cycles "mo:base/Cycles";
   /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   public func main() : async() {
   ///     let available = Cycles.available();
   ///     Debug.print("Available: " # debug_show(available));
@@ -87,7 +87,7 @@ module {
   /// import Cycles "mo:base/Cycles";
   /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   public func main() : async() {
   ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   ///   };
@@ -111,7 +111,7 @@ module {
   /// import Cycles "mo:base/Cycles";
   /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   func operation() : async() {
   ///     ignore Cycles.accept<system>(10_000_000);
   ///   };

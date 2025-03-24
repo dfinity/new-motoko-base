@@ -2,9 +2,10 @@
 
 ## Next
 
+* Improve code examples in doc comments
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
 * Fix bug in `Iter.step()`
-* Fix bug in `Array.enumerate()` and `VarArray.enumerate()`
+* Fix bug in `Array.enumerate()` / `VarArray.enumerate()`
 * Adjust `Random` representation to allow persistence in stable memory
 
 ## 0.3.0

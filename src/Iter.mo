@@ -51,7 +51,7 @@ module {
   /// Creates an empty iterator.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// for (x in Iter.empty<Nat>())
   ///   assert false; // This loop body will never run
   /// ```
@@ -66,7 +66,7 @@ module {
   /// Creates an iterator that produces a single value.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// var sum = 0;
   /// for (x in Iter.singleton(3))
   ///   sum += x;
@@ -91,7 +91,7 @@ module {
   /// the results. If you're looking to keep these results use `map` instead.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// var sum = 0;
   /// Iter.forEach<Nat>([1, 2, 3].values(), func(x) {
   ///   sum += x;
@@ -118,7 +118,7 @@ module {
   /// The index starts at 0 and increments by 1 for each element.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray(["A", "B", "C"]);
   /// let enumerated = Iter.enumerate(iter);
   /// Array.toArray(enumerated) // => [(0, "A"), (1, "B"), (2, "C")];
@@ -144,7 +144,7 @@ module {
   /// For any other positive interval, returns an iterator that skips `interval - 1` elements after each yielded element.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3, 4, 5, 6]);
   /// let steppedIter = Iter.step(iter, 2); // Take every 2nd element
   /// assert(?1 == steppedIter.next());
@@ -174,7 +174,7 @@ module {
 
   /// Consumes an iterator and counts how many elements were produced (discarding them in the process).
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = [1, 2, 3].values();
   /// assert(3 == Iter.size(iter));
   /// ```
@@ -187,7 +187,7 @@ module {
   /// Takes a function and an iterator and returns a new iterator that lazily applies
   /// the function to every element produced by the argument iterator.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = [1, 2, 3].values();
   /// let mappedIter = Iter.map<Nat, Nat>(iter, func (x) = x * 2);
   /// Iter.toArray(mappedIter) // => [2, 4, 6]
@@ -209,7 +209,7 @@ module {
   /// for which the predicate function returns true.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = [1, 2, 3, 4, 5].values();
   /// let evenNumbers = Iter.filter<Nat>(iter, func (x) = x % 2 == 0);
   /// Iter.toArray(evenNumbers) // => [2, 4]
@@ -229,7 +229,7 @@ module {
   /// excluded from the result.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = [1, 2, 3].values();
   /// let evenNumbers = Iter.filterMap<Nat, Nat>(iter, func (x) = if (x % 2 == 0) ?x else null);
   /// Iter.toArray(evenNumbers) // => [2]
@@ -250,7 +250,7 @@ module {
   ///
   /// Possible optimization: Use `flatMap` when you need to transform elements before calling `flatten`. Example: use `flatMap(...)` instead of `flatten(map(...))`.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.flatten([[1, 2].values(), [3].values(), [4, 5, 6].values()].values());
   /// Iter.toArray(iter) // => [1, 2, 3, 4, 5, 6]
   /// ```
@@ -271,7 +271,7 @@ module {
 
   /// Transforms every element of an iterator into an iterator and concatenates the results.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.flatMap<Nat, Nat>([1, 3, 5].values(), func (x) = [x, x + 1].values());
   /// Iter.toArray(iter) // => [1, 2, 3, 4, 5, 6]
   /// ```
@@ -295,14 +295,14 @@ module {
   /// subsequent calls to `next()` will return `null`.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3, 4, 5]);
   /// let first3 = Iter.take(iter, 3);
   /// Iter.toArray(first3) // => [1, 2, 3]
   /// ```
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3]);
   /// let first5 = Iter.take(iter, 5);
   /// Iter.toArray(first5) // => [1, 2, 3] only 3 elements in the original iterator
@@ -320,7 +320,7 @@ module {
   /// The first element for which the predicate returns false is not included in the result.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3, 4, 5, 4, 3, 2, 1]);
   /// let result = Iter.takeWhile<Nat>(iter, func (x) = x < 4);
   /// Iter.toArray(result) // => [1, 2, 3] note the difference between `takeWhile` and `filter`
@@ -340,7 +340,7 @@ module {
   /// If the original iterator has fewer than `n` elements, the result will be an empty iterator.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3, 4, 5]);
   /// let skipped = Iter.drop(iter, 3);
   /// Iter.toArray(skipped) // => [4, 5]
@@ -360,7 +360,7 @@ module {
   /// The first element for which the predicate returns false is the first element produced by the new iterator.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3, 4, 5, 4, 3, 2, 1]);
   /// let result = Iter.dropWhile<Nat>(iter, func (x) = x < 4);
   /// Iter.toArray(result) // => [4, 5, 4, 3, 2, 1] notice that `takeWhile` and `dropWhile` are complementary
@@ -383,7 +383,7 @@ module {
   /// The resulting iterator will stop producing elements when either of the input iterators is exhausted.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter1 = [1, 2, 3].values();
   /// let iter2 = ["A", "B"].values();
   /// let zipped = Iter.zip(iter1, iter2);
@@ -401,7 +401,7 @@ module {
   /// The resulting iterator will stop producing elements when any of the input iterators is exhausted.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter1 = ["A", "B"].values();
   /// let iter2 = ["1", "2", "3"].values();
   /// let iter3 = ["x", "y", "z", "xd"].values();
@@ -421,7 +421,7 @@ module {
   /// The resulting iterator will stop producing elements when either of the input iterators is exhausted.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter1 = ["A", "B"].values();
   /// let iter2 = ["1", "2", "3"].values();
   /// let zipped = Iter.zipWith<Text, Text, Text>(iter1, iter2, func (a, b) = a # b);
@@ -439,7 +439,7 @@ module {
   /// The resulting iterator will stop producing elements when any of the input iterators is exhausted.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter1 = ["A", "B"].values();
   /// let iter2 = ["1", "2", "3"].values();
   /// let iter3 = ["x", "y", "z", "xd"].values();
@@ -459,7 +459,7 @@ module {
   /// It stops consuming elements from the original iterator as soon as the predicate returns false.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.all<Nat>([1, 2, 3].values(), func (x) = x < 4) // => true
   /// Iter.all<Nat>([1, 2, 3].values(), func (x) = x < 3) // => false
   /// ```
@@ -474,7 +474,7 @@ module {
   /// It stops consuming elements from the original iterator as soon as the predicate returns true.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.any<Nat>([1, 2, 3].values(), func (x) = x == 2) // => true
   /// Iter.any<Nat>([1, 2, 3].values(), func (x) = x == 4) // => false
   /// ```
@@ -490,7 +490,7 @@ module {
   /// It stops consuming elements from the original iterator as soon as the predicate returns true.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.find<Nat>([1, 2, 3, 4].values(), func (x) = x % 2 == 0) // => ?2
   /// ```
   public func find<T>(iter : Iter<T>, f : T -> Bool) : ?T {
@@ -504,8 +504,8 @@ module {
   /// It stops consuming elements from the original iterator as soon as the predicate returns true.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
-  /// import Nat "mo:new-base/Nat";
+  /// import Iter "mo:base/Iter";
+  /// import Nat "mo:base/Nat";
   /// Iter.contains<Nat>([1, 2, 3].values(), Nat.equal, 2) // => true
   /// ```
   public func contains<T>(iter : Iter<T>, equal : (T, T) -> Bool, value : T) : Bool {
@@ -520,7 +520,7 @@ module {
   /// It starts applying the `combine` function starting from the `initial` accumulator value and the first elements produced by the iterator.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.foldLeft<Text>(["A", "B", "C"].values(), "S", func (acc, x) = "(" # acc # x # ")") // => ?"(((SA)B)C)"
   /// ```
   public func foldLeft<T, R>(iter : Iter<T>, initial : R, combine : (R, T) -> R) : R {
@@ -540,7 +540,7 @@ module {
   /// **Use `foldLeft` or `reduce` when possible to avoid the extra memory overhead**.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.foldRight<Text>(["A", "B", "C"].values(), "S", func (x, acc) = "(" # x # acc # ")") // => ?"(A(B(CS)))"
   /// ```
   public func foldRight<T, R>(iter : Iter<T>, initial : R, combine : (T, R) -> R) : R {
@@ -552,7 +552,7 @@ module {
   /// When the iterator is empty, it returns `null`.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.reduce<Nat>([1, 2, 3].values(), Nat.add) // => ?6
   /// ```
   public func reduce<T>(iter : Iter<T>, combine : (T, T) -> T) : ?T {
@@ -563,7 +563,7 @@ module {
   /// Produces an iterator containing cumulative results of applying the `combine` operator going left to right, including the `initial` value.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = [1, 2, 3].values();
   /// let scanned = Iter.scanLeft<Nat, Nat>(iter, 0, Nat.add);
   /// Iter.toArray(scanned) // => [0, 1, 3, 6]
@@ -593,7 +593,7 @@ module {
   /// **Use `scanLeft` when possible to avoid the extra memory overhead**.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = [1, 2, 3].values();
   /// let scanned = Iter.scanRight<Nat, Nat>(iter, 0, Nat.add);
   /// Iter.toArray(scanned) // => [0, 3, 5, 6]
@@ -606,7 +606,7 @@ module {
   /// The `step` function takes the current state and returns the next element and the next state, or `null` if the iteration is finished.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.unfold<Nat, Nat>(1, func (x) = if (x <= 3) ?(x, x + 1) else null);
   /// Iter.toArray(iter) // => [1, 2, 3]
   /// ```
@@ -625,7 +625,7 @@ module {
   /// If the iterator is empty, it returns `null`.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.max<Nat>([1, 2, 3].values(), Nat.compare) // => ?3
   /// ```
   public func max<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
@@ -644,7 +644,7 @@ module {
   /// If the iterator is empty, it returns `null`.
   ///
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// Iter.min<Nat>([1, 2, 3].values(), Nat.compare) // => ?1
   /// ```
   public func min<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
@@ -661,8 +661,8 @@ module {
 
   /// Creates an iterator that produces an infinite sequence of `x`.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
-  /// let iter = Iter.make(10);
+  /// import Iter "mo:base/Iter";
+  /// let iter = Iter.infinite(10);
   /// assert(?10 == iter.next());
   /// assert(?10 == iter.next());
   /// assert(?10 == iter.next());
@@ -677,7 +677,7 @@ module {
   /// Takes two iterators and returns a new iterator that produces
   /// elements from the original iterators sequentally.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter1 = [1, 2].values();
   /// let iter2 = [5, 6, 7].values();
   /// let concatenatedIter = Iter.concat(iter1, iter2);
@@ -703,7 +703,7 @@ module {
 
   /// Creates an iterator that produces the elements of an Array in ascending index order.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = Iter.fromArray([1, 2, 3]);
   /// assert(?1 == iter.next());
   /// assert(?2 == iter.next());
@@ -719,7 +719,7 @@ module {
 
   /// Consumes an iterator and collects its produced elements in an Array.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   /// let iter = [1, 2, 3].values();
   /// assert([1, 2, 3] == Iter.toArray(iter));
   /// ```
@@ -779,7 +779,7 @@ module {
 
   /// Creates an iterator that produces a given item a specified number of times.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   ///
   /// let iter = Iter.repeat<Nat>(3, 2);
   /// assert(?3 == iter.next());
@@ -805,7 +805,7 @@ module {
   /// Creates a new iterator that produces elements from the original iterator in reverse order.
   /// Note: This function needs to consume the entire iterator to reverse it.
   /// ```motoko
-  /// import Iter "mo:new-base/Iter";
+  /// import Iter "mo:base/Iter";
   ///
   /// let iter = Iter.fromArray([1, 2, 3]);
   /// let reversed = Iter.reverse(iter);

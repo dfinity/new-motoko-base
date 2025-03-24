@@ -333,8 +333,8 @@ persistent actor {
 Elements can be pushed on top of the stack
 and removed from top of the stack (LIFO).</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;Stack&quot;;
-import Debug &quot;Debug&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
   let levels = Stack.empty&lt;Text&gt;();

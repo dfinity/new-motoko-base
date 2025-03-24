@@ -20,30 +20,29 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           cache: 'npm'
+      - run: npm ci
       - name: Install dfx
         uses: dfinity/setup-dfx@main
-      - name: Confirm successful installation
-        run: dfx --version
       - name: Install dfx cache
         run: dfx cache install
-      - name: Cache mops packages
-        uses: actions/cache@v4
-        with:
-          key: mops-packages-${{ hashFiles('mops.toml') }}
-          restore-keys: |
-            mops-packages-${{ hashFiles('mops.toml') }}
-            mops-packages-
-          path: |
-            ~/.cache/mops
-      - name: Install mops & mocv
-        run: |
-          npm --yes -g i ic-mops
-          mops install
-          mops toolchain init
-          # mops toolchain use moc latest # TODO: we should use the compatible one
+      # - name: Cache mops packages
+      #   uses: actions/cache@v4
+      #   with:
+      #     key: mops-packages-${{ hashFiles('mops.toml') }}
+      #     restore-keys: |
+      #       mops-packages-${{ hashFiles('mops.toml') }}
+      #       mops-packages-
+      #     path: |
+      #       ~/.cache/mops
+      # - name: Install mops & mocv
+      #   run: |
+      #     npm --yes -g i ic-mops
+      #     mops install
+      #     mops toolchain init
+      #     # mops toolchain use moc latest # TODO: we should use the compatible one
 
-          # set moc path for dfx to use
-          echo "DFX_MOC_PATH=$(mops toolchain bin moc)" >> $GITHUB_ENV
+      #     # set moc path for dfx to use
+      #     echo "DFX_MOC_PATH=$(mops toolchain bin moc)" >> $GITHUB_ENV
 
       - name: Checkout out the branch with benchmark results
         if: github.event_name == 'pull_request'

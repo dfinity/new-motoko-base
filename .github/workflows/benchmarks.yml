@@ -80,17 +80,17 @@ jobs:
           edit-mode: replace
       
       - name: Generate Benchmark Results
-        if: github.event_name != 'pull_request'
-        run: mops bench --save  # Make sure to use the same flags as in the `mops bench` command above!
+        # if: github.event_name != 'pull_request'
+        run: mops bench --save 2>&1 | tee README.md  # Make sure to use the same flags as in the `mops bench` command above!
       - name: Move Generated Results
-        if: github.event_name != 'pull_request'
+        # if: github.event_name != 'pull_request'
         run: |
-          mkdir .benchmark-results-branch
-          mv .bench .benchmark-results-branch/.bench
+          mkdir .bench-br
+          mv .bench .bench-br/.bench
       - name: Upload benchmark results
-        if: github.event_name != 'pull_request'
+        # if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: benchmark-results
-          folder: .benchmark-results-branch
+          folder: .bench-br

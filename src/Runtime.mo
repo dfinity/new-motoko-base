@@ -19,7 +19,7 @@ module {
   /// propagate the trap and terminate execution, with or without some
   /// descriptive message.
   ///
-  /// ```motoko include=import no-eval
+  /// ```motoko include=import no-validate
   /// Runtime.trap("An error occurred!");
   /// ```
   public func trap(errorMessage : Text) : None {
@@ -32,7 +32,7 @@ module {
   /// such as after exhaustive pattern matches or unreachable control flow branches.
   /// If execution reaches this function, it indicates a programming error.
   ///
-  /// ```motoko include=import no-eval
+  /// ```motoko include=import no-validate
   /// let number = switch (?5) {
   ///   case (?n) n;
   ///   case null Runtime.unreachable();

@@ -2,14 +2,15 @@
 
 ## Next
 
+* Add `isReplicated : () -> Bool` to `InternetComputer` (#213).
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
-* Fix bug in `Iter.step()`
-* Fix bug in `Array.enumerate()` and `VarArray.enumerate()`
-* Adjust `Random` representation to allow persistence in stable memory
+* Fix bug in `Iter.step()` (#???).
+* Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#???).
+* Adjust `Random` representation to allow persistence in stable memory (#???).
 
 ## 0.3.0
 
-* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()`
+* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()` (#???).
 
 ## 0.2.2
 

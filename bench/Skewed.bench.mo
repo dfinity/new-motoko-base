@@ -5,13 +5,22 @@ import Nat "../src/Nat";
 import Option "../src/Option";
 import OldQueue "../src/pure/OldQueue";
 import NewQueue "../src/pure/Queue";
+import MutQueue "../src/Queue";
 import Runtime "../src/Runtime";
+
+import Prim "mo:prim";
+
+// todo:
+// - analyze a random sequence of operations (random pushes, then random pushes+pops)
+// - use primitives to measure cycles needed (memory too?)
+// - plot the results, analyse
+// - use Prim.rts_* functions, they are the same as used by the bench module
 
 module {
   public func init() : Bench.Bench {
     let bench = Bench.Bench();
 
-    bench.name("Compare pure/Queue with base:Deque");
+    bench.name("Compare queue implementations");
     bench.description("");
 
     bench.rows([
@@ -24,7 +33,8 @@ module {
     ]);
     bench.cols([
       "Real-Time",
-      "Amortized"
+      "Amortized",
+      "Mutable"
     ]);
 
     let fuzz = Fuzz.fromSeed(27850937); // fix seed for reproducibility
@@ -34,6 +44,7 @@ module {
     let init = input(2);
     var newQ = NewQueue.empty<Nat>();
     var oldQ = OldQueue.empty<Nat>();
+    var mutQ = MutQueue.empty<Nat>();
 
     let toPush = input(500);
 
@@ -46,6 +57,7 @@ module {
       func(row, col) = switch (col, row) {
         case ("Real-Time", "Initialize with 2 elements") newQ := NewQueue.fromIter<Nat>(init.vals());
         case ("Amortized", "Initialize with 2 elements") oldQ := OldQueue.fromIter<Nat>(init.vals());
+        case ("Mutable", "Initialize with 2 elements") mutQ := MutQueue.fromIter<Nat>(init.vals());
         case ("Real-Time", "Push 500 elements") {
           for (i in toPush.vals()) {
             newQ := NewQueue.pushBack<Nat>(newQ, i)
@@ -54,6 +66,11 @@ module {
         case ("Amortized", "Push 500 elements") {
           for (i in toPush.vals()) {
             oldQ := OldQueue.pushBack<Nat>(oldQ, i)
+          }
+        };
+        case ("Mutable", "Push 500 elements") {
+          for (i in toPush.vals()) {
+            MutQueue.pushBack<Nat>(mutQ, i)
           }
         };
         case ("Real-Time", "Pop front 2 elements") Option.unwrap(
@@ -66,6 +83,12 @@ module {
             oldQ := OldQueue.popFront<Nat>(OldQueue.popFront<Nat>(oldQ)!.1)!.1
           }
         );
+        case ("Mutable", "Pop front 2 elements") Option.unwrap(
+          do ? {
+            ignore MutQueue.popFront<Nat>(mutQ);
+            ignore MutQueue.popFront<Nat>(mutQ)
+          }
+        );
         case ("Real-Time", "Pop back 2 elements") Option.unwrap(
           do ? {
             newQ := NewQueue.popBack<Nat>(NewQueue.popBack<Nat>(newQ)!.0)!.0
@@ -74,6 +97,12 @@ module {
         case ("Amortized", "Pop back 2 elements") Option.unwrap(
           do ? {
             oldQ := OldQueue.popBack<Nat>(OldQueue.popBack<Nat>(oldQ)!.0)!.0
+          }
+        );
+        case ("Mutable", "Pop back 2 elements") Option.unwrap(
+          do ? {
+            ignore MutQueue.popBack<Nat>(mutQ);
+            ignore MutQueue.popBack<Nat>(mutQ)
           }
         );
         case ("Real-Time", "Push 10 front&back; Pop 5 front&back") {
@@ -96,6 +125,16 @@ module {
             }
           )
         };
+        case ("Mutable", "Push 10 front&back; Pop 5 front&back") {
+          for (i in Nat.range(0, 10)) {
+            MutQueue.pushFront<Nat>(mutQ, i);
+            MutQueue.pushBack<Nat>(mutQ, i)
+          };
+          for (i in Nat.range(0, 5)) {
+            ignore MutQueue.popFront<Nat>(mutQ);
+            ignore MutQueue.popBack<Nat>(mutQ)
+          }
+        };
         case ("Real-Time", "Pop 150 front&back") {
           for (i in Nat.range(0, 150)) Option.unwrap(
             do ? {
@@ -109,6 +148,12 @@ module {
               oldQ := OldQueue.popBack<Nat>(OldQueue.popFront<Nat>(oldQ)!.1)!.0
             }
           )
+        };
+        case ("Mutable", "Pop 150 front&back") {
+          for (i in Nat.range(0, 150)) {
+            ignore MutQueue.popFront<Nat>(mutQ);
+            ignore MutQueue.popBack<Nat>(mutQ)
+          }
         };
         case _ Runtime.unreachable()
       }

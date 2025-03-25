@@ -6,21 +6,22 @@ import Nat "../src/Nat";
 import Option "../src/Option";
 import OldQueue "../src/pure/OldQueue";
 import NewQueue "../src/pure/Queue";
+import MutQueue "../src/Queue";
 import Runtime "../src/Runtime";
 import Text "../src/Text";
-import Debug "../src/Debug";
 
 module {
   public func init() : Bench.Bench {
     let bench = Bench.Bench();
 
-    bench.name("Compare pure/Queue with base:Deque");
+    bench.name("Compare queue implementations");
     bench.description("Start with empty, then perform 100 random steps of pushFront/popBack (each repeated 5 times) with push twice as likely. Spikes in real-time operations are due to rebalancing");
 
     let numberOfSteps = 100;
     bench.cols([
       "Real-Time",
-      "Amortized"
+      "Amortized",
+      "Mutable"
     ]);
 
     let fuzz = Fuzz.fromSeed(27850937); // fix seed for reproducibility
@@ -35,6 +36,7 @@ module {
 
     var newQ = NewQueue.empty<Nat>();
     var oldQ = OldQueue.empty<Nat>();
+    var mutQ = MutQueue.empty<Nat>();
 
     func newOp(op : Text, q : NewQueue.Queue<Nat>) : NewQueue.Queue<Nat> = switch op {
       case "pop" Option.get(NewQueue.popBack<Nat>(q), (q, 0)).0;
@@ -45,6 +47,12 @@ module {
     func oldOp(op : Text, q : OldQueue.Queue<Nat>) : OldQueue.Queue<Nat> = switch op {
       case "pop" Option.get(OldQueue.popBack<Nat>(q), (q, 0)).0;
       case "push" OldQueue.pushFront<Nat>(q, 2);
+      case _ Runtime.unreachable()
+    };
+
+    func mutOp(op : Text, q : MutQueue.Queue<Nat>) = switch op {
+      case "pop" ignore MutQueue.popBack<Nat>(q);
+      case "push" MutQueue.pushFront<Nat>(q, 2);
       case _ Runtime.unreachable()
     };
 
@@ -73,6 +81,13 @@ module {
           };
           case "Amortized" {
             oldQ := oldOp(op, oldOp(op, oldOp(op, oldOp(op, oldOp(op, oldQ)))))
+          };
+          case "Mutable" {
+            mutOp(op, mutQ);
+            mutOp(op, mutQ);
+            mutOp(op, mutQ);
+            mutOp(op, mutQ);
+            mutOp(op, mutQ)
           };
           case _ Runtime.unreachable()
         }

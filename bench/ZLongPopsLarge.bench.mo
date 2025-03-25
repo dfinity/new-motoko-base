@@ -6,13 +6,14 @@ import Nat "../src/Nat";
 import Option "../src/Option";
 import OldQueue "../src/pure/OldQueue";
 import NewQueue "../src/pure/Queue";
+import MutQueue "../src/Queue";
 import Runtime "../src/Runtime";
 
 module {
   public func init() : Bench.Bench {
     let bench = Bench.Bench();
 
-    bench.name("Compare pure/Queue with base:Deque");
+    bench.name("Compare queue implementations");
     bench.description("PushFront 10_000 elements at step 0, then perform 110 steps of 50 x popBack");
 
     let initialSize = 10_000;
@@ -22,13 +23,15 @@ module {
     bench.rows(steps);
     bench.cols([
       "Real-Time",
-      "Amortized"
+      "Amortized",
+      "Mutable"
     ]);
 
     let fuzz = Fuzz.fromSeed(27850937); // fix seed for reproducibility
 
     var newQ = NewQueue.empty<Nat>();
     var oldQ = OldQueue.empty<Nat>();
+    var mutQ = MutQueue.empty<Nat>();
 
     // initialize with random elements
     let initials = fuzz.array.randomArray(initialSize, fuzz.nat.random);
@@ -55,6 +58,11 @@ module {
                 oldQ := OldQueue.pushFront<Nat>(oldQ, i)
               }
             };
+            case "Mutable" {
+              for (i in initials.vals()) {
+                MutQueue.pushFront<Nat>(mutQ, i)
+              }
+            };
             case _ Runtime.unreachable()
           };
           return ()
@@ -63,6 +71,7 @@ module {
         switch col {
           case "Real-Time" newQ := times<NewQueue.Queue<Nat>>(func q = Option.unwrap(NewQueue.popBack<Nat>(q)).0, numberOfOperationsPerStep, newQ);
           case "Amortized" oldQ := times<OldQueue.Queue<Nat>>(func q = Option.unwrap(OldQueue.popBack<Nat>(q)).0, numberOfOperationsPerStep, oldQ);
+          case "Mutable" times<()>(func _ = ignore MutQueue.popBack<Nat>(mutQ), numberOfOperationsPerStep, ());
           case _ Runtime.unreachable()
         }
       }

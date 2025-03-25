@@ -24,6 +24,7 @@ import Iter "../Iter";
 import List "List";
 import Order "../Order";
 import Types "../Types";
+import Debug "../Debug";
 
 module {
   type List<T> = Types.Pure.List<T>;
@@ -152,10 +153,12 @@ module {
   func check<T>(q : Queue<T>) : Queue<T> {
     switch q {
       case (null, n, r) {
+        // Debug.print(debug_show n);
         let (a, b) = takeDrop(r, n / 2);
         (List.reverse b, n, a)
       };
       case (f, n, null) {
+        // Debug.print(debug_show n);
         let (a, b) = takeDrop(f, n / 2);
         (a, n, List.reverse b)
       };

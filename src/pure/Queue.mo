@@ -25,6 +25,7 @@ import List "List";
 import Option "../Option";
 import { trap } "../Runtime";
 import Iter "../Iter";
+import Debug "../Debug";
 
 module {
   /// The real-time queue data structure can be in one of the following states:
@@ -350,6 +351,22 @@ module {
         }
       }
     }
+  };
+
+  public func debugState<T>(q : Queue<T>) : {
+    #empty;
+    #one;
+    #two;
+    #three;
+    #idles;
+    #rebal
+  } = switch q {
+    case (#empty) #empty;
+    case (#one(x)) #one;
+    case (#two(x, y)) #two;
+    case (#three(x, y, z)) #three;
+    case (#idles(_, _)) #idles;
+    case (#rebal(_, _, _)) #rebal
   };
 
   /// Remove the element on the back end of a queue.

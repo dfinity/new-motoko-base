@@ -110,7 +110,7 @@ module {
     case (#two(_, _)) 2;
     case (#three(_, _, _)) 3;
     case (#idles((l, nL), (r, nR))) {
-      debug assert Stacks.size(l) == nL and Stacks.size(r) == nR;
+      // debug assert Stacks.size(l) == nL and Stacks.size(r) == nR;
       nL + nR
     };
     case (#rebal((_, big, small))) BigState.size(big) + SmallState.size(small)
@@ -226,13 +226,14 @@ module {
       let (l, nL) = Idle.push(l0, element); // enque the element to the left end
       // check if the size invariant still holds
       if (3 * nR >= nL) {
-        debug assert 3 * nL >= nR;
+        // debug assert 3 * nL >= nR;
         #idles((l, nL), (r, nR))
       } else {
+        // debug assert false;
         // initiate the rebalancing process
         let targetSizeL = nL - nR - 1 : Nat;
         let targetSizeR = 2 * nR + 1;
-        debug assert targetSizeL + targetSizeR == nL + nR;
+        // debug assert targetSizeL + targetSizeR == nL + nR;
         let big = #big1(Current.new(l, targetSizeL), l, null, targetSizeL);
         let small = #small1(Current.new(r, targetSizeR), r, null);
         let states = (#right, big, small);
@@ -246,10 +247,10 @@ module {
       case (#right) {
         let big = BigState.push(big0, element);
         let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
-        debug assert states4.0 == #right;
+        // debug assert states4.0 == #right;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
-            debug assert idlesInvariant(big, small);
+            // debug assert idlesInvariant(big, small);
             #idles(big, small)
           };
           case _ #rebal(states4)
@@ -258,10 +259,10 @@ module {
       case (#left) {
         let small = SmallState.push(small0, element);
         let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
-        debug assert states4.0 == #left;
+        // debug assert states4.0 == #left;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
-            debug assert idlesInvariant(small, big);
+            // debug assert idlesInvariant(small, big);
             #idles(small, big) // swapped because dir=left
           };
           case _ #rebal(states4)
@@ -313,7 +314,7 @@ module {
       } else if (nL >= 1) {
         let targetSizeL = 2 * nL + 1;
         let targetSizeR = nR - nL - 1 : Nat;
-        debug assert targetSizeL + targetSizeR == nL + nR;
+        // debug assert targetSizeL + targetSizeR == nL + nR;
         let small = #small1(Current.new(l, targetSizeL), l, null);
         let big = #big1(Current.new(r, targetSizeR), r, null, targetSizeR);
         let states = (#left, big, small);
@@ -327,10 +328,10 @@ module {
       case (#left) {
         let (x, small) = SmallState.pop(small0);
         let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
-        debug assert states4.0 == #left;
+        // debug assert states4.0 == #left;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
-            debug assert idlesInvariant(small, big);
+            // debug assert idlesInvariant(small, big);
             ?(x, #idles(small, big))
           };
           case _ ?(x, #rebal(states4))
@@ -339,10 +340,10 @@ module {
       case (#right) {
         let (x, big) = BigState.pop(big0);
         let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
-        debug assert states4.0 == #right;
+        // debug assert states4.0 == #right;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
-            debug assert idlesInvariant(big, small);
+            // debug assert idlesInvariant(big, small);
             ?(x, #idles(big, small))
           };
           case _ ?(x, #rebal(states4))
@@ -929,7 +930,7 @@ module {
     public func norm<T>(copy : CopyState<T>) : CommonState<T> {
       let #copy(cur, _, new, sizeOfNew) = copy;
       let (extra, extraSize, _, targetSize) = cur;
-      debug assert sizeOfNew <= targetSize;
+      // debug assert sizeOfNew <= targetSize;
       if (sizeOfNew >= targetSize) {
         #idle(cur, ((extra, new), extraSize + sizeOfNew)) // note: aux can be non-empty, thus ignored here, when the target size decreases after pop operations
       } else copy

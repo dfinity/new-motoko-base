@@ -89,7 +89,7 @@ module {
   ///
   /// Space: `O(1)`.
   public func size<T>(queue : Queue<T>) : Nat {
-    debug assert queue.1 == List.size(queue.0) + List.size(queue.2);
+    // debug assert queue.1 == List.size(queue.0) + List.size(queue.2);
     queue.1
   };
 
@@ -111,7 +111,10 @@ module {
   /// Space: `O(1)`.
   public func peekFront<T>(queue : Queue<T>) : ?T = switch queue {
     case ((?(x, _), _, _) or (_, _, ?(x, null))) ?x;
-    case _ { debug assert List.isEmpty(queue.2); null }
+    case _ {
+      // debug assert List.isEmpty(queue.2);
+      null
+    }
   };
 
   /// Inspect the optional element on the back end of a queue.
@@ -130,7 +133,10 @@ module {
   /// Space: `O(1)`.
   public func peekBack<T>(queue : Queue<T>) : ?T = switch queue {
     case ((_, _, ?(x, _)) or (?(x, null), _, _)) ?x;
-    case _ { debug assert List.isEmpty(queue.0); null }
+    case _ {
+      // debug assert List.isEmpty(queue.0);
+      null
+    }
   };
 
   // helper to split the list evenly

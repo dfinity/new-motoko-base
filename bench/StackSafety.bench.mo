@@ -1,9 +1,10 @@
 import Bench "mo:bench";
 
 import Nat "../src/Nat";
+import Option "../src/Option";
 import List "../src/pure/List";
 import Queue "../src/pure/Queue";
-import Option "../src/Option";
+import Runtime "../src/Runtime";
 
 module {
   public func init() : Bench.Bench {
@@ -16,7 +17,9 @@ module {
       "pure/List.split",
       "pure/List.all",
       "pure/List.any",
-      "pure/Queue"
+      // "pure/List.map",
+      // "pure/List.foldRight",
+      // "pure/Queue",
     ]);
     bench.cols([""]);
 
@@ -28,6 +31,8 @@ module {
           case "pure/List.split" ignore List.split(list, 99_999);
           case "pure/List.all" ignore List.all<Nat>(list, func x = 1 == x);
           case "pure/List.any" ignore not List.any<Nat>(list, func x = 1 != x);
+          // case "pure/List.map" ignore List.map<Nat, Nat>(list, func x = x + 1);
+          // case "pure/List.foldRight" ignore List.foldRight<Nat, Nat>(list, 0, Nat.add);
           // case "pure/Queue" {
           //   var q = Queue.empty<Nat>();
           //   let n = 100_000;
@@ -39,7 +44,7 @@ module {
           //   };
           //   assert Queue.size(q) == 0
           // };
-          case _ return ()
+          case _ Runtime.unreachable()
         }
       }
     );

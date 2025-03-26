@@ -60,7 +60,7 @@ module {
   ///   Map.add(map, Nat.compare, 1, "One");
   ///   Map.add(map, Nat.compare, 2, "Two");
   ///   let pureMap = Map.toPure(map, Nat.compare);
-  ///   assert(PureMap.get(pureMap, Nat.compare, 0) == Map.get(map, Nat.compare, 0));
+  ///   assert PureMap.get(pureMap, Nat.compare, 0) == Map.get(map, Nat.compare, 0);
   /// }
   /// ```
   ///
@@ -88,7 +88,7 @@ module {
   ///   pureMap := PureMap.add(pureMap, Nat.compare, 1, "One");
   ///   pureMap := PureMap.add(pureMap, Nat.compare, 2, "Two");
   ///   let mutableMap = Map.fromPure<Nat, Text>(pureMap, Nat.compare);
-  ///   assert (Map.get(mutableMap, Nat.compare, 0) == PureMap.get(pureMap, Nat.compare, 0));
+  ///   assert Map.get(mutableMap, Nat.compare, 0) == PureMap.get(pureMap, Nat.compare, 0);
   /// }
   /// ```
   ///
@@ -131,12 +131,10 @@ module {
   /// Example:
   /// ```motoko
   /// import Map "mo:base/Map";
-  /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let map = Map.empty<Nat, Text>();
-  ///   Debug.print(Nat.toText(Map.size(map))); // prints `0`
+  ///   assert Map.size(map) == 0;
   /// }
   /// ```
   ///
@@ -159,11 +157,10 @@ module {
   /// Example:
   /// ```motoko
   /// import Map "mo:base/Map";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let cityCodes = Map.singleton<Text, Nat>("Zurich", 8000);
-  ///   Debug.print(debug_show(Map.size(cityCodes))); // prints `1`
+  ///   assert Map.size(cityCodes) == 1;
   /// }
   /// ```
   ///
@@ -184,17 +181,16 @@ module {
   /// ```motoko
   /// import Map "mo:base/Map";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let map = Map.empty<Nat, Text>();
   ///   Map.add(map, Nat.compare, 0, "Zero");
   ///   Map.add(map, Nat.compare, 1, "One");
   ///   Map.add(map, Nat.compare, 2, "Two");
-  ///   Debug.print(debug_show(Map.size(map))); // prints `3`
+  ///   assert Map.size(map)) == 3;
   ///
   ///   Map.clear(map);
-  ///   Debug.print(debug_show(Map.size(map))); // prints `0`
+  ///   assert Map.size(map) == 0;
   /// }
   /// ```
   ///

@@ -12,6 +12,7 @@
 ///   Set.add(userIds, Nat.compare, 1);
 ///   Set.add(userIds, Nat.compare, 2);
 ///   Set.add(userIds, Nat.compare, 3);
+///   assert Set.size(userIds) == 3;
 /// }
 /// ```
 ///
@@ -62,7 +63,7 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///   let pureSet = Set.toPure(set, Nat.compare);
-  ///   assert(PureSet.contains(pureSet, Nat.compare, 1));
+  ///   assert PureSet.contains(pureSet, Nat.compare, 1);
   /// }
   /// ```
   ///
@@ -90,7 +91,7 @@ module {
   ///   pureSet := PureSet.add(pureSet, Nat.compare, 2);
   ///   pureSet := PureSet.add(pureSet, Nat.compare, 3);
   ///   let mutableSet = Set.fromPure(pureSet, Nat.compare);
-  //    assert(Set.contains(mutableSet, Nat.compare, 1));
+  ///   assert Set.contains(mutableSet, Nat.compare, 1);
   /// }
   /// ```
   ///
@@ -134,11 +135,10 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
-  ///   Debug.print(Nat.toText(Set.size(set))); // prints `0`
+  ///   assert Set.size(set) == 0;
   /// }
   /// ```
   ///
@@ -161,11 +161,10 @@ module {
   /// Example:
   /// ```motoko
   /// import Set "mo:base/Set";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let cities = Set.singleton<Text>("Zurich");
-  ///   Debug.print(debug_show(Set.size(cities))); // prints `1`
+  ///   assert Set.size(cities) == 1;
   /// }
   /// ```
   ///
@@ -187,17 +186,16 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Text "mo:base/Text";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let cities = Set.empty<Text>();
   ///   Set.add(cities, Text.compare, "Zurich");
   ///   Set.add(cities, Text.compare, "San Francisco");
   ///   Set.add(cities, Text.compare, "London");
-  ///   Debug.print(debug_show(Set.size(cities))); // prints `3`
+  ///   assert Set.size(cities) == 3;
   ///
   ///   Set.clear(cities);
-  ///   Debug.print(debug_show(Set.size(cities))); // prints `0`
+  ///   assert Set.size(cities) == 0;
   /// }
   /// ```
   ///
@@ -215,7 +213,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
@@ -223,9 +220,9 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   Debug.print(debug_show(Set.isEmpty(set))); // prints `false`
+  ///   assert not Set.isEmpty(set);
   ///   Set.clear(set);
-  ///   Debug.print(debug_show(Set.isEmpty(set))); // prints `true`
+  ///   assert Set.isEmpty(set);
   /// }
   /// ```
   ///
@@ -241,7 +238,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
@@ -249,7 +245,7 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   Debug.print(Nat.toText(Set.size(set))); // prints `3`
+  ///   assert Set.size(set) == 3;
   /// }
   /// ```
   ///
@@ -309,8 +305,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Bool "mo:base/Bool";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
@@ -318,8 +312,8 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   Debug.print(Bool.toText(Set.contains(set, Nat.compare, 1))); // prints `true`
-  ///   Debug.print(Bool.toText(Set.contains(set, Nat.compare, 4))); // prints `false`
+  ///   assert Set.contains(set, Nat.compare, 1);
+  ///   assert not Set.contains(set, Nat.compare, 4);
   /// }
   /// ```
   ///
@@ -424,7 +418,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
@@ -433,10 +426,10 @@ module {
   ///   Set.add(set, Nat.compare, 3);
   ///
   ///   Set.remove(set, Nat.compare, 1);
-  ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 1))); // prints `false`.
+  ///   assert not Set.contains(set, Nat.compare, 1);
   ///
   ///   Set.remove(set, Nat.compare, 4);
-  ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 4))); // prints `false`.
+  ///   assert not Set.contains(set, Nat.compare, 4);
   /// }
   /// ```
   ///
@@ -456,7 +449,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
@@ -464,11 +456,11 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   assert (Set.delete(set, Nat.compare, 1)); // delete returns true
-  ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 1))); // prints `false`.
+  ///   assert Set.delete(set, Nat.compare, 1);
+  ///   assert not Set.contains(set, Nat.compare, 1);
   ///
-  ///   assert (not Set.delete(set, Nat.compare, 4)); // delete returns false
-  ///   Debug.print(debug_show(Set.contains(set, Nat.compare, 4))); // prints `false`.
+  ///   assert not Set.delete(set, Nat.compare, 4);
+  ///   assert not Set.contains(set, Nat.compare, 4);
   /// }
   /// ```
   ///
@@ -530,14 +522,13 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
-  ///   Debug.print(debug_show(Set.max(set))); // prints `?3`.
+  ///   assert Set.max(set) == ?3;
   /// }
   /// ```
   ///
@@ -555,14 +546,13 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
-  ///   Debug.print(debug_show(Set.min(set))); // prints `?1`.
+  ///   assert Set.min(set) == ?1;
   /// }
   /// ```
   ///

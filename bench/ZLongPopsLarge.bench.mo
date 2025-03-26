@@ -20,8 +20,8 @@ module {
     let initialSize = 10_000;
     let numberOfSteps = 110;
     let numberOfOperationsPerStep = 50;
-    let steps = Nat.range(0, numberOfSteps) |> Iter.map<Nat, Text>(_, func i = Nat.toText(i)) |> Iter.toArray<Text>(_);
-    bench.rows(steps);
+    let rows = Nat.range(0, numberOfSteps) |> Iter.map<Nat, Text>(_, func i = Nat.toText(i)) |> Iter.toArray<Text>(_);
+    bench.rows(rows);
     bench.cols([
       "Real-Time",
       "Amortized",
@@ -72,7 +72,7 @@ module {
           case _ Runtime.unreachable()
         };
 
-        if (row == Nat.toText(numberOfSteps - 1)) {
+        if (row == rows[numberOfSteps - 1]) {
           switch col {
             case "Real-Time" Stats.dump(newStats);
             case "Amortized" Stats.dump(oldStats);

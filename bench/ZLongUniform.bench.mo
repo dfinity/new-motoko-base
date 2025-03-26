@@ -94,7 +94,7 @@ module {
           case _ Runtime.unreachable()
         };
 
-        if (row == Nat.toText(numberOfSteps - 1)) {
+        if (row == rows[numberOfSteps - 1]) {
           switch col {
             case "Real-Time" Stats.dump(newStats);
             case "Amortized" Stats.dump(oldStats);

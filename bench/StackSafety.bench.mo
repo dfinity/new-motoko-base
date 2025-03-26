@@ -14,17 +14,20 @@ module {
 
     bench.rows([
       "pure/List.split",
+      "pure/List.all",
+      "pure/List.any",
       "pure/Queue"
     ]);
     bench.cols([""]);
 
+    let list = List.repeat(1, 100_000);
+
     bench.runner(
       func(row, col) {
         switch row {
-          case "pure/List.split" {
-            let list = List.repeat(1, 100_000);
-            ignore List.split(list, 99_999)
-          };
+          case "pure/List.split" ignore List.split(list, 99_999);
+          case "pure/List.all" ignore List.all<Nat>(list, func x = 1 == x);
+          case "pure/List.any" ignore not List.any<Nat>(list, func x = 1 != x);
           // case "pure/Queue" {
           //   var q = Queue.empty<Nat>();
           //   let n = 100_000;

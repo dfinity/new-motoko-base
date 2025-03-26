@@ -217,17 +217,17 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Set "mo:base/OrderedSet";
+  /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
-  /// let natSet = Set.Make<Nat>(Nat.compare);
-  /// let s1 = natSet.fromIter(Iter.fromArray([0, 2, 1]));
-  /// let s2 = natSet.empty();
-  ///
-  /// Debug.print(debug_show(natSet.max(s1))); // => ?2
-  /// Debug.print(debug_show(natSet.max(s2))); // => null
+  /// persistent actor {
+  ///   let set1 = Set.fromIter<Nat>(Iter.fromArray([0, 2, 1]), Nat.compare);
+  ///   let set2 = Set.empty<Nat>();
+  ///   assert Set.max(set1) == ?2;
+  ///   assert Set.max(set2) == null;
+  /// }
   /// ```
   ///
   /// Runtime: `O(log(n))`.
@@ -764,7 +764,7 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
-  ///   Debug.print(Nat.toText(Set.size(set))); // prints `0`
+  ///   assert Set.size(set) == 0;
   /// }
   /// ```
   ///
@@ -781,7 +781,7 @@ module {
   ///
   /// persistent actor {
   ///   let cities = Set.singleton<Text>("Zurich");
-  ///   Debug.print(debug_show(Set.size(cities))); // prints `1`
+  ///   assert Set.size(cities) == 1;
   /// }
   /// ```
   ///

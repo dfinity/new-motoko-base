@@ -510,8 +510,8 @@ import Array &quot;mo:base/Array&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let list = List.toArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
-  assert Array.equal&lt;Nat&gt;(list, [0, 1, 2, 3, 4], Nat.equal);
+  let array = List.toArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  assert Array.equal&lt;Nat&gt;(array, [0, 1, 2, 3, 4], Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -523,8 +523,8 @@ import Array &quot;mo:base/Array&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let list = Array.freeze(List.toVarArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null)))))));
-  assert Array.equal&lt;Nat&gt;(list, [0, 1, 2, 3, 4], Nat.equal);
+  let array = List.toVarArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  assert Array.equal&lt;Nat&gt;(Array.freeze(array, [0, 1, 2, 3, 4]), Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(size)</p>

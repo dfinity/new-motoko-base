@@ -1,7 +1,6 @@
 import { run; suite; test } "mo:matchers/Suite";
 import M "mo:matchers/Matchers";
 import T "mo:matchers/Testable";
-import Test "mo:test";
 
 import List "../../src/pure/List";
 import Nat "../../src/Nat";
@@ -1611,20 +1610,4 @@ run(
       toText
     ]
   )
-);
-
-Test.suite(
-  "Large",
-  func() {
-    Test.test(
-      "split",
-      func() {
-        // let n = 100_000;
-        // let list = List.repeat(1, n);
-        // let (left, right) = List.split(list, n - 1 : Nat);
-        // Test.expect.nat(List.size(left)).equal(n - 1);
-        // Test.expect.nat(List.size(right)).equal(1)
-      }
-    )
-  }
 )

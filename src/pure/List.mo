@@ -63,7 +63,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.size<Nat>(?(0, ?(1, null))) == 2;
+  ///   let list = ?(0, ?(1, null));
+  ///   assert List.size<Nat>(list) == 2;
   /// }
   /// ```
   ///
@@ -85,7 +86,8 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   assert List.contains<Nat>(?(1, ?(2, ?(3, null))), Nat.equal, 2);
+  ///   let list = ?(1, ?(2, ?(3, null)));
+  ///   assert List.contains<Nat>(list, Nat.equal, 2);
   /// }
   /// ```
   ///
@@ -110,7 +112,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.get<Nat>(?(0, ?(1, null)), 1) == ?1;
+  ///   let list = ?(0, ?(1, null));
+  ///   assert List.get<Nat>(list, 1) == ?1;
   /// }
   /// ```
   ///
@@ -144,7 +147,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.last<Nat>(?(0, ?(1, null))) == ?1;
+  ///   let list = ?(0, ?(1, null));
+  ///   assert List.last<Nat>(list) == ?1;
   /// }
   /// ```
   ///
@@ -165,7 +169,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.popFront<Nat>(?(0, ?(1, null))) == (?0, ?(1, null));
+  ///   let list = ?(0, ?(1, null));
+  ///   assert List.popFront<Nat>(list) == (?0, ?(1, null));
   /// }
   /// ```
   ///
@@ -184,7 +189,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.reverse<Nat>(?(0, ?(1, ?(2, null)))) == ?(2, ?(1, ?(0, null)));
+  ///   let list = ?(0, ?(1, ?(2, null)));
+  ///   assert List.reverse<Nat>(list) == ?(2, ?(1, ?(0, null)));
   /// }
   /// ```
   ///
@@ -205,8 +211,9 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
+  ///   let list = ?(0, ?(1, ?(2, null)));
   ///   var sum = 0;
-  ///   List.forEach<Nat>(?(0, ?(1, ?(2, null))), func n = sum += n);
+  ///   List.forEach<Nat>(list, func n = sum += n);
   ///   assert sum == 3;
   /// }
   /// ```
@@ -230,7 +237,8 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   assert List.map<Nat, Text>(?(0, ?(1, ?(2, null))), Nat.toText) == ?("0", ?("1", ?("2", null)));
+  ///   let list = ?(0, ?(1, ?(2, null)));
+  ///   assert List.map<Nat, Text>(list, Nat.toText) == ?("0", ?("1", ?("2", null)));
   /// }
   /// ```
   ///
@@ -251,7 +259,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.filter<Nat>(?(0, ?(1, ?(2, null))), func n = n != 1) == ?(0, ?(2, null));
+  ///   let list = ?(0, ?(1, ?(2, null)));
+  ///   assert List.filter<Nat>(list, func n = n != 1) == ?(0, ?(2, null));
   /// }
   /// ```
   ///
@@ -271,8 +280,9 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
+  ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.filterMap<Nat, Nat>(
-  ///     ?(1, ?(2, ?(3, null))),
+  ///     list,
   ///     func n = if (n > 1) ?(n * 2) else null
   ///   ) == ?(4, ?(6, null));
   /// }
@@ -299,8 +309,9 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
+  ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.mapResult<Nat, Nat, Text>(
-  ///     ?(1, ?(2, ?(3, null))),
+  ///     list,
   ///     func n = if (n > 0) #ok(n * 2) else #err "Some element is zero"
   ///   ) == #ok(?(2, ?(4, ?(6, null))));
   /// }
@@ -332,7 +343,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.partition<Nat>(?(0, ?(1, ?(2, null))), func n = n != 1) == (?(0, ?(2, null)), ?(1, null));
+  ///   let list = ?(0, ?(1, ?(2, null)));
+  ///   assert List.partition<Nat>(list, func n = n != 1) == (?(0, ?(2, null)), ?(1, null));
   /// }
   /// ```
   ///
@@ -357,10 +369,9 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.concat<Nat>(
-  ///     ?(0, ?(1, ?(2, null))),
-  ///     ?(3, ?(4, ?(5, null)))
-  ///   ) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
+  ///   let list1 = ?(0, ?(1, ?(2, null)));
+  ///   let list2 = ?(3, ?(4, ?(5, null)));
+  ///   assert List.concat<Nat>(list1, list2) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
   /// }
   /// ```
   ///
@@ -382,10 +393,9 @@ module {
   /// import Iter "mo:base/Iter";
   /// 
   /// persistent actor {
-  ///   assert List.join<Nat>(
-  ///     [ ?(0, ?(1, ?(2, null))),
-  ///       ?(3, ?(4, ?(5, null))) ] |> Iter.fromArray _
-  ///   ) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
+  ///   let lists = [ ?(0, ?(1, ?(2, null))),
+  ///                 ?(3, ?(4, ?(5, null))) ];
+  ///   assert List.join<Nat>(lists |> Iter.fromArray(_)) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
   /// }
   /// ```
   ///
@@ -405,11 +415,10 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.flatten<Nat>(
-  ///     ?(?(0, ?(1, ?(2, null))),
-  ///       ?(?(3, ?(4, ?(5, null))),
-  ///         null))
-  ///   ) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
+  ///   let lists = ?(?(0, ?(1, ?(2, null))),
+  ///                ?(?(3, ?(4, ?(5, null))),
+  ///                  null));
+  ///   assert List.flatten<Nat>(lists) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
   /// }
   /// ```
   ///
@@ -427,10 +436,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.take<Nat>(
-  ///     ?(0, ?(1, ?(2, null))),
-  ///     2
-  ///   ) == ?(0, ?(1, null));
+  ///   let list = ?(0, ?(1, ?(2, null)));
+  ///   assert List.take<Nat>(list, 2) == ?(0, ?(1, null));
   /// }
   /// ```
   ///
@@ -449,10 +456,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.drop<Nat>(
-  ///     ?(0, ?(1, ?(2, null))),
-  ///     2
-  ///   ) == ?(2, null);
+  ///   let list = ?(0, ?(1, ?(2, null)));
+  ///   assert List.drop<Nat>(list, 2) == ?(2, null);
   /// }
   /// ```
   ///
@@ -474,8 +479,9 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
+  ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.foldLeft<Nat, Text>(
-  ///     ?(1, ?(2, ?(3, null))),
+  ///     list,
   ///     "",
   ///     func (acc, x) = acc # Nat.toText(x)
   ///   ) == "123";
@@ -502,8 +508,9 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
+  ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.foldRight<Nat, Text>(
-  ///     ?(1, ?(2, ?(3, null))),
+  ///     list,
   ///     "",
   ///     func (x, acc) = Nat.toText(x) # acc
   ///   ) == "123";
@@ -528,10 +535,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.find<Nat>(
-  ///     ?(1, ?(2, ?(3, null))),
-  ///     func n = n > 1
-  ///   ) == ?2;
+  ///   let list = ?(1, ?(2, ?(3, null)));
+  ///   assert List.find<Nat>(list, func n = n > 1) == ?2;
   /// }
   /// ```
   ///
@@ -553,10 +558,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert not List.all<Nat>(
-  ///     ?(1, ?(2, ?(3, null))),
-  ///     func n = n > 1
-  ///   );
+  ///   let list = ?(1, ?(2, ?(3, null)));
+  ///   assert not List.all<Nat>(list, func n = n > 1);
   /// }
   /// ```
   ///
@@ -578,10 +581,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.any<Nat>(
-  ///     ?(1, ?(2, ?(3, null))),
-  ///     func n = n > 1
-  ///   );
+  ///   let list = ?(1, ?(2, ?(3, null)));
+  ///   assert List.any<Nat>(list, func n = n > 1);
   /// }
   /// ```
   ///
@@ -605,11 +606,9 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   assert List.merge<Nat>(
-  ///     ?(1, ?(2, ?(4, null))),
-  ///     ?(2, ?(4, ?(6, null))),
-  ///     Nat.compare
-  ///   ) == ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))));
+  ///   let list1 = ?(1, ?(2, ?(4, null)));
+  ///   let list2 = ?(2, ?(4, ?(6, null)));
+  ///   assert List.merge<Nat>(list1, list2, Nat.compare) == ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))));
   /// }
   /// ```
   ///
@@ -641,7 +640,9 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   assert List.equal<Nat>(?(1, ?(2, null)), ?(1, ?(2, null)), Nat.equal);
+  ///   let list1 = ?(1, ?(2, null));
+  ///   let list2 = ?(1, ?(2, null));
+  ///   assert List.equal<Nat>(list1, list2, Nat.equal);
   /// }
   /// ```
   ///
@@ -664,11 +665,9 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   assert List.compare<Nat>(
-  ///     ?(1, ?(2, null)),
-  ///     ?(3, ?(4, null)),
-  ///     Nat.compare
-  ///   ) == #less;
+  ///   let list1 = ?(1, ?(2, null));
+  ///   let list2 = ?(3, ?(4, null));
+  ///   assert List.compare<Nat>(list1, list2, Nat.compare) == #less;
   /// }
   /// ```
   ///
@@ -695,10 +694,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.tabulate<Nat>(
-  ///     3,
-  ///     func n = n * 2
-  ///   ) == ?(0, ?(2, ?(4, null)));
+  ///   let list = List.tabulate<Nat>(3, func n = n * 2);
+  ///   assert list == ?(0, ?(2, ?(4, null)));
   /// }
   /// ```
   ///
@@ -740,7 +737,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.repeat<Nat>(3, 0) == ?(0, ?(0, ?(0, null)));
+  ///   let list = List.repeat<Nat>(3, 0);
+  ///   assert list == ?(0, ?(0, ?(0, null)));
   /// }
   /// ```
   ///
@@ -767,10 +765,9 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.zip<Nat, Text>(
-  ///     ?(0, ?(1, ?(2, null))),
-  ///     ?("0", ?("1", null))
-  ///   ) == ?((0, "0"), ?((1, "1"), null));
+  ///   let list1 = ?(0, ?(1, ?(2, null)));
+  ///   let list2 = ?("0", ?("1", null));
+  ///   assert List.zip<Nat, Text>(list1, list2) == ?((0, "0"), ?((1, "1"), null));
   /// }
   /// ```
   ///
@@ -792,9 +789,11 @@ module {
   /// import Char "mo:base/Char";
   /// 
   /// persistent actor {
+  ///   let list1 = ?(0, ?(1, ?(2, null)));
+  ///   let list2 = ?('a', ?('b', null));
   ///   assert List.zipWith<Nat, Char, Text>(
-  ///     ?(0, ?(1, ?(2, null))),
-  ///     ?('a', ?('b', null)),
+  ///     list1,
+  ///     list2,
   ///     func (n, c) = Nat.toText(n) # Char.toText(c)
   ///   ) == ?("0a", ?("1b", null));
   /// }
@@ -817,10 +816,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.split<Nat>(
-  ///     2,
-  ///     ?(0, ?(1, ?(2, null)))
-  ///   ) == (?(0, ?(1, null)), ?(2, null));
+  ///   let list = ?(0, ?(1, ?(2, null)));
+  ///   assert List.split<Nat>(2, list) == (?(0, ?(1, null)), ?(2, null));
   /// }
   /// ```
   ///
@@ -844,10 +841,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.chunks<Nat>(
-  ///     2,
-  ///     ?(0, ?(1, ?(2, ?(3, ?(4, null)))))
-  ///   ) == ?(?(0, ?(1, null)), ?(?(2, ?(3, null)), ?(?(4, null), null)));
+  ///   let list = ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
+  ///   assert List.chunks<Nat>(2, list) == ?(?(0, ?(1, null)), ?(?(2, ?(3, null)), ?(?(4, null), null)));
   /// }
   /// ```
   ///
@@ -894,7 +889,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.fromArray<Nat>([0, 1, 2, 3, 4]) == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
+  ///   let list = List.fromArray<Nat>([0, 1, 2, 3, 4]);
+  ///   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
   /// }
   /// ```
   ///
@@ -913,7 +909,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.fromVarArray<Nat>([var 0, 1, 2, 3, 4]) == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
+  ///   let list = List.fromVarArray<Nat>([var 0, 1, 2, 3, 4]);
+  ///   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
   /// }
   /// ```
   ///
@@ -930,11 +927,8 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   assert Array.equal<Nat>(
-  ///     List.toArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null)))))),
-  ///     [0, 1, 2, 3, 4],
-  ///     Nat.equal
-  ///   );
+  ///   let list = List.toArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  ///   assert Array.equal<Nat>(list, [0, 1, 2, 3, 4], Nat.equal);
   /// }
   /// ```
   ///
@@ -954,11 +948,8 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   assert Array.equal<Nat>(
-  ///     Array.freeze(List.toVarArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))))),
-  ///     [0, 1, 2, 3, 4],
-  ///     Nat.equal
-  ///   );
+  ///   let list = Array.freeze(List.toVarArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null)))))));
+  ///   assert Array.equal<Nat>(list, [0, 1, 2, 3, 4], Nat.equal);
   /// }
   /// ```
   ///
@@ -973,7 +964,8 @@ module {
   /// import List "mo:base/pure/List";
   /// 
   /// persistent actor {
-  ///   assert List.fromIter<Nat>([0, 1, 2, 3, 4].vals()) == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
+  ///   let list = List.fromIter<Nat>([0, 1, 2, 3, 4].vals());
+  ///   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
   /// }
   /// ```
   ///

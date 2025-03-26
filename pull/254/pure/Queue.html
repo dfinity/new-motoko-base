@@ -121,7 +121,7 @@ the first element and a new queue that contains all the remaining elements of <c
 <p>This may involve dynamic rebalancing of the two, internally used lists.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Runtime &quot;mo:base/Runtime&quot;;
 
 persistent actor {
   let initial = Queue.pushFront(Queue.pushFront(Queue.empty&lt;Nat&gt;(), 2), 1);
@@ -129,7 +129,7 @@ persistent actor {
   let reduced = Queue.popFront(initial);
   switch reduced {
     case null {
-      Debug.trap &quot;Empty queue impossible&quot;
+      Runtime.trap &quot;Empty queue impossible&quot;
     };
     case (?result) {
       let removedElement = result.0;
@@ -150,7 +150,7 @@ and, as the second pair item, the removed back element.</p>
 <p>This may involve dynamic rebalancing of the two, internally used lists.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Runtime &quot;mo:base/Runtime&quot;;
 
 persistent actor {
   let initial = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
@@ -158,7 +158,7 @@ persistent actor {
   let reduced = Queue.popBack(initial);
   switch reduced {
     case null {
-      Debug.trap &quot;Empty queue impossible&quot;
+      Runtime.trap &quot;Empty queue impossible&quot;
     };
     case (?result) {
       let reducedQueue = result.0;

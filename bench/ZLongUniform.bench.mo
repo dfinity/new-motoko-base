@@ -83,13 +83,13 @@ module {
             // newQ := newOp(op, newQ);
             // let s5 = NewQueue.debugState(newQ);
             // Debug.print(debug_show [s1, s2, s3, s4, s5])
-            Stats.times(func _ = Stats.record(newStats, func _ = newOp(op)), numberOfOperationsPerStep)
+            Stats.times(func _ = newOp(op), numberOfOperationsPerStep)
           };
           case "Amortized" {
-            Stats.times(func _ = Stats.record(oldStats, func _ = oldOp(op)), numberOfOperationsPerStep)
+            Stats.times(func _ = oldOp(op), numberOfOperationsPerStep)
           };
           case "Mutable" {
-            Stats.times(func _ = Stats.record(mutStats, func _ = mutOp(op)), numberOfOperationsPerStep)
+            Stats.times(func _ = mutOp(op), numberOfOperationsPerStep)
           };
           case _ Runtime.unreachable()
         };

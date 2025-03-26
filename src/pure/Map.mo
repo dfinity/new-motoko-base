@@ -830,7 +830,7 @@ module {
   ///   let map = Map.fromIter<Nat, Text>(
   ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]),
   ///     Nat.compare);
-  ///   Map.toText<Nat, Text>(map, Nat.toText, func t { t }) // => "{(0, Zero), (1, One), (2, Two)}"
+  ///   assert Map.toText<Nat, Text>(map, Nat.toText, func t { t }) == "{(0, Zero), (1, One), (2, Two)}";
   /// }
   /// ```
   ///

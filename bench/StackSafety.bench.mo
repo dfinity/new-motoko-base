@@ -13,7 +13,7 @@ module {
     bench.rows([
       "List.split"
     ]);
-    bench.cols([""]);
+    bench.cols(["Should not cause a stack overflow"]);
 
     let splitN = 100_000;
     let list = List.repeat(1, splitN);

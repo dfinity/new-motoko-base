@@ -1613,16 +1613,12 @@ run(
   )
 );
 
-func rec(n : Nat) : Nat = if (n == 0) 0 else rec(n - 1) + 1;
-
 Test.suite(
   "Large",
   func() {
     Test.test(
       "split",
       func() {
-        let n = 1_000_000_000;
-        Test.expect.nat(rec(n)).equal(n);
         // let n = 100_000;
         // let list = List.repeat(1, n);
         // let (left, right) = List.split(list, n - 1 : Nat);

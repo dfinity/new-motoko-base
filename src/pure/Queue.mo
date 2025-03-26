@@ -41,7 +41,10 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// Queue.empty<Nat>()
+  /// persistent actor {
+  ///   let queue = Queue.empty<Nat>();
+  ///   assert Queue.isEmpty(queue);
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -56,8 +59,10 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// let queue = Queue.empty<Nat>();
-  /// Queue.isEmpty(queue) // => true
+  /// persistent actor {
+  ///   let queue = Queue.empty<Nat>();
+  ///   assert Queue.isEmpty(queue);
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -71,7 +76,10 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// Queue.singleton<Nat>(25)
+  /// persistent actor {
+  ///   let queue = Queue.singleton<Nat>(25);
+  ///   assert Queue.size(queue) == 1;
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -85,8 +93,10 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// let queue = Queue.singleton<Nat>(42);
-  /// Queue.size(queue) // => 1
+  /// persistent actor {
+  ///   let queue = Queue.singleton<Nat>(42);
+  ///   assert Queue.size(queue) == 1;
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -106,8 +116,10 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
-  /// Queue.peekFront(queue) // => ?1
+  /// persistent actor {
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   assert Queue.peekFront(queue) == ?1;
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -125,8 +137,10 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
-  /// Queue.peekBack(queue) // => ?2
+  /// persistent actor {
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   assert Queue.peekBack(queue) == ?2;
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -170,7 +184,11 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1) // queue with elements [1, 2]
+  /// persistent actor {
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   assert Queue.peekFront(queue) == ?1;
+  ///   assert Queue.size(queue) == 2;
+  /// }
   /// ```
   ///
   /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
@@ -189,7 +207,11 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   ///
-  /// Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2) // queue with elements [1, 2]
+  /// persistent actor {
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   assert Queue.peekBack(queue) == ?2;
+  ///   assert Queue.size(queue) == 2;
+  /// }
   /// ```
   ///
   /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
@@ -209,16 +231,21 @@ module {
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
   /// import Debug "mo:base/Debug";
-  /// let initial = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
-  /// // initial queue with elements [1, 2]
-  /// let reduced = Queue.popFront(initial);
-  /// switch reduced {
-  ///   case null {
-  ///     Debug.trap "Empty queue impossible"
-  ///   };
-  ///   case (?result) {
-  ///     let removedElement = result.0; // 1
-  ///     let reducedQueue = result.1; // queue with element [2].
+  ///
+  /// persistent actor {
+  ///   let initial = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   // initial queue with elements [1, 2]
+  ///   let reduced = Queue.popFront(initial);
+  ///   switch reduced {
+  ///     case null {
+  ///       Debug.trap "Empty queue impossible"
+  ///     };
+  ///     case (?result) {
+  ///       let removedElement = result.0;
+  ///       let reducedQueue = result.1;
+  ///       assert removedElement == 1;
+  ///       assert Queue.size(reducedQueue) == 1;
+  ///     }
   ///   }
   /// }
   /// ```
@@ -246,16 +273,20 @@ module {
   /// import Queue "mo:base/pure/Queue";
   /// import Debug "mo:base/Debug";
   ///
-  /// let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
-  /// // initial queue with elements [1, 2]
-  /// let reduced = Queue.popBack(initial);
-  /// switch reduced {
-  ///   case null {
-  ///     Debug.trap "Empty queue impossible"
-  ///   };
-  ///   case (?result) {
-  ///     let reducedQueue = result.0; // queue with element [1].
-  ///     let removedElement = result.1; // => 2
+  /// persistent actor {
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   // initial queue with elements [1, 2]
+  ///   let reduced = Queue.popBack(initial);
+  ///   switch reduced {
+  ///     case null {
+  ///       Debug.trap "Empty queue impossible"
+  ///     };
+  ///     case (?result) {
+  ///       let reducedQueue = result.0;
+  ///       let removedElement = result.1;
+  ///       assert removedElement == 2;
+  ///       assert Queue.size(reducedQueue) == 1;
+  ///     }
   ///   }
   /// }
   /// ```
@@ -273,8 +304,13 @@ module {
 
   /// Turn an iterator into a queue, consuming it.
   /// Example:
-  /// ```motoko include=import
-  /// Queue.fromIter<Nat>([0, 1, 2, 3, 4].values()) // => (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter<Nat>([0, 1, 2, 3, 4].values());
+  ///   assert Queue.size(queue) == 5;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -307,12 +343,14 @@ module {
   /// elements.
   ///
   /// Example:
-  /// ```motoko include=import
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
   ///
-  /// Queue.all<Nat>(
-  ///   (?(1, ?(2, ?(3, null))), 3, null),
-  ///   func n = n > 1
-  /// ); // => false
+  /// persistent actor {
+  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let allGreaterThanOne = Queue.all<Nat>(queue, func n = n > 1);
+  ///   assert not allGreaterThanOne; // false because 1 is not > 1
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -329,12 +367,14 @@ module {
   /// the given predicate `f` is true.
   ///
   /// Example:
-  /// ```motoko include=import
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
   ///
-  /// Queue.any<Nat>(
-  ///   (null, 3, ?(1, ?(2, ?(3, null)))),
-  ///   func n = n > 1
-  /// ) // => true
+  /// persistent actor {
+  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let hasGreaterThanOne = Queue.any<Nat>(queue, func n = n > 1);
+  ///   assert hasGreaterThanOne; // true because 2 and 3 are > 1
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -350,10 +390,15 @@ module {
   /// Call the given function for its side effect, with each queue element in turn.
   ///
   /// Example:
-  /// ```motoko include=import
-  /// var sum = 0;
-  /// Queue.forEach<Nat>((?(0, ?(1, ?(2, null))), 3, null), func n = sum += n);
-  /// sum // => 3
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  ///
+  /// persistent actor {
+  ///   var sum = 0;
+  ///   let queue = Queue.fromIter<Nat>([0, 1, 2].values());
+  ///   Queue.forEach<Nat>(queue, func n = sum += n);
+  ///   assert sum == 3;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -367,9 +412,15 @@ module {
   /// in a new queue.
   ///
   /// Example:
-  /// ```motoko include=import
-  /// import Nat = "mo:base/Nat"
-  /// Queue.map<Nat, Text>(Queue.fromIter([0, 1, 2].values()), Nat.toText) // => (?("0", null), 3, ?("2", ?("1", null)))
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter<Nat>([0, 1, 2].values());
+  ///   let textQueue = Queue.map<Nat, Text>(queue, Nat.toText);
+  ///   assert Queue.size(textQueue) == 3;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -385,8 +436,14 @@ module {
   /// the given function (often called the _predicate_) returns true.
   ///
   /// Example:
-  /// ```motoko include=import
-  /// Queue.filter<Nat>((?(0, ?(1, ?(2, null))), 4, ?(1, null)), func n = n != 1) // => ?(0, ?(2, null))
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter<Nat>([0, 1, 2, 1].values());
+  ///   let filtered = Queue.filter<Nat>(queue, func n = n != 1);
+  ///   assert Queue.size(filtered) == 2;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -403,11 +460,17 @@ module {
   /// in a new queue.
   ///
   /// Example:
-  /// ```motoko include=import
-  /// Queue.filterMap<Nat, Nat>(
-  ///   (?(1, ?(2, ?(3, null))), 3, null)
-  ///   func n = if (n > 1) ?(n * 2) else null
-  /// ) // => (?(4, null), 2, ?(6, null))
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let doubled = Queue.filterMap<Nat, Nat>(
+  ///     queue,
+  ///     func n = if (n > 1) ?(n * 2) else null
+  ///   );
+  ///   assert Queue.size(doubled) == 2;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -436,14 +499,15 @@ module {
   /// Compare two queues using lexicographic ordering specified by argument function `compareItem`.
   ///
   /// Example:
-  /// ```motoko include=import
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
   /// import Nat "mo:base/Nat";
   ///
-  /// Queue.compare<Nat>(
-  ///   (?(1, ?(2, null)), 2, null),
-  ///   (null, 2, ?(2, ?(1, null))),
-  ///   Nat.compare
-  /// ) // => #equal
+  /// persistent actor {
+  ///   let queue1 = Queue.fromIter<Nat>([1, 2].values());
+  ///   let queue2 = Queue.fromIter<Nat>([1, 2].values());
+  ///   assert Queue.compare(queue1, queue2, Nat.compare) == #equal;
+  /// }
   /// ```
   ///
   /// Runtime: O(size(l1))

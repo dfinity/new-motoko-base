@@ -230,7 +230,7 @@ module {
   /// Example:
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
-  /// import Debug "mo:base/Debug";
+  /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
   ///   let initial = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
@@ -238,7 +238,7 @@ module {
   ///   let reduced = Queue.popFront(initial);
   ///   switch reduced {
   ///     case null {
-  ///       Debug.trap "Empty queue impossible"
+  ///       Runtime.trap "Empty queue impossible"
   ///     };
   ///     case (?result) {
   ///       let removedElement = result.0;
@@ -271,7 +271,7 @@ module {
   /// Example:
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
-  /// import Debug "mo:base/Debug";
+  /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
   ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
@@ -279,7 +279,7 @@ module {
   ///   let reduced = Queue.popBack(initial);
   ///   switch reduced {
   ///     case null {
-  ///       Debug.trap "Empty queue impossible"
+  ///       Runtime.trap "Empty queue impossible"
   ///     };
   ///     case (?result) {
   ///       let reducedQueue = result.0;

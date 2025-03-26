@@ -28,7 +28,7 @@
 /// assert numBytes == 4; // returns the number of bytes in the Blob
 /// for (byte in blob.values()) { // iterator over the Blob
 ///   Debug.print(Nat8.toText(byte))
-/// };
+/// }
 /// ```
 
 import Types "Types";

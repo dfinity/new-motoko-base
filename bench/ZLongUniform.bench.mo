@@ -9,6 +9,7 @@ import NewQueue "../src/pure/Queue";
 import MutQueue "../src/Queue";
 import Runtime "../src/Runtime";
 import Text "../src/Text";
+import Stats "Stats";
 
 module {
   public func init() : Bench.Bench {
@@ -18,6 +19,7 @@ module {
     bench.description("Start with empty, then perform 100 random steps of pushFront/popBack (each repeated 5 times) with push twice as likely. Spikes in real-time operations are due to rebalancing");
 
     let numberOfSteps = 100;
+    let numberOfOperationsPerStep = 5;
     bench.cols([
       "Real-Time",
       "Amortized",
@@ -38,21 +40,25 @@ module {
     var oldQ = OldQueue.empty<Nat>();
     var mutQ = MutQueue.empty<Nat>();
 
-    func newOp(op : Text, q : NewQueue.Queue<Nat>) : NewQueue.Queue<Nat> = switch op {
-      case "pop" Option.get(NewQueue.popBack<Nat>(q), (q, 0)).0;
-      case "push" NewQueue.pushFront<Nat>(q, 2);
+    var newStats = Stats.empty("Real-Time");
+    var oldStats = Stats.empty("Amortized");
+    var mutStats = Stats.empty("Mutable");
+
+    func newOp(op : Text) = switch op {
+      case "pop" Stats.record(newStats, func _ = newQ := Option.get(NewQueue.popBack<Nat>(newQ), (newQ, 0)).0);
+      case "push" Stats.record(newStats, func _ = newQ := NewQueue.pushFront<Nat>(newQ, 2));
       case _ Runtime.unreachable()
     };
 
-    func oldOp(op : Text, q : OldQueue.Queue<Nat>) : OldQueue.Queue<Nat> = switch op {
-      case "pop" Option.get(OldQueue.popBack<Nat>(q), (q, 0)).0;
-      case "push" OldQueue.pushFront<Nat>(q, 2);
+    func oldOp(op : Text) = switch op {
+      case "pop" Stats.record(oldStats, func _ = oldQ := Option.get(OldQueue.popBack<Nat>(oldQ), (oldQ, 0)).0);
+      case "push" Stats.record(oldStats, func _ = oldQ := OldQueue.pushFront<Nat>(oldQ, 2));
       case _ Runtime.unreachable()
     };
 
-    func mutOp(op : Text, q : MutQueue.Queue<Nat>) = switch op {
-      case "pop" ignore MutQueue.popBack<Nat>(q);
-      case "push" MutQueue.pushFront<Nat>(q, 2);
+    func mutOp(op : Text) = switch op {
+      case "pop" Stats.record(mutStats, func _ = ignore MutQueue.popBack<Nat>(mutQ));
+      case "push" Stats.record(mutStats, func _ = MutQueue.pushFront<Nat>(mutQ, 2));
       case _ Runtime.unreachable()
     };
 
@@ -77,19 +83,24 @@ module {
             // newQ := newOp(op, newQ);
             // let s5 = NewQueue.debugState(newQ);
             // Debug.print(debug_show [s1, s2, s3, s4, s5])
-            newQ := newOp(op, newOp(op, newOp(op, newOp(op, newOp(op, newQ)))))
+            Stats.times(func _ = Stats.record(newStats, func _ = newOp(op)), numberOfOperationsPerStep)
           };
           case "Amortized" {
-            oldQ := oldOp(op, oldOp(op, oldOp(op, oldOp(op, oldOp(op, oldQ)))))
+            Stats.times(func _ = Stats.record(oldStats, func _ = oldOp(op)), numberOfOperationsPerStep)
           };
           case "Mutable" {
-            mutOp(op, mutQ);
-            mutOp(op, mutQ);
-            mutOp(op, mutQ);
-            mutOp(op, mutQ);
-            mutOp(op, mutQ)
+            Stats.times(func _ = Stats.record(mutStats, func _ = mutOp(op)), numberOfOperationsPerStep)
           };
           case _ Runtime.unreachable()
+        };
+
+        if (row == Nat.toText(numberOfSteps - 1)) {
+          switch col {
+            case "Real-Time" Stats.dump(newStats);
+            case "Amortized" Stats.dump(oldStats);
+            case "Mutable" Stats.dump(mutStats);
+            case _ Runtime.unreachable()
+          }
         }
       }
     );

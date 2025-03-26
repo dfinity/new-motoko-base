@@ -1,0 +1,3 @@
+2025-03-25 17:49:45.720096 UTC: [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Real-Time {avg = 2_248; max = ?6_880; mean = 1_045; total = 34_746_390}
+2025-03-25 17:49:46.193618 UTC: [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Amortized {avg = 358; max = ?1_445_509; mean = 188; total = 5_536_584}
+2025-03-25 17:49:46.672611 UTC: [Canister bkyz2-fmaaa-aaaaa-qaaaq-cai] Mutable {avg = 449; max = ?595; mean = 469; total = 6_946_759}

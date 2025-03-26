@@ -927,8 +927,8 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   let list = List.toArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
-  ///   assert Array.equal<Nat>(list, [0, 1, 2, 3, 4], Nat.equal);
+  ///   let array = List.toArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  ///   assert Array.equal<Nat>(array, [0, 1, 2, 3, 4], Nat.equal);
   /// }
   /// ```
   ///
@@ -948,8 +948,8 @@ module {
   /// import Nat "mo:base/Nat";
   /// 
   /// persistent actor {
-  ///   let list = Array.freeze(List.toVarArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null)))))));
-  ///   assert Array.equal<Nat>(list, [0, 1, 2, 3, 4], Nat.equal);
+  ///   let array = List.toVarArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  ///   assert Array.equal<Nat>(Array.freeze(array, [0, 1, 2, 3, 4]), Nat.equal);
   /// }
   /// ```
   ///

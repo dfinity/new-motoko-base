@@ -702,12 +702,12 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
-  public func split<T>(list : List<T>, n : Nat) : (List<T>, List<T>) = if (n == 0) (null, list) else switch list {
-    case null (null, null);
-    case (?(h, t)) {
-      let (l1, l2) = split(t, n - 1 : Nat);
-      (?(h, l1), l2)
-    }
+  public func split<T>(list : List<T>, n : Nat) : (List<T>, List<T>) {
+    func go(n : Nat, list : List<T>, acc : List<T>) : (List<T>, List<T>) = if (n == 0) (reverse acc, list) else switch list {
+      case (?(h, t)) go(n - 1 : Nat, t, ?(h, acc));
+      case null (reverse acc, null)
+    };
+    go(n, list, null)
   };
 
   /// Split the given list into chunks of length `n`.

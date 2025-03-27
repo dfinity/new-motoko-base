@@ -44,7 +44,7 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.singleton&lt;Nat&gt;(25);
+  let queue = Queue.singleton(25);
   assert Queue.size(queue) == 1;
 }</code></pre>
 
@@ -55,7 +55,7 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.singleton&lt;Nat&gt;(42);
+  let queue = Queue.singleton(42);
   assert Queue.size(queue) == 1;
 }</code></pre>
 
@@ -67,7 +67,7 @@ Returns <code>null</code> if <code>queue</code> is empty. Otherwise, the front e
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.pushFront(Queue.pushFront(Queue.empty&lt;Nat&gt;(), 2), 1);
+  let queue = Queue.pushFront(Queue.pushFront(Queue.empty(), 2), 1);
   assert Queue.peekFront(queue) == ?1;
 }</code></pre>
 
@@ -79,7 +79,7 @@ Returns <code>null</code> if <code>queue</code> is empty. Otherwise, the back el
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
+  let queue = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   assert Queue.peekBack(queue) == ?2;
 }</code></pre>
 
@@ -92,7 +92,7 @@ Returns the new queue with <code>element</code> in the front followed by the ele
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.pushFront(Queue.pushFront(Queue.empty&lt;Nat&gt;(), 2), 1);
+  let queue = Queue.pushFront(Queue.pushFront(Queue.empty(), 2), 1);
   assert Queue.peekFront(queue) == ?1;
   assert Queue.peekBack(queue) == ?2;
   assert Queue.size(queue) == 2;
@@ -108,7 +108,7 @@ Returns the new queue with all the elements of <code>queue</code>, followed by <
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
+  let queue = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   assert Queue.peekBack(queue) == ?2;
   assert Queue.size(queue) == 2;
 }</code></pre>
@@ -125,7 +125,7 @@ the first element and a new queue that contains all the remaining elements of <c
 import Runtime &quot;mo:base/Runtime&quot;;
 
 persistent actor {
-  let initial = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
+  let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   // initial queue with elements [1, 2]
   let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap &quot;Empty queue impossible&quot;;
   assert frontElement == 1;
@@ -145,13 +145,11 @@ and, as the second pair item, the removed back element.</p>
 import Runtime &quot;mo:base/Runtime&quot;;
 
 persistent actor {
-  let initial = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
+  let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   // initial queue with elements [1, 2]
   let reduced = Queue.popBack(initial);
   switch reduced {
-    case null {
-      Runtime.trap &quot;Empty queue impossible&quot;
-    };
+    case null Runtime.trap(&quot;Empty queue impossible&quot;);
     case (?result) {
       let reducedQueue = result.0;
       let removedElement = result.1;
@@ -169,7 +167,7 @@ Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].values());
+  let queue = Queue.fromIter([0, 1, 2, 3, 4].values());
   assert Queue.size(queue) == 5;
 }</code></pre>
 
@@ -181,7 +179,7 @@ elements.</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let queue = Queue.fromIter([1, 2, 3].values());
   let allGreaterThanOne = Queue.all&lt;Nat&gt;(queue, func n = n &gt; 1);
   assert not allGreaterThanOne; // false because 1 is not &gt; 1
 }</code></pre>
@@ -195,7 +193,7 @@ the given predicate <code>f</code> is true.</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let queue = Queue.fromIter([1, 2, 3].values());
   let hasGreaterThanOne = Queue.any&lt;Nat&gt;(queue, func n = n &gt; 1);
   assert hasGreaterThanOne; // true because 2 and 3 are &gt; 1
 }</code></pre>
@@ -208,10 +206,10 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  var sum = 0;
-  let queue = Queue.fromIter&lt;Nat&gt;([0, 1, 2].values());
-  Queue.forEach&lt;Nat&gt;(queue, func n = sum += n);
-  assert sum == 3;
+  var text = &quot;&quot;;
+  let queue = Queue.fromIter([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;].values());
+  Queue.forEach&lt;Text&gt;(queue, func n = text #= n);
+  assert text == &quot;ABC&quot;;
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -221,12 +219,13 @@ persistent actor {
 in a new queue.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter&lt;Nat&gt;([0, 1, 2].values());
+  let queue = Queue.fromIter([0, 1, 2].values());
   let textQueue = Queue.map&lt;Nat, Text&gt;(queue, Nat.toText);
-  assert Queue.size(textQueue) == 3;
+  assert Iter.toArray(Queue.values(textQueue)) == [&quot;0&quot;, &quot;1&quot;, &quot;2&quot;];
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -238,7 +237,7 @@ the given function (often called the <em>predicate</em>) returns true.</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter&lt;Nat&gt;([0, 1, 2, 1].values());
+  let queue = Queue.fromIter([0, 1, 2, 1].values());
   let filtered = Queue.filter&lt;Nat&gt;(queue, func n = n != 1);
   assert Queue.size(filtered) == 2;
 }</code></pre>
@@ -251,7 +250,7 @@ in a new queue.</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let queue = Queue.fromIter([1, 2, 3].values());
   let doubled = Queue.filterMap&lt;Nat, Nat&gt;(
     queue,
     func n = if (n &gt; 1) ?(n * 2) else null
@@ -268,9 +267,9 @@ persistent actor {
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let queue1 = Queue.fromIter&lt;Nat&gt;([1, 2].values());
-  let queue2 = Queue.fromIter&lt;Nat&gt;([1, 2].values());
-  assert Queue.compare(queue1, queue2, Nat.compare) == #equal;
+  let queue1 = Queue.fromIter([1, 2].values());
+  let queue2 = Queue.fromIter([1, 3].values());
+  assert Queue.compare(queue1, queue2, Nat.compare) == #less;
 }</code></pre>
 
 <p>Runtime: O(size(l1))</p>

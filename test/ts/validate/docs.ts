@@ -21,7 +21,7 @@ interface Snippet {
   path: string;
   line: number;
   language: string;
-  attrs: string[];
+  tags: string[];
   name: string | undefined;
   includes: Snippet[];
   sourceCode: string;
@@ -67,7 +67,7 @@ async function main() {
             line: number;
             language: string | undefined;
             sourceCode: string;
-            attrs: string[];
+            tags: string[];
           }[] = [];
 
           const getLineNumber = (text: string, charIndex: number): number => {
@@ -86,24 +86,24 @@ async function main() {
           for (const match of docComments.matchAll(
             /```(\S*)?(?:[ \t]+([^\n]+)?)?\n([\s\S]*?)\n[ \t]*```/g
           )) {
-            const [_, language, attrs, sourceCode] = match;
+            const [_, language, tags, sourceCode] = match;
             codeBlocks.push({
               line: getLineNumber(docComments, match.index),
               language,
-              attrs: attrs?.trim() ? attrs.trim().split(/\s+/) : [],
+              tags: tags?.trim() ? tags.trim().split(/\s+/) : [],
               sourceCode: sourceCode.trim(),
             });
           }
 
           const snippets: Snippet[] = [];
           const snippetMap = new Map<string, Snippet>();
-          for (const { line, language, attrs, sourceCode } of codeBlocks) {
+          for (const { line, language, tags, sourceCode } of codeBlocks) {
             const snippet: Snippet = {
               path: virtualPath,
               line,
               language,
-              attrs,
-              name: attrs
+              tags,
+              name: tags
                 .find((attr) => attr.startsWith("name="))
                 ?.substring("name=".length),
               includes: [],
@@ -121,7 +121,7 @@ async function main() {
           }
           // Resolve "include=..." references
           for (const snippet of snippets) {
-            for (const attr of snippet.attrs) {
+            for (const attr of snippet.tags) {
               if (attr.startsWith("include=")) {
                 const name = attr.substring("include=".length);
                 const include = snippetMap.get(name);
@@ -171,7 +171,7 @@ async function main() {
     if (snippet.path !== previousSnippet?.path) {
       console.log(chalk.gray(snippet.path));
     }
-    if (snippet.language === "motoko") {
+    if (snippet.language === "motoko" && !snippet.tags.includes("no-validate")) {
       const startTime = Date.now();
       let status: TestResult["status"];
       let error;
@@ -363,6 +363,6 @@ main().catch((err) => {
 const displaySnippet = (snippet: Snippet) => {
   const tripleBacktick = "```";
   return `${tripleBacktick}${snippet.language || ""}${
-    snippet.attrs.length ? ` ${snippet.attrs.join(" ")}` : ""
+    snippet.tags.length ? ` ${snippet.tags.join(" ")}` : ""
   }\n${snippet.sourceCode}\n${tripleBacktick}`;
 };

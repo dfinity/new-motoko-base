@@ -15,9 +15,10 @@
 /// ```
 ///
 ///
-/// An iterator `i` can be iterated over using
+/// An iterator can be iterated over using a `for` loop:
 /// ```motoko
-/// for (x in i) {
+/// let iter = [1, 2, 3].values();
+/// for (x in iter) {
 ///   // do something with x...
 /// }
 /// ```
@@ -47,7 +48,8 @@ module {
   ///
   /// An iterator `i` can be iterated over using
   /// ```motoko
-  /// for (x in i) {
+  /// let iter = [1, 2, 3].values();
+  /// for (x in iter) {
   ///   // do something with x...
   /// }
   /// ```
@@ -488,7 +490,8 @@ module {
   /// It stops consuming elements from the original iterator as soon as the predicate returns true.
   ///
   /// ```motoko include=import
-  /// assert ?2 == Iter.find<Nat>([1, 2, 3, 4].values(), func (x) = x % 2 == 0);
+  /// let iter = [1, 2, 3, 4].values();
+  /// assert ?2 == Iter.find<Nat>(iter, func (x) = x % 2 == 0);
   /// ```
   public func find<T>(iter : Iter<T>, f : T -> Bool) : ?T {
     for (x in iter) {
@@ -502,7 +505,9 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
-  /// assert Iter.contains<Nat>([1, 2, 3].values(), Nat.equal, 2);
+  ///
+  /// let iter = [1, 2, 3, 4].values();
+  /// assert Iter.contains<Nat>(iter, Nat.equal, 2);
   /// ```
   public func contains<T>(iter : Iter<T>, equal : (T, T) -> Bool, value : T) : Bool {
     for (x in iter) {
@@ -516,7 +521,8 @@ module {
   /// It starts applying the `combine` function starting from the `initial` accumulator value and the first elements produced by the iterator.
   ///
   /// ```motoko include=import
-  /// let result = Iter.foldLeft<Text>(["A", "B", "C"].values(), "S", func (acc, x) = "(" # acc # x # ")");
+  /// let iter = ["A", "B", "C"].values();
+  /// let result = Iter.foldLeft<Text, Text>(iter, "S", func (acc, x) = "(" # acc # x # ")");
   /// assert result == "(((SA)B)C)";
   /// ```
   public func foldLeft<T, R>(iter : Iter<T>, initial : R, combine : (R, T) -> R) : R {
@@ -536,7 +542,8 @@ module {
   /// **Use `foldLeft` or `reduce` when possible to avoid the extra memory overhead**.
   ///
   /// ```motoko include=import
-  /// let result = Iter.foldRight<Text>(["A", "B", "C"].values(), "S", func (x, acc) = "(" # x # acc # ")");
+  /// let iter = ["A", "B", "C"].values();
+  /// let result = Iter.foldRight<Text, Text>(iter, "S", func (x, acc) = "(" # x # acc # ")");
   /// assert result == "(A(B(CS)))";
   /// ```
   public func foldRight<T, R>(iter : Iter<T>, initial : R, combine : (T, R) -> R) : R {
@@ -549,7 +556,9 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
-  /// assert ?6 == Iter.reduce<Nat>([1, 2, 3].values(), Nat.add);
+  ///
+  /// let iter = [1, 2, 3].values();
+  /// assert ?6 == Iter.reduce<Nat>(iter, Nat.add);
   /// ```
   public func reduce<T>(iter : Iter<T>, combine : (T, T) -> T) : ?T {
     let ?first = iter.next() else return null;
@@ -560,6 +569,7 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  ///
   /// let iter = [1, 2, 3].values();
   /// let scanned = Iter.scanLeft<Nat, Nat>(iter, 0, Nat.add);
   /// let result = Iter.toArray(scanned);
@@ -591,6 +601,7 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  ///
   /// let iter = [1, 2, 3].values();
   /// let scanned = Iter.scanRight<Nat, Nat>(iter, 0, Nat.add);
   /// let result = Iter.toArray(scanned);
@@ -624,7 +635,9 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
-  /// assert ?3 == Iter.max<Nat>([1, 2, 3].values(), Nat.compare);
+  ///
+  /// let iter = [1, 2, 3].values();
+  /// assert ?3 == Iter.max<Nat>(iter, Nat.compare);
   /// ```
   public func max<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
     reduce<T>(
@@ -643,7 +656,9 @@ module {
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
-  /// assert ?1 == Iter.min<Nat>([1, 2, 3].values(), Nat.compare);
+  ///
+  /// let iter = [1, 2, 3].values();
+  /// assert ?1 == Iter.min<Nat>(iter, Nat.compare);
   /// ```
   public func min<T>(iter : Iter<T>, compare : (T, T) -> Order.Order) : ?T {
     reduce<T>(

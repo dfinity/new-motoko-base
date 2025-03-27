@@ -187,6 +187,7 @@ module {
   /// persistent actor {
   ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
   ///   assert Queue.peekFront(queue) == ?1;
+  ///   assert Queue.peekBack(queue) == ?2;
   ///   assert Queue.size(queue) == 2;
   /// }
   /// ```
@@ -233,20 +234,11 @@ module {
   /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
-  ///   let initial = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
   ///   // initial queue with elements [1, 2]
-  ///   let reduced = Queue.popFront(initial);
-  ///   switch reduced {
-  ///     case null {
-  ///       Runtime.trap "Empty queue impossible"
-  ///     };
-  ///     case (?result) {
-  ///       let removedElement = result.0;
-  ///       let reducedQueue = result.1;
-  ///       assert removedElement == 1;
-  ///       assert Queue.size(reducedQueue) == 1;
-  ///     }
-  ///   }
+  ///   let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap "Empty queue impossible";
+  ///   assert frontElement == 1;
+  ///   assert Queue.size(remainingQueue) == 1;
   /// }
   /// ```
   ///

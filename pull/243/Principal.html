@@ -103,7 +103,7 @@ as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let principal1 = Principal.anonymous();
-let principal2 = Principal.fromBlob(Principal.anonymousBlob);
+let principal2 = Principal.fromBlob(&quot;\04&quot;);
 assert Principal.equal(principal1, principal2);</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">principal1</span> : <a href="#type.Principal"><span class="type">Principal</span></a>, <span class="parameter">principal2</span> : <a href="#type.Principal"><span class="type">Principal</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Principal types.
 This is equivalent to <code>principal1 != principal2</code>.</p>
 <p>Example:</p>

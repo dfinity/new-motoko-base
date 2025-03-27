@@ -19,10 +19,14 @@ module {
   /// The simplest way of working with Results is to pattern match on them.
   /// For example:
   /// ```motoko include=import
+  /// import Int "mo:base/Int";
+  /// import Text "mo:base/Text";
+  /// import Time "mo:base/Time";
+  ///
   /// type User = { email : Text; name : Text };
   /// type Id = Text;
   ///
-  /// func createUser(user : User) : Result<Id, Text> {
+  /// func createUser(user : User) : Result.Result<Id, Text> {
   ///   if (Text.size(user.email) == 0) {
   ///     #err("Invalid email format")
   ///   } else {
@@ -45,6 +49,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  /// import Text "mo:base/Text";
+  ///
   /// let result1 = #ok(10);
   /// let result2 = #ok(10);
   /// let result3 = #err("error");
@@ -74,6 +81,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  ///
   /// let result1 = #ok(5);
   /// let result2 = #ok(10);
   /// let result3 = #err("error");

@@ -42,6 +42,16 @@ module {
   public type Result<Ok, Err> = Types.Result<Ok, Err>;
 
   /// Compares two Results for equality.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let result1 = #ok(10);
+  /// let result2 = #ok(10);
+  /// let result3 = #err("error");
+  /// 
+  /// assert Result.equal<Nat, Text>(Nat.equal, Text.equal, result1, result2);
+  /// assert not Result.equal<Nat, Text>(Nat.equal, Text.equal, result1, result3);
+  /// ```
   public func equal<Ok, Err>(
     eqOk : (Ok, Ok) -> Bool,
     eqErr : (Err, Err) -> Bool,
@@ -61,6 +71,17 @@ module {
 
   /// Compares two Result values. `#ok` is larger than `#err`. This ordering is
   /// arbitrary, but it lets you for example use Results as keys in ordered maps.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let result1 = #ok(5);
+  /// let result2 = #ok(10);
+  /// let result3 = #err("error");
+  /// 
+  /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result1, result2) == #less;
+  /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result2, result1) == #greater;
+  /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result1, result3) == #greater;
+  /// ```
   public func compare<Ok, Err>(
     compareOk : (Ok, Ok) -> Order.Order,
     compareErr : (Err, Err) -> Order.Order,
@@ -123,6 +144,18 @@ module {
   };
 
   /// Maps the `Ok` type/value, leaving any `Err` type/value unchanged.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let result1 = #ok(42);
+  /// let result2 = #err("error");
+  /// 
+  /// let doubled1 = Result.mapOk<Nat, Nat, Text>(result1, func x = x * 2);
+  /// assert doubled1 == #ok(84);
+  /// 
+  /// let doubled2 = Result.mapOk<Nat, Nat, Text>(result2, func x = x * 2);
+  /// assert doubled2 == #err("error");
+  /// ```
   public func mapOk<Ok1, Ok2, Err>(
     result : Result<Ok1, Err>,
     f : Ok1 -> Ok2
@@ -134,6 +167,18 @@ module {
   };
 
   /// Maps the `Err` type/value, leaving any `Ok` type/value unchanged.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let result1 = #ok(42);
+  /// let result2 = #err("error");
+  /// 
+  /// let mapped1 = Result.mapErr<Nat, Text, Text>(result1, func x = x # "!");
+  /// assert mapped1 == #ok(42);
+  /// 
+  /// let mapped2 = Result.mapErr<Nat, Text, Text>(result2, func x = x # "!");
+  /// assert mapped2 == #err("error!");
+  /// ```
   public func mapErr<Ok, Err1, Err2>(
     result : Result<Ok, Err1>,
     f : Err1 -> Err2
@@ -202,7 +247,13 @@ module {
     }
   };
 
-  /// Whether this Result is an `#ok`
+  /// Whether this Result is an `#ok`.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// assert Result.isOk(#ok(42));
+  /// assert not Result.isOk(#err("error"));
+  /// ```
   public func isOk(result : Result<Any, Any>) : Bool {
     switch result {
       case (#ok(_)) { true };
@@ -210,7 +261,13 @@ module {
     }
   };
 
-  /// Whether this Result is an `#err`
+  /// Whether this Result is an `#err`.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// assert Result.isErr(#err("error"));
+  /// assert not Result.isErr(#ok(42));
+  /// ```
   public func isErr(result : Result<Any, Any>) : Bool {
     switch result {
       case (#ok(_)) { false };
@@ -219,6 +276,12 @@ module {
   };
 
   /// Asserts that its argument is an `#ok` result, traps otherwise.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Result.assertOk(#ok(42)); // succeeds
+  /// // Result.assertOk(#err("error")); // would trap
+  /// ```
   public func assertOk(result : Result<Any, Any>) {
     switch result {
       case (#err(_)) { assert false };
@@ -227,6 +290,12 @@ module {
   };
 
   /// Asserts that its argument is an `#err` result, traps otherwise.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// Result.assertErr(#err("error")); // succeeds
+  /// // Result.assertErr(#ok(42)); // would trap
+  /// ```
   public func assertErr(result : Result<Any, Any>) {
     switch result {
       case (#err(_)) {};
@@ -237,6 +306,13 @@ module {
   /// Converts an upper cased `#Ok`, `#Err` result type into a lowercased `#ok`, `#err` result type.
   /// On the IC, a common convention is to use `#Ok` and `#Err` as the variants of a result type,
   /// but in Motoko, we use `#ok` and `#err` instead.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let upper = #Ok(42);
+  /// let lower = Result.fromUpper(upper);
+  /// assert lower == #ok(42);
+  /// ```
   public func fromUpper<Ok, Err>(
     result : { #Ok : Ok; #Err : Err }
   ) : Result<Ok, Err> {
@@ -249,6 +325,13 @@ module {
   /// Converts a lower cased `#ok`, `#err` result type into an upper cased `#Ok`, `#Err` result type.
   /// On the IC, a common convention is to use `#Ok` and `#Err` as the variants of a result type,
   /// but in Motoko, we use `#ok` and `#err` instead.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let lower = #ok(42);
+  /// let upper = Result.toUpper(lower);
+  /// assert upper == #Ok(42);
+  /// ```
   public func toUpper<Ok, Err>(
     result : Result<Ok, Err>
   ) : { #Ok : Ok; #Err : Err } {

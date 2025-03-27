@@ -311,8 +311,13 @@ increase <code>--max-stable-pages</code> as desired, approaching the IC maximum 
 All applications should reserve at least one page for stable variable data, even when no stable variables are used.</p>
 <p>Usage:</p>
 <pre><code>motoko no-repl name=import
-import Region &quot;mo:base/Region&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Result.html">Result</a><div class="index-item-comment"><p>Error handling with the Result type.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>An imperative set based on order/comparison of the elements.
+import Region &quot;mo:base/Region&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Result.html">Result</a><div class="index-item-comment"><p>Module for error handling with the Result type.</p>
+<p>The Result type is used for returning and propagating errors. It has two variants:
+<code>#ok(Ok)</code>, representing success and containing a value, and <code>#err(Err)</code>, representing
+error and containing an error value.</p>
+<p>Import from the base library to use this module.</p>
+<pre><code>motoko name=import
+import Result &quot;mo:base/Result&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>An imperative set based on order/comparison of the elements.
 A set is a collection of elements without duplicates.
 The set data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>

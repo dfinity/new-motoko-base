@@ -829,6 +829,7 @@ module {
   ///
   /// ```motoko include=import
   /// let blob = Text.encodeUtf8("Hello");
+  /// assert blob == "\48\65\6C\6C\6F";
   /// ```
   public let encodeUtf8 : Text -> Blob = Prim.encodeUtf8;
 

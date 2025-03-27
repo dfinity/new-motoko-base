@@ -77,7 +77,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.singleton<Nat>(25);
+  ///   let queue = Queue.singleton(25);
   ///   assert Queue.size(queue) == 1;
   /// }
   /// ```
@@ -94,7 +94,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.singleton<Nat>(42);
+  ///   let queue = Queue.singleton(42);
   ///   assert Queue.size(queue) == 1;
   /// }
   /// ```
@@ -117,7 +117,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty(), 2), 1);
   ///   assert Queue.peekFront(queue) == ?1;
   /// }
   /// ```
@@ -138,7 +138,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   ///   assert Queue.peekBack(queue) == ?2;
   /// }
   /// ```
@@ -185,7 +185,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty(), 2), 1);
   ///   assert Queue.peekFront(queue) == ?1;
   ///   assert Queue.peekBack(queue) == ?2;
   ///   assert Queue.size(queue) == 2;
@@ -209,7 +209,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   ///   assert Queue.peekBack(queue) == ?2;
   ///   assert Queue.size(queue) == 2;
   /// }
@@ -234,7 +234,7 @@ module {
   /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
-  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   ///   // initial queue with elements [1, 2]
   ///   let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap "Empty queue impossible";
   ///   assert frontElement == 1;
@@ -266,13 +266,11 @@ module {
   /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
-  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   ///   // initial queue with elements [1, 2]
   ///   let reduced = Queue.popBack(initial);
   ///   switch reduced {
-  ///     case null {
-  ///       Runtime.trap "Empty queue impossible"
-  ///     };
+  ///     case null Runtime.trap("Empty queue impossible");
   ///     case (?result) {
   ///       let reducedQueue = result.0;
   ///       let removedElement = result.1;
@@ -300,7 +298,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.fromIter<Nat>([0, 1, 2, 3, 4].values());
+  ///   let queue = Queue.fromIter([0, 1, 2, 3, 4].values());
   ///   assert Queue.size(queue) == 5;
   /// }
   /// ```
@@ -339,7 +337,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
   ///   let allGreaterThanOne = Queue.all<Nat>(queue, func n = n > 1);
   ///   assert not allGreaterThanOne; // false because 1 is not > 1
   /// }
@@ -363,7 +361,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
   ///   let hasGreaterThanOne = Queue.any<Nat>(queue, func n = n > 1);
   ///   assert hasGreaterThanOne; // true because 2 and 3 are > 1
   /// }
@@ -386,10 +384,10 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   var sum = 0;
-  ///   let queue = Queue.fromIter<Nat>([0, 1, 2].values());
-  ///   Queue.forEach<Nat>(queue, func n = sum += n);
-  ///   assert sum == 3;
+  ///   var text = "";
+  ///   let queue = Queue.fromIter(["A", "B", "C"].values());
+  ///   Queue.forEach<Text>(queue, func n = text #= n);
+  ///   assert text == "ABC";
   /// }
   /// ```
   ///
@@ -406,12 +404,13 @@ module {
   /// Example:
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
+  /// import Iter "mo:base/Iter";
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let queue = Queue.fromIter<Nat>([0, 1, 2].values());
+  ///   let queue = Queue.fromIter([0, 1, 2].values());
   ///   let textQueue = Queue.map<Nat, Text>(queue, Nat.toText);
-  ///   assert Queue.size(textQueue) == 3;
+  ///   assert Iter.toArray(Queue.values(textQueue)) == ["0", "1", "2"];
   /// }
   /// ```
   ///
@@ -432,7 +431,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.fromIter<Nat>([0, 1, 2, 1].values());
+  ///   let queue = Queue.fromIter([0, 1, 2, 1].values());
   ///   let filtered = Queue.filter<Nat>(queue, func n = n != 1);
   ///   assert Queue.size(filtered) == 2;
   /// }
@@ -456,7 +455,7 @@ module {
   /// import Queue "mo:base/pure/Queue";
   ///
   /// persistent actor {
-  ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
   ///   let doubled = Queue.filterMap<Nat, Nat>(
   ///     queue,
   ///     func n = if (n > 1) ?(n * 2) else null
@@ -496,9 +495,9 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let queue1 = Queue.fromIter<Nat>([1, 2].values());
-  ///   let queue2 = Queue.fromIter<Nat>([1, 2].values());
-  ///   assert Queue.compare(queue1, queue2, Nat.compare) == #equal;
+  ///   let queue1 = Queue.fromIter([1, 2].values());
+  ///   let queue2 = Queue.fromIter([1, 3].values());
+  ///   assert Queue.compare(queue1, queue2, Nat.compare) == #less;
   /// }
   /// ```
   ///

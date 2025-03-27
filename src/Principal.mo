@@ -244,7 +244,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let principal1 = Principal.anonymous();
-  /// let principal2 = Principal.fromBlob("\04");
+  /// let principal2 = Principal.fromBlob(Principal.anonymousBlob);
   /// Principal.equal(principal1, principal2, Principal.equal) // => true
   /// ```
   public func equal(principal1 : Principal, principal2 : Principal) : Bool {

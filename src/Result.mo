@@ -55,7 +55,7 @@ module {
   /// let result1 = #ok(10);
   /// let result2 = #ok(10);
   /// let result3 = #err("error");
-  /// 
+  ///
   /// assert Result.equal<Nat, Text>(Nat.equal, Text.equal, result1, result2);
   /// assert not Result.equal<Nat, Text>(Nat.equal, Text.equal, result1, result3);
   /// ```
@@ -87,7 +87,7 @@ module {
   /// let result1 = #ok(5);
   /// let result2 = #ok(10);
   /// let result3 = #err("error");
-  /// 
+  ///
   /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result1, result2) == #less;
   /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result2, result1) == #greater;
   /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result1, result3) == #greater;
@@ -159,10 +159,10 @@ module {
   /// ```motoko include=import
   /// let result1 = #ok(42);
   /// let result2 = #err("error");
-  /// 
+  ///
   /// let doubled1 = Result.mapOk<Nat, Nat, Text>(result1, func x = x * 2);
   /// assert doubled1 == #ok(84);
-  /// 
+  ///
   /// let doubled2 = Result.mapOk<Nat, Nat, Text>(result2, func x = x * 2);
   /// assert doubled2 == #err("error");
   /// ```
@@ -182,10 +182,10 @@ module {
   /// ```motoko include=import
   /// let result1 = #ok(42);
   /// let result2 = #err("error");
-  /// 
+  ///
   /// let mapped1 = Result.mapErr<Nat, Text, Text>(result1, func x = x # "!");
   /// assert mapped1 == #ok(42);
-  /// 
+  ///
   /// let mapped2 = Result.mapErr<Nat, Text, Text>(result2, func x = x # "!");
   /// assert mapped2 == #err("error!");
   /// ```

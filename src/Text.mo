@@ -180,22 +180,66 @@ module {
   /// ```
   public func concat(t1 : Text, t2 : Text) : Text = t1 # t2;
 
-  /// Returns `t1 == t2`.
+  /// Returns true if two text values are equal.
+  ///
+  /// ```motoko
+  /// import Text "mo:base/Text";
+  ///
+  /// assert Text.equal("hello", "hello");
+  /// assert not Text.equal("hello", "world");
+  /// ```
   public func equal(t1 : Text, t2 : Text) : Bool { t1 == t2 };
 
-  /// Returns `t1 != t2`.
+  /// Returns true if two text values are not equal.
+  ///
+  /// ```motoko
+  /// import Text "mo:base/Text";
+  ///
+  /// assert Text.notEqual("hello", "world");
+  /// assert not Text.notEqual("hello", "hello");
+  /// ```
   public func notEqual(t1 : Text, t2 : Text) : Bool { t1 != t2 };
 
-  /// Returns `t1 < t2`.
+  /// Returns true if the first text value is lexicographically less than the second.
+  ///
+  /// ```motoko
+  /// import Text "mo:base/Text";
+  ///
+  /// assert Text.less("apple", "banana");
+  /// assert not Text.less("banana", "apple");
+  /// ```
   public func less(t1 : Text, t2 : Text) : Bool { t1 < t2 };
 
-  /// Returns `t1 <= t2`.
+  /// Returns true if the first text value is lexicographically less than or equal to the second.
+  ///
+  /// ```motoko
+  /// import Text "mo:base/Text";
+  ///
+  /// assert Text.lessOrEqual("apple", "banana");
+  /// assert Text.lessOrEqual("apple", "apple");
+  /// assert not Text.lessOrEqual("banana", "apple");
+  /// ```
   public func lessOrEqual(t1 : Text, t2 : Text) : Bool { t1 <= t2 };
 
-  /// Returns `t1 > t2`.
+  /// Returns true if the first text value is lexicographically greater than the second.
+  ///
+  /// ```motoko
+  /// import Text "mo:base/Text";
+  ///
+  /// assert Text.greater("banana", "apple");
+  /// assert not Text.greater("apple", "banana");
+  /// ```
   public func greater(t1 : Text, t2 : Text) : Bool { t1 > t2 };
 
-  /// Returns `t1 >= t2`.
+  /// Returns true if the first text value is lexicographically greater than or equal to the second.
+  ///
+  /// ```motoko
+  /// import Text "mo:base/Text";
+  ///
+  /// assert Text.greaterOrEqual("banana", "apple");
+  /// assert Text.greaterOrEqual("apple", "apple");
+  /// assert not Text.greaterOrEqual("apple", "banana");
+  /// ```
   public func greaterOrEqual(t1 : Text, t2 : Text) : Bool { t1 >= t2 };
 
   /// Compares `t1` and `t2` lexicographically.
@@ -522,6 +566,7 @@ module {
   ///
   /// ```motoko include=import
   /// assert Text.contains("Motoko", #text "oto");
+  /// assert not Text.contains("Motoko", #text "xyz");
   /// ```
   public func contains(t : Text, p : Pattern) : Bool {
     let match = matchOfPattern(p);

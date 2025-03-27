@@ -57,7 +57,8 @@ abs(-0.0) =&gt; 0.0</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.abs(-1.2) == 1.2;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="sqrt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">sqrt</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the square root of <code>x</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.abs(-1.2), 1.2, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="sqrt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">sqrt</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the square root of <code>x</code>.</p>
 <p>Special cases:</p>
 <pre><code>sqrt(+inf) =&gt; +inf
 sqrt(-0.0) =&gt; -0.0
@@ -66,7 +67,8 @@ sqrt(NaN)  =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.sqrt(6.25) == 2.5;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="ceil"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">ceil</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the smallest integral float greater than or equal to <code>x</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.sqrt(6.25), 2.5, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="ceil"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">ceil</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the smallest integral float greater than or equal to <code>x</code>.</p>
 <p>Special cases:</p>
 <pre><code>ceil(+inf) =&gt; +inf
 ceil(-inf) =&gt; -inf
@@ -76,7 +78,8 @@ ceil(-0.0) =&gt; -0.0</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.ceil(1.2) == 2.0;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="floor"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">floor</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the largest integral float less than or equal to <code>x</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.ceil(1.2), 2.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="floor"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">floor</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the largest integral float less than or equal to <code>x</code>.</p>
 <p>Special cases:</p>
 <pre><code>floor(+inf) =&gt; +inf
 floor(-inf) =&gt; -inf
@@ -86,7 +89,8 @@ floor(-0.0) =&gt; -0.0</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.floor(1.2) == 1.0;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="trunc"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">trunc</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the nearest integral float not greater in magnitude than <code>x</code>.
+let epsilon = 1e-6;
+assert Float.equal(Float.floor(1.2), 1.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="trunc"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">trunc</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the nearest integral float not greater in magnitude than <code>x</code>.
 This is equivalent to returning <code>x</code> with truncating its decimal places.</p>
 <p>Special cases:</p>
 <pre><code>trunc(+inf) =&gt; +inf
@@ -97,7 +101,8 @@ trunc(-0.0) =&gt; -0.0</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.trunc(2.75) == 2.0;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="nearest"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">nearest</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the nearest integral float to <code>x</code>.
+let epsilon = 1e-6;
+assert Float.equal(Float.trunc(2.75), 2.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="nearest"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">nearest</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the nearest integral float to <code>x</code>.
 A decimal place of exactly .5 is rounded up for <code>x &gt; 0</code>
 and rounded down for <code>x &lt; 0</code></p>
 <p>Special cases:</p>
@@ -109,11 +114,12 @@ nearest(-0.0) =&gt; -0.0</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.nearest(2.75) == 3.0;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="copySign"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">copySign</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns <code>x</code> if <code>x</code> and <code>y</code> have same sign, otherwise <code>x</code> with negated sign.</p>
+assert Float.nearest(2.75) == 3.0</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="copySign"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">copySign</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns <code>x</code> if <code>x</code> and <code>y</code> have same sign, otherwise <code>x</code> with negated sign.</p>
 <p>The sign bit of zero, infinity, and <code>NaN</code> is considered.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.copySign(1.2, -2.3) == -1.2;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="min"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">min</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the smaller value of <code>x</code> and <code>y</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.copySign(1.2, -2.3), -1.2, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="min"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">min</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the smaller value of <code>x</code> and <code>y</code>.</p>
 <p>Special cases:</p>
 <pre><code>min(NaN, y) =&gt; NaN for any Float y
 min(x, NaN) =&gt; NaN for any Float x</code></pre>
@@ -135,7 +141,8 @@ sin(NaN) =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.sin(Float.pi / 2) == 1.0;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="cos"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">cos</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the cosine of the radian angle <code>x</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.sin(Float.pi / 2), 1.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="cos"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">cos</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the cosine of the radian angle <code>x</code>.</p>
 <p>Special cases:</p>
 <pre><code>cos(+inf) =&gt; NaN
 cos(-inf) =&gt; NaN
@@ -143,7 +150,8 @@ cos(NaN)  =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.cos(Float.pi / 2) == 0.0; // with numerical imprecision</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="tan"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">tan</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the tangent of the radian angle <code>x</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.cos(Float.pi / 2), 0.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="tan"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">tan</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the tangent of the radian angle <code>x</code>.</p>
 <p>Special cases:</p>
 <pre><code>tan(+inf) =&gt; NaN
 tan(-inf) =&gt; NaN
@@ -151,7 +159,8 @@ tan(NaN)  =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.tan(Float.pi / 4) == 1.0; // with numerical imprecision</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arcsin"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arcsin</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the arc sine of <code>x</code> in radians.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.tan(Float.pi / 4), 1.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arcsin"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arcsin</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the arc sine of <code>x</code> in radians.</p>
 <p>Special cases:</p>
 <pre><code>arcsin(x)   =&gt; NaN if x &gt; 1.0
 arcsin(x)   =&gt; NaN if x &lt; -1.0
@@ -159,7 +168,8 @@ arcsin(NaN) =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.arcsin(1.0) == Float.pi / 2;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arccos"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arccos</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the arc cosine of <code>x</code> in radians.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.arcsin(1.0), Float.pi / 2, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arccos"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arccos</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the arc cosine of <code>x</code> in radians.</p>
 <p>Special cases:</p>
 <pre><code>arccos(x)  =&gt; NaN if x &gt; 1.0
 arccos(x)  =&gt; NaN if x &lt; -1.0
@@ -167,7 +177,8 @@ arcos(NaN) =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.arccos(1.0) == 0.0;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arctan"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arctan</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the arc tangent of <code>x</code> in radians.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.arccos(1.0), 0.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arctan"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arctan</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the arc tangent of <code>x</code> in radians.</p>
 <p>Special cases:</p>
 <pre><code>arctan(+inf) =&gt; pi / 2
 arctan(-inf) =&gt; -pi / 2
@@ -175,7 +186,8 @@ arctan(NaN)  =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.arctan(1.0) == Float.pi / 4;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arctan2"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arctan2</span> : (<span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Given <code>(y,x)</code>, returns the arc tangent in radians of <code>y/x</code> based on the signs of both values to determine the correct quadrant.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.arctan(1.0), Float.pi / 4, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="arctan2"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">arctan2</span> : (<span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Given <code>(y,x)</code>, returns the arc tangent in radians of <code>y/x</code> based on the signs of both values to determine the correct quadrant.</p>
 <p>Special cases:</p>
 <pre><code>arctan2(0.0, 0.0)   =&gt; 0.0
 arctan2(-0.0, 0.0)  =&gt; -0.0
@@ -199,7 +211,8 @@ exp(NaN)  =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.exp(1.0) == Float.e;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="log"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">log</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the natural logarithm (base-<code>e</code>) of <code>x</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.exp(1.0), Float.e, epsilon);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="log"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">log</span> : (<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) -&gt; <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the natural logarithm (base-<code>e</code>) of <code>x</code>.</p>
 <p>Special cases:</p>
 <pre><code>log(0.0)  =&gt; -inf
 log(-0.0) =&gt; -inf
@@ -209,26 +222,30 @@ log(NaN)  =&gt; NaN</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.log(Float.e) == 1.0;</code></pre></p></div><div class="declaration"><h4 class="function" id="format"><code><span class="keyword">public func </span><span class="fnname">format</span>(<span class="parameter">fmt</span> : {#fix : <span class="type">Nat8</span>; #exp : <span class="type">Nat8</span>; #gen : <span class="type">Nat8</span>; #exact}, <span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <span class="type">Text</span></code></h4><p><p>Formatting. <code>format(fmt, x)</code> formats <code>x</code> to <code>Text</code> according to the
+let epsilon = 1e-6;
+assert Float.equal(Float.log(Float.e), 1.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="function" id="format"><code><span class="keyword">public func </span><span class="fnname">format</span>(<span class="parameter">fmt</span> : {#fix : <span class="type">Nat8</span>; #exp : <span class="type">Nat8</span>; #gen : <span class="type">Nat8</span>; #exact}, <span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <span class="type">Text</span></code></h4><p><p>Formatting. <code>format(fmt, x)</code> formats <code>x</code> to <code>Text</code> according to the
 formatting directive <code>fmt</code>, which can take one of the following forms:</p>
 <ul><li><code>#fix prec</code> as fixed-point format with <code>prec</code> digits</li><li><code>#exp prec</code> as exponential format with <code>prec</code> digits</li><li><code>#gen prec</code> as generic format with <code>prec</code> digits</li><li><code>#exact</code> as exact format that can be decoded without loss.</li></ul>
 
 <p><code>-0.0</code> is formatted with negative sign bit.
 Positive infinity is formatted as &quot;inf&quot;.
 Negative infinity is formatted as &quot;-inf&quot;.</p>
-<p>Note: The numerical precision and the text format can vary between
+<p>The numerical precision and the text format can vary between
 Motoko versions and runtime configuration. Moreover, <code>NaN</code> can be printed
 differently, i.e. &quot;NaN&quot; or &quot;nan&quot;, potentially omitting the <code>NaN</code> sign.</p>
 <p>Example:</p>
-<pre><code>motoko include=import
+<pre><code>motoko include=import no-validate
 assert Float.format(#exp 3, 123.0) == &quot;1.230e+02&quot;;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toText"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toText</span> : <a href="#type.Float"><span class="type">Float</span></a> -&gt; <span class="type">Text</span></code></h4><p><p>Conversion to Text. Use <code>format(fmt, x)</code> for more detailed control.</p>
 <p><code>-0.0</code> is formatted with negative sign bit.
 Positive infinity is formatted as <code>inf</code>.
 Negative infinity is formatted as <code>-inf</code>.
 <code>NaN</code> is formatted as <code>NaN</code> or <code>-NaN</code> depending on its sign bit.</p>
+<p>The numerical precision and the text format can vary between
+Motoko versions and runtime configuration. Moreover, <code>NaN</code> can be printed
+differently, i.e. &quot;NaN&quot; or &quot;nan&quot;, potentially omitting the <code>NaN</code> sign.</p>
 <p>Example:</p>
-<pre><code>motoko include=import
-assert Float.toText(0.12) == &quot;0.12&quot;;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt64</span> : <a href="#type.Float"><span class="type">Float</span></a> -&gt; <span class="type">Int64</span></code></h4><p><p>Conversion to Int64 by truncating Float, equivalent to <code>toInt64(trunc(f))</code></p>
+<pre><code>motoko include=import no-validate
+assert Float.toText(1.2) == &quot;1.2&quot;;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt64</span> : <a href="#type.Float"><span class="type">Float</span></a> -&gt; <span class="type">Int64</span></code></h4><p><p>Conversion to Int64 by truncating Float, equivalent to <code>toInt64(trunc(f))</code></p>
 <p>Traps if the floating point number is larger or smaller than the representable Int64.
 Also traps for <code>inf</code>, <code>-inf</code>, and <code>NaN</code>.</p>
 <p>Example:</p>
@@ -336,7 +353,8 @@ neg(-0.0) =&gt; +0.0</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.neg(1.23) == -1.23;</code></pre></p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x + y</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.neg(1.23), -1.23, epsilon);</code></pre></p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x + y</code>.</p>
 <p>Note: Numerical errors may occur, see comment above.</p>
 <p>Special cases:</p>
 <pre><code>add(+inf, y)    =&gt; +inf if y is any Float except -inf and NaN
@@ -345,7 +363,8 @@ add(+inf, -inf) =&gt; NaN
 add(NaN, y)     =&gt; NaN for any Float y</code></pre><p>The same cases apply commutatively, i.e. for <code>add(y, x)</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.add(1.23, 0.123) == 1.353;</code></pre></p></div><div class="declaration"><h4 class="function" id="sub"><code><span class="keyword">public func </span><span class="fnname">sub</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x - y</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.add(1.23, 0.123), 1.353, epsilon);</code></pre></p></div><div class="declaration"><h4 class="function" id="sub"><code><span class="keyword">public func </span><span class="fnname">sub</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x - y</code>.</p>
 <p>Note: Numerical errors may occur, see comment above.</p>
 <p>Special cases:</p>
 <pre><code>sub(+inf, y)    =&gt; +inf if y is any Float except +inf or NaN
@@ -359,7 +378,8 @@ sub(x, NaN)     =&gt; NaN for any Float x</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Float.sub(1.23, 0.123) == 1.107;</code></pre></p></div><div class="declaration"><h4 class="function" id="mul"><code><span class="keyword">public func </span><span class="fnname">mul</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x * y</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.sub(1.23, 0.123), 1.107, epsilon);</code></pre></p></div><div class="declaration"><h4 class="function" id="mul"><code><span class="keyword">public func </span><span class="fnname">mul</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x * y</code>.</p>
 <p>Note: Numerical errors may occur, see comment above.</p>
 <p>Special cases:</p>
 <pre><code>mul(+inf, y) =&gt; +inf if y &gt; 0.0
@@ -371,7 +391,8 @@ mul(-inf, 0.0) =&gt; NaN
 mul(NaN, y) =&gt; NaN for any Float y</code></pre><p>The same cases apply commutatively, i.e. for <code>mul(y, x)</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Float.mul(1.23, 1e2) // =&gt; 123.0</code></pre></p></div><div class="declaration"><h4 class="function" id="div"><code><span class="keyword">public func </span><span class="fnname">div</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the division of <code>x</code> by <code>y</code>, <code>x / y</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.mul(1.23, 1e2), 123.0, epsilon);</code></pre></p></div><div class="declaration"><h4 class="function" id="div"><code><span class="keyword">public func </span><span class="fnname">div</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the division of <code>x</code> by <code>y</code>, <code>x / y</code>.</p>
 <p>Note: Numerical errors may occur, see comment above.</p>
 <p>Special cases:</p>
 <pre><code>div(0.0, 0.0) =&gt; NaN
@@ -388,7 +409,8 @@ div(x, NaN)   =&gt; NaN for any Float x</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-Float.div(1.23, 1e2) // =&gt; 0.0123</code></pre></p></div><div class="declaration"><h4 class="function" id="rem"><code><span class="keyword">public func </span><span class="fnname">rem</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the floating point division remainder <code>x % y</code>,
+let epsilon = 1e-6;
+assert Float.equal(Float.div(1.23, 1e2), 0.0123, epsilon);</code></pre></p></div><div class="declaration"><h4 class="function" id="rem"><code><span class="keyword">public func </span><span class="fnname">rem</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns the floating point division remainder <code>x % y</code>,
 which is defined as <code>x - trunc(x / y) * y</code>.</p>
 <p>Note: Numerical errors may occur, see comment above.</p>
 <p>Special cases:</p>
@@ -404,7 +426,8 @@ rem(x, NaN)   =&gt; NaN for any Float x</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-Float.rem(7.2, 2.3) // =&gt; 0.3 (with numerical imprecision)</code></pre></p></div><div class="declaration"><h4 class="function" id="pow"><code><span class="keyword">public func </span><span class="fnname">pow</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns <code>x</code> to the power of <code>y</code>, <code>x ** y</code>.</p>
+let epsilon = 1e-6;
+assert Float.equal(Float.rem(7.2, 2.3), 0.3, epsilon);</code></pre></p></div><div class="declaration"><h4 class="function" id="pow"><code><span class="keyword">public func </span><span class="fnname">pow</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="#type.Float"><span class="type">Float</span></a></code></h4><p><p>Returns <code>x</code> to the power of <code>y</code>, <code>x ** y</code>.</p>
 <p>Note: Numerical errors may occur, see comment above.</p>
 <p>Special cases:</p>
 <pre><code>pow(+inf, y)    =&gt; +inf for any y &gt; 0.0 including +inf
@@ -427,4 +450,5 @@ pow(x, NaN)     =&gt; NaN for any Float x</code></pre>
 
 <p>Example:</p>
 <pre><code>motoko include=import
-Float.pow(2.5, 2.0) // =&gt; 6.25</code></pre></p></div></div></body></html>
+let epsilon = 1e-6;
+assert Float.equal(Float.pow(2.5, 2.0), 6.25, epsilon);</code></pre></p></div></div></body></html>

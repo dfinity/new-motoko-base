@@ -67,13 +67,17 @@ module {
   ///
   /// ```motoko include=import no-repl
   /// var counter = 0;
-  /// func() : async () {
+  /// var timerId : ?Timer.TimerId = null;
+  /// func runFiveTimes() : async () {
   ///   counter += 1;
   ///   if (counter == 5) {
-  ///     Timer.cancelTimer(timerId);
+  ///     switch (timerId) {
+  ///       case (?id) { Timer.cancelTimer(id) };
+  ///       case null { assert false /* timer already cancelled */ };
+  ///     };
   ///   }
   /// };
-  /// let timerId = Timer.recurringTimer<system>(#minutes 30, runFiveTimes);
+  /// timerId := ?Timer.recurringTimer<system>(#minutes 30, runFiveTimes);
   /// ```
   public let cancelTimer : TimerId -> () = cancel;
 

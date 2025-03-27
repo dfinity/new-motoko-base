@@ -1,0 +1,3 @@
+Real-Time {avg = 2_163; max = ?6_658; mean = 1_078; total = 1_081_697}
+Amortized {avg = 366; max = ?21_287; mean = 185; total = 183_358}
+Mutable {avg = 442; max = ?592; mean = 466; total = 221_271}

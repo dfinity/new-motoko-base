@@ -1,4 +1,4 @@
-/// Runtime utilities. 
+/// Runtime utilities.
 /// These functions were originally part of the `Debug` module.
 ///
 /// ```motoko name=import

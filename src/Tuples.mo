@@ -4,11 +4,13 @@
 ///
 /// ```motoko
 /// import { Tuple2; Tuple3 } "mo:base/Tuples";
+/// import Bool "mo:base/Bool";
 /// import Nat "mo:base/Nat";
-/// import Text "mo:base/Text";
 ///
-/// let swapped = Tuple2.swap((1, "hello")); // ("hello", 1)
-/// let text = Tuple3.toText((1, "hello", 3), Nat.toText, Text.toText, Nat.toText); // "(1, hello, 3)"
+/// let swapped = Tuple2.swap((1, "hello"));
+/// assert swapped == ("hello", 1);
+/// let text = Tuple3.toText((1, true, 3), Nat.toText, Bool.toText, Nat.toText);
+/// assert text == "(1, true, 3)";
 /// ```
 
 import Types "Types";
@@ -71,7 +73,7 @@ module {
     /// import { Tuple2 } "mo:base/Tuples";
     /// import Nat "mo:base/Nat";
     ///
-    /// let tupleToText = Tuple2.makeToText<Nat, Text>(Nat.toText, func (x: Text): Text = x);
+    /// let tupleToText = Tuple2.makeToText<Nat, Text>(Nat.toText, func x = x);
     /// assert tupleToText((1, "hello")) == "(1, hello)";
     /// ```
     public func makeToText<A, B>(toTextA : A -> Text, toTextB : B -> Text) : ((A, B)) -> Text = func t = toText(t, toTextA, toTextB);
@@ -84,7 +86,7 @@ module {
     /// import Nat "mo:base/Nat";
     /// import Text "mo:base/Text";
     ///
-    /// let tupleEqual = Tuple2.makeEqual<Nat, Text>(Nat.equal, Text.equal);
+    /// let tupleEqual = Tuple2.makeEqual(Nat.equal, Text.equal);
     /// assert tupleEqual((1, "hello"), (1, "hello"));
     /// ```
     public func makeEqual<A, B>(aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool) : ((A, B), (A, B)) -> Bool = func(t1, t2) = equal(t1, t2, aEqual, bEqual);
@@ -97,7 +99,7 @@ module {
     /// import Nat "mo:base/Nat";
     /// import Text "mo:base/Text";
     ///
-    /// let tupleCompare = Tuple2.makeCompare<Nat, Text>(Nat.compare, Text.compare);
+    /// let tupleCompare = Tuple2.makeCompare(Nat.compare, Text.compare);
     /// assert tupleCompare((1, "hello"), (1, "world")) == #less;
     /// ```
     public func makeCompare<A, B>(aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order) : ((A, B), (A, B)) -> Types.Order = func(t1, t2) = compare(t1, t2, aCompare, bCompare)
@@ -154,7 +156,7 @@ module {
     /// import { Tuple3 } "mo:base/Tuples";
     ///
     /// import Nat "mo:base/Nat";
-    /// let toText = Tuple3.makeToText<Nat, Text, Nat>(Nat.toText, func (x: Text): Text = x, Nat.toText);
+    /// let toText = Tuple3.makeToText<Nat, Text, Nat>(Nat.toText, func x = x, Nat.toText);
     /// assert toText((1, "hello", 2)) == "(1, hello, 2)";
     /// ```
     public func makeToText<A, B, C>(toTextA : A -> Text, toTextB : B -> Text, toTextC : C -> Text) : ((A, B, C)) -> Text = func t = toText(t, toTextA, toTextB, toTextC);
@@ -167,7 +169,7 @@ module {
     ///
     /// import Nat "mo:base/Nat";
     /// import Text "mo:base/Text";
-    /// let equal = Tuple3.makeEqual<Nat, Text, Nat>(Nat.equal, Text.equal, Nat.equal);
+    /// let equal = Tuple3.makeEqual(Nat.equal, Text.equal, Nat.equal);
     /// assert equal((1, "hello", 2), (1, "hello", 2));
     /// ```
     public func makeEqual<A, B, C>(aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool, cEqual : (C, C) -> Bool) : ((A, B, C), (A, B, C)) -> Bool = func(t1, t2) = equal(t1, t2, aEqual, bEqual, cEqual);
@@ -180,7 +182,7 @@ module {
     ///
     /// import Nat "mo:base/Nat";
     /// import Text "mo:base/Text";
-    /// let compare = Tuple3.makeCompare<Nat, Text, Nat>(Nat.compare, Text.compare, Nat.compare);
+    /// let compare = Tuple3.makeCompare(Nat.compare, Text.compare, Nat.compare);
     /// assert compare((1, "hello", 2), (1, "world", 1)) == #less;
     /// ```
     public func makeCompare<A, B, C>(aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order, cCompare : (C, C) -> Types.Order) : ((A, B, C), (A, B, C)) -> Types.Order = func(t1, t2) = compare(t1, t2, aCompare, bCompare, cCompare)
@@ -242,7 +244,7 @@ module {
     /// import { Tuple4 } "mo:base/Tuples";
     ///
     /// import Nat "mo:base/Nat";
-    /// let toText = Tuple4.makeToText<Nat, Text, Nat, Nat>(Nat.toText, func (x: Text): Text = x, Nat.toText, Nat.toText);
+    /// let toText = Tuple4.makeToText(Nat.toText, func (x: Text): Text = x, Nat.toText, Nat.toText);
     /// assert toText((1, "hello", 2, 3)) == "(1, hello, 2, 3)";
     /// ```
     public func makeToText<A, B, C, D>(toTextA : A -> Text, toTextB : B -> Text, toTextC : C -> Text, toTextD : D -> Text) : ((A, B, C, D)) -> Text = func t = toText(t, toTextA, toTextB, toTextC, toTextD);
@@ -255,7 +257,7 @@ module {
     ///
     /// import Nat "mo:base/Nat";
     /// import Text "mo:base/Text";
-    /// let equal = Tuple4.makeEqual<Nat, Text, Nat, Nat>(Nat.equal, Text.equal, Nat.equal, Nat.equal);
+    /// let equal = Tuple4.makeEqual(Nat.equal, Text.equal, Nat.equal, Nat.equal);
     /// assert equal((1, "hello", 2, 3), (1, "hello", 2, 3));
     /// ```
     public func makeEqual<A, B, C, D>(aEqual : (A, A) -> Bool, bEqual : (B, B) -> Bool, cEqual : (C, C) -> Bool, dEqual : (D, D) -> Bool) : ((A, B, C, D), (A, B, C, D)) -> Bool = func(t1, t2) = equal(t1, t2, aEqual, bEqual, cEqual, dEqual);
@@ -268,7 +270,7 @@ module {
     ///
     /// import Nat "mo:base/Nat";
     /// import Text "mo:base/Text";
-    /// let compare = Tuple4.makeCompare<Nat, Text, Nat, Nat>(Nat.compare, Text.compare, Nat.compare, Nat.compare);
+    /// let compare = Tuple4.makeCompare(Nat.compare, Text.compare, Nat.compare, Nat.compare);
     /// assert compare((1, "hello", 2, 3), (1, "world", 1, 3)) == #less;
     /// ```
     public func makeCompare<A, B, C, D>(aCompare : (A, A) -> Types.Order, bCompare : (B, B) -> Types.Order, cCompare : (C, C) -> Types.Order, dCompare : (D, D) -> Types.Order) : ((A, B, C, D), (A, B, C, D)) -> Types.Order = func(t1, t2) = compare(t1, t2, aCompare, bCompare, cCompare, dCompare)

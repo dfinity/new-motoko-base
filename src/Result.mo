@@ -19,29 +19,29 @@ module {
   /// The simplest way of working with Results is to pattern match on them.
   /// For example:
   /// ```motoko include=import
-  /// import Int "mo:base/Int";
   /// import Text "mo:base/Text";
-  /// import Time "mo:base/Time";
   ///
-  /// type User = { email : Text; name : Text };
-  /// type Id = Text;
+  /// type Email = Text;
+  /// type ErrorMessage = Text;
   ///
-  /// func createUser(user : User) : Result.Result<Id, Text> {
-  ///   if (Text.size(user.email) == 0) {
-  ///     #err("Invalid email format")
-  ///   } else {
-  ///     #ok("user_" # Int.toText(Time.now()))
-  ///   };
+  /// func validateEmail(email : Text) : Result.Result<Email, ErrorMessage> {
+  ///   let parts = Text.split(email, #char '@');
+  ///   let beforeAt = parts.next();
+  ///   let afterAt = parts.next();
+  ///   switch (beforeAt, afterAt) {
+  ///     case (?local, ?domain) {
+  ///       if (local == "") return #err("Username cannot be empty");
+  ///       if (not Text.contains(domain, #char '.')) return #err("Invalid domain format");
+  ///       #ok(email)
+  ///     };
+  ///     case _ #err("Email must contain exactly one @ symbol")
+  ///   }
   /// };
   ///
-  /// let myUser1 = { email = "test@example.com"; name = "Test" };
-  /// let myUser2 = { email = ""; name = "Invalid" };
-  ///
-  /// let res1 = createUser(myUser1);
-  /// assert res1 == #ok("user_123");
-  ///
-  /// let res2 = createUser(myUser2);
-  /// assert res2 == #err("Invalid email format");
+  /// assert validateEmail("user@example.com") == #ok("user@example.com");
+  /// assert validateEmail("invalid.email") == #err("Email must contain exactly one @ symbol");
+  /// assert validateEmail("@domain.com") == #err("Username cannot be empty");
+  /// assert validateEmail("user@invalid") == #err("Invalid domain format");
   /// ```
   public type Result<Ok, Err> = Types.Result<Ok, Err>;
 
@@ -82,6 +82,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  /// import Text "mo:base/Text";
   ///
   /// let result1 = #ok(5);
   /// let result2 = #ok(10);

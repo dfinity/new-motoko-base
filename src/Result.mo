@@ -1,19 +1,38 @@
-/// Error handling with the Result type.
+/// Module for error handling with the Result type.
+///
+/// The Result type is used for returning and propagating errors. It has two variants:
+/// `#ok(Ok)`, representing success and containing a value, and `#err(Err)`, representing
+/// error and containing an error value.
+///
+/// Import from the base library to use this module.
+/// ```motoko name=import
+/// import Result "mo:base/Result";
+/// ```
 
 import Order "Order";
 import Types "Types";
 
 module {
 
-  /// `Result<Ok, Err>` is the type used for returning and propagating errors. It
-  /// is a type with the variants, `#ok(Ok)`, representing success and containing
-  /// a value, and `#err(Err)`, representing error and containing an error value.
+  /// The Result type used for returning and propagating errors.
   ///
-  /// The simplest way of working with `Result`s is to pattern match on them:
+  /// The simplest way of working with Results is to pattern match on them.
+  /// For example:
+  /// ```motoko include=import
+  /// type User = { email : Text; name : Text };
+  /// type Id = Text;
   ///
-  /// For example, given a function `createUser(user : User) : Result<Id, String>`
-  /// where `String` is an error message we could use it like so:
-  /// ```motoko no-repl
+  /// func createUser(user : User) : Result<Id, Text> {
+  ///   if (Text.size(user.email) == 0) {
+  ///     #err("Invalid email format")
+  ///   } else {
+  ///     #ok("user_" # Int.toText(Time.now()))
+  ///   };
+  /// };
+  ///
+  /// let myUser1 = { email = "test@example.com"; name = "Test" };
+  /// let myUser2 = { email = ""; name = "Invalid" };
+  ///
   /// let res1 = createUser(myUser1);
   /// assert res1 == #ok("user_123");
   ///
@@ -22,7 +41,7 @@ module {
   /// ```
   public type Result<Ok, Err> = Types.Result<Ok, Err>;
 
-  // Compares two Result's for equality.
+  /// Compares two Results for equality.
   public func equal<Ok, Err>(
     eqOk : (Ok, Ok) -> Bool,
     eqErr : (Err, Err) -> Bool,
@@ -40,8 +59,8 @@ module {
     }
   };
 
-  // Compares two Results. `#ok` is larger than `#err`. This ordering is
-  // arbitrary, but it lets you for example use Results as keys in ordered maps.
+  /// Compares two Result values. `#ok` is larger than `#err`. This ordering is
+  /// arbitrary, but it lets you for example use Results as keys in ordered maps.
   public func compare<Ok, Err>(
     compareOk : (Ok, Ok) -> Order.Order,
     compareErr : (Err, Err) -> Order.Order,
@@ -60,10 +79,9 @@ module {
     }
   };
 
-  /// Allows sequencing of `Result` values and functions that return
-  /// `Result`'s themselves.
-  /// ```motoko
-  /// import Result "mo:base/Result";
+  /// Allows sequencing of Result values and functions that return
+  /// Results themselves.
+  /// ```motoko include=import
   /// type Result<Ok,Err> = Result.Result<Ok, Err>;
   /// func largerThan10(x : Nat) : Result<Nat, Text> =
   ///   if (x > 10) { #ok(x) } else { #err("Not larger than 10.") };
@@ -90,8 +108,7 @@ module {
 
   /// Flattens a nested Result.
   ///
-  /// ```motoko
-  /// import Result "mo:base/Result";
+  /// ```motoko include=import
   /// assert Result.flatten<Nat, Text>(#ok(#ok(10))) == #ok(10);
   /// assert Result.flatten<Nat, Text>(#err("Wrong")) == #err("Wrong");
   /// assert Result.flatten<Nat, Text>(#ok(#err("Wrong"))) == #err("Wrong");
@@ -128,8 +145,7 @@ module {
   };
 
   /// Create a result from an option, including an error value to handle the `null` case.
-  /// ```motoko
-  /// import Result "mo:base/Result";
+  /// ```motoko include=import
   /// assert Result.fromOption(?42, "err") == #ok(42);
   /// assert Result.fromOption(null, "err") == #err("err");
   /// ```
@@ -141,8 +157,7 @@ module {
   };
 
   /// Create an option from a result, turning all #err into `null`.
-  /// ```motoko
-  /// import Result "mo:base/Result";
+  /// ```motoko include=import
   /// assert Result.toOption(#ok(42)) == ?42;
   /// assert Result.toOption(#err("err")) == null;
   /// ```
@@ -156,8 +171,7 @@ module {
   /// Applies a function to a successful value and discards the result. Use
   /// `forOk` if you're only interested in the side effect `f` produces.
   ///
-  /// ```motoko
-  /// import Result "mo:base/Result";
+  /// ```motoko include=import
   /// var counter : Nat = 0;
   /// Result.forOk<Nat, Text>(#ok(5), func (x : Nat) { counter += x });
   /// assert counter == 5;
@@ -174,8 +188,7 @@ module {
   /// Applies a function to an error value and discards the result. Use
   /// `forErr` if you're only interested in the side effect `f` produces.
   ///
-  /// ```motoko
-  /// import Result "mo:base/Result";
+  /// ```motoko include=import
   /// var counter : Nat = 0;
   /// Result.forErr<Nat, Text>(#err("Error"), func (x : Text) { counter += 1 });
   /// assert counter == 1;
@@ -189,7 +202,7 @@ module {
     }
   };
 
-  // Whether this Result is an `#ok`
+  /// Whether this Result is an `#ok`
   public func isOk(result : Result<Any, Any>) : Bool {
     switch result {
       case (#ok(_)) { true };
@@ -197,7 +210,7 @@ module {
     }
   };
 
-  // Whether this Result is an `#err`
+  /// Whether this Result is an `#err`
   public func isErr(result : Result<Any, Any>) : Bool {
     switch result {
       case (#ok(_)) { false };

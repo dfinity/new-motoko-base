@@ -107,6 +107,24 @@ module {
     queue.1
   };
 
+  /// Check if a queue contains a specific element.
+  /// Returns true if the queue contains an element equal to `item` according to the `equal` function.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Queue.contains(queue, Nat.equal, 2);
+  ///   assert not Queue.contains(queue, Nat.equal, 4);
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
   public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(queue.0, equal, item) or List.contains(queue.2, equal, item);
 
   /// Inspect the optional element on the front end of a queue.
@@ -315,8 +333,43 @@ module {
     check(list, List.size list, null)
   };
 
+  /// Convert a queue to an iterator of its elements in front-to-back order.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  /// import Iter "mo:base/Iter";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Iter.toArray(Queue.values(queue)) == [1, 2, 3];
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func values<T>(queue : Queue<T>) : Iter.Iter<T> = Iter.concat(List.values(queue.0), List.values(List.reverse(queue.2)));
 
+  /// Compare two queues for equality using the provided equality function.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue1 = Queue.fromIter([1, 2].values());
+  ///   let queue2 = Queue.fromIter([1, 2].values());
+  ///   let queue3 = Queue.fromIter([1, 3].values());
+  ///   assert Queue.equal(queue1, queue2, Nat.equal);
+  ///   assert not Queue.equal(queue1, queue3, Nat.equal);
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equal : (T, T) -> Bool) : Bool {
     if (queue1.1 != queue2.1) {
       return false
@@ -480,6 +533,23 @@ module {
     check(front, List.size front + List.size back, back)
   };
 
+  /// Convert a queue to its text representation using the provided conversion function.
+  /// This function is meant to be used for debugging and testing purposes.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Queue "mo:base/pure/Queue";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Queue.toText(queue, Nat.toText) == "PureQueue[1, 2, 3]";
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
     var text = "PureQueue[";
     func add(item : T) {

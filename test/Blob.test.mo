@@ -83,7 +83,7 @@ suite(
         let blob1 = "\00\FF\00" : Blob;
         let blob2 = "\FF\00\FF" : Blob;
         expect.nat32(Blob.hash(blob1)).equal(1818567776);
-        expect.nat32(Blob.hash(blob2)).equal(1826292338);
+        expect.nat32(Blob.hash(blob2)).equal(1826292338)
       }
     )
   }
@@ -98,7 +98,7 @@ suite(
         let blob1 = "\00\FF\00" : Blob;
         let blob2 = "\00\FF\00" : Blob;
         let blob3 = "\FF\00\FF" : Blob;
-        
+
         expect.bool(Blob.equal(blob1, blob2)).equal(true);
         expect.bool(Blob.equal(blob1, blob3)).equal(false)
       }
@@ -110,7 +110,7 @@ suite(
         let blob1 = "\00\FF\00" : Blob;
         let blob2 = "\00\FF\00" : Blob;
         let blob3 = "\FF\00\FF" : Blob;
-        
+
         expect.bool(Blob.notEqual(blob1, blob2)).equal(false);
         expect.bool(Blob.notEqual(blob1, blob3)).equal(true)
       }
@@ -121,7 +121,7 @@ suite(
       func() {
         let blob1 = "\00\AA\00" : Blob;
         let blob2 = "\00\FF\00" : Blob;
-        
+
         expect.bool(Blob.less(blob1, blob2)).equal(true);
         expect.bool(Blob.less(blob2, blob1)).equal(false);
         expect.bool(Blob.less(blob1, blob1)).equal(false)
@@ -133,7 +133,7 @@ suite(
       func() {
         let blob1 = "\00\AA\00" : Blob;
         let blob2 = "\00\FF\00" : Blob;
-        
+
         expect.bool(Blob.lessOrEqual(blob1, blob2)).equal(true);
         expect.bool(Blob.lessOrEqual(blob1, blob1)).equal(true);
         expect.bool(Blob.lessOrEqual(blob2, blob1)).equal(false)
@@ -145,7 +145,7 @@ suite(
       func() {
         let blob1 = "\00\FF\00" : Blob;
         let blob2 = "\00\AA\00" : Blob;
-        
+
         expect.bool(Blob.greater(blob1, blob2)).equal(true);
         expect.bool(Blob.greater(blob2, blob1)).equal(false);
         expect.bool(Blob.greater(blob1, blob1)).equal(false)
@@ -157,7 +157,7 @@ suite(
       func() {
         let blob1 = "\00\FF\00" : Blob;
         let blob2 = "\00\AA\00" : Blob;
-        
+
         expect.bool(Blob.greaterOrEqual(blob1, blob2)).equal(true);
         expect.bool(Blob.greaterOrEqual(blob1, blob1)).equal(true);
         expect.bool(Blob.greaterOrEqual(blob2, blob1)).equal(false)
@@ -169,10 +169,10 @@ suite(
       func() {
         let blob1 = "\00\AA\00" : Blob;
         let blob2 = "\00\FF\00" : Blob;
-        
-        expect.text(debug_show(Blob.compare(blob1, blob2))).equal("#less");
-        expect.text(debug_show(Blob.compare(blob2, blob1))).equal("#greater");
-        expect.text(debug_show(Blob.compare(blob1, blob1))).equal("#equal")
+
+        expect.text(debug_show (Blob.compare(blob1, blob2))).equal("#less");
+        expect.text(debug_show (Blob.compare(blob2, blob1))).equal("#greater");
+        expect.text(debug_show (Blob.compare(blob1, blob1))).equal("#equal")
       }
     )
   }

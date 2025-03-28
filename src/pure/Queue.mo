@@ -99,7 +99,7 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: `O(1)`.
+  /// Runtime: `O(1)` in Release profile (compiled with `--release` flag), `O(n)` otherwise.
   ///
   /// Space: `O(1)`.
   public func size<T>(queue : Queue<T>) : Nat {
@@ -109,6 +109,8 @@ module {
 
   /// Check if a queue contains a specific element.
   /// Returns true if the queue contains an element equal to `item` according to the `equal` function.
+  ///
+  /// Note: The order in which elements are visited is undefined, for performance reasons.
   ///
   /// Example:
   /// ```motoko
@@ -335,6 +337,8 @@ module {
 
   /// Convert a queue to an iterator of its elements in front-to-back order.
   ///
+  /// Performance note: Creating the iterator needs `O(size)` runtime and space!
+  ///
   /// Example:
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
@@ -402,7 +406,7 @@ module {
   ///
   /// Runtime: O(size)
   ///
-  /// Space: O(1)
+  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
@@ -426,7 +430,7 @@ module {
   ///
   /// Runtime: O(size)
   ///
-  /// Space: O(1)
+  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
@@ -435,6 +439,7 @@ module {
   };
 
   /// Call the given function for its side effect, with each queue element in turn.
+  /// The order of visiting elements is front-to-back.
   ///
   /// Example:
   /// ```motoko
@@ -458,6 +463,7 @@ module {
   /// Call the given function `f` on each queue element and collect the results
   /// in a new queue.
   ///
+  /// Note: The order of visiting elements is undefined with the current implementation.
   /// Example:
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
@@ -483,6 +489,8 @@ module {
   /// Create a new queue with only those elements of the original queue for which
   /// the given function (often called the _predicate_) returns true.
   ///
+  /// Note: The order of visiting elements is undefined with the current implementation.
+  ///
   /// Example:
   /// ```motoko
   /// import Queue "mo:base/pure/Queue";
@@ -506,6 +514,8 @@ module {
 
   /// Call the given function on each queue element, and collect the non-null results
   /// in a new queue.
+  ///
+  /// Note: The order of visiting elements is undefined with the current implementation.
   ///
   /// Example:
   /// ```motoko
@@ -575,9 +585,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size(l1))
+  /// Runtime: O(size)
   ///
-  /// Space: O(1)
+  /// Space: O(size)
   ///
   /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compareItem : (T, T) -> Order.Order) : Order.Order {

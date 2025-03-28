@@ -64,7 +64,7 @@ module {
   public func nullable<T>(size : Nat) : [?T] = Prim.Array_tabulate<?T>(size, func _ = null);
 
   /// Attempts to convert an array of optional values into an optional array of non-optional values.
-  /// Returns `null` if any element in the input array is `null`, otherwise returns `?array` where `array` 
+  /// Returns `null` if any element in the input array is `null`, otherwise returns `?array` where `array`
   /// contains all the unwrapped values.
   ///
   /// ```motoko include=import
@@ -87,12 +87,15 @@ module {
         case _ {}
       }
     };
-    ?Prim.Array_tabulate<T>(size, func i {
-      switch (array[i]) {
-        case (?value) { value };
-        case null { Prim.trap("Array.fromNullable(): unreachable") }
+    ?Prim.Array_tabulate<T>(
+      size,
+      func i {
+        switch (array[i]) {
+          case (?value) { value };
+          case null { Prim.trap("Array.fromNullable(): unreachable") }
+        }
       }
-    })
+    )
   };
 
   /// Transforms a mutable array into an immutable array.

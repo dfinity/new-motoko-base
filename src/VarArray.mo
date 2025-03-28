@@ -92,7 +92,7 @@ module {
   public func nullable<T>(size : Nat) : [var ?T] = tabulate<?T>(size, func _ = null);
 
   /// Attempts to convert a mutable array of optional values into an optional mutable array of non-optional values.
-  /// Returns `null` if any element in the input array is `null`, otherwise returns `?array` where `array` 
+  /// Returns `null` if any element in the input array is `null`, otherwise returns `?array` where `array`
   /// contains all the unwrapped values.
   ///
   /// ```motoko include=import
@@ -115,12 +115,15 @@ module {
         case _ {}
       }
     };
-    ?tabulate<T>(size, func i {
-      switch (array[i]) {
-        case (?value) { value };
-        case null { Prim.trap("VarArray.fromNullable(): unreachable") }
+    ?tabulate<T>(
+      size,
+      func i {
+        switch (array[i]) {
+          case (?value) { value };
+          case null { Prim.trap("VarArray.fromNullable(): unreachable") }
+        }
       }
-    })
+    )
   };
 
   /// Tests if two arrays contain equal values (i.e. they represent the same

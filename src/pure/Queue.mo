@@ -557,7 +557,7 @@ module {
       text #= f(item)
     };
     List.forEach(queue.0, add);
-    List.forEach(queue.2, add);
+    List.forEach(List.reverse(queue.2), add);
     text # "]"
   };
 

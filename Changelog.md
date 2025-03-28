@@ -2,7 +2,8 @@
 
 ## Next
 
-* Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
+* Add `burn : <system>Nat -> Nat` to `Cycles` (#228)
+* Add `isEmpty : _ -> Bool` to `Blob` and `Text` (#263)
 * Fix bug in `Iter.step()`
 * Fix bug in `Array.enumerate()` and `VarArray.enumerate()`
 * Adjust `Random` representation to allow persistence in stable memory

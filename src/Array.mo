@@ -50,6 +50,51 @@ module {
   /// *Runtime and space assumes that `generator` runs in O(1) time and space.
   public func tabulate<T>(size : Nat, generator : Nat -> T) : [T] = Prim.Array_tabulate<T>(size, generator);
 
+  /// Creates an array of size `size` where each element is initialized to `null`.
+  /// This is useful when you need an array of optional values.
+  ///
+  /// ```motoko include=import
+  /// let array = Array.nullable<Nat>(3);
+  /// assert array == [null, null, null];
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  public func nullable<T>(size : Nat) : [?T] = Prim.Array_tabulate<?T>(size, func _ = null);
+
+  /// Attempts to convert an array of optional values into an optional array of non-optional values.
+  /// Returns `null` if any element in the input array is `null`, otherwise returns `?array` where `array` 
+  /// contains all the unwrapped values.
+  ///
+  /// ```motoko include=import
+  /// let array1 = [?1, ?2, ?3];
+  /// assert Array.fromNullable<Nat>(array1) == ?[1, 2, 3];
+  ///
+  /// let array2 = [?1, null, ?3];
+  /// assert Array.fromNullable<Nat>(array2) == null;
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  public func fromNullable<T>(array : [?T]) : ?[T] {
+    let size = array.size();
+    if (size == 0) { return ?[] };
+    for (element in array.vals()) {
+      switch element {
+        case null { return null };
+        case _ {}
+      }
+    };
+    ?Prim.Array_tabulate<T>(size, func i {
+      switch (array[i]) {
+        case (?value) { value };
+        case null { Prim.trap("Array.fromNullable(): unreachable") }
+      }
+    })
+  };
+
   /// Transforms a mutable array into an immutable array.
   ///
   /// ```motoko include=import

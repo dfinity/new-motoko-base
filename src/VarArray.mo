@@ -78,6 +78,51 @@ module {
     array
   };
 
+  /// Creates a mutable array of size `size` where each element is initialized to `null`.
+  /// This is useful when you need a mutable array of optional values.
+  ///
+  /// ```motoko include=import
+  /// let array = VarArray.nullable<Nat>(3);
+  /// assert VarArray.equal(array, [var null, null, null], func(a, b) = a == b);
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  public func nullable<T>(size : Nat) : [var ?T] = tabulate<?T>(size, func _ = null);
+
+  /// Attempts to convert a mutable array of optional values into an optional mutable array of non-optional values.
+  /// Returns `null` if any element in the input array is `null`, otherwise returns `?array` where `array` 
+  /// contains all the unwrapped values.
+  ///
+  /// ```motoko include=import
+  /// let array1 = [var ?1, ?2, ?3];
+  /// assert VarArray.fromNullable<Nat>(array1) == ?[var 1, 2, 3];
+  ///
+  /// let array2 = [var ?1, null, ?3];
+  /// assert VarArray.fromNullable<Nat>(array2) == null;
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
+  public func fromNullable<T>(array : [var ?T]) : ?[var T] {
+    let size = array.size();
+    if (size == 0) { return ?[var] };
+    for (element in array.vals()) {
+      switch element {
+        case null { return null };
+        case _ {}
+      }
+    };
+    ?tabulate<T>(size, func i {
+      switch (array[i]) {
+        case (?value) { value };
+        case null { Prim.trap("VarArray.fromNullable(): unreachable") }
+      }
+    })
+  };
+
   /// Tests if two arrays contain equal values (i.e. they represent the same
   /// list of elements). Uses `equal` to compare elements in the arrays.
   ///

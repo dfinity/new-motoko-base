@@ -139,6 +139,16 @@ module {
     return r
   };
 
+  /// Returns whether the given `Text` is empty (has a size of zero).
+  ///
+  /// ```motoko include=import
+  /// let text1 = "";
+  /// let text2 = "example";
+  /// assert Text.isEmpty(text1);
+  /// assert not Text.isEmpty(text2);
+  /// ```
+  public func isEmpty(t : Text) : Bool = t == "";
+
   /// Returns the number of characters in the given `Text`.
   ///
   /// Equivalent to calling `t.size()` where `t` is a `Text` value.
@@ -146,7 +156,7 @@ module {
   /// ```motoko include=import
   /// let size = Text.size("abc"); // 3
   /// ```
-  public func size(t : Text) : Nat { t.size() };
+  public func size(t : Text) : Nat = t.size();
 
   /// Returns `t1 # t2`, where `#` is the `Text` concatenation operator.
   ///

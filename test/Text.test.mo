@@ -61,6 +61,34 @@ func textIterT(c : [Text]) : T.TestableItem<Iter.Iter<Text>> = {
 
 run(
   suite(
+    "isEmpty",
+    [
+      test(
+        "isEmpty-0",
+        Text.isEmpty(""),
+        M.equals(T.bool true)
+      ),
+      test(
+        "isEmpty-1",
+        Text.isEmpty("a"),
+        M.equals(T.bool false)
+      ),
+      test(
+        "isEmpty-2",
+        Text.isEmpty("abc"),
+        M.equals(T.bool false)
+      ),
+      test(
+        "isEmpty-3",
+        Text.isEmpty("☃"),
+        M.equals(T.bool false)
+      )
+    ]
+  )
+);
+
+run(
+  suite(
     "size",
     [
       test(

@@ -31,6 +31,31 @@ let suite = Suite.suite(
       M.equals(T.array<Int>(T.intTestable, []))
     ),
     Suite.test(
+      "nullable",
+      Array.nullable<Int>(3),
+      M.equals(T.array<?Int>(T.optionalTestable(T.intTestable), [null, null, null]))
+    ),
+    Suite.test(
+      "nullable empty",
+      Array.nullable<Int>(0),
+      M.equals(T.array<?Int>(T.optionalTestable(T.intTestable), []))
+    ),
+    Suite.test(
+      "fromNullable success",
+      Array.fromNullable<Int>([?1, ?2, ?3]),
+      M.equals(T.optional<[Int]>(T.arrayTestable(T.intTestable), ?[1, 2, 3]))
+    ),
+    Suite.test(
+      "fromNullable with null",
+      Array.fromNullable<Int>([?1, null, ?3]),
+      M.equals(T.optional<[Int]>(T.arrayTestable(T.intTestable), null))
+    ),
+    Suite.test(
+      "fromNullable empty",
+      Array.fromNullable<Int>([]),
+      M.equals(T.optional<[Int]>(T.arrayTestable(T.intTestable), ?[]))
+    ),
+    Suite.test(
       "fromVarArray",
       Array.fromVarArray<Int>([var 1, 2, 3]),
       M.equals(T.array<Int>(T.intTestable, [1, 2, 3]))

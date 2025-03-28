@@ -36,7 +36,7 @@ assert VarArray.equal(array, [var null, null, null], func(a, b) = a == b);</code
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="fromNullable"><code><span class="keyword">public func </span><span class="fnname">fromNullable</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span>?<span class="type">T</span>]) : ?[<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Attempts to convert a mutable array of optional values into an optional mutable array of non-optional values.
-Returns <code>null</code> if any element in the input array is <code>null</code>, otherwise returns <code>?array</code> where <code>array</code> 
+Returns <code>null</code> if any element in the input array is <code>null</code>, otherwise returns <code>?array</code> where <code>array</code>
 contains all the unwrapped values.</p>
 <pre><code>motoko include=import
 let array1 = [var ?1, ?2, ?3];

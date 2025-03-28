@@ -127,9 +127,13 @@ import Runtime &quot;mo:base/Runtime&quot;;
 persistent actor {
   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   // initial queue with elements [1, 2]
-  let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap &quot;Empty queue impossible&quot;;
-  assert frontElement == 1;
-  assert Queue.size(remainingQueue) == 1;
+  switch (Queue.popFront(initial)) {
+    case null Runtime.trap &quot;Empty queue impossible&quot;;
+    case (?(frontElement, remainingQueue)) {
+      assert frontElement == 1;
+      assert Queue.size(remainingQueue) == 1
+    }
+  }
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code> worst-case, amortized to <code>O(1)</code>.</p>

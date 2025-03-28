@@ -61,7 +61,21 @@ persistent actor {
 
 <p>Runtime: <code>O(1)</code>.</p>
 <p>Space: <code>O(1)</code>.</p>
-</p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">item</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="peekFront"><code><span class="keyword">public func </span><span class="fnname">peekFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Inspect the optional element on the front end of a queue.
+</p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">item</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Check if a queue contains a specific element.
+Returns true if the queue contains an element equal to <code>item</code> according to the <code>equal</code> function.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let queue = Queue.fromIter([1, 2, 3].values());
+  assert Queue.contains(queue, Nat.equal, 2);
+  assert not Queue.contains(queue, Nat.equal, 4);
+}</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(1)</p>
+</p></div><div class="declaration"><h4 class="function" id="peekFront"><code><span class="keyword">public func </span><span class="fnname">peekFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Inspect the optional element on the front end of a queue.
 Returns <code>null</code> if <code>queue</code> is empty. Otherwise, the front element of <code>queue</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
@@ -177,7 +191,34 @@ persistent actor {
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
-</p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if the given predicate <code>f</code> is true for all queue
+</p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a queue to an iterator of its elements in front-to-back order.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
+import Iter &quot;mo:base/Iter&quot;;
+
+persistent actor {
+  let queue = Queue.fromIter([1, 2, 3].values());
+  assert Iter.toArray(Queue.values(queue)) == [1, 2, 3];
+}</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Compare two queues for equality using the provided equality function.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let queue1 = Queue.fromIter([1, 2].values());
+  let queue2 = Queue.fromIter([1, 2].values());
+  let queue3 = Queue.fromIter([1, 3].values());
+  assert Queue.equal(queue1, queue2, Nat.equal);
+  assert not Queue.equal(queue1, queue3, Nat.equal);
+}</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if the given predicate <code>f</code> is true for all queue
 elements.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
@@ -265,7 +306,20 @@ persistent actor {
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
-</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compareItem</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compare two queues using lexicographic ordering specified by argument function <code>compareItem</code>.</p>
+</p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Convert a queue to its text representation using the provided conversion function.
+This function is meant to be used for debugging and testing purposes.</p>
+<p>Example:</p>
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
+persistent actor {
+  let queue = Queue.fromIter([1, 2, 3].values());
+  assert Queue.toText(queue, Nat.toText) == &quot;PureQueue[1, 2, 3]&quot;;
+}</code></pre>
+
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
+</p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compareItem</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compare two queues using lexicographic ordering specified by argument function <code>compareItem</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 import Nat &quot;mo:base/Nat&quot;;

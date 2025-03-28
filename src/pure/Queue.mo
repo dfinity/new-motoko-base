@@ -236,9 +236,13 @@ module {
   /// persistent actor {
   ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
   ///   // initial queue with elements [1, 2]
-  ///   let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap "Empty queue impossible";
-  ///   assert frontElement == 1;
-  ///   assert Queue.size(remainingQueue) == 1;
+  ///   switch (Queue.popFront(initial)) {
+  ///     case null Runtime.trap "Empty queue impossible";
+  ///     case (?(frontElement, remainingQueue)) {
+  ///       assert frontElement == 1;
+  ///       assert Queue.size(remainingQueue) == 1
+  ///     }
+  ///   }
   /// }
   /// ```
   ///

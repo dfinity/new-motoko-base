@@ -59,10 +59,11 @@ persistent actor {
   assert Queue.size(queue) == 1;
 }</code></pre>
 
-<p>Runtime: <code>O(1)</code>.</p>
+<p>Runtime: <code>O(1)</code> in Release profile (compiled with <code>--release</code> flag), <code>O(n)</code> otherwise.</p>
 <p>Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">item</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Check if a queue contains a specific element.
 Returns true if the queue contains an element equal to <code>item</code> according to the <code>equal</code> function.</p>
+<p>Note: The order in which elements are visited is undefined, for performance reasons.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -192,6 +193,7 @@ persistent actor {
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a queue to an iterator of its elements in front-to-back order.</p>
+<p>Performance note: Creating the iterator needs <code>O(size)</code> runtime and space!</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 import Iter &quot;mo:base/Iter&quot;;
@@ -230,7 +232,7 @@ persistent actor {
 }</code></pre>
 
 <p>Runtime: O(size)</p>
-<p>Space: O(1)</p>
+<p>Space: O(size) as the current implementation uses <code>values</code> to iterate over the queue.</p>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if there exists a queue element for which
 the given predicate <code>f</code> is true.</p>
@@ -244,9 +246,10 @@ persistent actor {
 }</code></pre>
 
 <p>Runtime: O(size)</p>
-<p>Space: O(1)</p>
+<p>Space: O(size) as the current implementation uses <code>values</code> to iterate over the queue.</p>
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
-</p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Call the given function for its side effect, with each queue element in turn.</p>
+</p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Call the given function for its side effect, with each queue element in turn.
+The order of visiting elements is front-to-back.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
@@ -262,7 +265,8 @@ persistent actor {
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T1</span>, <span class="type">T2</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T1</span>&gt;, <span class="parameter">f</span> : <span class="type">T1</span> -&gt; <span class="type">T2</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T2</span>&gt;</code></h4><p><p>Call the given function <code>f</code> on each queue element and collect the results
 in a new queue.</p>
-<p>Example:</p>
+<p>Note: The order of visiting elements is undefined with the current implementation.
+Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 import Nat &quot;mo:base/Nat&quot;;
@@ -278,6 +282,7 @@ persistent actor {
 *Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new queue with only those elements of the original queue for which
 the given function (often called the <em>predicate</em>) returns true.</p>
+<p>Note: The order of visiting elements is undefined with the current implementation.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
@@ -291,6 +296,7 @@ persistent actor {
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="filterMap"><code><span class="keyword">public func </span><span class="fnname">filterMap</span>&lt;<span class="type">T</span>, <span class="type">U</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ?<span class="type">U</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">U</span>&gt;</code></h4><p><p>Call the given function on each queue element, and collect the non-null results
 in a new queue.</p>
+<p>Note: The order of visiting elements is undefined with the current implementation.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/pure/Queue&quot;;
 
@@ -330,7 +336,7 @@ persistent actor {
   assert Queue.compare(queue1, queue2, Nat.compare) == #less;
 }</code></pre>
 
-<p>Runtime: O(size(l1))</p>
-<p>Space: O(1)</p>
+<p>Runtime: O(size)</p>
+<p>Space: O(size)</p>
 <p>*Runtime and space assumes that argument <code>compare</code> runs in O(1) time and space.</p>
 </p></div></div></body></html>

@@ -10,8 +10,8 @@ module {
   public func init() : Bench.Bench {
     let bench = Bench.Bench();
 
-    bench.name("Stack safety");
-    bench.description("Check stack-safety of the following functions.");
+    bench.name("List Stack safety");
+    bench.description("Check stack-safety of the following `pure/List`-related functions.");
 
     bench.rows([
       "pure/List.split",

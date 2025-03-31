@@ -133,24 +133,15 @@ module {
     case _ { debug assert List.isEmpty(queue.0); null }
   };
 
-  // helper to split the list evenly
-  func takeDrop<T>(list : List<T>, n : Nat) : (List<T>, List<T>) = if (n == 0) (null, list) else switch list {
-    case null (null, null);
-    case (?(h, t)) {
-      let (f, b) = takeDrop(t, n - 1 : Nat);
-      (?(h, f), b)
-    }
-  };
-
   // helper to rebalance the queue after getting lopsided
   func check<T>(q : Queue<T>) : Queue<T> {
     switch q {
       case (null, n, r) {
-        let (a, b) = takeDrop(r, n / 2);
+        let (a, b) = List.split(r, n / 2);
         (List.reverse b, n, a)
       };
       case (f, n, null) {
-        let (a, b) = takeDrop(f, n / 2);
+        let (a, b) = List.split(f, n / 2);
         (a, n, List.reverse b)
       };
       case q q

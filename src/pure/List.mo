@@ -436,10 +436,12 @@ module {
   /// Space: O(1) heap, O(size(list)) stack
   ///
   /// *Runtime and space assumes that `combine` runs in O(1) time and space.
-  public func foldRight<T, A>(list : List<T>, base : A, combine : (T, A) -> A) : A = switch list {
-    case null base;
-    case (?(h, t)) combine(h, foldRight(t, base, combine))
-  };
+  public func foldRight<T, A>(list : List<T>, base : A, combine : (T, A) -> A) : A = (
+    func go(list : List<T>, base : A, combine : (T, A) -> A) : A = switch list {
+      case null base;
+      case (?(h, t)) go(t, combine(h, base), combine)
+    }
+  )(reverse list, base, combine);
 
   /// Return the first element for which the given predicate `f` is true,
   /// if such an element exists.
@@ -526,20 +528,15 @@ module {
   /// Space: O(size(l1) + size(l2))
   ///
   /// *Runtime and space assumes that `lessThanOrEqual` runs in O(1) time and space.
-  // TODO: replace by merge taking a compare : (T, T) -> Order.Order function?
-  public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T> = switch (list1, list2) {
-    case (?(h1, t1), ?(h2, t2)) {
-      if (compare(h1, h2) != #greater) {
-        ?(h1, merge(t1, list2, compare))
-      } else if (compare(h2, h1) != #greater) {
-        ?(h2, merge(list1, t2, compare))
-      } else {
-        ?(h1, ?(h2, merge(list1, list2, compare)))
+  public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T> = (
+    func go(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order, acc : List<T>) : List<T> = switch (list1, list2) {
+      case ((null, l) or (l, null)) reverse(revAppend(l, acc));
+      case (?(h1, t1), ?(h2, t2)) switch (compare(h1, h2)) {
+        case (#less or #equal) go(t1, list2, compare, ?(h1, acc));
+        case (#greater) go(list1, t2, compare, ?(h2, acc))
       }
-    };
-    case (null, _) list2;
-    case (_, null) list1
-  };
+    }
+  )(list1, list2, compare, null);
 
   /// Check if two lists are equal using the given equality function to compare elements.
   ///
@@ -692,10 +689,12 @@ module {
   /// Space: O(min(size(xs), size(ys)))
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func zipWith<T, U, V>(list1 : List<T>, list2 : List<U>, f : (T, U) -> V) : List<V> = switch (list1, list2) {
-    case (?(h1, t1), ?(h2, t2)) ?(f(h1, h2), zipWith(t1, t2, f));
-    case _ null
-  };
+  public func zipWith<T, U, V>(list1 : List<T>, list2 : List<U>, f : (T, U) -> V) : List<V> = (
+    func go(list1 : List<T>, list2 : List<U>, f : (T, U) -> V, acc : List<V>) : List<V> = switch (list1, list2) {
+      case ((null, _) or (_, null)) reverse acc;
+      case (?(h1, t1), ?(h2, t2)) go(t1, t2, f, ?(f(h1, h2), acc))
+    }
+  )(list1, list2, f, null);
 
   /// Split the given list at the given zero-based index.
   ///
@@ -738,10 +737,14 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> = switch (split(list, n)) {
-    case (null, _) { if (n == 0) trap "pure/List.chunks()"; null };
-    case (pre, null) ?(pre, null);
-    case (pre, post) ?(pre, chunks(post, n))
+  public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> {
+    if (n == 0) trap "pure/List.chunks()";
+    func go(list : List<T>, n : Nat, acc : List<List<T>>) : List<List<T>> = switch (split(list, n)) {
+      case (null, _) reverse acc;
+      case (pre, null) reverse(?(pre, acc));
+      case (pre, post) go(post, n, ?(pre, acc))
+    };
+    go(list, n, null)
   };
 
   /// Returns an iterator to the elements in the list.

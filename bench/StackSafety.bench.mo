@@ -17,13 +17,21 @@ module {
       "pure/List.split",
       "pure/List.all",
       "pure/List.any",
-      // "pure/List.map",
+      "pure/List.map",
+      "pure/List.filter",
+      "pure/List.filterMap",
+      "pure/List.partition",
+      "pure/List.join",
+      "pure/List.flatten",
+      "pure/List.take",
+      "pure/List.drop",
       // "pure/List.foldRight",
       // "pure/Queue",
     ]);
     bench.cols([""]);
 
     let list = List.repeat(1, 100_000);
+    let listOfLists = List.repeat(List.repeat(1, 1), 100_000);
 
     bench.runner(
       func(row, col) {
@@ -31,7 +39,14 @@ module {
           case "pure/List.split" ignore List.split(list, 99_999);
           case "pure/List.all" ignore List.all<Nat>(list, func x = 1 == x);
           case "pure/List.any" ignore not List.any<Nat>(list, func x = 1 != x);
-          // case "pure/List.map" ignore List.map<Nat, Nat>(list, func x = x + 1);
+          case "pure/List.map" ignore List.map<Nat, Nat>(list, func x = x + 1);
+          case "pure/List.filter" ignore List.filter<Nat>(list, func x = x == 1);
+          case "pure/List.filterMap" ignore List.filterMap<Nat, Nat>(list, func x = if (x == 1) ?(x + 1) else null);
+          case "pure/List.partition" ignore List.partition<Nat>(list, func x = x == 1);
+          case "pure/List.join" ignore List.join(List.values listOfLists);
+          case "pure/List.flatten" ignore List.flatten(listOfLists);
+          case "pure/List.take" ignore List.take<Nat>(list, 99_999);
+          case "pure/List.drop" ignore List.drop<Nat>(list, 99_999);
           // case "pure/List.foldRight" ignore List.foldRight<Nat, Nat>(list, 0, Nat.add);
           // case "pure/Queue" {
           //   var q = Queue.empty<Nat>();

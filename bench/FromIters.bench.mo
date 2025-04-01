@@ -2,9 +2,10 @@ import Bench "mo:bench";
 import Fuzz "mo:fuzz";
 
 import Array "../src/Array";
+import Iter "../src/Iter";
+import Nat "../src/Nat";
 import List "../src/pure/List";
 import Runtime "../src/Runtime";
-import Nat "../src/Nat";
 
 module {
   public func init() : Bench.Bench {
@@ -15,7 +16,8 @@ module {
 
     bench.rows([
       "Array.fromIter",
-      "List.fromIter"
+      "List.fromIter",
+      "List.fromIter . Iter.reverse"
     ]);
     bench.cols([
       "100",
@@ -41,8 +43,9 @@ module {
         };
         switch (row) {
           case "List.fromIter" ignore List.fromIter(array.vals());
+          case "List.fromIter . Iter.reverse" ignore List.fromIter(Iter.reverse(array.vals()));
           case "Array.fromIter" ignore Array.fromIter(array.vals());
-          case _ return ()
+          case _ Runtime.unreachable()
         }
       }
     );

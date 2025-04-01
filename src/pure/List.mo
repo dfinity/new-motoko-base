@@ -824,10 +824,9 @@ module {
   /// Space: O(size)
   public func fromIter<T>(iter : Iter.Iter<T>) : List<T> {
     var result : List<T> = null;
-    Iter.forEach<T>(
-      iter,
-      func x = result := ?(x, result)
-    );
+    for (x in iter) {
+      result := ?(x, result)
+    };
     reverse result
   };
 

@@ -3,6 +3,7 @@
 
 Benchmark files:
 • bench/FromIters.bench.mo
+• bench/PureListStackSafety.bench.mo
 
 			
 ## Benchmarking the fromIter functions
@@ -38,3 +39,74 @@ Garbage Collection
 			
 		
 Saving results to .bench/FromIters.bench.json
+
+			
+## List Stack safety
+			
+_Check stack-safety of the following `pure/List`-related functions._
+			
+
+Instructions
+
+|                     |             |
+| :------------------ | ----------: |
+| pure/List.split     |  27_403_702 |
+| pure/List.all       |   9_301_158 |
+| pure/List.any       |   9_401_587 |
+| pure/List.map       |  26_005_119 |
+| pure/List.filter    |  24_305_594 |
+| pure/List.filterMap |  30_606_218 |
+| pure/List.partition |  24_706_541 |
+| pure/List.join      |  38_606_857 |
+| pure/List.flatten   |  29_607_264 |
+| pure/List.take      |  27_407_284 |
+| pure/List.drop      |  11_004_663 |
+| pure/List.foldRight |  21_806_964 |
+| pure/List.merge     |  36_411_003 |
+| pure/List.chunks    |  61_513_743 |
+| pure/Queue          | 177_572_226 |
+			
+
+Heap
+
+|                     |       |
+| :------------------ | ----: |
+| pure/List.split     | 272 B |
+| pure/List.all       | 272 B |
+| pure/List.any       | 272 B |
+| pure/List.map       | 272 B |
+| pure/List.filter    | 272 B |
+| pure/List.filterMap | 272 B |
+| pure/List.partition | 272 B |
+| pure/List.join      | 272 B |
+| pure/List.flatten   | 272 B |
+| pure/List.take      | 272 B |
+| pure/List.drop      | 272 B |
+| pure/List.foldRight | 272 B |
+| pure/List.merge     | 272 B |
+| pure/List.chunks    | 272 B |
+| pure/Queue          | 272 B |
+			
+
+Garbage Collection
+
+|                     |           |
+| :------------------ | --------: |
+| pure/List.split     |  3.05 MiB |
+| pure/List.all       |     328 B |
+| pure/List.any       |     328 B |
+| pure/List.map       |  3.05 MiB |
+| pure/List.filter    |  3.05 MiB |
+| pure/List.filterMap |  3.05 MiB |
+| pure/List.partition |  3.05 MiB |
+| pure/List.join      |  3.05 MiB |
+| pure/List.flatten   |  3.05 MiB |
+| pure/List.take      |  3.05 MiB |
+| pure/List.drop      |     328 B |
+| pure/List.foldRight |  1.53 MiB |
+| pure/List.merge     |  4.58 MiB |
+| pure/List.chunks    |  7.63 MiB |
+| pure/Queue          | 18.31 MiB |
+			
+		
+Saving results to .bench/PureListStackSafety.bench.json

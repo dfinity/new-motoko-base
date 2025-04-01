@@ -15,8 +15,8 @@
 /// Construction: Create a new queue with the `empty<T>()` function.
 ///
 /// Note on the costs of push and pop functions:
-/// * Runtime: `O(1)` amortized costs, `O(n)` worst case cost per single call.
-/// * Space: `O(1)` amortized costs, `O(n)` worst case cost per single call.
+/// * Runtime: `O(1)` amortized costs, `O(size)` worst case cost per single call.
+/// * Space: `O(1)` amortized costs, `O(size)` worst case cost per single call.
 ///
 /// `n` denotes the number of elements stored in the queue.
 ///
@@ -99,7 +99,7 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: `O(1)` in Release profile (compiled with `--release` flag), `O(n)` otherwise.
+  /// Runtime: `O(1)` in Release profile (compiled with `--release` flag), `O(size)` otherwise.
   ///
   /// Space: `O(1)`.
   public func size<T>(queue : Queue<T>) : Nat {
@@ -212,9 +212,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> = check(?(element, queue.0), queue.1 + 1, queue.2);
@@ -235,9 +235,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> = check(queue.0, queue.1 + 1, ?(element, queue.2));
@@ -266,9 +266,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) = if (queue.1 == 0) null else switch queue {
@@ -305,9 +305,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) = if (queue.1 == 0) null else switch queue {

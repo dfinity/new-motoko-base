@@ -41,7 +41,7 @@ module {
           case "100_000" array3;
           case _ Runtime.unreachable()
         };
-        switch (row) {
+        switch row {
           case "List.fromIter" ignore List.fromIter(array.vals());
           case "List.fromIter . Iter.reverse" ignore List.fromIter(Iter.reverse(array.vals()));
           case "Array.fromIter" ignore Array.fromIter(array.vals());

@@ -825,7 +825,7 @@ module {
     };
     object {
       public func next() : ?T {
-        switch (acc) {
+        switch acc {
           case null null;
           case (?(h, t)) {
             acc := t;

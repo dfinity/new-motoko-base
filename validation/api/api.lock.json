@@ -1261,7 +1261,7 @@
       "public func fromVarArray<T>(array : [var T]) : List<T>",
       "public func get<T>(list : List<T>, n : Nat) : ?T",
       "public func isEmpty<T>(list : List<T>) : Bool",
-      "public func join<T>(list : Iter.Iter<List<T>>) : List<T>",
+      "public func join<T>(iter : Iter.Iter<List<T>>) : List<T>",
       "public func last<T>(list : List<T>) : ?T",
       "public type List<T>",
       "public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2>",

@@ -362,9 +362,18 @@ persistent actor {
 <code>n</code> denotes the number of elements stored on the stack.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Text.html">Text</a><div class="index-item-comment"><p>Utility functions for <code>Text</code> values.</p>
 <p>A <code>Text</code> value represents human-readable text as a sequence of characters of type <code>Char</code>.</p>
 <pre class="motoko"><code class="motoko">let text = &quot;Hello!&quot;;
-let size = text.size(); // 6
-let iter = text.chars(); // iterator ('H', 'e', 'l', 'l', 'o', '!')
-let concat = text # &quot; 👋&quot;; // &quot;Hello! 👋&quot;</code></pre>
+let size = text.size();
+assert size == 6;
+let iter = text.chars();
+assert iter.next() == ?'H';
+assert iter.next() == ?'e';
+assert iter.next() == ?'l';
+assert iter.next() == ?'l';
+assert iter.next() == ?'o';
+assert iter.next() == ?'!';
+assert iter.next() == null;
+let concat = text # &quot; 👋&quot;;
+assert concat == &quot;Hello! 👋&quot;;</code></pre>
 
 <p>The <code>&quot;mo:base/Text&quot;</code> module defines additional operations on <code>Text</code> values.</p>
 <p>Import the module from the base library:</p>

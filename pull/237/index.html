@@ -501,7 +501,7 @@ Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</p>
 that are dynamically size-balanced by splitting.</p>
 <p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
 <p>Note on the costs of push and pop functions:</p>
-<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
+<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(size)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(size)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
 <pre><code>motoko name=import

@@ -475,7 +475,7 @@ suite(
       "ok",
       func() {
         Result.forOk(makeNatural(5), func(x : Nat) { counter += x });
-        expect.bool(counter == 5).isTrue()
+        expect.nat(counter).equal(5)
       }
     );
 
@@ -483,7 +483,7 @@ suite(
       "err",
       func() {
         Result.forOk(makeNatural(-10), func(x : Nat) { counter += x });
-        expect.bool(counter == 5).isTrue()
+        expect.nat(counter).equal(5)
       }
     )
   }
@@ -498,7 +498,7 @@ suite(
       "ok",
       func() {
         Result.forErr(#err 5, func(x : Nat) { counter += x });
-        expect.bool(counter == 5).isTrue()
+        expect.nat(counter).equal(5)
       }
     );
 
@@ -506,7 +506,7 @@ suite(
       "err",
       func() {
         Result.forErr(#ok 5, func(x : Nat) { counter += x });
-        expect.bool(counter == 5).isTrue()
+        expect.nat(counter).equal(5)
       }
     )
   }

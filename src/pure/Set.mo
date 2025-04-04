@@ -48,7 +48,8 @@ module {
   ///
   /// persistent actor {
   ///   transient let iterator = Iter.fromArray([3, 1, 2, 1]);
-  ///   let set = Set.fromIter<Nat>(iterator, Nat.compare); // => {1, 2, 3}
+  ///   let set = Set.fromIter<Nat>(iterator, Nat.compare);
+  ///   let text = Set.toText(set, Nat.toText);  // => "{1, 2, 3}"
   /// }
   /// ```
   ///
@@ -73,14 +74,15 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Set "mo:base/Set";
+  /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
+  ///   let set = Set.empty<Nat>() |>
+  ///             Set.add(_, Nat.compare, 2) |>
+  ///             Set.add(_, Nat.compare, 1) |>
+  ///             Set.add(_, Nat.compare, 2);
+  ///   let text = Set.toText(set, Nat.toText) // => "{1, 2}"
   /// }
   /// ```
   ///
@@ -100,14 +102,17 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Set "mo:base/Set";
+  /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let (set1, true) = Set.insert(Set.empty<Nat>, Nat.compare, 1);
-  ///   let (set2, true) = Set.insert(set2, Nat.compare, 2);
-  ///   let (set3, true) = Set.insert(set3, Nat.compare, 3);
-  ///   let (set4, false) = Set.insert(set3, Nat.compare, 1);
+  ///   let r1 = Set.insert(Set.empty<Nat>(), Nat.compare, 2);
+  ///   assert r1.1;
+  ///   let r2 = Set.insert(r1.0, Nat.compare, 1);
+  ///   assert r2.1;
+  ///   let r3 = Set.insert(r2.0, Nat.compare, 2);
+  ///   assert not r3.1;
+  ///   Set.toText(r3.0, Nat.toText); // => "{1, 2}"
   /// }
   /// ```
   ///
@@ -127,7 +132,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>() |>
@@ -136,9 +140,8 @@ module {
   ///             Set.add(_, Nat.compare, 3);
   ///
   ///   let set1 = Set.remove(set, Nat.compare, 2);
-  ///   Debug.print(Set.toText(set1, Nat.toText));   // prints `{1, 3}`
-  ///   let set2 = Set.remove(set, Nat.compare, 4);
-  ///   Debug.print(Set.toText(set2, Nat.toText));   // prints `{1, 2, 3}`
+  ///   let set2 = Set.remove(set1, Nat.compare, 4);
+  ///   let text = Set.toText(set2, Nat.toText); // => "{1, 3}"
   /// }
   /// ```
   ///

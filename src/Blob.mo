@@ -32,6 +32,7 @@
 
 import Types "Types";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
@@ -122,7 +123,7 @@ module {
   /// let blob2 = "\00\FF\00" : Blob;
   /// Blob.compare(blob1, blob2) // => #less
   /// ```
-  public func compare(b1 : Blob, b2 : Blob) : { #less; #equal; #greater } {
+  public func compare(b1 : Blob, b2 : Blob) : Order.Order {
     let c = Prim.blobCompare(b1, b2);
     if (c < 0) #less else if (c == 0) #equal else #greater
   };

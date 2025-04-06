@@ -13,6 +13,7 @@ import Prim "mo:⛔";
 import Char "Char";
 import Iter "Iter";
 import Runtime "Runtime";
+import Order "Order";
 
 module {
 
@@ -214,7 +215,7 @@ module {
   /// import Array "mo:base/Array";
   /// Array.sort([2, 3, 1], Nat.compare) // => [1, 2, 3]
   /// ```
-  public func compare(x : Nat, y : Nat) : { #less; #equal; #greater } {
+  public func compare(x : Nat, y : Nat) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 

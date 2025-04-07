@@ -56,7 +56,7 @@ let bytes = Blob.toVarArray(blob); // =&gt; [var 0, 255, 0]</code></pre></p></di
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob = &quot;\00\FF\00&quot; : Blob;
-Blob.hash(blob) // =&gt; 1_818_567_776</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">b1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">b2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : {#less; #equal; #greater}</code></h4><p><p>General purpose comparison function for <code>Blob</code> by comparing the value of
+Blob.hash(blob) // =&gt; 1_818_567_776</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">b1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">b2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>General purpose comparison function for <code>Blob</code> by comparing the value of
 the bytes. Returns the <code>Order</code> (either <code>#less</code>, <code>#equal</code>, or <code>#greater</code>)
 by comparing <code>blob1</code> with <code>blob2</code>.</p>
 <p>Example:</p>

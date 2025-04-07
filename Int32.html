@@ -125,7 +125,7 @@ Int32.greaterOrEqual(-2, -2); // =&gt; true</code></pre>
 to the existing <code>&gt;=</code> operator) is so that you can use it as a function
 value to pass to a higher order function. It is not possible to use <code>&gt;=</code>
 as a function value at the moment.</p>
-</p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">x</span> : <a href="#type.Int32"><span class="type">Int32</span></a>, <span class="parameter">y</span> : <a href="#type.Int32"><span class="type">Int32</span></a>) : {#less; #equal; #greater}</code></h4><p><p>General-purpose comparison function for <code>Int32</code>. Returns the <code>Order</code> (
+</p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">x</span> : <a href="#type.Int32"><span class="type">Int32</span></a>, <span class="parameter">y</span> : <a href="#type.Int32"><span class="type">Int32</span></a>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>General-purpose comparison function for <code>Int32</code>. Returns the <code>Order</code> (
 either <code>#less</code>, <code>#equal</code>, or <code>#greater</code>) of comparing <code>x</code> with <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

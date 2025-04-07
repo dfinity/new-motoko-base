@@ -113,7 +113,7 @@ Int16.greater(-2, 1); // =&gt; false</code></pre></p></div><div class="declarati
 This is equivalent to <code>x &gt;= y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Int16.greaterOrEqual(-2, -2); // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">x</span> : <a href="#type.Int16"><span class="type">Int16</span></a>, <span class="parameter">y</span> : <a href="#type.Int16"><span class="type">Int16</span></a>) : {#less; #equal; #greater}</code></h4><p><p>General-purpose comparison function for <code>Int16</code>. Returns the <code>Order</code> (
+Int16.greaterOrEqual(-2, -2); // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">x</span> : <a href="#type.Int16"><span class="type">Int16</span></a>, <span class="parameter">y</span> : <a href="#type.Int16"><span class="type">Int16</span></a>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>General-purpose comparison function for <code>Int16</code>. Returns the <code>Order</code> (
 either <code>#less</code>, <code>#equal</code>, or <code>#greater</code>) of comparing <code>x</code> with <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

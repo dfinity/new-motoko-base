@@ -2,19 +2,19 @@
 /// A set is a collection of elements without duplicates.
 /// The set data structure type is stable and can be used for orthogonal persistence.
 ///
-  /// Example:
-  /// ```motoko
-  /// import Set "mo:base/Set";
-  /// import Nat "mo:base/Nat";
-  ///
-  /// persistent actor {
-  ///   let set = Set.fromIter([3, 1, 2, 3].vals(), Nat.compare);
-  ///   assert Set.size(set) == 3;
-  ///   assert not Set.contains(set, Nat.compare, 4);
-  ///   let diff = Set.difference(set, set, Nat.compare);
-  ///   assert Set.isEmpty(diff);
-  /// }
-  /// ```
+/// Example:
+/// ```motoko
+/// import Set "mo:base/Set";
+/// import Nat "mo:base/Nat";
+///
+/// persistent actor {
+///   let set = Set.fromIter([3, 1, 2, 3].vals(), Nat.compare);
+///   assert Set.size(set) == 3;
+///   assert not Set.contains(set, Nat.compare, 4);
+///   let diff = Set.difference(set, set, Nat.compare);
+///   assert Set.isEmpty(diff);
+/// }
+/// ```
 ///
 /// These sets are implemented as B-trees with order 32, a balanced search tree of ordered elements.
 ///

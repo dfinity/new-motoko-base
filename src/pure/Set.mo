@@ -1,6 +1,22 @@
-/// Stable ordered set implemented as a red-black tree.
+/// Pure (immutable) sets based on order/comparison of elements.
+/// A set is a collection of elements without duplicates.
+/// The set data structure type is stable and can be used for orthogonal persistence.
 ///
-/// A red-black tree is a balanced binary search tree ordered by the elements.
+/// Example:
+/// ```motoko
+/// import Set "mo:base/Set";
+/// import Nat "mo:base/Nat";
+///
+/// persistent actor {
+///   let set = Set.fromIter([3, 1, 2, 3].values(), Nat.compare);
+///   let size = Set.size(set) // => 3
+///   let bool1 = Set.contains(set, Nat.compare, 4) // => false
+///   let diff = Set.difference(set, set, Nat.compare);
+///   let bool2 = Set.isEmpty(diff) // => true
+/// }
+/// ```
+///
+/// These sets are implemented as red-black trees, a balanced binary search tree of ordered elements.
 ///
 /// The tree data structure internally colors each of its nodes either red or black,
 /// and uses this information to balance the tree during modifying operations.

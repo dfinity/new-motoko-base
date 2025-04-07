@@ -798,7 +798,7 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  ///   let iter = Iter.fromArray([3, 4, 5]);
+  ///   transient let iter = Iter.fromArray([3, 4, 5]);
   ///   Set.addAll(set, Nat.compare, iter);
   ///   assert Iter.toArray(Set.values(set)) == [1, 2, 3, 4, 5];
   /// }
@@ -827,7 +827,7 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
-  ///   let iter = Iter.fromArray([0, 2]);
+  ///   transient let iter = Iter.fromArray([0, 2]);
   ///   assert Set.deleteAll(set, Nat.compare, iter);
   ///   assert Iter.toArray(Set.values(set)) == [1];
   /// }
@@ -858,7 +858,7 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
-  ///   let iter = Iter.fromArray([0, 2, 3]);
+  ///   transient let iter = Iter.fromArray([0, 2, 3]);
   ///   assert Set.insertAll(set, Nat.compare, iter);
   ///   assert Iter.toArray(Set.values(set)) == [0, 1, 2, 3];
   /// }
@@ -988,11 +988,11 @@ module {
   ///   Set.add(numbers, Nat.compare, 2);
   ///   Set.add(numbers, Nat.compare, 3);
   ///
-  ///   let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, func (number) {
+  ///   transient let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, func (number) {
   ///     Nat.toText(number)
   ///   });
-  ///   let numbers = Iter.toArray(Set.values(textNumbers));
-  ///   assert numbers == ["1", "2", "3"];
+  ///   let array = Iter.toArray(Set.values(textNumbers));
+  ///   assert array == ["1", "2", "3"];
   /// }
   /// ```
   ///
@@ -1030,15 +1030,15 @@ module {
   ///   Set.add(numbers, Nat.compare, 2);
   ///   Set.add(numbers, Nat.compare, 3);
   ///
-  ///   let evenTextNumbers = Set.filterMap<Nat, Text>(numbers, Text.compare, func (number) {
+  ///   transient let evenTextNumbers = Set.filterMap<Nat, Text>(numbers, Text.compare, func (number) {
   ///     if (number % 2 == 0) {
   ///        ?Nat.toText(number)
   ///     } else {
   ///        null // discard odd numbers
   ///     }
   ///   });
-  ///   let numbers = Iter.toArray(Set.values(evenTextNumbers));
-  ///   assert numbers == ["0", "2"];
+  ///   let array = Iter.toArray(Set.values(evenTextNumbers));
+  ///   assert array == ["0", "2"];
   /// }
   /// ```
   ///

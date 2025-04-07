@@ -756,6 +756,19 @@ module {
     }
   };
 
+  public func entriesFrom<K, V>(
+    map : Map<K, V>,
+    compare : (K, K) -> Order.Order,
+    key : K
+  ) : Types.Iter<(K, V)> {
+    switch (map.root) {
+      case (#leaf(leafNode)) { return leafEntriesFrom(leafNode, compare, key) };
+      case (#internal(internalNode)) {
+        internalEntriesFrom(internalNode, compare, key)
+      }
+    }
+  };
+
   /// Returns an iterator over the key-value pairs in the map,
   /// traversing the entries in the descending order of the keys.
   ///
@@ -1369,6 +1382,24 @@ module {
     }
   };
 
+  func leafEntriesFrom<K, V>({ data } : Leaf<K, V>, compare : (K, K) -> Order.Order, key : K) : Types.Iter<(K, V)> {
+    var i = switch (BinarySearch.binarySearchNode<K, V>(data.kvs, compare, key, data.count)) {
+      case (#keyFound(i)) i;
+      case (#notFound(i)) i
+    };
+    object {
+      public func next() : ?(K, V) {
+        if (i >= data.count) {
+          return null
+        } else {
+          let res = data.kvs[i];
+          i += 1;
+          return res
+        }
+      }
+    }
+  };
+
   func reverseLeafEntries<K, V>({ data } : Leaf<K, V>) : Types.Iter<(K, V)> {
     var i : Nat = data.count;
     object {
@@ -1388,11 +1419,19 @@ module {
   type NodeCursor<K, V> = { node : Node<K, V>; kvIndex : Nat };
 
   func internalEntries<K, V>(internal : Internal<K, V>) : Types.Iter<(K, V)> {
-    object {
-      // The nodeCursorStack keeps track of the current node and the current key-value index in the node
-      // We use a stack here to push to/pop off the next node cursor to visit
-      let nodeCursorStack = initializeForwardNodeCursorStack(internal);
+    // The nodeCursorStack keeps track of the current node and the current key-value index in the node
+    // We use a stack here to push to/pop off the next node cursor to visit
+    let nodeCursorStack = initializeForwardNodeCursorStack(internal);
+    internalEntriesFromStack(nodeCursorStack)
+  };
 
+  func internalEntriesFrom<K, V>(internal : Internal<K, V>, compare : (K, K) -> Order.Order, key : K) : Types.Iter<(K, V)> {
+    let nodeCursorStack = initializeForwardNodeCursorStackFrom(internal, compare, key);
+    internalEntriesFromStack(nodeCursorStack)
+  };
+
+  func internalEntriesFromStack<K, V>(nodeCursorStack : Stack.Stack<NodeCursor<K, V>>) : Types.Iter<(K, V)> {
+    object {
       public func next() : ?(K, V) {
         // pop the next node cursor off the stack
         var nodeCursor = Stack.pop(nodeCursorStack);
@@ -1554,6 +1593,20 @@ module {
     nodeCursorStack
   };
 
+  func initializeForwardNodeCursorStackFrom<K, V>(internal : Internal<K, V>, compare : (K, K) -> Order.Order, key : K) : Stack.Stack<NodeCursor<K, V>> {
+    let nodeCursorStack = Stack.empty<NodeCursor<K, V>>();
+    let nodeCursor : NodeCursor<K, V> = {
+      node = #internal(internal);
+      kvIndex = 0
+    };
+
+    // push the initial cursor to the stack
+    Stack.push(nodeCursorStack, nodeCursor);
+    // then traverse left to the key
+    traverseMinSubtreeIterFrom(nodeCursorStack, nodeCursor, compare, key);
+    nodeCursorStack
+  };
+
   func initializeReverseNodeCursorStack<K, V>(internal : Internal<K, V>) : Stack.Stack<NodeCursor<K, V>> {
     let nodeCursorStack = Stack.empty<NodeCursor<K, V>>();
     let nodeCursor : NodeCursor<K, V> = {
@@ -1597,6 +1650,80 @@ module {
             };
             case null {
               Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.traverseMinSubtreeIter(), null child node error")
+            }
+          }
+        }
+      }
+    }
+  };
+
+  func traverseMinSubtreeIterFrom<K, V>(nodeCursorStack : Stack.Stack<NodeCursor<K, V>>, nodeCursor : NodeCursor<K, V>, compare : (K, K) -> Order.Order, key : K) {
+    var currentNode = nodeCursor.node;
+    var childIndex = nodeCursor.kvIndex;
+
+    label l loop {
+      switch (currentNode) {
+        // If leaf node, locate the first key >= target key
+        case (#leaf(leafNode)) {
+          switch (BinarySearch.binarySearchNode<K, V>(leafNode.data.kvs, compare, key, leafNode.data.count)) {
+            case (#keyFound(i)) {
+              // Found exact match, update cursor index
+              Stack.push(
+                nodeCursorStack,
+                {
+                  node = currentNode;
+                  kvIndex = i
+                }
+              );
+              return
+            };
+            case (#notFound(i)) {
+              // Found insert position, update cursor index
+              if (i < leafNode.data.count) {
+                Stack.push(
+                  nodeCursorStack,
+                  {
+                    node = currentNode;
+                    kvIndex = i
+                  }
+                )
+              };
+              return
+            }
+          }
+        };
+        // If internal node, search for child containing target key
+        case (#internal(internalNode)) {
+          switch (NodeUtil.getKeyIndex<K, V>(internalNode.data, compare, key)) {
+            case (#keyFound(i)) {
+              // Found exact match in internal node
+              Stack.push(
+                nodeCursorStack,
+                {
+                  node = currentNode;
+                  kvIndex = i
+                }
+              );
+              return
+            };
+            case (#notFound(i)) {
+              // Need to traverse down appropriate child
+              switch (internalNode.children[i]) {
+                case (?childNode) {
+                  Stack.push(
+                    nodeCursorStack,
+                    {
+                      node = currentNode;
+                      kvIndex = childIndex
+                    }
+                  );
+                  childIndex := 0;
+                  currentNode := childNode
+                };
+                case null {
+                  Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.traverseMinSubtreeIterFrom(), null child node error")
+                }
+              }
             }
           }
         }

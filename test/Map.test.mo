@@ -2,6 +2,7 @@
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
+import Test "mo:test";
 import Map "../src/Map";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
@@ -9,6 +10,7 @@ import Runtime "../src/Runtime";
 import Text "../src/Text";
 import Array "../src/Array";
 import PureMap "../src/pure/Map";
+import { Tuple2 } "../src/Tuples";
 
 let { run; test; suite } = Suite;
 
@@ -1543,4 +1545,24 @@ run(
       )
     ]
   )
+);
+
+Test.suite(
+  "entriesFrom",
+  func() {
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        for (i in Nat.range(0, 9)) {
+          Map.add(map, Nat.compare, i, Nat.toText(i));
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Map.entriesFrom(map, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat, Text)>(Map.entries(map), func(k, v) = k < j));
+            Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+          }
+        }
+      }
+    )
+  }
 )

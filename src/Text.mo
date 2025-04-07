@@ -832,5 +832,7 @@ module {
   /// ```motoko include=import
   /// let text = Text.toUpper("Good Day"); // ?"GOOD DAY"
   /// ```
-  public let toUpper : Text -> Text = Prim.textUppercase
+  public let toUpper : Text -> Text = Prim.textUppercase;
+
+  public func toText(t : Text) : Text = "\"" # t # "\""
 }

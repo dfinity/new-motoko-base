@@ -7,6 +7,7 @@
 * Fix bug in `Iter.step()`
 * Fix bug in `Array.enumerate()` / `VarArray.enumerate()`
 * Adjust `Random` representation to allow persistence in stable memory
+* Add `Tuples` module
 
 ## 0.3.0
 

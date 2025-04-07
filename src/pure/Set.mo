@@ -44,11 +44,9 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   transient let iterator = Iter.fromArray([3, 1, 2, 1]);
-  ///   let set = Set.fromIter<Nat>(iterator, Nat.compare);
+  ///   let set = Set.fromIter([3, 1, 2, 1].values(), Nat.compare);
   ///   let text = Set.toText(set, Nat.toText);  // => "{1, 2, 3}"
   /// }
   /// ```
@@ -222,10 +220,9 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let set1 = Set.fromIter<Nat>(Iter.fromArray([0, 2, 1]), Nat.compare);
+  ///   let set1 = Set.fromIter<Nat>([0, 2, 1].values(), Nat.compare);
   ///   let set2 = Set.empty<Nat>();
   ///   let r1 = Set.max(set1); // => ?2
   ///   let r2 = Set.max(set2); // => null
@@ -268,13 +265,12 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  ///   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  ///   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   ///   let union = Set.union(set1, set2, Nat.compare);
-  ///   let r = Iter.toArray(Set.values(union)) // => [1, 2, 3, 4, 5]
+  ///   let text = Set.toText(union, Nat.toText) // => "{1, 2, 3, 4, 5}"
   /// }
   /// ```
   ///
@@ -303,8 +299,8 @@ module {
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
-  ///   let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  ///   let set1 = Set.fromIter([0, 1, 2].values(), Nat.compare);
+  ///   let set2 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///   let intersection = Set.intersection(set1, set2, Nat.compare);
   ///   Debug.print(debug_show(Iter.toArray(Set.values(intersection))));
   ///   // prints: `[1, 2]`.
@@ -348,15 +344,12 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  ///   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  ///   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   ///   let difference = Set.difference(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(difference))));
-  ///   // prints: `[1, 2]`.
+  ///   let text = Set.toText(difference, Nat.toText) // => "{1, 2}"
   /// }
   /// ```
   ///
@@ -400,24 +393,13 @@ module {
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
-  /// import Debug "mo:base/Debug";
+  /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
-  ///   let set0 = Set.empty<Nat>();
-  ///   let set1 = Set.add(set0, Nat.compare, 1);
-  ///   let set2 = Set.add(set1, Nat.compare, 2);
-  ///   let numbers = Set.add(set2, Nat.compare, 3);
+  ///   let numbers = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///
-  ///   let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, func (number) {
-  ///     Nat.toText(number)
-  ///   });
-  ///   for (textNumbers in Set.values(textNumbers)) {
-  ///      Debug.print(debug_show(textNumbers));
-  ///   }
-  ///   // prints:
-  ///   // `"1"`
-  ///   // `"2"`
-  ///   // `"3"`
+  ///   let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, Nat.toText);
+  ///   let text = Set.toText<Text>(textNumbers, func t { "'" # t # "'" }); // => "{'1', '2', '3'}"
   /// }
   /// ```
   ///
@@ -561,12 +543,11 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set1 = Set.fromIter(Iter.fromArray([1, 2]), Nat.compare);
-  ///   let set2 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
+  ///   let set1 = Set.fromIter([1, 2].values(), Nat.compare);
+  ///   let set2 = Set.fromIter([0, 1, 2].values(), Nat.compare);
   ///   Debug.print(debug_show(Set.isSubset(set1, set2, Nat.compare))); // prints `true`.
   /// }
   /// ```

@@ -8,10 +8,10 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([3, 1, 2, 3].values(), Nat.compare);
-  let size = Set.size(set) // =&gt; 3
-  let bool1 = Set.contains(set, Nat.compare, 4) // =&gt; false
+  assert Set.size(set) == 3;
+  assert not Set.contains(set, Nat.compare, 4);
   let diff = Set.difference(set, set, Nat.compare);
-  let bool2 = Set.isEmpty(diff) // =&gt; true
+  assert Set.isEmpty(diff);
 }</code></pre>
 
 <p>These sets are implemented as red-black trees, a balanced binary search tree of ordered elements.</p>
@@ -36,7 +36,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([3, 1, 2, 1].values(), Nat.compare);
-  let text = Set.toText(set, Nat.toText);  // =&gt; &quot;{1, 2, 3}&quot;
+  assert Set.toText(set, Nat.toText) == &quot;{1, 2, 3}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -56,7 +56,7 @@ persistent actor {
             Set.add(_, Nat.compare, 2) |&gt;
             Set.add(_, Nat.compare, 1) |&gt;
             Set.add(_, Nat.compare, 2);
-  let text = Set.toText(set, Nat.toText) // =&gt; &quot;{1, 2}&quot;
+  assert Set.toText(set, Nat.toText) == &quot;{1, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -126,12 +126,12 @@ persistent actor {
             Set.add(_, Nat.compare, 2) |&gt;
             Set.add(_, Nat.compare, 3);
 
-  let r1 = Set.delete(set, Nat.compare, 2);
-  assert r1.1;
-  let t1 = Set.toText(r1.0, Nat.toText);   // =&gt; &quot;{1, 3}&quot;
-  let r2 = Set.delete(r1.0, Nat.compare, 4);
-  assert not r2.1;
-  let t2 = Set.toText(r2.0, Nat.toText);   // =&gt; &quot;{1, 3}&quot;
+  transient let (set1, changed1) = Set.delete(set, Nat.compare, 2);
+  assert changed1;
+  assert Set.toText(set1, Nat.toText) == &quot;{1, 3}&quot;;
+  transient let (set2, changed2) = Set.delete(set1, Nat.compare, 4);
+  assert not changed2;
+  assert Set.toText(set2, Nat.toText) == &quot;{1, 3}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -155,8 +155,8 @@ persistent actor {
   let set2 = Set.add(set1, Nat.compare, 2);
   let set3 = Set.add(set2, Nat.compare, 3);
 
-  let b1 = Bool.toText(Set.contains(set3, Nat.compare, 1)); // =&gt; true
-  let b2 = Bool.toText(Set.contains(set3, Nat.compare, 4)); // =&gt; false
+  assert Set.contains(set3, Nat.compare, 1);
+  assert not Set.contains(set3, Nat.compare, 4);
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -171,8 +171,8 @@ import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
   let set1 = Set.fromIter&lt;Nat&gt;([0, 2, 1].values(), Nat.compare);
   let set2 = Set.empty&lt;Nat&gt;();
-  let r1 = Set.max(set1); // =&gt; ?2
-  let r2 = Set.max(set2); // =&gt; null
+  assert Set.max(set1) == ?2;
+  assert Set.max(set2) == null;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -189,7 +189,7 @@ persistent actor {
   let set1 = Set.add(set0, Nat.compare, 1);
   let set2 = Set.add(set1, Nat.compare, 2);
   let set3 = Set.add(set2, Nat.compare, 3);
-  let r1 = Set.min(set3); // =&gt; ?1
+  assert Set.min(set3) == ?1;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -207,7 +207,7 @@ persistent actor {
   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   let union = Set.union(set1, set2, Nat.compare);
-  let text = Set.toText(union, Nat.toText) // =&gt; &quot;{1, 2, 3, 4, 5}&quot;
+  assert Set.toText(union, Nat.toText) == &quot;{1, 2, 3, 4, 5}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -226,7 +226,7 @@ persistent actor {
   let set1 = Set.fromIter([0, 1, 2].values(), Nat.compare);
   let set2 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   let intersection = Set.intersection(set1, set2, Nat.compare);
-  let text = Set.toText(intersection, Nat.toText) // =&gt; &quot;{1, 2}&quot;
+  assert Set.toText(intersection, Nat.toText) == &quot;{1, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -244,7 +244,7 @@ persistent actor {
   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   let difference = Set.difference(set1, set2, Nat.compare);
-  let text = Set.toText(difference, Nat.toText) // =&gt; &quot;{1, 2}&quot;
+  assert Set.toText(difference, Nat.toText) == &quot;{1, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -264,7 +264,7 @@ persistent actor {
   let numbers = Set.fromIter([1, 2, 3].values(), Nat.compare);
 
   let textNumbers = Set.map&lt;Nat, Text&gt;(numbers, Text.compare, Nat.toText);
-  let text = Set.toText&lt;Text&gt;(textNumbers, func t { &quot;'&quot; # t # &quot;'&quot; }); // =&gt; &quot;{'1', '2', '3'}&quot;
+  assert Set.toText&lt;Text&gt;(textNumbers, func t { &quot;'&quot; # t # &quot;'&quot; }) == &quot;{'1', '2', '3'}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -285,7 +285,7 @@ persistent actor {
   Set.forEach&lt;Nat&gt;(numbers, func (element) {
     tmp #= &quot; &quot; # Nat.toText(element)
   });
-  let text = tmp; // =&gt; &quot; 0 1 2 3&quot;
+  assert tmp == &quot; 0 1 2 3&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -304,7 +304,7 @@ persistent actor {
   let evenNumbers = Set.filter&lt;Nat&gt;(numbers, Nat.compare, func (number) {
     number % 2 == 0
   });
-  let text = Set.toText(evenNumbers, Nat.toText) // =&gt; &quot;{0, 2}&quot;
+  assert Set.toText(evenNumbers, Nat.toText) == &quot;{0, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -330,7 +330,7 @@ persistent actor {
        null // discard odd numbers
     }
   });
-  let text = Set.toText&lt;Text&gt;(evenTextNumbers, func t { &quot;'&quot; # t # &quot;'&quot;}) // =&gt; &quot;{'0', '2'}&quot;
+  assert Set.toText&lt;Text&gt;(evenTextNumbers, func t { &quot;'&quot; # t # &quot;'&quot;}) == &quot;{'0', '2'}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -352,8 +352,8 @@ persistent actor {
   let set1 = Set.fromIter([1, 2].values(), Nat.compare);
   let set2 = Set.fromIter([2, 1, 0].values(), Nat.compare);
   let set3 = Set.fromIter([3, 4].values(), Nat.compare);
-  let bool1 = Set.isSubset(set1, set2, Nat.compare); // =&gt; true
-  let bool2 = Set.isSubset(set1, set3, Nat.compare); // =&gt; false
+  assert Set.isSubset(set1, set2, Nat.compare);
+  assert not Set.isSubset(set1, set3, Nat.compare);
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -370,8 +370,8 @@ persistent actor {
   let set1 = Set.fromIter([1, 2].values(), Nat.compare);
   let set2 = Set.fromIter([2, 1].values(), Nat.compare);
   let set3 = Set.fromIter([2, 1, 0].values(), Nat.compare);
-  let bool1 = Set.equal(set1, set2, Nat.compare); // =&gt; true
-  let bool2 = Set.equal(set1, set3, Nat.compare); // =&gt; false
+  assert Set.equal(set1, set2, Nat.compare);
+  assert not Set.equal(set1, set3, Nat.compare);
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -400,9 +400,9 @@ persistent actor {
   let set1 = Set.fromIter([0, 1].values(), Nat.compare);
   let set2 = Set.fromIter([0, 2].values(), Nat.compare);
 
-  let orderLess = Set.compare(set1, set2, Nat.compare); // =&gt; #less
-  let orderEqual = Set.compare(set1, set1, Nat.compare); // =&gt; #equal
-  let orderGreater = Set.compare(set2, set1, Nat.compare); // =&gt; #greater
+  assert Set.compare(set1, set2, Nat.compare) == #less;
+  assert Set.compare(set1, set1, Nat.compare) == #equal;
+  assert Set.compare(set2, set1, Nat.compare) == #greater;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -423,7 +423,7 @@ persistent actor {
   for (number in Set.values(set)) {
      tmp #= &quot; &quot; # Nat.toText(number);
   };
-  var text = tmp // =&gt; &quot; 0 1 2 3&quot;
+  assert tmp == &quot; 0 1 2 3&quot;;
 }</code></pre><p>Cost of iteration over all elements:
 Runtime: <code>O(n)</code>.
 Space: <code>O(1)</code> retained memory plus garbage, see below.
@@ -442,7 +442,7 @@ persistent actor {
   for (number in Set.reverseValues(set)) {
      tmp #= &quot; &quot; # Nat.toText(number);
   };
-  let text = tmp // =&gt; &quot; 3 2 1 0&quot;
+  assert tmp == &quot; 3 2 1 0&quot;;
 }</code></pre><p>Cost of iteration over all elements:
 Runtime: <code>O(n)</code>.
 Space: <code>O(1)</code> retained memory plus garbage, see below.
@@ -480,7 +480,7 @@ import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
   let set = Set.fromIter([0, 3, 2, 1, 3].values(), Nat.compare);
 
-  let size = Set.size(set); // =&gt; 4
+  assert Set.size(set) == 4;
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code>.
@@ -501,7 +501,7 @@ persistent actor {
        accumulator # &quot; &quot; # Nat.toText(element)
      }
   );
-  let res = text; // =&gt; &quot; 0 1 2 3&quot;
+  assert text == &quot; 0 1 2 3&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -523,7 +523,7 @@ persistent actor {
         accumulator # &quot; &quot; # Nat.toText(element)
      }
   );
-  let res = text; // =&gt; &quot; 3 2 1 0&quot;
+  assert text == &quot; 3 2 1 0&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -538,8 +538,8 @@ persistent actor {
   let set1 = Set.empty&lt;Nat&gt;();
   let set2 = Set.singleton&lt;Nat&gt;(1);
 
-  let bool1 = Set.isEmpty(set1); // =&gt; true
-  let bool2 = Set.isEmpty(set2); // =&gt; false
+  assert Set.isEmpty(set1);
+  assert not Set.isEmpty(set2);
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code>.
@@ -557,7 +557,7 @@ persistent actor {
   let belowTen = Set.all&lt;Nat&gt;(set, func (number) {
     number &lt; 10
   });
-  let bool = belowTen // =&gt; true
+  assert belowTen;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -576,7 +576,7 @@ persistent actor {
   let aboveTen = Set.any&lt;Nat&gt;(set, func (number) {
     number &gt; 10
   });
-  let bool = aboveTen // =&gt; false
+  assert not aboveTen;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -621,7 +621,7 @@ persistent actor {
   let set3 = Set.fromIter([5, 6, 7].values(), Nat.compare);
   let setOfSets = Set.fromIter([set1, set2, set3].values(), setCompare);
   let flatSet = Set.flatten(setOfSets, Nat.compare);
-  let text = Set.toText(flatSet, Nat.toText); // =&gt; &quot;{1, 2, 3, 4, 5, 6, 7}&quot;
+  assert Set.toText(flatSet, Nat.toText) == &quot;{1, 2, 3, 4, 5, 6, 7}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -643,7 +643,7 @@ persistent actor {
   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   let set3 = Set.fromIter([5, 6, 7].values(), Nat.compare);
   let combined = Set.join([set1, set2, set3].values(), Nat.compare);
-  let text = Set.toText(combined, Nat.toText); // =&gt; &quot;{1, 2, 3, 4, 5, 6, 7}&quot;
+  assert Set.toText(combined, Nat.toText) == &quot;{1, 2, 3, 4, 5, 6, 7}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.

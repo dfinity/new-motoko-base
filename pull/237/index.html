@@ -514,10 +514,10 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([3, 1, 2, 3].values(), Nat.compare);
-  let size = Set.size(set) // =&gt; 3
-  let bool1 = Set.contains(set, Nat.compare, 4) // =&gt; false
+  assert Set.size(set) == 3;
+  assert not Set.contains(set, Nat.compare, 4);
   let diff = Set.difference(set, set, Nat.compare);
-  let bool2 = Set.isEmpty(diff) // =&gt; true
+  assert Set.isEmpty(diff);
 }</code></pre>
 
 <p>These sets are implemented as red-black trees, a balanced binary search tree of ordered elements.</p>

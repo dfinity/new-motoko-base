@@ -1554,7 +1554,8 @@ Test.suite(
       "Extensive 2D test",
       func() {
         let map = Map.empty<Nat, Text>();
-        for (i in Nat.range(0, 9)) {
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
           Map.add(map, Nat.compare, i, Nat.toText(i));
           for (j in Nat.range(0, i + 2)) {
             let actual = Iter.toArray(Map.entriesFrom(map, Nat.compare, j));

@@ -1600,9 +1600,6 @@ module {
       kvIndex = 0
     };
 
-    // push the initial cursor to the stack
-    Stack.push(nodeCursorStack, nodeCursor);
-    // then traverse left to the key
     traverseMinSubtreeIterFrom(nodeCursorStack, nodeCursor, compare, key);
     nodeCursorStack
   };
@@ -1659,75 +1656,29 @@ module {
 
   func traverseMinSubtreeIterFrom<K, V>(nodeCursorStack : Stack.Stack<NodeCursor<K, V>>, nodeCursor : NodeCursor<K, V>, compare : (K, K) -> Order.Order, key : K) {
     var currentNode = nodeCursor.node;
-    var childIndex = nodeCursor.kvIndex;
 
     label l loop {
-      switch (currentNode) {
-        // If leaf node, locate the first key >= target key
-        case (#leaf(leafNode)) {
-          switch (BinarySearch.binarySearchNode<K, V>(leafNode.data.kvs, compare, key, leafNode.data.count)) {
-            case (#keyFound(i)) {
-              // Found exact match, update cursor index
-              Stack.push(
-                nodeCursorStack,
-                {
-                  node = currentNode;
-                  kvIndex = i
-                }
-              );
-              return
-            };
-            case (#notFound(i)) {
-              // Found insert position, update cursor index
-              if (i < leafNode.data.count) {
-                Stack.push(
-                  nodeCursorStack,
-                  {
-                    node = currentNode;
-                    kvIndex = i
-                  }
-                )
-              };
-              return
-            }
+      let (node, childrenOption) = switch (currentNode) {
+        case (#leaf(leafNode)) (leafNode, null);
+        case (#internal(internalNode)) (internalNode, ?internalNode.children)
+      };
+      let (i, isFound) = switch (NodeUtil.getKeyIndex<K, V>(node.data, compare, key)) {
+        case (#keyFound(i)) (i, true);
+        case (#notFound(i)) (i, false)
+      };
+      if (i < node.data.count) {
+        Stack.push(
+          nodeCursorStack,
+          {
+            node = currentNode;
+            kvIndex = i // greater entries to traverse
           }
-        };
-        // If internal node, search for child containing target key
-        case (#internal(internalNode)) {
-          switch (NodeUtil.getKeyIndex<K, V>(internalNode.data, compare, key)) {
-            case (#keyFound(i)) {
-              // Found exact match in internal node
-              Stack.push(
-                nodeCursorStack,
-                {
-                  node = currentNode;
-                  kvIndex = i
-                }
-              );
-              return
-            };
-            case (#notFound(i)) {
-              // Need to traverse down appropriate child
-              switch (internalNode.children[i]) {
-                case (?childNode) {
-                  Stack.push(
-                    nodeCursorStack,
-                    {
-                      node = currentNode;
-                      kvIndex = childIndex
-                    }
-                  );
-                  childIndex := 0;
-                  currentNode := childNode
-                };
-                case null {
-                  Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.traverseMinSubtreeIterFrom(), null child node error")
-                }
-              }
-            }
-          }
-        }
-      }
+        )
+      };
+      if isFound return;
+      let ?children = childrenOption else return;
+      let ?childNode = children[i] else Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.traverseMinSubtreeIterFrom(), null child node error");
+      currentNode := childNode
     }
   };
 

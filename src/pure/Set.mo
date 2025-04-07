@@ -184,10 +184,10 @@ module {
   ///             Set.add(_, Nat.compare, 2) |>
   ///             Set.add(_, Nat.compare, 3);
   ///
-  ///   let (set1, changed1) = Set.delete(set, Nat.compare, 2);
+  ///   transient let (set1, changed1) = Set.delete(set, Nat.compare, 2);
   ///   assert changed1;
   ///   assert Set.toText(set1, Nat.toText) == "{1, 3}";
-  ///   let (set2, changed2) = Set.delete(set1, Nat.compare, 4);
+  ///   transient let (set2, changed2) = Set.delete(set1, Nat.compare, 4);
   ///   assert not changed2;
   ///   assert Set.toText(set2, Nat.toText) == "{1, 3}";
   /// }

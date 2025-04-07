@@ -151,9 +151,13 @@ They can be used to:</p>
 <p>Iterators are inherently stateful. Calling <code>next</code> &quot;consumes&quot; a value from
 the Iterator that cannot be put back, so keep that in mind when sharing
 iterators between consumers.</p>
-<p>An iterator <code>i</code> can be iterated over using</p>
-<pre class="motoko"><code class="motoko">for (x in i) {
-  …do something with x…
+<pre><code>motoko name=import
+import Iter &quot;mo:base/Iter&quot;;</code></pre>
+
+<p>An iterator can be iterated over using a <code>for</code> loop:</p>
+<pre class="motoko"><code class="motoko">let iter = [1, 2, 3].values();
+for (x in iter) {
+  // do something with x...
 }</code></pre>
 
 <p>Iterators can be:</p>

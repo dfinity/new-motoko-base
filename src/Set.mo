@@ -1,27 +1,27 @@
-/// An imperative set based on order/comparison of the elements.
+/// Imperative (mutable) sets based on order/comparison of elements.
 /// A set is a collection of elements without duplicates.
 /// The set data structure type is stable and can be used for orthogonal persistence.
 ///
-/// Example:
-/// ```motoko
-/// import Set "mo:base/Set";
-/// import Nat "mo:base/Nat";
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let set = Set.fromIter([3, 1, 2, 3].vals(), Nat.compare);
+  ///   assert Set.size(set) == 3;
+  ///   assert not Set.contains(set, Nat.compare, 4);
+  ///   let diff = Set.difference(set, set, Nat.compare);
+  ///   assert Set.isEmpty(diff);
+  /// }
+  /// ```
 ///
-/// persistent actor {
-///   let userIds = Set.empty<Nat>();
-///   Set.add(userIds, Nat.compare, 1);
-///   Set.add(userIds, Nat.compare, 2);
-///   Set.add(userIds, Nat.compare, 3);
-///   assert Set.size(userIds) == 3;
-/// }
-/// ```
-///
-/// The internal implementation is a B-tree with order 32.
+/// These sets are implemented as B-trees with order 32, a balanced search tree of ordered elements.
 ///
 /// Performance:
 /// * Runtime: `O(log(n))` worst case cost per insertion, removal, and retrieval operation.
-/// * Space: `O(n)` for storing the entire set.
-/// `n` denotes the number of elements stored in the set.
+/// * Space: `O(n)` for storing the entire tree,
+/// where `n` denotes the number of elements stored in the set.
 
 // Data structure implementation is courtesy of Byron Becker.
 // Source: https://github.com/canscale/StableHeapBTreeMap
@@ -116,6 +116,7 @@ module {
   ///   Set.add(originalSet, Nat.compare, 2);
   ///   Set.add(originalSet, Nat.compare, 3);
   ///   let clonedSet = Set.clone(originalSet);
+  ///   assert Set.size(clonedSet) == 3;
   /// }
   /// ```
   ///
@@ -343,6 +344,7 @@ module {
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
+  ///   assert Set.size(set) == 3;
   /// }
   /// ```
   ///
@@ -367,7 +369,7 @@ module {
   ///   assert Set.insert(set, Nat.compare, 1);
   ///   assert Set.insert(set, Nat.compare, 2);
   ///   assert Set.insert(set, Nat.compare, 3);
-  ///   assert not (Set.insert(set, Nat.compare, 3));
+  ///   assert not Set.insert(set, Nat.compare, 3);
   /// }
   /// ```
   ///
@@ -443,6 +445,8 @@ module {
     ignore delete(set, compare, element)
   };
 
+  /// Deletes an element from a set.
+  /// Returns true if the element was contained in the set, false if not.
   /// Deletes an element from a set.
   /// Returns true if the element was contained in the set, false if not.
   ///
@@ -570,7 +574,7 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
@@ -578,13 +582,8 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   for (number in Set.values(set)) {
-  ///      Debug.print(debug_show(number));
-  ///   }
-  ///   // prints:
-  ///   // `1`
-  ///   // `2`
-  ///   // `3`
+  ///   let numbers = Iter.toArray(Set.values(set));
+  ///   assert numbers == [1, 2, 3];
   /// }
   /// ```
   /// Cost of iteration over all elements:
@@ -607,7 +606,7 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
@@ -615,13 +614,8 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///
-  ///   for (number in Set.reverseValues(set)) {
-  ///      Debug.print(debug_show(number));
-  ///   }
-  ///   // prints:
-  ///   // `3`
-  ///   // `2`
-  ///   // `1`
+  ///   let numbers = Iter.toArray(Set.reverseValues(set));
+  ///   assert numbers == [3, 2, 1];
   /// }
   /// ```
   /// Cost of iteration over all elements:
@@ -648,8 +642,8 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   transient let iterator = Iter.fromArray([3, 1, 2, 1]);
-  ///   let set = Set.fromIter<Nat>(iterator, Nat.compare);  // => {1, 2, 3}
+  ///   let set = Set.fromIter<Nat>(Iter.fromArray([3, 1, 2, 1]), Nat.compare);
+  ///   assert Iter.toArray(Set.values(set)) == [1, 2, 3];
   /// }
   /// ```
   ///
@@ -673,12 +667,11 @@ module {
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
-  ///   Debug.print(debug_show(Set.isSubset(set1, set2, Nat.compare))); // prints `true`.
+  ///   assert Set.isSubset(set1, set2, Nat.compare);
   /// }
   /// ```
   ///
@@ -707,13 +700,12 @@ module {
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
   ///   let union = Set.union(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(union)))); // => [1, 2, 3, 4, 5]
+  ///   assert Iter.toArray(Set.values(union)) == [1, 2, 3, 4, 5];
   /// }
   /// ```
   ///
@@ -739,13 +731,12 @@ module {
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
   ///   let intersection = Set.intersection(set1, set2, Nat.compare);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(intersection)))); // => [1, 2]
+  ///   assert Iter.toArray(Set.values(intersection)) == [1, 2];
   /// }
   /// ```
   ///
@@ -838,7 +829,7 @@ module {
   ///   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let iter = Iter.fromArray([0, 2]);
   ///   assert Set.deleteAll(set, Nat.compare, iter);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [1]
+  ///   assert Iter.toArray(Set.values(set)) == [1];
   /// }
   /// ```
   ///
@@ -869,7 +860,7 @@ module {
   ///   let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
   ///   let iter = Iter.fromArray([0, 2, 3]);
   ///   assert Set.insertAll(set, Nat.compare, iter);
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [0, 1, 2, 3]
+  ///   assert Iter.toArray(Set.values(set)) == [0, 1, 2, 3];
   /// }
   /// ```
   ///
@@ -901,7 +892,7 @@ module {
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);
   ///   Set.retainAll(set, Nat.compare, func (n) { n % 2 == 0 });
-  ///   Debug.print(debug_show(Iter.toArray(Set.values(set)))); // => [2]
+  ///   assert Iter.toArray(Set.values(set)) == [2];
   /// }
   /// ```
   public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) : Bool {
@@ -1000,13 +991,8 @@ module {
   ///   let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, func (number) {
   ///     Nat.toText(number)
   ///   });
-  ///   for (textNumbers in Set.values(textNumbers)) {
-  ///      Debug.print(debug_show(textNumbers));
-  ///   }
-  ///   // prints:
-  ///   // `"1"`
-  ///   // `"2"`
-  ///   // `"3"`
+  ///   let numbers = Iter.toArray(Set.values(textNumbers));
+  ///   assert numbers == ["1", "2", "3"];
   /// }
   /// ```
   ///
@@ -1051,12 +1037,8 @@ module {
   ///        null // discard odd numbers
   ///     }
   ///   });
-  ///   for (textNumber in Set.values(evenTextNumbers)) {
-  ///      Debug.print(textNumber);
-  ///   }
-  ///   // prints:
-  ///   // `"0"`
-  ///   // `"2"`
+  ///   let numbers = Iter.toArray(Set.values(evenTextNumbers));
+  ///   assert numbers == ["0", "2"];
   /// }
   /// ```
   ///
@@ -1767,7 +1749,7 @@ module {
           case (#deleted) { #deleted };
           case (#inexistent) { #inexistent };
           case (#mergeChild({ internalChild })) {
-            #mergeChild({ internalChild; deletedElement = deleteElement })
+            #mergeChild({ internalChild })
           }
         }
       };

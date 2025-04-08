@@ -1,7 +1,6 @@
 /// Utilities for `Char` (character)
 
 import Prim "mo:⛔";
-import Iter "Iter";
 import Order "Order";
 
 module {

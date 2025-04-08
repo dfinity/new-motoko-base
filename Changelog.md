@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 0.4.0
 
 * Add `isReplicated : () -> Bool` to `InternetComputer` (#213).
 * Use `Order` type instead of the inlined variant (#270).

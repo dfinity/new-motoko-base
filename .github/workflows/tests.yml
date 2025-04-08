@@ -18,19 +18,18 @@ jobs:
       - run: npm run validate:changelog
       - name: Check for Motoko file changes
         run: |
-          # Use HEAD^ if the base commit is not available
-          BASE_SHA="${{ github.event.pull_request.base.sha || 'HEAD^' }}"
-          
-          # Debug: Print HEAD hash
-          echo "Current HEAD hash: $(git rev-parse HEAD)"
-          
-          # Debug: Print all changed files
-          echo "Changed files:"
-          git diff --name-only $BASE_SHA HEAD
-          
-          if git diff --name-only $BASE_SHA HEAD | grep -q '^src/.*\.mo$'; then
+          HEAD_SHA=$(git rev-parse HEAD)
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          if [ -z "$BASE_SHA" ]; then
+            echo "Error: Base commit is not available"
+            exit 1
+          fi
+          echo "HEAD_SHA: $HEAD_SHA"
+          echo "BASE_SHA: $BASE_SHA"
+
+          if git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^src/.*\.mo$'; then
             echo "Found modified Motoko files, checking for Changelog.md update..."
-            if git diff --name-only $BASE_SHA HEAD | grep -q '^Changelog\.md$'; then
+            if git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^Changelog\.md$'; then
               echo "Changelog.md was updated"
             else
               echo "Error: Motoko files were modified but Changelog.md was not updated"

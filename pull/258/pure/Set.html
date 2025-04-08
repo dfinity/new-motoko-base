@@ -52,11 +52,14 @@ returning the new set.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;() |&gt;
-            Set.add(_, Nat.compare, 2) |&gt;
-            Set.add(_, Nat.compare, 1) |&gt;
-            Set.add(_, Nat.compare, 2);
-  assert Set.toText(set, Nat.toText) == &quot;{1, 2}&quot;;
+  let set0 = Set.empty&lt;Nat&gt;();
+  let set1 = Set.add(set0, Nat.compare, 2);
+  let set2 = Set.add(set1, Nat.compare, 1);
+  let set3 = Set.add(set2, Nat.compare, 2);
+  assert Set.toText(set0, Nat.toText) == &quot;{}&quot;;
+  assert Set.toText(set1, Nat.toText) == &quot;{2}&quot;;
+  assert Set.toText(set2, Nat.toText) == &quot;{1, 2}&quot;;
+  assert Set.toText(set3, Nat.toText) == &quot;{1, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -209,7 +212,6 @@ i.e. a new set that contains all the elements that exist in both sets.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/pure/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([0, 1, 2].values(), Nat.compare);
@@ -250,10 +252,12 @@ import Nat &quot;mo:base/Nat&quot;;
 import Text &quot;mo:base/Text&quot;;
 
 persistent actor {
-  let numbers = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  let numbers = Set.fromIter([3, 1, 2].values(), Nat.compare);
 
-  let textNumbers = Set.map&lt;Nat, Text&gt;(numbers, Text.compare, Nat.toText);
-  assert Set.toText&lt;Text&gt;(textNumbers, func t { &quot;'&quot; # t # &quot;'&quot; }) == &quot;{'1', '2', '3'}&quot;;
+  let textNumbers =
+    Set.map&lt;Nat, Text&gt;(numbers, Text.compare, Nat.toText);
+  assert Set.toText&lt;Text&gt;(textNumbers, func t { &quot;`&quot; # t # &quot;`&quot; }) ==
+    &quot;{`1`, `2`, `3`}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -310,7 +314,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Text &quot;mo:base/Text&quot;;
 
 persistent actor {
-  let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
+  let numbers = Set.fromIter([3, 0, 2, 1].values(), Nat.compare);
 
   let evenTextNumbers = Set.filterMap&lt;Nat, Text&gt;(numbers, Text.compare, func (number) {
     if (number % 2 == 0) {
@@ -319,7 +323,8 @@ persistent actor {
        null // discard odd numbers
     }
   });
-  assert Set.toText&lt;Text&gt;(evenTextNumbers, func t { &quot;'&quot; # t # &quot;'&quot;}) == &quot;{'0', '2'}&quot;;
+  assert Set.toText&lt;Text&gt;(evenTextNumbers, func t { &quot;`&quot; # t # &quot;`&quot;}) ==
+    &quot;{`0`, `2`}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -625,7 +630,6 @@ in several of the iterated sets, it only occurs once in the result set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/pure/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);

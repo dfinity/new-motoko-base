@@ -300,16 +300,15 @@ traversing the elements in the ascending order.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter([0, 2, 3, 1].values(), Nat.compare);
 
-  let numbers = Iter.toArray(Set.values(set));
-  assert numbers == [1, 2, 3];
+  var tmp = &quot;&quot;;
+  for (number in Set.values(set)) {
+     tmp #= &quot; &quot; # Nat.toText(number);
+  };
+  assert tmp == &quot; 0 1 2 3&quot;;
 }</code></pre><p>Cost of iteration over all elements:
 Runtime: <code>O(n)</code>.
 Space: <code>O(1)</code> retained memory plus garbage, see below.
@@ -320,16 +319,15 @@ traversing the elements in the descending order.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter([0, 2, 3, 1].values(), Nat.compare);
 
-  let numbers = Iter.toArray(Set.reverseValues(set));
-  assert numbers == [3, 2, 1];
+  var tmp = &quot;&quot;;
+  for (number in Set.reverseValues(set)) {
+     tmp #= &quot; &quot; # Nat.toText(number);
+  };
+  assert tmp == &quot; 3 2 1 0&quot;;
 }</code></pre><p>Cost of iteration over all elements:
 Runtime: <code>O(n)</code>.
 Space: <code>O(1)</code> retained memory plus garbage, see below.
@@ -341,11 +339,10 @@ multiple occurrence of an equal element only occur once in the set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let set = Set.fromIter&lt;Nat&gt;(Iter.fromArray([3, 1, 2, 1]), Nat.compare);
-  assert Iter.toArray(Set.values(set)) == [1, 2, 3];
+  let set = Set.fromIter&lt;Nat&gt;([3, 1, 2, 1].values(), Nat.compare);
+  assert Set.toText(set, Nat.toText) == &quot;{1, 2, 3}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -357,12 +354,13 @@ also contained in <code>set2</code>. Returns <code>true</code> if both sets are 
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let set1 = Set.fromIter(Iter.fromArray([1, 2]), Nat.compare);
-  let set2 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
+  let set1 = Set.fromIter([1, 2].values(), Nat.compare);
+  let set2 = Set.fromIter([2, 1, 0].values(), Nat.compare);
+  let set3 = Set.fromIter([3, 4].values(), Nat.compare);
   assert Set.isSubset(set1, set2, Nat.compare);
+  assert not Set.isSubset(set1, set3, Nat.compare);
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -376,13 +374,12 @@ and <code>set2</code>, it only occurs once in the returned set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   let union = Set.union(set1, set2, Nat.compare);
-  assert Iter.toArray(Set.values(union)) == [1, 2, 3, 4, 5];
+  assert Set.toText(union, Nat.toText) == &quot;{1, 2, 3, 4, 5}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -394,13 +391,12 @@ i.e. a new set that contains all the elements that exist in both sets.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let set1 = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
-  let set2 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
+  let set1 = Set.fromIter([0, 1, 2].values(), Nat.compare);
+  let set2 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   let intersection = Set.intersection(set1, set2, Nat.compare);
-  assert Iter.toArray(Set.values(intersection)) == [1, 2];
+  assert Set.toText(intersection, Nat.toText) == &quot;{1, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -412,14 +408,12 @@ i.e. a new set that contains all the elements of <code>set1</code> that do not e
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
+  let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   let difference = Set.difference(set1, set2, Nat.compare);
-  assert Iter.toArray(Set.values(difference)) == [1, 2];
+  assert Set.toText(difference, Nat.toText) == &quot;{1, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -432,13 +426,11 @@ This is equivalent to <code>Set.union()</code> but modifies the set in place.</p
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  transient let iter = Iter.fromArray([3, 4, 5]);
-  Set.addAll(set, Nat.compare, iter);
-  assert Iter.toArray(Set.values(set)) == [1, 2, 3, 4, 5];
+  let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  Set.addAll(set, Nat.compare, [3, 4, 5].values());
+  assert Set.toText(set, Nat.toText) == &quot;{1, 2, 3, 4, 5}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -451,14 +443,11 @@ The return value indicates whether the size of the set has changed.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
-  transient let iter = Iter.fromArray([0, 2]);
-  assert Set.deleteAll(set, Nat.compare, iter);
-  assert Iter.toArray(Set.values(set)) == [1];
+  let set = Set.fromIter([0, 1, 2].values(), Nat.compare);
+  assert Set.deleteAll(set, Nat.compare, [0, 2].values());
+  assert Set.toText(set, Nat.toText) == &quot;{1}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -471,14 +460,12 @@ The return value indicates whether the size of the set has changed.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.fromIter(Iter.fromArray([0, 1, 2]), Nat.compare);
-  transient let iter = Iter.fromArray([0, 2, 3]);
-  assert Set.insertAll(set, Nat.compare, iter);
-  assert Iter.toArray(Set.values(set)) == [0, 1, 2, 3];
+  let set = Set.fromIter([0, 1, 2].values(), Nat.compare);
+  assert Set.insertAll(set, Nat.compare, [0, 2, 3].values());
+  assert Set.toText(set, Nat.toText) == &quot;{0, 1, 2, 3}&quot;;
+  assert not Set.insertAll(set, Nat.compare, [0, 1, 2].values()); // no change
 }</code></pre>
 
 <p>Runtime: <code>O(m * log(n))</code>.
@@ -503,17 +490,15 @@ The operation is applied in ascending order of the elements.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
 
-  Set.forEach&lt;Nat&gt;(set, func (element) {
-    Debug.print(&quot;element=&quot; # Nat.toText(element));
-  })
+  var tmp = &quot;&quot;;
+  Set.forEach&lt;Nat&gt;(numbers, func (element) {
+    tmp #= &quot; &quot; # Nat.toText(element)
+  });
+  assert tmp == &quot; 0 1 2 3&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -528,14 +513,12 @@ that fulfil the criterion function.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let numbers = Set.empty&lt;Nat&gt;();
-  Set.add(numbers, Nat.compare, 1);
-  Set.add(numbers, Nat.compare, 2);
-  Set.add(numbers, Nat.compare, 3);
+  let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
 
   let evenNumbers = Set.filter&lt;Nat&gt;(numbers, Nat.compare, func (number) {
     number % 2 == 0
   });
+  assert Set.toText(evenNumbers, Nat.toText) == &quot;{0, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -596,24 +579,18 @@ and accumulate the elements by applying the combine function, starting from a ba
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter([0, 3, 2, 1].values(), Nat.compare);
 
   let text = Set.foldLeft&lt;Nat, Text&gt;(
      set,
      &quot;&quot;,
      func (accumulator, element) {
-       let separator = if (accumulator != &quot;&quot;) { &quot;, &quot; } else { &quot;&quot; };
-       accumulator # separator # Nat.toText(element)
+       accumulator # &quot; &quot; # Nat.toText(element)
      }
   );
-  Debug.print(text);
-  // prints `1, 2, 3`.
+  assert text == &quot; 0 1 2 3&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -625,24 +602,18 @@ and accumulate the elements by applying the combine function, starting from a ba
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter([0, 3, 2, 1].values(), Nat.compare);
 
   let text = Set.foldRight&lt;Nat, Text&gt;(
      set,
      &quot;&quot;,
      func (element, accumulator) {
-       let separator = if (accumulator != &quot;&quot;) { &quot;, &quot; } else { &quot;&quot; };
-       accumulator # separator # Nat.toText(element)
+        accumulator # &quot; &quot; # Nat.toText(element)
      }
   );
-  Debug.print(text);
-  // prints `2, 1, 0`
+  assert text == &quot; 3 2 1 0&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -657,17 +628,13 @@ in several of the iterated sets, it only occurs once in the result set.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  let set2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
-  let set3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
-  transient let iterator = Iter.fromArray([set1, set2, set3]);
-  let combined = Set.join(iterator, Nat.compare);
-  Debug.print(debug_show(Iter.toArray(Set.values(combined))));
-  // prints: `[1, 2, 3, 4, 5, 6, 7]`.
+  let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
+  let set3 = Set.fromIter([5, 6, 7].values(), Nat.compare);
+  let combined = Set.join([set1, set2, set3].values(), Nat.compare);
+  assert Set.toText(combined, Nat.toText) == &quot;{1, 2, 3, 4, 5, 6, 7}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -683,21 +650,18 @@ it only occurs once in the result set.</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Order &quot;mo:base/Order&quot;;
-import Iter &quot;mo:base/Iter&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
   func setCompare(first: Set.Set&lt;Nat&gt;, second: Set.Set&lt;Nat&gt;) : Order.Order {
      Set.compare(first, second, Nat.compare)
   };
 
-  let subSet1 = Set.fromIter(Iter.fromArray([1, 2, 3]), Nat.compare);
-  let subSet2 = Set.fromIter(Iter.fromArray([3, 4, 5]), Nat.compare);
-  let subSet3 = Set.fromIter(Iter.fromArray([5, 6, 7]), Nat.compare);
-  let setOfSets = Set.fromIter(Iter.fromArray([subSet1, subSet2, subSet3]), setCompare);
+  let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
+  let set3 = Set.fromIter([5, 6, 7].values(), Nat.compare);
+  let setOfSets = Set.fromIter([set1, set2, set3].values(), setCompare);
   let flatSet = Set.flatten(setOfSets, Nat.compare);
-  Debug.print(debug_show(Iter.toArray(Set.values(flatSet))));
-  // prints: `[1, 2, 3, 4, 5, 6, 7]`.
+  assert Set.toText(flatSet, Nat.toText) == &quot;{1, 2, 3, 4, 5, 6, 7}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -708,18 +672,16 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 the <code>predicate</code> function returns <code>true</code> for all elements in the set.
 Returns <code>true</code> for an empty set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/pure/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
 
   let belowTen = Set.all&lt;Nat&gt;(set, func (number) {
     number &lt; 10
-  }); // `true`
+  });
+  assert belowTen;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -734,14 +696,12 @@ Returns <code>false</code> for an empty set.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
 
   let aboveTen = Set.any&lt;Nat&gt;(set, func (number) {
     number &gt; 10
-  }); // `false`
+  });
+  assert not aboveTen;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -759,13 +719,9 @@ The elements are formatted according to <code>elementFormat</code>.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
 
-  let text = Set.toText&lt;Nat&gt;(set, Nat.toText);
-  // `&quot;{0, 1, 2}&quot;`
+  assert Set.toText(set, Nat.toText) == &quot;{0, 1, 2, 3}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -788,25 +744,16 @@ Greater:
 <code>set1</code> is neither less nor equal <code>set2</code>.</li></ul>
 
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/pure/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Text &quot;mo:base/Text&quot;;
 
 persistent actor {
-  let set1 = Set.empty&lt;Nat&gt;();
-  Set.add(set1, Nat.compare, 0);
-  Set.add(set1, Nat.compare, 1);
+  let set1 = Set.fromIter([0, 1].values(), Nat.compare);
+  let set2 = Set.fromIter([0, 2].values(), Nat.compare);
 
-  let set2 = Set.empty&lt;Nat&gt;();
-  Set.add(set2, Nat.compare, 0);
-  Set.add(set2, Nat.compare, 2);
-
-  let orderLess = Set.compare(set1, set2, Nat.compare);
-  // `#less`
-  let orderEqual = Set.compare(set1, set1, Nat.compare);
-  // `#equal`
-  let orderGreater = Set.compare(set2, set1, Nat.compare);
-  // `#greater`
+  assert Set.compare(set1, set2, Nat.compare) == #less;
+  assert Set.compare(set1, set1, Nat.compare) == #equal;
+  assert Set.compare(set2, set1, Nat.compare) == #greater;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

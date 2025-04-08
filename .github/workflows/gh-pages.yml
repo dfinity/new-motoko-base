@@ -7,14 +7,7 @@ on:
   pull_request:
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup.yml
-    with:
-      setup-dfx: true
-      setup-mops: false
-
   deploy:
-    needs: setup
     if: github.repository_owner == 'dfinity'
     concurrency: gh-pages-${{ github.ref }}
     runs-on: ubuntu-24.04
@@ -23,6 +16,11 @@ jobs:
     steps:
       - name: Checkout website repo
         uses: actions/checkout@v4
+
+      - name: Use the setup action
+        uses: ./.github/actions/setup
+        with:
+          setup-mops: false
 
       - name: Build docs
         run: npm run docs

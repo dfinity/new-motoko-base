@@ -53,14 +53,12 @@ jobs:
           fi
 
   format:
-    needs: setup
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - run: npm run format:check
 
   test:
-    needs: setup
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4

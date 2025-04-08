@@ -15,9 +15,9 @@ Instructions
 
 |                              |    100 |    10_000 |    100_000 |
 | :--------------------------- | -----: | --------: | ---------: |
-| Array.fromIter               | 53_380 | 5_152_341 | 51_503_956 |
-| List.fromIter                | 35_442 | 3_421_829 | 34_204_830 |
-| List.fromIter . Iter.reverse | 56_156 | 5_392_969 | 53_907_356 |
+| Array.fromIter               | 53_373 | 5_152_334 | 51_503_949 |
+| List.fromIter                | 35_436 | 3_421_823 | 34_204_824 |
+| List.fromIter . Iter.reverse | 56_149 | 5_392_962 | 53_907_349 |
 			
 
 Heap
@@ -50,21 +50,21 @@ Instructions
 
 |                     |             |
 | :------------------ | ----------: |
-| pure/List.split     |  27_403_702 |
-| pure/List.all       |   9_301_158 |
-| pure/List.any       |   9_401_587 |
-| pure/List.map       |  26_005_119 |
-| pure/List.filter    |  24_305_594 |
-| pure/List.filterMap |  30_606_218 |
-| pure/List.partition |  24_706_541 |
-| pure/List.join      |  38_606_857 |
-| pure/List.flatten   |  29_607_264 |
-| pure/List.take      |  27_407_284 |
-| pure/List.drop      |  11_004_663 |
-| pure/List.foldRight |  21_806_964 |
-| pure/List.merge     |  36_411_003 |
-| pure/List.chunks    |  61_513_743 |
-| pure/Queue          | 177_572_226 |
+| pure/List.split     |  27_403_700 |
+| pure/List.all       |   9_301_156 |
+| pure/List.any       |   9_401_585 |
+| pure/List.map       |  26_005_117 |
+| pure/List.filter    |  24_305_592 |
+| pure/List.filterMap |  30_606_216 |
+| pure/List.partition |  24_706_539 |
+| pure/List.join      |  38_606_854 |
+| pure/List.flatten   |  29_607_262 |
+| pure/List.take      |  27_407_282 |
+| pure/List.drop      |  11_004_661 |
+| pure/List.foldRight |  21_806_962 |
+| pure/List.merge     |  36_411_001 |
+| pure/List.chunks    |  61_513_741 |
+| pure/Queue          | 177_572_220 |
 			
 
 Heap

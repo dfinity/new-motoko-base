@@ -16,7 +16,7 @@
 
 ## 0.3.0
 
-* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()`
+* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()` (#219).
 
 ## 0.2.2
 

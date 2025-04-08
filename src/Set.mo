@@ -1242,7 +1242,7 @@ module {
     };
     false
   };
-// RESUME JHERE
+
   /// Internal sanity check function.
   /// Can be used to check that elements have been inserted with a consistent comparison function.
   /// Traps if the internal set structure is invalid.

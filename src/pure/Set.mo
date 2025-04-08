@@ -92,11 +92,14 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>() |>
-  ///             Set.add(_, Nat.compare, 2) |>
-  ///             Set.add(_, Nat.compare, 1) |>
-  ///             Set.add(_, Nat.compare, 2);
-  ///   assert Set.toText(set, Nat.toText) == "{1, 2}";
+  ///   let set0 = Set.empty<Nat>();
+  ///   let set1 = Set.add(set0, Nat.compare, 2);
+  ///   let set2 = Set.add(set1, Nat.compare, 1);
+  ///   let set3 = Set.add(set2, Nat.compare, 2);
+  ///   assert Set.toText(set0, Nat.toText) == "{}";
+  ///   assert Set.toText(set1, Nat.toText) == "{2}";
+  ///   assert Set.toText(set2, Nat.toText) == "{1, 2}";
+  ///   assert Set.toText(set3, Nat.toText) == "{1, 2}";
   /// }
   /// ```
   ///
@@ -300,7 +303,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter([0, 1, 2].values(), Nat.compare);
@@ -398,10 +400,12 @@ module {
   /// import Text "mo:base/Text";
   ///
   /// persistent actor {
-  ///   let numbers = Set.fromIter([1, 2, 3].values(), Nat.compare);
+  ///   let numbers = Set.fromIter([3, 1, 2].values(), Nat.compare);
   ///
-  ///   let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, Nat.toText);
-  ///   assert Set.toText<Text>(textNumbers, func t { "'" # t # "'" }) == "{'1', '2', '3'}";
+  ///   let textNumbers =
+  ///     Set.map<Nat, Text>(numbers, Text.compare, Nat.toText);
+  ///   assert Set.toText<Text>(textNumbers, func t { "`" # t # "`" }) ==
+  ///     "{`1`, `2`, `3`}";
   /// }
   /// ```
   ///
@@ -485,7 +489,7 @@ module {
   /// import Text "mo:base/Text";
   ///
   /// persistent actor {
-  ///   let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
+  ///   let numbers = Set.fromIter([3, 0, 2, 1].values(), Nat.compare);
   ///
   ///   let evenTextNumbers = Set.filterMap<Nat, Text>(numbers, Text.compare, func (number) {
   ///     if (number % 2 == 0) {
@@ -494,7 +498,8 @@ module {
   ///        null // discard odd numbers
   ///     }
   ///   });
-  ///   assert Set.toText<Text>(evenTextNumbers, func t { "'" # t # "'"}) == "{'0', '2'}";
+  ///   assert Set.toText<Text>(evenTextNumbers, func t { "`" # t # "`"}) ==
+  ///     "{`0`, `2`}";
   /// }
   /// ```
   ///
@@ -981,7 +986,6 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
-  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);

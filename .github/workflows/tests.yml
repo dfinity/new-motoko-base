@@ -27,6 +27,13 @@ jobs:
           # Use HEAD^ if the base commit is not available
           BASE_SHA="${{ github.event.pull_request.base.sha || 'HEAD^' }}"
           
+          # Debug: Print HEAD hash
+          echo "Current HEAD hash: $(git rev-parse HEAD)"
+          
+          # Debug: Print all changed files
+          echo "Changed files:"
+          git diff --name-only $BASE_SHA HEAD
+          
           if git diff --name-only $BASE_SHA HEAD | grep -q '^src/.*\.mo$'; then
             echo "Found modified Motoko files, checking for Changelog.md update..."
             if git diff --name-only $BASE_SHA HEAD | grep -q '^Changelog\.md$'; then

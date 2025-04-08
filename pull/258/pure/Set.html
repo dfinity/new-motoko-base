@@ -80,7 +80,7 @@ persistent actor {
   assert r2.1;
   let r3 = Set.insert(r2.0, Nat.compare, 2);
   assert not r3.1;
-  Set.toText(r3.0, Nat.toText); // =&gt; &quot;{1, 2}&quot;
+  assert Set.toText(r3.0, Nat.toText) == &quot;{1, 2}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -100,7 +100,7 @@ persistent actor {
 
   let set1 = Set.remove(set, Nat.compare, 2);
   let set2 = Set.remove(set1, Nat.compare, 4);
-  let text = Set.toText(set2, Nat.toText); // =&gt; &quot;{1, 3}&quot;
+  assert Set.toText(set2, Nat.toText) == &quot;{1, 3}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -444,7 +444,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
-  let text = Set.toText(set, Nat.toText); // =&gt; &quot;{}&quot;
+  assert Set.toText(set, Nat.toText) == &quot;{}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code>.
@@ -456,7 +456,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.singleton(0);
-  let text = Set.toText(set, Nat.toText) // =&gt; &quot;{0}&quot;
+  assert Set.toText(set, Nat.toText) == &quot;{0}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code>.
@@ -582,7 +582,7 @@ import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
 
-  let text = Set.toText(set, Nat.toText); // =&gt; &quot;{0, 1, 2, 3}&quot;
+  assert Set.toText(set, Nat.toText) == &quot;{0, 1, 2, 3}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

@@ -58,6 +58,8 @@ We automatically generate previews for each pull request.
 
 PRs are welcome! Please check out the [contributor guidelines](.github/CONTRIBUTING.md) for more information.
 
+Code and documentation style guidelines for the repository can be found [here](./STYLEGUIDE.md).
+
 Big thanks to the following community contributors:
 
 * [MR Research AG (A. Stepanov, T. Hanke)](https://github.com/research-ag): [`vector`](https://github.com/research-ag/vector), [`prng`](https://github.com/research-ag/prng)

@@ -7,7 +7,7 @@ on:
 
 jobs:
   setup:
-    uses: ./.github/workflows/mops-cache.yml
+    uses: ./.github/workflows/setup.yml
 
   validate-changelog:
     needs: setup

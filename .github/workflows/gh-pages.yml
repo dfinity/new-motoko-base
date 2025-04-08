@@ -8,7 +8,7 @@ on:
 
 jobs:
   setup:
-    uses: ./.github/workflows/mops-cache.yml
+    uses: ./.github/workflows/setup.yml
     with:
       setup-dfx: true
       setup-mops: false

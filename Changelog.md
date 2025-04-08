@@ -6,13 +6,13 @@
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
 * Add `isEmpty : _ -> Bool` to `Blob` and `Text` (#263).
 * Fix bug in `Iter.step()` (#???).
-* Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#???).
-* Fix argument order for `Result.compare()` and `Result.equal()` (#???).
-* Adjust `Random` representation to allow persistence in stable memory (#???).
+* Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#233).
+* Fix argument order for `Result.compare()` and `Result.equal()` (#268).
+* Adjust `Random` representation to allow persistence in stable memory (#226).
 
 ## 0.3.0
 
-* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()` (#???).
+* Rename `List.push()` to `pushFront()` and `List.pop()` to `popFront()` (#219).
 
 ## 0.2.2
 

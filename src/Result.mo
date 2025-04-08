@@ -23,17 +23,17 @@ module {
 
   // Compares two Result's for equality.
   public func equal<Ok, Err>(
-    eqOk : (Ok, Ok) -> Bool,
-    eqErr : (Err, Err) -> Bool,
-    r1 : Result<Ok, Err>,
-    r2 : Result<Ok, Err>
+    result1 : Result<Ok, Err>,
+    result2 : Result<Ok, Err>,
+    equalOk : (Ok, Ok) -> Bool,
+    equalErr : (Err, Err) -> Bool
   ) : Bool {
-    switch (r1, r2) {
+    switch (result1, result2) {
       case (#ok(ok1), #ok(ok2)) {
-        eqOk(ok1, ok2)
+        equalOk(ok1, ok2)
       };
       case (#err(err1), #err(err2)) {
-        eqErr(err1, err2)
+        equalErr(err1, err2)
       };
       case _ { false }
     }
@@ -42,10 +42,10 @@ module {
   // Compares two Results. `#ok` is larger than `#err`. This ordering is
   // arbitrary, but it lets you for example use Results as keys in ordered maps.
   public func compare<Ok, Err>(
-    compareOk : (Ok, Ok) -> Order.Order,
-    compareErr : (Err, Err) -> Order.Order,
     result1 : Result<Ok, Err>,
-    result2 : Result<Ok, Err>
+    result2 : Result<Ok, Err>,
+    compareOk : (Ok, Ok) -> Order.Order,
+    compareErr : (Err, Err) -> Order.Order
   ) : Order.Order {
     switch (result1, result2) {
       case (#ok(ok1), #ok(ok2)) {

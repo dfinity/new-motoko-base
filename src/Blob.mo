@@ -32,14 +32,40 @@
 
 import Types "Types";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
   public type Blob = Prim.Types.Blob;
 
   /// Returns an empty `Blob` (equivalent to `""`).
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let emptyBlob = Blob.empty(); // => ""
+  /// assert emptyBlob.size() == 0;
+  /// ```
   public func empty() : Blob = "";
 
+  /// Returns whether the given `Blob` is empty (has a size of zero).
+  ///
+  /// ```motoko include=import
+  /// let blob1 = "" : Blob;
+  /// let blob2 = "\FF\00" : Blob;
+  /// assert Blob.isEmpty(blob1);
+  /// assert not Blob.isEmpty(blob2);
+  /// ```
+  public func isEmpty(blob : Blob) : Bool = blob == "";
+
+  /// Returns the number of bytes in the given `Blob`.
+  /// This is equivalent to `blob.size()`.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let blob = "\FF\00\AA" : Blob;
+  /// assert Blob.size(blob) == 3;
+  /// assert blob.size() == 3;
+  /// ```
   public func size(blob : Blob) : Nat = blob.size();
 
   /// Creates a `Blob` from an array of bytes (`[Nat8]`), by copying each element.
@@ -97,7 +123,7 @@ module {
   /// let blob2 = "\00\FF\00" : Blob;
   /// Blob.compare(blob1, blob2) // => #less
   /// ```
-  public func compare(b1 : Blob, b2 : Blob) : { #less; #equal; #greater } {
+  public func compare(b1 : Blob, b2 : Blob) : Order.Order {
     let c = Prim.blobCompare(b1, b2);
     if (c < 0) #less else if (c == 0) #equal else #greater
   };

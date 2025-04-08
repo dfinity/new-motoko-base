@@ -25,6 +25,7 @@ import Iter "Iter";
 import Stack "Stack";
 import Types "Types";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
@@ -139,6 +140,16 @@ module {
     return r
   };
 
+  /// Returns whether the given `Text` is empty (has a size of zero).
+  ///
+  /// ```motoko include=import
+  /// let text1 = "";
+  /// let text2 = "example";
+  /// assert Text.isEmpty(text1);
+  /// assert not Text.isEmpty(text2);
+  /// ```
+  public func isEmpty(t : Text) : Bool = t == "";
+
   /// Returns the number of characters in the given `Text`.
   ///
   /// Equivalent to calling `t.size()` where `t` is a `Text` value.
@@ -146,7 +157,7 @@ module {
   /// ```motoko include=import
   /// let size = Text.size("abc"); // 3
   /// ```
-  public func size(t : Text) : Nat { t.size() };
+  public func size(t : Text) : Nat = t.size();
 
   /// Returns `t1 # t2`, where `#` is the `Text` concatenation operator.
   ///
@@ -186,7 +197,7 @@ module {
   /// print(debug_show Text.compare("abc", "def")); // #less
   /// print(debug_show Text.compare("abc", "ABC")); // #greater
   /// ```
-  public func compare(t1 : Text, t2 : Text) : { #less; #equal; #greater } {
+  public func compare(t1 : Text, t2 : Text) : Order.Order {
     let c = Prim.textCompare(t1, t2);
     if (c < 0) #less else if (c == 0) #equal else #greater
   };
@@ -774,8 +785,8 @@ module {
   public func compareWith(
     t1 : Text,
     t2 : Text,
-    cmp : (Char, Char) -> { #less; #equal; #greater }
-  ) : { #less; #equal; #greater } {
+    cmp : (Char, Char) -> Order.Order
+  ) : Order.Order {
     let cs1 = t1.chars();
     let cs2 = t2.chars();
     loop {

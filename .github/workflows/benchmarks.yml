@@ -9,7 +9,11 @@ on:
       - main
 
 jobs:
+  mops-cache:
+    uses: ./.github/workflows/mops-cache.yml
+
   benchmark:
+    needs: mops-cache
     runs-on: ubuntu-24.04
     name: Run Benchmarks and Comment on PR or Upload on push
 

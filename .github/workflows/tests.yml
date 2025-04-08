@@ -6,15 +6,14 @@ on:
   pull_request:
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup.yml
-
   validate-changelog:
-    needs: setup
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/workflows/setup.yml
+      - name: Use the setup action
+        uses: ./.github/actions/setup
+        with:
+          setup-mops: false
       - run: npm run validate:changelog
       - name: Check for Motoko file changes
         run: |
@@ -27,14 +26,16 @@ jobs:
           fi
 
   validate-version:
-    needs: setup
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - name: Use the setup action
+        uses: ./.github/actions/setup
+        with:
+          setup-mops: false
       - run: npm run validate:version
 
   validate-api:
-    needs: setup
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4

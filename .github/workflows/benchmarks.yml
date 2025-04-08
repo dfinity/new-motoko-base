@@ -9,18 +9,18 @@ on:
       - main
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup.yml
-    with:
-      setup-dfx: true
 
   benchmark:
-    needs: setup
     runs-on: ubuntu-24.04
     name: Run Benchmarks and Comment on PR or Upload on push
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Use the setup action
+        uses: ./.github/actions/setup/action.yml
+        with:
+          setup-dfx: true
 
       - name: Checkout out the branch with benchmark results
         if: github.event_name == 'pull_request'

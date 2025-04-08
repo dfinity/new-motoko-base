@@ -1,0 +1,53 @@
+name: Setup Environment
+description: Sets up the development environment including Node.js, mops, and optionally dfx
+
+inputs:
+  setup-mops:
+    description: Whether to setup mops
+    required: false
+    default: true
+    type: boolean
+  setup-dfx:
+    description: Whether to setup dfx
+    required: false
+    default: false
+    type: boolean
+runs:
+  using: composite
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: npm
+        
+    - name: Cache mops packages
+      if: ${{ inputs.setup-mops }}
+      id: mops-cache
+      uses: actions/cache@v4
+      with:
+        key: mops-packages-${{ hashFiles('mops.toml') }}
+        restore-keys: |
+          mops-packages-${{ hashFiles('mops.toml') }}
+          mops-packages-
+        path: |
+          ~/.cache/mops
+    
+    - name: Install dependencies
+      if: ${{ inputs.setup-mops }}
+      shell: bash
+      run: npm ci
+    
+    - name: Init Mops Toolchain
+      if: ${{ inputs.setup-mops }}
+      shell: bash
+      run: npx mops toolchain init
+    
+    - name: Setup dfx
+      if: ${{ inputs.setup-dfx }}
+      uses: dfinity/setup-dfx@main
+    
+    - name: Install dfx cache
+      if: ${{ inputs.setup-dfx }}
+      shell: bash
+      run: dfx cache install 

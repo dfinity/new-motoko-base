@@ -1,5 +1,5 @@
 name: Setup Environment
-description: Sets up the development environment including Node.js, mops, and optionally dfx
+description: Common dependencies setup for all workflows
 
 inputs:
   setup-mops:

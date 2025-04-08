@@ -186,10 +186,10 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
+  Set.add(set, Nat.compare, 2);
   Set.add(set, Nat.compare, 1);
   Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
-  assert Set.size(set) == 3;
+  assert Set.toText(set, Nat.toText) == &quot;{1, 2}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -204,10 +204,10 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
-  assert Set.insert(set, Nat.compare, 1);
   assert Set.insert(set, Nat.compare, 2);
-  assert Set.insert(set, Nat.compare, 3);
-  assert not Set.insert(set, Nat.compare, 3);
+  assert Set.insert(set, Nat.compare, 1);
+  assert not Set.insert(set, Nat.compare, 2);
+  assert Set.toText(set, Nat.toText) == &quot;{1, 2}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -220,16 +220,15 @@ Returns <code>true</code> if the element was contained in the set, <code>false</
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
 
-  Set.remove(set, Nat.compare, 1);
-  assert not Set.contains(set, Nat.compare, 1);
+  Set.remove(set, Nat.compare, 2);
+  assert not Set.contains(set, Nat.compare, 2);
 
   Set.remove(set, Nat.compare, 4);
   assert not Set.contains(set, Nat.compare, 4);
+
+  assert Set.toText(set, Nat.toText) == &quot;{1, 3}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -245,16 +244,14 @@ Returns true if the element was contained in the set, false if not.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
+  let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
 
-  assert Set.delete(set, Nat.compare, 1);
-  assert not Set.contains(set, Nat.compare, 1);
+  assert Set.delete(set, Nat.compare, 2);
+  assert not Set.contains(set, Nat.compare, 2);
 
   assert not Set.delete(set, Nat.compare, 4);
   assert not Set.contains(set, Nat.compare, 4);
+  assert Set.toText(set, Nat.toText) == &quot;{1, 3}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -270,9 +267,10 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
+  assert Set.max(set) == null;
+  Set.add(set, Nat.compare, 3);
   Set.add(set, Nat.compare, 1);
   Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
   assert Set.max(set) == ?3;
 }</code></pre>
 
@@ -287,6 +285,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
+  assert Set.min(set) == null;
   Set.add(set, Nat.compare, 1);
   Set.add(set, Nat.compare, 2);
   Set.add(set, Nat.compare, 3);

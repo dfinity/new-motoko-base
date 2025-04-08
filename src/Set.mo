@@ -884,15 +884,13 @@ module {
   /// ```motoko
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
-  ///   Set.retainAll(set, Nat.compare, func (n) { n % 2 == 0 });
-  ///   assert Iter.toArray(Set.values(set)) == [2];
+  ///   let set = Set.fromIter([3, 1, 2].values(), Nat.compare);
+  ///
+  ///   let sizeChanged = Set.retainAll<Nat>(set, Nat.compare, func n { n % 2 == 0 });
+  ///   assert Set.toText(set, Nat.toText) == "{2}";
+  ///   assert sizeChanged;
   /// }
   /// ```
   public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) : Bool {
@@ -980,19 +978,14 @@ module {
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let numbers = Set.empty<Nat>();
-  ///   Set.add(numbers, Nat.compare, 1);
-  ///   Set.add(numbers, Nat.compare, 2);
-  ///   Set.add(numbers, Nat.compare, 3);
+  ///   let numbers = Set.fromIter([3, 1, 2].values(), Nat.compare);
   ///
-  ///   transient let textNumbers = Set.map<Nat, Text>(numbers, Text.compare, func (number) {
-  ///     Nat.toText(number)
-  ///   });
-  ///   let array = Iter.toArray(Set.values(textNumbers));
-  ///   assert array == ["1", "2", "3"];
+  ///   let textNumbers =
+  ///     Set.map<Nat, Text>(numbers, Text.compare, Nat.toText);
+  ///   assert Set.toText<Text>(textNumbers, func t { "`" # t # "`" }) ==
+  ///     "{`1`, `2`, `3`}"
   /// }
   /// ```
   ///
@@ -1021,24 +1014,19 @@ module {
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
-  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
-  ///   let numbers = Set.empty<Nat>();
-  ///   Set.add(numbers, Nat.compare, 0);
-  ///   Set.add(numbers, Nat.compare, 1);
-  ///   Set.add(numbers, Nat.compare, 2);
-  ///   Set.add(numbers, Nat.compare, 3);
+  ///   let numbers = Set.fromIter([3, 0, 2, 1].values(), Nat.compare);
   ///
-  ///   transient let evenTextNumbers = Set.filterMap<Nat, Text>(numbers, Text.compare, func (number) {
+  ///   let evenTextNumbers = Set.filterMap<Nat, Text>(numbers, Text.compare, func (number) {
   ///     if (number % 2 == 0) {
   ///        ?Nat.toText(number)
   ///     } else {
   ///        null // discard odd numbers
   ///     }
   ///   });
-  ///   let array = Iter.toArray(Set.values(evenTextNumbers));
-  ///   assert array == ["0", "2"];
+  ///   assert Set.toText<Text>(evenTextNumbers, func t { "`" # t # "`"}) ==
+  ///     "{`0`, `2`}";
   /// }
   /// ```
   ///

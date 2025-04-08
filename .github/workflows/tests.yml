@@ -7,6 +7,7 @@ on:
 
 jobs:
   validate-changelog:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -18,12 +19,8 @@ jobs:
       - run: npm run validate:changelog
       - name: Check for Motoko file changes
         run: |
-          HEAD_SHA=$(git rev-parse HEAD)
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          if [ -z "$BASE_SHA" ]; then
-            echo "Error: Base commit is not available"
-            exit 1
-          fi
+          HEAD_SHA="${{ github.sha }}"
+          BASE_SHA="${{ github.event.pull_request.base.sha || '$(git rev-parse HEAD~1)' }}"
           echo "HEAD_SHA: $HEAD_SHA"
           echo "BASE_SHA: $BASE_SHA"
 

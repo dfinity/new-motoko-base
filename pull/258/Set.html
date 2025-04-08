@@ -499,15 +499,13 @@ Modifies the set in place.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let set = Set.empty&lt;Nat&gt;();
-  Set.add(set, Nat.compare, 1);
-  Set.add(set, Nat.compare, 2);
-  Set.add(set, Nat.compare, 3);
-  Set.retainAll(set, Nat.compare, func (n) { n % 2 == 0 });
-  assert Iter.toArray(Set.values(set)) == [2];
+  let set = Set.fromIter([3, 1, 2].values(), Nat.compare);
+
+  let sizeChanged = Set.retainAll&lt;Nat&gt;(set, Nat.compare, func n { n % 2 == 0 });
+  assert Set.toText(set, Nat.toText) == &quot;{2}&quot;;
+  assert sizeChanged;
 }</code></pre></p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">operation</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Apply an operation on each element contained in the set.
 The operation is applied in ascending order of the elements.</p>
 <p>Example:</p>
@@ -559,19 +557,14 @@ collect the mapped elements in a new mutable set.</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Text &quot;mo:base/Text&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let numbers = Set.empty&lt;Nat&gt;();
-  Set.add(numbers, Nat.compare, 1);
-  Set.add(numbers, Nat.compare, 2);
-  Set.add(numbers, Nat.compare, 3);
+  let numbers = Set.fromIter([3, 1, 2].values(), Nat.compare);
 
-  transient let textNumbers = Set.map&lt;Nat, Text&gt;(numbers, Text.compare, func (number) {
-    Nat.toText(number)
-  });
-  let array = Iter.toArray(Set.values(textNumbers));
-  assert array == [&quot;1&quot;, &quot;2&quot;, &quot;3&quot;];
+  let textNumbers =
+    Set.map&lt;Nat, Text&gt;(numbers, Text.compare, Nat.toText);
+  assert Set.toText&lt;Text&gt;(textNumbers, func t { &quot;`&quot; # t # &quot;`&quot; }) ==
+    &quot;{`1`, `2`, `3`}&quot;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -587,24 +580,19 @@ non-discarded new elements in a new mutable set.</p>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 import Text &quot;mo:base/Text&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let numbers = Set.empty&lt;Nat&gt;();
-  Set.add(numbers, Nat.compare, 0);
-  Set.add(numbers, Nat.compare, 1);
-  Set.add(numbers, Nat.compare, 2);
-  Set.add(numbers, Nat.compare, 3);
+  let numbers = Set.fromIter([3, 0, 2, 1].values(), Nat.compare);
 
-  transient let evenTextNumbers = Set.filterMap&lt;Nat, Text&gt;(numbers, Text.compare, func (number) {
+  let evenTextNumbers = Set.filterMap&lt;Nat, Text&gt;(numbers, Text.compare, func (number) {
     if (number % 2 == 0) {
        ?Nat.toText(number)
     } else {
        null // discard odd numbers
     }
   });
-  let array = Iter.toArray(Set.values(evenTextNumbers));
-  assert array == [&quot;0&quot;, &quot;2&quot;];
+  assert Set.toText&lt;Text&gt;(evenTextNumbers, func t { &quot;`&quot; # t # &quot;`&quot;}) ==
+    &quot;{`0`, `2`}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.

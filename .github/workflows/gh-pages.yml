@@ -7,11 +7,15 @@ on:
   pull_request:
 
 jobs:
+  setup:
+    uses: ./.github/workflows/mops-cache.yml
+    with:
+      setup-dfx: true
+      setup-mops: false
+
   deploy:
+    needs: setup
     if: github.repository_owner == 'dfinity'
-    strategy:
-      matrix:
-        node: [20]
     concurrency: gh-pages-${{ github.ref }}
     runs-on: ubuntu-24.04
     env:
@@ -19,16 +23,6 @@ jobs:
     steps:
       - name: Checkout website repo
         uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-
-      - name: Setup dfx
-        uses: dfinity/setup-dfx@main
-
-      - run: dfx cache install
 
       - name: Build docs
         run: npm run docs

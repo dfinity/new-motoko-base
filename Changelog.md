@@ -3,12 +3,17 @@
 ## Next
 
 * Add `isReplicated : () -> Bool` to `InternetComputer` (#213).
-* Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
-* Add `isEmpty : _ -> Bool` to `Blob` and `Text` (#263).
-* Fix bug in `Iter.step()` (#???).
-* Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#233).
+* Use `Order` type instead of the inlined variant (#270).
 * Fix argument order for `Result.compare()` and `Result.equal()` (#268).
+* Add `isEmpty : _ -> Bool` to `Blob` and `Text` (#263).
+* Make `pure/List` and `pure/Queue` stack-safe (#252).
+* Optimize `Iter.reverse` (#266).
+* Fix List growing bug (#251).
+* Improve `Iter.mo` with new functions and documentation (#231).
 * Adjust `Random` representation to allow persistence in stable memory (#226).
+* Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#233).
+* Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
+* Fix bug in `Iter.step()` (#222).
 
 ## 0.3.0
 

@@ -258,19 +258,16 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set1 = Set.empty<Nat>();
-  ///   Set.add(set1, Nat.compare, 1);
-  ///   Set.add(set1, Nat.compare, 2);
-  ///   Set.add(set1, Nat.compare, 3);
-  ///   let set2 = Set.clone(set1);
-  ///
+  ///   let set1 = Set.fromIter([1, 2].values(), Nat.compare);
+  ///   let set2 = Set.fromIter([2, 1].values(), Nat.compare);
+  ///   let set3 = Set.fromIter([2, 1, 0].values(), Nat.compare);
   ///   assert Set.equal(set1, set2, Nat.compare);
+  ///   assert not Set.equal(set1, set3, Nat.compare);
   /// }
   /// ```
   ///
   /// Runtime: `O(n)`.
   /// Space: `O(1)`.
-  // TODO: pass compare, not equal to match pure API and allow optimization
   public func equal<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Types.Order) : Bool {
     if (set1.size != set2.size) return false;
     // TODO: optimize

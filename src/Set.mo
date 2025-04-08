@@ -334,10 +334,10 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
+  ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
-  ///   assert Set.size(set) == 3;
+  ///   assert Set.toText(set, Nat.toText) == "{1, 2}";
   /// }
   /// ```
   ///
@@ -359,10 +359,10 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
-  ///   assert Set.insert(set, Nat.compare, 1);
   ///   assert Set.insert(set, Nat.compare, 2);
-  ///   assert Set.insert(set, Nat.compare, 3);
-  ///   assert not Set.insert(set, Nat.compare, 3);
+  ///   assert Set.insert(set, Nat.compare, 1);
+  ///   assert not Set.insert(set, Nat.compare, 2);
+  ///   assert Set.toText(set, Nat.toText) == "{1, 2}"
   /// }
   /// ```
   ///
@@ -415,16 +415,15 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
+  ///   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///
-  ///   Set.remove(set, Nat.compare, 1);
-  ///   assert not Set.contains(set, Nat.compare, 1);
+  ///   Set.remove(set, Nat.compare, 2);
+  ///   assert not Set.contains(set, Nat.compare, 2);
   ///
   ///   Set.remove(set, Nat.compare, 4);
   ///   assert not Set.contains(set, Nat.compare, 4);
+  ///
+  ///   assert Set.toText(set, Nat.toText) == "{1, 3}"
   /// }
   /// ```
   ///
@@ -448,16 +447,14 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
+  ///   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///
-  ///   assert Set.delete(set, Nat.compare, 1);
-  ///   assert not Set.contains(set, Nat.compare, 1);
+  ///   assert Set.delete(set, Nat.compare, 2);
+  ///   assert not Set.contains(set, Nat.compare, 2);
   ///
   ///   assert not Set.delete(set, Nat.compare, 4);
   ///   assert not Set.contains(set, Nat.compare, 4);
+  ///   assert Set.toText(set, Nat.toText) == "{1, 3}";
   /// }
   /// ```
   ///
@@ -522,9 +519,10 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
+  ///   assert Set.max(set) == null;
+  ///   Set.add(set, Nat.compare, 3);
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
   ///   assert Set.max(set) == ?3;
   /// }
   /// ```
@@ -546,6 +544,7 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
+  ///   assert Set.min(set) == null;
   ///   Set.add(set, Nat.compare, 1);
   ///   Set.add(set, Nat.compare, 2);
   ///   Set.add(set, Nat.compare, 3);

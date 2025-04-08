@@ -7,20 +7,14 @@ on:
 
 jobs:
   validate-changelog:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-24.04]
-        node: [20]
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Fetch all history for all branches and tags
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
+          setup-mops: false
       - run: npm run validate:changelog
       - name: Check for Motoko file changes
         run: |
@@ -45,33 +39,19 @@ jobs:
           fi
 
   validate-version:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-24.04]
-        node: [20]
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
+          setup-mops: false
       - run: npm run validate:version
 
   validate-api:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-24.04]
-        node: [20]
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
+      - uses: ./.github/actions/setup
       - run: npm run validate:api
       - name: Check for API changes
         run: |
@@ -86,29 +66,17 @@ jobs:
           fi
 
   format:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-24.04]
-        node: [20]
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
+      - uses: ./.github/actions/setup
       - run: npm run format:check
 
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-24.04]
-        node: [20]
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - name: Check for Motoko file changes in 'src' directory
         id: check_mo_changes
         run: |
@@ -116,9 +84,4 @@ jobs:
             echo "No Motoko file changes in src directory detected, skipping tests"
             exit 0
           fi
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npx mops toolchain init
       - run: npm test

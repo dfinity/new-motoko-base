@@ -58,10 +58,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 2);
-  ///   Set.add(set, Nat.compare, 3);
+  ///   let set = Set.fromIter<Nat>([0, 2, 1].values(), Nat.compare);
   ///   let pureSet = Set.toPure(set, Nat.compare);
   ///   assert PureSet.contains(pureSet, Nat.compare, 1);
   /// }
@@ -86,10 +83,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   var pureSet = PureSet.empty<Nat>();
-  ///   pureSet := PureSet.add(pureSet, Nat.compare, 1);
-  ///   pureSet := PureSet.add(pureSet, Nat.compare, 2);
-  ///   pureSet := PureSet.add(pureSet, Nat.compare, 3);
+  ///   let pureSet = PureSet.fromIter([3, 1, 2].values(), Nat.compare);
   ///   let mutableSet = Set.fromPure(pureSet, Nat.compare);
   ///   assert Set.contains(mutableSet, Nat.compare, 1);
   /// }
@@ -111,12 +105,11 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let originalSet = Set.empty<Nat>();
-  ///   Set.add(originalSet, Nat.compare, 1);
-  ///   Set.add(originalSet, Nat.compare, 2);
-  ///   Set.add(originalSet, Nat.compare, 3);
+  ///   let originalSet = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///   let clonedSet = Set.clone(originalSet);
+  ///   Set.add(originalSet, Nat.compare, 4);
   ///   assert Set.size(clonedSet) == 3;
+  ///   assert Set.size(originalSet) == 4;
   /// }
   /// ```
   ///

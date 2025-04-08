@@ -148,13 +148,11 @@ Both sets have to be constructed by the same comparison function.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let set1 = Set.empty&lt;Nat&gt;();
-  Set.add(set1, Nat.compare, 1);
-  Set.add(set1, Nat.compare, 2);
-  Set.add(set1, Nat.compare, 3);
-  let set2 = Set.clone(set1);
-
+  let set1 = Set.fromIter([1, 2].values(), Nat.compare);
+  let set2 = Set.fromIter([2, 1].values(), Nat.compare);
+  let set3 = Set.fromIter([2, 1, 0].values(), Nat.compare);
   assert Set.equal(set1, set2, Nat.compare);
+  assert not Set.equal(set1, set3, Nat.compare);
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

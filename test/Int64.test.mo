@@ -37,7 +37,7 @@ class Nat64Testable(number : Nat64) : T.TestableItem<Nat64> {
   }
 };
 
-type Order = { #less; #equal; #greater };
+type Order = Order.Order;
 
 class OrderTestable(value : Order) : T.TestableItem<Order> {
   public let item = value;

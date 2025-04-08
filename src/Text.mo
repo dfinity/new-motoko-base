@@ -25,6 +25,7 @@ import Iter "Iter";
 import Stack "Stack";
 import Types "Types";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
@@ -196,7 +197,7 @@ module {
   /// print(debug_show Text.compare("abc", "def")); // #less
   /// print(debug_show Text.compare("abc", "ABC")); // #greater
   /// ```
-  public func compare(t1 : Text, t2 : Text) : { #less; #equal; #greater } {
+  public func compare(t1 : Text, t2 : Text) : Order.Order {
     let c = Prim.textCompare(t1, t2);
     if (c < 0) #less else if (c == 0) #equal else #greater
   };
@@ -784,8 +785,8 @@ module {
   public func compareWith(
     t1 : Text,
     t2 : Text,
-    cmp : (Char, Char) -> { #less; #equal; #greater }
-  ) : { #less; #equal; #greater } {
+    cmp : (Char, Char) -> Order.Order
+  ) : Order.Order {
     let cs1 = t1.chars();
     let cs2 = t2.chars();
     loop {

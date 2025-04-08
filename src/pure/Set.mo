@@ -4,7 +4,7 @@
 ///
 /// Example:
 /// ```motoko
-/// import Set "mo:base/Set";
+/// import Set "mo:base/pure/Set";
 /// import Nat "mo:base/Nat";
 ///
 /// persistent actor {

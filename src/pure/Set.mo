@@ -126,7 +126,7 @@ module {
   ///   assert r2.1;
   ///   let r3 = Set.insert(r2.0, Nat.compare, 2);
   ///   assert not r3.1;
-  ///   Set.toText(r3.0, Nat.toText); // => "{1, 2}"
+  ///   assert Set.toText(r3.0, Nat.toText) == "{1, 2}"
   /// }
   /// ```
   ///
@@ -152,7 +152,7 @@ module {
   ///
   ///   let set1 = Set.remove(set, Nat.compare, 2);
   ///   let set2 = Set.remove(set1, Nat.compare, 4);
-  ///   let text = Set.toText(set2, Nat.toText); // => "{1, 3}"
+  ///   assert Set.toText(set2, Nat.toText) == "{1, 3}"
   /// }
   /// ```
   ///
@@ -711,7 +711,7 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
-  ///   let text = Set.toText(set, Nat.toText); // => "{}"
+  ///   assert Set.toText(set, Nat.toText) == "{}"
   /// }
   /// ```
   ///
@@ -728,7 +728,7 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.singleton(0);
-  ///   let text = Set.toText(set, Nat.toText) // => "{0}"
+  ///   assert Set.toText(set, Nat.toText) == "{0}"
   /// }
   /// ```
   ///
@@ -911,7 +911,7 @@ module {
   /// persistent actor {
   ///   let set = Set.fromIter<Nat>([0, 3, 1, 2].values(), Nat.compare);
   ///
-  ///   let text = Set.toText(set, Nat.toText); // => "{0, 1, 2, 3}"
+  ///   assert Set.toText(set, Nat.toText) == "{0, 1, 2, 3}"
   /// }
   /// ```
   ///

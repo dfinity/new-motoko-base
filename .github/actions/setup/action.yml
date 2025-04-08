@@ -21,7 +21,7 @@ runs:
         node-version: 20
         cache: npm
         
-    - name: Cache mops packages
+    - name: Cache mops packages before installing dependencies
       if: ${{ inputs.setup-mops }}
       id: mops-cache
       uses: actions/cache@v4

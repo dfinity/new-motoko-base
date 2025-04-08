@@ -17,10 +17,10 @@ jobs:
       - name: Checkout website repo
         uses: actions/checkout@v4
 
-      - name: Use the setup action
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
         with:
           setup-mops: false
+          setup-dfx: true
 
       - name: Build docs
         run: npm run docs

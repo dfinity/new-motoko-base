@@ -9,7 +9,6 @@ on:
       - main
 
 jobs:
-
   benchmark:
     runs-on: ubuntu-24.04
     name: Run Benchmarks and Comment on PR or Upload on push
@@ -17,8 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use the setup action
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
         with:
           setup-dfx: true
 

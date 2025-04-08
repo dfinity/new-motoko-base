@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Use the setup action
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
         with:
           setup-mops: false
       - run: npm run validate:changelog
@@ -29,8 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Use the setup action
-        uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup
         with:
           setup-mops: false
       - run: npm run validate:version
@@ -39,6 +37,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: npm run validate:api
       - name: Check for API changes
         run: |
@@ -56,12 +55,14 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: npm run format:check
 
   test:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - name: Check for Motoko file changes in 'src' directory
         id: check_mo_changes
         run: |

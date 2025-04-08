@@ -12,6 +12,7 @@
 * Adjust `Random` representation to allow persistence in stable memory (#226)
 * Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#233)
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228)
+* Fix bug in `Iter.step()` (#222)
 
 ## 0.3.0
 

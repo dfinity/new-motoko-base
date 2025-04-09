@@ -7,18 +7,26 @@ on:
 
 jobs:
   validate-changelog:
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
       - uses: ./.github/actions/setup
         with:
           setup-mops: false
       - run: npm run validate:changelog
       - name: Check for Motoko file changes
         run: |
-          if git diff --name-only ${{ github.event.pull_request.base.sha || 'HEAD^' }} HEAD | grep -q '^src/.*\.mo$'; then
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          if git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^src/.*\.mo$'; then
             echo "Found modified Motoko files, checking for Changelog.md update..."
-            if ! git diff --name-only ${{ github.event.pull_request.base.sha || 'HEAD^' }} HEAD | grep -q '^Changelog\.md$'; then
+            if git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^Changelog\.md$'; then
+              echo "Changelog.md was updated"
+            else
               echo "Error: Motoko files were modified but Changelog.md was not updated"
               exit 1
             fi
@@ -62,11 +70,16 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
       - uses: ./.github/actions/setup
       - name: Check for Motoko file changes in 'src' directory
         id: check_mo_changes
         run: |
-          if ! git diff --name-only ${{ github.event.pull_request.base.sha || 'HEAD^' }} HEAD | grep -q '\.mo$'; then
+          BASE_SHA="${{ github.event.pull_request.base.sha || '$(git rev-parse HEAD~1)' }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '\.mo$'; then
             echo "No Motoko file changes in src directory detected, skipping tests"
             exit 0
           fi

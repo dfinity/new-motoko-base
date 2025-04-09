@@ -19,7 +19,7 @@ jobs:
         with:
           setup-mops: false
       - run: npm run validate:changelog
-      - name: Validate Changelog for Motoko changes
+      - name: Verify Changelog updated when Motoko source files changed
         if: needs.check-motoko-changes.outputs.has_src_mo_changes == 'true'
         run: |
           if [ "${{ needs.check-motoko-changes.outputs.has_changelog_changes }}" != "true" ]; then

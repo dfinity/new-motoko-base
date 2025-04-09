@@ -6,12 +6,20 @@ on:
       has_mo_changes:
         description: "Whether there are any Motoko file changes"
         value: ${{ jobs.check.outputs.has_mo_changes }}
+      has_src_mo_changes:
+        description: "Whether there are any Motoko file changes in src directory"
+        value: ${{ jobs.check.outputs.has_src_mo_changes }}
+      has_changelog_changes:
+        description: "Whether Changelog.md was modified"
+        value: ${{ jobs.check.outputs.has_changelog_changes }}
 
 jobs:
   check:
     runs-on: ubuntu-24.04
     outputs:
       has_mo_changes: ${{ steps.check_mo_changes.outputs.has_mo_changes }}
+      has_src_mo_changes: ${{ steps.check_mo_changes.outputs.has_src_mo_changes }}
+      has_changelog_changes: ${{ steps.check_mo_changes.outputs.has_changelog_changes }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,9 +31,26 @@ jobs:
           BASE_SHA="${{ github.event.pull_request.base.sha || '$(git rev-parse HEAD~1)' }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
 
+          # Check for any .mo changes
           if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '\.mo$'; then
             echo "has_mo_changes=false" >> $GITHUB_OUTPUT
             echo "No Motoko file changes detected"
           else
             echo "has_mo_changes=true" >> $GITHUB_OUTPUT
-          fi 
+          fi
+
+          # Check for src/*.mo changes
+          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^src/.*\.mo$'; then
+            echo "has_src_mo_changes=false" >> $GITHUB_OUTPUT
+            echo "No Motoko file changes in src directory detected"
+          else
+            echo "has_src_mo_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+          # Check for Changelog.md changes
+          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^Changelog\.md$'; then
+            echo "has_changelog_changes=false" >> $GITHUB_OUTPUT
+            echo "No Changelog.md changes detected"
+          else
+            echo "has_changelog_changes=true" >> $GITHUB_OUTPUT
+          fi

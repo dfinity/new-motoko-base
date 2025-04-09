@@ -10,30 +10,23 @@ jobs:
     uses: ./.github/workflows/check-motoko-changes.yml
 
   validate-changelog:
+    needs: check-motoko-changes
     if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
       - uses: ./.github/actions/setup
         with:
           setup-mops: false
       - run: npm run validate:changelog
-      - name: Check for Motoko file changes
+      - name: Validate Changelog for Motoko changes
+        if: needs.check-motoko-changes.outputs.has_src_mo_changes == 'true'
         run: |
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-
-          if git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^src/.*\.mo$'; then
-            echo "Found modified Motoko files, checking for Changelog.md update..."
-            if git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^Changelog\.md$'; then
-              echo "Changelog.md was updated"
-            else
-              echo "Error: Motoko files were modified but Changelog.md was not updated"
-              exit 1
-            fi
+          if [ "${{ needs.check-motoko-changes.outputs.has_changelog_changes }}" != "true" ]; then
+            echo "Error: Motoko files were modified but Changelog.md was not updated"
+            exit 1
           fi
+          echo "Changelog.md was updated"
 
   validate-version:
     runs-on: ubuntu-24.04

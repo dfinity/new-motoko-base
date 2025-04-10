@@ -1,5 +1,7 @@
 # Changelog
 
+* Add `entriesFrom` and `reverseEntriesFrom` to `Map` as well as `valuesFrom` and `reverseValuesFrom` to `Set` (#272).
+
 ## 0.4.0
 
 * Add `isReplicated : () -> Bool` to `InternetComputer` (#213).

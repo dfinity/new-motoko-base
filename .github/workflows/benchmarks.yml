@@ -9,13 +9,17 @@ on:
       - main
 
 jobs:
+  check-motoko-changes:
+    uses: ./.github/workflows/check-motoko-changes.yml
+
   benchmark:
+    needs: check-motoko-changes
+    if: needs.check-motoko-changes.outputs.has_mo_changes == 'true'
     runs-on: ubuntu-24.04
     name: Run Benchmarks and Comment on PR or Upload on push
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: ./.github/actions/setup
         with:
           setup-dfx: true
@@ -53,6 +57,7 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             ${{ steps.benchmarks.outputs.result }}
+            
             **Note**: Renamed benchmarks cannot be compared. Refer to the [current baseline](https://github.com/dfinity/new-motoko-base/tree/benchmark-results) for manual comparison.
           edit-mode: replace
 

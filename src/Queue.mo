@@ -12,14 +12,12 @@
 ///
 /// persistent actor {
 ///   let orders = Queue.empty<Text>();
-///   Queue.pushBack(orders, "Antipasta");
-///   Queue.pushBack(orders, "Spaghetti");
-///   Queue.pushBack(orders, "Bistecca");
-///   Queue.pushBack(orders, "Dolce");
-///   assert Queue.popFront(orders) == ?"Antipasta";
-///   assert Queue.popFront(orders) == ?"Spaghetti";
-///   assert Queue.popFront(orders) == ?"Bistecca";
-///   assert Queue.popFront(orders) == ?"Dolce";
+///   Queue.pushBack(orders, "Motoko");
+///   Queue.pushBack(orders, "Mops");
+///   Queue.pushBack(orders, "IC");
+///   assert Queue.popFront(orders) == ?"Motoko";
+///   assert Queue.popFront(orders) == ?"Mops";
+///   assert Queue.popFront(orders) == ?"IC";
 ///   assert Queue.popFront(orders) == null;
 /// }
 /// ```
@@ -444,7 +442,7 @@ module {
   /// import Queue "mo:base/Queue";
   /// persistent actor {
   ///   let queue = Queue.fromIter<Text>(["A", "B", "C"].values());
-  ///   let iter = Queue.values(queue);
+  ///   transient let iter = Queue.values(queue);
   ///   assert iter.next() == ?"A";
   ///   assert iter.next() == ?"B";
   ///   assert iter.next() == ?"C";

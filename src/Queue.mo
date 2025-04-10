@@ -98,7 +98,6 @@ module {
   /// Example:
   /// ```motoko
   /// import Queue "mo:base/Queue";
-  /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
   ///   let queue = Queue.empty<Text>();
@@ -163,6 +162,7 @@ module {
   ///   let original = Queue.fromIter<Nat>([1, 2, 3].values());
   ///   let copy = Queue.clone(original);
   ///   Queue.clear(original);
+  ///   assert Queue.size(original) == 0;
   ///   assert Queue.size(copy) == 3;
   /// }
   /// ```

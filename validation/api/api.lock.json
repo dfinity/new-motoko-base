@@ -1033,13 +1033,15 @@
       "public func remove<T>(set : Set<T>, compare : (T, T) -> Order.Order, element : T) : ()",
       "public func retainAll<T>(set : Set<T>, compare : (T, T) -> Order.Order, predicate : T -> Bool) : Bool",
       "public func reverseValues<T>(set : Set<T>) : Types.Iter<T>",
+      "public func reverseValuesFrom<T>( set : Set<T>, compare : (T, T) -> Order.Order, element : T ) : Types.Iter<T>",
       "public type Set<T>",
       "public func singleton<T>(element : T) : Set<T>",
       "public func size<T>(set : Set<T>) : Nat",
       "public func toPure<T>(set : Set<T>, compare : (T, T) -> Order.Order) : PureSet.Set<T>",
       "public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text",
       "public func union<T>(set1 : Set<T>, set2 : Set<T>, compare : (T, T) -> Order.Order) : Set<T>",
-      "public func values<T>(set : Set<T>) : Types.Iter<T>"
+      "public func values<T>(set : Set<T>) : Types.Iter<T>",
+      "public func valuesFrom<T>( set : Set<T>, compare : (T, T) -> Order.Order, element : T ) : Types.Iter<T>"
     ]
   },
   {

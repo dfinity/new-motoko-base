@@ -50,7 +50,6 @@ Space: O(n)
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty mutable double-ended queue.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
-import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let queue = Queue.empty&lt;Text&gt;();
@@ -90,6 +89,7 @@ persistent actor {
   let original = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
   let copy = Queue.clone(original);
   Queue.clear(original);
+  assert Queue.size(original) == 0;
   assert Queue.size(copy) == 3;
 }</code></pre>
 

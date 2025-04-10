@@ -323,7 +323,6 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-
   public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = (
     func rev(acc : List<R>, list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
       case null #ok acc;
@@ -982,6 +981,23 @@ module {
     reverse result
   };
 
+  /// Convert a list to a text representation using the provided function to convert each element to text.
+  /// The resulting text will be in the format "[element1, element2, ...]".
+  ///
+  /// Example:
+  /// ```motoko
+  /// import List "mo:base/pure/List";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let list = ?(1, ?(2, ?(3, null)));
+  ///   assert List.toText(list, Nat.toText) == "[1, 2, 3]";
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func toText<T>(list : List<T>, f : T -> Text) : Text {
     var text = "[";
     var first = true;

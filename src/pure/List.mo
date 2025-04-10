@@ -26,7 +26,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   assert List.empty<Nat>() == null;
   /// }
@@ -42,9 +42,10 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
-  ///   assert List.isEmpty<Nat>(null);
+  ///   assert List.isEmpty(null);
+  ///   assert not List.isEmpty(?(1, null));
   /// }
   /// ```
   ///
@@ -61,10 +62,10 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, null));
-  ///   assert List.size<Nat>(list) == 2;
+  ///   assert List.size(list) == 2;
   /// }
   /// ```
   ///
@@ -84,10 +85,10 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
-  ///   assert List.contains<Nat>(list, Nat.equal, 2);
+  ///   assert List.contains(list, Nat.equal, 2);
   /// }
   /// ```
   ///
@@ -110,7 +111,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, null));
   ///   assert List.get<Nat>(list, 1) == ?1;
@@ -130,7 +131,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   assert List.pushFront<Nat>(null, 0) == ?(0, null);
   /// }
@@ -145,7 +146,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, null));
   ///   assert List.last<Nat>(list) == ?1;
@@ -167,7 +168,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, null));
   ///   assert List.popFront<Nat>(list) == (?0, ?(1, null));
@@ -187,7 +188,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
   ///   assert List.reverse<Nat>(list) == ?(2, ?(1, ?(0, null)));
@@ -209,7 +210,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
   ///   var sum = 0;
@@ -235,7 +236,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
   ///   assert List.map<Nat, Text>(list, Nat.toText) == ?("0", ?("1", ?("2", null)));
@@ -257,7 +258,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
   ///   assert List.filter<Nat>(list, func n = n != 1) == ?(0, ?(2, null));
@@ -278,7 +279,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.filterMap<Nat, Nat>(
@@ -307,7 +308,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.mapResult<Nat, Nat, Text>(
@@ -341,7 +342,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
   ///   assert List.partition<Nat>(list, func n = n != 1) == (?(0, ?(2, null)), ?(1, null));
@@ -367,7 +368,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list1 = ?(0, ?(1, ?(2, null)));
   ///   let list2 = ?(3, ?(4, ?(5, null)));
@@ -391,7 +392,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Iter "mo:base/Iter";
-  /// 
+  ///
   /// persistent actor {
   ///   let lists = [ ?(0, ?(1, ?(2, null))),
   ///                 ?(3, ?(4, ?(5, null))) ];
@@ -413,7 +414,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let lists = ?(?(0, ?(1, ?(2, null))),
   ///                ?(?(3, ?(4, ?(5, null))),
@@ -434,7 +435,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
   ///   assert List.take<Nat>(list, 2) == ?(0, ?(1, null));
@@ -454,7 +455,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
   ///   assert List.drop<Nat>(list, 2) == ?(2, null);
@@ -477,7 +478,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.foldLeft<Nat, Text>(
@@ -506,7 +507,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.foldRight<Nat, Text>(
@@ -533,7 +534,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.find<Nat>(list, func n = n > 1) == ?2;
@@ -556,7 +557,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert not List.all<Nat>(list, func n = n > 1);
@@ -579,7 +580,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
   ///   assert List.any<Nat>(list, func n = n > 1);
@@ -604,7 +605,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list1 = ?(1, ?(2, ?(4, null)));
   ///   let list2 = ?(2, ?(4, ?(6, null)));
@@ -638,7 +639,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list1 = ?(1, ?(2, null));
   ///   let list2 = ?(1, ?(2, null));
@@ -663,7 +664,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list1 = ?(1, ?(2, null));
   ///   let list2 = ?(3, ?(4, null));
@@ -692,7 +693,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = List.tabulate<Nat>(3, func n = n * 2);
   ///   assert list == ?(0, ?(2, ?(4, null)));
@@ -719,7 +720,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   assert List.singleton<Nat>(0) == ?(0, null);
   /// }
@@ -735,10 +736,10 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
-  ///   let list = List.repeat<Nat>(3, 0);
-  ///   assert list == ?(0, ?(0, ?(0, null)));
+  ///   let list = List.repeat<Char>('a', 3);
+  ///   assert list == ?('a', ?('a', ?('a', null)));
   /// }
   /// ```
   ///
@@ -763,7 +764,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list1 = ?(0, ?(1, ?(2, null)));
   ///   let list2 = ?("0", ?("1", null));
@@ -787,7 +788,7 @@ module {
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
   /// import Char "mo:base/Char";
-  /// 
+  ///
   /// persistent actor {
   ///   let list1 = ?(0, ?(1, ?(2, null)));
   ///   let list2 = ?('a', ?('b', null));
@@ -814,10 +815,10 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, null)));
-  ///   assert List.split<Nat>(2, list) == (?(0, ?(1, null)), ?(2, null));
+  ///   assert List.split(list, 2) == (?(0, ?(1, null)), ?(2, null));
   /// }
   /// ```
   ///
@@ -839,10 +840,10 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
-  ///   assert List.chunks<Nat>(2, list) == ?(?(0, ?(1, null)), ?(?(2, ?(3, null)), ?(?(4, null), null)));
+  ///   assert List.chunks(list, 2) == ?(?(0, ?(1, null)), ?(?(2, ?(3, null)), ?(?(4, null), null)));
   /// }
   /// ```
   ///
@@ -861,7 +862,7 @@ module {
   /// ```motoko
   /// import List "mo:base/pure/List";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = List.fromArray<Nat>([3, 1, 4]);
   ///   var text = "";
@@ -887,7 +888,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = List.fromArray<Nat>([0, 1, 2, 3, 4]);
   ///   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
@@ -907,7 +908,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = List.fromVarArray<Nat>([var 0, 1, 2, 3, 4]);
   ///   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
@@ -925,7 +926,7 @@ module {
   /// import List "mo:base/pure/List";
   /// import Array "mo:base/Array";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let array = List.toArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
   ///   assert Array.equal<Nat>(array, [0, 1, 2, 3, 4], Nat.equal);
@@ -946,10 +947,10 @@ module {
   /// import List "mo:base/pure/List";
   /// import Array "mo:base/Array";
   /// import Nat "mo:base/Nat";
-  /// 
+  ///
   /// persistent actor {
   ///   let array = List.toVarArray<Nat>(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
-  ///   assert Array.equal<Nat>(Array.freeze(array, [0, 1, 2, 3, 4]), Nat.equal);
+  ///   assert Array.equal<Nat>(Array.fromVarArray(array), [0, 1, 2, 3, 4], Nat.equal);
   /// }
   /// ```
   ///
@@ -962,7 +963,7 @@ module {
   /// Example:
   /// ```motoko
   /// import List "mo:base/pure/List";
-  /// 
+  ///
   /// persistent actor {
   ///   let list = List.fromIter<Nat>([0, 1, 2, 3, 4].vals());
   ///   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));

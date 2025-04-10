@@ -1915,6 +1915,24 @@ Test.suite(
   "valuesFrom",
   func() {
     Test.test(
+      "Simple",
+      func() {
+        let set = Set.empty<Nat>();
+        Set.add(set, Nat.compare, 1);
+        Set.add(set, Nat.compare, 2);
+        Set.add(set, Nat.compare, 4);
+        func check(from : Nat, expected : [Nat]) {
+          let actual = Iter.toArray(Set.valuesFrom(set, Nat.compare, from));
+          Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+        };
+        check(0, [1, 2, 4]);
+        check(1, [1, 2, 4]);
+        check(2, [2, 4]);
+        check(3, [4]);
+        check(4, [4])
+      }
+    );
+    Test.test(
       "Extensive 2D test",
       func() {
         let set = Set.empty<Nat>();
@@ -1935,6 +1953,25 @@ Test.suite(
 Test.suite(
   "reverseValuesFrom",
   func() {
+    Test.test(
+      "Simple",
+      func() {
+        let set = Set.empty<Nat>();
+        Set.add(set, Nat.compare, 1);
+        Set.add(set, Nat.compare, 2);
+        Set.add(set, Nat.compare, 4);
+        func check(from : Nat, expected : [Nat]) {
+          let actual = Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, from));
+          Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+        };
+        check(0, []);
+        check(1, [1]);
+        check(2, [2, 1]);
+        check(3, [2, 1]);
+        check(4, [4, 2, 1]);
+        check(5, [4, 2, 1])
+      }
+    );
     Test.test(
       "Extensive 2D test",
       func() {

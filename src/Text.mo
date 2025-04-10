@@ -836,6 +836,7 @@ module {
   public let toUpper : Text -> Text = Prim.textUppercase;
 
   /// Returns the given text value unchanged.
+  /// This function is provided for consistency with other modules.
   ///
   /// ```motoko include=import
   /// assert Text.toText("Hello") == "Hello";

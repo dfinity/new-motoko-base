@@ -1,6 +1,6 @@
 # Changelog
 
-* Add `entriesFrom` and `reverseEntriesFrom` to `Map` as well as `valuesFrom` and `reverseValuesFrom` to `Set` (#272).
+* Add `entriesFrom` and `reverseEntriesFrom` to `Map`, `valuesFrom` and `reverseValuesFrom` to `Set` and `Text.toText` (#272).
 
 ## 0.4.0
 

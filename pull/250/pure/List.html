@@ -57,7 +57,7 @@ to use.</p>
 
 persistent actor {
   let list = ?(0, ?(1, null));
-  assert List.get&lt;Nat&gt;(list, 1) == ?1;
+  assert List.get(list, 1) == ?1;
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -67,7 +67,7 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
 
 persistent actor {
-  assert List.pushFront&lt;Nat&gt;(null, 0) == ?(0, null);
+  assert List.pushFront(null, 0) == ?(0, null);
 }</code></pre>
 
 <p>Runtime: O(1)</p>
@@ -78,7 +78,7 @@ Example:</p>
 
 persistent actor {
   let list = ?(0, ?(1, null));
-  assert List.last&lt;Nat&gt;(list) == ?1;
+  assert List.last(list) == ?1;
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -90,7 +90,7 @@ Returns <code>(null, null)</code> if the list is empty.</p>
 
 persistent actor {
   let list = ?(0, ?(1, null));
-  assert List.popFront&lt;Nat&gt;(list) == (?0, ?(1, null));
+  assert List.popFront(list) == (?0, ?(1, null));
 }</code></pre>
 
 <p>Runtime: O(1)</p>
@@ -101,7 +101,7 @@ persistent actor {
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
-  assert List.reverse&lt;Nat&gt;(list) == ?(2, ?(1, ?(0, null)));
+  assert List.reverse(list) == ?(2, ?(1, ?(0, null)));
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -128,7 +128,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
-  assert List.map&lt;Nat, Text&gt;(list, Nat.toText) == ?(&quot;0&quot;, ?(&quot;1&quot;, ?(&quot;2&quot;, null)));
+  assert List.map(list, Nat.toText) == ?(&quot;0&quot;, ?(&quot;1&quot;, ?(&quot;2&quot;, null)));
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -200,7 +200,7 @@ persistent actor {
 persistent actor {
   let list1 = ?(0, ?(1, ?(2, null)));
   let list2 = ?(3, ?(4, ?(5, null)));
-  assert List.concat&lt;Nat&gt;(list1, list2) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
+  assert List.concat(list1, list2) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
 }</code></pre>
 
 <p>Runtime: O(size(l))</p>
@@ -213,7 +213,7 @@ import Iter &quot;mo:base/Iter&quot;;
 persistent actor {
   let lists = [ ?(0, ?(1, ?(2, null))),
                 ?(3, ?(4, ?(5, null))) ];
-  assert List.join&lt;Nat&gt;(lists |&gt; Iter.fromArray(_)) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
+  assert List.join(lists |&gt; Iter.fromArray(_)) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
 }</code></pre>
 
 <p>Runtime: O(size*size)</p>
@@ -226,7 +226,7 @@ persistent actor {
   let lists = ?(?(0, ?(1, ?(2, null))),
                ?(?(3, ?(4, ?(5, null))),
                  null));
-  assert List.flatten&lt;Nat&gt;(lists) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
+  assert List.flatten(lists) == ?(0, ?(1, ?(2, ?(3, ?(4, ?(5, null))))));
 }</code></pre>
 
 <p>Runtime: O(size*size)</p>
@@ -239,7 +239,7 @@ a copy of the full input list.</p>
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
-  assert List.take&lt;Nat&gt;(list, 2) == ?(0, ?(1, null));
+  assert List.take(list, 2) == ?(0, ?(1, null));
 }</code></pre>
 
 <p>Runtime: O(n)</p>
@@ -250,7 +250,7 @@ persistent actor {
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
-  assert List.drop&lt;Nat&gt;(list, 2) == ?(2, null);
+  assert List.drop(list, 2) == ?(2, null);
 }</code></pre>
 
 <p>Runtime: O(n)</p>
@@ -342,7 +342,7 @@ import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
   let list1 = ?(1, ?(2, ?(4, null)));
   let list2 = ?(2, ?(4, ?(6, null)));
-  assert List.merge&lt;Nat&gt;(list1, list2, Nat.compare) == ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))));
+  assert List.merge(list1, list2, Nat.compare) == ?(1, ?(2, ?(2, ?(4, ?(4, ?(6, null))))));
 }</code></pre>
 
 <p>Runtime: O(size(l1) + size(l2))</p>
@@ -356,7 +356,7 @@ import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
   let list1 = ?(1, ?(2, null));
   let list2 = ?(1, ?(2, null));
-  assert List.equal&lt;Nat&gt;(list1, list2, Nat.equal);
+  assert List.equal(list1, list2, Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -370,7 +370,7 @@ import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
   let list1 = ?(1, ?(2, null));
   let list2 = ?(3, ?(4, null));
-  assert List.compare&lt;Nat&gt;(list1, list2, Nat.compare) == #less;
+  assert List.compare(list1, list2, Nat.compare) == #less;
 }</code></pre>
 
 <p>Runtime: O(size(l1))</p>
@@ -394,7 +394,7 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
 
 persistent actor {
-  assert List.singleton&lt;Nat&gt;(0) == ?(0, null);
+  assert List.singleton(0) == ?(0, null);
 }</code></pre>
 
 <p>Runtime: O(1)</p>
@@ -404,7 +404,7 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
 
 persistent actor {
-  let list = List.repeat&lt;Char&gt;('a', 3);
+  let list = List.repeat('a', 3);
   assert list == ?('a', ?('a', ?('a', null)));
 }</code></pre>
 
@@ -419,7 +419,7 @@ length equal to the length of the smaller list.</p>
 persistent actor {
   let list1 = ?(0, ?(1, ?(2, null)));
   let list2 = ?(&quot;0&quot;, ?(&quot;1&quot;, null));
-  assert List.zip&lt;Nat, Text&gt;(list1, list2) == ?((0, &quot;0&quot;), ?((1, &quot;1&quot;), null));
+  assert List.zip(list1, list2) == ?((0, &quot;0&quot;), ?((1, &quot;1&quot;), null));
 }</code></pre>
 
 <p>Runtime: O(min(size(xs), size(ys)))</p>
@@ -476,7 +476,7 @@ persistent actor {
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let list = List.fromArray&lt;Nat&gt;([3, 1, 4]);
+  let list = List.fromArray([3, 1, 4]);
   var text = &quot;&quot;;
   for (item in List.values(list)) {
     text #= Nat.toText(item);
@@ -487,7 +487,7 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
 
 persistent actor {
-  let list = List.fromArray&lt;Nat&gt;([0, 1, 2, 3, 4]);
+  let list = List.fromArray([0, 1, 2, 3, 4]);
   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
 }</code></pre>
 
@@ -498,7 +498,7 @@ persistent actor {
 <pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
 
 persistent actor {
-  let list = List.fromVarArray&lt;Nat&gt;([var 0, 1, 2, 3, 4]);
+  let list = List.fromVarArray([var 0, 1, 2, 3, 4]);
   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
 }</code></pre>
 
@@ -511,8 +511,8 @@ import Array &quot;mo:base/Array&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let array = List.toArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
-  assert Array.equal&lt;Nat&gt;(array, [0, 1, 2, 3, 4], Nat.equal);
+  let array = List.toArray(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
+  assert Array.equal(array, [0, 1, 2, 3, 4], Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -525,7 +525,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let array = List.toVarArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
-  assert Array.equal&lt;Nat&gt;(Array.fromVarArray(array), [0, 1, 2, 3, 4], Nat.equal);
+  assert Array.equal(Array.fromVarArray(array), [0, 1, 2, 3, 4], Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(size)</p>
@@ -535,7 +535,7 @@ Example:</p>
 <pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
 
 persistent actor {
-  let list = List.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].vals());
+  let list = List.fromIter([0, 1, 2, 3, 4].vals());
   assert list == ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
 }</code></pre>
 

@@ -1431,11 +1431,11 @@ module {
     object {
       public func next() : ?(K, V) {
         if (i >= data.count) {
-          return null
+          null
         } else {
           let res = data.kvs[i];
           i += 1;
-          return res
+          res
         }
       }
     }
@@ -1449,11 +1449,11 @@ module {
     object {
       public func next() : ?(K, V) {
         if (i >= data.count) {
-          return null
+          null
         } else {
           let res = data.kvs[i];
           i += 1;
-          return res
+          res
         }
       }
     }

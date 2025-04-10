@@ -1,6 +1,8 @@
+// @testmode wasi
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
+import Test "mo:test";
 import Set "../src/Set";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
@@ -1907,4 +1909,46 @@ run(
 
     ]
   )
+);
+
+Test.suite(
+  "valuesFrom",
+  func() {
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let set = Set.empty<Nat>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Set.add(set, Nat.compare, i);
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Set.valuesFrom(set, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat)>(Set.values(set), func(k) = k < j));
+            Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+          }
+        }
+      }
+    )
+  }
+);
+
+Test.suite(
+  "reverseValuesFrom",
+  func() {
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let set = Set.empty<Nat>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Set.add(set, Nat.compare, i);
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat)>(Set.reverseValues(set), func(k) = k > j));
+            Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+          }
+        }
+      }
+    )
+  }
 )

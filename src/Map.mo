@@ -787,10 +787,8 @@ module {
     key : K
   ) : Types.Iter<(K, V)> {
     switch (map.root) {
-      case (#leaf(leafNode)) { return leafEntriesFrom(leafNode, compare, key) };
-      case (#internal(internalNode)) {
-        internalEntriesFrom(internalNode, compare, key)
-      }
+      case (#leaf(leafNode)) leafEntriesFrom(leafNode, compare, key);
+      case (#internal(internalNode)) internalEntriesFrom(internalNode, compare, key)
     }
   };
 

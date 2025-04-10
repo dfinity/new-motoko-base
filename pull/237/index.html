@@ -314,7 +314,7 @@ error and containing an error value.</p>
 import Result &quot;mo:base/Result&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Runtime.html">Runtime</a><div class="index-item-comment"><p>Runtime utilities.
 These functions were originally part of the <code>Debug</code> module.</p>
 <pre><code>motoko name=import
-import Runtime &quot;mo:base/Runtime&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>An imperative set based on order/comparison of the elements.
+import Runtime &quot;mo:base/Runtime&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Set.html">Set</a><div class="index-item-comment"><p>Imperative (mutable) sets based on order/comparison of elements.
 A set is a collection of elements without duplicates.
 The set data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>
@@ -322,16 +322,17 @@ The set data structure type is stable and can be used for orthogonal persistence
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let userIds = Set.empty&lt;Nat&gt;();
-  Set.add(userIds, Nat.compare, 1);
-  Set.add(userIds, Nat.compare, 2);
-  Set.add(userIds, Nat.compare, 3);
+  let set = Set.fromIter([3, 1, 2, 3].vals(), Nat.compare);
+  assert Set.size(set) == 3;
+  assert not Set.contains(set, Nat.compare, 4);
+  let diff = Set.difference(set, set, Nat.compare);
+  assert Set.isEmpty(diff);
 }</code></pre>
 
-<p>The internal implementation is a B-tree with order 32.</p>
+<p>These sets are implemented as B-trees with order 32, a balanced search tree of ordered elements.</p>
 <p>Performance:</p>
-<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire set.
-<code>n</code> denotes the number of elements stored in the set.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>A mutable stack data structure.
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree,
+where <code>n</code> denotes the number of elements stored in the set.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>A mutable stack data structure.
 Elements can be pushed on top of the stack
 and removed from top of the stack (LIFO).</p>
 <p>Example:</p>
@@ -505,7 +506,7 @@ import Queue &quot;mo:base/pure/Queue&quot;;</code></pre></div></li><li class="i
 A set is a collection of elements without duplicates.
 The set data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:base/pure/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {

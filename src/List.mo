@@ -1656,7 +1656,7 @@ module {
       text := text # f(get<T>(list, i))
     };
 
-    "[" # text # "]"
+    "List[" # text # "]"
   };
 
   /// Collapses the elements in `list` into a single value by starting with `base`

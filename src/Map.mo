@@ -1274,7 +1274,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text {
-    var text = "{";
+    var text = "Map{";
     var sep = "";
     for ((key, value) in entries(map)) {
       text #= sep # "(" # keyFormat(key) # ", " # valueFormat(value) # ")";

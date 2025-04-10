@@ -1,52 +1,68 @@
 # Benchmark Results
 
 
-Benchmark files:
-• bench/FromIters.bench.mo
-• bench/PureListStackSafety.bench.mo
 
-			
-## Benchmarking the fromIter functions
-			
+<details>
+
+<summary>bench/FromIters.bench.mo $({\color{gray}0\%})$</summary>
+
+### Benchmarking the fromIter functions
+
 _Columns describe the number of elements in the input iter._
-			
 
-Instructions
+
+Instructions: ${\color{gray}0\\%}$
+Heap: ${\color{gray}0\\%}$
+Stable Memory: ${\color{gray}0\\%}$
+Garbage Collection: ${\color{gray}0\\%}$
+
+
+**Instructions**
 
 |                              |    100 |    10_000 |    100_000 |
 | :--------------------------- | -----: | --------: | ---------: |
 | Array.fromIter               | 53_373 | 5_152_334 | 51_503_949 |
 | List.fromIter                | 35_436 | 3_421_823 | 34_204_824 |
 | List.fromIter . Iter.reverse | 56_149 | 5_392_962 | 53_907_349 |
-			
 
-Heap
+
+**Heap**
 
 |                              |   100 | 10_000 | 100_000 |
 | :--------------------------- | ----: | -----: | ------: |
 | Array.fromIter               | 272 B |  272 B |   272 B |
 | List.fromIter                | 272 B |  272 B |   272 B |
 | List.fromIter . Iter.reverse | 272 B |  272 B |   272 B |
-			
 
-Garbage Collection
+
+**Garbage Collection**
 
 |                              |      100 |     10_000 |  100_000 |
 | :--------------------------- | -------: | ---------: | -------: |
 | Array.fromIter               | 2.76 KiB | 234.79 KiB | 2.29 MiB |
 | List.fromIter                | 3.51 KiB | 312.88 KiB | 3.05 MiB |
 | List.fromIter . Iter.reverse | 5.11 KiB | 469.17 KiB | 4.58 MiB |
-			
-		
+
+
+</details>
 Saving results to .bench/FromIters.bench.json
 
-			
-## List Stack safety
-			
-_Check stack-safety of the following `pure/List`-related functions._
-			
+<details>
 
-Instructions
+<summary>bench/PureListStackSafety.bench.mo $({\color{gray}0\%})$</summary>
+
+### List Stack safety
+
+_Check stack-safety of the following `pure/List`-related functions._
+
+
+Instructions: ${\color{gray}0\\%}$
+Heap: ${\color{gray}0\\%}$
+Stable Memory: ${\color{gray}0\\%}$
+Garbage Collection: ${\color{gray}0\\%}$
+
+
+**Instructions**
 
 |                     |             |
 | :------------------ | ----------: |
@@ -64,10 +80,10 @@ Instructions
 | pure/List.foldRight |  21_806_962 |
 | pure/List.merge     |  36_411_001 |
 | pure/List.chunks    |  61_513_741 |
-| pure/Queue          | 177_572_220 |
-			
+| pure/Queue          | 161_571_999 |
 
-Heap
+
+**Heap**
 
 |                     |       |
 | :------------------ | ----: |
@@ -86,9 +102,9 @@ Heap
 | pure/List.merge     | 272 B |
 | pure/List.chunks    | 272 B |
 | pure/Queue          | 272 B |
-			
 
-Garbage Collection
+
+**Garbage Collection**
 
 |                     |           |
 | :------------------ | --------: |
@@ -107,6 +123,7 @@ Garbage Collection
 | pure/List.merge     |  4.58 MiB |
 | pure/List.chunks    |  7.63 MiB |
 | pure/Queue          | 18.31 MiB |
-			
-		
+
+
+</details>
 Saving results to .bench/PureListStackSafety.bench.json

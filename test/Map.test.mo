@@ -1566,4 +1566,25 @@ Test.suite(
       }
     )
   }
+);
+
+Test.suite(
+  "reverseEntriesFrom",
+  func() {
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Map.add(map, Nat.compare, i, Nat.toText(i));
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat, Text)>(Map.reverseEntries(map), func(k, v) = k > j));
+            Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+          }
+        }
+      }
+    )
+  }
 )

@@ -835,5 +835,10 @@ module {
   /// ```
   public let toUpper : Text -> Text = Prim.textUppercase;
 
-  public func toText(t : Text) : Text = "\"" # t # "\""
+  /// Returns the given text value unchanged.
+  ///
+  /// ```motoko include=import
+  /// assert Text.toText("Hello") == "Hello";
+  /// ```
+  public func toText(t : Text) : Text = t
 }

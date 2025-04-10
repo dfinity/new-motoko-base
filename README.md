@@ -41,6 +41,7 @@ Run the following commands to configure your local development branch:
 git clone https://github.com/dfinity/new-motoko-base
 cd new-motoko-base
 npm ci
+npx ic-mops toolchain init
 ```
 
 Below is a quick reference for commonly-used scripts during development:

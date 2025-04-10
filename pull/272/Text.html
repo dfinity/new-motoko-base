@@ -151,6 +151,7 @@ WARNING: Unicode compliant only when compiled, not interpreted.</p>
 let text = Text.toLower(&quot;Good Day&quot;); // ?&quot;good day&quot;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toUpper"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toUpper</span> : <a href="#type.Text"><span class="type">Text</span></a> -&gt; <a href="#type.Text"><span class="type">Text</span></a></code></h4><p><p>Returns the text argument in uppercase. Unicode compliant.
 WARNING: Unicode compliant only when compiled, not interpreted.</p>
 <pre><code>motoko include=import
-let text = Text.toUpper(&quot;Good Day&quot;); // ?&quot;GOOD DAY&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">t</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <a href="#type.Text"><span class="type">Text</span></a></code></h4><p><p>Returns the given text value unchanged.</p>
+let text = Text.toUpper(&quot;Good Day&quot;); // ?&quot;GOOD DAY&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">t</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <a href="#type.Text"><span class="type">Text</span></a></code></h4><p><p>Returns the given text value unchanged.
+This function is provided for consistency with other modules.</p>
 <pre><code>motoko include=import
 assert Text.toText(&quot;Hello&quot;) == &quot;Hello&quot;;</code></pre></p></div></div></body></html>

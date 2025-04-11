@@ -187,7 +187,7 @@ module {
   ///   Map.add(map, Nat.compare, 0, "Zero");
   ///   Map.add(map, Nat.compare, 1, "One");
   ///   Map.add(map, Nat.compare, 2, "Two");
-  ///   assert Map.size(map)) == 3;
+  ///   assert Map.size(map) == 3;
   ///
   ///   Map.clear(map);
   ///   assert Map.size(map) == 0;

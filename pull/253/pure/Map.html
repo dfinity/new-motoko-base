@@ -66,7 +66,6 @@ Space: <code>O(1)</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
 
@@ -78,7 +77,6 @@ Space: <code>O(1)</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
@@ -95,7 +93,6 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
@@ -294,7 +291,6 @@ causes collecting <code>O(log(n))</code> nodes.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
@@ -309,7 +305,6 @@ where <code>n</code> denotes the number of key-value entries stored in the map.<
 </p></div><div class="declaration"><h4 class="function" id="minEntry"><code><span class="keyword">public func </span><span class="fnname">minEntry</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;) : ?(<span class="type">K</span>, <span class="type">V</span>)</code></h4><p><p>Retrieves a key-value pair from <code>map</code> with the minimal key. If the map is empty returns <code>null</code>.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
@@ -501,7 +496,6 @@ where <code>n</code> denotes the number of key-value entries stored in the map.<
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let map = Map.fromIter([(0, &quot;0&quot;), (2, &quot;2&quot;), (1, &quot;1&quot;)].values(), Nat.compare);
@@ -516,10 +510,11 @@ where <code>n</code> denotes the number of key-value entries stored in the map.<
 </p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">key</span> : <span class="type">K</span>, <span class="parameter">value</span> : <span class="type">V</span>) : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></h4><p><p>Create a new immutable key-value <code>map</code> with a single entry.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let cityCodes = Map.singleton&lt;Text, Nat&gt;(&quot;Zurich&quot;, 8000);
-  assert Map.size(cityCodes) == 1;
+  let map = Map.singleton&lt;Nat, Text&gt;(0, &quot;Zero&quot;);
+  assert Iter.toArray(Map.entries(map)) == [(0, &quot;Zero&quot;)];
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code>.
@@ -529,7 +524,6 @@ The operation is applied in ascending order of the keys.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);

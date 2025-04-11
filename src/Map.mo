@@ -757,6 +757,38 @@ module {
   };
 
   /// Returns an iterator over the key-value pairs in the map,
+  /// starting from a given key in ascending order.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  ///
+  /// persistent actor {
+  ///   let map = Map.fromIter([(0, "Zero"), (3, "Three),  (1, "One")].values(), Nat.compare);
+  ///   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 1)) == [(1, "One"), (3, "Three")];
+  ///   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 2)) == [(3, "Three")];
+  /// }
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func entriesFrom<K, V>(
+    map : Map<K, V>,
+    compare : (K, K) -> Order.Order,
+    key : K
+  ) : Types.Iter<(K, V)> {
+    switch (map.root) {
+      case (#leaf(leafNode)) leafEntriesFrom(leafNode, compare, key);
+      case (#internal(internalNode)) internalEntriesFrom(internalNode, compare, key)
+    }
+  };
+
+  /// Returns an iterator over the key-value pairs in the map,
   /// traversing the entries in the descending order of the keys.
   ///
   /// Example:
@@ -788,8 +820,40 @@ module {
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func reverseEntries<K, V>(map : Map<K, V>) : Types.Iter<(K, V)> {
     switch (map.root) {
-      case (#leaf(leafNode)) { return reverseLeafEntries(leafNode) };
-      case (#internal(internalNode)) { reverseInternalEntries(internalNode) }
+      case (#leaf(leafNode)) reverseLeafEntries(leafNode);
+      case (#internal(internalNode)) reverseInternalEntries(internalNode)
+    }
+  };
+
+  /// Returns an iterator over the key-value pairs in the map,
+  /// starting from a given key in descending order.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Map "mo:base/Map";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  ///
+  /// persistent actor {
+  ///   let map = Map.fromIter([(0, "Zero"), (1, "One"), (3, "Three")].values(), Nat.compare);
+  ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 1)) == [(1, "One"), (0, "Zero")];
+  ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 2)) == [(0, "Zero")];
+  /// }
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func reverseEntriesFrom<K, V>(
+    map : Map<K, V>,
+    compare : (K, K) -> Order.Order,
+    key : K
+  ) : Types.Iter<(K, V)> {
+    switch (map.root) {
+      case (#leaf(leafNode)) reverseLeafEntriesFrom(leafNode, compare, key);
+      case (#internal(internalNode)) reverseInternalEntriesFrom(internalNode, compare, key)
     }
   };
 
@@ -1359,11 +1423,29 @@ module {
     object {
       public func next() : ?(K, V) {
         if (i >= data.count) {
-          return null
+          null
         } else {
           let res = data.kvs[i];
           i += 1;
-          return res
+          res
+        }
+      }
+    }
+  };
+
+  func leafEntriesFrom<K, V>({ data } : Leaf<K, V>, compare : (K, K) -> Order.Order, key : K) : Types.Iter<(K, V)> {
+    var i = switch (BinarySearch.binarySearchNode<K, V>(data.kvs, compare, key, data.count)) {
+      case (#keyFound(i)) i;
+      case (#notFound(i)) i
+    };
+    object {
+      public func next() : ?(K, V) {
+        if (i >= data.count) {
+          null
+        } else {
+          let res = data.kvs[i];
+          i += 1;
+          res
         }
       }
     }
@@ -1374,11 +1456,29 @@ module {
     object {
       public func next() : ?(K, V) {
         if (i == 0) {
-          return null
+          null
         } else {
           let res = data.kvs[i - 1];
           i -= 1;
-          return res
+          res
+        }
+      }
+    }
+  };
+
+  func reverseLeafEntriesFrom<K, V>({ data } : Leaf<K, V>, compare : (K, K) -> Order.Order, key : K) : Types.Iter<(K, V)> {
+    var i = switch (BinarySearch.binarySearchNode<K, V>(data.kvs, compare, key, data.count)) {
+      case (#keyFound(i)) i + 1; // +1 to include this key
+      case (#notFound(i)) i // i is the index of the first key greater than the search key, or count if all keys are less than the search key
+    };
+    object {
+      public func next() : ?(K, V) {
+        if (i == 0) {
+          null
+        } else {
+          let res = data.kvs[i - 1];
+          i -= 1;
+          res
         }
       }
     }
@@ -1388,11 +1488,19 @@ module {
   type NodeCursor<K, V> = { node : Node<K, V>; kvIndex : Nat };
 
   func internalEntries<K, V>(internal : Internal<K, V>) : Types.Iter<(K, V)> {
-    object {
-      // The nodeCursorStack keeps track of the current node and the current key-value index in the node
-      // We use a stack here to push to/pop off the next node cursor to visit
-      let nodeCursorStack = initializeForwardNodeCursorStack(internal);
+    // The nodeCursorStack keeps track of the current node and the current key-value index in the node
+    // We use a stack here to push to/pop off the next node cursor to visit
+    let nodeCursorStack = initializeForwardNodeCursorStack(internal);
+    internalEntriesFromStack(nodeCursorStack)
+  };
 
+  func internalEntriesFrom<K, V>(internal : Internal<K, V>, compare : (K, K) -> Order.Order, key : K) : Types.Iter<(K, V)> {
+    let nodeCursorStack = initializeForwardNodeCursorStackFrom(internal, compare, key);
+    internalEntriesFromStack(nodeCursorStack)
+  };
+
+  func internalEntriesFromStack<K, V>(nodeCursorStack : Stack.Stack<NodeCursor<K, V>>) : Types.Iter<(K, V)> {
+    object {
       public func next() : ?(K, V) {
         // pop the next node cursor off the stack
         var nodeCursor = Stack.pop(nodeCursorStack);
@@ -1469,11 +1577,19 @@ module {
   };
 
   func reverseInternalEntries<K, V>(internal : Internal<K, V>) : Types.Iter<(K, V)> {
-    object {
-      // The nodeCursorStack keeps track of the current node and the current key-value index in the node
-      // We use a stack here to push to/pop off the next node cursor to visit
-      let nodeCursorStack = initializeReverseNodeCursorStack(internal);
+    // The nodeCursorStack keeps track of the current node and the current key-value index in the node
+    // We use a stack here to push to/pop off the next node cursor to visit
+    let nodeCursorStack = initializeReverseNodeCursorStack(internal);
+    reverseInternalEntriesFromStack(nodeCursorStack)
+  };
 
+  func reverseInternalEntriesFrom<K, V>(internal : Internal<K, V>, compare : (K, K) -> Order.Order, key : K) : Types.Iter<(K, V)> {
+    let nodeCursorStack = initializeReverseNodeCursorStackFrom(internal, compare, key);
+    reverseInternalEntriesFromStack(nodeCursorStack)
+  };
+
+  func reverseInternalEntriesFromStack<K, V>(nodeCursorStack : Stack.Stack<NodeCursor<K, V>>) : Types.Iter<(K, V)> {
+    object {
       public func next() : ?(K, V) {
         // pop the next node cursor off the stack
         var nodeCursor = Stack.pop(nodeCursorStack);
@@ -1554,6 +1670,17 @@ module {
     nodeCursorStack
   };
 
+  func initializeForwardNodeCursorStackFrom<K, V>(internal : Internal<K, V>, compare : (K, K) -> Order.Order, key : K) : Stack.Stack<NodeCursor<K, V>> {
+    let nodeCursorStack = Stack.empty<NodeCursor<K, V>>();
+    let nodeCursor : NodeCursor<K, V> = {
+      node = #internal(internal);
+      kvIndex = 0
+    };
+
+    traverseMinSubtreeIterFrom(nodeCursorStack, nodeCursor, compare, key);
+    nodeCursorStack
+  };
+
   func initializeReverseNodeCursorStack<K, V>(internal : Internal<K, V>) : Stack.Stack<NodeCursor<K, V>> {
     let nodeCursorStack = Stack.empty<NodeCursor<K, V>>();
     let nodeCursor : NodeCursor<K, V> = {
@@ -1565,6 +1692,17 @@ module {
     Stack.push(nodeCursorStack, nodeCursor);
     // then traverse left
     traverseMaxSubtreeIter(nodeCursorStack, nodeCursor);
+    nodeCursorStack
+  };
+
+  func initializeReverseNodeCursorStackFrom<K, V>(internal : Internal<K, V>, compare : (K, K) -> Order.Order, key : K) : Stack.Stack<NodeCursor<K, V>> {
+    let nodeCursorStack = Stack.empty<NodeCursor<K, V>>();
+    let nodeCursor : NodeCursor<K, V> = {
+      node = #internal(internal);
+      kvIndex = internal.data.count
+    };
+
+    traverseMaxSubtreeIterFrom(nodeCursorStack, nodeCursor, compare, key);
     nodeCursorStack
   };
 
@@ -1601,6 +1739,34 @@ module {
           }
         }
       }
+    }
+  };
+
+  func traverseMinSubtreeIterFrom<K, V>(nodeCursorStack : Stack.Stack<NodeCursor<K, V>>, nodeCursor : NodeCursor<K, V>, compare : (K, K) -> Order.Order, key : K) {
+    var currentNode = nodeCursor.node;
+
+    label l loop {
+      let (node, childrenOption) = switch (currentNode) {
+        case (#leaf(leafNode)) (leafNode, null);
+        case (#internal(internalNode)) (internalNode, ?internalNode.children)
+      };
+      let (i, isFound) = switch (NodeUtil.getKeyIndex<K, V>(node.data, compare, key)) {
+        case (#keyFound(i)) (i, true);
+        case (#notFound(i)) (i, false)
+      };
+      if (i < node.data.count) {
+        Stack.push(
+          nodeCursorStack,
+          {
+            node = currentNode;
+            kvIndex = i // greater entries to traverse
+          }
+        )
+      };
+      if isFound return;
+      let ?children = childrenOption else return;
+      let ?childNode = children[i] else Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.traverseMinSubtreeIterFrom(), null child node error");
+      currentNode := childNode
     }
   };
 
@@ -1641,6 +1807,34 @@ module {
           }
         }
       }
+    }
+  };
+
+  func traverseMaxSubtreeIterFrom<K, V>(nodeCursorStack : Stack.Stack<NodeCursor<K, V>>, nodeCursor : NodeCursor<K, V>, compare : (K, K) -> Order.Order, key : K) {
+    var currentNode = nodeCursor.node;
+
+    label l loop {
+      let (node, childrenOption) = switch (currentNode) {
+        case (#leaf(leafNode)) (leafNode, null);
+        case (#internal(internalNode)) (internalNode, ?internalNode.children)
+      };
+      let (i, isFound) = switch (NodeUtil.getKeyIndex<K, V>(node.data, compare, key)) {
+        case (#keyFound(i)) (i + 1, true); // +1 to include this key
+        case (#notFound(i)) (i, false) // i is the index of the first key less than the search key, or 0 if all keys are greater than the search key
+      };
+      if (i > 0) {
+        Stack.push(
+          nodeCursorStack,
+          {
+            node = currentNode;
+            kvIndex = i
+          }
+        )
+      };
+      if isFound return;
+      let ?children = childrenOption else return;
+      let ?childNode = children[i] else Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Map.traverseMaxSubtreeIterFrom(), null child node error");
+      currentNode := childNode
     }
   };
 

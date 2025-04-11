@@ -833,5 +833,13 @@ module {
   /// ```motoko include=import
   /// let text = Text.toUpper("Good Day"); // ?"GOOD DAY"
   /// ```
-  public let toUpper : Text -> Text = Prim.textUppercase
+  public let toUpper : Text -> Text = Prim.textUppercase;
+
+  /// Returns the given text value unchanged.
+  /// This function is provided for consistency with other modules.
+  ///
+  /// ```motoko include=import
+  /// assert Text.toText("Hello") == "Hello";
+  /// ```
+  public func toText(t : Text) : Text = t
 }

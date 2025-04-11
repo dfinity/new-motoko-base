@@ -42,10 +42,13 @@ assert array == [0, 1, 3];</code></pre>
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Transforms an immutable array into a mutable array.</p>
 <pre><code>motoko include=import
+import VarArray &quot;mo:base/VarArray&quot;;
+import Nat &quot;mo:base/Nat&quot;;
+
 let array = [0, 1, 2];
 let varArray = Array.toVarArray&lt;Nat&gt;(array);
 varArray[2] := 3;
-assert varArray == [var 0, 1, 3];</code></pre>
+assert VarArray.equal(varArray, [var 0, 1, 3], Nat.equal);</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(1)</p>

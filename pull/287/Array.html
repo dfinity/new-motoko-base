@@ -160,7 +160,7 @@ Retains original ordering of elements.</p>
 
 let array = [10, 10, 10, 10];
 let newArray = Array.mapEntries&lt;Nat, Nat&gt;(array, func (x, i) = i * x);
-assert newArray == [10, 20, 30, 40];</code></pre>
+assert newArray == [0, 10, 20, 30];</code></pre>
 
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>

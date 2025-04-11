@@ -862,7 +862,7 @@ module {
   /// Space: O(1)
   public func values<T>(array : [var T]) : Types.Iter<T> = array.vals();
 
-  /// Returns an iterator that provides pairs of (index, element) in order, or `null` 
+  /// Returns an iterator that provides pairs of (index, element) in order, or `null`
   /// when out of elements to iterate over.
   ///
   /// ```motoko include=import

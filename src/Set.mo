@@ -56,11 +56,12 @@ module {
   /// import Set "mo:base/Set";
   /// import PureSet "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.fromIter<Nat>([0, 2, 1].values(), Nat.compare);
   ///   let pureSet = Set.toPure(set, Nat.compare);
-  ///   assert PureSet.contains(pureSet, Nat.compare, 1);
+  ///   assert Iter.toArray(PureSet.values(pureSet)) == Iter.toArray(Set.values(set));
   /// }
   /// ```
   ///
@@ -81,11 +82,12 @@ module {
   /// import PureSet "mo:base/pure/Set";
   /// import Set "mo:base/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let pureSet = PureSet.fromIter([3, 1, 2].values(), Nat.compare);
-  ///   let mutableSet = Set.fromPure(pureSet, Nat.compare);
-  ///   assert Set.contains(mutableSet, Nat.compare, 1);
+  ///   let set = Set.fromPure(pureSet, Nat.compare);
+  ///   assert Iter.toArray(Set.values(set)) == Iter.toArray(PureSet.values(pureSet));
   /// }
   /// ```
   ///

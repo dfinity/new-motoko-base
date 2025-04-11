@@ -421,7 +421,7 @@ module {
   ///
   /// let array = [10, 10, 10, 10];
   /// let newArray = Array.mapEntries<Nat, Nat>(array, func (x, i) = i * x);
-  /// assert newArray == [10, 20, 30, 40];
+  /// assert newArray == [0, 10, 20, 30];
   /// ```
   ///
   /// Runtime: O(size)

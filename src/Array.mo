@@ -100,7 +100,7 @@ module {
   ///
   /// let array1 = [0, 1, 2, 3];
   /// let array2 = [0, 1, 2, 3];
-  /// Array.equal(array1, array2, equal)
+  /// assert Array.equal(array1, array2, equal);
   /// ```
   ///
   /// Runtime: O(size1 + size2)
@@ -129,7 +129,8 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 9, 4, 8];
-  /// Array.find<Nat>(array, func x = x > 8)
+  /// let found = Array.find<Nat>(array, func x = x > 8);
+  /// assert found == ?9;
   /// ```
   /// Runtime: O(size)
   ///
@@ -151,7 +152,8 @@ module {
   /// ```motoko include=import
   /// let array1 = [1, 2, 3];
   /// let array2 = [4, 5, 6];
-  /// Array.concat<Nat>(array1, array2)
+  /// let result = Array.concat<Nat>(array1, array2);
+  /// assert result == [1, 2, 3, 4, 5, 6];
   /// ```
   /// Runtime: O(size1 + size2)
   ///
@@ -178,7 +180,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let array = [4, 2, 6];
-  /// Array.sort(array, Nat.compare)
+  /// let sorted = Array.sort(array, Nat.compare);
+  /// assert sorted == [2, 4, 6];
   /// ```
   /// Runtime: O(size * log(size))
   ///
@@ -196,7 +199,7 @@ module {
   ///
   /// let array = [10, 11, 12];
   ///
-  /// Array.reverse(array)
+  /// assert Array.reverse(array) == [12, 11, 10];
   /// ```
   ///
   /// Runtime: O(size)
@@ -211,12 +214,12 @@ module {
   /// Retains original ordering of elements.
   ///
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  ///
+  /// var sum = 0;
   /// let array = [0, 1, 2, 3];
   /// Array.forEach<Nat>(array, func(x) {
-  ///   Debug.print(debug_show x)
-  /// })
+  ///   sum += x;
+  /// });
+  /// assert sum == 6;
   /// ```
   ///
   /// Runtime: O(size)
@@ -253,6 +256,7 @@ module {
   /// ```motoko include=import
   /// let array = [4, 2, 6, 1, 5];
   /// let evenElements = Array.filter<Nat>(array, func x = x % 2 == 0);
+  /// assert evenElements == [4, 2, 6];
   /// ```
   /// Runtime: O(size)
   ///
@@ -296,6 +300,7 @@ module {
   ///     array,
   ///     func x = if (x == 0) { null } else { ?toText(100 / x) } // can't divide by 0, so return null
   ///   );
+  /// assert newArray == ["25", "50", "100"];
   /// ```
   /// Runtime: O(size)
   ///
@@ -344,13 +349,14 @@ module {
   /// ```motoko include=import
   /// let array = [4, 3, 2, 1, 0];
   /// // divide 100 by every element in the array
-  /// Array.mapResult<Nat, Nat, Text>(array, func x {
+  /// let result = Array.mapResult<Nat, Nat, Text>(array, func x {
   ///   if (x > 0) {
   ///     #ok(100 / x)
   ///   } else {
   ///     #err "Cannot divide by zero"
   ///   }
-  /// })
+  /// });
+  /// assert result == #err "Cannot divide by zero";
   /// ```
   ///
   /// Runtime: O(size)
@@ -414,7 +420,8 @@ module {
   /// ```motoko include=import
   ///
   /// let array = [10, 10, 10, 10];
-  /// Array.mapEntries<Nat, Nat>(array, func (x, i) = i * x)
+  /// let newArray = Array.mapEntries<Nat, Nat>(array, func (x, i) = i * x);
+  /// assert newArray == [10, 20, 30, 40];
   /// ```
   ///
   /// Runtime: O(size)
@@ -429,7 +436,8 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4];
-  /// Array.flatMap<Nat, Int>(array, func x = [x, -x].values()) // => [1, -1, 2, -2, 3, -3, 4, -4]
+  /// let newArray = Array.flatMap<Nat, Int>(array, func x = [x, -x].values());
+  /// assert newArray == [1, -1, 2, -2, 3, -3, 4, -4];
   /// ```
   /// Runtime: O(size)
   ///
@@ -478,6 +486,7 @@ module {
   ///     0, // start the sum at 0
   ///     func(sumSoFar, x) = sumSoFar + x // this entire function can be replaced with `add`!
   ///   );
+  /// assert sum == 7;
   /// ```
   ///
   /// Runtime: O(size)
@@ -502,6 +511,7 @@ module {
   ///
   /// let array = [1, 9, 4, 8];
   /// let bookTitle = Array.foldRight<Nat, Text>(array, "", func(x, acc) = toText(x) # acc);
+  /// assert bookTitle == "1948";
   /// ```
   ///
   /// Runtime: O(size)
@@ -527,7 +537,8 @@ module {
   ///
   /// ```motoko include=import
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.join<Nat>(arrays.values()) // => [0, 1, 2, 2, 3, 4]
+  /// let joinedArray = Array.join<Nat>(arrays.values());
+  /// assert joinedArray == [0, 1, 2, 2, 3, 4];
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -545,7 +556,8 @@ module {
   /// ```motoko include=import
   ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flatten<Nat>(arrays) // => [0, 1, 2, 2, 3, 4]
+  /// let flatArray = Array.flatten<Nat>(arrays);
+  /// assert flatArray == [0, 1, 2, 2, 3, 4];
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -644,7 +656,7 @@ module {
   /// for (element in array.keys()) {
   ///   sum += element;
   /// };
-  /// sum
+  /// assert sum == 3; // 0 + 1 + 2
   /// ```
   ///
   /// Runtime: O(1)
@@ -665,7 +677,7 @@ module {
   /// for (element in array.values()) {
   ///   sum += element;
   /// };
-  /// sum
+  /// assert sum == 33;
   /// ```
   ///
   /// Runtime: O(1)
@@ -683,7 +695,7 @@ module {
   /// for ((index, element) in Array.enumerate(array)) {
   ///   sum += element;
   /// };
-  /// sum // => 33
+  /// assert sum == 33;
   /// ```
   ///
   /// Runtime: O(1)
@@ -706,7 +718,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4];
-  /// Array.all<Nat>(array, func x = x > 0) // => true
+  /// assert Array.all<Nat>(array, func x = x > 0);
   /// ```
   ///
   /// Runtime: O(size)
@@ -727,7 +739,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4];
-  /// Array.any<Nat>(array, func x = x > 3) // => true
+  /// assert Array.any<Nat>(array, func x = x > 3);
   /// ```
   ///
   /// Runtime: O(size)
@@ -932,7 +944,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let array = [1, 2, 3];
-  /// Array.toText<Nat>(array, Nat.toText) // => "[1, 2, 3]"
+  /// let text = Array.toText<Nat>(array, Nat.toText);
+  /// assert text == "[1, 2, 3]";
   /// ```
   ///
   /// Runtime: O(size)
@@ -968,7 +981,7 @@ module {
   ///
   /// let array1 = [1, 2, 3];
   /// let array2 = [1, 2, 4];
-  /// Array.compare<Nat>(array1, array2, Nat.compare) // => #less
+  /// assert Array.compare<Nat>(array1, array2, Nat.compare) == #less;
   /// ```
   ///
   /// ```motoko include=import
@@ -976,7 +989,7 @@ module {
   ///
   /// let array3 = [1, 2];
   /// let array4 = [1, 2, 3];
-  /// Array.compare<Nat>(array3, array4, Nat.compare) // => #less /* shorter array */
+  /// assert Array.compare<Nat>(array3, array4, Nat.compare) == #less;
   /// ```
   ///
   /// Runtime: O(min(size1, size2))

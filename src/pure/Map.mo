@@ -357,12 +357,14 @@ module {
   ///   let map0 =
   ///     Map.fromIter<Nat, Text>([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
   ///
-  ///   let r1 = Map.delete(map0, Nat.compare, 1);
-  ///   assert Iter.toArray(Map.entries(r1.0)) == [(0, "Zero"), (2, "Two")];
-  ///   assert r1.1;
-  ///   let r2 = Map.delete(map0, Nat.compare, 42);
-  ///   assert not r2.1;
-  ///   assert Iter.toArray(Map.entries(r2.0)) == [(0, "Zero"), (1, "One"), (2, "Two")];
+  ///   do {
+  ///     let (map1, pres1) = Map.delete(map0, Nat.compare, 1);
+  ///     assert Iter.toArray(Map.entries(map1)) == [(0, "Zero"), (2, "Two")];
+  ///     assert pres1;
+  ///     let (map2, pres2) = Map.delete(map0, Nat.compare, 42);
+  ///     assert not pres2;
+  ///     assert Iter.toArray(Map.entries(map2)) == [(0, "Zero"), (1, "One"), (2, "Two")];
+  ///   }
   /// }
   /// ```
   ///

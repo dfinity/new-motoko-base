@@ -113,10 +113,10 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let map = Map.empty&lt;Nat, Text&gt;();
+  let map0 = Map.empty&lt;Nat, Text&gt;();
 
   do {
-    let (map0, new0) = Map.insert(map, Nat.compare, 0, &quot;Zero&quot;);
+    let (map1, new1) = Map.insert(map0, Nat.compare, 0, &quot;Zero&quot;);
     assert Iter.toArray(Map.entries(map1)) == [(0, &quot;Zero&quot;)];
     assert new1;
     let (map2, new2) = Map.insert(map1, Nat.compare, 0, &quot;Nil&quot;);
@@ -200,7 +200,7 @@ persistent actor {
     assert prev1 == ?&quot;Zero&quot;;
     assert Map.get(map1, Nat.compare, 0) == ?&quot;Nil&quot;;
 
-    let (map2, prev2) = Map.replaceIfExists(1, Nat.compare, 1, &quot;One&quot;);  // no effect, key is absent
+    let (map2, prev2) = Map.replaceIfExists(map1, Nat.compare, 1, &quot;One&quot;);  // no effect, key is absent
     assert prev2 == null;
     assert Map.get(map2, Nat.compare, 1) == null;
  }

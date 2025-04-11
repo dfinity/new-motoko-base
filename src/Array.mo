@@ -1,6 +1,8 @@
-/// Provides extended utility functions on Arrays.
+/// Provides extended utility functions on immutable Arrays (`[]`).
 ///
-/// Note the difference between mutable and non-mutable arrays below.
+/// Note the difference between mutable (`[var]`) and immutable (`[]`) arrays.
+/// Mutable arrays allow their elements to be modified after creation, while
+/// immutable arrays are fixed once created.
 ///
 /// WARNING: If you are looking for a list that can grow and shrink in size,
 /// it is recommended you use `List` for those purposes.
@@ -21,6 +23,15 @@ import Prim "mo:⛔";
 module {
 
   /// Creates an empty array (equivalent to `[]`).
+  ///
+  /// ```motoko include=import
+  /// let array = Array.empty<Text>();
+  /// assert array == [];
+  /// ```
+  ///
+  /// Runtime: O(1)
+  ///
+  /// Space: O(1)
   public func empty<T>() : [T] = [];
 
   /// Creates an array containing `item` repeated `size` times.
@@ -53,10 +64,10 @@ module {
   /// Transforms a mutable array into an immutable array.
   ///
   /// ```motoko include=import
-  ///
   /// let varArray = [var 0, 1, 2];
   /// varArray[2] := 3;
   /// let array = Array.fromVarArray<Nat>(varArray);
+  /// assert array == [0, 1, 3];
   /// ```
   ///
   /// Runtime: O(size)
@@ -67,11 +78,10 @@ module {
   /// Transforms an immutable array into a mutable array.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [0, 1, 2];
   /// let varArray = Array.toVarArray<Nat>(array);
   /// varArray[2] := 3;
-  /// varArray
+  /// assert varArray == [var 0, 1, 3];
   /// ```
   ///
   /// Runtime: O(size)
@@ -147,7 +157,7 @@ module {
   };
 
   /// Create a new array by concatenating the values of `array1` and `array2`.
-  /// Note that `Array.append` copies its arguments and has linear complexity.
+  /// Note that `Array.concat` copies its arguments and has linear complexity.
   ///
   /// ```motoko include=import
   /// let array1 = [1, 2, 3];
@@ -196,10 +206,9 @@ module {
   /// Creates a new array by reversing the order of elements in `array`.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 11, 12];
-  ///
-  /// assert Array.reverse(array) == [12, 11, 10];
+  /// let reversed = Array.reverse(array);
+  /// assert reversed == [12, 11, 10];
   /// ```
   ///
   /// Runtime: O(size)
@@ -418,7 +427,6 @@ module {
   /// Retains original ordering of elements.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 10, 10, 10];
   /// let newArray = Array.mapEntries<Nat, Nat>(array, func (x, i) = i * x);
   /// assert newArray == [0, 10, 20, 30];
@@ -533,7 +541,7 @@ module {
   /// Combines an iterator of arrays into a single array. Retains the original
   /// ordering of the elements.
   ///
-  /// Consider using `Array.flatten()` where possible for better performance.
+  /// Consider using `Array.flatten()` for better performance.
   ///
   /// ```motoko include=import
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
@@ -554,7 +562,6 @@ module {
   /// This has better performance compared to `Array.join()`.
   ///
   /// ```motoko include=import
-  ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
   /// let flatArray = Array.flatten<Nat>(arrays);
   /// assert flatArray == [0, 1, 2, 2, 3, 4];
@@ -588,7 +595,7 @@ module {
   /// Create an array containing a single value.
   ///
   /// ```motoko include=import
-  /// var array = Array.singleton(2);
+  /// let array = Array.singleton(2);
   /// assert array == [2];
   /// ```
   ///

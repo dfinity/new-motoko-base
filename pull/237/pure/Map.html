@@ -113,13 +113,16 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let map = Map.empty&lt;Nat, Text&gt;();
+  let map0 = Map.empty&lt;Nat, Text&gt;();
 
-  transient let (map0, true) = Map.insert(map, Nat.compare, 0, &quot;Zero&quot;);
-  transient let (map1, true) = Map.insert(map0, Nat.compare, 1, &quot;One&quot;);
-  assert Iter.toArray(Map.entries(map1)) == [(0, &quot;Zero&quot;), (1, &quot;One&quot;)];
-  transient let (map2, false) = Map.insert(map1, Nat.compare, 0, &quot;Nil&quot;);
-  assert Iter.toArray(Map.entries(map2)) == [(0, &quot;Nil&quot;), (1, &quot;One&quot;)];
+  do {
+    let (map1, new1) = Map.insert(map0, Nat.compare, 0, &quot;Zero&quot;);
+    assert Iter.toArray(Map.entries(map1)) == [(0, &quot;Zero&quot;)];
+    assert new1;
+    let (map2, new2) = Map.insert(map1, Nat.compare, 0, &quot;Nil&quot;);
+    assert Iter.toArray(Map.entries(map2)) == [(0, &quot;Nil&quot;)];
+    assert not new2
+  }
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -190,15 +193,17 @@ If the key does not exist, returns the original map and <code>null</code>.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let singleton = Map.singleton(0, &quot;Null&quot;);
+  let singleton = Map.singleton(0, &quot;Zero&quot;);
 
-  transient let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, &quot;Zero&quot;); // overwrites the value for existing key.
-  assert oldZero == ?&quot;Null&quot;;
-  assert Map.get(map1, Nat.compare, 0) == ?&quot;Zero&quot;;
-  let empty = Map.empty&lt;Nat, Text&gt;();
-  transient let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, &quot;One&quot;);  // no effect, key is absent
-  assert oldOne == null;
-  assert Map.get(map2, Nat.compare, 0) == null;
+  do {
+    let (map1, prev1) = Map.replaceIfExists(singleton, Nat.compare, 0, &quot;Nil&quot;); // overwrites the value for existing key.
+    assert prev1 == ?&quot;Zero&quot;;
+    assert Map.get(map1, Nat.compare, 0) == ?&quot;Nil&quot;;
+
+    let (map2, prev2) = Map.replaceIfExists(map1, Nat.compare, 1, &quot;One&quot;);  // no effect, key is absent
+    assert prev2 == null;
+    assert Map.get(map2, Nat.compare, 1) == null;
+ }
 }</code></pre>
 
 <p>Runtime: <code>O(log(n))</code>.
@@ -270,7 +275,7 @@ persistent actor {
   let map0 =  Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
 
   do {
-    let (map1, prev1)= Map.take(map0, Nat.compare, 0);
+    let (map1, prev1) = Map.take(map0, Nat.compare, 0);
     assert Iter.toArray(Map.entries(map1)) == [(1, &quot;One&quot;), (2, &quot;Two&quot;)];
     assert prev1 == ?&quot;Zero&quot;;
 
@@ -403,7 +408,10 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
+  transient let iter =
+    Iter.fromArray([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)]);
+
+  let map = Map.fromIter(iter, Nat.compare);
 
   assert Iter.toArray(Map.entries(map)) == [(0, &quot;Zero&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;)];
 }</code></pre>
@@ -546,12 +554,16 @@ that fulfil the criterion function.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let numberNames = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
+
   let evenNames = Map.filter&lt;Nat, Text&gt;(numberNames, Nat.compare, func (key, value) {
     key % 2 == 0
   });
+
+  assert Iter.toArray(Map.entries(evenNames)) == [(0, &quot;Zero&quot;), (2, &quot;Two&quot;)];
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

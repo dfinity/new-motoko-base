@@ -78,10 +78,13 @@ module {
   /// Transforms an immutable array into a mutable array.
   ///
   /// ```motoko include=import
+  /// import VarArray "mo:base/VarArray";
+  /// import Nat "mo:base/Nat";
+  ///
   /// let array = [0, 1, 2];
   /// let varArray = Array.toVarArray<Nat>(array);
   /// varArray[2] := 3;
-  /// assert varArray == [var 0, 1, 3];
+  /// assert VarArray.equal(varArray, [var 0, 1, 3], Nat.equal);
   /// ```
   ///
   /// Runtime: O(size)

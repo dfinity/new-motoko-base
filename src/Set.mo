@@ -620,11 +620,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 0);
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 3);
-  ///
+  ///   let set = Set.fromIter([0, 3, 1].values(), Nat.compare);
   ///   assert Iter.toArray(Set.valuesFrom(set, Nat.compare, 1)) == [1, 3];
   ///   assert Iter.toArray(Set.valuesFrom(set, Nat.compare, 2)) == [3];
   /// }
@@ -693,11 +689,8 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let set = Set.empty<Nat>();
-  ///   Set.add(set, Nat.compare, 0);
-  ///   Set.add(set, Nat.compare, 1);
-  ///   Set.add(set, Nat.compare, 3);
-  ///
+  ///   let set = Set.fromIter([0, 1, 3].values(), Nat.compare);
+  ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 1)) == [3, 1];
   ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 1)) == [3, 1];
   ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 2)) == [3];
   /// }

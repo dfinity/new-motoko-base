@@ -766,11 +766,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.empty<Nat, Text>();
-  ///   Map.add(map, Nat.compare, 0, "Zero");
-  ///   Map.add(map, Nat.compare, 1, "One");
-  ///   Map.add(map, Nat.compare, 3, "Three");
-  ///
+  ///   let map = Map.fromIter([(0, "Zero"), (3, "Three),  (1, "One")].values(), Nat.compare);
   ///   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 1)) == [(1, "One"), (3, "Three")];
   ///   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 2)) == [(3, "Three")];
   /// }
@@ -839,11 +835,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.empty<Nat, Text>();
-  ///   Map.add(map, Nat.compare, 0, "Zero");
-  ///   Map.add(map, Nat.compare, 1, "One");
-  ///   Map.add(map, Nat.compare, 3, "Three");
-  ///
+  ///   let map = Map.fromIter([(0, "Zero"), (1, "One"), (3, "Three")].values(), Nat.compare);
   ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 1)) == [(1, "One"), (0, "Zero")];
   ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 2)) == [(0, "Zero")];
   /// }

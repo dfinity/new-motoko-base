@@ -1,6 +1,8 @@
-/// Provides extended utility functions on `[var]` Arrays.
+/// Provides extended utility functions on mutable Arrays (`[var]`).
 ///
-/// Note the difference between mutable and non-mutable arrays below.
+/// Note the difference between mutable (`[var]`) and immutable (`[]`) arrays.
+/// Mutable arrays allow their elements to be modified after creation, while
+/// immutable arrays are fixed once created.
 ///
 /// WARNING: If you are looking for a list that can grow and shrink in size,
 /// it is recommended you use `List` for those purposes.
@@ -20,6 +22,15 @@ import Prim "mo:⛔";
 module {
 
   /// Creates an empty mutable array (equivalent to `[var]`).
+  ///
+  /// ```motoko include=import
+  /// let array = VarArray.empty<Text>();
+  /// assert array == [var];
+  /// ```
+  ///
+  /// Runtime: O(1)
+  ///
+  /// Space: O(1)
   public func empty<T>() : [var T] = [var];
 
   /// Creates a mutable array containing `item` repeated `size` times.
@@ -41,7 +52,7 @@ module {
   /// let array2 = VarArray.clone<Nat>(array1);
   /// array2[0] := 0;
   /// assert array1 == [var 1, 2, 3];
-  /// assert array2 = [var 0, 2, 3];
+  /// assert array2 == [var 0, 2, 3];
   /// ```
   ///
   /// Runtime: O(size)
@@ -145,7 +156,7 @@ module {
   };
 
   /// Create a new mutable array by concatenating the values of `array1` and `array2`.
-  /// Note that `Array.append` copies its arguments and has linear complexity.
+  /// Note that `VarArray.concat` copies its arguments and has linear complexity.
   ///
   /// ```motoko include=import
   /// let array1 = [var 1, 2, 3];
@@ -171,7 +182,7 @@ module {
     )
   };
 
-  /// Sorts the elements in a mutable array according to `compare`.
+  /// Creates a new sorted copy of the mutable array according to `compare`.
   /// Sort is deterministic and stable.
   ///
   /// ```motoko include=import
@@ -192,7 +203,7 @@ module {
   };
 
   /// Sorts the elements in a mutable array in place according to `compare`.
-  /// Sort is deterministic and stable.
+  /// Sort is deterministic and stable. This modifies the original array.
   ///
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
@@ -270,9 +281,9 @@ module {
   };
 
   /// Creates a new mutable array by reversing the order of elements in `array`.
+  /// The original array is not modified.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [var 10, 11, 12];
   /// let reversed = VarArray.reverse(array);
   /// assert reversed == [var 12, 11, 10];
@@ -287,6 +298,7 @@ module {
   };
 
   /// Reverses the order of elements in a mutable array in place.
+  /// This modifies the original array.
   ///
   /// ```motoko include=import
   /// let array = [var 10, 11, 12];
@@ -317,12 +329,12 @@ module {
   /// Retains original ordering of elements.
   ///
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  ///
+  /// var sum = 0;
   /// let array = [var 0, 1, 2, 3];
   /// VarArray.forEach<Nat>(array, func(x) {
-  ///   Debug.print(debug_show x)
-  /// })
+  ///   sum += x;
+  /// });
+  /// assert sum == 6;
   /// ```
   ///
   /// Runtime: O(size)
@@ -337,14 +349,13 @@ module {
   };
 
   /// Creates a new mutable array by applying `f` to each element in `array`. `f` "maps"
-  /// each element it is applied to of type `X` to an element of type `Y`.
+  /// each element it is applied to of type `T` to an element of type `R`.
   /// Retains original ordering of elements.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [var 0, 1, 2, 3];
-  /// let array2 = VarArray.map<Nat, Nat>(array, func x = x * 3);
-  /// assert array2 == [var 0, 3, 6, 9];
+  /// let array2 = VarArray.map<Nat, Nat>(array, func x = x * 2);
+  /// assert array2 == [var 0, 2, 4, 6];
   /// ```
   ///
   /// Runtime: O(size)
@@ -363,11 +374,11 @@ module {
 
   /// Applies `f` to each element of `array` in place,
   /// retaining the original ordering of elements.
+  /// This modifies the original array.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [var 0, 1, 2, 3];
-  /// VarArray.mapInPlace<Nat>(array, func x = x * 3)
+  /// VarArray.mapInPlace<Nat>(array, func x = x * 3);
   /// assert array == [var 0, 3, 6, 9];
   /// ```
   ///
@@ -423,7 +434,7 @@ module {
     )
   };
 
-  /// Creates a new array by applying `f` to each element in `array`,
+  /// Creates a new mutable array by applying `f` to each element in `array`,
   /// and keeping all non-null elements. The ordering is retained.
   ///
   /// ```motoko include=import
@@ -477,20 +488,21 @@ module {
     )
   };
 
-  /// Creates a new array by applying `f` to each element in `array`.
+  /// Creates a new mutable array by applying `f` to each element in `array`.
   /// If any invocation of `f` produces an `#err`, returns an `#err`. Otherwise
   /// returns an `#ok` containing the new array.
   ///
   /// ```motoko include=import
   /// let array = [var 4, 3, 2, 1, 0];
   /// // divide 100 by every element in the array
-  /// VarArray.mapResult<Nat, Nat, Text>(array, func x {
+  /// let result = VarArray.mapResult<Nat, Nat, Text>(array, func x {
   ///   if (x > 0) {
   ///     #ok(100 / x)
   ///   } else {
   ///     #err "Cannot divide by zero"
   ///   }
-  /// })
+  /// });
+  /// assert result == #err "Cannot divide by zero";
   /// ```
   ///
   /// Runtime: O(size)
@@ -567,16 +579,13 @@ module {
     tabulate<R>(array.size(), func i = f(array[i], i))
   };
 
-  /// Creates a new array by applying `k` to each element in `array`,
+  /// Creates a new mutable array by applying `k` to each element in `array`,
   /// and concatenating the resulting arrays in order.
   ///
   /// ```motoko include=import
-  /// import Nat "mo:base/Nat";
-  ///
   /// let array = [var 1, 2, 3, 4];
   /// let newArray = VarArray.flatMap<Nat, Int>(array, func x = [x, -x].vals());
   /// assert newArray == [var 1, -1, 2, -2, 3, -3, 4, -4];
-  ///
   /// ```
   /// Runtime: O(size)
   ///
@@ -672,12 +681,12 @@ module {
   /// Combines an iterator of mutable arrays into a single mutable array. Retains the original
   /// ordering of the elements.
   ///
-  /// Consider using `VarArray.flatten()` where possible for better performance.
+  /// Consider using `VarArray.flatten()` for better performance.
   ///
   /// ```motoko include=import
-  ///
   /// let arrays = [[var 0, 1, 2], [var 2, 3], [var], [var 4]];
-  /// VarArray.join<Nat>(VarArray.fromIter(arrays)) // => [var 0, 1, 2, 2, 3, 4]
+  /// let joinedArray = VarArray.join<Nat>(arrays.vals());
+  /// assert joinedArray == [var 0, 1, 2, 2, 3, 4];
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -690,12 +699,12 @@ module {
   /// Combines a mutable array of mutable arrays into a single mutable array. Retains the original
   /// ordering of the elements.
   ///
-  /// This has better performance compared to `VarArray.flatten()`.
+  /// This has better performance compared to `VarArray.join()`.
   ///
   /// ```motoko include=import
-  ///
   /// let arrays = [var [var 0, 1, 2], [var 2, 3], [var], [var 4]];
-  /// VarArray.flatten<Nat>(arrays) // => [var 0, 1, 2, 2, 3, 4]
+  /// let flatArray = VarArray.flatten<Nat>(arrays);
+  /// assert flatArray == [var 0, 1, 2, 2, 3, 4];
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -823,8 +832,8 @@ module {
   /// Space: O(1)
   public func values<T>(array : [var T]) : Types.Iter<T> = array.vals();
 
-  /// Iterator provides a single method `next()`, which returns
-  /// pairs of (index, element) in order, or `null` when out of elements to iterate over.
+  /// Returns an iterator that provides pairs of (index, element) in order, or `null` 
+  /// when out of elements to iterate over.
   ///
   /// ```motoko include=import
   /// let array = [var 10, 11, 12];
@@ -833,7 +842,7 @@ module {
   /// for ((index, element) in VarArray.enumerate(array)) {
   ///   sum += element;
   /// };
-  /// sum // => 33
+  /// assert sum == 33;
   /// ```
   ///
   /// Runtime: O(1)
@@ -856,7 +865,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [var 1, 2, 3, 4];
-  /// VarArray.all<Nat>(array, func x = x > 0) // => true
+  /// assert VarArray.all<Nat>(array, func x = x > 0);
   /// ```
   ///
   /// Runtime: O(size)
@@ -877,7 +886,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [var 1, 2, 3, 4];
-  /// VarArray.any<Nat>(array, func x = x > 3) // => true
+  /// assert VarArray.any<Nat>(array, func x = x > 3);
   /// ```
   ///
   /// Runtime: O(size)
@@ -1076,7 +1085,7 @@ module {
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
   /// let array = [var 1, 2, 3];
-  /// VarArray.toText<Nat>(array, Nat.toText) // => "[var 1, 2, 3]"
+  /// assert VarArray.toText<Nat>(array, Nat.toText) == "[var 1, 2, 3]";
   /// ```
   ///
   /// Runtime: O(size)
@@ -1111,11 +1120,11 @@ module {
   /// import Nat "mo:base/Nat";
   /// let array1 = [var 1, 2, 3];
   /// let array2 = [var 1, 2, 4];
-  /// VarArray.compare<Nat>(array1, array2, Nat.compare) // => #less
+  /// assert VarArray.compare<Nat>(array1, array2, Nat.compare) == #less;
   ///
   /// let array3 = [var 1, 2];
   /// let array4 = [var 1, 2, 3];
-  /// VarArray.compare<Nat>(array3, array4, Nat.compare) // => #less (shorter array)
+  /// assert VarArray.compare<Nat>(array3, array4, Nat.compare) == #less;
   /// ```
   ///
   /// Runtime: O(min(size1, size2))

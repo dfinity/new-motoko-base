@@ -173,13 +173,16 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.empty<Nat, Text>();
+  ///   let map0 = Map.empty<Nat, Text>();
   ///
-  ///   transient let (map0, true) = Map.insert(map, Nat.compare, 0, "Zero");
-  ///   transient let (map1, true) = Map.insert(map0, Nat.compare, 1, "One");
-  ///   assert Iter.toArray(Map.entries(map1)) == [(0, "Zero"), (1, "One")];
-  ///   transient let (map2, false) = Map.insert(map1, Nat.compare, 0, "Nil");
-  ///   assert Iter.toArray(Map.entries(map2)) == [(0, "Nil"), (1, "One")];
+  ///   do {
+  ///     let (map1, new1) = Map.insert(map0, Nat.compare, 0, "Zero");
+  ///     assert Iter.toArray(Map.entries(map1)) == [(0, "Zero")];
+  ///     assert new1;
+  ///     let (map2, new2) = Map.insert(map1, Nat.compare, 0, "Nil");
+  ///     assert Iter.toArray(Map.entries(map2)) == [(0, "Nil")];
+  ///     assert not new2
+  ///   }
   /// }
   /// ```
   ///
@@ -280,16 +283,17 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let singleton = Map.singleton(0, "Null");
+  ///   let singleton = Map.singleton(0, "Zero");
   ///
-  ///   transient let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
-  ///   assert oldZero == ?"Null";
-  ///   assert Map.get(map1, Nat.compare, 0) == ?"Zero";
-
-  ///   let empty = Map.empty<Nat, Text>();
-  ///   transient let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, "One");  // no effect, key is absent
-  ///   assert oldOne == null;
-  ///   assert Map.get(map2, Nat.compare, 0) == null;
+  ///   do {
+  ///     let (map1, prev1) = Map.replaceIfExists(singleton, Nat.compare, 0, "Nil"); // overwrites the value for existing key.
+  ///     assert prev1 == ?"Zero";
+  ///     assert Map.get(map1, Nat.compare, 0) == ?"Nil";
+  ///
+  ///     let (map2, prev2) = Map.replaceIfExists(map1, Nat.compare, 1, "One");  // no effect, key is absent
+  ///     assert prev2 == null;
+  ///     assert Map.get(map2, Nat.compare, 1) == null;
+  ///  }
   /// }
   /// ```
   ///
@@ -393,7 +397,7 @@ module {
   ///   let map0 =  Map.fromIter([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
   ///
   ///   do {
-  ///     let (map1, prev1)= Map.take(map0, Nat.compare, 0);
+  ///     let (map1, prev1) = Map.take(map0, Nat.compare, 0);
   ///     assert Iter.toArray(Map.entries(map1)) == [(1, "One"), (2, "Two")];
   ///     assert prev1 == ?"Zero";
   ///
@@ -575,7 +579,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
+  ///   transient let iter =
+  ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]);
+  ///
+  ///   let map = Map.fromIter(iter, Nat.compare);
   ///
   ///   assert Iter.toArray(Map.entries(map)) == [(0, "Zero"), (1, "One"), (2, "Two")];
   /// }
@@ -774,12 +781,16 @@ module {
   /// ```motoko
   /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let numberNames = Map.fromIter([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
+  ///
   ///   let evenNames = Map.filter<Nat, Text>(numberNames, Nat.compare, func (key, value) {
   ///     key % 2 == 0
   ///   });
+  ///
+  ///   assert Iter.toArray(Map.entries(evenNames)) == [(0, "Zero"), (2, "Two")];
   /// }
   /// ```
   ///

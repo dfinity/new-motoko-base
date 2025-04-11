@@ -15,8 +15,8 @@
 /// Construction: Create a new queue with the `empty<T>()` function.
 ///
 /// Note on the costs of push and pop functions:
-/// * Runtime: `O(1)` amortized costs, `O(n)` worst case cost per single call.
-/// * Space: `O(1)` amortized costs, `O(n)` worst case cost per single call.
+/// * Runtime: `O(1)` amortized costs, `O(size)` worst case cost per single call.
+/// * Space: `O(1)` amortized costs, `O(size)` worst case cost per single call.
 ///
 /// `n` denotes the number of elements stored in the queue.
 ///
@@ -38,10 +38,11 @@ module {
   /// Create a new empty queue.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// Queue.empty<Nat>()
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.empty<Nat>();
+  ///   assert Queue.isEmpty(queue);
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -53,11 +54,11 @@ module {
   /// Returns true if `queue` is empty, otherwise `false`.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// let queue = Queue.empty<Nat>();
-  /// Queue.isEmpty(queue) // => true
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.empty<Nat>();
+  ///   assert Queue.isEmpty(queue);
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -68,10 +69,11 @@ module {
   /// Create a new queue comprising a single element.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// Queue.singleton<Nat>(25)
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.singleton(25);
+  ///   assert Queue.size(queue) == 1;
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -82,14 +84,14 @@ module {
   /// Determine the number of elements contained in a queue.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// let queue = Queue.singleton<Nat>(42);
-  /// Queue.size(queue) // => 1
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.singleton(42);
+  ///   assert Queue.size(queue) == 1;
+  /// }
   /// ```
   ///
-  /// Runtime: `O(1)`.
+  /// Runtime: `O(1)` in Release profile (compiled with `--release` flag), `O(size)` otherwise.
   ///
   /// Space: `O(1)`.
   public func size<T>(queue : Queue<T>) : Nat {
@@ -97,17 +99,36 @@ module {
     queue.1
   };
 
+  /// Check if a queue contains a specific element.
+  /// Returns true if the queue contains an element equal to `item` according to the `equal` function.
+  ///
+  /// Note: The order in which elements are visited is undefined, for performance reasons.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Queue.contains(queue, Nat.equal, 2);
+  ///   assert not Queue.contains(queue, Nat.equal, 4);
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
   public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(queue.0, equal, item) or List.contains(queue.2, equal, item);
 
   /// Inspect the optional element on the front end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, the front element of `queue`.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
-  /// Queue.peekFront(queue) // => ?1
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty(), 2), 1);
+  ///   assert Queue.peekFront(queue) == ?1;
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -122,11 +143,11 @@ module {
   /// Returns `null` if `queue` is empty. Otherwise, the back element of `queue`.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
-  /// Queue.peekBack(queue) // => ?2
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
+  ///   assert Queue.peekBack(queue) == ?2;
+  /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
@@ -167,15 +188,18 @@ module {
   /// This may involve dynamic rebalancing of the two, internally used lists.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1) // queue with elements [1, 2]
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty(), 2), 1);
+  ///   assert Queue.peekFront(queue) == ?1;
+  ///   assert Queue.peekBack(queue) == ?2;
+  ///   assert Queue.size(queue) == 2;
+  /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> = check(?(element, queue.0), queue.1 + 1, queue.2);
@@ -186,15 +210,17 @@ module {
   /// This may involve dynamic rebalancing of the two, internally used lists.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  ///
-  /// Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2) // queue with elements [1, 2]
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
+  ///   assert Queue.peekBack(queue) == ?2;
+  ///   assert Queue.size(queue) == 2;
+  /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> = check(queue.0, queue.1 + 1, ?(element, queue.2));
@@ -206,26 +232,25 @@ module {
   /// This may involve dynamic rebalancing of the two, internally used lists.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  /// import Debug "mo:base/Debug";
-  /// let initial = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
-  /// // initial queue with elements [1, 2]
-  /// let reduced = Queue.popFront(initial);
-  /// switch reduced {
-  ///   case null {
-  ///     Debug.trap "Empty queue impossible"
-  ///   };
-  ///   case (?result) {
-  ///     let removedElement = result.0; // 1
-  ///     let reducedQueue = result.1; // queue with element [2].
+  /// ```motoko include=import
+  /// import Runtime "mo:base/Runtime";
+  ///
+  /// persistent actor {
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
+  ///   // initial queue with elements [1, 2]
+  ///   switch (Queue.popFront(initial)) {
+  ///     case null Runtime.trap "Empty queue impossible";
+  ///     case (?(frontElement, remainingQueue)) {
+  ///       assert frontElement == 1;
+  ///       assert Queue.size(remainingQueue) == 1
+  ///     }
   ///   }
   /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) = if (queue.1 == 0) null else switch queue {
@@ -242,27 +267,28 @@ module {
   /// This may involve dynamic rebalancing of the two, internally used lists.
   ///
   /// Example:
-  /// ```motoko
-  /// import Queue "mo:base/pure/Queue";
-  /// import Debug "mo:base/Debug";
+  /// ```motoko include=import
+  /// import Runtime "mo:base/Runtime";
   ///
-  /// let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
-  /// // initial queue with elements [1, 2]
-  /// let reduced = Queue.popBack(initial);
-  /// switch reduced {
-  ///   case null {
-  ///     Debug.trap "Empty queue impossible"
-  ///   };
-  ///   case (?result) {
-  ///     let reducedQueue = result.0; // queue with element [1].
-  ///     let removedElement = result.1; // => 2
+  /// persistent actor {
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
+  ///   // initial queue with elements [1, 2]
+  ///   let reduced = Queue.popBack(initial);
+  ///   switch reduced {
+  ///     case null Runtime.trap("Empty queue impossible");
+  ///     case (?result) {
+  ///       let reducedQueue = result.0;
+  ///       let removedElement = result.1;
+  ///       assert removedElement == 2;
+  ///       assert Queue.size(reducedQueue) == 1;
+  ///     }
   ///   }
   /// }
   /// ```
   ///
-  /// Runtime: `O(n)` worst-case, amortized to `O(1)`.
+  /// Runtime: `O(size)` worst-case, amortized to `O(1)`.
   ///
-  /// Space: `O(n)` worst-case, amortized to `O(1)`.
+  /// Space: `O(size)` worst-case, amortized to `O(1)`.
   ///
   /// `n` denotes the number of elements stored in the queue.
   public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) = if (queue.1 == 0) null else switch queue {
@@ -274,7 +300,10 @@ module {
   /// Turn an iterator into a queue, consuming it.
   /// Example:
   /// ```motoko include=import
-  /// Queue.fromIter<Nat>([0, 1, 2, 3, 4].values()) // => (?(0, ?(1, null)), 5, ?(4, ?(3, ?(2, null))))
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([0, 1, 2, 3, 4].values());
+  ///   assert Queue.size(queue) == 5;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -285,8 +314,43 @@ module {
     check(list, List.size list, null)
   };
 
+  /// Convert a queue to an iterator of its elements in front-to-back order.
+  ///
+  /// Performance note: Creating the iterator needs `O(size)` runtime and space!
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Iter "mo:base/Iter";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Iter.toArray(Queue.values(queue)) == [1, 2, 3];
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func values<T>(queue : Queue<T>) : Iter.Iter<T> = Iter.concat(List.values(queue.0), List.values(List.reverse(queue.2)));
 
+  /// Compare two queues for equality using the provided equality function.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue1 = Queue.fromIter([1, 2].values());
+  ///   let queue2 = Queue.fromIter([1, 2].values());
+  ///   let queue3 = Queue.fromIter([1, 3].values());
+  ///   assert Queue.equal(queue1, queue2, Nat.equal);
+  ///   assert not Queue.equal(queue1, queue3, Nat.equal);
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equal : (T, T) -> Bool) : Bool {
     if (queue1.1 != queue2.1) {
       return false
@@ -308,16 +372,16 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  ///
-  /// Queue.all<Nat>(
-  ///   (?(1, ?(2, ?(3, null))), 3, null),
-  ///   func n = n > 1
-  /// ); // => false
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let allGreaterThanOne = Queue.all<Nat>(queue, func n = n > 1);
+  ///   assert not allGreaterThanOne; // false because 1 is not > 1
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
   ///
-  /// Space: O(1)
+  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
@@ -330,16 +394,16 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  ///
-  /// Queue.any<Nat>(
-  ///   (null, 3, ?(1, ?(2, ?(3, null)))),
-  ///   func n = n > 1
-  /// ) // => true
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let hasGreaterThanOne = Queue.any<Nat>(queue, func n = n > 1);
+  ///   assert hasGreaterThanOne; // true because 2 and 3 are > 1
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
   ///
-  /// Space: O(1)
+  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
@@ -348,12 +412,16 @@ module {
   };
 
   /// Call the given function for its side effect, with each queue element in turn.
+  /// The order of visiting elements is front-to-back.
   ///
   /// Example:
   /// ```motoko include=import
-  /// var sum = 0;
-  /// Queue.forEach<Nat>((?(0, ?(1, ?(2, null))), 3, null), func n = sum += n);
-  /// sum // => 3
+  /// persistent actor {
+  ///   var text = "";
+  ///   let queue = Queue.fromIter(["A", "B", "C"].values());
+  ///   Queue.forEach<Text>(queue, func n = text #= n);
+  ///   assert text == "ABC";
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -366,10 +434,17 @@ module {
   /// Call the given function `f` on each queue element and collect the results
   /// in a new queue.
   ///
+  /// Note: The order of visiting elements is undefined with the current implementation.
   /// Example:
   /// ```motoko include=import
-  /// import Nat = "mo:base/Nat"
-  /// Queue.map<Nat, Text>(Queue.fromIter([0, 1, 2].values()), Nat.toText) // => (?("0", null), 3, ?("2", ?("1", null)))
+  /// import Iter "mo:base/Iter";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([0, 1, 2].values());
+  ///   let textQueue = Queue.map<Nat, Text>(queue, Nat.toText);
+  ///   assert Iter.toArray(Queue.values(textQueue)) == ["0", "1", "2"];
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -384,9 +459,15 @@ module {
   /// Create a new queue with only those elements of the original queue for which
   /// the given function (often called the _predicate_) returns true.
   ///
+  /// Note: The order of visiting elements is undefined with the current implementation.
+  ///
   /// Example:
   /// ```motoko include=import
-  /// Queue.filter<Nat>((?(0, ?(1, ?(2, null))), 4, ?(1, null)), func n = n != 1) // => ?(0, ?(2, null))
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([0, 1, 2, 1].values());
+  ///   let filtered = Queue.filter<Nat>(queue, func n = n != 1);
+  ///   assert Queue.size(filtered) == 2;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -402,12 +483,18 @@ module {
   /// Call the given function on each queue element, and collect the non-null results
   /// in a new queue.
   ///
+  /// Note: The order of visiting elements is undefined with the current implementation.
+  ///
   /// Example:
   /// ```motoko include=import
-  /// Queue.filterMap<Nat, Nat>(
-  ///   (?(1, ?(2, ?(3, null))), 3, null)
-  ///   func n = if (n > 1) ?(n * 2) else null
-  /// ) // => (?(4, null), 2, ?(6, null))
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let doubled = Queue.filterMap<Nat, Nat>(
+  ///     queue,
+  ///     func n = if (n > 1) ?(n * 2) else null
+  ///   );
+  ///   assert Queue.size(doubled) == 2;
+  /// }
   /// ```
   ///
   /// Runtime: O(size)
@@ -422,6 +509,22 @@ module {
     check(front, List.size front + List.size back, back)
   };
 
+  /// Convert a queue to its text representation using the provided conversion function.
+  /// This function is meant to be used for debugging and testing purposes.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Queue.toText(queue, Nat.toText) == "PureQueue[1, 2, 3]";
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(size)
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
     var text = "PureQueue[";
     func add(item : T) {
@@ -429,7 +532,7 @@ module {
       text #= f(item)
     };
     List.forEach(queue.0, add);
-    List.forEach(queue.2, add);
+    List.forEach(List.reverse(queue.2), add);
     text # "]"
   };
 
@@ -439,16 +542,16 @@ module {
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
   ///
-  /// Queue.compare<Nat>(
-  ///   (?(1, ?(2, null)), 2, null),
-  ///   (null, 2, ?(2, ?(1, null))),
-  ///   Nat.compare
-  /// ) // => #equal
+  /// persistent actor {
+  ///   let queue1 = Queue.fromIter([1, 2].values());
+  ///   let queue2 = Queue.fromIter([1, 3].values());
+  ///   assert Queue.compare(queue1, queue2, Nat.compare) == #less;
+  /// }
   /// ```
   ///
-  /// Runtime: O(size(l1))
+  /// Runtime: O(size)
   ///
-  /// Space: O(1)
+  /// Space: O(size)
   ///
   /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compareItem : (T, T) -> Order.Order) : Order.Order {

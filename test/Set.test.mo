@@ -7,7 +7,6 @@ import Nat "../src/Nat";
 import Int "../src/Int";
 import Runtime "../src/Runtime";
 import Array "../src/Array";
-import Debug "../src/Debug";
 
 let { run; test; suite } = Suite;
 

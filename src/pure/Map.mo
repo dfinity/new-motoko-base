@@ -307,12 +307,12 @@ module {
   /// persistent actor {
   ///   let singleton = Map.singleton(0, "Null");
   ///
-  ///   let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
+  ///   let (map1, oldZero) = Map.replace(singleton, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
   ///   Debug.print(debug_show(oldZero)); // prints `?"Null"`, previous value.
   ///   Debug.print(debug_show(Map.get(map1, Nat.compare, 0))); // prints `?"Zero"`, new value.
 
   ///   let empty = Map.empty<Nat, Text>();
-  ///   let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, "One");  // no effect, key is absent
+  ///   let (map2, oldOne) = Map.replace(empty, Nat.compare, 1, "One");  // no effect, key is absent
   ///   Debug.print(debug_show(oldOne)); // prints `null`, key was absent.
   ///   Debug.print(debug_show(Map.get(map2, Nat.compare, 0))); // prints `null`
   /// }
@@ -322,7 +322,7 @@ module {
   /// Space: `O(log(n))`.
   /// where `n` denotes the number of key-value entries stored in the map and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func replaceIfExists<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V) {
+  public func replace<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : (Map<K, V>, ?V) {
     // TODO: Could be optimized in future
     if (containsKey(map, compare, key)) {
       swap(map, compare, key, value)

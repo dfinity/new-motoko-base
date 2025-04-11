@@ -506,11 +506,11 @@ module {
   ///   let map = Map.empty<Nat, Text>();
   ///   Map.add(map, Nat.compare, 0, "Null");
   ///
-  ///   let oldZero = Map.replaceIfExists(map, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
+  ///   let oldZero = Map.replace(map, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
   ///   Debug.print(debug_show(oldZero)); // prints `?"Null"`, previous value.
   ///   Debug.print(debug_show(Map.get(map, Nat.compare, 0))); // prints `?"Zero"`, new value.
   ///
-  ///   let oldOne = Map.replaceIfExists(map, Nat.compare, 1, "One");  // no effect, key is absent
+  ///   let oldOne = Map.replace(map, Nat.compare, 1, "One");  // no effect, key is absent
   ///   Debug.print(debug_show(oldOne)); // prints `null`, key was absent.
   /// }
   /// ```
@@ -519,7 +519,7 @@ module {
   /// Space: `O(log(n))`.
   /// where `n` denotes the number of key-value entries stored in the map and
   /// assuming that the `compare` function implements an `O(1)` comparison.
-  public func replaceIfExists<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
+  public func replace<K, V>(map : Map<K, V>, compare : (K, K) -> Order.Order, key : K, value : V) : ?V {
     // TODO: Could be optimized in future
     if (containsKey(map, compare, key)) {
       swap(map, compare, key, value)

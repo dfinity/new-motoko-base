@@ -367,6 +367,7 @@ module {
   /// ```motoko
   /// import Map "mo:base/Map";
   /// import Nat "mo:base/Nat";
+  /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {
   ///   let map = Map.empty<Nat, Text>();

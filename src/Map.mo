@@ -367,6 +367,7 @@ module {
   /// ```motoko
   /// import Map "mo:base/Map";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   /// import Debug "mo:base/Debug";
   ///
   /// persistent actor {

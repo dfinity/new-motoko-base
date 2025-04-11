@@ -21,14 +21,14 @@
 /// import Cycles "mo:base/Cycles";
 ///
 /// persistent actor {
-///   public func main() : async() {
+///   public func main() : async () {
 ///     let initialBalance = Cycles.balance();
 ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
 ///     assert Cycles.refunded() == 5_000_000;
 ///     assert Cycles.balance() < initialBalance; // decreased by around 10_000_000
 ///   };
 ///
-///   func operation() : async() {
+///   func operation() : async () {
 ///     let initialBalance = Cycles.balance();
 ///     let initialAvailable = Cycles.available();
 ///     let obtained = Cycles.accept<system>(10_000_000);

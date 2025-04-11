@@ -397,7 +397,7 @@ module {
   ///   let map0 =  Map.fromIter([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
   ///
   ///   do {
-  ///     let (map1, prev1)= Map.take(map0, Nat.compare, 0);
+  ///     let (map1, prev1) = Map.take(map0, Nat.compare, 0);
   ///     assert Iter.toArray(Map.entries(map1)) == [(1, "One"), (2, "Two")];
   ///     assert prev1 == ?"Zero";
   ///
@@ -579,7 +579,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
+  ///   transient let iter =
+  ///     Iter.fromArray([(0, "Zero"), (2, "Two"), (1, "One")]);
+  ///
+  ///   let map = Map.fromIter(iter, Nat.compare);
   ///
   ///   assert Iter.toArray(Map.entries(map)) == [(0, "Zero"), (1, "One"), (2, "Two")];
   /// }
@@ -778,12 +781,16 @@ module {
   /// ```motoko
   /// import Map "mo:base/pure/Map";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let numberNames = Map.fromIter([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
+  ///
   ///   let evenNames = Map.filter<Nat, Text>(numberNames, Nat.compare, func (key, value) {
   ///     key % 2 == 0
   ///   });
+  ///
+  ///   assert Iter.toArray(Map.entries(evenNames)) == [(0, "Zero"), (2, "Two")];
   /// }
   /// ```
   ///

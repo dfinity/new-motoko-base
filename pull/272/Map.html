@@ -444,11 +444,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let map = Map.empty&lt;Nat, Text&gt;();
-  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
-  Map.add(map, Nat.compare, 1, &quot;One&quot;);
-  Map.add(map, Nat.compare, 3, &quot;Three&quot;);
-
+  let map = Map.fromIter([(0, &quot;Zero&quot;), (3, &quot;Three),  (1, &quot;One&quot;)].values(), Nat.compare);
   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 1)) == [(1, &quot;One&quot;), (3, &quot;Three&quot;)];
   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 2)) == [(3, &quot;Three&quot;)];
 }</code></pre><p>Cost of iteration over all elements:
@@ -489,11 +485,7 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let map = Map.empty&lt;Nat, Text&gt;();
-  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
-  Map.add(map, Nat.compare, 1, &quot;One&quot;);
-  Map.add(map, Nat.compare, 3, &quot;Three&quot;);
-
+  let map = Map.fromIter([(0, &quot;Zero&quot;), (1, &quot;One&quot;), (3, &quot;Three&quot;)].values(), Nat.compare);
   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 1)) == [(1, &quot;One&quot;), (0, &quot;Zero&quot;)];
   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 2)) == [(0, &quot;Zero&quot;)];
 }</code></pre><p>Cost of iteration over all elements:

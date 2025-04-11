@@ -1,5 +1,9 @@
 # Changelog
 
+## Next
+
+* Rename `Map.replaceIfExists()` to `Map.replace()`
+
 ## 0.4.0
 
 * Add `isReplicated : () -> Bool` to `InternetComputer` (#213).

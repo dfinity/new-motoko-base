@@ -880,7 +880,7 @@ run(
         do {
           let map = smallMap();
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.replaceIfExists(map, Nat.compare, index, Nat.toText(index) # "!").1 == ?Nat.toText(index))
+            assert (Map.replace(map, Nat.compare, index, Nat.toText(index) # "!").1 == ?Nat.toText(index))
           };
           Map.size(map)
         },
@@ -890,7 +890,7 @@ run(
         "replace if exists absent",
         do {
           let map0 = smallMap();
-          let (map1, ov) = Map.replaceIfExists(map0, Nat.compare, smallSize, Nat.toText(smallSize));
+          let (map1, ov) = Map.replace(map0, Nat.compare, smallSize, Nat.toText(smallSize));
           assert (ov == null);
           Map.size(map1)
         },

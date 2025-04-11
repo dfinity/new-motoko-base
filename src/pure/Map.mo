@@ -173,10 +173,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.empty<Nat, Text>();
+  ///   let map0 = Map.empty<Nat, Text>();
   ///
   ///   do {
-  ///     let (map0, new0) = Map.insert(map, Nat.compare, 0, "Zero");
+  ///     let (map1, new1) = Map.insert(map0, Nat.compare, 0, "Zero");
   ///     assert Iter.toArray(Map.entries(map1)) == [(0, "Zero")];
   ///     assert new1;
   ///     let (map2, new2) = Map.insert(map1, Nat.compare, 0, "Nil");
@@ -290,7 +290,7 @@ module {
   ///     assert prev1 == ?"Zero";
   ///     assert Map.get(map1, Nat.compare, 0) == ?"Nil";
   ///
-  ///     let (map2, prev2) = Map.replaceIfExists(1, Nat.compare, 1, "One");  // no effect, key is absent
+  ///     let (map2, prev2) = Map.replaceIfExists(map1, Nat.compare, 1, "One");  // no effect, key is absent
   ///     assert prev2 == null;
   ///     assert Map.get(map2, Nat.compare, 1) == null;
   ///  }

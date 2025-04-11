@@ -275,7 +275,7 @@ persistent actor {
   let map0 =  Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
 
   do {
-    let (map1, prev1)= Map.take(map0, Nat.compare, 0);
+    let (map1, prev1) = Map.take(map0, Nat.compare, 0);
     assert Iter.toArray(Map.entries(map1)) == [(1, &quot;One&quot;), (2, &quot;Two&quot;)];
     assert prev1 == ?&quot;Zero&quot;;
 
@@ -408,7 +408,10 @@ import Nat &quot;mo:base/Nat&quot;;
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
+  transient let iter =
+    Iter.fromArray([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)]);
+
+  let map = Map.fromIter(iter, Nat.compare);
 
   assert Iter.toArray(Map.entries(map)) == [(0, &quot;Zero&quot;), (1, &quot;One&quot;), (2, &quot;Two&quot;)];
 }</code></pre>
@@ -551,12 +554,16 @@ that fulfil the criterion function.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/pure/Map&quot;;
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let numberNames = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
+
   let evenNames = Map.filter&lt;Nat, Text&gt;(numberNames, Nat.compare, func (key, value) {
     key % 2 == 0
   });
+
+  assert Iter.toArray(Map.entries(evenNames)) == [(0, &quot;Zero&quot;), (2, &quot;Two&quot;)];
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

@@ -25,7 +25,7 @@ module {
   /// Creates a mutable array containing `item` repeated `size` times.
   ///
   /// ```motoko include=import
-  /// let array = VarArray.repeat<Nat>("Echo", 3);
+  /// let array = VarArray.repeat<Text>("Echo", 3);
   /// assert array == [var "Echo", "Echo", "Echo"];
   /// ```
   ///
@@ -98,7 +98,7 @@ module {
   ///
   /// let array1 = [var 0, 1, 2, 3];
   /// let array2 = [var 0, 1, 2, 3];
-  /// VarArray.equal(array1, array2, equal)
+  /// assert VarArray.equal(array1, array2, equal);
   /// ```
   ///
   /// Runtime: O(size1 + size2)
@@ -127,7 +127,8 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [var 1, 9, 4, 8];
-  /// VarArray.find<Nat>(array, func x = x > 8)
+  /// let found = VarArray.find<Nat>(array, func x = x > 8);
+  /// assert found == ?9;
   /// ```
   /// Runtime: O(size)
   ///
@@ -149,7 +150,8 @@ module {
   /// ```motoko include=import
   /// let array1 = [var 1, 2, 3];
   /// let array2 = [var 4, 5, 6];
-  /// VarArray.concat<Nat>(array1, array2)
+  /// let result = VarArray.concat<Nat>(array1, array2);
+  /// assert result == [var 1, 2, 3, 4, 5, 6];
   /// ```
   /// Runtime: O(size1 + size2)
   ///
@@ -176,7 +178,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let array = [var 4, 2, 6];
-  /// VarArray.sort(array, Nat.compare)
+  /// let sorted = VarArray.sort(array, Nat.compare);
+  /// assert sorted == [var 2, 4, 6];
   /// ```
   /// Runtime: O(size * log(size))
   ///
@@ -271,8 +274,8 @@ module {
   /// ```motoko include=import
   ///
   /// let array = [var 10, 11, 12];
-  ///
-  /// VarArray.reverse(array)
+  /// let reversed = VarArray.reverse(array);
+  /// assert reversed == [var 12, 11, 10];
   /// ```
   ///
   /// Runtime: O(size)
@@ -340,7 +343,8 @@ module {
   /// ```motoko include=import
   ///
   /// let array = [var 0, 1, 2, 3];
-  /// VarArray.map<Nat, Nat>(array, func x = x * 3)
+  /// let array2 = VarArray.map<Nat, Nat>(array, func x = x * 3);
+  /// assert array2 == [var 0, 3, 6, 9];
   /// ```
   ///
   /// Runtime: O(size)
@@ -364,7 +368,7 @@ module {
   ///
   /// let array = [var 0, 1, 2, 3];
   /// VarArray.mapInPlace<Nat>(array, func x = x * 3)
-  /// assert array == [0, 2, 4, 6];
+  /// assert array == [var 0, 3, 6, 9];
   /// ```
   ///
   /// Runtime: O(size)
@@ -387,6 +391,7 @@ module {
   /// ```motoko include=import
   /// let array = [var 4, 2, 6, 1, 5];
   /// let evenElements = VarArray.filter<Nat>(array, func x = x % 2 == 0);
+  /// assert evenElements == [var 4, 2, 6];
   /// ```
   /// Runtime: O(size)
   ///
@@ -430,6 +435,7 @@ module {
   ///     array,
   ///     func x = if (x == 0) { null } else { ?toText(100 / x) } // can't divide by 0, so return null
   ///   );
+  /// assert newArray == [var "25", "50", "100"];
   /// ```
   /// Runtime: O(size)
   ///
@@ -547,8 +553,9 @@ module {
   ///
   /// ```motoko include=import
   ///
-  /// let array = [10, 10, 10, 10];
-  /// Array.mapEntries<Nat, Nat>(array, func (x, i) = i * x)
+  /// let array = [var 10, 10, 10, 10];
+  /// let newArray = VarArray.mapEntries<Nat, Nat>(array, func (x, i) = i * x);
+  /// assert newArray == [var 0, 10, 20, 30];
   /// ```
   ///
   /// Runtime: O(size)
@@ -567,7 +574,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let array = [var 1, 2, 3, 4];
-  /// VarArray.flatMap<Nat, Int>(array, func x = [x, -x])
+  /// let newArray = VarArray.flatMap<Nat, Int>(array, func x = [x, -x].vals());
+  /// assert newArray == [var 1, -1, 2, -2, 3, -3, 4, -4];
   ///
   /// ```
   /// Runtime: O(size)
@@ -617,6 +625,7 @@ module {
   ///     0, // start the sum at 0
   ///     func(sumSoFar, x) = sumSoFar + x // this entire function can be replaced with `add`!
   ///   );
+  /// assert sum == 7;
   /// ```
   ///
   /// Runtime: O(size)
@@ -639,8 +648,9 @@ module {
   /// ```motoko include=import
   /// import {toText} "mo:base/Nat";
   ///
-  /// let array = [1, 9, 4, 8];
+  /// let array = [var 1, 9, 4, 8];
   /// let bookTitle = VarArray.foldRight<Nat, Text>(array, "", func(x, acc) = toText(x) # acc);
+  /// assert bookTitle == "1948";
   /// ```
   ///
   /// Runtime: O(size)
@@ -784,7 +794,7 @@ module {
   /// for (element in array.keys()) {
   ///   sum += element;
   /// };
-  /// sum
+  /// assert sum == 3; // 0 + 1 + 2
   /// ```
   ///
   /// Runtime: O(1)
@@ -805,7 +815,7 @@ module {
   /// for (element in array.values()) {
   ///   sum += element;
   /// };
-  /// sum
+  /// assert sum == 33; // 10 + 11 + 12
   /// ```
   ///
   /// Runtime: O(1)
@@ -975,7 +985,7 @@ module {
   /// If the first index is greater than the second, the function returns an empty iterator.
   ///
   /// ```motoko include=import
-  /// let array = [1, 2, 3, 4, 5];
+  /// let array = [var 1, 2, 3, 4, 5];
   /// let iter1 = VarArray.range<Nat>(array, 3, array.size());
   /// assert iter1.next() == ?4;
   /// assert iter1.next() == ?5;
@@ -1028,7 +1038,7 @@ module {
   /// If the indices are out of bounds, they are clamped to the array bounds.
   ///
   /// ```motoko include=import
-  /// let array = [1, 2, 3, 4, 5];
+  /// let array = [var 1, 2, 3, 4, 5];
   ///
   /// let slice1 = VarArray.sliceToArray<Nat>(array, 1, 4);
   /// assert slice1 == [2, 3, 4];

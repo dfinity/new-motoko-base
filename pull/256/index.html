@@ -176,10 +176,16 @@ The map data structure type is stable and can be used for orthogonal persistence
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let numberNames = Map.empty&lt;Nat, Text&gt;();
-  Map.add(numberNames, Nat.compare, 0, &quot;Zero&quot;);
-  Map.add(numberNames, Nat.compare, 1, &quot;One&quot;);
-  Map.add(numberNames, Nat.compare, 2, &quot;Two&quot;);
+  // creation
+  let map = Map.empty&lt;Nat, Text&gt;();
+  // insertion
+  Map.add(map, Nat.compare, 0, &quot;Zero&quot;);
+  // retrieval
+  assert Map.get(map, Nat.compare, 0) == ?&quot;Zero&quot;;
+  assert Map.get(map, Nat.compare, 1) == null;
+  // removal
+  Map.remove(map, Nat.compare, 0);
+  assert Map.isEmpty(map);
 }</code></pre>
 
 <p>The internal implementation is a B-tree with order 32.</p>

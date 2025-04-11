@@ -465,10 +465,10 @@ persistent actor {
   // insertion
   let map1 = Map.add(empty, Nat.compare, 0, &quot;Zero&quot;);
   // retrieval
-  let null = Map.get(empty, Nat.compare, 0);
-  let ?&quot;Zero&quot; = Map.get(map1, Nat.compare, 0);
-  // deletion
-  let map2 = Map.delete(map1, Nat.compare, 0);
+  assert Map.get(empty, Nat.compare, 0) == null;
+  assert Map.get(map1, Nat.compare, 0) == ?&quot;Zero&quot;;
+  // removal
+  let map2 = Map.remove(map1, Nat.compare, 0);
   assert not Map.isEmpty(map1);
   assert Map.isEmpty(map2);
 }</code></pre>

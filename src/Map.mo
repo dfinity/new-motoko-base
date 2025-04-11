@@ -1221,7 +1221,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Map "mo:base/pure/Map";
+  /// import Map "mo:base/Map";
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
   ///

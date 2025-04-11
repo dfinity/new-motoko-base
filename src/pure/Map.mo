@@ -175,11 +175,14 @@ module {
   /// persistent actor {
   ///   let map = Map.empty<Nat, Text>();
   ///
-  ///   transient let (map0, true) = Map.insert(map, Nat.compare, 0, "Zero");
-  ///   transient let (map1, true) = Map.insert(map0, Nat.compare, 1, "One");
-  ///   assert Iter.toArray(Map.entries(map1)) == [(0, "Zero"), (1, "One")];
-  ///   transient let (map2, false) = Map.insert(map1, Nat.compare, 0, "Nil");
-  ///   assert Iter.toArray(Map.entries(map2)) == [(0, "Nil"), (1, "One")];
+  ///   do {
+  ///     let (map0, new0) = Map.insert(map, Nat.compare, 0, "Zero");
+  ///     assert Iter.toArray(Map.entries(map1)) == [(0, "Zero")];
+  ///     assert new1;
+  ///     let (map2, new2) = Map.insert(map1, Nat.compare, 0, "Nil");
+  ///     assert Iter.toArray(Map.entries(map2)) == [(0, "Nil")];
+  ///     assert not new2
+  ///   }
   /// }
   /// ```
   ///
@@ -280,16 +283,17 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let singleton = Map.singleton(0, "Null");
+  ///   let singleton = Map.singleton(0, "Zero");
   ///
-  ///   transient let (map1, oldZero) = Map.replaceIfExists(singleton, Nat.compare, 0, "Zero"); // overwrites the value for existing key.
-  ///   assert oldZero == ?"Null";
-  ///   assert Map.get(map1, Nat.compare, 0) == ?"Zero";
-
-  ///   let empty = Map.empty<Nat, Text>();
-  ///   transient let (map2, oldOne) = Map.replaceIfExists(empty, Nat.compare, 1, "One");  // no effect, key is absent
-  ///   assert oldOne == null;
-  ///   assert Map.get(map2, Nat.compare, 0) == null;
+  ///   do {
+  ///     let (map1, prev1) = Map.replaceIfExists(singleton, Nat.compare, 0, "Nil"); // overwrites the value for existing key.
+  ///     assert prev1 == ?"Zero";
+  ///     assert Map.get(map1, Nat.compare, 0) == ?"Nil";
+  ///
+  ///     let (map2, prev2) = Map.replaceIfExists(1, Nat.compare, 1, "One");  // no effect, key is absent
+  ///     assert prev2 == null;
+  ///     assert Map.get(map2, Nat.compare, 1) == null;
+  ///  }
   /// }
   /// ```
   ///

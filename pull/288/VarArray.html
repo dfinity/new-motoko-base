@@ -324,7 +324,7 @@ assert sum == 33; // 10 + 11 + 12</code></pre>
 
 <p>Runtime: O(1)</p>
 <p>Space: O(1)</p>
-</p></div><div class="declaration"><h4 class="function" id="enumerate"><code><span class="keyword">public func </span><span class="fnname">enumerate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;(<span class="type">Nat</span>, <span class="type">T</span>)&gt;</code></h4><p><p>Returns an iterator that provides pairs of (index, element) in order, or <code>null</code> 
+</p></div><div class="declaration"><h4 class="function" id="enumerate"><code><span class="keyword">public func </span><span class="fnname">enumerate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;(<span class="type">Nat</span>, <span class="type">T</span>)&gt;</code></h4><p><p>Returns an iterator that provides pairs of (index, element) in order, or <code>null</code>
 when out of elements to iterate over.</p>
 <pre><code>motoko include=import
 let array = [var 10, 11, 12];

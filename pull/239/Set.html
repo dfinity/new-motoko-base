@@ -22,11 +22,12 @@ where <code>n</code> denotes the number of elements stored in the set.</li></ul>
 <pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
 import PureSet &quot;mo:base/pure/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([0, 2, 1].values(), Nat.compare);
   let pureSet = Set.toPure(set, Nat.compare);
-  assert PureSet.contains(pureSet, Nat.compare, 1);
+  assert Iter.toArray(PureSet.values(pureSet)) == Iter.toArray(Set.values(set));
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.
@@ -39,11 +40,12 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 <pre class="motoko"><code class="motoko">import PureSet &quot;mo:base/pure/Set&quot;;
 import Set &quot;mo:base/Set&quot;;
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let pureSet = PureSet.fromIter([3, 1, 2].values(), Nat.compare);
-  let mutableSet = Set.fromPure(pureSet, Nat.compare);
-  assert Set.contains(mutableSet, Nat.compare, 1);
+  let set = Set.fromPure(pureSet, Nat.compare);
+  assert Iter.toArray(Set.values(set)) == Iter.toArray(PureSet.values(pureSet));
 }</code></pre>
 
 <p>Runtime: <code>O(n * log(n))</code>.

@@ -70,11 +70,26 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import { message; isRetryPossible } "mo:base/Error";
-  /// import { print } "mo:base/Debug";
+  /// import Error "mo:base/Error";
+  /// import Debug "mo:base/Debug";
   ///
-  /// try await (with timeout = 3) Actor.call(arg)
-  /// catch e { if (isRetryPossible e) print(message e) }
+  /// persistent actor {
+  ///   type CallableActor = actor {
+  ///     call : () -> async ()
+  ///   };
+  ///
+  ///   public func example(callableActor : CallableActor) {
+  ///     try {
+  ///       await (with timeout = 3) callableActor.call();
+  ///     }
+  ///     catch e {
+  ///       if (Error.isRetryPossible e) {
+  ///         Debug.print(Error.message e);
+  ///       }
+  ///     }
+  ///   }
+  /// }
+  ///
   /// ```
   public func isRetryPossible(error : Error) : Bool = switch (code error) {
     case (#system_unknown or #system_transient) true;

@@ -43,7 +43,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let emptyBlob = Blob.empty(); // => ""
+  /// let emptyBlob = Blob.empty();
   /// assert emptyBlob.size() == 0;
   /// ```
   public func empty() : Blob = "";

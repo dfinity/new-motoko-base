@@ -74,23 +74,22 @@ Note that attaching cycles to a call to a local function call or <code>async</co
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  public func main() : async() {
-    Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance()));
+  public func main() : async () {
+    let initialBalance = Cycles.balance();
     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
-    Debug.print(&quot;Main refunded: &quot; # debug_show(Cycles.refunded())); // 5_000_000
-    Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance())); // decreased by around 10_000_000
+    assert Cycles.refunded() == 5_000_000;
+    assert Cycles.balance() &lt; initialBalance; // decreased by around 10_000_000
   };
 
-  func operation() : async() {
-    Debug.print(&quot;Operation balance: &quot; # debug_show(Cycles.balance()));
-    Debug.print(&quot;Operation available: &quot; # debug_show(Cycles.available()));
+  func operation() : async () {
+    let initialBalance = Cycles.balance();
+    let initialAvailable = Cycles.available();
     let obtained = Cycles.accept&lt;system&gt;(10_000_000);
-    Debug.print(&quot;Operation obtained: &quot; # debug_show(obtained)); // =&gt; 10_000_000
-    Debug.print(&quot;Operation balance: &quot; # debug_show(Cycles.balance())); // increased by 10_000_000
-    Debug.print(&quot;Operation available: &quot; # debug_show(Cycles.available())); // decreased by 10_000_000
+    assert obtained == 10_000_000;
+    assert Cycles.balance() == initialBalance + 10_000_000;
+    assert Cycles.available() == initialAvailable - 10_000_000;
   }
 }</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Debug.html">Debug</a><div class="index-item-comment"><p>Utility functions for debugging.</p>
 <p>Import from the base library to use this module.</p>

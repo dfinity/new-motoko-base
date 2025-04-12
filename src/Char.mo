@@ -37,7 +37,7 @@ module {
   /// ```motoko include=import
   /// let char = 'A';
   /// let unicode = Char.toNat32(char);
-  /// assert unicode == 65 : Nat32;
+  /// assert unicode == (65 : Nat32);
   /// ```
   public let toNat32 : (char : Char) -> Nat32 = Prim.charToNat32;
 

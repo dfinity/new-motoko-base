@@ -1,7 +1,7 @@
 /// Module for working with Characters (Unicode code points).
 ///
-/// Characters in Motoko represent Unicode code points 
-/// in the range 0 to 0x10FFFF, excluding the surrogate code points 
+/// Characters in Motoko represent Unicode code points
+/// in the range 0 to 0x10FFFF, excluding the surrogate code points
 /// (0xD800 through 0xDFFF).
 ///
 /// Import from the base library to use this module.

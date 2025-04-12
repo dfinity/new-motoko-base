@@ -1,7 +1,7 @@
 /// Utilities for `Char` (character)
 
 import Prim "mo:⛔";
-import Iter "Iter";
+import Order "Order";
 
 module {
 
@@ -61,7 +61,7 @@ module {
   public func greaterOrEqual(a : Char, b : Char) : Bool { a >= b };
 
   /// Returns the order of `a` and `b`.
-  public func compare(a : Char, b : Char) : { #less; #equal; #greater } {
+  public func compare(a : Char, b : Char) : Order.Order {
     if (a < b) { #less } else if (a == b) { #equal } else { #greater }
   };
 

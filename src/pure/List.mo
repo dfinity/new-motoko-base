@@ -194,10 +194,12 @@ module {
   ///
   /// Space: O(size)
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> = switch list {
-    case null null;
-    case (?(h, t)) ?(f h, map(t, f))
-  };
+  public func map<T1, T2>(list : List<T1>, f : T1 -> T2) : List<T2> = (
+    func go(list : List<T1>, f : T1 -> T2, acc : List<T2>) : List<T2> = switch list {
+      case (?(h, t)) go(t, f, ?(f h, acc));
+      case null reverse acc
+    }
+  )(list, f, null);
 
   /// Create a new list with only those elements of the original list for which
   /// the given function (often called the _predicate_) returns true.
@@ -210,10 +212,12 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func filter<T>(list : List<T>, f : T -> Bool) : List<T> = switch list {
-    case null null;
-    case (?(h, t)) if (f h) ?(h, filter(t, f)) else filter(t, f)
-  };
+  public func filter<T>(list : List<T>, f : T -> Bool) : List<T> = (
+    func go(list : List<T>, f : T -> Bool, acc : List<T>) : List<T> = switch list {
+      case (?(h, t)) if (f h) go(t, f, ?(h, acc)) else go(t, f, acc);
+      case null reverse acc
+    }
+  )(list, f, null);
 
   /// Call the given function on each list element, and collect the non-null results
   /// in a new list.
@@ -231,13 +235,15 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func filterMap<T, R>(list : List<T>, f : T -> ?R) : List<R> = switch list {
-    case null null;
-    case (?(h, t)) {
-      let ?v = f h else return filterMap(t, f);
-      ?(v, filterMap(t, f))
+  public func filterMap<T, R>(list : List<T>, f : T -> ?R) : List<R> = (
+    func go(list : List<T>, f : T -> ?R, acc : List<R>) : List<R> = switch list {
+      case (?(h, t)) switch (f h) {
+        case null go(t, f, acc);
+        case (?r) go(t, f, ?(r, acc))
+      };
+      case null reverse acc
     }
-  };
+  )(list, f, null);
 
   /// Maps a `Result`-returning function `f` over a `List` and returns either
   /// the first error or a list of successful values.
@@ -258,13 +264,13 @@ module {
 
   public func mapResult<T, R, E>(list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = (
     func rev(acc : List<R>, list : List<T>, f : T -> Result.Result<R, E>) : Result.Result<List<R>, E> = switch list {
-      case null #ok acc;
       case (?(h, t)) switch (f h) {
         case (#ok fh) rev(?(fh, acc), t, f);
         case (#err e) #err e
-      }
+      };
+      case null #ok(reverse acc)
     }
-  )(null, list, f) |> Result.mapOk(_, func(l : List<R>) : List<R> = reverse l);
+  )(null, list, f);
 
   /// Create two new lists from the results of a given function (`f`).
   /// The first list only includes the elements for which the given
@@ -281,14 +287,12 @@ module {
   /// Space: O(size)
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func partition<T>(list : List<T>, f : T -> Bool) : (List<T>, List<T>) = switch list {
-    case null (null, null);
-    case (?(h, t)) {
-      let left = f h;
-      let (l, r) = partition(t, f);
-      if left (?(h, l), r) else (l, ?(h, r))
+  public func partition<T>(list : List<T>, f : T -> Bool) : (List<T>, List<T>) = (
+    func go(list : List<T>, f : T -> Bool, acc1 : List<T>, acc2 : List<T>) : (List<T>, List<T>) = switch list {
+      case (?(h, t)) if (f h) go(t, f, ?(h, acc1), acc2) else go(t, f, acc1, ?(h, acc2));
+      case null (reverse acc1, reverse acc2)
     }
-  };
+  )(list, f, null, null);
 
   /// Append the elements from one list to another list.
   ///
@@ -303,12 +307,7 @@ module {
   /// Runtime: O(size(l))
   ///
   /// Space: O(size(l))
-  public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T> = (
-    func revAppend<T>(l : List<T>, m : List<T>) : List<T> = switch l {
-      case (?(h, t)) revAppend(t, ?(h, m));
-      case null m
-    }
-  )(reverse list1, list2);
+  public func concat<T>(list1 : List<T>, list2 : List<T>) : List<T> = revAppend(reverse list1, list2);
 
   /// Flatten, or repatedly concatenate, an iterator of lists as a list.
   ///
@@ -323,10 +322,12 @@ module {
   /// Runtime: O(size*size)
   ///
   /// Space: O(size*size)
-  public func join<T>(list : Iter.Iter<List<T>>) : List<T> {
-    let ?l = list.next() else return null;
-    let ls = join list;
-    concat(l, ls)
+  public func join<T>(iter : Iter.Iter<List<T>>) : List<T> {
+    var acc : List<T> = null;
+    for (list in iter) {
+      acc := revAppend(list, acc)
+    };
+    reverse acc
   };
 
   /// Flatten, or repatedly concatenate, a list of lists as a list.
@@ -343,7 +344,12 @@ module {
   /// Runtime: O(size*size)
   ///
   /// Space: O(size*size)
-  public func flatten<T>(list : List<List<T>>) : List<T> = foldRight<List<T>, List<T>>(list, null, func(list1, list2) = concat(list1, list2));
+  public func flatten<T>(list : List<List<T>>) : List<T> = (
+    func go(lists : List<List<T>>, acc : List<T>) : List<T> = switch lists {
+      case (?(list, t)) go(t, revAppend(list, acc));
+      case null reverse acc
+    }
+  )(list, null);
 
   /// Returns the first `n` elements of the given list.
   /// If the given list has fewer than `n` elements, this function returns
@@ -360,10 +366,12 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
-  public func take<T>(list : List<T>, n : Nat) : List<T> = if (n == 0) null else switch list {
-    case null null;
-    case (?(h, t)) ?(h, take(t, n - 1 : Nat))
-  };
+  public func take<T>(list : List<T>, n : Nat) : List<T> = (
+    func go(n : Nat, list : List<T>, acc : List<T>) : List<T> = if (n == 0) reverse acc else switch list {
+      case (?(h, t)) go(n - 1 : Nat, t, ?(h, acc));
+      case null reverse acc
+    }
+  )(n, list, null);
 
   /// Drop the first `n` elements from the given list.
   ///
@@ -428,10 +436,12 @@ module {
   /// Space: O(1) heap, O(size(list)) stack
   ///
   /// *Runtime and space assumes that `combine` runs in O(1) time and space.
-  public func foldRight<T, A>(list : List<T>, base : A, combine : (T, A) -> A) : A = switch list {
-    case null base;
-    case (?(h, t)) combine(h, foldRight(t, base, combine))
-  };
+  public func foldRight<T, A>(list : List<T>, base : A, combine : (T, A) -> A) : A = (
+    func go(list : List<T>, base : A, combine : (T, A) -> A) : A = switch list {
+      case null base;
+      case (?(h, t)) go(t, combine(h, base), combine)
+    }
+  )(reverse list, base, combine);
 
   /// Return the first element for which the given predicate `f` is true,
   /// if such an element exists.
@@ -518,20 +528,15 @@ module {
   /// Space: O(size(l1) + size(l2))
   ///
   /// *Runtime and space assumes that `lessThanOrEqual` runs in O(1) time and space.
-  // TODO: replace by merge taking a compare : (T, T) -> Order.Order function?
-  public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T> = switch (list1, list2) {
-    case (?(h1, t1), ?(h2, t2)) {
-      if (compare(h1, h2) != #greater) {
-        ?(h1, merge(t1, list2, compare))
-      } else if (compare(h2, h1) != #greater) {
-        ?(h2, merge(list1, t2, compare))
-      } else {
-        ?(h1, ?(h2, merge(list1, list2, compare)))
+  public func merge<T>(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order) : List<T> = (
+    func go(list1 : List<T>, list2 : List<T>, compare : (T, T) -> Order.Order, acc : List<T>) : List<T> = switch (list1, list2) {
+      case ((null, l) or (l, null)) reverse(revAppend(l, acc));
+      case (?(h1, t1), ?(h2, t2)) switch (compare(h1, h2)) {
+        case (#less or #equal) go(t1, list2, compare, ?(h1, acc));
+        case (#greater) go(list1, t2, compare, ?(h2, acc))
       }
-    };
-    case (null, _) list2;
-    case (_, null) list1
-  };
+    }
+  )(list1, list2, compare, null);
 
   /// Check if two lists are equal using the given equality function to compare elements.
   ///
@@ -681,10 +686,12 @@ module {
   /// Space: O(min(size(xs), size(ys)))
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
-  public func zipWith<T, U, V>(list1 : List<T>, list2 : List<U>, f : (T, U) -> V) : List<V> = switch (list1, list2) {
-    case (?(h1, t1), ?(h2, t2)) ?(f(h1, h2), zipWith(t1, t2, f));
-    case _ null
-  };
+  public func zipWith<T, U, V>(list1 : List<T>, list2 : List<U>, f : (T, U) -> V) : List<V> = (
+    func go(list1 : List<T>, list2 : List<U>, f : (T, U) -> V, acc : List<V>) : List<V> = switch (list1, list2) {
+      case ((null, _) or (_, null)) reverse acc;
+      case (?(h1, t1), ?(h2, t2)) go(t1, t2, f, ?(f(h1, h2), acc))
+    }
+  )(list1, list2, f, null);
 
   /// Split the given list at the given zero-based index.
   ///
@@ -700,12 +707,12 @@ module {
   /// Runtime: O(n)
   ///
   /// Space: O(n)
-  public func split<T>(list : List<T>, n : Nat) : (List<T>, List<T>) = if (n == 0) (null, list) else switch list {
-    case null (null, null);
-    case (?(h, t)) {
-      let (l1, l2) = split(t, n - 1 : Nat);
-      (?(h, l1), l2)
-    }
+  public func split<T>(list : List<T>, n : Nat) : (List<T>, List<T>) {
+    func go(n : Nat, list : List<T>, acc : List<T>) : (List<T>, List<T>) = if (n == 0) (reverse acc, list) else switch list {
+      case (?(h, t)) go(n - 1 : Nat, t, ?(h, acc));
+      case null (reverse acc, null)
+    };
+    go(n, list, null)
   };
 
   /// Split the given list into chunks of length `n`.
@@ -724,10 +731,14 @@ module {
   /// Runtime: O(size)
   ///
   /// Space: O(size)
-  public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> = switch (split(list, n)) {
-    case (null, _) { if (n == 0) trap "pure/List.chunks()"; null };
-    case (pre, null) ?(pre, null);
-    case (pre, post) ?(pre, chunks(post, n))
+  public func chunks<T>(list : List<T>, n : Nat) : List<List<T>> {
+    if (n == 0) trap "pure/List.chunks()";
+    func go(list : List<T>, n : Nat, acc : List<List<T>>) : List<List<T>> = switch (split(list, n)) {
+      case (null, _) reverse acc;
+      case (pre, null) reverse(?(pre, acc));
+      case (pre, post) go(post, n, ?(pre, acc))
+    };
+    go(list, n, null)
   };
 
   /// Returns an iterator to the elements in the list.
@@ -820,10 +831,9 @@ module {
   /// Space: O(size)
   public func fromIter<T>(iter : Iter.Iter<T>) : List<T> {
     var result : List<T> = null;
-    Iter.forEach<T>(
-      iter,
-      func x = result := ?(x, result)
-    );
+    for (x in iter) {
+      result := ?(x, result)
+    };
     reverse result
   };
 
@@ -844,4 +854,9 @@ module {
     text # "]"
   };
 
+  // revAppend([x1 .. xn], [y1 .. ym]) = [xn .. x1, y1 .. ym]
+  func revAppend<T>(l : List<T>, m : List<T>) : List<T> = switch l {
+    case (?(h, t)) revAppend(t, ?(h, m));
+    case null m
+  }
 }

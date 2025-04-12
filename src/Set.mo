@@ -1777,7 +1777,7 @@ module {
           case (#deleted) { #deleted };
           case (#inexistent) { #inexistent };
           case (#mergeChild({ internalChild })) {
-            #mergeChild({ internalChild; deletedElement = deleteElement })
+            #mergeChild({ internalChild })
           }
         }
       };

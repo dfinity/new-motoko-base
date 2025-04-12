@@ -7,6 +7,7 @@
 
 import Prim "mo:⛔";
 import Iter "Iter";
+import Order "Order";
 
 module {
 
@@ -31,7 +32,7 @@ module {
   };
 
   /// Returns `a != b`.
-  public func compare(a : Bool, b : Bool) : { #less; #equal; #greater } {
+  public func compare(a : Bool, b : Bool) : Order.Order {
     if (a == b) { #equal } else if (a) { #greater } else { #less }
   };
 

@@ -22,7 +22,7 @@ assert Char.toText(char) == &quot;A&quot;;</code></pre><div class="declaration">
 <pre><code>motoko include=import
 let char = 'A';
 let unicode = Char.toNat32(char);
-assert unicode == 65 : Nat32;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat32</span> : (<span class="parameter">nat32</span> : <span class="type">Nat32</span>) -&gt; <a href="#type.Char"><span class="type">Char</span></a></code></h4><p><p>Convert <code>w</code> to a character.
+assert unicode == (65 : Nat32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat32</span> : (<span class="parameter">nat32</span> : <span class="type">Nat32</span>) -&gt; <a href="#type.Char"><span class="type">Char</span></a></code></h4><p><p>Convert <code>w</code> to a character.
 Traps if <code>w</code> is not a valid Unicode scalar value.
 Value <code>w</code> is valid if, and only if, <code>w &lt; 0xD800 or (0xE000 &lt;= w and w &lt;= 0x10FFFF)</code>.</p>
 <p>Example:</p>

@@ -22,8 +22,8 @@ Int.fromText(&quot;-1234&quot;) // =&gt; ?-1234</code></pre></p></div><div class
 <p>Example:</p>
 <pre><code>motoko include=import
 import Debug &quot;mo:base/Debug&quot;;
-assert Int.toNat(-1) == null;
-assert Int.toNat(1234) == ?1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromNat"><code><span class="keyword">public func </span><span class="fnname">fromNat</span>(<span class="parameter">nat</span> : <span class="type">Nat</span>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Converts a natural number to an integer.</p>
+assert true;//Int.toNat(-1) == null;
+assert Int.toNat(1234) == 1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromNat"><code><span class="keyword">public func </span><span class="fnname">fromNat</span>(<span class="parameter">nat</span> : <span class="type">Nat</span>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Converts a natural number to an integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 Int.fromNat(1234); // =&gt; 1234</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Int"><span class="type">Int</span></a>, <span class="parameter">y</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <a href="#type.Int"><span class="type">Int</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>

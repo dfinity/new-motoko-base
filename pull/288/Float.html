@@ -341,7 +341,7 @@ greaterOrEqual(x, NaN)     =&gt; false for any Float x</code></pre>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Float &quot;mo:base/Float&quot;;
 
-Float.greaterOrEqual(0.1234, 0.123) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Defines a total order of <code>x</code> and <code>y</code> for use in sorting.</p>
+Float.greaterOrEqual(0.1234, 0.123) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">x</span> : <a href="#type.Float"><span class="type">Float</span></a>, <span class="parameter">y</span> : <a href="#type.Float"><span class="type">Float</span></a>) : {#less; #equal; #greater}</code></h4><p><p>Defines a total order of <code>x</code> and <code>y</code> for use in sorting.</p>
 <p>Note: Using this operation to determine equality or inequality is discouraged for two reasons:</p>
 <ul><li>It does not consider numerical errors, see comment above. Use <code>equal(x, y, espilon)</code> or
  <code>notEqual(x, y, epsilon)</code> to test for equality or inequality, respectively.</li><li><code>NaN</code> are here considered equal if their sign matches, which is different to the standard equality

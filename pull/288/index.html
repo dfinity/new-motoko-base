@@ -44,24 +44,8 @@ a certificate about that data.</p>
 users and library implementors. See the Internet Computer Functional
 Specification and corresponding documentation for how to use this to make query
 calls to your canister tamperproof.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="Char.html">Char</a><div class="index-item-comment"><p>Module for working with Characters (Unicode code points).</p>
-<p>Characters in Motoko represent Unicode code points
-in the range 0 to 0x10FFFF, excluding the surrogate code points
-(0xD800 through 0xDFFF).</p>
-<p>Import from the base library to use this module.</p>
-<pre><code>motoko name=import
-import Char &quot;mo:base/Char&quot;;</code></pre>
-
-<p>Some built in features not listed in this module:</p>
-<ul><li>You can create a <code>Char</code> literal using single quotes, e.g. 'A', '1', '漢'</li><li>You can compare characters using <code>&lt;</code>, <code>&lt;=</code>, <code>==</code>, <code>!=</code>, <code>&gt;=</code>, <code>&gt;</code> operators</li><li>You can convert a single-character <code>Text</code> to a <code>Char</code> using <code>:Char</code> type annotation</li></ul>
-
-<p>For example:</p>
-<pre><code>motoko include=import
-let char : Char = 'A';
-let unicodeChar = '漢';
-let digit = '7';
-assert Char.isDigit(digit);
-assert Char.toText(char) == &quot;A&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Cycles.html">Cycles</a><div class="index-item-comment"><p>Managing cycles within actors in the Internet Computer Protocol (ICP).</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Char.html">Char</a><div class="index-item-comment"><p>Utilities for <code>Char</code> (character)</p>
+</div></li><li class="index-item"><a class="index-item-link" href="Cycles.html">Cycles</a><div class="index-item-comment"><p>Managing cycles within actors in the Internet Computer Protocol (ICP).</p>
 <p>The usage of the Internet Computer is measured, and paid for, in <em>cycles</em>.
 This library provides imperative operations for observing cycles, transferring cycles, and
 observing refunds of cycles.</p>
@@ -429,9 +413,6 @@ Note: The resolution of the timers is in the order of the block rate,</p>
 <pre><code>  so durations should be chosen well above that. For frequent
   canister wake-ups the heartbeat mechanism should be considered.</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Timer.html">Timer</a><div class="index-item-comment"><p>Timers for one-off or periodic tasks. Applicable as part of the default mechanism.
 If <code>moc</code> is invoked with <code>-no-timer</code>, the importing will fail. Furthermore, if passed <code>--trap-on-call-error</code>, a congested canister send queue may prevent timer expirations to execute at runtime. It may also deactivate the global timer.</p>
-<pre><code>motoko name=import
-import Timer &quot;mo:base/Timer&quot;;</code></pre>
-
 <p>The resolution of the timers is similar to the block rate,
 so durations should be chosen well above that. For frequent
 canister wake-ups, consider using the <a href="https://internetcomputer.org/docs/current/motoko/main/writing-motoko/heartbeats">heartbeat</a> mechanism; however, when possible, canisters should prefer timers.</p>

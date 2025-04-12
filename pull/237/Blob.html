@@ -25,7 +25,7 @@ for (byte in blob.values()) { // iterator over the Blob
 }</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Blob"><span class="keyword">type </span><span class="type">Blob</span> = <span class="type">Prim.Types.Blob</span></h4><p></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>() : <a href="#type.Blob"><span class="type">Blob</span></a></code></h4><p><p>Returns an empty <code>Blob</code> (equivalent to <code>&quot;&quot;</code>).</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let emptyBlob = Blob.empty(); // =&gt; &quot;&quot;
+let emptyBlob = Blob.empty();
 assert emptyBlob.size() == 0;</code></pre></p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns whether the given <code>Blob</code> is empty (has a size of zero).</p>
 <pre><code>motoko include=import
 let blob1 = &quot;&quot; : Blob;

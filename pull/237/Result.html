@@ -37,25 +37,25 @@ assert validateEmail(&quot;user@invalid&quot;) == #err(&quot;Invalid domain form
 import Nat &quot;mo:base/Nat&quot;;
 import Text &quot;mo:base/Text&quot;;
 
-let result1 = #ok(10);
-let result2 = #ok(10);
-let result3 = #err(&quot;error&quot;);
+let result1 = #ok 10;
+let result2 = #ok 10;
+let result3 = #err &quot;error&quot;;
 
-assert Result.equal&lt;Nat, Text&gt;(Nat.equal, Text.equal, result1, result2);
-assert not Result.equal&lt;Nat, Text&gt;(Nat.equal, Text.equal, result1, result3);</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;(<br/>  <span class="parameter">result1</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;, <br/>  <span class="parameter">result2</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;, <br/>  <span class="parameter">compareOk</span> : (<span class="type">Ok</span>, <span class="type">Ok</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">compareErr</span> : (<span class="type">Err</span>, <span class="type">Err</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compares two Result values. <code>#ok</code> is larger than <code>#err</code>. This ordering is
+assert Result.equal&lt;Nat, Text&gt;(result1, result2, Nat.equal, Text.equal);
+assert not Result.equal&lt;Nat, Text&gt;(result1, result3, Nat.equal, Text.equal);</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;(<br/>  <span class="parameter">result1</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;, <br/>  <span class="parameter">result2</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;, <br/>  <span class="parameter">compareOk</span> : (<span class="type">Ok</span>, <span class="type">Ok</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">compareErr</span> : (<span class="type">Err</span>, <span class="type">Err</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compares two Result values. <code>#ok</code> is larger than <code>#err</code>. This ordering is
 arbitrary, but it lets you for example use Results as keys in ordered maps.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 import Text &quot;mo:base/Text&quot;;
 
-let result1 = #ok(5);
-let result2 = #ok(10);
-let result3 = #err(&quot;error&quot;);
+let result1 = #ok 5;
+let result2 = #ok 10;
+let result3 = #err &quot;error&quot;;
 
-assert Result.compare&lt;Nat, Text&gt;(Nat.compare, Text.compare, result1, result2) == #less;
-assert Result.compare&lt;Nat, Text&gt;(Nat.compare, Text.compare, result2, result1) == #greater;
-assert Result.compare&lt;Nat, Text&gt;(Nat.compare, Text.compare, result1, result3) == #greater;</code></pre></p></div><div class="declaration"><h4 class="function" id="chain"><code><span class="keyword">public func </span><span class="fnname">chain</span>&lt;<span class="type">Ok1</span>, <span class="type">Ok2</span>, <span class="type">Err</span>&gt;(<span class="parameter">result</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok1</span>, <span class="type">Err</span>&gt;, <span class="parameter">f</span> : <span class="type">Ok1</span> -&gt; <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok2</span>, <span class="type">Err</span>&gt;) : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok2</span>, <span class="type">Err</span>&gt;</code></h4><p><p>Allows sequencing of Result values and functions that return
+assert Result.compare&lt;Nat, Text&gt;(result1, result2, Nat.compare, Text.compare) == #less;
+assert Result.compare&lt;Nat, Text&gt;(result2, result1, Nat.compare, Text.compare) == #greater;
+assert Result.compare&lt;Nat, Text&gt;(result1, result3, Nat.compare, Text.compare) == #greater;</code></pre></p></div><div class="declaration"><h4 class="function" id="chain"><code><span class="keyword">public func </span><span class="fnname">chain</span>&lt;<span class="type">Ok1</span>, <span class="type">Ok2</span>, <span class="type">Err</span>&gt;(<span class="parameter">result</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok1</span>, <span class="type">Err</span>&gt;, <span class="parameter">f</span> : <span class="type">Ok1</span> -&gt; <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok2</span>, <span class="type">Err</span>&gt;) : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok2</span>, <span class="type">Err</span>&gt;</code></h4><p><p>Allows sequencing of Result values and functions that return
 Results themselves.</p>
 <pre><code>motoko include=import
 type Result&lt;Ok,Err&gt; = Result.Result&lt;Ok, Err&gt;;

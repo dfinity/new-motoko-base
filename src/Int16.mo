@@ -10,6 +10,7 @@
 import Int "Int";
 import Iter "Iter";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
@@ -255,7 +256,7 @@ module {
   /// import Array "mo:base/Array";
   /// Array.sort([1, -2, -3] : [Int16], Int16.compare) // => [-3, -2, 1]
   /// ```
-  public func compare(x : Int16, y : Int16) : { #less; #equal; #greater } {
+  public func compare(x : Int16, y : Int16) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 

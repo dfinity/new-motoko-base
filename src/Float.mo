@@ -20,7 +20,7 @@
 ///   ```
 ///
 ///   ```motoko
-///   assert 1e16 + 1.0 == 1e16;
+///   assert not (1e16 + 1.0 != 1e16);
 ///   ```
 ///
 ///  (and many more cases)

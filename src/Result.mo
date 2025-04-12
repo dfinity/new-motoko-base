@@ -52,12 +52,12 @@ module {
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
   ///
-  /// let result1 = #ok(10);
-  /// let result2 = #ok(10);
-  /// let result3 = #err("error");
+  /// let result1 = #ok 10;
+  /// let result2 = #ok 10;
+  /// let result3 = #err "error";
   ///
-  /// assert Result.equal<Nat, Text>(Nat.equal, Text.equal, result1, result2);
-  /// assert not Result.equal<Nat, Text>(Nat.equal, Text.equal, result1, result3);
+  /// assert Result.equal<Nat, Text>(result1, result2, Nat.equal, Text.equal);
+  /// assert not Result.equal<Nat, Text>(result1, result3, Nat.equal, Text.equal);
   /// ```
   public func equal<Ok, Err>(
     result1 : Result<Ok, Err>,
@@ -84,13 +84,13 @@ module {
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
   ///
-  /// let result1 = #ok(5);
-  /// let result2 = #ok(10);
-  /// let result3 = #err("error");
+  /// let result1 = #ok 5;
+  /// let result2 = #ok 10;
+  /// let result3 = #err "error";
   ///
-  /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result1, result2) == #less;
-  /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result2, result1) == #greater;
-  /// assert Result.compare<Nat, Text>(Nat.compare, Text.compare, result1, result3) == #greater;
+  /// assert Result.compare<Nat, Text>(result1, result2, Nat.compare, Text.compare) == #less;
+  /// assert Result.compare<Nat, Text>(result2, result1, Nat.compare, Text.compare) == #greater;
+  /// assert Result.compare<Nat, Text>(result1, result3, Nat.compare, Text.compare) == #greater;
   /// ```
   public func compare<Ok, Err>(
     result1 : Result<Ok, Err>,

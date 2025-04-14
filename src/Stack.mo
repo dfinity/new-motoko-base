@@ -12,18 +12,10 @@
 ///   Stack.push(levels, "Inner");
 ///   Stack.push(levels, "Middle");
 ///   Stack.push(levels, "Outer");
-///   let expected = ["Outer", "Middle", "Inner"];
-///   var i = 0;
-///   label iteration loop {
-///     switch (Stack.pop(levels)) {
-///       case null { break iteration };
-///       case (?name) {
-///         assert name == expected[i];
-///         i += 1;
-///       }
-///     }
-///   };
-///   assert i == expected.size();
+///   assert Stack.pop(levels) == ?"Outer";
+///   assert Stack.pop(levels) == ?"Middle";
+///   assert Stack.pop(levels) == ?"Inner";
+///   assert Stack.pop(levels) == null;
 /// }
 /// ```
 ///

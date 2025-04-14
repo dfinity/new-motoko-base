@@ -60,10 +60,11 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.fromIter([3, 1, 2, 1].values(), Nat.compare);
-  ///   assert Set.toText(set, Nat.toText) == "{1, 2, 3}";
+  ///   assert Iter.toArray(Set.values(set)) == [1, 2, 3];
   /// }
   /// ```
   ///
@@ -90,16 +91,17 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set0 = Set.empty<Nat>();
   ///   let set1 = Set.add(set0, Nat.compare, 2);
   ///   let set2 = Set.add(set1, Nat.compare, 1);
   ///   let set3 = Set.add(set2, Nat.compare, 2);
-  ///   assert Set.toText(set0, Nat.toText) == "{}";
-  ///   assert Set.toText(set1, Nat.toText) == "{2}";
-  ///   assert Set.toText(set2, Nat.toText) == "{1, 2}";
-  ///   assert Set.toText(set3, Nat.toText) == "{1, 2}";
+  ///   assert Iter.toArray(Set.values(set0)) == [];
+  ///   assert Iter.toArray(Set.values(set1)) == [2];
+  ///   assert Iter.toArray(Set.values(set2)) == [1, 2];
+  ///   assert Iter.toArray(Set.values(set3)) == [1, 2];
   /// }
   /// ```
   ///
@@ -121,6 +123,7 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let r1 = Set.insert(Set.empty<Nat>(), Nat.compare, 2);
@@ -129,7 +132,7 @@ module {
   ///   assert r2.1;
   ///   let r3 = Set.insert(r2.0, Nat.compare, 2);
   ///   assert not r3.1;
-  ///   assert Set.toText(r3.0, Nat.toText) == "{1, 2}"
+  ///   assert Iter.toArray(Set.values(r3.0)) == [1, 2]
   /// }
   /// ```
   ///
@@ -149,13 +152,14 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///
   ///   let set1 = Set.remove(set, Nat.compare, 2);
   ///   let set2 = Set.remove(set1, Nat.compare, 4);
-  ///   assert Set.toText(set2, Nat.toText) == "{1, 3}"
+  ///   assert Iter.toArray(Set.values(set2)) == [1, 3];
   /// }
   /// ```
   ///
@@ -177,16 +181,17 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///
   ///   let r1 = Set.delete(set, Nat.compare, 2);
   ///   assert r1.1;
-  ///   assert Set.toText(r1.0, Nat.toText) == "{1, 3}";
+  ///   assert Iter.toArray(Set.values(r1.0)) == [1, 3];
   ///   let r2 = Set.delete(r1.0, Nat.compare, 4);
   ///   assert not r2.1;
-  ///   assert Set.toText(r2.0, Nat.toText) == "{1, 3}";
+  ///   assert Iter.toArray(Set.values(r2.0)) == [1, 3];
   /// }
   /// ```
   ///
@@ -273,12 +278,13 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   ///   let union = Set.union(set1, set2, Nat.compare);
-  ///   assert Set.toText(union, Nat.toText) == "{1, 2, 3, 4, 5}";
+  ///   assert Iter.toArray(Set.values(union)) == [1, 2, 3, 4, 5];
   /// }
   /// ```
   ///
@@ -303,12 +309,13 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter([0, 1, 2].values(), Nat.compare);
   ///   let set2 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///   let intersection = Set.intersection(set1, set2, Nat.compare);
-  ///   assert Set.toText(intersection, Nat.toText) == "{1, 2}";
+  ///   assert Iter.toArray(Set.values(intersection)) == [1, 2];
   /// }
   /// ```
   ///
@@ -349,12 +356,13 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   ///   let difference = Set.difference(set1, set2, Nat.compare);
-  ///   assert Set.toText(difference, Nat.toText) == "{1, 2}";
+  ///   assert Iter.toArray(Set.values(difference)) == [1, 2];
   /// }
   /// ```
   ///
@@ -398,14 +406,14 @@ module {
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let numbers = Set.fromIter([3, 1, 2].values(), Nat.compare);
   ///
   ///   let textNumbers =
   ///     Set.map<Nat, Text>(numbers, Text.compare, Nat.toText);
-  ///   assert Set.toText<Text>(textNumbers, func t { "`" # t # "`" }) ==
-  ///     "{`1`, `2`, `3`}";
+  ///   assert Iter.toArray(Set.values(textNumbers)) == ["1", "2", "3"];
   /// }
   /// ```
   ///
@@ -428,11 +436,11 @@ module {
   /// persistent actor {
   ///   let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
   ///
-  ///   var tmp = "";
+  ///   var text = "";
   ///   Set.forEach<Nat>(numbers, func (element) {
-  ///     tmp #= " " # Nat.toText(element)
+  ///     text #= " " # Nat.toText(element)
   ///   });
-  ///   assert tmp == " 0 1 2 3";
+  ///   assert text == " 0 1 2 3";
   /// }
   /// ```
   ///
@@ -452,6 +460,7 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
@@ -459,7 +468,7 @@ module {
   ///   let evenNumbers = Set.filter<Nat>(numbers, Nat.compare, func (number) {
   ///     number % 2 == 0
   ///   });
-  ///   assert Set.toText(evenNumbers, Nat.toText) == "{0, 2}";
+  ///   assert Iter.toArray(Set.values(evenNumbers)) == [0, 2];
   /// }
   /// ```
   ///
@@ -487,6 +496,7 @@ module {
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
   /// import Text "mo:base/Text";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let numbers = Set.fromIter([3, 0, 2, 1].values(), Nat.compare);
@@ -498,8 +508,7 @@ module {
   ///        null // discard odd numbers
   ///     }
   ///   });
-  ///   assert Set.toText<Text>(evenTextNumbers, func t { "`" # t # "`"}) ==
-  ///     "{`0`, `2`}";
+  ///   assert Iter.toArray(Set.values(evenTextNumbers)) == ["0", "2"];
   /// }
   /// ```
   ///
@@ -666,11 +675,11 @@ module {
   /// persistent actor {
   ///   let set = Set.fromIter([0, 2, 3, 1].values(), Nat.compare);
   ///
-  ///   var tmp = "";
+  ///   var text = "";
   ///   for (number in Set.values(set)) {
-  ///      tmp #= " " # Nat.toText(number);
+  ///      text #= " " # Nat.toText(number);
   ///   };
-  ///   assert tmp == " 0 1 2 3";
+  ///   assert text == " 0 1 2 3";
   /// }
   /// ```
   /// Cost of iteration over all elements:
@@ -713,10 +722,11 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.empty<Nat>();
-  ///   assert Set.toText(set, Nat.toText) == "{}"
+  ///   assert Iter.toArray(Set.values(set)) == [];
   /// }
   /// ```
   ///
@@ -730,10 +740,11 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.singleton(0);
-  ///   assert Set.toText(set, Nat.toText) == "{0}"
+  ///   assert Iter.toArray(Set.values(set)) == [0];
   /// }
   /// ```
   ///
@@ -912,11 +923,12 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.fromIter<Nat>([0, 3, 1, 2].values(), Nat.compare);
   ///
-  ///   assert Set.toText(set, Nat.toText) == "{0, 1, 2, 3}"
+  ///   assert Set.toText(set, Nat.toText) == "{0, 1, 2, 3}";
   /// }
   /// ```
   ///
@@ -948,6 +960,7 @@ module {
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
   /// import Order "mo:base/Order";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   func setCompare(first: Set.Set<Nat>, second: Set.Set<Nat>) : Order.Order {
@@ -959,7 +972,7 @@ module {
   ///   let set3 = Set.fromIter([5, 6, 7].values(), Nat.compare);
   ///   let setOfSets = Set.fromIter([set1, set2, set3].values(), setCompare);
   ///   let flatSet = Set.flatten(setOfSets, Nat.compare);
-  ///   assert Set.toText(flatSet, Nat.toText) == "{1, 2, 3, 4, 5, 6, 7}";
+  ///   assert Iter.toArray(Set.values(flatSet)) == [1, 2, 3, 4, 5, 6, 7];
   /// }
   /// ```
   ///
@@ -986,13 +999,14 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
   ///   let set2 = Set.fromIter([3, 4, 5].values(), Nat.compare);
   ///   let set3 = Set.fromIter([5, 6, 7].values(), Nat.compare);
   ///   let combined = Set.join([set1, set2, set3].values(), Nat.compare);
-  ///   assert Set.toText(combined, Nat.toText) == "{1, 2, 3, 4, 5, 6, 7}";
+  ///   assert Iter.toArray(Set.values(combined)) == [1, 2, 3, 4, 5, 6, 7];
   /// }
   /// ```
   ///

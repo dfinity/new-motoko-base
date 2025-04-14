@@ -691,7 +691,6 @@ module {
   /// persistent actor {
   ///   let set = Set.fromIter([0, 1, 3].values(), Nat.compare);
   ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 1)) == [3, 1];
-  ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 1)) == [3, 1];
   ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 2)) == [3];
   /// }
   /// ```

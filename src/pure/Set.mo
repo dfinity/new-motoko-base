@@ -126,13 +126,16 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let r1 = Set.insert(Set.empty<Nat>(), Nat.compare, 2);
-  ///   assert r1.1;
-  ///   let r2 = Set.insert(r1.0, Nat.compare, 1);
-  ///   assert r2.1;
-  ///   let r3 = Set.insert(r2.0, Nat.compare, 2);
-  ///   assert not r3.1;
-  ///   assert Iter.toArray(Set.values(r3.0)) == [1, 2]
+  ///   let set0 = Set.empty();
+  ///   do {
+  ///     let (set1, new1) = Set.insert(set0, Nat.compare, 2);
+  ///     assert new1;
+  ///     let (set2, new2) = Set.insert(set1, Nat.compare, 1);
+  ///     assert new2;
+  ///     let (set3, new3) = Set.insert(set2, Nat.compare, 2);
+  ///     assert not new3;
+  ///     assert Iter.toArray(Set.values(set3)) == [1, 2]
+  ///   }
   /// }
   /// ```
   ///
@@ -185,13 +188,14 @@ module {
   ///
   /// persistent actor {
   ///   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
-  ///
-  ///   let r1 = Set.delete(set, Nat.compare, 2);
-  ///   assert r1.1;
-  ///   assert Iter.toArray(Set.values(r1.0)) == [1, 3];
-  ///   let r2 = Set.delete(r1.0, Nat.compare, 4);
-  ///   assert not r2.1;
-  ///   assert Iter.toArray(Set.values(r2.0)) == [1, 3];
+  ///   do {
+  ///     let (set1, contained1) = Set.delete(set, Nat.compare, 2);
+  ///     assert contained1;
+  ///     assert Iter.toArray(Set.values(set1)) == [1, 3];
+  ///     let (set2, contained2) = Set.delete(set1, Nat.compare, 4);
+  ///     assert not contained2;
+  ///     assert Iter.toArray(Set.values(set2)) == [1, 3];
+  ///   }
   /// }
   /// ```
   ///

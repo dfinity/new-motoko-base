@@ -11,18 +11,10 @@ persistent actor {
   Stack.push(levels, &quot;Inner&quot;);
   Stack.push(levels, &quot;Middle&quot;);
   Stack.push(levels, &quot;Outer&quot;);
-  let expected = [&quot;Outer&quot;, &quot;Middle&quot;, &quot;Inner&quot;];
-  var i = 0;
-  label iteration loop {
-    switch (Stack.pop(levels)) {
-      case null { break iteration };
-      case (?name) {
-        assert name == expected[i];
-        i += 1;
-      }
-    }
-  };
-  assert i == expected.size();
+  assert Stack.pop(levels) == ?&quot;Outer&quot;;
+  assert Stack.pop(levels) == ?&quot;Middle&quot;;
+  assert Stack.pop(levels) == ?&quot;Inner&quot;;
+  assert Stack.pop(levels) == null;
 }</code></pre>
 
 <p>The internal implementation is a singly-linked list.</p>

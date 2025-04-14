@@ -9,9 +9,6 @@ on:
 jobs:
   deploy:
     if: github.repository_owner == 'dfinity'
-    strategy:
-      matrix:
-        node: [20]
     concurrency: gh-pages-${{ github.ref }}
     runs-on: ubuntu-24.04
     env:
@@ -20,15 +17,10 @@ jobs:
       - name: Checkout website repo
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version: ${{ matrix.node }}
-
-      - name: Setup dfx
-        uses: dfinity/setup-dfx@main
-
-      - run: dfx cache install
+          setup-mops: false
+          setup-dfx: true
 
       - name: Build docs
         run: npm run docs

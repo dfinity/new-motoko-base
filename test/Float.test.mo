@@ -2,6 +2,7 @@
 
 import Debug "../src/Debug";
 import Float "../src/Float";
+import Order "../src/Order";
 import Text "../src/Text";
 
 import Suite "mo:matchers/Suite";
@@ -2775,7 +2776,7 @@ run(
 
 /* --------------------------------------- */
 
-type Order = { #less; #equal; #greater };
+type Order = Order.Order;
 
 class OrderTestable(value : Order) : T.TestableItem<Order> {
   public let item = value;

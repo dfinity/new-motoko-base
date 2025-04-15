@@ -1,4 +1,4 @@
-name: Tests
+name: Validation
 on:
   push:
     branches:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   changelog:
+    if: ${{ github.event.pull_request.base.ref == 'main' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -15,6 +16,8 @@ jobs:
         node: [20]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
@@ -54,10 +57,34 @@ jobs:
         node: [20]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
       - run: npm ci
-      - run: npm run validate:docs
+      - name: Validate changed files
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep '^src/.*\.mo$' || true)
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "$CHANGED_FILES" | xargs npm run validate:docs
+          else
+            echo "No Motoko files changed"
+          fi
         env:
           FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106
+
+  api:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ubuntu-24.04]
+        node: [20]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm run validate:api

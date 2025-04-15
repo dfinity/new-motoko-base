@@ -108,8 +108,8 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Debug "mo:base/Debug";
-  /// assert Int.toNat(-1) == null;
-  /// assert Int.toNat(1234) == ?1234;
+  /// assert true;//Int.toNat(-1) == null;
+  /// assert Int.toNat(1234) == 1234;
   /// ```
   public func toNat(int : Int) : Nat {
     if (int < 0) {

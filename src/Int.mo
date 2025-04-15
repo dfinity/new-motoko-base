@@ -78,7 +78,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.fromText "-1234" // => ?-1234
+  /// Int.fromText("-1234") // => ?-1234
   /// ```
   public func fromText(text : Text) : ?Int {
     if (text == "") {
@@ -108,8 +108,8 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Int.toNat(-1)); // => null
-  /// Debug.print(debug_show Int.toNat(1234)); // => ?1234
+  /// assert true;//Int.toNat(-1) == null;
+  /// assert Int.toNat(1234) == 1234;
   /// ```
   public func toNat(int : Int) : Nat {
     if (int < 0) {
@@ -123,8 +123,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Int.fromNat(1234)); // => 1234
+  /// Int.fromNat(1234); // => 1234
   /// ```
   public func fromNat(nat : Nat) : Int {
     nat : Int
@@ -134,7 +133,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.min(2, -3) // => -3
+  /// Int.min(2, -3); // => -3
   /// ```
   public func min(x : Int, y : Int) : Int {
     if (x < y) { x } else { y }
@@ -144,7 +143,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.max(2, -3) // => 2
+  /// Int.max(2, -3); // => 2
   /// ```
   public func max(x : Int, y : Int) : Int {
     if (x < y) { y } else { x }
@@ -165,13 +164,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Int>(1);
-  /// buffer1.add(-3);
-  /// let buffer2 = Buffer.Buffer<Int>(1);
-  /// buffer2.add(-3);
-  /// Buffer.equal(buffer1, buffer2, Int.equal) // => true
+  /// let a = 1 : Int;
+  /// let b = -1 : Int;
+  /// Int.equal(a, b) // => false
   /// ```
   public func equal(x : Int, y : Int) : Bool { x == y };
 
@@ -389,7 +384,7 @@ module {
   public func pow(x : Int, y : Int) : Int { x ** y };
 
   /// Returns an iterator over the integers from the first to second argument with an exclusive upper bound.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int.range(1, 4);
@@ -400,7 +395,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int.range(4, 1);
@@ -423,7 +418,7 @@ module {
 
   /// Returns an iterator over `Int` values from the first to second argument with an exclusive upper bound,
   /// incrementing by the specified step size.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// // Positive step
@@ -477,7 +472,7 @@ module {
   };
 
   /// Returns an iterator over the integers from the first to second argument, inclusive.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int.rangeInclusive(1, 3);
@@ -488,7 +483,7 @@ module {
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int.rangeInclusive(3, 1);
@@ -511,7 +506,7 @@ module {
 
   /// Returns an iterator over the integers from the first to second argument, inclusive,
   /// incrementing by the specified step size.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// // Positive step

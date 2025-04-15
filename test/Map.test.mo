@@ -131,7 +131,7 @@ run(
         "replace if exists",
         do {
           let map = Map.empty<Nat, Text>();
-          assert (Map.replaceIfExists(map, Nat.compare, 0, "0") == null);
+          assert (Map.replace(map, Nat.compare, 0, "0") == null);
           Map.size(map)
         },
         M.equals(T.nat(0))
@@ -509,7 +509,7 @@ run(
         "replace if exists present",
         do {
           let map = Map.singleton<Nat, Text>(0, "0");
-          assert (Map.replaceIfExists(map, Nat.compare, 0, "Zero") == ?"0");
+          assert (Map.replace(map, Nat.compare, 0, "Zero") == ?"0");
           Map.size(map)
         },
         M.equals(T.nat(1))
@@ -518,7 +518,7 @@ run(
         "replace if exists absent",
         do {
           let map = Map.singleton<Nat, Text>(0, "0");
-          assert (Map.replaceIfExists(map, Nat.compare, 1, "1") == null);
+          assert (Map.replace(map, Nat.compare, 1, "1") == null);
           Map.size(map)
         },
         M.equals(T.nat(1))
@@ -933,7 +933,7 @@ run(
         do {
           let map = smallMap();
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.replaceIfExists(map, Nat.compare, index, Nat.toText(index) # "!") == ?Nat.toText(index))
+            assert (Map.replace(map, Nat.compare, index, Nat.toText(index) # "!") == ?Nat.toText(index))
           };
           Map.size(map)
         },
@@ -943,7 +943,7 @@ run(
         "replace if exists absent",
         do {
           let map = smallMap();
-          assert (Map.replaceIfExists(map, Nat.compare, smallSize, Nat.toText(smallSize)) == null);
+          assert (Map.replace(map, Nat.compare, smallSize, Nat.toText(smallSize)) == null);
           Map.size(map)
         },
         M.equals(T.nat(smallSize))

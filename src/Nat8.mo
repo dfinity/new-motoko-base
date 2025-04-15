@@ -116,11 +116,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Nat8>(3);
-  /// let buffer2 = Buffer.Buffer<Nat8>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat8.equal) // => true
+  /// let a : Nat8 = 111;
+  /// let b : Nat8 = 222;
+  /// Nat8.equal(a, b) // => false
   /// ```
   public func equal(x : Nat8, y : Nat8) : Bool { x == y };
 
@@ -159,7 +157,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.lessOrEqual(1, 2); // => true
+  /// ignore Nat8.lessOrEqual(1, 2); // => true
   /// 1 <= 2 // => true
   /// ```
   ///

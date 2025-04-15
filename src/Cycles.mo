@@ -19,23 +19,22 @@
 /// Example for use on the ICP:
 /// ```motoko no-repl
 /// import Cycles "mo:base/Cycles";
-/// import Debug "mo:base/Debug";
 ///
-/// actor {
-///   public func main() : async() {
-///     Debug.print("Main balance: " # debug_show(Cycles.balance()));
+/// persistent actor {
+///   public func main() : async () {
+///     let initialBalance = Cycles.balance();
 ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
-///     Debug.print("Main refunded: " # debug_show(Cycles.refunded())); // 5_000_000
-///     Debug.print("Main balance: " # debug_show(Cycles.balance())); // decreased by around 10_000_000
+///     assert Cycles.refunded() == 5_000_000;
+///     assert Cycles.balance() < initialBalance; // decreased by around 10_000_000
 ///   };
 ///
-///   func operation() : async() {
-///     Debug.print("Operation balance: " # debug_show(Cycles.balance()));
-///     Debug.print("Operation available: " # debug_show(Cycles.available()));
+///   func operation() : async () {
+///     let initialBalance = Cycles.balance();
+///     let initialAvailable = Cycles.available();
 ///     let obtained = Cycles.accept<system>(10_000_000);
-///     Debug.print("Operation obtained: " # debug_show(obtained)); // => 10_000_000
-///     Debug.print("Operation balance: " # debug_show(Cycles.balance())); // increased by 10_000_000
-///     Debug.print("Operation available: " # debug_show(Cycles.available())); // decreased by 10_000_000
+///     assert obtained == 10_000_000;
+///     assert Cycles.balance() == initialBalance + 10_000_000;
+///     assert Cycles.available() == initialAvailable - 10_000_000;
 ///   }
 /// }
 /// ```
@@ -47,12 +46,11 @@ module {
   /// Example for use on the ICP:
   /// ```motoko no-repl
   /// import Cycles "mo:base/Cycles";
-  /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   public func main() : async() {
   ///     let balance = Cycles.balance();
-  ///     Debug.print("Balance: " # debug_show(balance));
+  ///     assert balance > 0;
   ///   }
   /// }
   /// ```
@@ -67,12 +65,11 @@ module {
   /// Example for use on the ICP:
   /// ```motoko no-repl
   /// import Cycles "mo:base/Cycles";
-  /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   public func main() : async() {
   ///     let available = Cycles.available();
-  ///     Debug.print("Available: " # debug_show(available));
+  ///     assert available >= 0;
   ///   }
   /// }
   /// ```
@@ -85,16 +82,15 @@ module {
   /// Example for use on the ICP (for simplicity, only transferring cycles to itself):
   /// ```motoko no-repl
   /// import Cycles "mo:base/Cycles";
-  /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   public func main() : async() {
   ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   ///   };
   ///
   ///   func operation() : async() {
   ///     let obtained = Cycles.accept<system>(10_000_000);
-  ///     Debug.print("Obtained: " # debug_show(obtained)); // => 10_000_000
+  ///     assert obtained == 10_000_000;
   ///   }
   /// }
   /// ```
@@ -109,16 +105,15 @@ module {
   /// Example for use on the ICP (for simplicity, only transferring cycles to itself):
   /// ```motoko no-repl
   /// import Cycles "mo:base/Cycles";
-  /// import Debug "mo:base/Debug";
   ///
-  /// actor {
+  /// persistent actor {
   ///   func operation() : async() {
   ///     ignore Cycles.accept<system>(10_000_000);
   ///   };
   ///
   ///   public func main() : async() {
   ///     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
-  ///     Debug.print("Refunded: " # debug_show(Cycles.refunded())); // 5_000_000
+  ///     assert Cycles.refunded() == 5_000_000;
   ///   }
   /// }
   /// ```
@@ -131,12 +126,11 @@ module {
   /// Example for use on the IC:
   /// ```motoko no-repl
   /// import Cycles "mo:base/Cycles";
-  /// import Debug "mo:base/Debug";
   ///
   /// actor {
   ///   public func main() : async() {
   ///     let burnt = Cycles.burn<system>(10_000_000);
-  ///     Debug.print("Burned: " # debug_show burnt); // 10_000_000
+  ///     assert burnt == 10_000_000;
   ///   }
   /// }
   /// ```

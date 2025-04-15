@@ -68,5 +68,14 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: "0"
+      - name: Check for Motoko file changes in 'src' directory
+        id: check_mo_changes
+        run: |
+          if ! git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep -q '\.mo$'; then
+            echo "No Motoko file changes in src directory detected, skipping tests"
+            exit 0
+          fi
       - uses: ./.github/actions/setup
       - run: npm test

@@ -1,4 +1,15 @@
-/// Mutable array utilities.
+/// Provides extended utility functions on `[var]` Arrays.
+///
+/// Note the difference between mutable and non-mutable arrays below.
+///
+/// WARNING: If you are looking for a list that can grow and shrink in size,
+/// it is recommended you use `List` for those purposes.
+/// Arrays must be created with a fixed size.
+///
+/// Import from the base library to use this module.
+/// ```motoko name=import
+/// import VarArray "mo:base/VarArray";
+/// ```
 
 import Types "Types";
 import Order "Order";
@@ -809,7 +820,7 @@ module {
   /// let array = [var 10, 11, 12];
   ///
   /// var sum = 0;
-  /// for ((index, element) in Array.enumerate(array)) {
+  /// for ((index, element) in VarArray.enumerate(array)) {
   ///   sum += element;
   /// };
   /// sum // => 33

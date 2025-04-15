@@ -174,13 +174,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Int32>(1);
-  /// buffer1.add(-3);
-  /// let buffer2 = Buffer.Buffer<Int32>(1);
-  /// buffer2.add(-3);
-  /// Buffer.equal(buffer1, buffer2, Int32.equal) // => true
+  /// let a : Int32 = -123;
+  /// let b : Int32 = 123;
+  /// Int32.equal(a, b) // => false
   /// ```
   public func equal(x : Int32, y : Int32) : Bool { x == y };
 
@@ -326,7 +322,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Int32, Int32>([1, -2, -3], 0, Int32.sub) // => 6
+  /// Array.foldLeft<Int32, Int32>([1, -2, -3], 0, Int32.sub) // => 4
   /// ```
   public func sub(x : Int32, y : Int32) : Int32 { x - y };
 

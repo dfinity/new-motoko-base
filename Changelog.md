@@ -4,6 +4,7 @@
 
 * Add `entriesFrom` and `reverseEntriesFrom` to `Map`, `valuesFrom` and `reverseValuesFrom` to `Set` and `Text.toText` (#272).
 * Rename `Map.replaceIfExists()` to `Map.replace()` (#286).
+* Update code examples in doc comments (#224).
 
 ## 0.4.0
 
@@ -18,7 +19,10 @@
 * Adjust `Random` representation to allow persistence in stable memory (#226).
 * Fix bug in `Array.enumerate()` and `VarArray.enumerate()` (#233).
 * Add `burn : <system>Nat -> Nat` to `Cycles` (#228).
-* Fix bug in `Iter.step()` (#222).
+* Fix bug in `Iter.step()`
+* Fix bug in `Array.enumerate()` / `VarArray.enumerate()`
+* Adjust `Random` representation to allow persistence in stable memory
+* Add `Tuples` module
 
 ## 0.3.0
 

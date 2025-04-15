@@ -783,7 +783,6 @@ module {
   /// import Map "mo:base/Map";
   /// import Nat "mo:base/Nat";
   /// import Iter "mo:base/Iter";
-  
   ///
   /// persistent actor {
   ///   let map = Map.fromIter<Nat, Text>([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);

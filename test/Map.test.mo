@@ -2,6 +2,7 @@
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
+import Test "mo:test";
 import Map "../src/Map";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
@@ -9,6 +10,7 @@ import Runtime "../src/Runtime";
 import Text "../src/Text";
 import Array "../src/Array";
 import PureMap "../src/pure/Map";
+import { Tuple2 } "../src/Tuples";
 
 let { run; test; suite } = Suite;
 
@@ -1543,4 +1545,84 @@ run(
       )
     ]
   )
+);
+
+Test.suite(
+  "entriesFrom",
+  func() {
+    Test.test(
+      "Simple",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        Map.add(map, Nat.compare, 1, "1");
+        Map.add(map, Nat.compare, 2, "2");
+        Map.add(map, Nat.compare, 4, "4");
+        func check(from : Nat, expected : [(Nat, Text)]) {
+          let actual = Iter.toArray(Map.entriesFrom(map, Nat.compare, from));
+          Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+        };
+        check(0, [(1, "1"), (2, "2"), (4, "4")]);
+        check(1, [(1, "1"), (2, "2"), (4, "4")]);
+        check(2, [(2, "2"), (4, "4")]);
+        check(3, [(4, "4")]);
+        check(4, [(4, "4")]);
+        check(5, [])
+      }
+    );
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Map.add(map, Nat.compare, i, Nat.toText(i));
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Map.entriesFrom(map, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat, Text)>(Map.entries(map), func(k, v) = k < j));
+            Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+          }
+        }
+      }
+    )
+  }
+);
+
+Test.suite(
+  "reverseEntriesFrom",
+  func() {
+    Test.test(
+      "Simple",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        Map.add(map, Nat.compare, 1, "1");
+        Map.add(map, Nat.compare, 2, "2");
+        Map.add(map, Nat.compare, 4, "4");
+        func check(from : Nat, expected : [(Nat, Text)]) {
+          let actual = Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, from));
+          Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+        };
+        check(0, []);
+        check(1, [(1, "1")]);
+        check(2, [(2, "2"), (1, "1")]);
+        check(3, [(2, "2"), (1, "1")]);
+        check(4, [(4, "4"), (2, "2"), (1, "1")]);
+        check(5, [(4, "4"), (2, "2"), (1, "1")])
+      }
+    );
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Map.add(map, Nat.compare, i, Nat.toText(i));
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat, Text)>(Map.reverseEntries(map), func(k, v) = k > j));
+            Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+          }
+        }
+      }
+    )
+  }
 )

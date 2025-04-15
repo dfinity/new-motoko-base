@@ -2,7 +2,8 @@
 
 ## Next
 
-* Improve code examples in doc comments
+* Add `entriesFrom` and `reverseEntriesFrom` to `Map`, `valuesFrom` and `reverseValuesFrom` to `Set` and `Text.toText` (#272).
+* Update code examples in doc comments (#224).
 
 ## 0.4.0
 

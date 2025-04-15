@@ -101,6 +101,9 @@ import Debug &quot;mo:base/Debug&quot;;</code></pre></div></li><li class="index-
 The <code>Error</code> type is opaque.</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Float.html">Float</a><div class="index-item-comment"><p>Double precision (64-bit) floating-point numbers in IEEE 754 representation.</p>
 <p>This module contains common floating-point constants and utility functions.</p>
+<pre><code>motoko name=import
+import Float &quot;mo:base/Float&quot;;</code></pre>
+
 <p>Notation for special values in the documentation below:
 <code>+inf</code>: Positive infinity
 <code>-inf</code>: Negative infinity
@@ -108,10 +111,10 @@ The <code>Error</code> type is opaque.</p>
 <p>Note:
 Floating point numbers have limited precision and operations may inherently result in numerical errors.</p>
 <p>Examples of numerical errors:</p>
-<pre class="motoko"><code class="motoko">  0.1 + 0.1 + 0.1 == 0.3 // =&gt; false
+<pre class="motoko"><code class="motoko">  assert 0.1 + 0.1 + 0.1 != 0.3;
   </code></pre>
 
-<pre class="motoko"><code class="motoko"> 1e16 + 1.0 != 1e16 // =&gt; false
+<pre class="motoko"><code class="motoko">  assert not (1e16 + 1.0 != 1e16);
   </code></pre>
 
 <p> (and many more cases)</p>
@@ -125,7 +128,7 @@ Floating point numbers have limited precision and operations may inherently resu
   let y = 0.3;
 
   let epsilon = 1e-6; // This depends on the application case (needs a numerical error analysis).
-  Float.equal(x, y, epsilon) // =&gt; true
+  assert Float.equal(x, y, epsilon);
   </code></pre>
 
 <ul><li>For absolute precision, it is recommened to encode the fraction number as a pair of a Nat for the base

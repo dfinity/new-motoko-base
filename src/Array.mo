@@ -1,6 +1,6 @@
-/// Provides extended utility functions on immutable Arrays (`[]`).
+/// Provides extended utility functions on immutable Arrays (values of type `[T]`).
 ///
-/// Note the difference between mutable (`[var]`) and immutable (`[]`) arrays.
+/// Note the difference between mutable (`[var T]`) and immutable (`[T]`) arrays.
 /// Mutable arrays allow their elements to be modified after creation, while
 /// immutable arrays are fixed once created.
 ///

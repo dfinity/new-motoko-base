@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html><head title="Motoko docs"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><div class="index-container"><h1 class="index-header">Index of modules</h1><ul class="index-listing"><li class="index-item"><a class="index-item-link" href="Array.html">Array</a><div class="index-item-comment"><p>Provides extended utility functions on Arrays.</p>
-<p>Note the difference between mutable and non-mutable arrays below.</p>
+<html><head title="Motoko docs"><meta charset="UTF-8"/><link href="styles.css" rel="stylesheet"/></head><div class="index-container"><h1 class="index-header">Index of modules</h1><ul class="index-listing"><li class="index-item"><a class="index-item-link" href="Array.html">Array</a><div class="index-item-comment"><p>Provides extended utility functions on immutable Arrays (values of type <code>[T]</code>).</p>
+<p>Note the difference between mutable (<code>[var T]</code>) and immutable (<code>[T]</code>) arrays.
+Mutable arrays allow their elements to be modified after creation, while
+immutable arrays are fixed once created.</p>
 <p>WARNING: If you are looking for a list that can grow and shrink in size,
 it is recommended you use <code>List</code> for those purposes.
 Arrays must be created with a fixed size.</p>

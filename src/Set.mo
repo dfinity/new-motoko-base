@@ -611,6 +611,38 @@ module {
   };
 
   /// Returns an iterator over the elements in the set,
+  /// starting from a given element in ascending order.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  ///
+  /// persistent actor {
+  ///   let set = Set.fromIter([0, 3, 1].values(), Nat.compare);
+  ///   assert Iter.toArray(Set.valuesFrom(set, Nat.compare, 1)) == [1, 3];
+  ///   assert Iter.toArray(Set.valuesFrom(set, Nat.compare, 2)) == [3];
+  /// }
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of key-value entries stored in the map.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func valuesFrom<T>(
+    set : Set<T>,
+    compare : (T, T) -> Order.Order,
+    element : T
+  ) : Types.Iter<T> {
+    switch (set.root) {
+      case (#leaf(leafNode)) leafElementsFrom(leafNode, compare, element);
+      case (#internal(internalNode)) internalElementsFrom(internalNode, compare, element)
+    }
+  };
+
+  /// Returns an iterator over the elements in the set,
   /// traversing the elements in the descending order.
   ///
   /// Example:
@@ -644,6 +676,38 @@ module {
     switch (set.root) {
       case (#leaf(leafNode)) { return reverseLeafElements(leafNode) };
       case (#internal(internalNode)) { reverseInternalElements(internalNode) }
+    }
+  };
+
+  /// Returns an iterator over the elements in the set,
+  /// starting from a given element in descending order.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Set "mo:base/Set";
+  /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
+  ///
+  /// persistent actor {
+  ///   let set = Set.fromIter([0, 1, 3].values(), Nat.compare);
+  ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 1)) == [3, 1];
+  ///   assert Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, 2)) == [3];
+  /// }
+  /// ```
+  /// Cost of iteration over all elements:
+  /// Runtime: `O(n)`.
+  /// Space: `O(1)` retained memory plus garbage, see below.
+  /// where `n` denotes the number of elements stored in the set.
+  ///
+  /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
+  public func reverseValuesFrom<T>(
+    set : Set<T>,
+    compare : (T, T) -> Order.Order,
+    element : T
+  ) : Types.Iter<T> {
+    switch (set.root) {
+      case (#leaf(leafNode)) reverseLeafElementsFrom(leafNode, compare, element);
+      case (#internal(internalNode)) reverseInternalElementsFrom(internalNode, compare, element)
     }
   };
 
@@ -1462,11 +1526,29 @@ module {
     object {
       public func next() : ?T {
         if (i >= data.count) {
-          return null
+          null
         } else {
           let res = data.elements[i];
           i += 1;
-          return res
+          res
+        }
+      }
+    }
+  };
+
+  func leafElementsFrom<T>({ data } : Leaf<T>, compare : (T, T) -> Order.Order, element : T) : Types.Iter<T> {
+    var i = switch (BinarySearch.binarySearchNode<T>(data.elements, compare, element, data.count)) {
+      case (#elementFound(i)) i;
+      case (#notFound(i)) i
+    };
+    object {
+      public func next() : ?T {
+        if (i >= data.count) {
+          null
+        } else {
+          let res = data.elements[i];
+          i += 1;
+          res
         }
       }
     }
@@ -1477,11 +1559,29 @@ module {
     object {
       public func next() : ?T {
         if (i == 0) {
-          return null
+          null
         } else {
           let res = data.elements[i - 1];
           i -= 1;
-          return res
+          res
+        }
+      }
+    }
+  };
+
+  func reverseLeafElementsFrom<T>({ data } : Leaf<T>, compare : (T, T) -> Order.Order, element : T) : Types.Iter<T> {
+    var i = switch (BinarySearch.binarySearchNode<T>(data.elements, compare, element, data.count)) {
+      case (#elementFound(i)) i + 1; // +1 to include this element
+      case (#notFound(i)) i // i is the index of the first element greater than the search element, or count if all elements are less than the search element
+    };
+    object {
+      public func next() : ?T {
+        if (i == 0) {
+          null
+        } else {
+          let res = data.elements[i - 1];
+          i -= 1;
+          res
         }
       }
     }
@@ -1491,11 +1591,19 @@ module {
   type NodeCursor<T> = { node : Node<T>; elementIndex : Nat };
 
   func internalElements<T>(internal : Internal<T>) : Types.Iter<T> {
-    object {
-      // The nodeCursorStack keeps track of the current node and the current element index in the node
-      // We use a stack here to push to/pop off the next node cursor to visit
-      let nodeCursorStack = initializeForwardNodeCursorStack(internal);
+    // The nodeCursorStack keeps track of the current node and the current element index in the node
+    // We use a stack here to push to/pop off the next node cursor to visit
+    let nodeCursorStack = initializeForwardNodeCursorStack(internal);
+    internalElementsFromStack(nodeCursorStack)
+  };
 
+  func internalElementsFrom<T>(internal : Internal<T>, compare : (T, T) -> Order.Order, element : T) : Types.Iter<T> {
+    let nodeCursorStack = initializeForwardNodeCursorStackFrom(internal, compare, element);
+    internalElementsFromStack(nodeCursorStack)
+  };
+
+  func internalElementsFromStack<T>(nodeCursorStack : Stack.Stack<NodeCursor<T>>) : Types.Iter<T> {
+    object {
       public func next() : ?T {
         // pop the next node cursor off the stack
         var nodeCursor = Stack.pop(nodeCursorStack);
@@ -1571,11 +1679,19 @@ module {
   };
 
   func reverseInternalElements<T>(internal : Internal<T>) : Types.Iter<T> {
-    object {
-      // The nodeCursorStack keeps track of the current node and the current element index in the node
-      // We use a stack here to push to/pop off the next node cursor to visit
-      let nodeCursorStack = initializeReverseNodeCursorStack(internal);
+    // The nodeCursorStack keeps track of the current node and the current element index in the node
+    // We use a stack here to push to/pop off the next node cursor to visit
+    let nodeCursorStack = initializeReverseNodeCursorStack(internal);
+    reverseInternalElementsFromStack(nodeCursorStack)
+  };
 
+  func reverseInternalElementsFrom<T>(internal : Internal<T>, compare : (T, T) -> Order.Order, element : T) : Types.Iter<T> {
+    let nodeCursorStack = initializeReverseNodeCursorStackFrom(internal, compare, element);
+    reverseInternalElementsFromStack(nodeCursorStack)
+  };
+
+  func reverseInternalElementsFromStack<T>(nodeCursorStack : Stack.Stack<NodeCursor<T>>) : Types.Iter<T> {
+    object {
       public func next() : ?T {
         // pop the next node cursor off the stack
         var nodeCursor = Stack.pop(nodeCursorStack);
@@ -1656,6 +1772,17 @@ module {
     nodeCursorStack
   };
 
+  func initializeForwardNodeCursorStackFrom<T>(internal : Internal<T>, compare : (T, T) -> Order.Order, element : T) : Stack.Stack<NodeCursor<T>> {
+    let nodeCursorStack = Stack.empty<NodeCursor<T>>();
+    let nodeCursor : NodeCursor<T> = {
+      node = #internal(internal);
+      elementIndex = 0
+    };
+
+    traverseMinSubtreeIterFrom(nodeCursorStack, nodeCursor, compare, element);
+    nodeCursorStack
+  };
+
   func initializeReverseNodeCursorStack<T>(internal : Internal<T>) : Stack.Stack<NodeCursor<T>> {
     let nodeCursorStack = Stack.empty<NodeCursor<T>>();
     let nodeCursor : NodeCursor<T> = {
@@ -1667,6 +1794,17 @@ module {
     Stack.push(nodeCursorStack, nodeCursor);
     // then traverse left
     traverseMaxSubtreeIter(nodeCursorStack, nodeCursor);
+    nodeCursorStack
+  };
+
+  func initializeReverseNodeCursorStackFrom<T>(internal : Internal<T>, compare : (T, T) -> Order.Order, element : T) : Stack.Stack<NodeCursor<T>> {
+    let nodeCursorStack = Stack.empty<NodeCursor<T>>();
+    let nodeCursor : NodeCursor<T> = {
+      node = #internal(internal);
+      elementIndex = internal.data.count
+    };
+
+    traverseMaxSubtreeIterFrom(nodeCursorStack, nodeCursor, compare, element);
     nodeCursorStack
   };
 
@@ -1703,6 +1841,34 @@ module {
           }
         }
       }
+    }
+  };
+
+  func traverseMinSubtreeIterFrom<T>(nodeCursorStack : Stack.Stack<NodeCursor<T>>, nodeCursor : NodeCursor<T>, compare : (T, T) -> Order.Order, element : T) {
+    var currentNode = nodeCursor.node;
+
+    label l loop {
+      let (node, childrenOption) = switch (currentNode) {
+        case (#leaf(leafNode)) (leafNode, null);
+        case (#internal(internalNode)) (internalNode, ?internalNode.children)
+      };
+      let (i, isFound) = switch (NodeUtil.getElementIndex<T>(node.data, compare, element)) {
+        case (#elementFound(i)) (i, true);
+        case (#notFound(i)) (i, false)
+      };
+      if (i < node.data.count) {
+        Stack.push(
+          nodeCursorStack,
+          {
+            node = currentNode;
+            elementIndex = i // greater elements to traverse
+          }
+        )
+      };
+      if isFound return;
+      let ?children = childrenOption else return;
+      let ?childNode = children[i] else Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.traverseMinSubtreeIterFrom(), null child node error");
+      currentNode := childNode
     }
   };
 
@@ -1743,6 +1909,34 @@ module {
           }
         }
       }
+    }
+  };
+
+  func traverseMaxSubtreeIterFrom<T>(nodeCursorStack : Stack.Stack<NodeCursor<T>>, nodeCursor : NodeCursor<T>, compare : (T, T) -> Order.Order, element : T) {
+    var currentNode = nodeCursor.node;
+
+    label l loop {
+      let (node, childrenOption) = switch (currentNode) {
+        case (#leaf(leafNode)) (leafNode, null);
+        case (#internal(internalNode)) (internalNode, ?internalNode.children)
+      };
+      let (i, isFound) = switch (NodeUtil.getElementIndex<T>(node.data, compare, element)) {
+        case (#elementFound(i)) (i + 1, true); // +1 to include this element
+        case (#notFound(i)) (i, false) // i is the index of the first element less than the search element, or 0 if all elements are greater than the search element
+      };
+      if (i > 0) {
+        Stack.push(
+          nodeCursorStack,
+          {
+            node = currentNode;
+            elementIndex = i
+          }
+        )
+      };
+      if isFound return;
+      let ?children = childrenOption else return;
+      let ?childNode = children[i] else Runtime.trap("UNREACHABLE_ERROR: file a bug report! In Set.traverseMaxSubtreeIterFrom(), null child node error");
+      currentNode := childNode
     }
   };
 

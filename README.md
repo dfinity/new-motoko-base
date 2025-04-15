@@ -20,7 +20,7 @@ You can quickly try out the new base library by making the following change to y
 base = "https://github.com/dfinity/new-motoko-base"
 ```
 
-It's also possible to start using both versions in parallel:
+It's also possible to use both versions in parallel:
 
 ```toml
 base = "0.14.4"
@@ -32,6 +32,8 @@ Please report any bugs or inconsistencies by opening a [GitHub issue](https://gi
 
 ## Local Environment
 
+Make sure that [Node.js](https://nodejs.org/en/) `>= 22.x` and the latest version of [`dfx`](https://internetcomputer.org/docs/building-apps/getting-started/install) are installed on your system.
+
 Run the following commands to configure your local development branch:
 
 ```sh
@@ -39,10 +41,19 @@ Run the following commands to configure your local development branch:
 git clone https://github.com/dfinity/new-motoko-base
 cd new-motoko-base
 npm ci
-
-# Run code formatter
-npm run format
+npx ic-mops toolchain init
 ```
+
+Below is a quick reference for commonly-used scripts during development:
+
+```sh
+npm test # Run all tests
+npm run format # Format Motoko files
+npm run validate:api # Update the public API lockfile
+npm run validate:docs Array # Run code snippets in `src/Array.mo`
+```
+
+All available scripts can be found in the project's [`package.json`](https://github.com/dfinity/new-motoko-base/blob/main/package.json) file.
 
 ## Documentation
 
@@ -56,7 +67,7 @@ We automatically generate previews for each pull request.
 
 ## Contributing
 
-PRs are welcome! Please check out the [contributor guidelines](.github/CONTRIBUTING.md) for more information.
+PRs are welcome! Please check out the [contributor guidelines](https://github.com/dfinity/new-motoko-base/blob/main/.github/CONTRIBUTING.md) for more information.
 
 Code and documentation style guidelines for the repository can be found [here](./STYLEGUIDE.md).
 

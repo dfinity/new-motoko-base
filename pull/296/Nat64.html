@@ -39,7 +39,7 @@ assert Nat64.max(123, 456) == 456 : Nat64;</code></pre></p></div><div class="dec
 This is equivalent to <code>x == y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.equal(1, 1);
+assert Nat64.equal(1, 1);
 assert (1 : Nat64) == (1 : Nat64);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -54,7 +54,7 @@ assert not Nat64.equal(a, b);</code></pre></p></div><div class="declaration"><h4
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.notEqual(1, 2);
+assert Nat64.notEqual(1, 2);
 assert (1 : Nat64) != (2 : Nat64);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -65,7 +65,7 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &lt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.less(1, 2);
+assert Nat64.less(1, 2);
 assert (1 : Nat64) &lt; (2 : Nat64);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -76,7 +76,7 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &lt;= y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.lessOrEqual(1, 2);
+assert Nat64.lessOrEqual(1, 2);
 assert (1 : Nat64) &lt;= (2 : Nat64);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -87,7 +87,7 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.greater(2, 1);
+assert Nat64.greater(2, 1);
 assert (2 : Nat64) &gt; (1 : Nat64);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -98,7 +98,7 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &gt;= y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.greaterOrEqual(2, 1);
+assert Nat64.greaterOrEqual(2, 1);
 assert (2 : Nat64) &gt;= (1 : Nat64);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -119,7 +119,7 @@ assert Array.sort([2, 3, 1] : [Nat64], Nat64.compare) == [1, 2, 3];</code></pre>
 Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.add(1, 2) == 3;
+assert Nat64.add(1, 2) == 3;
 assert (1 : Nat64) + (2 : Nat64) == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -133,7 +133,7 @@ assert Array.foldLeft&lt;Nat64, Nat64&gt;([2, 3, 1], 0, Nat64.add) == 6;</code><
 Traps on underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.sub(3, 1) == 2;
+assert Nat64.sub(3, 1) == 2;
 assert (3 : Nat64) - (1 : Nat64) == 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -147,7 +147,7 @@ assert Array.foldLeft&lt;Nat64, Nat64&gt;([2, 3, 1], 10, Nat64.sub) == 4;</code>
 Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.mul(2, 3) == 6;
+assert Nat64.mul(2, 3) == 6;
 assert (2 : Nat64) * (3 : Nat64) == 6;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -161,7 +161,7 @@ assert Array.foldLeft&lt;Nat64, Nat64&gt;([2, 3, 1], 1, Nat64.mul) == 6;</code><
 Traps when <code>y</code> is zero.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.div(6, 2) == 3;
+assert Nat64.div(6, 2) == 3;
 assert (6 : Nat64) / (2 : Nat64) == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -172,7 +172,7 @@ as a function value at the moment.</p>
 Traps when <code>y</code> is zero.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.rem(6, 4) == 2;
+assert Nat64.rem(6, 4) == 2;
 assert (6 : Nat64) % (4 : Nat64) == 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -182,7 +182,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="pow"><code><span class="keyword">public func </span><span class="fnname">pow</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns <code>x</code> to the power of <code>y</code>, <code>x ** y</code>. Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.pow(2, 3) == 8;
+assert Nat64.pow(2, 3) == 8;
 assert (2 : Nat64) ** (3 : Nat64) == 8;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -192,7 +192,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitnot"><code><span class="keyword">public func </span><span class="fnname">bitnot</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise negation of <code>x</code>, <code>^x</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitnot(0) == 18446744073709551615;
+assert Nat64.bitnot(0) == 18446744073709551615;
 assert ^(0 : Nat64) == 18446744073709551615;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -202,7 +202,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitand"><code><span class="keyword">public func </span><span class="fnname">bitand</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise and of <code>x</code> and <code>y</code>, <code>x &amp; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitand(1, 3) == 1;
+assert Nat64.bitand(1, 3) == 1;
 assert (1 : Nat64) &amp; (3 : Nat64) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -212,7 +212,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitor"><code><span class="keyword">public func </span><span class="fnname">bitor</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise or of <code>x</code> and <code>y</code>, <code>x | y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitor(1, 3) == 3;
+assert Nat64.bitor(1, 3) == 3;
 assert (1 : Nat64) | (3 : Nat64) == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -222,7 +222,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitxor"><code><span class="keyword">public func </span><span class="fnname">bitxor</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise exclusive or of <code>x</code> and <code>y</code>, <code>x ^ y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitxor(1, 3) == 2;
+assert Nat64.bitxor(1, 3) == 2;
 assert (1 : Nat64) ^ (3 : Nat64) == 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -232,7 +232,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitshiftLeft"><code><span class="keyword">public func </span><span class="fnname">bitshiftLeft</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise shift left of <code>x</code> by <code>y</code>, <code>x &lt;&lt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitshiftLeft(1, 3) == 8;
+assert Nat64.bitshiftLeft(1, 3) == 8;
 assert (1 : Nat64) &lt;&lt; (3 : Nat64) == 8;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -242,7 +242,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitshiftRight"><code><span class="keyword">public func </span><span class="fnname">bitshiftRight</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise shift right of <code>x</code> by <code>y</code>, <code>x &gt;&gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitshiftRight(8, 3) == 1;
+assert Nat64.bitshiftRight(8, 3) == 1;
 assert (8 : Nat64) &gt;&gt; (3 : Nat64) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -252,7 +252,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitrotLeft"><code><span class="keyword">public func </span><span class="fnname">bitrotLeft</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise rotate left of <code>x</code> by <code>y</code>, <code>x &lt;&lt;&gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitrotLeft(1, 3) == 8;
+assert Nat64.bitrotLeft(1, 3) == 8;
 assert (1 : Nat64) &lt;&lt;&gt; (3 : Nat64) == 8;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -262,7 +262,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitrotRight"><code><span class="keyword">public func </span><span class="fnname">bitrotRight</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the bitwise rotate right of <code>x</code> by <code>y</code>, <code>x &lt;&gt;&gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.bitrotRight(8, 3) == 1;
+assert Nat64.bitrotRight(8, 3) == 1;
 assert (8 : Nat64) &lt;&gt;&gt; (3 : Nat64) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -294,7 +294,7 @@ assert Nat64.bitcountLeadingZero(5) == 61;</code></pre></p></div><div class="dec
 assert Nat64.bitcountTrailingZero(16) == 4;</code></pre></p></div><div class="declaration"><h4 class="function" id="addWrap"><code><span class="keyword">public func </span><span class="fnname">addWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x +% y</code>. Wraps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.addWrap(Nat64.maxValue, 1) == 0;
+assert Nat64.addWrap(Nat64.maxValue, 1) == 0;
 assert Nat64.maxValue +% (1 : Nat64) == 0;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -304,7 +304,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="subWrap"><code><span class="keyword">public func </span><span class="fnname">subWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x -% y</code>. Wraps on underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.subWrap(0, 1) == 18446744073709551615;
+assert Nat64.subWrap(0, 1) == 18446744073709551615;
 assert (0 : Nat64) -% (1 : Nat64) == 18446744073709551615;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -314,7 +314,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="mulWrap"><code><span class="keyword">public func </span><span class="fnname">mulWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x *% y</code>. Wraps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.mulWrap(4294967296, 4294967296) == 0;
+assert Nat64.mulWrap(4294967296, 4294967296) == 0;
 assert (4294967296 : Nat64) *% (4294967296 : Nat64) == 0;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
@@ -324,7 +324,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="powWrap"><code><span class="keyword">public func </span><span class="fnname">powWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="#type.Nat64"><span class="type">Nat64</span></a></code></h4><p><p>Returns <code>x</code> to the power of <code>y</code>, <code>x **% y</code>. Wraps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert ignore Nat64.powWrap(2, 64) == 0;
+assert Nat64.powWrap(2, 64) == 0;
 assert (2 : Nat64) **% (64 : Nat64) == 0;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition

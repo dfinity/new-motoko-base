@@ -32,11 +32,24 @@ assert numBytes == 4; // returns the number of bytes in the Blob
 for (byte in blob.values()) { // iterator over the Blob
   Debug.print(Nat8.toText(byte))
 }</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Bool.html">Bool</a><div class="index-item-comment"><p>Boolean type and operations.</p>
+<p>Import from the base library to use this module.</p>
+<pre><code>motoko name=import
+import Bool &quot;mo:base/Bool&quot;;</code></pre>
+
 <p>While boolean operators <code>_ and _</code> and <code>_ or _</code> are short-circuiting,
 avoiding computation of the right argument when possible, the functions
 <code>logand(_, _)</code> and <code>logor(_, _)</code> are <em>strict</em> and will always evaluate <em>both</em>
 of their arguments.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="CertifiedData.html">CertifiedData</a><div class="index-item-comment"><p>Certified data.</p>
+<p>Example:</p>
+<pre><code>motoko include=import
+let t = true;
+let f = false;
+
+// Short-circuiting AND
+assert not (t and f);
+
+// Short-circuiting OR
+assert t or f;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="CertifiedData.html">CertifiedData</a><div class="index-item-comment"><p>Certified data.</p>
 <p>The Internet Computer allows canister smart contracts to store a small amount of data during
 update method processing so that during query call processing, the canister can obtain
 a certificate about that data.</p>

@@ -125,8 +125,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat8 = 123;
   /// Region.storeNat8(region, offset, value);
   /// assert Region.loadNat8(region, offset) == 123;
   /// ```
@@ -138,8 +138,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat8 = 123;
   /// Region.storeNat8(region, offset, value);
   /// assert Region.loadNat8(region, offset) == 123;
   /// ```
@@ -151,8 +151,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat16 = 123;
   /// Region.storeNat16(region, offset, value);
   /// assert Region.loadNat16(region, offset) == 123;
   /// ```
@@ -164,8 +164,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat16 = 123;
   /// Region.storeNat16(region, offset, value);
   /// assert Region.loadNat16(region, offset) == 123;
   /// ```
@@ -177,8 +177,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat32 = 123;
   /// Region.storeNat32(region, offset, value);
   /// assert Region.loadNat32(region, offset) == 123;
   /// ```
@@ -190,8 +190,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat32 = 123;
   /// Region.storeNat32(region, offset, value);
   /// assert Region.loadNat32(region, offset) == 123;
   /// ```
@@ -203,8 +203,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat64 = 123;
   /// Region.storeNat64(region, offset, value);
   /// assert Region.loadNat64(region, offset) == 123;
   /// ```
@@ -216,8 +216,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Nat64 = 123;
   /// Region.storeNat64(region, offset, value);
   /// assert Region.loadNat64(region, offset) == 123;
   /// ```
@@ -229,8 +229,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int8 = 123;
   /// Region.storeInt8(region, offset, value);
   /// assert Region.loadInt8(region, offset) == 123;
   /// ```
@@ -242,8 +242,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int8 = 123;
   /// Region.storeInt8(region, offset, value);
   /// assert Region.loadInt8(region, offset) == 123;
   /// ```
@@ -255,8 +255,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int16 = 123;
   /// Region.storeInt16(region, offset, value);
   /// assert Region.loadInt16(region, offset) == 123;
   /// ```
@@ -268,8 +268,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int16 = 123;
   /// Region.storeInt16(region, offset, value);
   /// assert Region.loadInt16(region, offset) == 123;
   /// ```
@@ -281,8 +281,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int32 = 123;
   /// Region.storeInt32(region, offset, value);
   /// assert Region.loadInt32(region, offset) == 123;
   /// ```
@@ -294,8 +294,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int32 = 123;
   /// Region.storeInt32(region, offset, value);
   /// assert Region.loadInt32(region, offset) == 123;
   /// ```
@@ -307,8 +307,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int64 = 123;
   /// Region.storeInt64(region, offset, value);
   /// assert Region.loadInt64(region, offset) == 123;
   /// ```
@@ -320,8 +320,8 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
+  /// let offset : Nat64 = 0;
+  /// let value : Int64 = 123;
   /// Region.storeInt64(region, offset, value);
   /// assert Region.loadInt64(region, offset) == 123;
   /// ```
@@ -333,7 +333,7 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
+  /// let offset : Nat64 = 0;
   /// let value = 1.25;
   /// Region.storeFloat(region, offset, value);
   /// assert Region.loadFloat(region, offset) == 1.25;
@@ -346,7 +346,7 @@ module {
   /// Example:
   /// ```motoko no-repl include=import
   /// let region = Region.new();
-  /// let offset = 0;
+  /// let offset : Nat64 = 0;
   /// let value = 1.25;
   /// Region.storeFloat(region, offset, value);
   /// assert Region.loadFloat(region, offset) == 1.25;
@@ -361,7 +361,7 @@ module {
   /// import Blob "mo:base/Blob";
   ///
   /// let region = Region.new();
-  /// let offset = 0;
+  /// let offset : Nat64 = 0;
   /// let value = Blob.fromArray([1, 2, 3]);
   /// let size = value.size();
   /// Region.storeBlob(region, offset, value);
@@ -377,7 +377,7 @@ module {
   /// import Blob "mo:base/Blob";
   ///
   /// let region = Region.new();
-  /// let offset = 0;
+  /// let offset : Nat64 = 0;
   /// let value = Blob.fromArray([1, 2, 3]);
   /// let size = value.size();
   /// Region.storeBlob(region, offset, value);

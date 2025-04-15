@@ -15,11 +15,11 @@ module {
 
     bench.rows([
       "List",
-      "PureList",
+      "pure/List",
       "Buffer",
     ]);
     bench.cols([
-      "0",
+      "0 (baseline)",
       "1",
       "5",
       "10",
@@ -31,7 +31,7 @@ module {
         switch row {
           case "List" {
             switch col {
-              case "0" {
+              case "0 (baseline)" {
                 let list = List.empty<Nat>();
                 ignore List.toArray(list);
               };
@@ -75,9 +75,9 @@ module {
               case _ Runtime.unreachable()
             };
           };
-          case "PureList" {
+          case "pure/List" {
             switch col {
-              case "0" {
+              case "0 (baseline)" {
                 var list = PureList.empty<Nat>();
                 ignore PureList.toArray(list);
               };
@@ -123,7 +123,7 @@ module {
           };
           case "Buffer" {
             switch col {
-              case "0" {
+              case "0 (baseline)" {
                 let buffer = Buffer.Buffer<Nat>(0);
                 ignore Buffer.toArray(buffer);
               };

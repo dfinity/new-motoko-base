@@ -1,6 +1,7 @@
 import { run; suite; test } "mo:matchers/Suite";
 import M "mo:matchers/Matchers";
 import T "mo:matchers/Testable";
+import Test "mo:test";
 
 import List "../../src/pure/List";
 import Nat "../../src/Nat";
@@ -8,7 +9,9 @@ import Order "../../src/Order";
 import Debug "../../src/Debug";
 import Int "../../src/Int";
 import Result "../../src/Result";
+import Iter "../../src/Iter";
 
+// TODO: Use `mo:test` for new tests, migrate legacy tests.
 /*
 
 FIXME: (CHECK these)
@@ -1610,4 +1613,34 @@ run(
       toText
     ]
   )
+);
+
+type List<T> = List.List<T>;
+
+Test.suite(
+  "join",
+  func() {
+    func t(input : [[Nat]], expected : [Nat]) : () -> () = func() {
+      let inputIter = Iter.map<[Nat], List<Nat>>(input.vals(), func x = List.fromArray(x));
+      let result = List.join(inputIter);
+      Test.expect.array(List.toArray(result), Nat.toText, Nat.equal).equal(expected)
+    };
+    Test.test("empty", t([], []));
+    Test.test("one", t([[1, 2, 3]], [1, 2, 3]));
+    Test.test("three", t([[1, 2, 3], [4, 5, 6], [7, 8, 9]], [1, 2, 3, 4, 5, 6, 7, 8, 9]))
+  }
+);
+
+Test.suite(
+  "flatten",
+  func() {
+    func t(input : [[Nat]], expected : [Nat]) : () -> () = func() {
+      let inputList = List.fromIter(Iter.map<[Nat], List<Nat>>(input.vals(), func x = List.fromArray(x)));
+      let result = List.flatten(inputList);
+      Test.expect.array(List.toArray(result), Nat.toText, Nat.equal).equal(expected)
+    };
+    Test.test("empty", t([], []));
+    Test.test("one", t([[1, 2, 3]], [1, 2, 3]));
+    Test.test("three", t([[1, 2, 3], [4, 5, 6], [7, 8, 9]], [1, 2, 3, 4, 5, 6, 7, 8, 9]))
+  }
 )

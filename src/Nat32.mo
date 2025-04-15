@@ -9,6 +9,7 @@
 import Nat "Nat";
 import Iter "Iter";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
@@ -238,7 +239,7 @@ module {
   /// import Array "mo:base/Array";
   /// Array.sort([2, 3, 1] : [Nat32], Nat32.compare) // => [1, 2, 3]
   /// ```
-  public func compare(x : Nat32, y : Nat32) : { #less; #equal; #greater } {
+  public func compare(x : Nat32, y : Nat32) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 

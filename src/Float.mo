@@ -48,6 +48,7 @@
 
 import Prim "mo:⛔";
 import Int "Int";
+import Order "Order";
 
 module {
 
@@ -607,7 +608,7 @@ module {
   /// ```motoko include=import
   /// assert Float.compare(0.123, 0.1234) == #less;
   /// ```
-  public func compare(x : Float, y : Float) : { #less; #equal; #greater } {
+  public func compare(x : Float, y : Float) : Order.Order {
     if (isNaN(x)) {
       if (isNegative(x)) {
         if (isNaN(y) and isNegative(y)) { #equal } else { #less }

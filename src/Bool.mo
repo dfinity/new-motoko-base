@@ -19,7 +19,7 @@
 /// assert not (t and f);
 ///
 /// // Short-circuiting OR
-/// assert (t or f);
+/// assert t or f;
 /// ```
 
 import Prim "mo:⛔";
@@ -38,7 +38,7 @@ module {
   /// assert not Bool.logicalAnd(true, false);
   /// assert Bool.logicalAnd(true, true);
   /// ```
-  public func logicalAnd(a : Bool, b : Bool) : Bool { a and b };
+  public func logicalAnd(a : Bool, b : Bool) : Bool = a and b;
 
   /// Returns `a or b`.
   ///
@@ -47,7 +47,7 @@ module {
   /// assert Bool.logicalOr(true, false);
   /// assert Bool.logicalOr(false, true);
   /// ```
-  public func logicalOr(a : Bool, b : Bool) : Bool { a or b };
+  public func logicalOr(a : Bool, b : Bool) : Bool = a or b;
 
   /// Returns exclusive or of `a` and `b`, `a != b`.
   ///
@@ -57,7 +57,7 @@ module {
   /// assert not Bool.logicalXor(true, true);
   /// assert not Bool.logicalXor(false, false);
   /// ```
-  public func logicalXor(a : Bool, b : Bool) : Bool { a != b };
+  public func logicalXor(a : Bool, b : Bool) : Bool = a != b;
 
   /// Returns `not bool`.
   ///
@@ -66,7 +66,7 @@ module {
   /// assert Bool.logicalNot(false);
   /// assert not Bool.logicalNot(true);
   /// ```
-  public func logicalNot(bool : Bool) : Bool { not bool };
+  public func logicalNot(bool : Bool) : Bool = not bool;
 
   /// Returns `a == b`.
   ///
@@ -75,9 +75,7 @@ module {
   /// assert Bool.equal(true, true);
   /// assert not Bool.equal(true, false);
   /// ```
-  public func equal(a : Bool, b : Bool) : Bool {
-    a == b
-  };
+  public func equal(a : Bool, b : Bool) : Bool { a == b };
 
   /// Returns the ordering of `a` compared to `b`.
   /// Returns `#less` if `a` is `false` and `b` is `true`,
@@ -91,7 +89,7 @@ module {
   /// assert Bool.compare(false, true) == #less;
   /// ```
   public func compare(a : Bool, b : Bool) : Order.Order {
-    if (a == b) { #equal } else if (a) { #greater } else { #less }
+    if (a == b) #equal else if a #greater else #less
   };
 
   /// Returns a text value which is either `"true"` or `"false"` depending on the input value.

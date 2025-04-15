@@ -55,11 +55,9 @@ value to pass to a higher order function. It is not possible to use <code>==</co
 as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Buffer &quot;mo:base/Buffer&quot;;
-
-let buffer1 = Buffer.Buffer&lt;Nat32&gt;(3);
-let buffer2 = Buffer.Buffer&lt;Nat32&gt;(3);
-Buffer.equal(buffer1, buffer2, Nat32.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat32"><span class="type">Nat32</span></a>, <span class="parameter">y</span> : <a href="#type.Nat32"><span class="type">Nat32</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat32 types.
+let a : Nat32 = 111;
+let b : Nat32 = 222;
+Nat32.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat32"><span class="type">Nat32</span></a>, <span class="parameter">y</span> : <a href="#type.Nat32"><span class="type">Nat32</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat32 types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

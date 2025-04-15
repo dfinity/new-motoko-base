@@ -38,8 +38,24 @@ Error.code(error) // #canister_reject</code></pre></p></div><div class="declarat
 let error = Error.reject(&quot;Example error&quot;);
 Error.message(error) // &quot;Example error&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="isRetryPossible"><code><span class="keyword">public func </span><span class="fnname">isRetryPossible</span>(<span class="parameter">error</span> : <a href="#type.Error"><span class="type">Error</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns whether retrying to send a message may result in success.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import { message; isRetryPossible } &quot;mo:base/Error&quot;;
-import { print } &quot;mo:base/Debug&quot;;
+<pre class="motoko"><code class="motoko">import Error &quot;mo:base/Error&quot;;
+import Debug &quot;mo:base/Debug&quot;;
 
-try await (with timeout = 3) Actor.call(arg)
-catch e { if (isRetryPossible e) print(message e) }</code></pre></p></div></div></body></html>
+persistent actor {
+  type CallableActor = actor {
+    call : () -&gt; async ()
+  };
+
+  public func example(callableActor : CallableActor) {
+    try {
+      await (with timeout = 3) callableActor.call();
+    }
+    catch e {
+      if (Error.isRetryPossible e) {
+        Debug.print(Error.message e);
+      }
+    }
+  }
+}
+
+</code></pre></p></div></div></body></html>

@@ -48,11 +48,9 @@ value to pass to a higher order function. It is not possible to use <code>==</co
 as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Buffer &quot;mo:base/Buffer&quot;;
-
-let buffer1 = Buffer.Buffer&lt;Nat64&gt;(3);
-let buffer2 = Buffer.Buffer&lt;Nat64&gt;(3);
-Buffer.equal(buffer1, buffer2, Nat64.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat64 types.
+let a : Nat64 = 111;
+let b : Nat64 = 222;
+Nat64.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">y</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat64 types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -334,7 +332,8 @@ to the existing <code>**%</code> operator) is so that you can use it as a functi
 value to pass to a higher order function. It is not possible to use <code>**%</code>
 as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="range"><code><span class="keyword">public func </span><span class="fnname">range</span>(<span class="parameter">fromInclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>, <span class="parameter">toExclusive</span> : <a href="#type.Nat64"><span class="type">Nat64</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat64"><span class="type">Nat64</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat64</code> values from the first to second argument with an exclusive upper bound.</p>
-<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat64.range(1, 4);
 assert(?1 == iter.next());

@@ -3,26 +3,18 @@
 Elements can be pushed on top of the stack
 and removed from top of the stack (LIFO).</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;Stack&quot;;
-import Debug &quot;Debug&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
   let levels = Stack.empty&lt;Text&gt;();
   Stack.push(levels, &quot;Inner&quot;);
   Stack.push(levels, &quot;Middle&quot;);
   Stack.push(levels, &quot;Outer&quot;);
-  label iteration loop {
-    switch (Stack.pop(levels)) {
-      case null { break iteration };
-      case (?name) {
-        Debug.print(name)
-      }
-    }
-  }
-  // prints:
-  // `Outer`
-  // `Middle`
-  // `Inner`
+  assert Stack.pop(levels) == ?&quot;Outer&quot;;
+  assert Stack.pop(levels) == ?&quot;Middle&quot;;
+  assert Stack.pop(levels) == ?&quot;Inner&quot;;
+  assert Stack.pop(levels) == null;
 }</code></pre>
 
 <p>The internal implementation is a singly-linked list.</p>
@@ -33,14 +25,15 @@ Please note that functional lists are ordered like stacks (FIFO).</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 import PureList &quot;mo:base/pure/List&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let mutableStack = Stack.empty&lt;Nat&gt;();
-  Stack.push(mutableStack, 0);
-  Stack.push(mutableStack, 1);
+  Stack.push(mutableStack, 3);
   Stack.push(mutableStack, 2);
+  Stack.push(mutableStack, 1);
   let immutableList = Stack.toPure(mutableStack);
-  assert(PureList.size(immutableList) == Stack.size(mutableStack));
+  assert Iter.toArray(PureList.values(immutableList)) == [1, 2, 3];
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code>.
@@ -51,20 +44,12 @@ Please note that functional lists are ordered like stacks (FIFO).</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 import PureList &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let immutableList = PureList.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  // pure (functional) list is a FIFO data structure, similar to imperative stack.
   let mutableStack = Stack.fromPure&lt;Nat&gt;(immutableList);
-  for (element in Stack.values(mutableStack)) {
-    Debug.print(Nat.toText(element));
-  }
-  // prints:
-  // `3`
-  // `2`
-  // `1`
+  assert Iter.toArray(Stack.values(mutableStack)) == [1, 2, 3];
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.
@@ -74,31 +59,24 @@ where <code>n</code> denotes the number of elements stored in the queue.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Text&gt;();
-  Debug.print(Nat.toText(Stack.size(stack))); // prints `0`
+  assert Stack.size(stack) == 0;
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code>.
 Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="tabulate"><code><span class="keyword">public func </span><span class="fnname">tabulate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">size</span> : <span class="type">Nat</span>, <span class="parameter">generator</span> : <span class="type">Nat</span> -&gt; <span class="type">T</span>) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new stack with <code>size</code> elements by applying the <code>generator</code> function to indices <code>[0..size-1]</code>.
-Elements are pushed in ascending index order.</p>
+Elements are pushed in ascending index order.
+Which means that the generated element with the index <code>0</code> will be at the bottom of the stack.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Debug &quot;mo:base/Debug&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let stack = Stack.tabulate&lt;Nat&gt;(3, func(i) { 2 * i });
-  for (number in Stack.values(stack)) {
-    Debug.print(Nat.toText(number))
-  }
-  // prints:
-  // `4`
-  // `2`
-  // `0`
+  assert Iter.toArray(Stack.values(stack)) == [4, 2, 0];
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -111,7 +89,7 @@ assuming that <code>generator</code> has O(1) costs.</p>
 
 persistent actor {
   let stack = Stack.singleton&lt;Text&gt;(&quot;motoko&quot;);
-  assert (Stack.peek(stack) ==?&quot;motoko&quot;);
+  assert Stack.peek(stack) == ?&quot;motoko&quot;;
 }</code></pre>
 
 <p>Runtime: O(1)
@@ -121,9 +99,9 @@ Space: O(1)</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 
 persistent actor {
-  let stack = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
   Stack.clear(stack);
-  assert (Stack.isEmpty(stack));
+  assert Stack.isEmpty(stack);
 }</code></pre>
 
 <p>Runtime: O(1)
@@ -134,9 +112,9 @@ Space: O(1)</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let original = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let original = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
   let copy = Stack.clone(original);
-  assert (Stack.equal(copy, original, Nat.equal))
+  assert Stack.equal(copy, original, Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -148,7 +126,7 @@ where <code>n</code> denotes the number of elements stored on the stack.</p>
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  assert (Stack.isEmpty(stack));
+  assert Stack.isEmpty(stack);
 }</code></pre>
 
 <p>Runtime: O(1)
@@ -158,8 +136,8 @@ Space: O(1)</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 
 persistent actor {
-  let stack = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert (Stack.size(stack) == 3);
+  let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  assert Stack.size(stack) == 3;
 }</code></pre>
 
 <p>Runtime: O(1)
@@ -171,8 +149,8 @@ Uses the provided equality function to compare elements.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let stack = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert (Stack.contains(stack, 2, Nat.equal));
+  let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  assert Stack.contains(stack, 2, Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -186,6 +164,7 @@ that <code>equal</code> has O(1) costs.</p>
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
   Stack.push(stack, 42);
+  assert Stack.peek(stack) == ?42;
 }</code></pre>
 
 <p>Runtime: O(1)
@@ -197,10 +176,10 @@ Returns null if the stack is empty.</p>
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
   Stack.push(stack, 3);
-  assert (Stack.peek(stack) == ?3);
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
+  assert Stack.peek(stack) == ?1;
 }</code></pre>
 
 <p>Runtime: O(1)
@@ -212,13 +191,13 @@ Returns null if the stack is empty.</p>
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
   Stack.push(stack, 3);
-  assert (Stack.pop(stack) == ?3);
-  assert (Stack.pop(stack) == ?2);
-  assert (Stack.pop(stack) == ?1);
-  assert (Stack.pop(stack) == null);
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
+  assert Stack.pop(stack) == ?1;
+  assert Stack.pop(stack) == ?2;
+  assert Stack.pop(stack) == ?3;
+  assert Stack.pop(stack) == null;
 }</code></pre>
 
 <p>Runtime: O(1)
@@ -230,14 +209,14 @@ Position 0 is the top of the stack.</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 
 persistent actor {
-  let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
-  Stack.push(stack, 3);
-  assert (Stack.get(stack, 0) == ?3);
-  assert (Stack.get(stack, 1) == ?2);
-  assert (Stack.get(stack, 2) == ?1);
-  assert (Stack.get(stack, 3) == null);
+  let stack = Stack.empty&lt;Char&gt;();
+  Stack.push(stack, 'c');
+  Stack.push(stack, 'b');
+  Stack.push(stack, 'a');
+  assert Stack.get(stack, 0) == ?'a';
+  assert Stack.get(stack, 1) == ?'b';
+  assert Stack.get(stack, 2) == ?'c';
+  assert Stack.get(stack, 3) == null;
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -249,14 +228,14 @@ where <code>n</code> denotes the number of elements stored on the stack.</p>
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
   Stack.push(stack, 3);
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
   Stack.reverse(stack);
-  assert (Stack.pop(stack) == ?1);
-  assert (Stack.pop(stack) == ?2);
-  assert (Stack.pop(stack) == ?3);
-  assert (Stack.pop(stack) == null);
+  assert Stack.pop(stack) == ?3;
+  assert Stack.pop(stack) == ?2;
+  assert Stack.pop(stack) == ?1;
+  assert Stack.pop(stack) == null;
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -266,20 +245,14 @@ where <code>n</code> denotes the number of elements stored on the stack.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
   Stack.push(stack, 3);
-  for (element in Stack.values(stack)) {
-    Debug.print(Nat.toText(element));
-  };
-  // prints:
-  // `3`
-  // `2`
-  // `1`
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
+  assert Iter.toArray(Stack.values(stack)) == [1, 2, 3];
 }</code></pre>
 
 <p>Runtime: O(1) for iterator creation, O(n) for full traversal
@@ -291,7 +264,7 @@ where <code>n</code> denotes the number of elements stored on the stack.</p>
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([2, 4, 6].values());
-  assert (Stack.all&lt;Nat&gt;(stack, func(n) { n % 2 == 0 }));
+  assert Stack.all&lt;Nat&gt;(stack, func(n) = n % 2 == 0);
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -303,8 +276,8 @@ assuming that <code>predicate</code> has O(1) costs.</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 
 persistent actor {
-  let stack = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert (Stack.any&lt;Nat&gt;(stack, func(n) { n == 2 }));
+  let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  assert Stack.any&lt;Nat&gt;(stack, func(n) = n == 2);
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -319,16 +292,12 @@ import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
   Stack.push(stack, 3);
-  Stack.forEach&lt;Nat&gt;(stack, func(n) {
-    Debug.print(Nat.toText(n))
-  });
-  // prints:
-  // `3`
-  // `2`
-  // `1`
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
+  var text = &quot;&quot;;
+  Stack.forEach&lt;Nat&gt;(stack, func(n) = text #= Nat.toText(n));
+  assert text == &quot;123&quot;;
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -339,17 +308,18 @@ assuming that <code>operation</code> has O(1) costs.</p>
 Maintains the original order of elements.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
   Stack.push(stack, 3);
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
   let doubled = Stack.map&lt;Nat, Nat&gt;(stack, func(n) { 2 * n });
-  assert (Stack.get(doubled, 0) == ?6);
-  assert (Stack.get(doubled, 1) == ?4);
-  assert (Stack.get(doubled, 2) == ?2);
-  assert (Stack.get(doubled, 3) == null);
+  assert Stack.get(doubled, 0) == ?2;
+  assert Stack.get(doubled, 1) == ?4;
+  assert Stack.get(doubled, 2) == ?6;
+  assert Stack.get(doubled, 3) == null;
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -363,14 +333,14 @@ Maintains the relative order of elements.</p>
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
-  Stack.push(stack, 3);
   Stack.push(stack, 4);
+  Stack.push(stack, 3);
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
   let evens = Stack.filter&lt;Nat&gt;(stack, func(n) { n % 2 == 0 });
-  assert(Stack.pop(evens) == ?4);
-  assert(Stack.pop(evens) == ?2);
-  assert(Stack.pop(evens) == null);
+  assert Stack.pop(evens) == ?2;
+  assert Stack.pop(evens) == ?4;
+  assert Stack.pop(evens) == null;
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -385,10 +355,10 @@ Maintains the relative order of elements.</p>
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
-  Stack.push(stack, 3);
   Stack.push(stack, 4);
+  Stack.push(stack, 3);
+  Stack.push(stack, 2);
+  Stack.push(stack, 1);
   let evenDoubled = Stack.filterMap&lt;Nat, Nat&gt;(stack, func(n) {
     if (n % 2 == 0) {
       ?(n * 2)
@@ -396,9 +366,9 @@ persistent actor {
       null
     }
   });
-  assert(Stack.pop(evenDoubled) == ?8);
-  assert(Stack.pop(evenDoubled) == ?4);
-  assert(Stack.pop(evenDoubled) == null);
+  assert Stack.pop(evenDoubled) == ?4;
+  assert Stack.pop(evenDoubled) == ?8;
+  assert Stack.pop(evenDoubled) == null;
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -411,9 +381,9 @@ assuming that <code>project</code> has O(1) costs.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let stack1 = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  let stack2 = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert (Stack.equal(stack1, stack2, Nat.equal));
+  let stack1 = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  let stack2 = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  assert Stack.equal(stack1, stack2, Nat.equal);
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -421,16 +391,15 @@ Space: O(1)
 where <code>n</code> denotes the number of elements stored on the stack and
 assuming that <code>equal</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new stack from an iterator.
-Elements are pushed in iteration order.</p>
+Elements are pushed in iteration order. Which means that the last element
+of the iterator will be the first element on top of the stack.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let stack = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert(Stack.pop(stack) == ?3);
-  assert(Stack.pop(stack) == ?2);
-  assert(Stack.pop(stack) == ?1);
-  assert(Stack.pop(stack) == null);
+  let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  assert Iter.toArray(Stack.values(stack)) == [1, 2, 3];
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -441,16 +410,10 @@ element formatting function.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
 import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 persistent actor {
-  let stack = Stack.empty&lt;Nat&gt;();
-  Stack.push(stack, 1);
-  Stack.push(stack, 2);
-  Stack.push(stack, 3);
-  let text = Stack.toText(stack, Nat.toText);
-  Debug.print(text);
-  // prints `[3, 2, 1]`
+  let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  assert Stack.toText(stack, Nat.toText) == &quot;Stack[1, 2, 3]&quot;;
 }</code></pre>
 
 <p>Runtime: O(n)
@@ -463,9 +426,9 @@ assuming that <code>format</code> has O(1) costs.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let stack1 = Stack.fromIter&lt;Nat&gt;([1, 2].values());
-  let stack2 = Stack.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert (Stack.compare(stack1, stack2, Nat.compare) == #less);
+  let stack1 = Stack.fromIter&lt;Nat&gt;([2, 1].values());
+  let stack2 = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
+  assert Stack.compare(stack1, stack2, Nat.compare) == #less;
 }</code></pre>
 
 <p>Runtime: O(n)

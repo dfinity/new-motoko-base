@@ -18,13 +18,14 @@ import Nat8 &quot;mo:base/Nat8&quot;;
 
 let blob = &quot;\00\00\00\ff&quot; : Blob; // blob literals, where each byte is delimited by a back-slash and represented in hex
 let blob2 = &quot;charsもあり&quot; : Blob; // you can also use characters in the literals
-let numBytes = blob.size(); // =&gt; 4 (returns the number of bytes in the Blob)
-for (byte : Nat8 in blob.values()) { // iterator over the Blob
+let numBytes = blob.size();
+assert numBytes == 4; // returns the number of bytes in the Blob
+for (byte in blob.values()) { // iterator over the Blob
   Debug.print(Nat8.toText(byte))
 }</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Blob"><span class="keyword">type </span><span class="type">Blob</span> = <span class="type">Prim.Types.Blob</span></h4><p></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>() : <a href="#type.Blob"><span class="type">Blob</span></a></code></h4><p><p>Returns an empty <code>Blob</code> (equivalent to <code>&quot;&quot;</code>).</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let emptyBlob = Blob.empty(); // =&gt; &quot;&quot;
+let emptyBlob = Blob.empty();
 assert emptyBlob.size() == 0;</code></pre></p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns whether the given <code>Blob</code> is empty (has a size of zero).</p>
 <pre><code>motoko include=import
 let blob1 = &quot;&quot; : Blob;
@@ -40,55 +41,62 @@ assert blob.size() == 3;</code></pre></p></div><div class="declaration"><h4 clas
 <p>Example:</p>
 <pre><code>motoko include=import
 let bytes : [Nat8] = [0, 255, 0];
-let blob = Blob.fromArray(bytes); // =&gt; &quot;\00\FF\00&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>(<span class="parameter">bytes</span> : [<span class="keyword">var </span><span class="type">Nat8</span>]) : <a href="#type.Blob"><span class="type">Blob</span></a></code></h4><p><p>Creates a <code>Blob</code> from a mutable array of bytes (<code>[var Nat8]</code>), by copying each element.</p>
+let blob = Blob.fromArray(bytes);
+assert blob == &quot;\00\FF\00&quot;;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>(<span class="parameter">bytes</span> : [<span class="keyword">var </span><span class="type">Nat8</span>]) : <a href="#type.Blob"><span class="type">Blob</span></a></code></h4><p><p>Creates a <code>Blob</code> from a mutable array of bytes (<code>[var Nat8]</code>), by copying each element.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let bytes : [var Nat8] = [var 0, 255, 0];
-let blob = Blob.fromVarArray(bytes); // =&gt; &quot;\00\FF\00&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : [<span class="type">Nat8</span>]</code></h4><p><p>Converts a <code>Blob</code> to an array of bytes (<code>[Nat8]</code>), by copying each element.</p>
+let blob = Blob.fromVarArray(bytes);
+assert blob == &quot;\00\FF\00&quot;;</code></pre></p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : [<span class="type">Nat8</span>]</code></h4><p><p>Converts a <code>Blob</code> to an array of bytes (<code>[Nat8]</code>), by copying each element.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob = &quot;\00\FF\00&quot; : Blob;
-let bytes = Blob.toArray(blob); // =&gt; [0, 255, 0]</code></pre></p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : [<span class="keyword">var </span><span class="type">Nat8</span>]</code></h4><p><p>Converts a <code>Blob</code> to a mutable array of bytes (<code>[var Nat8]</code>), by copying each element.</p>
+let bytes = Blob.toArray(blob);
+assert bytes == [0, 255, 0];</code></pre></p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : [<span class="keyword">var </span><span class="type">Nat8</span>]</code></h4><p><p>Converts a <code>Blob</code> to a mutable array of bytes (<code>[var Nat8]</code>), by copying each element.</p>
+<p>Example:</p>
+<pre><code>motoko include=import
+import Nat8 &quot;mo:base/Nat8&quot;;
+import VarArray &quot;mo:base/VarArray&quot;;
+
+let blob = &quot;\00\FF\00&quot; : Blob;
+let bytes = Blob.toVarArray(blob);
+assert VarArray.equal&lt;Nat8&gt;(bytes, [var 0, 255, 0], Nat8.equal);</code></pre></p></div><div class="declaration"><h4 class="function" id="hash"><code><span class="keyword">public func </span><span class="fnname">hash</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <a href="Types.html#type.Hash"><span class="type">Types.Hash</span></a></code></h4><p><p>Returns the (non-cryptographic) hash of <code>blob</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob = &quot;\00\FF\00&quot; : Blob;
-let bytes = Blob.toVarArray(blob); // =&gt; [var 0, 255, 0]</code></pre></p></div><div class="declaration"><h4 class="function" id="hash"><code><span class="keyword">public func </span><span class="fnname">hash</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <a href="Types.html#type.Hash"><span class="type">Types.Hash</span></a></code></h4><p><p>Returns the (non-cryptographic) hash of <code>blob</code>.</p>
-<p>Example:</p>
-<pre><code>motoko include=import
-let blob = &quot;\00\FF\00&quot; : Blob;
-Blob.hash(blob) // =&gt; 1_818_567_776</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">b1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">b2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>General purpose comparison function for <code>Blob</code> by comparing the value of
+let h = Blob.hash(blob);
+assert h == 1_818_567_776;</code></pre></p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>(<span class="parameter">b1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">b2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>General purpose comparison function for <code>Blob</code> by comparing the value of
 the bytes. Returns the <code>Order</code> (either <code>#less</code>, <code>#equal</code>, or <code>#greater</code>)
 by comparing <code>blob1</code> with <code>blob2</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob1 = &quot;\00\00\00&quot; : Blob;
 let blob2 = &quot;\00\FF\00&quot; : Blob;
-Blob.compare(blob1, blob2) // =&gt; #less</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">blob1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">blob2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for <code>Blob</code> types.
+let result = Blob.compare(blob1, blob2);
+assert result == #less;</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">blob1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">blob2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for <code>Blob</code> types.
 This is equivalent to <code>blob1 == blob2</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob1 = &quot;\00\FF\00&quot; : Blob;
 let blob2 = &quot;\00\FF\00&quot; : Blob;
-ignore Blob.equal(blob1, blob2);
-blob1 == blob2 // =&gt; true</code></pre>
+assert Blob.equal(blob1, blob2);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>==</code> operator) is so that you can use it as a function value
 to pass to a higher order function.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Buffer &quot;mo:base/Buffer&quot;;
+import List &quot;mo:base/List&quot;;
 
-let buffer1 = Buffer.Buffer&lt;Blob&gt;(3);
-let buffer2 = Buffer.Buffer&lt;Blob&gt;(3);
-Buffer.equal(buffer1, buffer2, Blob.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">blob1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">blob2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for <code>Blob</code> types.
+let list1 = List.singleton&lt;Blob&gt;(&quot;\00\FF\00&quot;);
+let list2 = List.singleton&lt;Blob&gt;(&quot;\00\FF\00&quot;);
+assert List.equal(list1, list2, Blob.equal);</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">blob1</span> : <a href="#type.Blob"><span class="type">Blob</span></a>, <span class="parameter">blob2</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for <code>Blob</code> types.
 This is equivalent to <code>blob1 != blob2</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 let blob1 = &quot;\00\AA\AA&quot; : Blob;
 let blob2 = &quot;\00\FF\00&quot; : Blob;
-ignore Blob.notEqual(blob1, blob2);
-blob1 != blob2 // =&gt; true</code></pre>
+assert Blob.notEqual(blob1, blob2);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>!=</code> operator) is so that you can use it as a function value
@@ -99,8 +107,7 @@ This is equivalent to <code>blob1 &lt; blob2</code>.</p>
 <pre><code>motoko include=import
 let blob1 = &quot;\00\AA\AA&quot; : Blob;
 let blob2 = &quot;\00\FF\00&quot; : Blob;
-ignore Blob.less(blob1, blob2);
-blob1 &lt; blob2 // =&gt; true</code></pre>
+assert Blob.less(blob1, blob2);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;</code> operator) is so that you can use it as a function value
@@ -111,8 +118,7 @@ This is equivalent to <code>blob1 &lt;= blob2</code>.</p>
 <pre><code>motoko include=import
 let blob1 = &quot;\00\AA\AA&quot; : Blob;
 let blob2 = &quot;\00\FF\00&quot; : Blob;
-ignore Blob.lessOrEqual(blob1, blob2);
-blob1 &lt;= blob2 // =&gt; true</code></pre>
+assert Blob.lessOrEqual(blob1, blob2);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;=</code> operator) is so that you can use it as a function value
@@ -123,8 +129,7 @@ This is equivalent to <code>blob1 &gt; blob2</code>.</p>
 <pre><code>motoko include=import
 let blob1 = &quot;\BB\AA\AA&quot; : Blob;
 let blob2 = &quot;\00\00\00&quot; : Blob;
-ignore Blob.greater(blob1, blob2);
-blob1 &gt; blob2 // =&gt; true</code></pre>
+assert Blob.greater(blob1, blob2);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&gt;</code> operator) is so that you can use it as a function value
@@ -135,8 +140,7 @@ This is equivalent to <code>blob1 &gt;= blob2</code>.</p>
 <pre><code>motoko include=import
 let blob1 = &quot;\BB\AA\AA&quot; : Blob;
 let blob2 = &quot;\00\00\00&quot; : Blob;
-ignore Blob.greaterOrEqual(blob1, blob2);
-blob1 &gt;= blob2 // =&gt; true</code></pre>
+assert Blob.greaterOrEqual(blob1, blob2);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&gt;=</code> operator) is so that you can use it as a function value

@@ -7,7 +7,7 @@ import Nat16 &quot;mo:base/Nat16&quot;;</code></pre><div class="declaration"><h4
 </p></div><div class="declaration"><h4 class="value-declaration" id="maxValue"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">maxValue</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a></code></h4><p><p>Maximum 16-bit natural number. <code>2 ** 16 - 1</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat16.maxValue; // =&gt; 65536 : Nat16</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a> -&gt; <span class="type">Nat</span></code></h4><p><p>Converts a 16-bit unsigned integer to an unsigned integer with infinite precision.</p>
+Nat16.maxValue; // =&gt; 65535 : Nat16</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a> -&gt; <span class="type">Nat</span></code></h4><p><p>Converts a 16-bit unsigned integer to an unsigned integer with infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 Nat16.toNat(123); // =&gt; 123 : Nat</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat</span> : <span class="type">Nat</span> -&gt; <a href="#type.Nat16"><span class="type">Nat16</span></a></code></h4><p><p>Converts an unsigned integer with infinite precision to a 16-bit unsigned integer.</p>
@@ -55,11 +55,9 @@ value to pass to a higher order function. It is not possible to use <code>==</co
 as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Buffer &quot;mo:base/Buffer&quot;;
-
-let buffer1 = Buffer.Buffer&lt;Nat16&gt;(3);
-let buffer2 = Buffer.Buffer&lt;Nat16&gt;(3);
-Buffer.equal(buffer1, buffer2, Nat16.equal) // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a>, <span class="parameter">y</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat16 types.
+let a : Nat16 = 111;
+let b : Nat16 = 222;
+Nat16.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a>, <span class="parameter">y</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat16 types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -345,7 +343,8 @@ import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat16.range(4, 1);
 assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a>, <span class="parameter">to</span> : <a href="#type.Nat16"><span class="type">Nat16</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat16"><span class="type">Nat16</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat16</code> values from the first to second argument, inclusive.</p>
-<pre class="motoko"><code class="motoko">import Iter &quot;mo:base/Iter&quot;;
+<pre><code>motoko include=import
+import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat16.rangeInclusive(1, 3);
 assert(?1 == iter.next());

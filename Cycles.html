@@ -14,34 +14,32 @@ Note that attaching cycles to a call to a local function call or <code>async</co
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
-actor {
-  public func main() : async() {
-    Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance()));
+persistent actor {
+  public func main() : async () {
+    let initialBalance = Cycles.balance();
     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
-    Debug.print(&quot;Main refunded: &quot; # debug_show(Cycles.refunded())); // 5_000_000
-    Debug.print(&quot;Main balance: &quot; # debug_show(Cycles.balance())); // decreased by around 10_000_000
+    assert Cycles.refunded() == 5_000_000;
+    assert Cycles.balance() &lt; initialBalance; // decreased by around 10_000_000
   };
 
-  func operation() : async() {
-    Debug.print(&quot;Operation balance: &quot; # debug_show(Cycles.balance()));
-    Debug.print(&quot;Operation available: &quot; # debug_show(Cycles.available()));
+  func operation() : async () {
+    let initialBalance = Cycles.balance();
+    let initialAvailable = Cycles.available();
     let obtained = Cycles.accept&lt;system&gt;(10_000_000);
-    Debug.print(&quot;Operation obtained: &quot; # debug_show(obtained)); // =&gt; 10_000_000
-    Debug.print(&quot;Operation balance: &quot; # debug_show(Cycles.balance())); // increased by 10_000_000
-    Debug.print(&quot;Operation available: &quot; # debug_show(Cycles.available())); // decreased by 10_000_000
+    assert obtained == 10_000_000;
+    assert Cycles.balance() == initialBalance + 10_000_000;
+    assert Cycles.available() == initialAvailable - 10_000_000;
   }
 }</code></pre><div class="declaration"><h4 class="value-declaration" id="balance"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">balance</span> : () -&gt; (<span class="parameter">amount</span> : <span class="type">Nat</span>)</code></h4><p><p>Returns the actor's current balance of cycles as <code>amount</code>.</p>
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     let balance = Cycles.balance();
-    Debug.print(&quot;Balance: &quot; # debug_show(balance));
+    assert balance &gt; 0;
   }
 }</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="available"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">available</span> : () -&gt; (<span class="parameter">amount</span> : <span class="type">Nat</span>)</code></h4><p><p>Returns the currently available <code>amount</code> of cycles.
 The amount available is the amount received in the current call,
@@ -51,12 +49,11 @@ any remaining available amount is automatically refunded to the caller/context.<
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     let available = Cycles.available();
-    Debug.print(&quot;Available: &quot; # debug_show(available));
+    assert available &gt;= 0;
   }
 }</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="accept"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">accept</span> : (<span class="parameter">amount</span> : <span class="type">Nat</span>) -&gt; (<span class="parameter">accepted</span> : <span class="type">Nat</span>)</code></h4><p><p>Transfers up to <code>amount</code> from <code>available()</code> to <code>balance()</code>.
 Returns the amount actually transferred, which may be less than
@@ -64,16 +61,15 @@ requested, for example, if less is available, or if canister balance limits are 
 <p>Example for use on the ICP (for simplicity, only transferring cycles to itself):</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   public func main() : async() {
     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
   };
 
   func operation() : async() {
     let obtained = Cycles.accept&lt;system&gt;(10_000_000);
-    Debug.print(&quot;Obtained: &quot; # debug_show(obtained)); // =&gt; 10_000_000
+    assert obtained == 10_000_000;
   }
 }</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="refunded"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">refunded</span> : () -&gt; (<span class="parameter">amount</span> : <span class="type">Nat</span>)</code></h4><p><p>Reports <code>amount</code> of cycles refunded in the last <code>await</code> of the current
 context, or zero if no await has occurred yet.
@@ -83,16 +79,15 @@ whether or not <code>refunded</code> is used to observe them.</p>
 <p>Example for use on the ICP (for simplicity, only transferring cycles to itself):</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
-actor {
+persistent actor {
   func operation() : async() {
     ignore Cycles.accept&lt;system&gt;(10_000_000);
   };
 
   public func main() : async() {
     await (with cycles = 15_000_000) operation(); // accepts 10_000_000 cycles
-    Debug.print(&quot;Refunded: &quot; # debug_show(Cycles.refunded())); // 5_000_000
+    assert Cycles.refunded() == 5_000_000;
   }
 }</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="burn"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">burn</span> : (<span class="parameter">amount</span> : <span class="type">Nat</span>) -&gt; (<span class="parameter">burned</span> : <span class="type">Nat</span>)</code></h4><p><p>Attempts to burn <code>amount</code> of cycles, deducting <code>burned</code> from the canister's
 cycle balance. The burned cycles are irrevocably lost and not available to any
@@ -100,11 +95,10 @@ other principal either.</p>
 <p>Example for use on the IC:</p>
 <pre><code>motoko no-repl
 import Cycles &quot;mo:base/Cycles&quot;;
-import Debug &quot;mo:base/Debug&quot;;
 
 actor {
   public func main() : async() {
     let burnt = Cycles.burn&lt;system&gt;(10_000_000);
-    Debug.print(&quot;Burned: &quot; # debug_show burnt); // 10_000_000
+    assert burnt == 10_000_000;
   }
 }</code></pre></p></div></div></body></html>

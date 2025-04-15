@@ -1,6 +1,8 @@
-/// Provides extended utility functions on Arrays.
+/// Provides extended utility functions on immutable Arrays (values of type `[T]`).
 ///
-/// Note the difference between mutable and non-mutable arrays below.
+/// Note the difference between mutable (`[var T]`) and immutable (`[T]`) arrays.
+/// Mutable arrays allow their elements to be modified after creation, while
+/// immutable arrays are fixed once created.
 ///
 /// WARNING: If you are looking for a list that can grow and shrink in size,
 /// it is recommended you use `List` for those purposes.
@@ -21,6 +23,15 @@ import Prim "mo:⛔";
 module {
 
   /// Creates an empty array (equivalent to `[]`).
+  ///
+  /// ```motoko include=import
+  /// let array = Array.empty<Text>();
+  /// assert array == [];
+  /// ```
+  ///
+  /// Runtime: O(1)
+  ///
+  /// Space: O(1)
   public func empty<T>() : [T] = [];
 
   /// Creates an array containing `item` repeated `size` times.
@@ -53,10 +64,10 @@ module {
   /// Transforms a mutable array into an immutable array.
   ///
   /// ```motoko include=import
-  ///
   /// let varArray = [var 0, 1, 2];
   /// varArray[2] := 3;
   /// let array = Array.fromVarArray<Nat>(varArray);
+  /// assert array == [0, 1, 3];
   /// ```
   ///
   /// Runtime: O(size)
@@ -67,11 +78,13 @@ module {
   /// Transforms an immutable array into a mutable array.
   ///
   /// ```motoko include=import
+  /// import VarArray "mo:base/VarArray";
+  /// import Nat "mo:base/Nat";
   ///
   /// let array = [0, 1, 2];
   /// let varArray = Array.toVarArray<Nat>(array);
   /// varArray[2] := 3;
-  /// varArray
+  /// assert VarArray.equal(varArray, [var 0, 1, 3], Nat.equal);
   /// ```
   ///
   /// Runtime: O(size)
@@ -100,7 +113,7 @@ module {
   ///
   /// let array1 = [0, 1, 2, 3];
   /// let array2 = [0, 1, 2, 3];
-  /// Array.equal(array1, array2, equal)
+  /// assert Array.equal(array1, array2, equal);
   /// ```
   ///
   /// Runtime: O(size1 + size2)
@@ -129,7 +142,8 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 9, 4, 8];
-  /// Array.find<Nat>(array, func x = x > 8)
+  /// let found = Array.find<Nat>(array, func x = x > 8);
+  /// assert found == ?9;
   /// ```
   /// Runtime: O(size)
   ///
@@ -146,12 +160,13 @@ module {
   };
 
   /// Create a new array by concatenating the values of `array1` and `array2`.
-  /// Note that `Array.append` copies its arguments and has linear complexity.
+  /// Note that `Array.concat` copies its arguments and has linear complexity.
   ///
   /// ```motoko include=import
   /// let array1 = [1, 2, 3];
   /// let array2 = [4, 5, 6];
-  /// Array.concat<Nat>(array1, array2)
+  /// let result = Array.concat<Nat>(array1, array2);
+  /// assert result == [1, 2, 3, 4, 5, 6];
   /// ```
   /// Runtime: O(size1 + size2)
   ///
@@ -178,7 +193,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let array = [4, 2, 6];
-  /// Array.sort(array, Nat.compare)
+  /// let sorted = Array.sort(array, Nat.compare);
+  /// assert sorted == [2, 4, 6];
   /// ```
   /// Runtime: O(size * log(size))
   ///
@@ -193,10 +209,9 @@ module {
   /// Creates a new array by reversing the order of elements in `array`.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 11, 12];
-  ///
-  /// Array.reverse(array)
+  /// let reversed = Array.reverse(array);
+  /// assert reversed == [12, 11, 10];
   /// ```
   ///
   /// Runtime: O(size)
@@ -211,12 +226,12 @@ module {
   /// Retains original ordering of elements.
   ///
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  ///
+  /// var sum = 0;
   /// let array = [0, 1, 2, 3];
   /// Array.forEach<Nat>(array, func(x) {
-  ///   Debug.print(debug_show x)
-  /// })
+  ///   sum += x;
+  /// });
+  /// assert sum == 6;
   /// ```
   ///
   /// Runtime: O(size)
@@ -253,6 +268,7 @@ module {
   /// ```motoko include=import
   /// let array = [4, 2, 6, 1, 5];
   /// let evenElements = Array.filter<Nat>(array, func x = x % 2 == 0);
+  /// assert evenElements == [4, 2, 6];
   /// ```
   /// Runtime: O(size)
   ///
@@ -296,6 +312,7 @@ module {
   ///     array,
   ///     func x = if (x == 0) { null } else { ?toText(100 / x) } // can't divide by 0, so return null
   ///   );
+  /// assert newArray == ["25", "50", "100"];
   /// ```
   /// Runtime: O(size)
   ///
@@ -344,13 +361,14 @@ module {
   /// ```motoko include=import
   /// let array = [4, 3, 2, 1, 0];
   /// // divide 100 by every element in the array
-  /// Array.mapResult<Nat, Nat, Text>(array, func x {
+  /// let result = Array.mapResult<Nat, Nat, Text>(array, func x {
   ///   if (x > 0) {
   ///     #ok(100 / x)
   ///   } else {
   ///     #err "Cannot divide by zero"
   ///   }
-  /// })
+  /// });
+  /// assert result == #err "Cannot divide by zero";
   /// ```
   ///
   /// Runtime: O(size)
@@ -412,9 +430,9 @@ module {
   /// Retains original ordering of elements.
   ///
   /// ```motoko include=import
-  ///
   /// let array = [10, 10, 10, 10];
-  /// Array.mapEntries<Nat, Nat>(array, func (x, i) = i * x)
+  /// let newArray = Array.mapEntries<Nat, Nat>(array, func (x, i) = i * x);
+  /// assert newArray == [0, 10, 20, 30];
   /// ```
   ///
   /// Runtime: O(size)
@@ -429,7 +447,8 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4];
-  /// Array.flatMap<Nat, Int>(array, func x = [x, -x].values()) // => [1, -1, 2, -2, 3, -3, 4, -4]
+  /// let newArray = Array.flatMap<Nat, Int>(array, func x = [x, -x].values());
+  /// assert newArray == [1, -1, 2, -2, 3, -3, 4, -4];
   /// ```
   /// Runtime: O(size)
   ///
@@ -478,6 +497,7 @@ module {
   ///     0, // start the sum at 0
   ///     func(sumSoFar, x) = sumSoFar + x // this entire function can be replaced with `add`!
   ///   );
+  /// assert sum == 7;
   /// ```
   ///
   /// Runtime: O(size)
@@ -502,6 +522,7 @@ module {
   ///
   /// let array = [1, 9, 4, 8];
   /// let bookTitle = Array.foldRight<Nat, Text>(array, "", func(x, acc) = toText(x) # acc);
+  /// assert bookTitle == "1948";
   /// ```
   ///
   /// Runtime: O(size)
@@ -523,11 +544,12 @@ module {
   /// Combines an iterator of arrays into a single array. Retains the original
   /// ordering of the elements.
   ///
-  /// Consider using `Array.flatten()` where possible for better performance.
+  /// Consider using `Array.flatten()` for better performance.
   ///
   /// ```motoko include=import
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.join<Nat>(arrays.values()) // => [0, 1, 2, 2, 3, 4]
+  /// let joinedArray = Array.join<Nat>(arrays.values());
+  /// assert joinedArray == [0, 1, 2, 2, 3, 4];
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -543,9 +565,9 @@ module {
   /// This has better performance compared to `Array.join()`.
   ///
   /// ```motoko include=import
-  ///
   /// let arrays = [[0, 1, 2], [2, 3], [], [4]];
-  /// Array.flatten<Nat>(arrays) // => [0, 1, 2, 2, 3, 4]
+  /// let flatArray = Array.flatten<Nat>(arrays);
+  /// assert flatArray == [0, 1, 2, 2, 3, 4];
   /// ```
   ///
   /// Runtime: O(number of elements in array)
@@ -576,7 +598,7 @@ module {
   /// Create an array containing a single value.
   ///
   /// ```motoko include=import
-  /// var array = Array.singleton(2);
+  /// let array = Array.singleton(2);
   /// assert array == [2];
   /// ```
   ///
@@ -644,7 +666,7 @@ module {
   /// for (element in array.keys()) {
   ///   sum += element;
   /// };
-  /// sum
+  /// assert sum == 3; // 0 + 1 + 2
   /// ```
   ///
   /// Runtime: O(1)
@@ -665,7 +687,7 @@ module {
   /// for (element in array.values()) {
   ///   sum += element;
   /// };
-  /// sum
+  /// assert sum == 33;
   /// ```
   ///
   /// Runtime: O(1)
@@ -683,7 +705,7 @@ module {
   /// for ((index, element) in Array.enumerate(array)) {
   ///   sum += element;
   /// };
-  /// sum // => 33
+  /// assert sum == 33;
   /// ```
   ///
   /// Runtime: O(1)
@@ -706,7 +728,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4];
-  /// Array.all<Nat>(array, func x = x > 0) // => true
+  /// assert Array.all<Nat>(array, func x = x > 0);
   /// ```
   ///
   /// Runtime: O(size)
@@ -727,7 +749,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = [1, 2, 3, 4];
-  /// Array.any<Nat>(array, func x = x > 3) // => true
+  /// assert Array.any<Nat>(array, func x = x > 3);
   /// ```
   ///
   /// Runtime: O(size)
@@ -932,7 +954,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let array = [1, 2, 3];
-  /// Array.toText<Nat>(array, Nat.toText) // => "[1, 2, 3]"
+  /// let text = Array.toText<Nat>(array, Nat.toText);
+  /// assert text == "[1, 2, 3]";
   /// ```
   ///
   /// Runtime: O(size)
@@ -968,7 +991,7 @@ module {
   ///
   /// let array1 = [1, 2, 3];
   /// let array2 = [1, 2, 4];
-  /// Array.compare<Nat>(array1, array2, Nat.compare) // => #less
+  /// assert Array.compare<Nat>(array1, array2, Nat.compare) == #less;
   /// ```
   ///
   /// ```motoko include=import
@@ -976,7 +999,7 @@ module {
   ///
   /// let array3 = [1, 2];
   /// let array4 = [1, 2, 3];
-  /// Array.compare<Nat>(array3, array4, Nat.compare) // => #less /* shorter array */
+  /// assert Array.compare<Nat>(array3, array4, Nat.compare) == #less;
   /// ```
   ///
   /// Runtime: O(min(size1, size2))

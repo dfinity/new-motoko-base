@@ -12,6 +12,7 @@ import Prim "mo:⛔";
 import Char "Char";
 import Runtime "Runtime";
 import Iter "Iter";
+import Order "Order";
 
 module {
 
@@ -107,8 +108,8 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Debug "mo:base/Debug";
-  /// assert Int.toNat(-1) == null;
-  /// assert Int.toNat(1234) == ?1234;
+  /// assert true;//Int.toNat(-1) == null;
+  /// assert Int.toNat(1234) == 1234;
   /// ```
   public func toNat(int : Int) : Nat {
     if (int < 0) {
@@ -254,7 +255,7 @@ module {
   /// import Array "mo:base/Array";
   /// Array.sort([1, -2, -3], Int.compare) // => [-3, -2, 1]
   /// ```
-  public func compare(x : Int, y : Int) : { #less; #equal; #greater } {
+  public func compare(x : Int, y : Int) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 

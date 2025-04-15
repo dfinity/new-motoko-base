@@ -360,7 +360,7 @@ module {
 
   func grow_index_block_if_needed<T>(list : List<T>) {
     if (list.blocks.size() == list.blockIndex) {
-      let new_blocks = VarArray.repeat<[var ?T]>([var], new_index_block_length(Nat32.bitcountLeadingZero(Nat32.fromNat(list.blockIndex))));
+      let new_blocks = VarArray.repeat<[var ?T]>([var], new_index_block_length(Nat32.fromNat(list.blockIndex)));
       var i = 0;
       while (i < list.blockIndex) {
         new_blocks[i] := list.blocks[i];

@@ -6,28 +6,66 @@ on:
   pull_request:
 
 jobs:
-  format:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-24.04]
-        node: [20]
+  check-motoko-changes:
+    uses: ./.github/workflows/check-motoko-changes.yml
+
+  validate-changelog:
+    needs: check-motoko-changes
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
+          setup-mops: false
+      - run: npm run validate:changelog
+      - name: Verify Changelog updated when Motoko source files changed
+        if: needs.check-motoko-changes.outputs.has_src_mo_changes == 'true'
+        run: |
+          if [ "${{ needs.check-motoko-changes.outputs.has_changelog_changes }}" != "true" ]; then
+            echo "Error: Motoko files were modified but Changelog.md was not updated"
+            exit 1
+          fi
+          echo "Changelog.md was updated"
+
+  validate-version:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          setup-mops: false
+      - run: npm run validate:version
+
+  validate-api:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm run validate:api
+      - name: Check for API changes
+        run: |
+          DIFF=$(git diff -- validation/api)
+          if [ -n "$DIFF" ]; then
+            echo "API changes:"
+            echo "$DIFF"
+            echo
+            echo '>>> If this looks correct, please run the command `npm run validate` and commit the output.'
+            echo
+            exit 1
+          fi
+
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: npm run format:check
 
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-24.04]
-        node: [20]
+    needs: check-motoko-changes
+    if: needs.check-motoko-changes.outputs.has_mo_changes == 'true'
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -39,9 +77,5 @@ jobs:
             echo "No Motoko file changes in src directory detected, skipping tests"
             exit 0
           fi
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npx mops toolchain init
+      - uses: ./.github/actions/setup
       - run: npm test

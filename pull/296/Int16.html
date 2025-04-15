@@ -7,43 +7,43 @@ import Int16 &quot;mo:base/Int16&quot;;</code></pre><div class="declaration"><h4
 </p></div><div class="declaration"><h4 class="value-declaration" id="minValue"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">minValue</span> : <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Minimum 16-bit integer value, <code>-2 ** 15</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.minValue == -32_768 : Int16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="maxValue"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">maxValue</span> : <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Maximum 16-bit integer value, <code>+2 ** 15 - 1</code>.</p>
+assert Int16.minValue == (-32_768 : Int16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="maxValue"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">maxValue</span> : <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Maximum 16-bit integer value, <code>+2 ** 15 - 1</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.maxValue == +32_767 : Int16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Int</span></code></h4><p><p>Converts a 16-bit signed integer to a signed integer with infinite precision.</p>
+assert Int16.maxValue == (+32_767 : Int16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Int</span></code></h4><p><p>Converts a 16-bit signed integer to a signed integer with infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.toInt(12_345) == 12_345 : Int;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt</span> : <span class="type">Int</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 16-bit signed integer.</p>
+assert Int16.toInt(12_345) == (12_345 : Int);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt</span> : <span class="type">Int</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 16-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.fromInt(12_345) == +12_345 : Int16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 16-bit signed integer.</p>
+assert Int16.fromInt(12_345) == (+12_345 : Int16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 16-bit signed integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.fromIntWrap(-12_345) == -12_345 : Int;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt8</span> : <span class="type">Int8</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a 8-bit signed integer to a 16-bit signed integer.</p>
+assert Int16.fromIntWrap(-12_345) == (-12_345 : Int);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt8</span> : <span class="type">Int8</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a 8-bit signed integer to a 16-bit signed integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.fromInt8(-123) == -123 : Int16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt8</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Int8</span></code></h4><p><p>Converts a 16-bit signed integer to a 8-bit signed integer.</p>
+assert Int16.fromInt8(-123) == (-123 : Int16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt8"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt8</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Int8</span></code></h4><p><p>Converts a 16-bit signed integer to a 8-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.toInt8(-123) == -123 : Int8;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt32</span> : <span class="type">Int32</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a 32-bit signed integer to a 16-bit signed integer.</p>
+assert Int16.toInt8(-123) == (-123 : Int8);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt32</span> : <span class="type">Int32</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts a 32-bit signed integer to a 16-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.fromInt32(-12_345) == -12_345 : Int16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt32</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Int32</span></code></h4><p><p>Converts a 16-bit signed integer to a 32-bit signed integer.</p>
+assert Int16.fromInt32(-12_345) == (-12_345 : Int16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt32</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Int32</span></code></h4><p><p>Converts a 16-bit signed integer to a 32-bit signed integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.toInt32(-12_345) == -12_345 : Int32;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat16</span> : <span class="type">Nat16</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts an unsigned 16-bit integer to a signed 16-bit integer.</p>
+assert Int16.toInt32(-12_345) == (-12_345 : Int32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat16</span> : <span class="type">Nat16</span> -&gt; <a href="#type.Int16"><span class="type">Int16</span></a></code></h4><p><p>Converts an unsigned 16-bit integer to a signed 16-bit integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.fromNat16(12_345) == +12_345 : Int16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat16</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Nat16</span></code></h4><p><p>Converts a signed 16-bit integer to an unsigned 16-bit integer.</p>
+assert Int16.fromNat16(12_345) == (+12_345 : Int16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat16</span> : <a href="#type.Int16"><span class="type">Int16</span></a> -&gt; <span class="type">Nat16</span></code></h4><p><p>Converts a signed 16-bit integer to an unsigned 16-bit integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.toNat16(-1) == 65_535 : Nat16 // underflow;</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Int16"><span class="type">Int16</span></a>) : <span class="type">Text</span></code></h4><p><p>Returns the Text representation of <code>x</code>. Textual representation <em>do not</em>
+assert Int16.toNat16(-1) == (65_535 : Nat16); // underflow</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Int16"><span class="type">Int16</span></a>) : <span class="type">Text</span></code></h4><p><p>Returns the Text representation of <code>x</code>. Textual representation <em>do not</em>
 contain underscores to represent commas.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -314,7 +314,7 @@ assert Int16.bitcountTrailingZero(0x0100) == +8;</code></pre></p></div><div clas
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.addWrap(2 ** 14, 2 ** 14) == -32_768 // overflow;</code></pre>
+assert Int16.addWrap(2 ** 14, 2 ** 14) == -32_768; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>+%</code> operator) is so that you can use it as a function
@@ -324,7 +324,7 @@ as a function value at the moment.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.subWrap(-2 ** 15, 1) == +32_767 // underflow;</code></pre>
+assert Int16.subWrap(-2 ** 15, 1) == +32_767; // underflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>-%</code> operator) is so that you can use it as a function
@@ -334,7 +334,7 @@ as a function value at the moment.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int16.mulWrap(2 ** 8, 2 ** 8) == 0 // overflow;</code></pre>
+assert Int16.mulWrap(2 ** 8, 2 ** 8) == 0; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>*%</code> operator) is so that you can use it as a function
@@ -346,7 +346,7 @@ Traps if <code>y &lt; 0 or y &gt;= 16</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 
-assert Int16.powWrap(2, 15) == -32_768 // overflow;</code></pre>
+assert Int16.powWrap(2, 15) == -32_768; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>**%</code> operator) is so that you can use it as a function

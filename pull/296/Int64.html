@@ -13,31 +13,31 @@ assert Int64.minValue == -9_223_372_036_854_775_808;</code></pre></p></div><div 
 assert Int64.maxValue == +9_223_372_036_854_775_807;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt</span> : <a href="#type.Int64"><span class="type">Int64</span></a> -&gt; <span class="type">Int</span></code></h4><p><p>Converts a 64-bit signed integer to a signed integer with infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.toInt(123_456) == 123_456 : Int;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt</span> : <span class="type">Int</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 64-bit signed integer.</p>
+assert Int64.toInt(123_456) == (123_456 : Int);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt</span> : <span class="type">Int</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 64-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.fromInt(123_456) == +123_456 : Int64;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt32</span> : <span class="type">Int32</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts a 32-bit signed integer to a 64-bit signed integer.</p>
+assert Int64.fromInt(123_456) == (+123_456 : Int64);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt32</span> : <span class="type">Int32</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts a 32-bit signed integer to a 64-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.fromInt32(-123_456) == -123_456 : Int64;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt32</span> : <a href="#type.Int64"><span class="type">Int64</span></a> -&gt; <span class="type">Int32</span></code></h4><p><p>Converts a 64-bit signed integer to a 32-bit signed integer.</p>
+assert Int64.fromInt32(-123_456) == (-123_456 : Int64);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt32</span> : <a href="#type.Int64"><span class="type">Int64</span></a> -&gt; <span class="type">Int32</span></code></h4><p><p>Converts a 64-bit signed integer to a 32-bit signed integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.toInt32(-123_456) == -123_456 : Int32;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 64-bit signed integer.</p>
+assert Int64.toInt32(-123_456) == (-123_456 : Int32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 64-bit signed integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.fromIntWrap(-123_456) == -123_456 : Int64;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat64</span> : <span class="type">Nat64</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts an unsigned 64-bit integer to a signed 64-bit integer.</p>
+assert Int64.fromIntWrap(-123_456) == (-123_456 : Int64);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat64</span> : <span class="type">Nat64</span> -&gt; <a href="#type.Int64"><span class="type">Int64</span></a></code></h4><p><p>Converts an unsigned 64-bit integer to a signed 64-bit integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.fromNat64(123_456) == +123_456 : Int64;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat64</span> : <a href="#type.Int64"><span class="type">Int64</span></a> -&gt; <span class="type">Nat64</span></code></h4><p><p>Converts a signed 64-bit integer to an unsigned 64-bit integer.</p>
+assert Int64.fromNat64(123_456) == (+123_456 : Int64);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat64</span> : <a href="#type.Int64"><span class="type">Int64</span></a> -&gt; <span class="type">Nat64</span></code></h4><p><p>Converts a signed 64-bit integer to an unsigned 64-bit integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.toNat64(-1) == 18_446_744_073_709_551_615 : Nat64 // underflow;</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Int64"><span class="type">Int64</span></a>) : <span class="type">Text</span></code></h4><p><p>Returns the Text representation of <code>x</code>. Textual representation <em>do not</em>
+assert Int64.toNat64(-1) == (18_446_744_073_709_551_615 : Nat64); // underflow</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Int64"><span class="type">Int64</span></a>) : <span class="type">Text</span></code></h4><p><p>Returns the Text representation of <code>x</code>. Textual representation <em>do not</em>
 contain underscores to represent commas.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -325,7 +325,7 @@ assert Int64.bitcountTrailingZero(0x0201_0000) == +16;</code></pre></p></div><di
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.addWrap(2 ** 62, 2 ** 62) == -9_223_372_036_854_775_808 // overflow;</code></pre>
+assert Int64.addWrap(2 ** 62, 2 ** 62) == -9_223_372_036_854_775_808; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>+%</code> operator) is so that you can use it as a function
@@ -335,7 +335,7 @@ as a function value at the moment.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.subWrap(-2 ** 63, 1) == +9_223_372_036_854_775_807 // underflow;</code></pre>
+assert Int64.subWrap(-2 ** 63, 1) == +9_223_372_036_854_775_807; // underflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>-%</code> operator) is so that you can use it as a function
@@ -345,7 +345,7 @@ as a function value at the moment.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.mulWrap(2 ** 32, 2 ** 32) == 0 // overflow;</code></pre>
+assert Int64.mulWrap(2 ** 32, 2 ** 32) == 0; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>*%</code> operator) is so that you can use it as a function
@@ -356,7 +356,7 @@ as a function value at the moment.</p>
 Traps if <code>y &lt; 0 or y &gt;= 64</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int64.powWrap(2, 63) == -9_223_372_036_854_775_808 // overflow;</code></pre>
+assert Int64.powWrap(2, 63) == -9_223_372_036_854_775_808; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>**%</code> operator) is so that you can use it as a function

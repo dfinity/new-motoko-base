@@ -32,18 +32,18 @@ assert Int32.toInt16(-123) == -123 : Int16;</code></pre></p></div><div class="de
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.fromInt64(-123_456) == -123_456 : Int32;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt64</span> : <a href="#type.Int32"><span class="type">Int32</span></a> -&gt; <span class="type">Int64</span></code></h4><p><p>Converts a 32-bit signed integer to a 64-bit signed integer.</p>
+assert Int32.fromInt64(-123_456) == (-123_456 : Int32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt64</span> : <a href="#type.Int32"><span class="type">Int32</span></a> -&gt; <span class="type">Int64</span></code></h4><p><p>Converts a 32-bit signed integer to a 64-bit signed integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.toInt64(-123_456) == -123_456 : Int64;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat32</span> : <span class="type">Nat32</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts an unsigned 32-bit integer to a signed 32-bit integer.</p>
+assert Int32.toInt64(-123_456) == (-123_456 : Int64);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat32</span> : <span class="type">Nat32</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts an unsigned 32-bit integer to a signed 32-bit integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.fromNat32(123_456) == +123_456 : Int32;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat32</span> : <a href="#type.Int32"><span class="type">Int32</span></a> -&gt; <span class="type">Nat32</span></code></h4><p><p>Converts a signed 32-bit integer to an unsigned 32-bit integer.</p>
+assert Int32.fromNat32(123_456) == (+123_456 : Int32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat32</span> : <a href="#type.Int32"><span class="type">Int32</span></a> -&gt; <span class="type">Nat32</span></code></h4><p><p>Converts a signed 32-bit integer to an unsigned 32-bit integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.toNat32(-1) == 4_294_967_295 : Nat32 // underflow;</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Int32"><span class="type">Int32</span></a>) : <span class="type">Text</span></code></h4><p><p>Returns the Text representation of <code>x</code>. Textual representation <em>do not</em>
+assert Int32.toNat32(-1) == (4_294_967_295 : Nat32); // underflow</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Int32"><span class="type">Int32</span></a>) : <span class="type">Text</span></code></h4><p><p>Returns the Text representation of <code>x</code>. Textual representation <em>do not</em>
 contain underscores to represent commas.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -330,7 +330,7 @@ assert Int32.bitcountTrailingZero(0x0201_0000) == +16;</code></pre></p></div><di
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.addWrap(2 ** 30, 2 ** 30) == -2_147_483_648 // overflow;</code></pre>
+assert Int32.addWrap(2 ** 30, 2 ** 30) == -2_147_483_648; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>+%</code> operator) is so that you can use it as a function
@@ -340,7 +340,7 @@ as a function value at the moment.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.subWrap(-2 ** 31, 1) == +2_147_483_647 // underflow;</code></pre>
+assert Int32.subWrap(-2 ** 31, 1) == +2_147_483_647; // underflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>-%</code> operator) is so that you can use it as a function
@@ -350,7 +350,7 @@ as a function value at the moment.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.mulWrap(2 ** 16, 2 ** 16) == 0 // overflow;</code></pre>
+assert Int32.mulWrap(2 ** 16, 2 ** 16) == 0; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>*%</code> operator) is so that you can use it as a function
@@ -361,7 +361,7 @@ as a function value at the moment.</p>
 Traps if <code>y &lt; 0 or y &gt;= 32</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.powWrap(2, 31) == -2_147_483_648 // overflow;</code></pre>
+assert Int32.powWrap(2, 31) == -2_147_483_648; // overflow</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>**%</code> operator) is so that you can use it as a function

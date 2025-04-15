@@ -13,22 +13,22 @@ assert Int32.minValue == -2_147_483_648;</code></pre></p></div><div class="decla
 assert Int32.maxValue == +2_147_483_647;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt</span> : <a href="#type.Int32"><span class="type">Int32</span></a> -&gt; <span class="type">Int</span></code></h4><p><p>Converts a 32-bit signed integer to a signed integer with infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.toInt(123_456) == 123_456 : Int;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt</span> : <span class="type">Int</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 32-bit signed integer.</p>
+assert Int32.toInt(123_456) == (123_456 : Int);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt</span> : <span class="type">Int</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 32-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.fromInt(123_456) == +123_456 : Int32;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 32-bit signed integer.</p>
+assert Int32.fromInt(123_456) == (+123_456 : Int32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a signed integer with infinite precision to a 32-bit signed integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.fromIntWrap(-123_456) == -123_456 : Int;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt16</span> : <span class="type">Int16</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a 16-bit signed integer to a 32-bit signed integer.</p>
+assert Int32.fromIntWrap(-123_456) == (-123_456 : Int);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt16</span> : <span class="type">Int16</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a 16-bit signed integer to a 32-bit signed integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.fromInt16(-123) == -123 : Int32;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt16</span> : <a href="#type.Int32"><span class="type">Int32</span></a> -&gt; <span class="type">Int16</span></code></h4><p><p>Converts a 32-bit signed integer to a 16-bit signed integer.</p>
+assert Int32.fromInt16(-123) == (-123 : Int32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toInt16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toInt16</span> : <a href="#type.Int32"><span class="type">Int32</span></a> -&gt; <span class="type">Int16</span></code></h4><p><p>Converts a 32-bit signed integer to a 16-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int32.toInt16(-123) == -123 : Int16;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt64</span> : <span class="type">Int64</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a 64-bit signed integer to a 32-bit signed integer.</p>
+assert Int32.toInt16(-123) == (-123 : Int16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromInt64"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromInt64</span> : <span class="type">Int64</span> -&gt; <a href="#type.Int32"><span class="type">Int32</span></a></code></h4><p><p>Converts a 64-bit signed integer to a 32-bit signed integer.</p>
 <p>Traps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

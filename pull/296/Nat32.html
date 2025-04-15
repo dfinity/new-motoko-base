@@ -10,7 +10,7 @@ import Nat32 &quot;mo:base/Nat32&quot;;</code></pre><div class="declaration"><h4
 assert Nat32.maxValue == (4294967295 : Nat32);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat</span> : <a href="#type.Nat32"><span class="type">Nat32</span></a> -&gt; <span class="type">Nat</span></code></h4><p><p>Converts a 32-bit unsigned integer to an unsigned integer with infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Nat32.toNat(123) == 123 : Nat;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat</span> : <span class="type">Nat</span> -&gt; <a href="#type.Nat32"><span class="type">Nat32</span></a></code></h4><p><p>Converts an unsigned integer with infinite precision to a 32-bit unsigned integer.</p>
+assert Nat32.toNat(123) == (123 : Nat);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat</span> : <span class="type">Nat</span> -&gt; <a href="#type.Nat32"><span class="type">Nat32</span></a></code></h4><p><p>Converts an unsigned integer with infinite precision to a 32-bit unsigned integer.</p>
 <p>Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

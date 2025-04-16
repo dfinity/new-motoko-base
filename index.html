@@ -463,8 +463,10 @@ import Nat &quot;mo:base/Nat&quot;;
 let swapped = Tuple2.swap((1, &quot;hello&quot;));
 assert swapped == (&quot;hello&quot;, 1);
 let text = Tuple3.toText((1, true, 3), Nat.toText, Bool.toText, Nat.toText);
-assert text == &quot;(1, true, 3)&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Provides extended utility functions on <code>[var]</code> Arrays.</p>
-<p>Note the difference between mutable and non-mutable arrays below.</p>
+assert text == &quot;(1, true, 3)&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="Types.html">Types</a><div class="index-item-comment"></div></li><li class="index-item"><a class="index-item-link" href="VarArray.html">VarArray</a><div class="index-item-comment"><p>Provides extended utility functions on mutable Arrays (<code>[var]</code>).</p>
+<p>Note the difference between mutable (<code>[var]</code>) and immutable (<code>[]</code>) arrays.
+Mutable arrays allow their elements to be modified after creation, while
+immutable arrays are fixed once created.</p>
 <p>WARNING: If you are looking for a list that can grow and shrink in size,
 it is recommended you use <code>List</code> for those purposes.
 Arrays must be created with a fixed size.</p>

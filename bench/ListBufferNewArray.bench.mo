@@ -5,7 +5,6 @@ import PureList "../src/pure/List";
 import Runtime "../src/Runtime";
 import Buffer "utils/Buffer";
 
-
 module {
   public func init() : Bench.Bench {
     let bench = Bench.Bench();
@@ -16,7 +15,7 @@ module {
     bench.rows([
       "List",
       "pure/List",
-      "Buffer",
+      "Buffer"
     ]);
     bench.cols([
       "0 (baseline)",
@@ -33,12 +32,12 @@ module {
             switch col {
               case "0 (baseline)" {
                 let list = List.empty<Nat>();
-                ignore List.toArray(list);
+                ignore List.toArray(list)
               };
               case "1" {
                 let list = List.empty<Nat>();
                 List.add(list, 0);
-                ignore List.toArray(list);
+                ignore List.toArray(list)
               };
               case "5" {
                 let list = List.empty<Nat>();
@@ -47,7 +46,7 @@ module {
                 List.add(list, 2);
                 List.add(list, 3);
                 List.add(list, 4);
-                ignore List.toArray(list);
+                ignore List.toArray(list)
               };
               case "10" {
                 let list = List.empty<Nat>();
@@ -61,30 +60,30 @@ module {
                 List.add(list, 7);
                 List.add(list, 8);
                 List.add(list, 9);
-                ignore List.toArray(list);
+                ignore List.toArray(list)
               };
               case "100 (for loop)" {
                 let list = List.empty<Nat>();
                 var i = 0;
                 while (i < 100) {
                   List.add(list, i);
-                  i += 1;
+                  i += 1
                 };
-                ignore List.toArray(list);
+                ignore List.toArray(list)
               };
               case _ Runtime.unreachable()
-            };
+            }
           };
           case "pure/List" {
             switch col {
               case "0 (baseline)" {
                 var list = PureList.empty<Nat>();
-                ignore PureList.toArray(list);
+                ignore PureList.toArray(list)
               };
               case "1" {
                 var list = PureList.empty<Nat>();
                 list := ?(0, list);
-                ignore PureList.toArray(list);
+                ignore PureList.toArray(list)
               };
               case "5" {
                 var list = PureList.empty<Nat>();
@@ -93,7 +92,7 @@ module {
                 list := ?(2, list);
                 list := ?(1, list);
                 list := ?(0, list);
-                ignore PureList.toArray(list);
+                ignore PureList.toArray(list)
               };
               case "10" {
                 var list = PureList.empty<Nat>();
@@ -107,30 +106,30 @@ module {
                 list := ?(2, list);
                 list := ?(1, list);
                 list := ?(0, list);
-                ignore PureList.toArray(list);
+                ignore PureList.toArray(list)
               };
               case "100 (for loop)" {
                 var list = PureList.empty<Nat>();
                 var i = 0;
                 while (i < 100) {
                   list := ?(i, list);
-                  i += 1;
+                  i += 1
                 };
-                ignore PureList.toArray(list);
+                ignore PureList.toArray(list)
               };
               case _ Runtime.unreachable()
-            };
+            }
           };
           case "Buffer" {
             switch col {
               case "0 (baseline)" {
                 let buffer = Buffer.Buffer<Nat>(0);
-                ignore Buffer.toArray(buffer);
+                ignore Buffer.toArray(buffer)
               };
               case "1" {
                 let buffer = Buffer.Buffer<Nat>(1);
                 buffer.add(0);
-                ignore Buffer.toArray(buffer);
+                ignore Buffer.toArray(buffer)
               };
               case "5" {
                 let buffer = Buffer.Buffer<Nat>(5);
@@ -139,7 +138,7 @@ module {
                 buffer.add(2);
                 buffer.add(3);
                 buffer.add(4);
-                ignore Buffer.toArray(buffer);
+                ignore Buffer.toArray(buffer)
               };
               case "10" {
                 let buffer = Buffer.Buffer<Nat>(10);
@@ -153,19 +152,19 @@ module {
                 buffer.add(7);
                 buffer.add(8);
                 buffer.add(9);
-                ignore Buffer.toArray(buffer);
+                ignore Buffer.toArray(buffer)
               };
               case "100 (for loop)" {
                 let buffer = Buffer.Buffer<Nat>(100);
                 var i = 0;
                 while (i < 100) {
                   buffer.add(i);
-                  i += 1;
+                  i += 1
                 };
-                ignore Buffer.toArray(buffer);
+                ignore Buffer.toArray(buffer)
               };
               case _ Runtime.unreachable()
-            };
+            }
           };
           case _ Runtime.unreachable()
         }

@@ -9,29 +9,29 @@ import Nat &quot;mo:base/Nat&quot;;</code></pre><div class="declaration"><h4 cla
 representation <em>do not</em> contain underscores to represent commas.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.toText(1234) // =&gt; &quot;1234&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromText"><code><span class="keyword">public func </span><span class="fnname">fromText</span>(<span class="parameter">text</span> : <span class="type">Text</span>) : ?<a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Creates a natural number from its textual representation. Returns <code>null</code>
+assert Nat.toText(1234) == &quot;1234&quot;;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromText"><code><span class="keyword">public func </span><span class="fnname">fromText</span>(<span class="parameter">text</span> : <span class="type">Text</span>) : ?<a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Creates a natural number from its textual representation. Returns <code>null</code>
 if the input is not a valid natural number.</p>
 <p>The textual representation <em>must not</em> contain underscores.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.fromText(&quot;1234&quot;) // =&gt; ?1234</code></pre></p></div><div class="declaration"><h4 class="function" id="fromInt"><code><span class="keyword">public func </span><span class="fnname">fromInt</span>(<span class="parameter">int</span> : <span class="type">Int</span>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
+assert Nat.fromText(&quot;1234&quot;) == ?1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="fromInt"><code><span class="keyword">public func </span><span class="fnname">fromInt</span>(<span class="parameter">int</span> : <span class="type">Int</span>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.fromInt(1234) // =&gt; 1234 : Nat</code></pre></p></div><div class="declaration"><h4 class="function" id="toInt"><code><span class="keyword">public func </span><span class="fnname">toInt</span>(<span class="parameter">nat</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Int</span></code></h4><p><p>Converts a natural number to an integer.</p>
+assert Nat.fromInt(1234) == (1234 : Nat);</code></pre></p></div><div class="declaration"><h4 class="function" id="toInt"><code><span class="keyword">public func </span><span class="fnname">toInt</span>(<span class="parameter">nat</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Int</span></code></h4><p><p>Converts a natural number to an integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Nat.toInt(1234) == 1234</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>
+assert Nat.toInt(1234) == 1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.min(1, 2) // =&gt; 1</code></pre></p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the maximum of <code>x</code> and <code>y</code>.</p>
+assert Nat.min(1, 2) == 1;</code></pre></p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the maximum of <code>x</code> and <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.max(1, 2) // =&gt; 2</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for Nat types.
+assert Nat.max(1, 2) == 2;</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for Nat types.
 This is equivalent to <code>x == y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.equal(1, 1); // =&gt; true
-1 == 1 // =&gt; true</code></pre>
+assert Nat.equal(1, 1);
+assert 1 == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>==</code> operator) is so that you can use it as a function
@@ -41,12 +41,12 @@ as a function value at the moment.</p>
 <pre><code>motoko include=import
 let a = 111;
 let b = 222;
-Nat.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat types.
+assert not Nat.equal(a, b);</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.notEqual(1, 2); // =&gt; true
-1 != 2 // =&gt; true</code></pre>
+assert Nat.notEqual(1, 2);
+assert 1 != 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>!=</code> operator) is so that you can use it as a function
@@ -56,8 +56,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &lt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.less(1, 2); // =&gt; true
-1 &lt; 2 // =&gt; true</code></pre>
+assert Nat.less(1, 2);
+assert 1 &lt; 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;</code> operator) is so that you can use it as a function
@@ -67,8 +67,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &lt;= y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.lessOrEqual(1, 2); // =&gt; true
-1 &lt;= 2 // =&gt; true</code></pre>
+assert Nat.lessOrEqual(1, 2);
+assert 1 &lt;= 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;=</code> operator) is so that you can use it as a function
@@ -78,8 +78,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.greater(2, 1); // =&gt; true
-2 &gt; 1 // =&gt; true</code></pre>
+assert Nat.greater(2, 1);
+assert 2 &gt; 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&gt;</code> operator) is so that you can use it as a function
@@ -89,8 +89,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &gt;= y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.greaterOrEqual(2, 1); // =&gt; true
-2 &gt;= 1 // =&gt; true</code></pre>
+assert Nat.greaterOrEqual(2, 1);
+assert 2 &gt;= 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&gt;=</code> operator) is so that you can use it as a function
@@ -100,18 +100,18 @@ as a function value at the moment.</p>
 either <code>#less</code>, <code>#equal</code>, or <code>#greater</code>) of comparing <code>x</code> with <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.compare(2, 3) // =&gt; #less</code></pre>
+assert Nat.compare(2, 3) == #less;</code></pre>
 
 <p>This function can be used as value for a high order function, such as a sort function.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.sort([2, 3, 1], Nat.compare) // =&gt; [1, 2, 3]</code></pre></p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x + y</code>. This operator will never overflow
+assert Array.sort([2, 3, 1], Nat.compare) == [1, 2, 3];</code></pre></p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x + y</code>. This operator will never overflow
 because <code>Nat</code> is infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.add(1, 2); // =&gt; 3
-1 + 2 // =&gt; 3</code></pre>
+assert Nat.add(1, 2) == 3;
+assert 1 + 2 == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>+</code> operator) is so that you can use it as a function
@@ -120,13 +120,13 @@ as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.foldLeft([2, 3, 1], 0, Nat.add) // =&gt; 6</code></pre></p></div><div class="declaration"><h4 class="function" id="sub"><code><span class="keyword">public func </span><span class="fnname">sub</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x - y</code>.
+assert Array.foldLeft([2, 3, 1], 0, Nat.add) == 6;</code></pre></p></div><div class="declaration"><h4 class="function" id="sub"><code><span class="keyword">public func </span><span class="fnname">sub</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x - y</code>.
 Traps on underflow below <code>0</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.sub(2, 1); // =&gt; 1
+assert Nat.sub(2, 1) == 1;
 // Add a type annotation to avoid a warning about the subtraction
-2 - 1 : Nat // =&gt; 1</code></pre>
+assert 2 - 1 : Nat == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>-</code> operator) is so that you can use it as a function
@@ -135,12 +135,12 @@ as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.foldLeft([2, 3, 1], 10, Nat.sub) // =&gt; 4</code></pre></p></div><div class="declaration"><h4 class="function" id="mul"><code><span class="keyword">public func </span><span class="fnname">mul</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x * y</code>. This operator will never
+assert Array.foldLeft([2, 3, 1], 10, Nat.sub) == 4;</code></pre></p></div><div class="declaration"><h4 class="function" id="mul"><code><span class="keyword">public func </span><span class="fnname">mul</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x * y</code>. This operator will never
 overflow because <code>Nat</code> is infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.mul(2, 3); // =&gt; 6
-2 * 3 // =&gt; 6</code></pre>
+assert Nat.mul(2, 3) == 6;
+assert 2 * 3 == 6;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>*</code> operator) is so that you can use it as a function
@@ -149,14 +149,14 @@ as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.foldLeft([2, 3, 1], 1, Nat.mul) // =&gt; 6</code></pre></p></div><div class="declaration"><h4 class="function" id="div"><code><span class="keyword">public func </span><span class="fnname">div</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the unsigned integer division of <code>x</code> by <code>y</code>,  <code>x / y</code>.
+assert Array.foldLeft([2, 3, 1], 1, Nat.mul) == 6;</code></pre></p></div><div class="declaration"><h4 class="function" id="div"><code><span class="keyword">public func </span><span class="fnname">div</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the unsigned integer division of <code>x</code> by <code>y</code>,  <code>x / y</code>.
 Traps when <code>y</code> is zero.</p>
 <p>The quotient is rounded down, which is equivalent to truncating the
 decimal places of the quotient.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.div(6, 2); // =&gt; 3
-6 / 2 // =&gt; 3</code></pre>
+assert Nat.div(6, 2) == 3;
+assert 6 / 2 == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>/</code> operator) is so that you can use it as a function
@@ -166,8 +166,8 @@ as a function value at the moment.</p>
 Traps when <code>y</code> is zero.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.rem(6, 4); // =&gt; 2
-6 % 4 // =&gt; 2</code></pre>
+assert Nat.rem(6, 4) == 2;
+assert 6 % 4 == 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>%</code> operator) is so that you can use it as a function
@@ -177,8 +177,8 @@ as a function value at the moment.</p>
 will never overflow because <code>Nat</code> is infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat.pow(2, 3); // =&gt; 8
-2 ** 3 // =&gt; 8</code></pre>
+assert Nat.pow(2, 3) == 8;
+assert 2 ** 3 == 8;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>**</code> operator) is so that you can use it as a function
@@ -187,7 +187,7 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitshiftLeft"><code><span class="keyword">public func </span><span class="fnname">bitshiftLeft</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <span class="type">Nat32</span>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the (conceptual) bitwise shift left of <code>x</code> by <code>y</code>, <code>x * (2 ** y)</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.bitshiftLeft(1, 3); // =&gt; 8</code></pre>
+assert Nat.bitshiftLeft(1, 3) == 8;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in absence
 of the <code>&lt;&lt;</code> operator) is so that you can use it as a function
@@ -198,7 +198,7 @@ rule.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitshiftRight"><code><span class="keyword">public func </span><span class="fnname">bitshiftRight</span>(<span class="parameter">x</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">y</span> : <span class="type">Nat32</span>) : <a href="#type.Nat"><span class="type">Nat</span></a></code></h4><p><p>Returns the (conceptual) bitwise shift right of <code>x</code> by <code>y</code>, <code>x / (2 ** y)</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat.bitshiftRight(8, 3); // =&gt; 1</code></pre>
+assert Nat.bitshiftRight(8, 3) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in absence
 of the <code>&gt;&gt;</code> operator) is so that you can use it as a function
@@ -211,34 +211,34 @@ rule.</p>
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat.range(1, 4);
-assert(?1 == iter.next());
-assert(?2 == iter.next());
-assert(?3 == iter.next());
-assert(null == iter.next());</code></pre>
+assert iter.next() == ?1;
+assert iter.next() == ?2;
+assert iter.next() == ?3;
+assert iter.next() == null;</code></pre>
 
 <p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat.range(4, 1);
-assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeBy"><code><span class="keyword">public func </span><span class="fnname">rangeBy</span>(<br/>  <span class="parameter">fromInclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">toExclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">step</span> : <span class="type">Int</span><br/>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat</code> values from the first to second argument with an exclusive upper bound,
+assert iter.next() == null; // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeBy"><code><span class="keyword">public func </span><span class="fnname">rangeBy</span>(<br/>  <span class="parameter">fromInclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">toExclusive</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">step</span> : <span class="type">Int</span><br/>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat</code> values from the first to second argument with an exclusive upper bound,
 incrementing by the specified step size. The step can be positive or negative.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 // Positive step
 let iter1 = Nat.rangeBy(1, 7, 2);
-assert(?1 == iter1.next());
-assert(?3 == iter1.next());
-assert(?5 == iter1.next());
-assert(null == iter1.next());
+assert iter1.next() == ?1;
+assert iter1.next() == ?3;
+assert iter1.next() == ?5;
+assert iter1.next() == null;
 
 // Negative step
 let iter2 = Nat.rangeBy(7, 1, -2);
-assert(?7 == iter2.next());
-assert(?5 == iter2.next());
-assert(?3 == iter2.next());
-assert(null == iter2.next());</code></pre>
+assert iter2.next() == ?7;
+assert iter2.next() == ?5;
+assert iter2.next() == ?3;
+assert iter2.next() == null;</code></pre>
 
 <p>If <code>step</code> is 0 or if the iteration would not progress towards the bound, returns an empty iterator.</p>
 </p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <span class="parameter">to</span> : <a href="#type.Nat"><span class="type">Nat</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument, inclusive.</p>
@@ -246,36 +246,36 @@ assert(null == iter2.next());</code></pre>
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat.rangeInclusive(1, 3);
-assert(?1 == iter.next());
-assert(?2 == iter.next());
-assert(?3 == iter.next());
-assert(null == iter.next());</code></pre>
+assert iter.next() == ?1;
+assert iter.next() == ?2;
+assert iter.next() == ?3;
+assert iter.next() == null;</code></pre>
 
 <p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat.rangeInclusive(3, 1);
-assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeByInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeByInclusive</span>(<br/>  <span class="parameter">from</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">to</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">step</span> : <span class="type">Int</span><br/>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument, inclusive,
+assert iter.next() == null; // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeByInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeByInclusive</span>(<br/>  <span class="parameter">from</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">to</span> : <a href="#type.Nat"><span class="type">Nat</span></a>, <br/>  <span class="parameter">step</span> : <span class="type">Int</span><br/>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat"><span class="type">Nat</span></a>&gt;</code></h4><p><p>Returns an iterator over the integers from the first to second argument, inclusive,
 incrementing by the specified step size. The step can be positive or negative.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 // Positive step
 let iter1 = Nat.rangeByInclusive(1, 7, 2);
-assert(?1 == iter1.next());
-assert(?3 == iter1.next());
-assert(?5 == iter1.next());
-assert(?7 == iter1.next());
-assert(null == iter1.next());
+assert iter1.next() == ?1;
+assert iter1.next() == ?3;
+assert iter1.next() == ?5;
+assert iter1.next() == ?7;
+assert iter1.next() == null;
 
 // Negative step
 let iter2 = Nat.rangeByInclusive(7, 1, -2);
-assert(?7 == iter2.next());
-assert(?5 == iter2.next());
-assert(?3 == iter2.next());
-assert(?1 == iter2.next());
-assert(null == iter2.next());</code></pre>
+assert iter2.next() == ?7;
+assert iter2.next() == ?5;
+assert iter2.next() == ?3;
+assert iter2.next() == ?1;
+assert iter2.next() == null;</code></pre>
 
 <p>If <code>from == to</code>, return an iterator which only</p>
 <p>Otherwise, if <code>step</code> is 0 or if the iteration would not progress towards the bound, returns an empty iterator.</p>
@@ -284,7 +284,7 @@ assert(null == iter2.next());</code></pre>
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat.allValues();
-assert(?0 == iter.next());
-assert(?1 == iter.next());
-assert(?2 == iter.next());
+assert iter.next() == ?0;
+assert iter.next() == ?1;
+assert iter.next() == ?2;
 // ...</code></pre></p></div></div></body></html>

@@ -7,39 +7,39 @@ import Nat8 &quot;mo:base/Nat8&quot;;</code></pre><div class="declaration"><h4 c
 </p></div><div class="declaration"><h4 class="value-declaration" id="maxValue"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">maxValue</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Maximum 8-bit natural number. <code>2 ** 8 - 1</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.maxValue; // =&gt; 255 : Nat8</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a> -&gt; <span class="type">Nat</span></code></h4><p><p>Converts an 8-bit unsigned integer to an unsigned integer with infinite precision.</p>
+assert Nat8.maxValue == (255 : Nat8);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a> -&gt; <span class="type">Nat</span></code></h4><p><p>Converts an 8-bit unsigned integer to an unsigned integer with infinite precision.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.toNat(123); // =&gt; 123 : Nat</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat</span> : <span class="type">Nat</span> -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Converts an unsigned integer with infinite precision to an 8-bit unsigned integer.</p>
+assert Nat8.toNat(123) == (123 : Nat);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat</span> : <span class="type">Nat</span> -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Converts an unsigned integer with infinite precision to an 8-bit unsigned integer.</p>
 <p>Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.fromNat(123); // =&gt; 123 : Nat8</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat16</span> : <span class="type">Nat16</span> -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Converts a 16-bit unsigned integer to a 8-bit unsigned integer.</p>
+assert Nat8.fromNat(123) == (123 : Nat8);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromNat16</span> : <span class="type">Nat16</span> -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Converts a 16-bit unsigned integer to a 8-bit unsigned integer.</p>
 <p>Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.fromNat16(123); // =&gt; 123 : Nat8</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat16</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a> -&gt; <span class="type">Nat16</span></code></h4><p><p>Converts an 8-bit unsigned integer to a 16-bit unsigned integer.</p>
+assert Nat8.fromNat16(123) == (123 : Nat8);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="toNat16"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat16</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a> -&gt; <span class="type">Nat16</span></code></h4><p><p>Converts an 8-bit unsigned integer to a 16-bit unsigned integer.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.toNat16(123); // =&gt; 123 : Nat16</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Converts a signed integer with infinite precision to an 8-bit unsigned integer.</p>
+assert Nat8.toNat16(123) == (123 : Nat16);</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="fromIntWrap"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">fromIntWrap</span> : <span class="type">Int</span> -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Converts a signed integer with infinite precision to an 8-bit unsigned integer.</p>
 <p>Wraps on overflow/underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.fromIntWrap(123); // =&gt; 123 : Nat8</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <span class="type">Text</span></code></h4><p><p>Converts <code>x</code> to its textual representation.</p>
+assert Nat8.fromIntWrap(123) == (123 : Nat8);</code></pre></p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <span class="type">Text</span></code></h4><p><p>Converts <code>x</code> to its textual representation.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.toText(123); // =&gt; &quot;123&quot; : Text</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>
+assert Nat8.toText(123) == (&quot;123&quot; : Text);</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the minimum of <code>x</code> and <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.min(123, 200); // =&gt; 123 : Nat8</code></pre></p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the maximum of <code>x</code> and <code>y</code>.</p>
+assert Nat8.min(123, 200) == (123 : Nat8);</code></pre></p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the maximum of <code>x</code> and <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.max(123, 200); // =&gt; 200 : Nat8</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for Nat8 types.
+assert Nat8.max(123, 200) == (200 : Nat8);</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <span class="type">Bool</span></code></h4><p><p>Equality function for Nat8 types.
 This is equivalent to <code>x == y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.equal(1, 1); // =&gt; true
-(1 : Nat8) == (1 : Nat8) // =&gt; true</code></pre>
+assert Nat8.equal(1, 1);
+assert (1 : Nat8) == (1 : Nat8);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>==</code> operator) is so that you can use it as a function
@@ -49,12 +49,12 @@ as a function value at the moment.</p>
 <pre><code>motoko include=import
 let a : Nat8 = 111;
 let b : Nat8 = 222;
-Nat8.equal(a, b) // =&gt; false</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat8 types.
+assert not Nat8.equal(a, b);</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <span class="type">Bool</span></code></h4><p><p>Inequality function for Nat8 types.
 This is equivalent to <code>x != y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.notEqual(1, 2); // =&gt; true
-(1 : Nat8) != (2 : Nat8) // =&gt; true</code></pre>
+assert Nat8.notEqual(1, 2);
+assert (1 : Nat8) != (2 : Nat8);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>!=</code> operator) is so that you can use it as a function
@@ -64,8 +64,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &lt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.less(1, 2); // =&gt; true
-(1 : Nat8) &lt; (2 : Nat8) // =&gt; true</code></pre>
+assert Nat8.less(1, 2);
+assert (1 : Nat8) &lt; (2 : Nat8);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;</code> operator) is so that you can use it as a function
@@ -75,8 +75,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &lt;= y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.lessOrEqual(1, 2); // =&gt; true
-1 &lt;= 2 // =&gt; true</code></pre>
+assert Nat8.lessOrEqual(1, 2);
+assert 1 &lt;= 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;=</code> operator) is so that you can use it as a function
@@ -86,8 +86,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.greater(2, 1); // =&gt; true
-(2 : Nat8) &gt; (1 : Nat8) // =&gt; true</code></pre>
+assert Nat8.greater(2, 1);
+assert (2 : Nat8) &gt; (1 : Nat8);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&gt;</code> operator) is so that you can use it as a function
@@ -97,8 +97,8 @@ as a function value at the moment.</p>
 This is equivalent to <code>x &gt;= y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.greaterOrEqual(2, 1); // =&gt; true
-(2 : Nat8) &gt;= (1 : Nat8) // =&gt; true</code></pre>
+assert Nat8.greaterOrEqual(2, 1);
+assert (2 : Nat8) &gt;= (1 : Nat8);</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&gt;=</code> operator) is so that you can use it as a function
@@ -108,18 +108,18 @@ as a function value at the moment.</p>
 either <code>#less</code>, <code>#equal</code>, or <code>#greater</code>) of comparing <code>x</code> with <code>y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.compare(2, 3) // =&gt; #less</code></pre>
+assert Nat8.compare(2, 3) == #less;</code></pre>
 
 <p>This function can be used as value for a high order function, such as a sort function.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.sort([2, 3, 1] : [Nat8], Nat8.compare) // =&gt; [1, 2, 3]</code></pre></p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x + y</code>.
+assert Array.sort([2, 3, 1] : [Nat8], Nat8.compare) == [1, 2, 3];</code></pre></p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x + y</code>.
 Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.add(1, 2); // =&gt; 3
-(1 : Nat8) + (2 : Nat8) // =&gt; 3</code></pre>
+assert Nat8.add(1, 2) == 3;
+assert (1 : Nat8) + (2 : Nat8) == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>+</code> operator) is so that you can use it as a function
@@ -128,12 +128,12 @@ as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.foldLeft&lt;Nat8, Nat8&gt;([2, 3, 1], 0, Nat8.add) // =&gt; 6</code></pre></p></div><div class="declaration"><h4 class="function" id="sub"><code><span class="keyword">public func </span><span class="fnname">sub</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x - y</code>.
+assert Array.foldLeft&lt;Nat8, Nat8&gt;([2, 3, 1], 0, Nat8.add) == 6;</code></pre></p></div><div class="declaration"><h4 class="function" id="sub"><code><span class="keyword">public func </span><span class="fnname">sub</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x - y</code>.
 Traps on underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.sub(2, 1); // =&gt; 1
-(2 : Nat8) - (1 : Nat8) // =&gt; 1</code></pre>
+assert Nat8.sub(2, 1) == 1;
+assert (2 : Nat8) - (1 : Nat8) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>-</code> operator) is so that you can use it as a function
@@ -142,12 +142,12 @@ as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.foldLeft&lt;Nat8, Nat8&gt;([2, 3, 1], 20, Nat8.sub) // =&gt; 14</code></pre></p></div><div class="declaration"><h4 class="function" id="mul"><code><span class="keyword">public func </span><span class="fnname">mul</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x * y</code>.
+assert Array.foldLeft&lt;Nat8, Nat8&gt;([2, 3, 1], 20, Nat8.sub) == 14;</code></pre></p></div><div class="declaration"><h4 class="function" id="mul"><code><span class="keyword">public func </span><span class="fnname">mul</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x * y</code>.
 Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.mul(2, 3); // =&gt; 6
-(2 : Nat8) * (3 : Nat8) // =&gt; 6</code></pre>
+assert Nat8.mul(2, 3) == 6;
+assert (2 : Nat8) * (3 : Nat8) == 6;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>*</code> operator) is so that you can use it as a function
@@ -156,12 +156,12 @@ as a function value at the moment.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Array &quot;mo:base/Array&quot;;
-Array.foldLeft&lt;Nat8, Nat8&gt;([2, 3, 1], 1, Nat8.mul) // =&gt; 6</code></pre></p></div><div class="declaration"><h4 class="function" id="div"><code><span class="keyword">public func </span><span class="fnname">div</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the quotient of <code>x</code> divided by <code>y</code>, <code>x / y</code>.
+assert Array.foldLeft&lt;Nat8, Nat8&gt;([2, 3, 1], 1, Nat8.mul) == 6;</code></pre></p></div><div class="declaration"><h4 class="function" id="div"><code><span class="keyword">public func </span><span class="fnname">div</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the quotient of <code>x</code> divided by <code>y</code>, <code>x / y</code>.
 Traps when <code>y</code> is zero.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.div(6, 2); // =&gt; 3
-(6 : Nat8) / (2 : Nat8) // =&gt; 3</code></pre>
+assert Nat8.div(6, 2) == 3;
+assert (6 : Nat8) / (2 : Nat8) == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>/</code> operator) is so that you can use it as a function
@@ -171,8 +171,8 @@ as a function value at the moment.</p>
 Traps when <code>y</code> is zero.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.rem(6, 4); // =&gt; 2
-(6 : Nat8) % (4 : Nat8) // =&gt; 2</code></pre>
+assert Nat8.rem(6, 4) == 2;
+assert (6 : Nat8) % (4 : Nat8) == 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>%</code> operator) is so that you can use it as a function
@@ -182,8 +182,8 @@ as a function value at the moment.</p>
 Traps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.pow(2, 3); // =&gt; 8
-(2 : Nat8) ** (3 : Nat8) // =&gt; 8</code></pre>
+assert Nat8.pow(2, 3) == 8;
+assert (2 : Nat8) ** (3 : Nat8) == 8;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>**</code> operator) is so that you can use it as a function
@@ -192,8 +192,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitnot"><code><span class="keyword">public func </span><span class="fnname">bitnot</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise negation of <code>x</code>, <code>^x</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitnot(0); // =&gt; 255
-^(0 : Nat8) // =&gt; 255</code></pre>
+assert Nat8.bitnot(0) == 255;
+assert ^(0 : Nat8) == 255;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>^</code> operator) is so that you can use it as a function
@@ -202,8 +202,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitand"><code><span class="keyword">public func </span><span class="fnname">bitand</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise and of <code>x</code> and <code>y</code>, <code>x &amp; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitand(3, 2); // =&gt; 2
-(3 : Nat8) &amp; (2 : Nat8) // =&gt; 2</code></pre>
+assert Nat8.bitand(3, 2) == 2;
+assert (3 : Nat8) &amp; (2 : Nat8) == 2;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&amp;</code> operator) is so that you can use it as a function
@@ -212,8 +212,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitor"><code><span class="keyword">public func </span><span class="fnname">bitor</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise or of <code>x</code> and <code>y</code>, <code>x | y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitor(3, 2); // =&gt; 3
-(3 : Nat8) | (2 : Nat8) // =&gt; 3</code></pre>
+assert Nat8.bitor(3, 2) == 3;
+assert (3 : Nat8) | (2 : Nat8) == 3;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>|</code> operator) is so that you can use it as a function
@@ -222,8 +222,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitxor"><code><span class="keyword">public func </span><span class="fnname">bitxor</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise exclusive or of <code>x</code> and <code>y</code>, <code>x ^ y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitxor(3, 2); // =&gt; 1
-(3 : Nat8) ^ (2 : Nat8) // =&gt; 1</code></pre>
+assert Nat8.bitxor(3, 2) == 1;
+assert (3 : Nat8) ^ (2 : Nat8) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>^</code> operator) is so that you can use it as a function
@@ -232,8 +232,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitshiftLeft"><code><span class="keyword">public func </span><span class="fnname">bitshiftLeft</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise shift left of <code>x</code> by <code>y</code>, <code>x &lt;&lt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitshiftLeft(1, 2); // =&gt; 4
-(1 : Nat8) &lt;&lt; (2 : Nat8) // =&gt; 4</code></pre>
+assert Nat8.bitshiftLeft(1, 2) == 4;
+assert (1 : Nat8) &lt;&lt; (2 : Nat8) == 4;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;&lt;</code> operator) is so that you can use it as a function
@@ -242,8 +242,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitshiftRight"><code><span class="keyword">public func </span><span class="fnname">bitshiftRight</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise shift right of <code>x</code> by <code>y</code>, <code>x &gt;&gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitshiftRight(4, 2); // =&gt; 1
-(4 : Nat8) &gt;&gt; (2 : Nat8) // =&gt; 1</code></pre>
+assert Nat8.bitshiftRight(4, 2) == 1;
+assert (4 : Nat8) &gt;&gt; (2 : Nat8) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&gt;&gt;</code> operator) is so that you can use it as a function
@@ -252,8 +252,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitrotLeft"><code><span class="keyword">public func </span><span class="fnname">bitrotLeft</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise rotate left of <code>x</code> by <code>y</code>, <code>x &lt;&lt;&gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitrotLeft(128, 1); // =&gt; 1
-(128 : Nat8) &lt;&lt;&gt; (1 : Nat8) // =&gt; 1</code></pre>
+assert Nat8.bitrotLeft(128, 1) == 1;
+assert (128 : Nat8) &lt;&lt;&gt; (1 : Nat8) == 1;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;&lt;&gt;</code> operator) is so that you can use it as a function
@@ -262,8 +262,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="bitrotRight"><code><span class="keyword">public func </span><span class="fnname">bitrotRight</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the bitwise rotate right of <code>x</code> by <code>y</code>, <code>x &lt;&gt;&gt; y</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.bitrotRight(1, 1); // =&gt; 128
-(1 : Nat8) &lt;&gt;&gt; (1 : Nat8) // =&gt; 128</code></pre>
+assert Nat8.bitrotRight(1, 1) == 128;
+assert (1 : Nat8) &lt;&gt;&gt; (1 : Nat8) == 128;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>&lt;&gt;&gt;</code> operator) is so that you can use it as a function
@@ -273,29 +273,29 @@ as a function value at the moment.</p>
 This is equivalent to checking if the <code>p</code>-th bit is set in <code>x</code>, using 0 indexing.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.bittest(5, 2); // =&gt; true</code></pre></p></div><div class="declaration"><h4 class="function" id="bitset"><code><span class="keyword">public func </span><span class="fnname">bitset</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">p</span> : <span class="type">Nat</span>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the value of setting bit <code>p mod 8</code> in <code>x</code> to <code>1</code>.</p>
+assert Nat8.bittest(5, 2);</code></pre></p></div><div class="declaration"><h4 class="function" id="bitset"><code><span class="keyword">public func </span><span class="fnname">bitset</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">p</span> : <span class="type">Nat</span>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the value of setting bit <code>p mod 8</code> in <code>x</code> to <code>1</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.bitset(5, 1); // =&gt; 7</code></pre></p></div><div class="declaration"><h4 class="function" id="bitclear"><code><span class="keyword">public func </span><span class="fnname">bitclear</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">p</span> : <span class="type">Nat</span>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the value of clearing bit <code>p mod 8</code> in <code>x</code> to <code>0</code>.</p>
+assert Nat8.bitset(5, 1) == 7;</code></pre></p></div><div class="declaration"><h4 class="function" id="bitclear"><code><span class="keyword">public func </span><span class="fnname">bitclear</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">p</span> : <span class="type">Nat</span>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the value of clearing bit <code>p mod 8</code> in <code>x</code> to <code>0</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.bitclear(5, 2); // =&gt; 1</code></pre></p></div><div class="declaration"><h4 class="function" id="bitflip"><code><span class="keyword">public func </span><span class="fnname">bitflip</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">p</span> : <span class="type">Nat</span>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the value of flipping bit <code>p mod 8</code> in <code>x</code>.</p>
+assert Nat8.bitclear(5, 2) == 1;</code></pre></p></div><div class="declaration"><h4 class="function" id="bitflip"><code><span class="keyword">public func </span><span class="fnname">bitflip</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">p</span> : <span class="type">Nat</span>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the value of flipping bit <code>p mod 8</code> in <code>x</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.bitflip(5, 2); // =&gt; 1</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="bitcountNonZero"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">bitcountNonZero</span> : (<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the count of non-zero bits in <code>x</code>.</p>
+assert Nat8.bitflip(5, 2) == 1;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="bitcountNonZero"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">bitcountNonZero</span> : (<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the count of non-zero bits in <code>x</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.bitcountNonZero(5); // =&gt; 2</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="bitcountLeadingZero"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">bitcountLeadingZero</span> : (<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the count of leading zero bits in <code>x</code>.</p>
+assert Nat8.bitcountNonZero(5) == 2;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="bitcountLeadingZero"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">bitcountLeadingZero</span> : (<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the count of leading zero bits in <code>x</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.bitcountLeadingZero(5); // =&gt; 5</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="bitcountTrailingZero"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">bitcountTrailingZero</span> : (<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the count of trailing zero bits in <code>x</code>.</p>
+assert Nat8.bitcountLeadingZero(5) == 5;</code></pre></p></div><div class="declaration"><h4 class="value-declaration" id="bitcountTrailingZero"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">bitcountTrailingZero</span> : (<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) -&gt; <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the count of trailing zero bits in <code>x</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-Nat8.bitcountTrailingZero(6); // =&gt; 1</code></pre></p></div><div class="declaration"><h4 class="function" id="addWrap"><code><span class="keyword">public func </span><span class="fnname">addWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x +% y</code>. Wraps on overflow.</p>
+assert Nat8.bitcountTrailingZero(6) == 1;</code></pre></p></div><div class="declaration"><h4 class="function" id="addWrap"><code><span class="keyword">public func </span><span class="fnname">addWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the sum of <code>x</code> and <code>y</code>, <code>x +% y</code>. Wraps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.addWrap(230, 26); // =&gt; 0
-(230 : Nat8) +% (26 : Nat8) // =&gt; 0</code></pre>
+assert Nat8.addWrap(230, 26) == 0;
+assert (230 : Nat8) +% (26 : Nat8) == 0;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>+%</code> operator) is so that you can use it as a function
@@ -304,16 +304,16 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="subWrap"><code><span class="keyword">public func </span><span class="fnname">subWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the difference of <code>x</code> and <code>y</code>, <code>x -% y</code>. Wraps on underflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.subWrap(0, 1); // =&gt; 255
-(0 : Nat8) -% (1 : Nat8) // =&gt; 255</code></pre><p>Note: The reason why this function is defined in this library (in addition
+assert Nat8.subWrap(0, 1) == 255;
+assert (0 : Nat8) -% (1 : Nat8) == 255;</code></pre><p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>-%</code> operator) is so that you can use it as a function
 value to pass to a higher order function. It is not possible to use <code>-%</code>
 as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="mulWrap"><code><span class="keyword">public func </span><span class="fnname">mulWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns the product of <code>x</code> and <code>y</code>, <code>x *% y</code>. Wraps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.mulWrap(230, 26); // =&gt; 92
-(230 : Nat8) *% (26 : Nat8) // =&gt; 92</code></pre>
+assert Nat8.mulWrap(230, 26) == 92;
+assert (230 : Nat8) *% (26 : Nat8) == 92;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>*%</code> operator) is so that you can use it as a function
@@ -322,8 +322,8 @@ as a function value at the moment.</p>
 </p></div><div class="declaration"><h4 class="function" id="powWrap"><code><span class="keyword">public func </span><span class="fnname">powWrap</span>(<span class="parameter">x</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">y</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="#type.Nat8"><span class="type">Nat8</span></a></code></h4><p><p>Returns <code>x</code> to the power of <code>y</code>, <code>x **% y</code>. Wraps on overflow.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-ignore Nat8.powWrap(2, 8); // =&gt; 0
-(2 : Nat8) **% (8 : Nat8) // =&gt; 0</code></pre>
+assert Nat8.powWrap(2, 8) == 0;
+assert (2 : Nat8) **% (8 : Nat8) == 0;</code></pre>
 
 <p>Note: The reason why this function is defined in this library (in addition
 to the existing <code>**%</code> operator) is so that you can use it as a function
@@ -334,37 +334,37 @@ as a function value at the moment.</p>
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat8.range(1, 4);
-assert(?1 == iter.next());
-assert(?2 == iter.next());
-assert(?3 == iter.next());
-assert(null == iter.next());</code></pre>
+assert iter.next() == ?1;
+assert iter.next() == ?2;
+assert iter.next() == ?3;
+assert iter.next() == null;</code></pre>
 
 <p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat8.range(4, 1);
-assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">to</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat8"><span class="type">Nat8</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat8</code> values from the first to second argument, inclusive.</p>
+assert iter.next() == null; // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="rangeInclusive"><code><span class="keyword">public func </span><span class="fnname">rangeInclusive</span>(<span class="parameter">from</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>, <span class="parameter">to</span> : <a href="#type.Nat8"><span class="type">Nat8</span></a>) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat8"><span class="type">Nat8</span></a>&gt;</code></h4><p><p>Returns an iterator over <code>Nat8</code> values from the first to second argument, inclusive.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat8.rangeInclusive(1, 3);
-assert(?1 == iter.next());
-assert(?2 == iter.next());
-assert(?3 == iter.next());
-assert(null == iter.next());</code></pre>
+assert iter.next() == ?1;
+assert iter.next() == ?2;
+assert iter.next() == ?3;
+assert iter.next() == null;</code></pre>
 
 <p>If the first argument is greater than the second argument, the function returns an empty iterator.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat8.rangeInclusive(4, 1);
-assert(null == iter.next()); // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat8"><span class="type">Nat8</span></a>&gt;</code></h4><p><p>Returns an iterator over all Nat8 values, from 0 to maxValue.</p>
+assert iter.next() == null; // empty iterator</code></pre></p></div><div class="declaration"><h4 class="function" id="allValues"><code><span class="keyword">public func </span><span class="fnname">allValues</span>() : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.Nat8"><span class="type">Nat8</span></a>&gt;</code></h4><p><p>Returns an iterator over all Nat8 values, from 0 to maxValue.</p>
 <pre><code>motoko include=import
 import Iter &quot;mo:base/Iter&quot;;
 
 let iter = Nat8.allValues();
-assert(?0 == iter.next());
-assert(?1 == iter.next());
-assert(?2 == iter.next());
+assert iter.next() == ?0;
+assert iter.next() == ?1;
+assert iter.next() == ?2;
 // ...</code></pre></p></div></div></body></html>

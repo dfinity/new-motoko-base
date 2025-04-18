@@ -1,7 +1,6 @@
 import Bench "mo:bench";
 import Fuzz "mo:fuzz";
 
-import Array "../src/Array";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
 import List "../src/pure/List";

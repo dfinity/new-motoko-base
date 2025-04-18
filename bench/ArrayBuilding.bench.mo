@@ -1,9 +1,9 @@
 import Bench "mo:bench";
+import Buffer "mo:base-0-14-8/Buffer";
 
 import List "../src/List";
 import PureList "../src/pure/List";
 import Runtime "../src/Runtime";
-import Buffer "utils/Buffer";
 import Nat "../src/Nat";
 import Array "../src/Array";
 import VarArray "../src/VarArray";
@@ -13,7 +13,7 @@ module {
     let bench = Bench.Bench();
 
     bench.name("Large known-size array building");
-    bench.description("");
+    bench.description("Compares performance of different data structures for building arrays of known size.");
 
     bench.rows([
       "List",

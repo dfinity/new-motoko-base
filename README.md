@@ -4,6 +4,60 @@
 
 <details>
 
+<summary>bench/ArrayBuilding.bench.mo $({\color{gray}0\%})$</summary>
+
+### Large known-size array building
+
+_Compares performance of different data structures for building arrays of known size._
+
+
+Instructions: ${\color{gray}0\\%}$
+Heap: ${\color{gray}0\\%}$
+Stable Memory: ${\color{gray}0\\%}$
+Garbage Collection: ${\color{gray}0\\%}$
+
+
+**Instructions**
+
+|                  |    1000 |     100000 |     1000000 |
+| :--------------- | ------: | ---------: | ----------: |
+| List             | 612_011 | 53_730_969 | 531_478_624 |
+| Buffer           | 367_424 | 36_403_920 | 364_004_168 |
+| pure/List        | 318_496 | 31_604_567 | 316_062_532 |
+| VarArray ?T      | 201_911 | 19_903_407 | 199_003_655 |
+| VarArray T       | 178_245 | 17_503_741 | 175_003_989 |
+| Array (baseline) |  44_088 |  4_103_584 |  41_003_832 |
+
+
+**Heap**
+
+|                  |  1000 | 100000 | 1000000 |
+| :--------------- | ----: | -----: | ------: |
+| List             | 272 B |  272 B |   272 B |
+| Buffer           | 272 B |  272 B |   272 B |
+| pure/List        | 272 B |  272 B |   272 B |
+| VarArray ?T      | 272 B |  272 B |   272 B |
+| VarArray T       | 272 B |  272 B |   272 B |
+| Array (baseline) | 272 B |  272 B |   272 B |
+
+
+**Garbage Collection**
+
+|                  |      1000 |     100000 |   1000000 |
+| :--------------- | --------: | ---------: | --------: |
+| List             | 10.05 KiB | 797.56 KiB |  7.67 MiB |
+| Buffer           |  8.71 KiB | 782.15 KiB |  7.63 MiB |
+| pure/List        | 19.95 KiB |   1.91 MiB | 19.07 MiB |
+| VarArray ?T      |  8.24 KiB | 781.68 KiB |  7.63 MiB |
+| VarArray T       |  8.23 KiB | 781.67 KiB |  7.63 MiB |
+| Array (baseline) |   4.3 KiB | 391.02 KiB |  3.82 MiB |
+
+
+</details>
+Saving results to .bench/ArrayBuilding.bench.json
+
+<details>
+
 <summary>bench/FromIters.bench.mo $({\color{gray}0\%})$</summary>
 
 ### Benchmarking the fromIter functions
@@ -46,6 +100,51 @@ Garbage Collection: ${\color{gray}0\\%}$
 
 </details>
 Saving results to .bench/FromIters.bench.json
+
+<details>
+
+<summary>bench/ListBufferNewArray.bench.mo $({\color{gray}0\%})$</summary>
+
+### List vs. Buffer for creating known-size arrays
+
+_Performance comparison between List and Buffer for creating a new array._
+
+
+Instructions: ${\color{gray}0\\%}$
+Heap: ${\color{gray}0\\%}$
+Stable Memory: ${\color{gray}0\\%}$
+Garbage Collection: ${\color{gray}0\\%}$
+
+
+**Instructions**
+
+|           | 0 (baseline) |     1 |      5 |     10 | 100 (for loop) |
+| :-------- | -----------: | ----: | -----: | -----: | -------------: |
+| List      |        1_753 | 3_319 | 10_314 | 15_845 |         82_859 |
+| pure/List |        1_450 | 1_564 |  2_738 |  4_205 |         33_746 |
+| Buffer    |        2_378 | 2_539 |  3_905 |  5_612 |         39_474 |
+
+
+**Heap**
+
+|           | 0 (baseline) |     1 |     5 |    10 | 100 (for loop) |
+| :-------- | -----------: | ----: | ----: | ----: | -------------: |
+| List      |        272 B | 272 B | 272 B | 272 B |          272 B |
+| pure/List |        272 B | 272 B | 272 B | 272 B |          272 B |
+| Buffer    |        272 B | 272 B | 272 B | 272 B |          272 B |
+
+
+**Garbage Collection**
+
+|           | 0 (baseline) |     1 |     5 |    10 | 100 (for loop) |
+| :-------- | -----------: | ----: | ----: | ----: | -------------: |
+| List      |        576 B | 616 B | 776 B | 884 B |       1.93 KiB |
+| pure/List |        360 B | 380 B | 460 B | 560 B |        2.3 KiB |
+| Buffer    |        856 B | 864 B | 896 B | 936 B |       1.62 KiB |
+
+
+</details>
+Saving results to .bench/ListBufferNewArray.bench.json
 
 <details>
 

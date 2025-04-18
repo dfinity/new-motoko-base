@@ -1,9 +1,9 @@
 import Bench "mo:bench";
+import Buffer "mo:base-0-14-8/Buffer";
 
 import List "../src/List";
 import PureList "../src/pure/List";
 import Runtime "../src/Runtime";
-import Buffer "utils/Buffer";
 
 module {
   public func init() : Bench.Bench {

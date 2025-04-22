@@ -1,6 +1,6 @@
 # Changelog
 
-## Next 
+## Next
 
 * Add `entriesFrom` and `reverseEntriesFrom` to `Map`, `valuesFrom` and `reverseValuesFrom` to `Set` and `Text.toText` (#272).
 * Rename `Map.replaceIfExists()` to `Map.replace()` (#286).

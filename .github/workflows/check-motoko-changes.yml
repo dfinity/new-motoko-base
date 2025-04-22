@@ -12,6 +12,9 @@ on:
       has_changelog_changes:
         description: "Whether Changelog.md was modified"
         value: ${{ jobs.check.outputs.has_changelog_changes }}
+      has_mops_dependency_changes:
+        description: "Whether mops dependency versions were changed"
+        value: ${{ jobs.check.outputs.has_mops_dependency_changes }}
 
 jobs:
   check:
@@ -20,6 +23,7 @@ jobs:
       has_mo_changes: ${{ steps.check_mo_changes.outputs.has_mo_changes }}
       has_src_mo_changes: ${{ steps.check_mo_changes.outputs.has_src_mo_changes }}
       has_changelog_changes: ${{ steps.check_mo_changes.outputs.has_changelog_changes }}
+      has_mops_dependency_changes: ${{ steps.check_mo_changes.outputs.has_mops_dependency_changes }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -53,4 +57,12 @@ jobs:
             echo "No Changelog.md changes detected"
           else
             echo "has_changelog_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+          # Check for mops dependency changes
+          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^mops\.toml$'; then
+            echo "has_mops_dependency_changes=false" >> $GITHUB_OUTPUT
+            echo "No mops dependency changes detected"
+          else
+            echo "has_mops_dependency_changes=true" >> $GITHUB_OUTPUT
           fi

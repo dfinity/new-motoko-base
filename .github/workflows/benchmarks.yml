@@ -14,7 +14,7 @@ jobs:
 
   benchmark:
     needs: check-motoko-changes
-    if: needs.check-motoko-changes.outputs.has_mo_changes == 'true'
+    if: needs.check-motoko-changes.outputs.has_mo_changes == 'true' || needs.check-motoko-changes.outputs.has_mops_dependency_changes == 'true'
     runs-on: ubuntu-24.04
     name: Run Benchmarks and Comment on PR or Upload on push
 

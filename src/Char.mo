@@ -28,7 +28,7 @@ import Prim "mo:⛔";
 
 module {
 
-  /// Characters represented as Unicode code points. chagne
+  /// Characters represented as Unicode code points.
   public type Char = Prim.Types.Char;
 
   /// Convert character `char` to a word containing its Unicode scalar value.

@@ -16,7 +16,7 @@ let char : Char = 'A';
 let unicodeChar = '漢';
 let digit = '7';
 assert Char.isDigit(digit);
-assert Char.toText(char) == &quot;A&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Char"><span class="keyword">type </span><span class="type">Char</span> = <span class="type">Prim.Types.Char</span></h4><p><p>Characters represented as Unicode code points.</p>
+assert Char.toText(char) == &quot;A&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Char"><span class="keyword">type </span><span class="type">Char</span> = <span class="type">Prim.Types.Char</span></h4><p><p>Characters represented as Unicode code points. chagne</p>
 </p></div><div class="declaration"><h4 class="value-declaration" id="toNat32"><code><span class="keyword">public </span><span class="keyword">let </span><span class="fnname">toNat32</span> : (<span class="parameter">char</span> : <a href="#type.Char"><span class="type">Char</span></a>) -&gt; <span class="type">Nat32</span></code></h4><p><p>Convert character <code>char</code> to a word containing its Unicode scalar value.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

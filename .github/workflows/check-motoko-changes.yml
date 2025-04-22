@@ -36,7 +36,7 @@ jobs:
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
 
           # Check for any .mo changes
-          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '\.mo$'; then
+          if [ -z "$(git diff --name-only $BASE_SHA $HEAD_SHA -- '*.mo')" ]; then
             echo "has_mo_changes=false" >> $GITHUB_OUTPUT
             echo "No Motoko file changes detected"
           else
@@ -44,7 +44,7 @@ jobs:
           fi
 
           # Check for src/*.mo changes
-          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^src/.*\.mo$'; then
+          if [ -z "$(git diff --name-only $BASE_SHA $HEAD_SHA -- 'src/*.mo')" ]; then
             echo "has_src_mo_changes=false" >> $GITHUB_OUTPUT
             echo "No Motoko file changes in src directory detected"
           else
@@ -52,7 +52,7 @@ jobs:
           fi
 
           # Check for Changelog.md changes
-          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^Changelog\.md$'; then
+          if [ -z "$(git diff --name-only $BASE_SHA $HEAD_SHA -- Changelog.md)" ]; then
             echo "has_changelog_changes=false" >> $GITHUB_OUTPUT
             echo "No Changelog.md changes detected"
           else
@@ -60,7 +60,7 @@ jobs:
           fi
 
           # Check for mops dependency changes
-          if ! git diff --name-only $BASE_SHA $HEAD_SHA | grep -q '^mops\.toml$'; then
+          if [ -z "$(git diff --name-only $BASE_SHA $HEAD_SHA -- mops.toml)" ]; then
             echo "has_mops_dependency_changes=false" >> $GITHUB_OUTPUT
             echo "No mops dependency changes detected"
           else

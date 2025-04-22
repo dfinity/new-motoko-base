@@ -3,7 +3,7 @@ import Nat8 "../src/Nat8";
 import { suite; test; expect } "mo:test";
 
 suite(
-  "basic operations",
+  "basic operationz",
   func() {
     test(
       "empty creates an empty blob",

@@ -20,7 +20,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.minValue // => -128
+  /// assert Int8.minValue == -128;
   /// ```
   public let minValue : Int8 = -128;
 
@@ -28,7 +28,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.maxValue // => +127
+  /// assert Int8.maxValue == +127;
   /// ```
   public let maxValue : Int8 = 127;
 
@@ -36,7 +36,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.toInt(123) // => 123 : Int
+  /// assert Int8.toInt(123) == (123 : Int);
   /// ```
   public let toInt : Int8 -> Int = Prim.int8ToInt;
 
@@ -46,7 +46,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.fromInt(123) // => +123 : Int8
+  /// assert Int8.fromInt(123) == (+123 : Int8);
   /// ```
   public let fromInt : Int -> Int8 = Prim.intToInt8;
 
@@ -56,7 +56,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.fromIntWrap(-123) // => -123 : Int
+  /// assert Int8.fromIntWrap(-123) == (-123 : Int8);
   /// ```
   public let fromIntWrap : Int -> Int8 = Prim.intToInt8Wrap;
 
@@ -66,7 +66,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.fromInt16(123) // => +123 : Int8
+  /// assert Int8.fromInt16(123) == (+123 : Int8);
   /// ```
   public let fromInt16 : Int16 -> Int8 = Prim.int16ToInt8;
 
@@ -74,7 +74,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.toInt16(123) // => +123 : Int16
+  /// assert Int8.toInt16(123) == (+123 : Int16);
   /// ```
   public let toInt16 : Int8 -> Int16 = Prim.int8ToInt16;
 
@@ -84,7 +84,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.fromNat8(123) // => +123 : Int8
+  /// assert Int8.fromNat8(123) == (+123 : Int8);
   /// ```
   public let fromNat8 : Nat8 -> Int8 = Prim.nat8ToInt8;
 
@@ -94,7 +94,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.toNat8(-1) // => 255 : Nat8 // underflow
+  /// assert Int8.toNat8(-1) == (255 : Nat8); // underflow
   /// ```
   public let toNat8 : Int8 -> Nat8 = Prim.int8ToNat8;
 
@@ -102,7 +102,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.toText(-123) // => "-123"
+  /// assert Int8.toText(-123) == "-123";
   /// ```
   public func toText(x : Int8) : Text {
     Int.toText(toInt(x))
@@ -114,7 +114,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.abs(-123) // => +123
+  /// assert Int8.abs(-123) == +123;
   /// ```
   public func abs(x : Int8) : Int8 {
     fromInt(Int.abs(toInt(x)))
@@ -124,7 +124,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.min(+2, -3) // => -3
+  /// assert Int8.min(+2, -3) == -3;
   /// ```
   public func min(x : Int8, y : Int8) : Int8 {
     if (x < y) { x } else { y }
@@ -134,7 +134,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.max(+2, -3) // => +2
+  /// assert Int8.max(+2, -3) == +2;
   /// ```
   public func max(x : Int8, y : Int8) : Int8 {
     if (x < y) { y } else { x }
@@ -145,7 +145,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.equal(-1, -1); // => true
+  /// assert Int8.equal(-1, -1);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -155,13 +155,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Int8>(1);
-  /// buffer1.add(-3);
-  /// let buffer2 = Buffer.Buffer<Int8>(1);
-  /// buffer2.add(-3);
-  /// Buffer.equal(buffer1, buffer2, Int8.equal) // => true
+  /// let a : Int8 = -123;
+  /// let b : Int8 = 123;
+  /// assert not Int8.equal(a, b);
   /// ```
   public func equal(x : Int8, y : Int8) : Bool { x == y };
 
@@ -170,7 +166,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.notEqual(-1, -2); // => true
+  /// assert Int8.notEqual(-1, -2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -184,7 +180,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.less(-2, 1); // => true
+  /// assert Int8.less(-2, 1);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -198,7 +194,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.lessOrEqual(-2, -2); // => true
+  /// assert Int8.lessOrEqual(-2, -2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -212,7 +208,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.greater(-2, -3); // => true
+  /// assert Int8.greater(-2, -3);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -226,7 +222,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.greaterOrEqual(-2, -2); // => true
+  /// assert Int8.greaterOrEqual(-2, -2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -240,7 +236,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.compare(-3, 2) // => #less
+  /// assert Int8.compare(-3, 2) == #less;
   /// ```
   ///
   /// This function can be used as value for a high order function, such as a sort function.
@@ -248,7 +244,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.sort([1, -2, -3] : [Int8], Int8.compare) // => [-3, -2, 1]
+  /// assert Array.sort([1, -2, -3] : [Int8], Int8.compare) == [-3, -2, 1];
   /// ```
   public func compare(x : Int8, y : Int8) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
@@ -260,7 +256,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.neg(123) // => -123
+  /// assert Int8.neg(123) == -123;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -275,7 +271,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.add(100, 23) // => +123
+  /// assert Int8.add(100, 23) == +123;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -286,7 +282,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Int8, Int8>([1, -2, -3], 0, Int8.add) // => -4
+  /// assert Array.foldLeft<Int8, Int8>([1, -2, -3], 0, Int8.add) == -4;
   /// ```
   public func add(x : Int8, y : Int8) : Int8 { x + y };
 
@@ -296,7 +292,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.sub(123, 23) // => +100
+  /// assert Int8.sub(123, 23) == +100;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -307,7 +303,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Int8, Int8>([1, -2, -3], 0, Int8.sub) // => 4
+  /// assert Array.foldLeft<Int8, Int8>([1, -2, -3], 0, Int8.sub) == 4;
   /// ```
   public func sub(x : Int8, y : Int8) : Int8 { x - y };
 
@@ -317,7 +313,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.mul(12, 10) // => +120
+  /// assert Int8.mul(12, 10) == +120;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -328,7 +324,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Int8, Int8>([1, -2, -3], 1, Int8.mul) // => 6
+  /// assert Array.foldLeft<Int8, Int8>([1, -2, -3], 1, Int8.mul) == 6;
   /// ```
   public func mul(x : Int8, y : Int8) : Int8 { x * y };
 
@@ -339,7 +335,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.div(123, 10) // => +12
+  /// assert Int8.div(123, 10) == +12;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -355,7 +351,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.rem(123, 10) // => +3
+  /// assert Int8.rem(123, 10) == +3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -370,7 +366,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.pow(2, 6) // => +64
+  /// assert Int8.pow(2, 6) == +64;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -383,7 +379,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitnot(-16 /* 0xf0 */) // => +15 // 0x0f
+  /// assert Int8.bitnot(-16 /* 0xf0 */) == +15 // 0x0f;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -396,7 +392,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitand(0x1f, 0x70) // => +16 // 0x10
+  /// assert Int8.bitand(0x1f, 0x70) == +16 // 0x10;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -409,7 +405,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitor(0x0f, 0x70) // => +127 // 0x7f
+  /// assert Int8.bitor(0x0f, 0x70) == +127 // 0x7f;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -422,7 +418,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitxor(0x70, 0x7f) // => +15 // 0x0f
+  /// assert Int8.bitxor(0x70, 0x7f) == +15 // 0x0f;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -440,7 +436,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitshiftLeft(1, 4) // => +16 // 0x10 equivalent to `2 ** 4`.
+  /// assert Int8.bitshiftLeft(1, 4) == +16 // 0x10 equivalent to `2 ** 4`.;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -458,7 +454,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitshiftRight(64, 4) // => +4 // equivalent to `64 / (2 ** 4)`
+  /// assert Int8.bitshiftRight(64, 4) == +4 // equivalent to `64 / (2 ** 4)`;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -476,7 +472,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitrotLeft(0x11 /* 0b0001_0001 */, 2) // => +68 // 0b0100_0100 == 0x44.
+  /// assert Int8.bitrotLeft(0x11 /* 0b0001_0001 */, 2) == +68 // 0b0100_0100 == 0x44.;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -494,7 +490,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitrotRight(0x11 /* 0b0001_0001 */, 1) // => -120 // 0b1000_1000 == 0x88.
+  /// assert Int8.bitrotRight(0x11 /* 0b0001_0001 */, 1) == -120 // 0b1000_1000 == 0x88.;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -509,7 +505,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bittest(64, 6) // => true
+  /// assert Int8.bittest(64, 6);
   /// ```
   public func bittest(x : Int8, p : Nat) : Bool {
     Prim.btstInt8(x, Prim.intToInt8(p))
@@ -520,7 +516,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitset(0, 6) // => +64
+  /// assert Int8.bitset(0, 6) == +64;
   /// ```
   public func bitset(x : Int8, p : Nat) : Int8 {
     x | (1 << Prim.intToInt8(p))
@@ -531,7 +527,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitclear(-1, 6) // => -65
+  /// assert Int8.bitclear(-1, 6) == -65;
   /// ```
   public func bitclear(x : Int8, p : Nat) : Int8 {
     x & ^(1 << Prim.intToInt8(p))
@@ -542,7 +538,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitflip(127, 6) // => +63
+  /// assert Int8.bitflip(127, 6) == +63;
   /// ```
   public func bitflip(x : Int8, p : Nat) : Int8 {
     x ^ (1 << Prim.intToInt8(p))
@@ -552,7 +548,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitcountNonZero(0x0f) // => +4
+  /// assert Int8.bitcountNonZero(0x0f) == +4;
   /// ```
   public let bitcountNonZero : (x : Int8) -> Int8 = Prim.popcntInt8;
 
@@ -560,7 +556,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitcountLeadingZero(0x08) // => +4
+  /// assert Int8.bitcountLeadingZero(0x08) == +4;
   /// ```
   public let bitcountLeadingZero : (x : Int8) -> Int8 = Prim.clzInt8;
 
@@ -568,7 +564,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.bitcountTrailingZero(0x10) // => +4
+  /// assert Int8.bitcountTrailingZero(0x10) == +4;
   /// ```
   public let bitcountTrailingZero : (x : Int8) -> Int8 = Prim.ctzInt8;
 
@@ -578,7 +574,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.addWrap(2 ** 6, 2 ** 6) // => -128 // overflow
+  /// assert Int8.addWrap(2 ** 6, 2 ** 6) == -128; // overflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -593,7 +589,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.subWrap(-2 ** 7, 1) // => +127 // underflow
+  /// assert Int8.subWrap(-2 ** 7, 1) == +127; // underflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -608,7 +604,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.mulWrap(2 ** 4, 2 ** 4) // => 0 // overflow
+  /// assert Int8.mulWrap(2 ** 4, 2 ** 4) == 0; // overflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -624,7 +620,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int8.powWrap(2, 7) // => -128 // overflow
+  /// assert Int8.powWrap(2, 7) == -128; // overflow
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -638,10 +634,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int8.range(1, 4);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
@@ -649,7 +645,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int8.range(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func range(fromInclusive : Int8, toExclusive : Int8) : Iter.Iter<Int8> {
     if (fromInclusive >= toExclusive) {
@@ -675,10 +671,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int8.rangeInclusive(1, 3);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
@@ -686,7 +682,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int8.rangeInclusive(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func rangeInclusive(from : Int8, to : Int8) : Iter.Iter<Int8> {
     if (from > to) {
@@ -717,9 +713,9 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Int8.allValues();
-  /// assert(?-128 == iter.next());
-  /// assert(?-127 == iter.next());
-  /// assert(?-126 == iter.next());
+  /// assert iter.next() == ?-128;
+  /// assert iter.next() == ?-127;
+  /// assert iter.next() == ?-126;
   /// // ...
   /// ```
   public func allValues() : Iter.Iter<Int8> {

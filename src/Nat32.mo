@@ -20,7 +20,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.maxValue; // => 4294967295 : Nat32
+  /// assert Nat32.maxValue == (4294967295 : Nat32);
   /// ```
   public let maxValue : Nat32 = 4294967295;
 
@@ -28,7 +28,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.toNat(123); // => 123 : Nat
+  /// assert Nat32.toNat(123) == (123 : Nat);
   /// ```
   public let toNat : Nat32 -> Nat = Prim.nat32ToNat;
 
@@ -38,7 +38,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.fromNat(123); // => 123 : Nat32
+  /// assert Nat32.fromNat(123) == (123 : Nat32);
   /// ```
   public let fromNat : Nat -> Nat32 = Prim.natToNat32;
 
@@ -46,7 +46,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.fromNat16(123); // => 123 : Nat32
+  /// assert Nat32.fromNat16(123) == (123 : Nat32);
   /// ```
   public func fromNat16(x : Nat16) : Nat32 {
     Prim.nat16ToNat32(x)
@@ -58,7 +58,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.toNat16(123); // => 123 : Nat16
+  /// assert Nat32.toNat16(123) == (123 : Nat16);
   /// ```
   public func toNat16(x : Nat32) : Nat16 {
     Prim.nat32ToNat16(x)
@@ -70,7 +70,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.fromNat64(123); // => 123 : Nat32
+  /// assert Nat32.fromNat64(123) == (123 : Nat32);
   /// ```
   public func fromNat64(x : Nat64) : Nat32 {
     Prim.nat64ToNat32(x)
@@ -80,7 +80,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.toNat64(123); // => 123 : Nat64
+  /// assert Nat32.toNat64(123) == (123 : Nat64);
   /// ```
   public func toNat64(x : Nat32) : Nat64 {
     Prim.nat32ToNat64(x)
@@ -92,7 +92,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.fromIntWrap(123); // => 123 : Nat32
+  /// assert Nat32.fromIntWrap(123) == (123 : Nat32);
   /// ```
   public let fromIntWrap : Int -> Nat32 = Prim.intToNat32Wrap;
 
@@ -101,7 +101,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.toText(1234); // => "1234" : Text
+  /// assert Nat32.toText(1234) == ("1234" : Text);
   /// ```
   public func toText(x : Nat32) : Text {
     Nat.toText(toNat(x))
@@ -111,7 +111,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.min(123, 456); // => 123 : Nat32
+  /// assert Nat32.min(123, 456) == (123 : Nat32);
   /// ```
   public func min(x : Nat32, y : Nat32) : Nat32 {
     if (x < y) { x } else { y }
@@ -121,7 +121,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.max(123, 456); // => 456 : Nat32
+  /// assert Nat32.max(123, 456) == (456 : Nat32);
   /// ```
   public func max(x : Nat32, y : Nat32) : Nat32 {
     if (x < y) { y } else { x }
@@ -132,8 +132,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.equal(1, 1); // => true
-  /// (1 : Nat32) == (1 : Nat32) // => true
+  /// assert Nat32.equal(1, 1);
+  /// assert (1 : Nat32) == (1 : Nat32);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -143,11 +143,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Nat32>(3);
-  /// let buffer2 = Buffer.Buffer<Nat32>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat32.equal) // => true
+  /// let a : Nat32 = 111;
+  /// let b : Nat32 = 222;
+  /// assert not Nat32.equal(a, b);
   /// ```
   public func equal(x : Nat32, y : Nat32) : Bool { x == y };
 
@@ -156,8 +154,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.notEqual(1, 2); // => true
-  /// (1 : Nat32) != (2 : Nat32) // => true
+  /// assert Nat32.notEqual(1, 2);
+  /// assert (1 : Nat32) != (2 : Nat32);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -171,8 +169,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.less(1, 2); // => true
-  /// (1 : Nat32) < (2 : Nat32) // => true
+  /// assert Nat32.less(1, 2);
+  /// assert (1 : Nat32) < (2 : Nat32);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -186,8 +184,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.lessOrEqual(1, 2); // => true
-  /// (1 : Nat32) <= (2 : Nat32) // => true
+  /// assert Nat32.lessOrEqual(1, 2);
+  /// assert (1 : Nat32) <= (2 : Nat32);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -201,8 +199,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.greater(2, 1); // => true
-  /// (2 : Nat32) > (1 : Nat32) // => true
+  /// assert Nat32.greater(2, 1);
+  /// assert (2 : Nat32) > (1 : Nat32);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -216,8 +214,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.greaterOrEqual(2, 1); // => true
-  /// (2 : Nat32) >= (1 : Nat32) // => true
+  /// assert Nat32.greaterOrEqual(2, 1);
+  /// assert (2 : Nat32) >= (1 : Nat32);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -231,7 +229,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.compare(2, 3) // => #less
+  /// assert Nat32.compare(2, 3) == #less;
   /// ```
   ///
   /// This function can be used as value for a high order function, such as a sort function.
@@ -239,7 +237,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.sort([2, 3, 1] : [Nat32], Nat32.compare) // => [1, 2, 3]
+  /// assert Array.sort([2, 3, 1] : [Nat32], Nat32.compare) == [1, 2, 3];
   /// ```
   public func compare(x : Nat32, y : Nat32) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
@@ -250,8 +248,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.add(1, 2); // => 3
-  /// (1 : Nat32) + (2 : Nat32) // => 3
+  /// assert Nat32.add(1, 2) == 3;
+  /// assert (1 : Nat32) + (2 : Nat32) == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -262,7 +260,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat32, Nat32>([2, 3, 1], 0, Nat32.add) // => 6
+  /// assert Array.foldLeft<Nat32, Nat32>([2, 3, 1], 0, Nat32.add) == 6;
   /// ```
   public func add(x : Nat32, y : Nat32) : Nat32 { x + y };
 
@@ -271,8 +269,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.sub(2, 1); // => 1
-  /// (2 : Nat32) - (1 : Nat32) // => 1
+  /// assert Nat32.sub(2, 1) == 1;
+  /// assert (2 : Nat32) - (1 : Nat32) == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -283,7 +281,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat32, Nat32>([2, 3, 1], 20, Nat32.sub) // => 14
+  /// assert Array.foldLeft<Nat32, Nat32>([2, 3, 1], 20, Nat32.sub) == 14;
   /// ```
   public func sub(x : Nat32, y : Nat32) : Nat32 { x - y };
 
@@ -292,8 +290,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.mul(2, 3); // => 6
-  /// (2 : Nat32) * (3 : Nat32) // => 6
+  /// assert Nat32.mul(2, 3) == 6;
+  /// assert (2 : Nat32) * (3 : Nat32) == 6;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -304,7 +302,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat32, Nat32>([2, 3, 1], 1, Nat32.mul) // => 6
+  /// assert Array.foldLeft<Nat32, Nat32>([2, 3, 1], 1, Nat32.mul) == 6;
   /// ```
   public func mul(x : Nat32, y : Nat32) : Nat32 { x * y };
 
@@ -313,8 +311,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.div(6, 2); // => 3
-  /// (6 : Nat32) / (2 : Nat32) // => 3
+  /// assert Nat32.div(6, 2) == 3;
+  /// assert (6 : Nat32) / (2 : Nat32) == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -328,8 +326,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.rem(6, 4); // => 2
-  /// (6 : Nat32) % (4 : Nat32) // => 2
+  /// assert Nat32.rem(6, 4) == 2;
+  /// assert (6 : Nat32) % (4 : Nat32) == 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -342,8 +340,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.pow(2, 3); // => 8
-  /// (2 : Nat32) ** (3 : Nat32) // => 8
+  /// assert Nat32.pow(2, 3) == 8;
+  /// assert (2 : Nat32) ** (3 : Nat32) == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -356,8 +354,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitnot(0) // => 4294967295
-  /// ^(0 : Nat32) // => 4294967295
+  /// assert Nat32.bitnot(0) == 4294967295;
+  /// assert ^(0 : Nat32) == 4294967295;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -370,8 +368,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitand(1, 3); // => 1
-  /// (1 : Nat32) & (3 : Nat32) // => 1
+  /// assert Nat32.bitand(1, 3) == 1;
+  /// assert (1 : Nat32) & (3 : Nat32) == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -384,8 +382,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitor(1, 3); // => 3
-  /// (1 : Nat32) | (3 : Nat32) // => 3
+  /// assert Nat32.bitor(1, 3) == 3;
+  /// assert (1 : Nat32) | (3 : Nat32) == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -398,8 +396,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitxor(1, 3); // => 2
-  /// (1 : Nat32) ^ (3 : Nat32) // => 2
+  /// assert Nat32.bitxor(1, 3) == 2;
+  /// assert (1 : Nat32) ^ (3 : Nat32) == 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -412,8 +410,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitshiftLeft(1, 3); // => 8
-  /// (1 : Nat32) << (3 : Nat32) // => 8
+  /// assert Nat32.bitshiftLeft(1, 3) == 8;
+  /// assert (1 : Nat32) << (3 : Nat32) == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -426,8 +424,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitshiftRight(8, 3); // => 1
-  /// (8 : Nat32) >> (3 : Nat32) // => 1
+  /// assert Nat32.bitshiftRight(8, 3) == 1;
+  /// assert (8 : Nat32) >> (3 : Nat32) == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -440,8 +438,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitrotLeft(1, 3); // => 8
-  /// (1 : Nat32) <<> (3 : Nat32) // => 8
+  /// assert Nat32.bitrotLeft(1, 3) == 8;
+  /// assert (1 : Nat32) <<> (3 : Nat32) == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -454,8 +452,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.bitrotRight(1, 1); // => 2147483648
-  /// (1 : Nat32) <>> (1 : Nat32) // => 2147483648
+  /// assert Nat32.bitrotRight(1, 1) == 2147483648;
+  /// assert (1 : Nat32) <>> (1 : Nat32) == 2147483648;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -469,7 +467,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.bittest(5, 2); // => true
+  /// assert Nat32.bittest(5, 2);
   /// ```
   public func bittest(x : Nat32, p : Nat) : Bool {
     Prim.btstNat32(x, Prim.natToNat32(p))
@@ -479,7 +477,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.bitset(5, 1); // => 7
+  /// assert Nat32.bitset(5, 1) == 7;
   /// ```
   public func bitset(x : Nat32, p : Nat) : Nat32 {
     x | (1 << Prim.natToNat32(p))
@@ -489,7 +487,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.bitclear(5, 2); // => 1
+  /// assert Nat32.bitclear(5, 2) == 1;
   /// ```
   public func bitclear(x : Nat32, p : Nat) : Nat32 {
     x & ^(1 << Prim.natToNat32(p))
@@ -499,7 +497,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.bitflip(5, 2); // => 1
+  /// assert Nat32.bitflip(5, 2) == 1;
   /// ```
   public func bitflip(x : Nat32, p : Nat) : Nat32 {
     x ^ (1 << Prim.natToNat32(p))
@@ -509,7 +507,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.bitcountNonZero(5); // => 2
+  /// assert Nat32.bitcountNonZero(5) == 2;
   /// ```
   public let bitcountNonZero : (x : Nat32) -> Nat32 = Prim.popcntNat32;
 
@@ -517,7 +515,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.bitcountLeadingZero(5); // => 29
+  /// assert Nat32.bitcountLeadingZero(5) == 29;
   /// ```
   public let bitcountLeadingZero : (x : Nat32) -> Nat32 = Prim.clzNat32;
 
@@ -525,7 +523,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat32.bitcountTrailingZero(16); // => 4
+  /// assert Nat32.bitcountTrailingZero(16) == 4;
   /// ```
   public let bitcountTrailingZero : (x : Nat32) -> Nat32 = Prim.ctzNat32;
 
@@ -533,8 +531,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.addWrap(4294967295, 1); // => 0
-  /// (4294967295 : Nat32) +% (1 : Nat32) // => 0
+  /// assert Nat32.addWrap(4294967295, 1) == 0;
+  /// assert (4294967295 : Nat32) +% (1 : Nat32) == 0;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -547,8 +545,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.subWrap(0, 1); // => 4294967295
-  /// (0 : Nat32) -% (1 : Nat32) // => 4294967295
+  /// assert Nat32.subWrap(0, 1) == 4294967295;
+  /// assert (0 : Nat32) -% (1 : Nat32) == 4294967295;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -561,8 +559,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.mulWrap(2147483648, 2); // => 0
-  /// (2147483648 : Nat32) *% (2 : Nat32) // => 0
+  /// assert Nat32.mulWrap(2147483648, 2) == 0;
+  /// assert (2147483648 : Nat32) *% (2 : Nat32) == 0;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -575,8 +573,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat32.powWrap(2, 32); // => 0
-  /// (2 : Nat32) **% (32 : Nat32) // => 0
+  /// assert Nat32.powWrap(2, 32) == 0;
+  /// assert (2 : Nat32) **% (32 : Nat32) == 0;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -590,10 +588,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat32.range(1, 4);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
@@ -601,7 +599,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat32.range(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func range(fromInclusive : Nat32, toExclusive : Nat32) : Iter.Iter<Nat32> {
     if (fromInclusive >= toExclusive) {
@@ -627,10 +625,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat32.rangeInclusive(1, 3);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
@@ -638,7 +636,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat32.rangeInclusive(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func rangeInclusive(from : Nat32, to : Nat32) : Iter.Iter<Nat32> {
     if (from > to) {
@@ -669,9 +667,9 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat32.allValues();
-  /// assert(?0 == iter.next());
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
+  /// assert iter.next() == ?0;
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
   /// // ...
   /// ```
   public func allValues() : Iter.Iter<Nat32> {

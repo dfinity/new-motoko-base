@@ -45,7 +45,7 @@
 /// All applications should reserve at least one page for stable variable data, even when no stable variables are used.
 ///
 /// Usage:
-/// ```motoko no-repl
+/// ```motoko no-repl name=import
 /// import Region "mo:base/Region";
 /// ```
 
@@ -61,9 +61,13 @@ module {
   ///
   /// Example:
   ///
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// assert Region.size(region) == 0;
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     assert Region.size(region) == 0;
+  ///   }
+  /// }
   /// ```
   public let new : () -> Region = Prim.regionNew;
 
@@ -75,9 +79,13 @@ module {
   ///
   /// Example:
   ///
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// assert Region.id(region) == 16;
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     assert Region.id(region) == 16;
+  ///   }
+  /// }
   /// ```
   public let id : Region -> Nat = Prim.regionId;
 
@@ -88,12 +96,16 @@ module {
   /// stable memory.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let beforeSize = Region.size(region);
-  /// ignore Region.grow(region, 10);
-  /// let afterSize = Region.size(region);
-  /// afterSize - beforeSize // => 10
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let beforeSize = Region.size(region);
+  ///     ignore Region.grow(region, 10);
+  ///     let afterSize = Region.size(region);
+  ///     assert afterSize - beforeSize == 10;
+  ///   }
+  /// }
   /// ```
   public let size : (region : Region) -> (pages : Nat64) = Prim.regionSize;
 
@@ -106,16 +118,20 @@ module {
   ///  `--max-stable-pages <n>` (the default is 65536, or 4GiB).
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// import Error "mo:base/Error";
   ///
-  /// let region = Region.new();
-  /// let beforeSize = Region.grow(region, 10);
-  /// if (beforeSize == 0xFFFF_FFFF_FFFF_FFFF) {
-  ///   throw Error.reject("Out of memory");
-  /// };
-  /// let afterSize = Region.size(region);
-  /// afterSize - beforeSize // => 10
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let beforeSize = Region.grow(region, 10);
+  ///     if (beforeSize == 0xFFFF_FFFF_FFFF_FFFF) {
+  ///       throw Error.reject("Out of memory");
+  ///     };
+  ///     let afterSize = Region.size(region);
+  ///     assert afterSize - beforeSize == 10;
+  ///   }
+  /// }
   /// ```
   public let grow : (region : Region, newPages : Nat64) -> (oldPages : Nat64) = Prim.regionGrow;
 
@@ -123,12 +139,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat8(region, offset, value);
-  /// Region.loadNat8(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat8 = 123;
+  ///     Region.storeNat8(region, offset, value);
+  ///     assert Region.loadNat8(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadNat8 : (region : Region, offset : Nat64) -> Nat8 = Prim.regionLoadNat8;
 
@@ -136,12 +156,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat8(region, offset, value);
-  /// Region.loadNat8(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat8 = 123;
+  ///     Region.storeNat8(region, offset, value);
+  ///     assert Region.loadNat8(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeNat8 : (region : Region, offset : Nat64, value : Nat8) -> () = Prim.regionStoreNat8;
 
@@ -149,12 +173,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat16(region, offset, value);
-  /// Region.loadNat16(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat16 = 123;
+  ///     Region.storeNat16(region, offset, value);
+  ///     assert Region.loadNat16(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadNat16 : (region : Region, offset : Nat64) -> Nat16 = Prim.regionLoadNat16;
 
@@ -162,12 +190,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat16(region, offset, value);
-  /// Region.loadNat16(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat16 = 123;
+  ///     Region.storeNat16(region, offset, value);
+  ///     assert Region.loadNat16(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeNat16 : (region : Region, offset : Nat64, value : Nat16) -> () = Prim.regionStoreNat16;
 
@@ -175,12 +207,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat32(region, offset, value);
-  /// Region.loadNat32(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat32 = 123;
+  ///     Region.storeNat32(region, offset, value);
+  ///     assert Region.loadNat32(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadNat32 : (region : Region, offset : Nat64) -> Nat32 = Prim.regionLoadNat32;
 
@@ -188,12 +224,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat32(region, offset, value);
-  /// Region.loadNat32(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat32 = 123;
+  ///     Region.storeNat32(region, offset, value);
+  ///     assert Region.loadNat32(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeNat32 : (region : Region, offset : Nat64, value : Nat32) -> () = Prim.regionStoreNat32;
 
@@ -201,12 +241,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat64(region, offset, value);
-  /// Region.loadNat64(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat64 = 123;
+  ///     Region.storeNat64(region, offset, value);
+  ///     assert Region.loadNat64(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadNat64 : (region : Region, offset : Nat64) -> Nat64 = Prim.regionLoadNat64;
 
@@ -214,12 +258,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeNat64(region, offset, value);
-  /// Region.loadNat64(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Nat64 = 123;
+  ///     Region.storeNat64(region, offset, value);
+  ///     assert Region.loadNat64(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeNat64 : (region : Region, offset : Nat64, value : Nat64) -> () = Prim.regionStoreNat64;
 
@@ -227,12 +275,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt8(region, offset, value);
-  /// Region.loadInt8(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int8 = 123;
+  ///     Region.storeInt8(region, offset, value);
+  ///     assert Region.loadInt8(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadInt8 : (region : Region, offset : Nat64) -> Int8 = Prim.regionLoadInt8;
 
@@ -240,12 +292,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt8(region, offset, value);
-  /// Region.loadInt8(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int8 = 123;
+  ///     Region.storeInt8(region, offset, value);
+  ///     assert Region.loadInt8(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeInt8 : (region : Region, offset : Nat64, value : Int8) -> () = Prim.regionStoreInt8;
 
@@ -253,12 +309,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt16(region, offset, value);
-  /// Region.loadInt16(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int16 = 123;
+  ///     Region.storeInt16(region, offset, value);
+  ///     assert Region.loadInt16(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadInt16 : (region : Region, offset : Nat64) -> Int16 = Prim.regionLoadInt16;
 
@@ -266,12 +326,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt16(region, offset, value);
-  /// Region.loadInt16(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int16 = 123;
+  ///     Region.storeInt16(region, offset, value);
+  ///     assert Region.loadInt16(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeInt16 : (region : Region, offset : Nat64, value : Int16) -> () = Prim.regionStoreInt16;
 
@@ -279,12 +343,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt32(region, offset, value);
-  /// Region.loadInt32(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int32 = 123;
+  ///     Region.storeInt32(region, offset, value);
+  ///     assert Region.loadInt32(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadInt32 : (region : Region, offset : Nat64) -> Int32 = Prim.regionLoadInt32;
 
@@ -292,12 +360,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt32(region, offset, value);
-  /// Region.loadInt32(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int32 = 123;
+  ///     Region.storeInt32(region, offset, value);
+  ///     assert Region.loadInt32(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeInt32 : (region : Region, offset : Nat64, value : Int32) -> () = Prim.regionStoreInt32;
 
@@ -305,12 +377,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt64(region, offset, value);
-  /// Region.loadInt64(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int64 = 123;
+  ///     Region.storeInt64(region, offset, value);
+  ///     assert Region.loadInt64(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let loadInt64 : (region : Region, offset : Nat64) -> Int64 = Prim.regionLoadInt64;
 
@@ -318,12 +394,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 123;
-  /// Region.storeInt64(region, offset, value);
-  /// Region.loadInt64(region, offset) // => 123
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value : Int64 = 123;
+  ///     Region.storeInt64(region, offset, value);
+  ///     assert Region.loadInt64(region, offset) == 123;
+  ///   }
+  /// }
   /// ```
   public let storeInt64 : (region : Region, offset : Nat64, value : Int64) -> () = Prim.regionStoreInt64;
 
@@ -331,12 +411,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 1.25;
-  /// Region.storeFloat(region, offset, value);
-  /// Region.loadFloat(region, offset) // => 1.25
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value = 1.25;
+  ///     Region.storeFloat(region, offset, value);
+  ///     assert Region.loadFloat(region, offset) == 1.25;
+  ///   }
+  /// }
   /// ```
   public let loadFloat : (region : Region, offset : Nat64) -> Float = Prim.regionLoadFloat;
 
@@ -344,12 +428,16 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = 1.25;
-  /// Region.storeFloat(region, offset, value);
-  /// Region.loadFloat(region, offset) // => 1.25
+  /// ```motoko no-repl include=import
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value = 1.25;
+  ///     Region.storeFloat(region, offset, value);
+  ///     assert Region.loadFloat(region, offset) == 1.25;
+  ///   }
+  /// }
   /// ```
   public let storeFloat : (region : Region, offset : Nat64, value : Float) -> () = Prim.regionStoreFloat;
 
@@ -357,15 +445,19 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// import Blob "mo:base/Blob";
   ///
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = Blob.fromArray([1, 2, 3]);
-  /// let size = value.size();
-  /// Region.storeBlob(region, offset, value);
-  /// Blob.toArray(Region.loadBlob(region, offset, size)) // => [1, 2, 3]
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value = Blob.fromArray([1, 2, 3]);
+  ///     let size = value.size();
+  ///     Region.storeBlob(region, offset, value);
+  ///     assert Blob.toArray(Region.loadBlob(region, offset, size)) == [1, 2, 3];
+  ///   }
+  /// }
   /// ```
   public let loadBlob : (region : Region, offset : Nat64, size : Nat) -> Blob = Prim.regionLoadBlob;
 
@@ -373,15 +465,19 @@ module {
   /// Traps on an out-of-bounds access.
   ///
   /// Example:
-  /// ```motoko no-repl
+  /// ```motoko no-repl include=import
   /// import Blob "mo:base/Blob";
   ///
-  /// let region = Region.new();
-  /// let offset = 0;
-  /// let value = Blob.fromArray([1, 2, 3]);
-  /// let size = value.size();
-  /// Region.storeBlob(region, offset, value);
-  /// Blob.toArray(Region.loadBlob(region, offset, size)) // => [1, 2, 3]
+  /// persistent actor {
+  ///   public func example() : async () {
+  ///     let region = Region.new();
+  ///     let offset : Nat64 = 0;
+  ///     let value = Blob.fromArray([1, 2, 3]);
+  ///     let size = value.size();
+  ///     Region.storeBlob(region, offset, value);
+  ///     assert Blob.toArray(Region.loadBlob(region, offset, size)) == [1, 2, 3];
+  ///   }
+  /// }
   /// ```
   public let storeBlob : (region : Region, offset : Nat64, value : Blob) -> () = Prim.regionStoreBlob;
 

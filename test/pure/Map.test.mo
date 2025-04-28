@@ -1115,9 +1115,9 @@ run(
           Map.toText<Nat, Text>(map, Nat.toText, func(value) { value })
         },
         do {
-          var text = "Map{";
+          var text = "PureMap{";
           for (index in Nat.range(0, smallSize)) {
-            if (text != "{") {
+            if (text != "PureMap{") {
               text #= ", "
             };
             text #= "(" # Nat.toText(index) # ", " # Nat.toText(index) # ")"

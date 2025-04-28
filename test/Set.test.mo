@@ -270,7 +270,7 @@ run(
           let set = Set.empty<Nat>();
           Set.toText<Nat>(set, Nat.toText)
         },
-        M.equals(T.text("{}"))
+        M.equals(T.text("Set{}"))
       ),
       test(
         "compare",
@@ -689,7 +689,7 @@ run(
           let set = Set.singleton<Nat>(1);
           Set.toText<Nat>(set, Nat.toText)
         },
-        M.equals(T.text("{1}"))
+        M.equals(T.text("Set{1}"))
       ),
       test(
         "compare less",
@@ -1218,9 +1218,9 @@ run(
           Set.toText<Nat>(set, Nat.toText)
         },
         do {
-          var text = "{";
+          var text = "Set{";
           for (index in Nat.range(0, smallSize)) {
-            if (text != "{") {
+            if (text != "Set{") {
               text #= ", "
             };
             text #= Nat.toText(index)

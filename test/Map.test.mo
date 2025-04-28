@@ -1177,7 +1177,7 @@ run(
         do {
           var text = "Map{";
           for (index in Nat.range(0, smallSize)) {
-            if (text != "{") {
+            if (text != "Map{") {
               text #= ", "
             };
             text #= "(" # Nat.toText(index) # ", " # Nat.toText(index) # ")"

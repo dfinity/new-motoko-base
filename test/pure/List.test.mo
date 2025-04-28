@@ -1567,7 +1567,7 @@ let toText = suite(
       "small",
       List.toText<Nat>(?(0, ?(1, null)), Nat.toText),
       M.equals(
-        T.text "[0, 1]"
+        T.text "PureList[0, 1]"
       )
     )
   ]

@@ -21,7 +21,7 @@ let list = List.empty&lt;Nat&gt;(); // Creates a new List</code></pre></p></div>
 import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.singleton&lt;Nat&gt;(1);
-assert List.toText&lt;Nat&gt;(list, Nat.toText) == &quot;[1]&quot;;</code></pre>
+assert List.toText&lt;Nat&gt;(list, Nat.toText) == &quot;List[1]&quot;;</code></pre>
 
 <p>Runtime: <code>O(1)</code></p>
 <p>Space: <code>O(1)</code></p>
@@ -601,7 +601,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3,4]);
 
-assert List.toText&lt;Nat&gt;(list, Nat.toText) == &quot;[1, 2, 3, 4]&quot;;</code></pre>
+assert List.toText&lt;Nat&gt;(list, Nat.toText) == &quot;List[1, 2, 3, 4]&quot;;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>Space: <code>O(size)</code></p>

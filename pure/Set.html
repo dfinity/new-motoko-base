@@ -602,7 +602,7 @@ import Iter &quot;mo:base/Iter&quot;;
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
 
-  assert Set.toText(set, Nat.toText) == &quot;{0, 1, 2, 3}&quot;;
+  assert Set.toText(set, Nat.toText) == &quot;PureSet{0, 1, 2, 3}&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(n)</code>.

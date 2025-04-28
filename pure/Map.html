@@ -606,7 +606,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let map = Map.fromIter([(0, &quot;Zero&quot;), (2, &quot;Two&quot;), (1, &quot;One&quot;)].values(), Nat.compare);
-  assert Map.toText&lt;Nat, Text&gt;(map, Nat.toText, func t { t }) == &quot;{(0, Zero), (1, One), (2, Two)}&quot;;
+  assert Map.toText&lt;Nat, Text&gt;(map, Nat.toText, func t { t }) == &quot;PureMap{(0, Zero), (1, One), (2, Two)}&quot;;
 }</code></pre>
 
 <p>Runtime: O(size)</p>

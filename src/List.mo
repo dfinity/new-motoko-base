@@ -52,7 +52,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let list = List.singleton<Nat>(1);
-  /// assert List.toText<Nat>(list, Nat.toText) == "[1]";
+  /// assert List.toText<Nat>(list, Nat.toText) == "List[1]";
   /// ```
   ///
   /// Runtime: `O(1)`

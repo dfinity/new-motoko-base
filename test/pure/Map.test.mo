@@ -200,7 +200,7 @@ run(
       test(
         "empty to text",
         Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
-        M.equals(T.text("Map{}"))
+        M.equals(T.text("PureMap{}"))
       ),
       test(
         "for each",
@@ -403,7 +403,7 @@ run(
       test(
         "to text",
         Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
-        M.equals(T.text("Map{(0, 0)}"))
+        M.equals(T.text("PureMap{(0, 0)}"))
       ),
       test(
         "for each",
@@ -633,7 +633,7 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] = [
   test(
     "to text",
     Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
-    M.equals(T.text("Map{(0, 0), (1, 1), (2, 2)}"))
+    M.equals(T.text("PureMap{(0, 0), (1, 1), (2, 2)}"))
   ),
   test(
     "for each",

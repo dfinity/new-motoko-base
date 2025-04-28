@@ -931,7 +931,7 @@ module {
   /// persistent actor {
   ///   let set = Set.fromIter<Nat>([0, 3, 1, 2].values(), Nat.compare);
   ///
-  ///   assert Set.toText(set, Nat.toText) == "{0, 1, 2, 3}";
+  ///   assert Set.toText(set, Nat.toText) == "PureSet{0, 1, 2, 3}";
   /// }
   /// ```
   ///

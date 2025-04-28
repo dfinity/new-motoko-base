@@ -1244,7 +1244,7 @@ module {
   ///
   /// persistent actor {
   ///   let map = Map.fromIter<Nat, Text>([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
-  ///   assert Map.toText<Nat, Text>(map, Nat.toText, func t { t }) == "{(0, Zero), (1, One), (2, Two)}";
+  ///   assert Map.toText<Nat, Text>(map, Nat.toText, func t { t }) == "Map{(0, Zero), (1, One), (2, Two)}";
   /// }
   /// ```
   ///

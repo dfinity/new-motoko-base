@@ -1630,7 +1630,7 @@ module {
   ///
   /// let list = List.fromArray<Nat>([1,2,3,4]);
   ///
-  /// assert List.toText<Nat>(list, Nat.toText) == "[1, 2, 3, 4]";
+  /// assert List.toText<Nat>(list, Nat.toText) == "List[1, 2, 3, 4]";
   /// ```
   ///
   /// Runtime: `O(size)`

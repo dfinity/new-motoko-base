@@ -9,6 +9,7 @@
 import Nat "Nat";
 import Iter "Iter";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
@@ -19,7 +20,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.maxValue; // => 18446744073709551615 : Nat64
+  /// assert Nat64.maxValue == (18446744073709551615 : Nat64);
   /// ```
   public let maxValue : Nat64 = 18446744073709551615;
 
@@ -27,7 +28,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.toNat(123); // => 123 : Nat
+  /// assert Nat64.toNat(123) == (123 : Nat);
   /// ```
   public let toNat : Nat64 -> Nat = Prim.nat64ToNat;
 
@@ -37,7 +38,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.fromNat(123); // => 123 : Nat64
+  /// assert Nat64.fromNat(123) == (123 : Nat64);
   /// ```
   public let fromNat : Nat -> Nat64 = Prim.natToNat64;
 
@@ -45,7 +46,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.fromNat32(123); // => 123 : Nat64
+  /// assert Nat64.fromNat32(123) == (123 : Nat64);
   /// ```
   public func fromNat32(x : Nat32) : Nat64 {
     Prim.nat32ToNat64(x)
@@ -57,7 +58,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.toNat32(123); // => 123 : Nat32
+  /// assert Nat64.toNat32(123) == (123 : Nat32);
   /// ```
   public func toNat32(x : Nat64) : Nat32 {
     Prim.nat64ToNat32(x)
@@ -69,7 +70,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.fromIntWrap(123); // => 123 : Nat64
+  /// assert Nat64.fromIntWrap(123) == (123 : Nat64);
   /// ```
   public let fromIntWrap : Int -> Nat64 = Prim.intToNat64Wrap;
 
@@ -78,7 +79,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.toText(1234); // => "1234" : Text
+  /// assert Nat64.toText(1234) == ("1234" : Text);
   /// ```
   public func toText(x : Nat64) : Text {
     Nat.toText(toNat(x))
@@ -88,7 +89,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.min(123, 456); // => 123 : Nat64
+  /// assert Nat64.min(123, 456) == (123 : Nat64);
   /// ```
   public func min(x : Nat64, y : Nat64) : Nat64 {
     if (x < y) { x } else { y }
@@ -98,7 +99,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.max(123, 456); // => 456 : Nat64
+  /// assert Nat64.max(123, 456) == (456 : Nat64);
   /// ```
   public func max(x : Nat64, y : Nat64) : Nat64 {
     if (x < y) { y } else { x }
@@ -109,8 +110,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.equal(1, 1); // => true
-  /// (1 : Nat64) == (1 : Nat64) // => true
+  /// assert Nat64.equal(1, 1);
+  /// assert (1 : Nat64) == (1 : Nat64);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -120,11 +121,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Nat64>(3);
-  /// let buffer2 = Buffer.Buffer<Nat64>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat64.equal) // => true
+  /// let a : Nat64 = 111;
+  /// let b : Nat64 = 222;
+  /// assert not Nat64.equal(a, b);
   /// ```
   public func equal(x : Nat64, y : Nat64) : Bool { x == y };
 
@@ -133,8 +132,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.notEqual(1, 2); // => true
-  /// (1 : Nat64) != (2 : Nat64) // => true
+  /// assert Nat64.notEqual(1, 2);
+  /// assert (1 : Nat64) != (2 : Nat64);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -148,8 +147,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.less(1, 2); // => true
-  /// (1 : Nat64) < (2 : Nat64) // => true
+  /// assert Nat64.less(1, 2);
+  /// assert (1 : Nat64) < (2 : Nat64);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -163,8 +162,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.lessOrEqual(1, 2); // => true
-  /// (1 : Nat64) <= (2 : Nat64) // => true
+  /// assert Nat64.lessOrEqual(1, 2);
+  /// assert (1 : Nat64) <= (2 : Nat64);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -178,8 +177,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.greater(2, 1); // => true
-  /// (2 : Nat64) > (1 : Nat64) // => true
+  /// assert Nat64.greater(2, 1);
+  /// assert (2 : Nat64) > (1 : Nat64);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -193,8 +192,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.greaterOrEqual(2, 1); // => true
-  /// (2 : Nat64) >= (1 : Nat64) // => true
+  /// assert Nat64.greaterOrEqual(2, 1);
+  /// assert (2 : Nat64) >= (1 : Nat64);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -208,7 +207,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.compare(2, 3) // => #less
+  /// assert Nat64.compare(2, 3) == #less;
   /// ```
   ///
   /// This function can be used as value for a high order function, such as a sort function.
@@ -216,9 +215,9 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.sort([2, 3, 1] : [Nat64], Nat64.compare) // => [1, 2, 3]
+  /// assert Array.sort([2, 3, 1] : [Nat64], Nat64.compare) == [1, 2, 3];
   /// ```
-  public func compare(x : Nat64, y : Nat64) : { #less; #equal; #greater } {
+  public func compare(x : Nat64, y : Nat64) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 
@@ -227,8 +226,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.add(1, 2); // => 3
-  /// (1 : Nat64) + (2 : Nat64) // => 3
+  /// assert Nat64.add(1, 2) == 3;
+  /// assert (1 : Nat64) + (2 : Nat64) == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -239,7 +238,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat64, Nat64>([2, 3, 1], 0, Nat64.add) // => 6
+  /// assert Array.foldLeft<Nat64, Nat64>([2, 3, 1], 0, Nat64.add) == 6;
   /// ```
   public func add(x : Nat64, y : Nat64) : Nat64 { x + y };
 
@@ -248,8 +247,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.sub(3, 1); // => 2
-  /// (3 : Nat64) - (1 : Nat64) // => 2
+  /// assert Nat64.sub(3, 1) == 2;
+  /// assert (3 : Nat64) - (1 : Nat64) == 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -260,7 +259,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat64, Nat64>([2, 3, 1], 10, Nat64.sub) // => 4
+  /// assert Array.foldLeft<Nat64, Nat64>([2, 3, 1], 10, Nat64.sub) == 4;
   /// ```
   public func sub(x : Nat64, y : Nat64) : Nat64 { x - y };
 
@@ -269,8 +268,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.mul(2, 3); // => 6
-  /// (2 : Nat64) * (3 : Nat64) // => 6
+  /// assert Nat64.mul(2, 3) == 6;
+  /// assert (2 : Nat64) * (3 : Nat64) == 6;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -281,7 +280,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Array "mo:base/Array";
-  /// Array.foldLeft<Nat64, Nat64>([2, 3, 1], 1, Nat64.mul) // => 6
+  /// assert Array.foldLeft<Nat64, Nat64>([2, 3, 1], 1, Nat64.mul) == 6;
   /// ```
   public func mul(x : Nat64, y : Nat64) : Nat64 { x * y };
 
@@ -290,8 +289,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.div(6, 2); // => 3
-  /// (6 : Nat64) / (2 : Nat64) // => 3
+  /// assert Nat64.div(6, 2) == 3;
+  /// assert (6 : Nat64) / (2 : Nat64) == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -305,8 +304,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.rem(6, 4); // => 2
-  /// (6 : Nat64) % (4 : Nat64) // => 2
+  /// assert Nat64.rem(6, 4) == 2;
+  /// assert (6 : Nat64) % (4 : Nat64) == 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -319,8 +318,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.pow(2, 3); // => 8
-  /// (2 : Nat64) ** (3 : Nat64) // => 8
+  /// assert Nat64.pow(2, 3) == 8;
+  /// assert (2 : Nat64) ** (3 : Nat64) == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -333,8 +332,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitnot(0); // => 18446744073709551615
-  /// ^(0 : Nat64) // => 18446744073709551615
+  /// assert Nat64.bitnot(0) == 18446744073709551615;
+  /// assert ^(0 : Nat64) == 18446744073709551615;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -347,8 +346,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitand(1, 3); // => 1
-  /// (1 : Nat64) & (3 : Nat64) // => 1
+  /// assert Nat64.bitand(1, 3) == 1;
+  /// assert (1 : Nat64) & (3 : Nat64) == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -361,8 +360,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitor(1, 3); // => 3
-  /// (1 : Nat64) | (3 : Nat64) // => 3
+  /// assert Nat64.bitor(1, 3) == 3;
+  /// assert (1 : Nat64) | (3 : Nat64) == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -375,8 +374,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitxor(1, 3); // => 2
-  /// (1 : Nat64) ^ (3 : Nat64) // => 2
+  /// assert Nat64.bitxor(1, 3) == 2;
+  /// assert (1 : Nat64) ^ (3 : Nat64) == 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -389,8 +388,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitshiftLeft(1, 3); // => 8
-  /// (1 : Nat64) << (3 : Nat64) // => 8
+  /// assert Nat64.bitshiftLeft(1, 3) == 8;
+  /// assert (1 : Nat64) << (3 : Nat64) == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -403,8 +402,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitshiftRight(8, 3); // => 1
-  /// (8 : Nat64) >> (3 : Nat64) // => 1
+  /// assert Nat64.bitshiftRight(8, 3) == 1;
+  /// assert (8 : Nat64) >> (3 : Nat64) == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -417,8 +416,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitrotLeft(1, 3); // => 8
-  /// (1 : Nat64) <<> (3 : Nat64) // => 8
+  /// assert Nat64.bitrotLeft(1, 3) == 8;
+  /// assert (1 : Nat64) <<> (3 : Nat64) == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -431,8 +430,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.bitrotRight(8, 3); // => 1
-  /// (8 : Nat64) <>> (3 : Nat64) // => 1
+  /// assert Nat64.bitrotRight(8, 3) == 1;
+  /// assert (8 : Nat64) <>> (3 : Nat64) == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -446,7 +445,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bittest(5, 2); // => true
+  /// assert Nat64.bittest(5, 2);
   /// ```
   public func bittest(x : Nat64, p : Nat) : Bool {
     Prim.btstNat64(x, Prim.natToNat64(p))
@@ -456,7 +455,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitset(5, 1); // => 7
+  /// assert Nat64.bitset(5, 1) == 7;
   /// ```
   public func bitset(x : Nat64, p : Nat) : Nat64 {
     x | (1 << Prim.natToNat64(p))
@@ -466,7 +465,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitclear(5, 2); // => 1
+  /// assert Nat64.bitclear(5, 2) == 1;
   /// ```
   public func bitclear(x : Nat64, p : Nat) : Nat64 {
     x & ^(1 << Prim.natToNat64(p))
@@ -476,7 +475,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitflip(5, 2); // => 1
+  /// assert Nat64.bitflip(5, 2) == 1;
   /// ```
   public func bitflip(x : Nat64, p : Nat) : Nat64 {
     x ^ (1 << Prim.natToNat64(p))
@@ -486,7 +485,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitcountNonZero(5); // => 2
+  /// assert Nat64.bitcountNonZero(5) == 2;
   /// ```
   public let bitcountNonZero : (x : Nat64) -> Nat64 = Prim.popcntNat64;
 
@@ -494,7 +493,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitcountLeadingZero(5); // => 61
+  /// assert Nat64.bitcountLeadingZero(5) == 61;
   /// ```
   public let bitcountLeadingZero : (x : Nat64) -> Nat64 = Prim.clzNat64;
 
@@ -502,7 +501,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat64.bitcountTrailingZero(16); // => 4
+  /// assert Nat64.bitcountTrailingZero(16) == 4;
   /// ```
   public let bitcountTrailingZero : (x : Nat64) -> Nat64 = Prim.ctzNat64;
 
@@ -510,8 +509,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.addWrap(Nat64.maxValue, 1); // => 0
-  /// Nat64.maxValue +% (1 : Nat64) // => 0
+  /// assert Nat64.addWrap(Nat64.maxValue, 1) == 0;
+  /// assert Nat64.maxValue +% (1 : Nat64) == 0;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -524,8 +523,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.subWrap(0, 1); // => 18446744073709551615
-  /// (0 : Nat64) -% (1 : Nat64) // => 18446744073709551615
+  /// assert Nat64.subWrap(0, 1) == 18446744073709551615;
+  /// assert (0 : Nat64) -% (1 : Nat64) == 18446744073709551615;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -538,8 +537,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.mulWrap(4294967296, 4294967296); // => 0
-  /// (4294967296 : Nat64) *% (4294967296 : Nat64) // => 0
+  /// assert Nat64.mulWrap(4294967296, 4294967296) == 0;
+  /// assert (4294967296 : Nat64) *% (4294967296 : Nat64) == 0;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -552,8 +551,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat64.powWrap(2, 64); // => 0
-  /// (2 : Nat64) **% (64 : Nat64) // => 0
+  /// assert Nat64.powWrap(2, 64) == 0;
+  /// assert (2 : Nat64) **% (64 : Nat64) == 0;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -563,14 +562,14 @@ module {
   public func powWrap(x : Nat64, y : Nat64) : Nat64 { x **% y };
 
   /// Returns an iterator over `Nat64` values from the first to second argument with an exclusive upper bound.
-  /// ```motoko
+  /// ```motoko include=import
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat64.range(1, 4);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
@@ -578,7 +577,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat64.range(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func range(fromInclusive : Nat64, toExclusive : Nat64) : Iter.Iter<Nat64> {
     if (fromInclusive >= toExclusive) {
@@ -604,10 +603,10 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat64.rangeInclusive(1, 3);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
@@ -615,7 +614,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat64.rangeInclusive(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func rangeInclusive(from : Nat64, to : Nat64) : Iter.Iter<Nat64> {
     if (from > to) {
@@ -646,9 +645,9 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// let iter = Nat64.allValues();
-  /// assert(?0 == iter.next());
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
+  /// assert iter.next() == ?0;
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
   /// // ...
   /// ```
   public func allValues() : Iter.Iter<Nat64> {

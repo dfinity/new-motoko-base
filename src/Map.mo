@@ -24,7 +24,7 @@
 ///
 /// Performance:
 /// * Runtime: `O(log(n))` worst case cost per insertion, removal, and retrieval operation.
-/// * Space: `O(n)` for storing the entire map.
+/// * Space: `O(n)` for storing the entire map .
 /// `n` denotes the number of key-value entries stored in the map.
 
 // Data structure implementation is courtesy of Byron Becker.

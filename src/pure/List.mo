@@ -1,4 +1,4 @@
-/// Purely-functional, singly-linked lists.
+/// Purely-functional, singly-linked lists .
 
 /// A list of type `List<T>` is either `null` or an optional pair of a value of type `T` and a tail, itself of type `List<T>`.
 ///

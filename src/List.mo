@@ -1,4 +1,4 @@
-/// A mutable list data structure with efficient random access and dynamic resizing.
+/// A mutable list data structure with efficient random access and dynamic resizing .
 /// Provides O(1) access time and O(sqrt(n)) memory overhead.
 /// Can be declared `stable` for orthogonal persistence.
 ///

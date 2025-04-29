@@ -36,7 +36,7 @@
 /// The order is undefined to avoid allocations, making these operations more efficient.
 ///
 /// ```motoko name=import
-/// import RealTimeQueue "mo:base/pure/RealTimeQueue";
+/// import Queue "mo:base/pure/RealTimeQueue";
 /// ```
 
 import Types "../Types";
@@ -54,7 +54,7 @@ module {
   /// - `#three`: the queue contains three elements
   /// - `#idles`: the queue is in the idle state, where `l` and `r` are non-empty stacks of elements fulfilling the size invariant
   /// - `#rebal`: the queue is in the rebalancing state
-  public type RealTimeQueue<T> = {
+  public type Queue<T> = {
     #empty;
     #one : T;
     #two : (T, T);
@@ -68,15 +68,15 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.empty<Nat>();
-  ///   assert RealTimeQueue.isEmpty(queue);
+  ///   let queue = Queue.empty<Nat>();
+  ///   assert Queue.isEmpty(queue);
   /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func empty<T>() : RealTimeQueue<T> = #empty;
+  public func empty<T>() : Queue<T> = #empty;
 
   /// Determine whether a queue is empty.
   /// Returns true if `queue` is empty, otherwise `false`.
@@ -84,15 +84,15 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.empty<Nat>();
-  ///   assert RealTimeQueue.isEmpty(queue);
+  ///   let queue = Queue.empty<Nat>();
+  ///   assert Queue.isEmpty(queue);
   /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func isEmpty<T>(queue : RealTimeQueue<T>) : Bool = switch queue {
+  public func isEmpty<T>(queue : Queue<T>) : Bool = switch queue {
     case (#empty) true;
     case _ false
   };
@@ -102,31 +102,31 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.singleton<Nat>(25);
-  ///   assert RealTimeQueue.size(queue) == 1;
-  ///   assert RealTimeQueue.peekFront(queue) == ?25;
+  ///   let queue = Queue.singleton<Nat>(25);
+  ///   assert Queue.size(queue) == 1;
+  ///   assert Queue.peekFront(queue) == ?25;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func singleton<T>(element : T) : RealTimeQueue<T> = #one(element);
+  public func singleton<T>(element : T) : Queue<T> = #one(element);
 
   /// Determine the number of elements contained in a queue.
   ///
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.singleton<Nat>(42);
-  ///   assert RealTimeQueue.size(queue) == 1;
+  ///   let queue = Queue.singleton<Nat>(42);
+  ///   assert Queue.size(queue) == 1;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func size<T>(queue : RealTimeQueue<T>) : Nat = switch queue {
+  public func size<T>(queue : Queue<T>) : Nat = switch queue {
     case (#empty) 0;
     case (#one(_)) 1;
     case (#two(_, _)) 2;
@@ -147,9 +147,9 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let queue = RealTimeQueue.pushBack(RealTimeQueue.pushBack(RealTimeQueue.empty<Nat>(), 1), 2);
-  ///   assert RealTimeQueue.contains(queue, Nat.equal, 1);
-  ///   assert not RealTimeQueue.contains(queue, Nat.equal, 3);
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   assert Queue.contains(queue, Nat.equal, 1);
+  ///   assert not Queue.contains(queue, Nat.equal, 3);
   /// }
   /// ```
   ///
@@ -158,7 +158,7 @@ module {
   /// Runtime: `O(size)`
   ///
   /// Space: `O(1)`
-  public func contains<T>(queue : RealTimeQueue<T>, eq : (T, T) -> Bool, item : T) : Bool = switch queue {
+  public func contains<T>(queue : Queue<T>, eq : (T, T) -> Bool, item : T) : Bool = switch queue {
     case (#empty) false;
     case (#one(x)) eq(x, item);
     case (#two(x, y)) eq(x, item) or eq(y, item);
@@ -178,15 +178,15 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.pushFront(RealTimeQueue.pushFront(RealTimeQueue.empty<Nat>(), 2), 1);
-  ///   assert RealTimeQueue.peekFront(queue) == ?1;
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   assert Queue.peekFront(queue) == ?1;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekFront<T>(queue : RealTimeQueue<T>) : ?T = switch queue {
+  public func peekFront<T>(queue : Queue<T>) : ?T = switch queue {
     case (#empty) null;
     case (#one(x)) ?x;
     case (#two(x, _)) ?x;
@@ -204,15 +204,15 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.pushFront(RealTimeQueue.pushFront(RealTimeQueue.empty<Nat>(), 2), 1);
-  ///   assert RealTimeQueue.peekBack(queue) == ?2;
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   assert Queue.peekBack(queue) == ?2;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)`.
   ///
   /// Space: `O(1)`.
-  public func peekBack<T>(queue : RealTimeQueue<T>) : ?T = switch queue {
+  public func peekBack<T>(queue : Queue<T>) : ?T = switch queue {
     case (#empty) null;
     case (#one(x)) ?x;
     case (#two(_, y)) ?y;
@@ -230,17 +230,17 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.pushFront(RealTimeQueue.pushFront(RealTimeQueue.empty<Nat>(), 2), 1);
-  ///   assert RealTimeQueue.peekFront(queue) == ?1;
-  ///   assert RealTimeQueue.peekBack(queue) == ?2;
-  ///   assert RealTimeQueue.size(queue) == 2;
+  ///   let queue = Queue.pushFront(Queue.pushFront(Queue.empty<Nat>(), 2), 1);
+  ///   assert Queue.peekFront(queue) == ?1;
+  ///   assert Queue.peekBack(queue) == ?2;
+  ///   assert Queue.size(queue) == 2;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func pushFront<T>(queue : RealTimeQueue<T>, element : T) : RealTimeQueue<T> = switch queue {
+  public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> = switch queue {
     case (#empty) #one(element);
     case (#one(y)) #two(element, y);
     case (#two(y, z)) #three(element, y, z);
@@ -303,16 +303,16 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.pushBack(RealTimeQueue.pushBack(RealTimeQueue.empty<Nat>(), 1), 2);
-  ///   assert RealTimeQueue.peekBack(queue) == ?2;
-  ///   assert RealTimeQueue.size(queue) == 2;
+  ///   let queue = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   assert Queue.peekBack(queue) == ?2;
+  ///   assert Queue.size(queue) == 2;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func pushBack<T>(queue : RealTimeQueue<T>, element : T) : RealTimeQueue<T> = reverse(pushFront(reverse(queue), element));
+  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> = reverse(pushFront(reverse(queue), element));
 
   /// Remove the element on the front end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of
@@ -323,17 +323,17 @@ module {
   /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
-  ///   let initial = RealTimeQueue.pushBack(RealTimeQueue.pushBack(RealTimeQueue.empty<Nat>(), 1), 2);
-  ///   let ?(frontElement, remainingQueue) = RealTimeQueue.popFront(initial) else Runtime.trap "Empty queue impossible";
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap "Empty queue impossible";
   ///   assert frontElement == 1;
-  ///   assert RealTimeQueue.size(remainingQueue) == 1;
+  ///   assert Queue.size(remainingQueue) == 1;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func popFront<T>(queue : RealTimeQueue<T>) : ?(T, RealTimeQueue<T>) = switch queue {
+  public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) = switch queue {
     case (#empty) null;
     case (#one(x)) ?(x, #empty);
     case (#two(x, y)) ?(x, #one(y));
@@ -393,17 +393,17 @@ module {
   /// import Runtime "mo:base/Runtime";
   ///
   /// persistent actor {
-  ///   let initial = RealTimeQueue.pushBack(RealTimeQueue.pushBack(RealTimeQueue.empty<Nat>(), 1), 2);
-  ///   let ?(reducedQueue, removedElement) = RealTimeQueue.popBack(initial) else Runtime.trap "Empty queue impossible";
+  ///   let initial = Queue.pushBack(Queue.pushBack(Queue.empty<Nat>(), 1), 2);
+  ///   let ?(reducedQueue, removedElement) = Queue.popBack(initial) else Runtime.trap "Empty queue impossible";
   ///   assert removedElement == 2;
-  ///   assert RealTimeQueue.size(reducedQueue) == 1;
+  ///   assert Queue.size(reducedQueue) == 1;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func popBack<T>(queue : RealTimeQueue<T>) : ?(RealTimeQueue<T>, T) = do ? {
+  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) = do ? {
     let (x, queue2) = popFront(reverse(queue))!;
     (reverse(queue2), x)
   };
@@ -413,17 +413,17 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([0, 1, 2, 3, 4].values());
-  ///   assert RealTimeQueue.peekFront(queue) == ?0;
-  ///   assert RealTimeQueue.peekBack(queue) == ?4;
-  ///   assert RealTimeQueue.size(queue) == 5;
+  ///   let queue = Queue.fromIter([0, 1, 2, 3, 4].values());
+  ///   assert Queue.peekFront(queue) == ?0;
+  ///   assert Queue.peekBack(queue) == ?4;
+  ///   assert Queue.size(queue) == 5;
   /// }
   /// ```
   ///
   /// Runtime: `O(size)`
   ///
   /// Space: `O(size)`
-  public func fromIter<T>(iter : Iter<T>) : RealTimeQueue<T> {
+  public func fromIter<T>(iter : Iter<T>) : Queue<T> {
     var queue = empty<T>();
     Iter.forEach(iter, func(t : T) = queue := pushBack(queue, t));
     queue
@@ -436,8 +436,8 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   let iter = RealTimeQueue.values(queue);
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let iter = Queue.values(queue);
   ///   assert Iter.toArray(iter) == [1, 2, 3];
   /// }
   /// ```
@@ -445,7 +445,7 @@ module {
   /// Runtime: `O(1)` to create the iterator and for each `next()` call.
   ///
   /// Space: `O(1)` to create the iterator and for each `next()` call.
-  public func values<T>(queue : RealTimeQueue<T>) : Iter.Iter<T> {
+  public func values<T>(queue : Queue<T>) : Iter.Iter<T> {
     object {
       var current = queue;
       public func next() : ?T {
@@ -460,37 +460,6 @@ module {
     }
   };
 
-  /// Create an iterator over the elements in the queue. The order of the elements is from back to front.
-  ///
-  /// Example:
-  /// ```motoko include=import
-  /// import Iter "mo:base/Iter";
-  ///
-  /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   let iter = RealTimeQueue.valuesRev(queue);
-  ///   assert Iter.toArray(iter) == [3, 2, 1];
-  /// }
-  /// ```
-  ///
-  /// Runtime: `O(1)` to create the iterator and for each `next()` call.
-  ///
-  /// Space: `O(1)` to create the iterator and for each `next()` call.
-  public func valuesRev<T>(queue : RealTimeQueue<T>) : Iter.Iter<T> {
-    object {
-      var current = queue;
-      public func next() : ?T {
-        switch (popBack(current)) {
-          case null null;
-          case (?result) {
-            current := result.0;
-            ?result.1
-          }
-        }
-      }
-    }
-  };
-
   /// Compare two queues for equality using a provided equality function to compare their elements.
   /// Two queues are considered equal if they contain the same elements in the same order.
   ///
@@ -499,18 +468,18 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let queue1 = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   let queue2 = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   let queue3 = RealTimeQueue.fromIter([1, 3, 2].values());
-  ///   assert RealTimeQueue.equal(queue1, queue2, Nat.equal);
-  ///   assert not RealTimeQueue.equal(queue1, queue3, Nat.equal);
+  ///   let queue1 = Queue.fromIter([1, 2, 3].values());
+  ///   let queue2 = Queue.fromIter([1, 2, 3].values());
+  ///   let queue3 = Queue.fromIter([1, 3, 2].values());
+  ///   assert Queue.equal(queue1, queue2, Nat.equal);
+  ///   assert not Queue.equal(queue1, queue3, Nat.equal);
   /// }
   /// ```
   ///
   /// Runtime: `O(size)`
   ///
   /// Space: `O(size)`
-  public func equal<T>(queue1 : RealTimeQueue<T>, queue2 : RealTimeQueue<T>, equality : (T, T) -> Bool) : Bool = switch (popFront queue1, popFront queue2) {
+  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equality : (T, T) -> Bool) : Bool = switch (popFront queue1, popFront queue2) {
     case (null, null) true;
     case (?(x1, queue1Tail), ?(x2, queue2Tail)) equality(x1, x2) and equal(queue1Tail, queue2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
     case _ false
@@ -524,16 +493,16 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let queue1 = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   let queue2 = RealTimeQueue.fromIter([1, 2, 4].values());
-  ///   assert RealTimeQueue.compare(queue1, queue2, Nat.compare) == #less;
+  ///   let queue1 = Queue.fromIter([1, 2, 3].values());
+  ///   let queue2 = Queue.fromIter([1, 2, 4].values());
+  ///   assert Queue.compare(queue1, queue2, Nat.compare) == #less;
   /// }
   /// ```
   ///
   /// Runtime: `O(size)`
   ///
   /// Space: `O(size)`
-  public func compare<T>(queue1 : RealTimeQueue<T>, queue2 : RealTimeQueue<T>, comparison : (T, T) -> Types.Order) : Types.Order = switch (popFront queue1, popFront queue2) {
+  public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, comparison : (T, T) -> Types.Order) : Types.Order = switch (popFront queue1, popFront queue2) {
     case (null, null) #equal;
     case (null, _) #less;
     case (_, null) #greater;
@@ -551,9 +520,9 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([2, 4, 6].values());
-  ///   assert RealTimeQueue.all(queue, func n = n % 2 == 0);
-  ///   assert not RealTimeQueue.all(queue, func n = n > 4);
+  ///   let queue = Queue.fromIter([2, 4, 6].values());
+  ///   assert Queue.all(queue, func n = n % 2 == 0);
+  ///   assert not Queue.all(queue, func n = n > 4);
   /// }
   /// ```
   ///
@@ -562,7 +531,7 @@ module {
   /// Space: `O(1)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
-  public func all<T>(queue : RealTimeQueue<T>, predicate : T -> Bool) : Bool = switch queue {
+  public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool = switch queue {
     case (#empty) true;
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x and predicate y;
@@ -582,9 +551,9 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   assert RealTimeQueue.any(queue, func n = n > 2);
-  ///   assert not RealTimeQueue.any(queue, func n = n > 3);
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Queue.any(queue, func n = n > 2);
+  ///   assert not Queue.any(queue, func n = n > 3);
   /// }
   /// ```
   ///
@@ -593,7 +562,7 @@ module {
   /// Space: `O(1)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
-  public func any<T>(queue : RealTimeQueue<T>, predicate : T -> Bool) : Bool = switch queue {
+  public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool = switch queue {
     case (#empty) false;
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x or predicate y;
@@ -611,11 +580,12 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// import Nat "mo:base/Nat";
   /// persistent actor {
   ///   var sum = 0;
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   RealTimeQueue.forEach(queue, func n = sum += n);
-  ///   assert sum == 6;
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   Queue.forEach(queue, func n = sum #= Nat.toText(n));
+  ///   assert sum == "123";
   /// }
   /// ```
   ///
@@ -624,7 +594,7 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func forEach<T>(queue : RealTimeQueue<T>, f : T -> ()) = switch queue {
+  public func forEach<T>(queue : Queue<T>, f : T -> ()) = switch queue {
     case (#empty) ();
     case (#one(x)) f x;
     case (#two(x, y)) { f x; f y };
@@ -643,11 +613,11 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   let mapped = RealTimeQueue.map(queue, func n = n * 2);
-  ///   assert RealTimeQueue.size(mapped) == 3;
-  ///   assert RealTimeQueue.peekFront(mapped) == ?2;
-  ///   assert RealTimeQueue.peekBack(mapped) == ?6;
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let mapped = Queue.map(queue, func n = n * 2);
+  ///   assert Queue.size(mapped) == 3;
+  ///   assert Queue.peekFront(mapped) == ?2;
+  ///   assert Queue.peekBack(mapped) == ?6;
   /// }
   /// ```
   ///
@@ -656,7 +626,7 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func map<T1, T2>(queue : RealTimeQueue<T1>, f : T1 -> T2) : RealTimeQueue<T2> = switch queue {
+  public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> = switch queue {
     case (#empty) #empty;
     case (#one(x)) #one(f x);
     case (#two(x, y)) #two(f x, f y);
@@ -677,11 +647,11 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3, 4].values());
-  ///   let filtered = RealTimeQueue.filter(queue, func n = n % 2 == 0);
-  ///   assert RealTimeQueue.size(filtered) == 2;
-  ///   assert RealTimeQueue.peekFront(filtered) == ?2;
-  ///   assert RealTimeQueue.peekBack(filtered) == ?4;
+  ///   let queue = Queue.fromIter([1, 2, 3, 4].values());
+  ///   let filtered = Queue.filter(queue, func n = n % 2 == 0);
+  ///   assert Queue.size(filtered) == 2;
+  ///   assert Queue.peekFront(filtered) == ?2;
+  ///   assert Queue.peekBack(filtered) == ?4;
   /// }
   /// ```
   ///
@@ -690,7 +660,7 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
-  public func filter<T>(queue : RealTimeQueue<T>, predicate : T -> Bool) : RealTimeQueue<T> {
+  public func filter<T>(queue : Queue<T>, predicate : T -> Bool) : Queue<T> {
     var q = empty<T>();
     for (t in values queue) if (predicate t) q := pushBack(q, t);
     q
@@ -702,11 +672,11 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3, 4].values());
-  ///   let filtered = RealTimeQueue.filterMap(queue, func n = if n % 2 == 0 then ?n else null);
-  ///   assert RealTimeQueue.size(filtered) == 2;
-  ///   assert RealTimeQueue.peekFront(filtered) == ?2;
-  ///   assert RealTimeQueue.peekBack(filtered) == ?4;
+  ///   let queue = Queue.fromIter([1, 2, 3, 4].values());
+  ///   let filtered = Queue.filterMap(queue, func n = if n % 2 == 0 then ?n else null);
+  ///   assert Queue.size(filtered) == 2;
+  ///   assert Queue.peekFront(filtered) == ?2;
+  ///   assert Queue.peekBack(filtered) == ?4;
   /// }
   /// ```
   ///
@@ -715,7 +685,7 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func filterMap<T, U>(queue : RealTimeQueue<T>, f : T -> ?U) : RealTimeQueue<U> {
+  public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
     var q = empty<U>();
     for (t in values queue) {
       switch (f t) {
@@ -733,8 +703,8 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   assert RealTimeQueue.toText(queue, Nat.toText) == "RealTimeQueue[1, 2, 3]";
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   assert Queue.toText(queue, Nat.toText) == "Queue[1, 2, 3]";
   /// }
   /// ```
   ///
@@ -743,8 +713,8 @@ module {
   /// Space: `O(size)`
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
-  public func toText<T>(queue : RealTimeQueue<T>, f : T -> Text) : Text {
-    var text = "RealTimeQueue[";
+  public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
+    var text = "Queue[";
     var first = true;
     for (t in values queue) {
       if (first) first := false else text #= ", ";
@@ -759,17 +729,17 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.fromIter([1, 2, 3].values());
-  ///   let reversed = RealTimeQueue.reverse(queue);
-  ///   assert RealTimeQueue.peekFront(reversed) == ?3;
-  ///   assert RealTimeQueue.peekBack(reversed) == ?1;
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let reversed = Queue.reverse(queue);
+  ///   assert Queue.peekFront(reversed) == ?3;
+  ///   assert Queue.peekBack(reversed) == ?1;
   /// }
   /// ```
   ///
   /// Runtime: `O(1)`
   ///
   /// Space: `O(1)`
-  public func reverse<T>(queue : RealTimeQueue<T>) : RealTimeQueue<T> = switch queue {
+  public func reverse<T>(queue : Queue<T>) : Queue<T> = switch queue {
     case (#empty) queue;
     case (#one(_)) queue;
     case (#two(x, y)) #two(y, x);
@@ -804,7 +774,7 @@ module {
 
     public func size<T>((left, right) : Stacks<T>) : Nat = List.size(left) + List.size(right);
 
-    public func smallqueue<T>((left, right) : Stacks<T>) : RealTimeQueue<T> = switch (left, right) {
+    public func smallqueue<T>((left, right) : Stacks<T>) : Queue<T> = switch (left, right) {
       case (null, null) #empty;
       case (null, ?(x, null)) #one(x);
       case (?(x, null), null) #one(x);
@@ -815,7 +785,7 @@ module {
       case (?(x, ?(y, ?(z, null))), null) #three(z, y, x);
       case (?(x, ?(y, null)), ?(z, null)) #three(z, y, x);
       case (?(x, null), ?(y, ?(z, null))) #three(z, y, x);
-      case _ (trap "RealTimeQueue.Stacks.smallqueue() impossible")
+      case _ (trap "Queue.Stacks.smallqueue() impossible")
     };
 
     public func map<T, U>((left, right) : Stacks<T>, f : T -> U) : Stacks<U> = (List.map(left, f), List.map(right, f))

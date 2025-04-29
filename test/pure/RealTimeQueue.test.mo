@@ -9,7 +9,7 @@ import { suite; test; expect } "mo:test";
 import Text "../../src/Text";
 import Debug "../../src/Debug";
 
-type Queue<T> = Queue.RealTimeQueue<T>;
+type Queue<T> = Queue.Queue<T>;
 
 func iterateForward<T>(queue : Queue<T>) : Iter.Iter<T> = Queue.values(queue);
 
@@ -773,28 +773,6 @@ suite(
         testReverse([1, 2, 3, 4]);
         testReverse([1, 2, 2, 3, 3, 4]);
         testReverse([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
-      }
-    );
-
-    test(
-      "valuesRev",
-      func() {
-        let testValuesRev = func(testElements : [Nat]) {
-          let q = Queue.fromIter(testElements.vals());
-          expect.array(
-            Iter.toArray(Queue.valuesRev(q)),
-            Nat.toText,
-            Nat.equal
-          ).equal(Array.reverse(testElements))
-        };
-
-        testValuesRev([]);
-        testValuesRev([1]);
-        testValuesRev([1, 2]);
-        testValuesRev([1, 2, 3]);
-        testValuesRev([1, 2, 3, 4]);
-        testValuesRev([1, 2, 2, 3, 3, 4]);
-        testValuesRev([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
       }
     );
 

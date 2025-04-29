@@ -574,5 +574,5 @@ module {
   /// Runtime: `O(1)`
   ///
   /// Space: `O(1)`
-  public func reverse<T>((f, n, b) : Queue<T>) : Queue<T> = (b, n, f)
+  public func reverse<T>(queue : Queue<T>) : Queue<T> = (queue.2, queue.1, queue.0)
 }

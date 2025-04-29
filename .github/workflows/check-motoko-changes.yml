@@ -49,7 +49,9 @@ jobs:
 
           # Check for src/*.mo changes
           src_mo_changed_files=$(git diff --name-only $BASE_SHA $HEAD_SHA -- 'src/*.mo')
-          echo "src_mo_changed_files=$src_mo_changed_files" >> $GITHUB_OUTPUT
+          echo "src_mo_changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$src_mo_changed_files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           if [ -z "$src_mo_changed_files" ]; then
             echo "has_src_mo_changes=false" >> $GITHUB_OUTPUT
             echo "No Motoko file changes in src directory detected"

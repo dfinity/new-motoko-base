@@ -1244,7 +1244,7 @@ module {
   ///
   /// persistent actor {
   ///   let map = Map.fromIter<Nat, Text>([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
-  ///   assert Map.toText<Nat, Text>(map, Nat.toText, func t { t }) == "{(0, Zero), (1, One), (2, Two)}";
+  ///   assert Map.toText<Nat, Text>(map, Nat.toText, func t { t }) == "Map{(0, Zero), (1, One), (2, Two)}";
   /// }
   /// ```
   ///
@@ -1255,7 +1255,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text {
-    var text = "{";
+    var text = "Map{";
     var sep = "";
     for ((key, value) in entries(map)) {
       text #= sep # "(" # keyFormat(key) # ", " # valueFormat(value) # ")";

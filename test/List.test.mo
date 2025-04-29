@@ -487,17 +487,17 @@ run(
       test(
         "empty list",
         List.toText<Nat>(List.empty<Nat>(), Nat.toText),
-        M.equals(T.text("[]"))
+        M.equals(T.text("List[]"))
       ),
       test(
         "singleton list",
         List.toText<Nat>(List.singleton<Nat>(3), Nat.toText),
-        M.equals(T.text("[3]"))
+        M.equals(T.text("List[3]"))
       ),
       test(
         "non-empty list",
         List.toText<Nat>(list, Nat.toText),
-        M.equals(T.text("[0, 1, 2, 3, 4, 5]"))
+        M.equals(T.text("List[0, 1, 2, 3, 4, 5]"))
       )
     ]
   )

@@ -1009,7 +1009,7 @@ module {
   ///
   /// Space: O(size)
   public func toText<T>(list : List<T>, f : T -> Text) : Text {
-    var text = "[";
+    var text = "PureList[";
     var first = true;
     forEach(
       list,

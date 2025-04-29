@@ -52,7 +52,7 @@ module {
   /// import Nat "mo:base/Nat";
   ///
   /// let list = List.singleton<Nat>(1);
-  /// assert List.toText<Nat>(list, Nat.toText) == "[1]";
+  /// assert List.toText<Nat>(list, Nat.toText) == "List[1]";
   /// ```
   ///
   /// Runtime: `O(1)`
@@ -1630,7 +1630,7 @@ module {
   ///
   /// let list = List.fromArray<Nat>([1,2,3,4]);
   ///
-  /// assert List.toText<Nat>(list, Nat.toText) == "[1, 2, 3, 4]";
+  /// assert List.toText<Nat>(list, Nat.toText) == "List[1, 2, 3, 4]";
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1652,7 +1652,7 @@ module {
       text := text # f(get<T>(list, i))
     };
 
-    "[" # text # "]"
+    "List[" # text # "]"
   };
 
   /// Collapses the elements in `list` into a single value by starting with `base`

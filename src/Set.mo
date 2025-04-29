@@ -1345,7 +1345,7 @@ module {
   /// persistent actor {
   ///   let set = Set.fromIter<Nat>([0, 3, 1, 2].values(), Nat.compare);
   ///
-  ///   assert Set.toText(set, Nat.toText) == "{0, 1, 2, 3}"
+  ///   assert Set.toText(set, Nat.toText) == "Set{0, 1, 2, 3}"
   /// }
   /// ```
   ///
@@ -1356,7 +1356,7 @@ module {
   ///
   /// Note: Creates `O(log(n))` temporary objects that will be collected as garbage.
   public func toText<T>(set : Set<T>, elementFormat : T -> Text) : Text {
-    var text = "{";
+    var text = "Set{";
     var sep = "";
     for (element in values(set)) {
       text #= sep # elementFormat(element);

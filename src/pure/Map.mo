@@ -846,7 +846,7 @@ module {
   ///
   /// persistent actor {
   ///   let map = Map.fromIter([(0, "Zero"), (2, "Two"), (1, "One")].values(), Nat.compare);
-  ///   assert Map.toText<Nat, Text>(map, Nat.toText, func t { t }) == "{(0, Zero), (1, One), (2, Two)}";
+  ///   assert Map.toText<Nat, Text>(map, Nat.toText, func t { t }) == "PureMap{(0, Zero), (1, One), (2, Two)}";
   /// }
   /// ```
   ///
@@ -856,7 +856,7 @@ module {
   ///
   /// *Runtime and space assumes that `keyFormat` and `valueFormat` run in O(1) time and space.
   public func toText<K, V>(map : Map<K, V>, keyFormat : K -> Text, valueFormat : V -> Text) : Text {
-    var text = "{";
+    var text = "PureMap{";
     var sep = "";
     for ((k, v) in entries(map)) {
       text #= sep # "(" # keyFormat(k) # ", " # valueFormat(v) # ")";

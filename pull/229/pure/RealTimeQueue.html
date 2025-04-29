@@ -139,10 +139,12 @@ the first element and a new queue that contains all the remaining elements of <c
 import Runtime &quot;mo:base/Runtime&quot;;
 
 persistent actor {
-  let initial = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
-  let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap &quot;Empty queue impossible&quot;;
-  assert frontElement == 1;
-  assert Queue.size(remainingQueue) == 1;
+  do {
+    let initial = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
+    let ?(frontElement, remainingQueue) = Queue.popFront(initial) else Runtime.trap &quot;Empty queue impossible&quot;;
+    assert frontElement == 1;
+    assert Queue.size(remainingQueue) == 1;
+  }
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code> worst-case!</p>
@@ -156,10 +158,12 @@ and, as the second pair item, the removed back element.</p>
 import Runtime &quot;mo:base/Runtime&quot;;
 
 persistent actor {
-  let initial = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
-  let ?(reducedQueue, removedElement) = Queue.popBack(initial) else Runtime.trap &quot;Empty queue impossible&quot;;
-  assert removedElement == 2;
-  assert Queue.size(reducedQueue) == 1;
+  do {
+    let initial = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
+    let ?(reducedQueue, removedElement) = Queue.popBack(initial) else Runtime.trap &quot;Empty queue impossible&quot;;
+    assert removedElement == 2;
+    assert Queue.size(reducedQueue) == 1;
+  }
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code> worst-case!</p>
@@ -168,7 +172,7 @@ persistent actor {
 <p>Example:</p>
 <pre><code>motoko include=import
 persistent actor {
-  let queue = Queue.fromIter([0, 1, 2, 3, 4].values());
+  let queue = Queue.fromIter&lt;Nat&gt;([0, 1, 2, 3, 4].values());
   assert Queue.peekFront(queue) == ?0;
   assert Queue.peekBack(queue) == ?4;
   assert Queue.size(queue) == 5;
@@ -182,9 +186,8 @@ persistent actor {
 import Iter &quot;mo:base/Iter&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter([1, 2, 3].values());
-  let iter = Queue.values(queue);
-  assert Iter.toArray(iter) == [1, 2, 3];
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  assert Iter.toArray(Queue.values(queue)) == [1, 2, 3];
 }</code></pre>
 
 <p>Runtime: <code>O(1)</code> to create the iterator and for each <code>next()</code> call.</p>
@@ -196,9 +199,9 @@ Two queues are considered equal if they contain the same elements in the same or
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let queue1 = Queue.fromIter([1, 2, 3].values());
-  let queue2 = Queue.fromIter([1, 2, 3].values());
-  let queue3 = Queue.fromIter([1, 3, 2].values());
+  let queue1 = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let queue2 = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let queue3 = Queue.fromIter&lt;Nat&gt;([1, 3, 2].values());
   assert Queue.equal(queue1, queue2, Nat.equal);
   assert not Queue.equal(queue1, queue3, Nat.equal);
 }</code></pre>
@@ -212,8 +215,8 @@ Returns <code>#less</code> if <code>queue1</code> is lexicographically less than
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let queue1 = Queue.fromIter([1, 2, 3].values());
-  let queue2 = Queue.fromIter([1, 2, 4].values());
+  let queue1 = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let queue2 = Queue.fromIter&lt;Nat&gt;([1, 2, 4].values());
   assert Queue.compare(queue1, queue2, Nat.compare) == #less;
 }</code></pre>
 
@@ -224,9 +227,9 @@ Note that this operation traverses the elements in arbitrary order.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 persistent actor {
-  let queue = Queue.fromIter([2, 4, 6].values());
-  assert Queue.all(queue, func n = n % 2 == 0);
-  assert not Queue.all(queue, func n = n &gt; 4);
+  let queue = Queue.fromIter&lt;Nat&gt;([2, 4, 6].values());
+  assert Queue.all&lt;Nat&gt;(queue, func n = n % 2 == 0);
+  assert not Queue.all&lt;Nat&gt;(queue, func n = n &gt; 4);
 }</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
@@ -237,9 +240,9 @@ Note that this operation traverses the elements in arbitrary order.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 persistent actor {
-  let queue = Queue.fromIter([1, 2, 3].values());
-  assert Queue.any(queue, func n = n &gt; 2);
-  assert not Queue.any(queue, func n = n &gt; 3);
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  assert Queue.any&lt;Nat&gt;(queue, func n = n &gt; 2);
+  assert not Queue.any&lt;Nat&gt;(queue, func n = n &gt; 3);
 }</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
@@ -250,10 +253,10 @@ persistent actor {
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
 persistent actor {
-  var sum = 0;
-  let queue = Queue.fromIter([1, 2, 3].values());
-  Queue.forEach(queue, func n = sum #= Nat.toText(n));
-  assert sum == &quot;123&quot;;
+  var text = &quot;&quot;;
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  Queue.forEach&lt;Nat&gt;(queue, func n = text #= Nat.toText(n));
+  assert text == &quot;123&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
@@ -266,8 +269,8 @@ Note that this operation traverses the elements in arbitrary order.</p>
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter([1, 2, 3].values());
-  let mapped = Queue.map(queue, func n = n * 2);
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
+  let mapped = Queue.map&lt;Nat, Nat&gt;(queue, func n = n * 2);
   assert Queue.size(mapped) == 3;
   assert Queue.peekFront(mapped) == ?2;
   assert Queue.peekBack(mapped) == ?6;
@@ -281,8 +284,8 @@ the given predicate returns true.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 persistent actor {
-  let queue = Queue.fromIter([1, 2, 3, 4].values());
-  let filtered = Queue.filter(queue, func n = n % 2 == 0);
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3, 4].values());
+  let filtered = Queue.filter&lt;Nat&gt;(queue, func n = n % 2 == 0);
   assert Queue.size(filtered) == 2;
   assert Queue.peekFront(filtered) == ?2;
   assert Queue.peekBack(filtered) == ?4;
@@ -296,8 +299,8 @@ and collecting the results for which the function returns a non-null value.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 persistent actor {
-  let queue = Queue.fromIter([1, 2, 3, 4].values());
-  let filtered = Queue.filterMap(queue, func n = if n % 2 == 0 then ?n else null);
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3, 4].values());
+  let filtered = Queue.filterMap&lt;Nat, Nat&gt;(queue, func n = if (n % 2 == 0) { ?n } else null);
   assert Queue.size(filtered) == 2;
   assert Queue.peekFront(filtered) == ?2;
   assert Queue.peekBack(filtered) == ?4;
@@ -312,7 +315,7 @@ persistent actor {
 import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
-  let queue = Queue.fromIter([1, 2, 3].values());
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
   assert Queue.toText(queue, Nat.toText) == &quot;Queue[1, 2, 3]&quot;;
 }</code></pre>
 
@@ -324,7 +327,7 @@ This operation is cheap, it does NOT require copying the elements.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 persistent actor {
-  let queue = Queue.fromIter([1, 2, 3].values());
+  let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
   let reversed = Queue.reverse(queue);
   assert Queue.peekFront(reversed) == ?3;
   assert Queue.peekBack(reversed) == ?1;

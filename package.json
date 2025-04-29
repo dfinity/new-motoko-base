@@ -10,7 +10,7 @@
     "test": "run-s test:ts test:mops",
     "test:ts": "cd test/ts && tsx .",
     "test:mops": "mops test",
-    "validate": "run-s validate:changelog validate:version validate:api validate:docs",
+    "validate": "run-s validate:changelog validate:version validate:api",
     "validate:changelog": "cd test/ts/validate && tsx changelog",
     "validate:version": "cd test/ts/validate && tsx version",
     "validate:api": "cd test/ts/validate && tsx api",

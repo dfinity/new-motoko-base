@@ -64,8 +64,8 @@ jobs:
       - uses: ./.github/actions/setup
       - name: Validate docs for changed src/*.mo files
         run: |
-          for file in ${{ needs.check-motoko-changes.outputs.src_mo_changed_files }}; do
-            npm run validate:docs $file
+          echo "${{ needs.check-motoko-changes.outputs.src_mo_changed_files }}" | while read -r file; do
+            npm run validate:docs "$file"
           done
 
   format:

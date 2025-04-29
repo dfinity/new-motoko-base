@@ -325,7 +325,7 @@ persistent actor {
 <p>Runtime: O(size)</p>
 <p>Space: O(size)</p>
 <p>*Runtime and space assumes that argument <code>compare</code> runs in O(1) time and space.</p>
-</p></div><div class="declaration"><h4 class="function" id="reverse"><code><span class="keyword">public func </span><span class="fnname">reverse</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Reverse the order of elements in a queue.
+</p></div><div class="declaration"><h4 class="function" id="reverse"><code><span class="keyword">public func </span><span class="fnname">reverse</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Reverse the order of elements in a queue.
 This operation is cheap, it does NOT require copying the elements.</p>
 <p>Example:</p>
 <pre><code>motoko include=import

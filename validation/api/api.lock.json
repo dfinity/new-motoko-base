@@ -1372,7 +1372,6 @@
       "public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U>",
       "public func forEach<T>(queue : Queue<T>, f : T -> ())",
       "public func fromIter<T>(iter : Iter<T>) : Queue<T>",
-      "public func idlesInvariant<T>(((l, nL), (r, nR)) : (Idle<T>, Idle<T>)) : Bool",
       "public func isEmpty<T>(queue : Queue<T>) : Bool",
       "public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2>",
       "public func peekBack<T>(queue : Queue<T>) : ?T",

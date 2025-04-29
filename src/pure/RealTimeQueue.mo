@@ -1,5 +1,19 @@
 /// Double-ended immutable queue with guaranteed `O(1)` push/pop operations (caveat: high constant factor).
-/// This is an alternative to the `pure/Queue` module.
+/// For a default immutable queue implementation, see `pure/Queue`.
+///
+/// This module provides an alternative implementation with better worst-case performance for single operations, e.g. `pushBack` and `popFront`.
+/// These operations are always constant time, `O(1)`, which eliminates spikes in performance of `pure/Queue` operations
+/// that are caused by the amortized nature of the `pure/Queue` implementation, which can lead to `O(n)` worst-case performance for a single operation.
+/// The spikes in performance can cause a single message to take multiple more rounds to complete than most other messages.
+///
+/// However, the `O(1)` operations come at a cost of higher constant factor than the `pure/Queue` implementation:
+/// - 'pop' operations are on average 4x more expensive
+/// - 'push' operations are on average 10x more expensive
+///
+/// For better performance across multiple operations and when the spikes in single operations are not a problem, use `pure/Queue`.
+/// For guaranteed `O(1)` operations, use `pure/RealTimeQueue`.
+///
+/// ---
 ///
 /// The interface is purely functional, not imperative, and queues are immutable values.
 /// In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
@@ -144,7 +158,7 @@ module {
     case (#rebal((_, big, small))) {
       let (extraB, _, (oldB1, oldB2), _) = BigState.current(big);
       let (extraS, _, (oldS1, oldS2), _) = SmallState.current(small);
-      // note that the order is one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
+      // note that the order of one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
       List.contains(extraB, eq, item) or List.contains(oldB1, eq, item) or List.contains(oldB2, eq, item) or List.contains(extraS, eq, item) or List.contains(oldS1, eq, item) or List.contains(oldS2, eq, item)
     }
   };
@@ -754,7 +768,7 @@ module {
       case (?(x, ?(y, ?(z, null))), null) #three(z, y, x);
       case (?(x, ?(y, null)), ?(z, null)) #three(z, y, x);
       case (?(x, null), ?(y, ?(z, null))) #three(z, y, x);
-      case _ (trap "Illegal smallqueue invocation")
+      case _ (trap "RealTimeQueue.Stacks.smallqueue() impossible")
     };
 
     public func map<T, U>((left, right) : Stacks<T>, f : T -> U) : Stacks<U> = (List.map(left, f), List.map(right, f))
@@ -985,7 +999,7 @@ module {
 
   type Direction = { #left; #right };
 
-  public func idlesInvariant<T>(((l, nL), (r, nR)) : (Idle<T>, Idle<T>)) : Bool = Stacks.size(l) == nL and Stacks.size(r) == nR and 3 * nL >= nR and 3 * nR >= nL;
+  func idlesInvariant<T>(((l, nL), (r, nR)) : (Idle<T>, Idle<T>)) : Bool = Stacks.size(l) == nL and Stacks.size(r) == nR and 3 * nL >= nR and 3 * nR >= nL;
 
   type List<T> = Types.Pure.List<T>;
   type Iter<T> = Types.Iter<T>;

@@ -194,7 +194,7 @@ for (x in iter) {
 }</code></pre>
 
 <p>Iterators can be:</p>
-<ul><li>created from other collections (e.g. using <code>values</code> or <code>keys</code> function on a <code>Map</code>) or from scratch (e.g. using <code>empty</code> or <code>singleton</code>).</li><li>transformed using <code>map</code>, <code>filter</code>, <code>concat</code>, etc. Which can be used to compose several transformations together without materializing intermediate collections.</li><li>consumed using <code>forEach</code>, <code>size</code>, <code>toArray</code>, etc.</li><li>combined using <code>concat</code>.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="List.html">List</a><div class="index-item-comment"><p>A mutable list data structure with efficient random access and dynamic resizing.
+<ul><li>created from other collections (e.g. using <code>values</code> or <code>keys</code> function on a <code>Map</code>) or from scratch (e.g. using <code>empty</code> or <code>singleton</code>).</li><li>transformed using <code>map</code>, <code>filter</code>, <code>concat</code>, etc. Which can be used to compose several transformations together without materializing intermediate collections.</li><li>consumed using <code>forEach</code>, <code>size</code>, <code>toArray</code>, etc.</li><li>combined using <code>concat</code>.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="List.html">List</a><div class="index-item-comment"><p>A mutable list data structure with efficient random access and dynamic resizing .
 Provides O(1) access time and O(sqrt(n)) memory overhead.
 Can be declared <code>stable</code> for orthogonal persistence.</p>
 <p>This implementation is adapted with permission from the <code>vector</code> Mops package created by Research AG.</p>
@@ -223,7 +223,7 @@ persistent actor {
 
 <p>The internal implementation is a B-tree with order 32.</p>
 <p>Performance:</p>
-<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire map.
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire map .
 <code>n</code> denotes the number of key-value entries stored in the map.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="Nat.html">Nat</a><div class="index-item-comment"><p>Natural numbers with infinite precision.</p>
 <p>Most operations on natural numbers (e.g. addition) are available as built-in operators (e.g. <code>1 + 1</code>).
 This module provides equivalent functions and <code>Text</code> conversion.</p>
@@ -482,7 +482,7 @@ See: https://numpy.org/doc/stable/reference/random/bit_generators/sfc64.html</p>
 <p>Copyright: 2023 MR Research AG
 Main author: react0r-com
 Contributors: Timo Hanke (timohanke)</p>
-</div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists.
+</div></li><li class="index-item"><a class="index-item-link" href="pure/List.html">pure/List</a><div class="index-item-comment"><p>Purely-functional, singly-linked lists .
 A list of type <code>List&lt;T&gt;</code> is either <code>null</code> or an optional pair of a value of type <code>T</code> and a tail, itself of type <code>List&lt;T&gt;</code>.</p>
 <p>To use this library, import it using:</p>
 <pre><code>motoko name=import

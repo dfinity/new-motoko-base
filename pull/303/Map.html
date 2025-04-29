@@ -20,7 +20,7 @@ persistent actor {
 
 <p>The internal implementation is a B-tree with order 32.</p>
 <p>Performance:</p>
-<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire map.
+<ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire map .
 <code>n</code> denotes the number of key-value entries stored in the map.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Map"><span class="keyword">type </span><span class="type">Map</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt; = <a href="Types.html#type.Map"><span class="type">Types.Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;(<span class="parameter">map</span> : <a href="#type.Map"><span class="type">Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;, <span class="parameter">compare</span> : (<span class="type">K</span>, <span class="type">K</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="pure/Map.html#type.Map"><span class="type">PureMap.Map</span></a>&lt;<span class="type">K</span>, <span class="type">V</span>&gt;</code></h4><p><p>Convert the mutable key-value map to an immutable key-value map.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Map &quot;mo:base/Map&quot;;

@@ -1,3 +1,5 @@
+// @testmode wasi
+
 import Queue "../../src/pure/RealTimeQueue";
 import Array "../../src/Array";
 import Nat "../../src/Nat";
@@ -7,37 +9,11 @@ import { suite; test; expect } "mo:test";
 import Text "../../src/Text";
 import Debug "../../src/Debug";
 
-type Queue<T> = Queue.Queue<T>;
+type Queue<T> = Queue.RealTimeQueue<T>;
 
-func iterateForward<T>(queue : Queue<T>) : Iter.Iter<T> {
-  var current = queue;
-  object {
-    public func next() : ?T {
-      switch (Queue.popFront(current)) {
-        case null null;
-        case (?result) {
-          current := result.1;
-          ?result.0
-        }
-      }
-    }
-  }
-};
+func iterateForward<T>(queue : Queue<T>) : Iter.Iter<T> = Queue.values(queue);
 
-func iterateBackward<T>(queue : Queue<T>) : Iter.Iter<T> {
-  var current = queue;
-  object {
-    public func next() : ?T {
-      switch (Queue.popBack(current)) {
-        case null null;
-        case (?result) {
-          current := result.0;
-          ?result.1
-        }
-      }
-    }
-  }
-};
+func iterateBackward<T>(queue : Queue<T>) : Iter.Iter<T> = Queue.values(Queue.reverse(queue));
 
 func frontToText(t : (Nat, Queue<Nat>)) : Text {
   "(" # Nat.toText(t.0) # ", " # Queue.toText(t.1, Nat.toText) # ")"
@@ -687,7 +663,7 @@ suite(
       func() {
         let testToText = func(testElements : [Nat]) {
           let q = Queue.fromIter(testElements.vals());
-          expect.text(Queue.toText(q, Nat.toText)).equal("PureQueue" # Array.toText<Nat>(testElements, Nat.toText))
+          expect.text(Queue.toText(q, Nat.toText)).equal("RealTimeQueue" # Array.toText<Nat>(testElements, Nat.toText))
         };
         testToText([]);
         testToText([1]);
@@ -889,7 +865,7 @@ suite(
         let #rebal(_) = q else Prim.trap "Should be in rebalancing state";
         // Test operations during rebalancing
         Debug.print(debug_show (q));
-        expect.text(Queue.toText(q, Nat.toText)).equal("PureQueue[3, 2, 1, 5, 6, 7, 8, 9, 10, 11]");
+        expect.text(Queue.toText(q, Nat.toText)).equal("RealTimeQueue[3, 2, 1, 5, 6, 7, 8, 9, 10, 11]");
         q := Queue.pushFront(q, 0);
         q := Queue.pushBack(q, 13);
         expect.bool(Queue.isEmpty(q)).isFalse();

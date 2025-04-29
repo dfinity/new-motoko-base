@@ -204,7 +204,7 @@ module {
   /// Example:
   /// ```motoko include=import
   /// persistent actor {
-  ///   let queue = RealTimeQueue.pushBack(RealTimeQueue.pushBack(RealTimeQueue.empty<Nat>(), 1), 2);
+  ///   let queue = RealTimeQueue.pushFront(RealTimeQueue.pushFront(RealTimeQueue.empty<Nat>(), 2), 1);
   ///   assert RealTimeQueue.peekBack(queue) == ?2;
   /// }
   /// ```

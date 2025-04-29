@@ -556,6 +556,23 @@ module {
       case (null, _) return #less;
       case (_, null) return #greater
     }
-  }
+  };
 
+  /// Reverse the order of elements in a queue.
+  /// This operation is cheap, it does NOT require copying the elements.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let reversed = Queue.reverse(queue);
+  ///   assert Queue.peekFront(reversed) == ?3;
+  ///   assert Queue.peekBack(reversed) == ?1;
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(1)`
+  ///
+  /// Space: `O(1)`
+  public func reverse<T>((f, n, b) : Queue<T>) : Queue<T> = (b, n, f)
 }

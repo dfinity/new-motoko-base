@@ -55,6 +55,19 @@ jobs:
             exit 1
           fi
 
+  validate-docs:
+    needs: check-motoko-changes
+    if: needs.check-motoko-changes.outputs.has_src_mo_changes == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Validate docs for changed src/*.mo files
+        run: |
+          for file in ${{ needs.check-motoko-changes.outputs.src_mo_changed_files }}; do
+            npm run validate:docs $file
+          done
+
   format:
     runs-on: ubuntu-24.04
     steps:

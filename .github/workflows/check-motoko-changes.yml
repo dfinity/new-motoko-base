@@ -9,6 +9,9 @@ on:
       has_src_mo_changes:
         description: "Whether there are any Motoko file changes in src directory"
         value: ${{ jobs.check.outputs.has_src_mo_changes }}
+      src_mo_changed_files:
+        description: "List of Motoko files changed in src directory"
+        value: ${{ jobs.check.outputs.src_mo_changed_files }}
       has_changelog_changes:
         description: "Whether Changelog.md was modified"
         value: ${{ jobs.check.outputs.has_changelog_changes }}
@@ -22,6 +25,7 @@ jobs:
     outputs:
       has_mo_changes: ${{ steps.check_mo_changes.outputs.has_mo_changes }}
       has_src_mo_changes: ${{ steps.check_mo_changes.outputs.has_src_mo_changes }}
+      src_mo_changed_files: ${{ steps.check_mo_changes.outputs.src_mo_changed_files }}
       has_changelog_changes: ${{ steps.check_mo_changes.outputs.has_changelog_changes }}
       has_mops_dependency_changes: ${{ steps.check_mo_changes.outputs.has_mops_dependency_changes }}
     steps:
@@ -44,7 +48,9 @@ jobs:
           fi
 
           # Check for src/*.mo changes
-          if [ -z "$(git diff --name-only $BASE_SHA $HEAD_SHA -- 'src/*.mo')" ]; then
+          src_mo_changed_files=$(git diff --name-only $BASE_SHA $HEAD_SHA -- 'src/*.mo')
+          echo "src_mo_changed_files=$src_mo_changed_files" >> $GITHUB_OUTPUT
+          if [ -z "$src_mo_changed_files" ]; then
             echo "has_src_mo_changes=false" >> $GITHUB_OUTPUT
             echo "No Motoko file changes in src directory detected"
           else

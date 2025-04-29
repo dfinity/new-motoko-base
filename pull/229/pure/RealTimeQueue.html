@@ -100,7 +100,7 @@ Returns <code>null</code> if <code>queue</code> is empty. Otherwise, the back el
 <p>Example:</p>
 <pre><code>motoko include=import
 persistent actor {
-  let queue = RealTimeQueue.pushBack(RealTimeQueue.pushBack(RealTimeQueue.empty&lt;Nat&gt;(), 1), 2);
+  let queue = RealTimeQueue.pushFront(RealTimeQueue.pushFront(RealTimeQueue.empty&lt;Nat&gt;(), 2), 1);
   assert RealTimeQueue.peekBack(queue) == ?2;
 }</code></pre>
 

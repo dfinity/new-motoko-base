@@ -24,7 +24,7 @@
 ///
 /// Performance:
 /// * Runtime: `O(log(n))` worst case cost per insertion, removal, and retrieval operation.
-/// * Space: `O(n)` for storing the entire map .
+/// * Space: `O(n)` for storing the entire map.
 /// `n` denotes the number of key-value entries stored in the map.
 
 // Data structure implementation is courtesy of Byron Becker.
@@ -753,7 +753,7 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter([(0, "Zero"), (3, "Three),  (1, "One")].values(), Nat.compare);
+  ///   let map = Map.fromIter<Nat, Text>([(0, "Zero"), (3, "Three"),  (1, "One")].values(), Nat.compare);
   ///   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 1)) == [(1, "One"), (3, "Three")];
   ///   assert Iter.toArray(Map.entriesFrom(map, Nat.compare, 2)) == [(3, "Three")];
   /// }
@@ -818,9 +818,9 @@ module {
   /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
-  ///   let map = Map.fromIter([(0, "Zero"), (1, "One"), (3, "Three")].values(), Nat.compare);
-  ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 1)) == [(1, "One"), (0, "Zero")];
-  ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 2)) == [(0, "Zero")];
+  ///   let map = Map.fromIter<Nat, Text>([(0, "Zero"), (1, "One"), (3, "Three")].values(), Nat.compare);
+  ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 0)) == [(0, "Zero")];
+  ///   assert Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, 2)) == [(1, "One"), (0, "Zero")];
   /// }
   /// ```
   /// Cost of iteration over all elements:

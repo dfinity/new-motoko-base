@@ -1,4 +1,4 @@
-/// Purely-functional, singly-linked lists .
+/// Purely-functional, singly-linked lists.
 
 /// A list of type `List<T>` is either `null` or an optional pair of a value of type `T` and a tail, itself of type `List<T>`.
 ///
@@ -1001,7 +1001,7 @@ module {
   ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
-  ///   assert List.toText(list, Nat.toText) == "[1, 2, 3]";
+  ///   assert List.toText(list, Nat.toText) == "PureList[1, 2, 3]";
   /// }
   /// ```
   ///

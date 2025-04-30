@@ -13,7 +13,7 @@ module {
     let bench = Bench.Bench();
 
     bench.name("Different queue implementations");
-    bench.description("Compare the performance of the following queue implementations:
+    bench.description("Compare the performance of the following queue implementations_:
 - `pure/Queue`: The default immutable double-ended queue implementation.
   * Pros: Good amortized performance, meaning that the average cost of operations is low `O(1)`.
   * Cons: In worst case, an operation can take `O(size)` time rebuilding half the queue as demonstrated in the `Pop front 2 elements` scenario.
@@ -22,8 +22,7 @@ module {
   * Cons: Amortized performance is worse than `pure/Queue`: on average *pop* takes 4x more instructions, and *push* takes 10x more instructions.
 - mutable `mo:base/Queue`
   * Pros: Worst case performance is low `O(1)` with a lower constant factor than `pure/RealTimeQueue`.
-  * Cons: It is mutable and cannot be used in `shared` types (not shareable).
-");
+  * Cons: It is mutable and cannot be used in `shared` types (not shareable)._ ");
 
     bench.rows([
       "Initialize with 2 elements",

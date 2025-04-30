@@ -313,7 +313,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
-  assert Queue.toText(queue, Nat.toText) == &quot;Queue[1, 2, 3]&quot;;
+  assert Queue.toText(queue, Nat.toText) == &quot;RealTimeQueue[1, 2, 3]&quot;;
 }</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>

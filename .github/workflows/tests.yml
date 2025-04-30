@@ -68,6 +68,8 @@ jobs:
           echo "${{ needs.check-motoko-changes.outputs.src_mo_changed_files }}" | while read -r file; do
             npm run validate:docs "$file"
           done
+        env:
+          FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106
 
   format:
     runs-on: ubuntu-24.04

@@ -140,7 +140,8 @@ module {
 
   /// Test if a queue contains a given value.
   /// Returns true if the queue contains the item, otherwise false.
-  /// Note that this operation traverses the elements in arbitrary order.
+  ///
+  /// Note: The order in which elements are visited is undefined, for performance reasons.
   ///
   /// Example:
   /// ```motoko include=import
@@ -152,8 +153,6 @@ module {
   ///   assert not Queue.contains(queue, Nat.equal, 3);
   /// }
   /// ```
-  ///
-  /// Note that the order in which the elements from the `queue` are checked is undefined and may vary.
   ///
   /// Runtime: `O(size)`
   ///
@@ -482,10 +481,16 @@ module {
   /// Runtime: `O(size)`
   ///
   /// Space: `O(size)`
-  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equality : (T, T) -> Bool) : Bool = switch (popFront queue1, popFront queue2) {
-    case (null, null) true;
-    case (?(x1, queue1Tail), ?(x2, queue2Tail)) equality(x1, x2) and equal(queue1Tail, queue2Tail, equality); // Note that this is tail recursive (`and` is expanded to `if`).
-    case _ false
+  public func equal<T>(queue1 : Queue<T>, queue2 : Queue<T>, equality : (T, T) -> Bool) : Bool {
+    if (size(queue1) != size(queue2)) {
+      return false
+    };
+    func go(queue1 : Queue<T>, queue2 : Queue<T>, equality : (T, T) -> Bool) : Bool = switch (popFront queue1, popFront queue2) {
+      case (null, null) true;
+      case (?(x1, tail1), ?(x2, tail2)) equality(x1, x2) and go(tail1, tail2, equality); // Note that this is tail recursive (`and` is expanded to `if`).
+      case _ false
+    };
+    go(queue1, queue2, equality)
   };
 
   /// Compare two queues lexicographically using a provided comparison function to compare their elements.
@@ -518,7 +523,6 @@ module {
   };
 
   /// Return true if the given predicate is true for all queue elements.
-  /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko include=import
@@ -531,25 +535,21 @@ module {
   ///
   /// Runtime: `O(size)`
   ///
-  /// Space: `O(1)`
+  /// Space: `O(size)` as the current implementation uses `values` to iterate over the queue.
   ///
-  /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
+  /// *Runtime and space assumes that the `predicate` runs in `O(1)` time and space.
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool = switch queue {
     case (#empty) true;
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x and predicate y;
     case (#three(x, y, z)) predicate x and predicate y and predicate z;
-    case (#idles(((l1, l2), _), ((r1, r2), _))) List.all(l1, predicate) and List.all(l2, predicate) and List.all(r2, predicate) and List.all(r1, predicate); // note that the order of the right stack is reversed, but for thisation it does not matter
-    case (#rebal(_, big, small)) {
-      let (extraB, _, (oldB1, oldB2), _) = BigState.current(big);
-      let (extraS, _, (oldS1, oldS2), _) = SmallState.current(small);
-      // note that the order is one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
-      List.all(extraB, predicate) and List.all(oldB1, predicate) and List.all(oldB2, predicate) and List.all(extraS, predicate) and List.all(oldS1, predicate) and List.all(oldS2, predicate)
+    case _ {
+      for (item in values queue) if (not (predicate item)) return false;
+      return true
     }
   };
 
   /// Return true if the given predicate is true for any queue element.
-  /// Note that this operation traverses the elements in arbitrary order.
   ///
   /// Example:
   /// ```motoko include=import
@@ -562,20 +562,17 @@ module {
   ///
   /// Runtime: `O(size)`
   ///
-  /// Space: `O(1)`
+  /// Space: `O(size)` as the current implementation uses `values` to iterate over the queue.
   ///
-  /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
+  /// *Runtime and space assumes that the `predicate` runs in `O(1)` time and space.
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool = switch queue {
     case (#empty) false;
     case (#one(x)) predicate x;
     case (#two(x, y)) predicate x or predicate y;
     case (#three(x, y, z)) predicate x or predicate y or predicate z;
-    case (#idles(((l1, l2), _), ((r1, r2), _))) List.any(l1, predicate) or List.any(l2, predicate) or List.any(r2, predicate) or List.any(r1, predicate); // note that the order of the right stack is reversed, but for thisation it does not matter
-    case (#rebal(_, big, small)) {
-      let (extraB, _, (oldB1, oldB2), _) = BigState.current(big);
-      let (extraS, _, (oldS1, oldS2), _) = SmallState.current(small);
-      // note that the order is one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
-      List.any(extraB, predicate) or List.any(oldB1, predicate) or List.any(oldB2, predicate) or List.any(extraS, predicate) or List.any(oldS1, predicate) or List.any(oldS2, predicate)
+    case _ {
+      for (item in values queue) if (predicate item) return true;
+      return false
     }
   };
 
@@ -596,7 +593,7 @@ module {
   ///
   /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that f runs in `O(1)` time and space.
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func forEach<T>(queue : Queue<T>, f : T -> ()) = switch queue {
     case (#empty) ();
     case (#one(x)) f x;
@@ -609,7 +606,8 @@ module {
   };
 
   /// Create a new queue by applying the given function to each element of the original queue.
-  /// Note that this operation traverses the elements in arbitrary order.
+  ///
+  /// Note: The order of visiting elements is undefined with the current implementation.
   ///
   /// Example:
   /// ```motoko include=import
@@ -628,7 +626,7 @@ module {
   ///
   /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that f runs in `O(1)` time and space.
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> = switch queue {
     case (#empty) #empty;
     case (#one(x)) #one(f x);
@@ -662,7 +660,7 @@ module {
   ///
   /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that predicate runs in `O(1)` time and space.
+  /// *Runtime and space assumes that `predicate` runs in `O(1)` time and space.
   public func filter<T>(queue : Queue<T>, predicate : T -> Bool) : Queue<T> {
     var q = empty<T>();
     for (t in values queue) if (predicate t) q := pushBack(q, t);

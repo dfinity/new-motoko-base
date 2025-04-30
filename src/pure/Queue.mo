@@ -115,9 +115,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(1)
+  /// Space: `O(1)`
   public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(queue.0, equal, item) or List.contains(queue.2, equal, item);
 
   /// Inspect the optional element on the front end of a queue.
@@ -370,11 +370,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
+  /// Space: `O(size)` as the current implementation uses `values` to iterate over the queue.
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that the `predicate` runs in `O(1)` time and space.
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     for (item in values queue) if (not (predicate item)) return false;
     return true
@@ -392,11 +392,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
+  /// Space: `O(size)` as the current implementation uses `values` to iterate over the queue.
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that the `predicate` runs in `O(1)` time and space.
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     for (item in values queue) if (predicate item) return true;
     return false
@@ -415,17 +415,18 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func forEach<T>(queue : Queue<T>, f : T -> ()) = for (item in values queue) f item;
 
   /// Call the given function `f` on each queue element and collect the results
   /// in a new queue.
   ///
   /// Note: The order of visiting elements is undefined with the current implementation.
+  ///
   /// Example:
   /// ```motoko include=import
   /// import Iter "mo:base/Iter";
@@ -438,10 +439,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
     let (fr, n, b) = queue;
     (List.map(fr, f), n, List.map(b, f))
@@ -461,13 +463,15 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
-  public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T> {
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that `predicate` runs in `O(1)` time and space.
+  public func filter<T>(queue : Queue<T>, predicate : T -> Bool) : Queue<T> {
     let (fr, _, b) = queue;
-    let front = List.filter(fr, f);
-    let back = List.filter(b, f);
+    let front = List.filter(fr, predicate);
+    let back = List.filter(b, predicate);
     check(front, List.size front + List.size back, back)
   };
 
@@ -488,11 +492,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
     let (fr, _n, b) = queue;
     let front = List.filterMap(fr, f);
@@ -513,9 +517,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
     var text = "PureQueue[";
     func add(item : T) {
@@ -540,11 +544,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
+  /// *Runtime and space assumes that argument `compareItem` runs in `O(1)` time and space.
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compareItem : (T, T) -> Order.Order) : Order.Order {
     let (i1, i2) = (values queue1, values queue2);
     loop switch (i1.next(), i2.next()) {

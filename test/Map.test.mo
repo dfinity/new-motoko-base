@@ -1,6 +1,8 @@
+// @testmode wasi
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
+import Test "mo:test";
 import Map "../src/Map";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
@@ -8,6 +10,7 @@ import Runtime "../src/Runtime";
 import Text "../src/Text";
 import Array "../src/Array";
 import PureMap "../src/pure/Map";
+import { Tuple2 } "../src/Tuples";
 
 let { run; test; suite } = Suite;
 
@@ -128,7 +131,7 @@ run(
         "replace if exists",
         do {
           let map = Map.empty<Nat, Text>();
-          assert (Map.replaceIfExists(map, Nat.compare, 0, "0") == null);
+          assert (Map.replace(map, Nat.compare, 0, "0") == null);
           Map.size(map)
         },
         M.equals(T.nat(0))
@@ -303,7 +306,7 @@ run(
           let map = Map.empty<Nat, Text>();
           Map.toText<Nat, Text>(map, Nat.toText, func(value) { value })
         },
-        M.equals(T.text("{}"))
+        M.equals(T.text("Map{}"))
       ),
       test(
         "compare",
@@ -506,7 +509,7 @@ run(
         "replace if exists present",
         do {
           let map = Map.singleton<Nat, Text>(0, "0");
-          assert (Map.replaceIfExists(map, Nat.compare, 0, "Zero") == ?"0");
+          assert (Map.replace(map, Nat.compare, 0, "Zero") == ?"0");
           Map.size(map)
         },
         M.equals(T.nat(1))
@@ -515,7 +518,7 @@ run(
         "replace if exists absent",
         do {
           let map = Map.singleton<Nat, Text>(0, "0");
-          assert (Map.replaceIfExists(map, Nat.compare, 1, "1") == null);
+          assert (Map.replace(map, Nat.compare, 1, "1") == null);
           Map.size(map)
         },
         M.equals(T.nat(1))
@@ -746,7 +749,7 @@ run(
           let map = Map.singleton<Nat, Text>(1, "1");
           Map.toText<Nat, Text>(map, Nat.toText, func(value) { value })
         },
-        M.equals(T.text("{(1, 1)}"))
+        M.equals(T.text("Map{(1, 1)}"))
       ),
       test(
         "compare less key",
@@ -930,7 +933,7 @@ run(
         do {
           let map = smallMap();
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.replaceIfExists(map, Nat.compare, index, Nat.toText(index) # "!") == ?Nat.toText(index))
+            assert (Map.replace(map, Nat.compare, index, Nat.toText(index) # "!") == ?Nat.toText(index))
           };
           Map.size(map)
         },
@@ -940,7 +943,7 @@ run(
         "replace if exists absent",
         do {
           let map = smallMap();
-          assert (Map.replaceIfExists(map, Nat.compare, smallSize, Nat.toText(smallSize)) == null);
+          assert (Map.replace(map, Nat.compare, smallSize, Nat.toText(smallSize)) == null);
           Map.size(map)
         },
         M.equals(T.nat(smallSize))
@@ -1172,9 +1175,9 @@ run(
           Map.toText<Nat, Text>(map, Nat.toText, func(value) { value })
         },
         do {
-          var text = "{";
+          var text = "Map{";
           for (index in Nat.range(0, smallSize)) {
-            if (text != "{") {
+            if (text != "Map{") {
               text #= ", "
             };
             text #= "(" # Nat.toText(index) # ", " # Nat.toText(index) # ")"
@@ -1542,4 +1545,84 @@ run(
       )
     ]
   )
+);
+
+Test.suite(
+  "entriesFrom",
+  func() {
+    Test.test(
+      "Simple",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        Map.add(map, Nat.compare, 1, "1");
+        Map.add(map, Nat.compare, 2, "2");
+        Map.add(map, Nat.compare, 4, "4");
+        func check(from : Nat, expected : [(Nat, Text)]) {
+          let actual = Iter.toArray(Map.entriesFrom(map, Nat.compare, from));
+          Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+        };
+        check(0, [(1, "1"), (2, "2"), (4, "4")]);
+        check(1, [(1, "1"), (2, "2"), (4, "4")]);
+        check(2, [(2, "2"), (4, "4")]);
+        check(3, [(4, "4")]);
+        check(4, [(4, "4")]);
+        check(5, [])
+      }
+    );
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Map.add(map, Nat.compare, i, Nat.toText(i));
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Map.entriesFrom(map, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat, Text)>(Map.entries(map), func(k, v) = k < j));
+            Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+          }
+        }
+      }
+    )
+  }
+);
+
+Test.suite(
+  "reverseEntriesFrom",
+  func() {
+    Test.test(
+      "Simple",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        Map.add(map, Nat.compare, 1, "1");
+        Map.add(map, Nat.compare, 2, "2");
+        Map.add(map, Nat.compare, 4, "4");
+        func check(from : Nat, expected : [(Nat, Text)]) {
+          let actual = Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, from));
+          Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+        };
+        check(0, []);
+        check(1, [(1, "1")]);
+        check(2, [(2, "2"), (1, "1")]);
+        check(3, [(2, "2"), (1, "1")]);
+        check(4, [(4, "4"), (2, "2"), (1, "1")]);
+        check(5, [(4, "4"), (2, "2"), (1, "1")])
+      }
+    );
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let map = Map.empty<Nat, Text>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Map.add(map, Nat.compare, i, Nat.toText(i));
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Map.reverseEntriesFrom(map, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat, Text)>(Map.reverseEntries(map), func(k, v) = k > j));
+            Test.expect.array(actual, Tuple2.makeToText(Nat.toText, Text.toText), Tuple2.makeEqual(Nat.equal, Text.equal)).equal(expected)
+          }
+        }
+      }
+    )
+  }
 )

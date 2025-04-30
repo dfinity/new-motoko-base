@@ -1,6 +1,7 @@
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
+import Test "mo:test";
 
 import Prim "mo:⛔";
 import Iter "../src/Iter";
@@ -12,6 +13,7 @@ import List "../src/List";
 import Runtime "../src/Runtime";
 import Int "../src/Int";
 import Debug "../src/Debug";
+import { Tuple2 } "../src/Tuples";
 
 let { run; test; suite } = Suite;
 
@@ -485,17 +487,17 @@ run(
       test(
         "empty list",
         List.toText<Nat>(List.empty<Nat>(), Nat.toText),
-        M.equals(T.text("[]"))
+        M.equals(T.text("List[]"))
       ),
       test(
         "singleton list",
         List.toText<Nat>(List.singleton<Nat>(3), Nat.toText),
-        M.equals(T.text("[3]"))
+        M.equals(T.text("List[3]"))
       ),
       test(
         "non-empty list",
         List.toText<Nat>(list, Nat.toText),
-        M.equals(T.text("[0, 1, 2, 3, 4, 5]"))
+        M.equals(T.text("List[0, 1, 2, 3, 4, 5]"))
       )
     ]
   )
@@ -1165,4 +1167,57 @@ func runAllTests() {
 };
 
 // Run all tests
-runAllTests()
+runAllTests();
+
+Test.suite(
+  "Regression tests",
+  func() {
+    Test.test(
+      "test adding many elements",
+      func() {
+        let list = List.empty<Nat>();
+
+        var blockSize = list.blocks.size();
+        var sizes = List.empty<(Nat, Nat)>();
+        List.add(sizes, (blockSize, 0));
+
+        let expectedSize = 100_000;
+        for (i in Nat.range(0, expectedSize)) {
+          List.add(list, i);
+
+          let size = list.blocks.size();
+          assert blockSize <= size;
+          if (blockSize < size) {
+            blockSize := size;
+            List.add(sizes, (blockSize, List.size(list)))
+          }
+        };
+        Test.expect.nat(List.size(list)).equal(expectedSize);
+
+        // Check how block size grows with the number of elements
+        let expectedBlockResizes = [
+          (1, 0),
+          (2, 1),
+          (3, 2),
+          (4, 3),
+          (6, 5),
+          (8, 9),
+          (12, 17),
+          (16, 33),
+          (24, 65),
+          (32, 129),
+          (48, 257),
+          (64, 513),
+          (96, 1_025),
+          (128, 2_049),
+          (192, 4_097),
+          (256, 8_193),
+          (384, 16_385),
+          (512, 32_769),
+          (768, 65_537)
+        ];
+        Test.expect.array<(Nat, Nat)>(List.toArray(sizes), Tuple2.makeToText(Nat.toText, Nat.toText), Tuple2.makeEqual<Nat, Nat>(Nat.equal, Nat.equal)).equal(expectedBlockResizes)
+      }
+    )
+  }
+)

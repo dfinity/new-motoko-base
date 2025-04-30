@@ -200,7 +200,7 @@ run(
       test(
         "empty to text",
         Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
-        M.equals(T.text("{}"))
+        M.equals(T.text("PureMap{}"))
       ),
       test(
         "for each",
@@ -403,7 +403,7 @@ run(
       test(
         "to text",
         Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
-        M.equals(T.text("{(0, 0)}"))
+        M.equals(T.text("PureMap{(0, 0)}"))
       ),
       test(
         "for each",
@@ -633,7 +633,7 @@ func rebalanceTests(buildTestMap : () -> Map.Map<Nat, Text>) : [Suite.Suite] = [
   test(
     "to text",
     Map.toText<Nat, Text>(buildTestMap(), Nat.toText, func(value) { value }),
-    M.equals(T.text("{(0, 0), (1, 1), (2, 2)}"))
+    M.equals(T.text("PureMap{(0, 0), (1, 1), (2, 2)}"))
   ),
   test(
     "for each",
@@ -880,7 +880,7 @@ run(
         do {
           let map = smallMap();
           for (index in Nat.range(0, smallSize)) {
-            assert (Map.replaceIfExists(map, Nat.compare, index, Nat.toText(index) # "!").1 == ?Nat.toText(index))
+            assert (Map.replace(map, Nat.compare, index, Nat.toText(index) # "!").1 == ?Nat.toText(index))
           };
           Map.size(map)
         },
@@ -890,7 +890,7 @@ run(
         "replace if exists absent",
         do {
           let map0 = smallMap();
-          let (map1, ov) = Map.replaceIfExists(map0, Nat.compare, smallSize, Nat.toText(smallSize));
+          let (map1, ov) = Map.replace(map0, Nat.compare, smallSize, Nat.toText(smallSize));
           assert (ov == null);
           Map.size(map1)
         },
@@ -1115,9 +1115,9 @@ run(
           Map.toText<Nat, Text>(map, Nat.toText, func(value) { value })
         },
         do {
-          var text = "{";
+          var text = "PureMap{";
           for (index in Nat.range(0, smallSize)) {
-            if (text != "{") {
+            if (text != "PureMap{") {
               text #= ", "
             };
             text #= "(" # Nat.toText(index) # ", " # Nat.toText(index) # ")"

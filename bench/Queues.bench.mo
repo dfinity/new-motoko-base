@@ -16,7 +16,7 @@ module {
     bench.description("Compare the performance of the following queue implementations_:
 - `pure/Queue`: The default immutable double-ended queue implementation.
   * Pros: Good amortized performance, meaning that the average cost of operations is low `O(1)`.
-  * Cons: In worst case, an operation can take `O(size)` time rebuilding half the queue as demonstrated in the `Pop front 2 elements` scenario.
+  * Cons: In worst case, an operation can take `O(size)` time rebuilding the queue as demonstrated in the `Pop front 2 elements` scenario.
 - `pure/RealTimeQueue`
   * Pros: Every operation is guaranteed to take at most `O(1)` time and space.
   * Cons: Poor amortized performance: Instruction cost is on average 4x for *pop* and 10x for *push* compared to `pure/Queue`.

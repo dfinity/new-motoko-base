@@ -522,7 +522,7 @@ and uses this information to balance the tree during the modifying operations.</
 
 <p>Credits:</p>
 <p>The core of this implementation is derived from:</p>
-<ul><li>Ken Friis Larsen's <a href="https://github.com/kfl/mosml/blob/master/src/mosmllib/Redblackmap.sml">RedBlackMap.sml</a>, which itself is based on:</li><li>Stefan Kahrs, &quot;Red-black trees with types&quot;, Journal of Functional Programming, 11(4): 425-432 (2001), <a href="http://www.cs.ukc.ac.uk/people/staff/smk/redblack/rb.html">version 1 in web appendix</a>.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="pure/OldQueue.html">pure/OldQueue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
+<ul><li>Ken Friis Larsen's <a href="https://github.com/kfl/mosml/blob/master/src/mosmllib/Redblackmap.sml">RedBlackMap.sml</a>, which itself is based on:</li><li>Stefan Kahrs, &quot;Red-black trees with types&quot;, Journal of Functional Programming, 11(4): 425-432 (2001), <a href="http://www.cs.ukc.ac.uk/people/staff/smk/redblack/rb.html">version 1 in web appendix</a>.</li></ul></div></li><li class="index-item"><a class="index-item-link" href="pure/Queue.html">pure/Queue</a><div class="index-item-comment"><p>Double-ended queue of a generic element type <code>T</code>.</p>
 <p>The interface is purely functional, not imperative, and queues are immutable values.
 In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
 value of the modified Queue, alongside any other data.
@@ -534,10 +534,11 @@ Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</p>
 that are dynamically size-balanced by splitting.</p>
 <p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
 <p>Note on the costs of push and pop functions:</p>
-<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(n)</code> worst case cost per single call.</li></ul>
+<ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(size)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(size)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
-</div></li><li class="index-item"><a class="index-item-link" href="pure/RealTimeQueue.html">pure/RealTimeQueue</a><div class="index-item-comment"><p>Double-ended immutable queue with guaranteed <code>O(1)</code> push/pop operations (caveat: high constant factor).
+<pre><code>motoko name=import
+import Queue &quot;mo:base/pure/Queue&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/RealTimeQueue.html">pure/RealTimeQueue</a><div class="index-item-comment"><p>Double-ended immutable queue with guaranteed <code>O(1)</code> push/pop operations (caveat: high constant factor).
 For a default immutable queue implementation, see <code>pure/Queue</code>.</p>
 <p>This module provides an alternative implementation with better worst-case performance for single operations, e.g. <code>pushBack</code> and <code>popFront</code>.
 These operations are always constant time, <code>O(1)</code>, which eliminates spikes in performance of <code>pure/Queue</code> operations

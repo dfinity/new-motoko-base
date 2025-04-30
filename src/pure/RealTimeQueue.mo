@@ -705,7 +705,7 @@ module {
   ///
   /// persistent actor {
   ///   let queue = Queue.fromIter<Nat>([1, 2, 3].values());
-  ///   assert Queue.toText(queue, Nat.toText) == "Queue[1, 2, 3]";
+  ///   assert Queue.toText(queue, Nat.toText) == "RealTimeQueue[1, 2, 3]";
   /// }
   /// ```
   ///
@@ -715,7 +715,7 @@ module {
   ///
   /// *Runtime and space assumes that f runs in `O(1)` time and space.
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
-    var text = "Queue[";
+    var text = "RealTimeQueue[";
     var first = true;
     for (t in values queue) {
       if (first) first := false else text #= ", ";

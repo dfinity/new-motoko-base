@@ -18,11 +18,11 @@ module {
   * Pros: Good amortized performance, meaning that the average cost of operations is low `O(1)`.
   * Cons: In worst case, an operation can take `O(size)` time rebuilding half the queue as demonstrated in the `Pop front 2 elements` scenario.
 - `pure/RealTimeQueue`
-  * Pros: Worst case performance is low `O(1)`, every operation is guaranteed to take at most `O(1)` time and space.
-  * Cons: Amortized performance is worse than `pure/Queue`: on average *pop* takes 4x more instructions, and *push* takes 10x more instructions.
-- mutable `mo:base/Queue`
-  * Pros: Worst case performance is low `O(1)` with a lower constant factor than `pure/RealTimeQueue`.
-  * Cons: It is mutable and cannot be used in `shared` types (not shareable)._ ");
+  * Pros: Every operation is guaranteed to take at most `O(1)` time and space.
+  * Cons: Poor amortized performance: Instruction cost is on average 4x for *pop* and 10x for *push* compared to `pure/Queue`.
+- mutable `Queue`
+  * Pros: Also `O(1)` guarantees with a lower constant factor than `pure/RealTimeQueue`. Amortized performance is comparable to `pure/Queue`.
+  * Cons: It is mutable and cannot be used in `shared` types (not shareable)_.");
 
     bench.rows([
       "Initialize with 2 elements",
@@ -33,7 +33,7 @@ module {
     bench.cols([
       "pure/Queue",
       "pure/RealTimeQueue",
-      "mutable mo:base/Queue"
+      "mutable Queue"
     ]);
 
     let init = Array.repeat(1, 2);
@@ -47,7 +47,7 @@ module {
       func(row, col) = switch (col, row) {
         case ("pure/RealTimeQueue", "Initialize with 2 elements") newQ := NewQueue.fromIter<Nat>(init.vals());
         case ("pure/Queue", "Initialize with 2 elements") oldQ := OldQueue.fromIter<Nat>(init.vals());
-        case ("mutable mo:base/Queue", "Initialize with 2 elements") mutQ := MutQueue.fromIter<Nat>(init.vals());
+        case ("mutable Queue", "Initialize with 2 elements") mutQ := MutQueue.fromIter<Nat>(init.vals());
         case ("pure/RealTimeQueue", "Push 500 elements") {
           for (i in toPush.vals()) {
             newQ := NewQueue.pushBack<Nat>(newQ, i)
@@ -58,7 +58,7 @@ module {
             oldQ := OldQueue.pushBack<Nat>(oldQ, i)
           }
         };
-        case ("mutable mo:base/Queue", "Push 500 elements") {
+        case ("mutable Queue", "Push 500 elements") {
           for (i in toPush.vals()) {
             MutQueue.pushBack<Nat>(mutQ, i)
           }
@@ -73,7 +73,7 @@ module {
             oldQ := OldQueue.popFront<Nat>(OldQueue.popFront<Nat>(oldQ)!.1)!.1
           }
         );
-        case ("mutable mo:base/Queue", "Pop front 2 elements") Option.unwrap(
+        case ("mutable Queue", "Pop front 2 elements") Option.unwrap(
           do ? {
             ignore MutQueue.popFront<Nat>(mutQ);
             ignore MutQueue.popFront<Nat>(mutQ)
@@ -93,7 +93,7 @@ module {
             }
           )
         };
-        case ("mutable mo:base/Queue", "Pop 150 front&back") {
+        case ("mutable Queue", "Pop 150 front&back") {
           for (i in Nat.range(0, 150)) {
             ignore MutQueue.popFront<Nat>(mutQ);
             ignore MutQueue.popBack<Nat>(mutQ)

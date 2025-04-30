@@ -3,8 +3,8 @@ import Fuzz "mo:fuzz";
 
 import Nat "../src/Nat";
 import Option "../src/Option";
-import OldQueue "../src/pure/OldQueue";
-import NewQueue "../src/pure/Queue";
+import OldQueue "../src/pure/Queue";
+import NewQueue "../src/pure/RealTimeQueue";
 import MutQueue "../src/Queue";
 import Runtime "../src/Runtime";
 

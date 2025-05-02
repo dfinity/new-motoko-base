@@ -262,7 +262,7 @@ module {
         let big = #big1(Current.new(l, targetSizeL), l, null, targetSizeL);
         let small = #small1(Current.new(r, targetSizeR), r, null);
         let states = (#right, big, small);
-        let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
+        let states6 = States.step<T>(6, states);
         #rebal(states6)
       }
     };
@@ -271,7 +271,7 @@ module {
     case (#rebal((dir, big0, small0))) switch dir {
       case (#right) {
         let big = BigState.push(big0, element);
-        let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
+        let states4 = States.step<T>(4, (#right, big, small0));
         debug assert states4.0 == #right;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
@@ -283,7 +283,7 @@ module {
       };
       case (#left) {
         let small = SmallState.push(small0, element);
-        let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
+        let states4 = States.step<T>(4, (#left, big0, small));
         debug assert states4.0 == #left;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
@@ -350,7 +350,7 @@ module {
         let small = #small1(Current.new(l, targetSizeL), l, null);
         let big = #big1(Current.new(r, targetSizeR), r, null, targetSizeR);
         let states = (#left, big, small);
-        let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
+        let states6 = States.step<T>(6, states);
         ?(x, #rebal(states6))
       } else {
         ?(x, Stacks.smallqueue(r))
@@ -359,7 +359,7 @@ module {
     case (#rebal((dir, big0, small0))) switch dir {
       case (#left) {
         let (x, small) = SmallState.pop(small0);
-        let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
+        let states4 = States.step<T>(4, (#left, big0, small));
         debug assert states4.0 == #left;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
@@ -371,7 +371,7 @@ module {
       };
       case (#right) {
         let (x, big) = BigState.pop(big0);
-        let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
+        let states4 = States.step<T>(4, (#right, big, small0));
         debug assert states4.0 == #right;
         switch states4 {
           case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
@@ -1007,11 +1007,25 @@ module {
   );
 
   module States {
+  /*
     public func step<T>(states : States<T>) : States<T> = switch states {
       case (dir, #big1(_, bigTail, _, 0), #small1(currentS, _, auxS)) {
         (dir, BigState.step(states.1), #small2(currentS, auxS, bigTail, null, 0))
       };
       case (dir, big, small) (dir, BigState.step(big), SmallState.step(small))
+    }
+    */
+    public func step<T>(n : Int8, states : States<T>) : States<T> {
+      if (n == 0) { states }
+      else {
+        step(n - 1 : Int8,
+          switch states {
+          case (dir, #big1(_, bigTail, _, 0), #small1(currentS, _, auxS)) {
+            (dir, BigState.step(states.1), #small2(currentS, auxS, bigTail, null, 0))
+          };
+          case (dir, big, small) (dir, BigState.step(big), SmallState.step(small))
+        })
+      }
     }
   };
 

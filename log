@@ -35,9 +35,9 @@ Instructions
 |                            | pure/Queue | pure/RealTimeQueue | mutable Queue |
 | :------------------------- | ---------: | -----------------: | ------------: |
 | Initialize with 2 elements |      3_571 |              2_742 |         3_401 |
-| Push 500 elements          |    103_492 |          1_059_591 |       243_585 |
+| Push 500 elements          |    103_492 |          1_090_440 |       243_585 |
 | Pop front 2 elements       |     98_792 |              5_243 |         4_326 |
-| Pop 150 front&back         |    106_545 |            440_324 |       140_211 |
+| Pop 150 front&back         |    106_545 |            447_800 |       140_211 |
 				
 
 Heap

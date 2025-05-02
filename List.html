@@ -366,12 +366,13 @@ Elements are added in the order they are returned by the iterator.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 let array = [1, 1, 1];
 let iter = array.vals();
 
 let list = List.fromIter&lt;Nat&gt;(iter);
-assert List.toText(list, Nat.toText) == &quot;[1, 1, 1]&quot;;</code></pre>
+assert Iter.toArray(List.values(list)) == [1, 1, 1];</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="addAll"><code><span class="keyword">public func </span><span class="fnname">addAll</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">iter</span> : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Adds all elements from the provided iterator to the end of the list.
@@ -379,13 +380,14 @@ Elements are added in the order they are returned by the iterator.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 let array = [1, 1, 1];
 let iter = array.vals();
 let list = List.repeat&lt;Nat&gt;(2, 1);
 
 List.addAll&lt;Nat&gt;(list, iter);
-assert List.toText(list, Nat.toText) == &quot;[2, 1, 1, 1]&quot;;</code></pre>
+assert Iter.toArray(List.values(list)) == [2, 1, 1, 1];</code></pre>
 
 <p>Runtime: <code>O(size)</code>, where n is the size of iter.</p>
 </p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p><p>Creates a new immutable array containing all elements from the list.
@@ -401,10 +403,11 @@ assert List.toArray&lt;Nat&gt;(list) == [1, 2, 3];</code></pre>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 let array = [2, 3];
 let list = List.fromArray&lt;Nat&gt;(array);
-assert List.toText(list, Nat.toText) == &quot;[2, 3]&quot;;</code></pre>
+assert Iter.toArray(List.values(list)) == [2, 3];</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Creates a new mutable array containing all elements from the list.
@@ -424,11 +427,11 @@ Elements appear in the same order as in the array.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 let array = [var 2, 3];
 let list = List.fromVarArray&lt;Nat&gt;(array);
-
-assert List.toText(list, Nat.toText) == &quot;[2, 3]&quot;;</code></pre>
+assert Iter.toArray(List.values(list)) == [2, 3];</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="first"><code><span class="keyword">public func </span><span class="fnname">first</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the first element of <code>list</code>, or <code>null</code> if the list is empty.</p>
@@ -638,11 +641,12 @@ assert List.foldRight&lt;Nat, Text&gt;(list, &quot;&quot;, func (x, acc) { Nat.t
 <p>Example:</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
 
 List.reverseInPlace&lt;Nat&gt;(list);
-assert List.toText&lt;Nat&gt;(list, Nat.toText) == &quot;[3, 2, 1]&quot;;</code></pre>
+assert Iter.toArray(List.values(list)) == [3, 2, 1];</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>Space: <code>O(1)</code></p>
@@ -650,11 +654,12 @@ assert List.toText&lt;Nat&gt;(list, Nat.toText) == &quot;[3, 2, 1]&quot;;</code>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:base/Iter&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
 
 let rlist = List.reverse&lt;Nat&gt;(list);
-assert List.toText&lt;Nat&gt;(rlist, Nat.toText) == &quot;[3, 2, 1]&quot;;</code></pre>
+assert Iter.toArray(List.values(rlist)) == [3, 2, 1];</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>Space: <code>O(1)</code></p>

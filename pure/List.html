@@ -549,7 +549,7 @@ import Nat &quot;mo:base/Nat&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
-  assert List.toText(list, Nat.toText) == &quot;[1, 2, 3]&quot;;
+  assert List.toText(list, Nat.toText) == &quot;PureList[1, 2, 3]&quot;;
 }</code></pre>
 
 <p>Runtime: O(size)</p>

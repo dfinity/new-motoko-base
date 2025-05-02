@@ -135,7 +135,7 @@ module {
       debug assert Stacks.size(l) == nL and Stacks.size(r) == nR;
       nL + nR
     };
-    case (#rebal((_, big, small))) BigState.size(big) + SmallState.size(small)
+    case (#rebal(_, big, small)) BigState.size(big) + SmallState.size(small)
   };
 
   /// Test if a queue contains a given value.
@@ -163,7 +163,7 @@ module {
     case (#two(x, y)) eq(x, item) or eq(y, item);
     case (#three(x, y, z)) eq(x, item) or eq(y, item) or eq(z, item);
     case (#idles(((l1, l2), _), ((r1, r2), _))) List.contains(l1, eq, item) or List.contains(l2, eq, item) or List.contains(r2, eq, item) or List.contains(r1, eq, item); // note that the order of the right stack is reversed, but for this operation it does not matter
-    case (#rebal((_, big, small))) {
+    case (#rebal(_, big, small)) {
       let (extraB, _, (oldB1, oldB2), _) = BigState.current(big);
       let (extraS, _, (oldS1, oldS2), _) = SmallState.current(small);
       // note that the order of one of the stacks is reversed (depending on the `direction` field), but for this operation it does not matter
@@ -187,7 +187,7 @@ module {
   /// Space: `O(1)`.
   public func peekFront<T>(queue : Queue<T>) : ?T = switch queue {
     case (#idles((l, _), _)) Stacks.first(l);
-    case (#rebal((dir, big, small))) switch dir {
+    case (#rebal(dir, big, small)) switch dir {
       case (#left) ?SmallState.peek(small);
       case (#right) ?BigState.peek(big)
     };
@@ -213,7 +213,7 @@ module {
   /// Space: `O(1)`.
   public func peekBack<T>(queue : Queue<T>) : ?T = switch queue {
     case (#idles(_, (r, _))) Stacks.first(r);
-    case (#rebal((dir, big, small))) switch dir {
+    case (#rebal(dir, big, small)) switch dir {
       case (#left) ?BigState.peek(big);
       case (#right) ?SmallState.peek(small)
     };
@@ -262,7 +262,7 @@ module {
     };
     // if the queue is in the middle of a rebalancing process: push the element and advance the rebalancing process by 4 steps
     // move back into the idle state if the rebalancing is done
-    case (#rebal((dir, big0, small0))) switch dir {
+    case (#rebal(dir, big0, small0)) switch dir {
       case (#right) {
         let big = BigState.push(big0, element);
         let states4 = States.step(States.step(States.step(States.step((#right, big, small0)))));
@@ -334,7 +334,7 @@ module {
         #rebal(states6)
       }
     };
-    case (#rebal((dir, big0, small0))) switch dir {
+    case (#rebal(dir, big0, small0)) switch dir {
       case (#left) {
         // ^ reversed input
         let big = BigState.push(big0, element);
@@ -413,7 +413,7 @@ module {
         ?(x, Stacks.smallqueue(rnR.0))
       }
     };
-    case (#rebal((dir, big0, small0))) switch dir {
+    case (#rebal(dir, big0, small0)) switch dir {
       case (#left) {
         let (x, small) = SmallState.pop(small0);
         let states4 = States.step(States.step(States.step(States.step((#left, big0, small)))));
@@ -491,7 +491,7 @@ module {
         ?(Stacks.smallqueueReversed(rnR.0), x) // reversed output
       }
     };
-    case (#rebal((dir, big0, small0))) switch dir {
+    case (#rebal(dir, big0, small0)) switch dir {
       case (#right) {
         // ^ reversed input
         let (x, small) = SmallState.pop(small0);
@@ -957,7 +957,7 @@ module {
 
   /// The bigger end of the queue during rebalancing. It is used to split the bigger end of the queue into the new big end and a portion to be added to the small end. Can be in one of the following states:
   ///
-  /// - `#big1(cur, big, aux, n)`: Initial stage. Using the step function it takes `n`-elements from the `big` stack and puts them to `aux` in reversed order. `#big1(cur, x1 .. xn : bigTail, [], n) ->* #big1(cur, bigTail, xn .. x1, 0)`. The `bigTail` is later given to the `small` end.
+  /// - `#big1(cur, big, aux, n)`: Initial state. Using the step function it takes `n`-elements from the `big` stack and puts them to `aux` in reversed order. `#big1(cur, x1 .. xn : bigTail, [], n) ->* #big1(cur, bigTail, xn .. x1, 0)`. The `bigTail` is later given to the `small` end.
   /// - `#big2(common)`: Is used to reverse the elements from the previous phase to restore the original order. `common = #copy(cur, xn .. x1, [], 0) ->* #copy(cur, [], x1 .. xn, n)`.
   type BigState<T> = {
     #big1 : (Current<T>, Stacks<T>, List<T>, Nat);
@@ -1008,7 +1008,7 @@ module {
 
   /// The smaller end of the queue during rebalancing. Can be in one of the following states:
   ///
-  /// - `#small1(cur, small, aux)`: Initial stage. Using the step function the original elements are reversed. `#small1(cur, s1 .. sn, []) ->* #small1(cur, [], sn .. s1)`, note that `aux` is initially empty, at the end contains the reversed elements from the small stack.
+  /// - `#small1(cur, small, aux)`: Initial state. Using the step function the original elements are reversed. `#small1(cur, s1 .. sn, []) ->* #small1(cur, [], sn .. s1)`, note that `aux` is initially empty, at the end contains the reversed elements from the small stack.
   /// - `#small2(cur, aux, big, new, size)`: Using the step function the newly transfered tail from the bigger end is reversed on top of the `new` list. `#small2(cur, sn .. s1, b1 .. bm, [], 0) ->* #small2(cur, sn .. s1, [], bm .. b1, m)`, note that `aux` is the reversed small stack from the previous phase, `new` is initially empty, `size` corresponds to the size of `new`.
   /// - `#small3(common)`: Is used to reverse the elements from the two previous phases again to get them again in the original order. `#copy(cur, sn .. s1, bm .. b1, m) ->* #copy(cur, [], s1 .. sn : bm .. b1, n + m)`, note that the correct order of the elements from the big stack is reversed.
   type SmallState<T> = {

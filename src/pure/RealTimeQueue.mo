@@ -186,15 +186,15 @@ module {
   ///
   /// Space: `O(1)`.
   public func peekFront<T>(queue : Queue<T>) : ?T = switch queue {
-    case (#empty) null;
-    case (#one(x)) ?x;
-    case (#two(x, _)) ?x;
-    case (#three(x, _, _)) ?x;
     case (#idles((l, _), _)) Stacks.first(l);
     case (#rebal((dir, big, small))) switch dir {
       case (#left) ?SmallState.peek(small);
       case (#right) ?BigState.peek(big)
-    }
+    };
+    case (#empty) null;
+    case (#one(x)) ?x;
+    case (#two(x, _)) ?x;
+    case (#three(x, _, _)) ?x;
   };
 
   /// Inspect the optional element on the back end of a queue.
@@ -240,21 +240,14 @@ module {
   ///
   /// Space: `O(1)` worst-case!
   public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> = switch queue {
-    case (#empty) #one(element);
-    case (#one(y)) #two(element, y);
-    case (#two(y, z)) #three(element, y, z);
-    case (#three(a, b, c)) {
-      let i1 = ((?(element, ?(a, null)), null), 2);
-      let i2 = ((?(c, ?(b, null)), null), 2);
-      #idles(i1, i2)
-    };
-    case (#idles(l0, (r, nR))) {
+    case (#idles(l0, rnR)) {
       let (l, nL) = Idle.push(l0, element); // enque the element to the left end
       // check if the size invariant still holds
-      if (3 * nR >= nL) {
-        debug assert 3 * nL >= nR;
-        #idles((l, nL), (r, nR))
+      if (3 * rnR.1 >= nL) {
+        debug assert 3 * nL >= rnR.1;
+        #idles((l, nL), rnR)
       } else {
+        let (r, nR) = rnR;
         // initiate the rebalancing process
         let targetSizeL = nL - nR - 1 : Nat;
         let targetSizeR = 2 * nR + 1;
@@ -293,7 +286,15 @@ module {
           case _ #rebal(states4)
         }
       }
-    }
+    };
+    case (#empty) #one(element);
+    case (#one(y)) #two(element, y);
+    case (#two(y, z)) #three(element, y, z);
+    case (#three(a, b, c)) {
+      let i1 = ((?(element, ?(a, null)), null), 2);
+      let i2 = ((?(c, ?(b, null)), null), 2);
+      #idles(i1, i2)
+    };
   };
 
   /// Insert a new element on the back end of a queue.
@@ -335,15 +336,13 @@ module {
   ///
   /// Space: `O(1)` worst-case!
   public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) = switch queue {
-    case (#empty) null;
-    case (#one(x)) ?(x, #empty);
-    case (#two(x, y)) ?(x, #one(y));
-    case (#three(x, y, z)) ?(x, #two(y, z));
-    case (#idles(l0, (r, nR))) {
-      let (x, (l, nL)) = Idle.pop(l0);
-      if (3 * nL >= nR) {
-        ?(x, #idles((l, nL), (r, nR)))
-      } else if (nL >= 1) {
+    case (#idles(l0, rnR)) {
+      let (x, lnL) = Idle.pop(l0);
+      if (3 * lnL.1 >= rnR.1) {
+        ?(x, #idles(lnL, rnR))
+      } else if (lnL.1 >= 1) {
+        let (l, nL) = lnL;
+	let (r, nR) = rnR;
         let targetSizeL = 2 * nL + 1;
         let targetSizeR = nR - nL - 1 : Nat;
         debug assert targetSizeL + targetSizeR == nL + nR;
@@ -353,7 +352,7 @@ module {
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         ?(x, #rebal(states6))
       } else {
-        ?(x, Stacks.smallqueue(r))
+        ?(x, Stacks.smallqueue(rnR.0))
       }
     };
     case (#rebal((dir, big0, small0))) switch dir {
@@ -380,8 +379,12 @@ module {
           };
           case _ ?(x, #rebal(states4))
         }
-      }
-    }
+      };
+    };
+    case (#empty) null;
+    case (#one(x)) ?(x, #empty);
+    case (#two(x, y)) ?(x, #one(y));
+    case (#three(x, y, z)) ?(x, #two(y, z));
   };
 
   /// Remove the element on the back end of a queue.
@@ -741,13 +744,13 @@ module {
   ///
   /// Space: `O(1)`
   public func reverse<T>(queue : Queue<T>) : Queue<T> = switch queue {
+    case (#idles(l, r)) #idles(r, l);
+    case (#rebal(#left, big, small)) #rebal(#right, big, small);
+    case (#rebal(#right, big, small)) #rebal(#left, big, small);
     case (#empty) queue;
     case (#one(_)) queue;
     case (#two(x, y)) #two(y, x);
-    case (#three(x, y, z)) #three(z, y, x);
-    case (#idles(l, r)) #idles(r, l);
-    case (#rebal(#left, big, small)) #rebal(#right, big, small);
-    case (#rebal(#right, big, small)) #rebal(#left, big, small)
+    case (#three(x, y, z)) #three(z, y, x)
   };
 
   type Stacks<T> = (left : List<T>, right : List<T>);

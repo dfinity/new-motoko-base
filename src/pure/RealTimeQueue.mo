@@ -1015,17 +1015,19 @@ module {
       case (dir, big, small) (dir, BigState.step(big), SmallState.step(small))
     }
     */
-    public func step<T>(n : Int8, states : States<T>) : States<T> {
-      if (n == 0) { states }
-      else {
-        step(n - 1 : Int8,
-          switch states {
+    public func step<T>(n : Int8, states0 : States<T>) : States<T> {
+      var states = states0;
+      var i = n;
+      while (i > 0) {
+        states := switch states {
           case (dir, #big1(_, bigTail, _, 0), #small1(currentS, _, auxS)) {
             (dir, BigState.step(states.1), #small2(currentS, auxS, bigTail, null, 0))
           };
           case (dir, big, small) (dir, BigState.step(big), SmallState.step(small))
-        })
-      }
+        };
+	i -= 1;
+      };
+      states
     }
   };
 

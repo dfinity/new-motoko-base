@@ -7,8 +7,8 @@
 /// The spikes in performance can cause a single message to take multiple more rounds to complete than most other messages.
 ///
 /// However, the `O(1)` operations come at a cost of higher constant factor than the `pure/Queue` implementation:
-/// - 'pop' operations are on average 4x more expensive
-/// - 'push' operations are on average 10x more expensive
+/// - 'pop' operations are on average 3x more expensive
+/// - 'push' operations are on average 8x more expensive
 ///
 /// For better performance across multiple operations and when the spikes in single operations are not a problem, use `pure/Queue`.
 /// For guaranteed `O(1)` operations, use `pure/RealTimeQueue`.
@@ -186,15 +186,15 @@ module {
   ///
   /// Space: `O(1)`.
   public func peekFront<T>(queue : Queue<T>) : ?T = switch queue {
-    case (#empty) null;
-    case (#one(x)) ?x;
-    case (#two(x, _)) ?x;
-    case (#three(x, _, _)) ?x;
     case (#idles((l, _), _)) Stacks.first(l);
     case (#rebal((dir, big, small))) switch dir {
       case (#left) ?SmallState.peek(small);
       case (#right) ?BigState.peek(big)
-    }
+    };
+    case (#empty) null;
+    case (#one(x)) ?x;
+    case (#two(x, _)) ?x;
+    case (#three(x, _, _)) ?x
   };
 
   /// Inspect the optional element on the back end of a queue.
@@ -212,15 +212,15 @@ module {
   ///
   /// Space: `O(1)`.
   public func peekBack<T>(queue : Queue<T>) : ?T = switch queue {
-    case (#empty) null;
-    case (#one(x)) ?x;
-    case (#two(_, y)) ?y;
-    case (#three(_, _, z)) ?z;
     case (#idles(_, (r, _))) Stacks.first(r);
     case (#rebal((dir, big, small))) switch dir {
       case (#left) ?BigState.peek(big);
       case (#right) ?SmallState.peek(small)
-    }
+    };
+    case (#empty) null;
+    case (#one(x)) ?x;
+    case (#two(_, y)) ?y;
+    case (#three(_, _, z)) ?z
   };
 
   /// Insert a new element on the front end of a queue.
@@ -240,22 +240,16 @@ module {
   ///
   /// Space: `O(1)` worst-case!
   public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> = switch queue {
-    case (#empty) #one(element);
-    case (#one(y)) #two(element, y);
-    case (#two(y, z)) #three(element, y, z);
-    case (#three(a, b, c)) {
-      let i1 = ((?(element, ?(a, null)), null), 2);
-      let i2 = ((?(c, ?(b, null)), null), 2);
-      #idles(i1, i2)
-    };
-    case (#idles(l0, (r, nR))) {
-      let (l, nL) = Idle.push(l0, element); // enque the element to the left end
+    case (#idles(l0, rnR)) {
+      let lnL = Idle.push(l0, element); // enque the element to the left end
       // check if the size invariant still holds
-      if (3 * nR >= nL) {
-        debug assert 3 * nL >= nR;
-        #idles((l, nL), (r, nR))
+      if (3 * rnR.1 >= lnL.1) {
+        debug assert 3 * lnL.1 >= rnR.1;
+        #idles(lnL, rnR)
       } else {
         // initiate the rebalancing process
+        let (l, nL) = lnL;
+        let (r, nR) = rnR;
         let targetSizeL = nL - nR - 1 : Nat;
         let targetSizeR = 2 * nR + 1;
         debug assert targetSizeL + targetSizeR == nL + nR;
@@ -293,6 +287,14 @@ module {
           case _ #rebal(states4)
         }
       }
+    };
+    case (#empty) #one(element);
+    case (#one(y)) #two(element, y);
+    case (#two(y, z)) #three(element, y, z);
+    case (#three(a, b, c)) {
+      let i1 = ((?(element, ?(a, null)), null), 2);
+      let i2 = ((?(c, ?(b, null)), null), 2);
+      #idles(i1, i2)
     }
   };
 
@@ -311,7 +313,64 @@ module {
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> = reverse(pushFront(reverse(queue), element));
+  public func pushBack<T>(queue : Queue<T>, element : T) : Queue<T> = switch queue {
+    // Equivalent to: `reverse(pushFront(reverse(queue), element))`. Inlined for performance.
+    case (#idles(rnR, l0)) {
+      // ^ reversed input
+      let lnL = Idle.push(l0, element);
+      if (3 * rnR.1 >= lnL.1) {
+        debug assert 3 * lnL.1 >= rnR.1;
+        #idles(rnR, lnL) // reversed output
+      } else {
+        let (l, nL) = lnL;
+        let (r, nR) = rnR;
+        let targetSizeL = nL - nR - 1 : Nat;
+        let targetSizeR = 2 * nR + 1;
+        debug assert targetSizeL + targetSizeR == nL + nR;
+        let big = #big1(Current.new(l, targetSizeL), l, null, targetSizeL);
+        let small = #small1(Current.new(r, targetSizeR), r, null);
+        let states = (#left, big, small); // reversed output
+        let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
+        #rebal(states6)
+      }
+    };
+    case (#rebal((dir, big0, small0))) switch dir {
+      case (#left) {
+        // ^ reversed input
+        let big = BigState.push(big0, element);
+        let states4 = States.step(States.step(States.step(States.step((#left, big, small0))))); // reversed output
+        debug assert states4.0 == #left;
+        switch states4 {
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(big, small);
+            #idles(small, big) // reversed output
+          };
+          case _ #rebal(states4)
+        }
+      };
+      case (#right) {
+        // ^ reversed input
+        let small = SmallState.push(small0, element);
+        let states4 = States.step(States.step(States.step(States.step((#right, big0, small))))); // reversed output
+        debug assert states4.0 == #right;
+        switch states4 {
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(small, big);
+            #idles(big, small) // reversed output
+          };
+          case _ #rebal(states4)
+        }
+      }
+    };
+    case (#empty) #one(element);
+    case (#one(y)) #two(y, element);
+    case (#two(y, z)) #three(y, z, element);
+    case (#three(a, b, c)) {
+      let i1 = ((?(a, ?(b, null)), null), 2);
+      let i2 = ((?(element, ?(c, null)), null), 2);
+      #idles(i1, i2)
+    }
+  };
 
   /// Remove the element on the front end of a queue.
   /// Returns `null` if `queue` is empty. Otherwise, it returns a pair of
@@ -335,15 +394,13 @@ module {
   ///
   /// Space: `O(1)` worst-case!
   public func popFront<T>(queue : Queue<T>) : ?(T, Queue<T>) = switch queue {
-    case (#empty) null;
-    case (#one(x)) ?(x, #empty);
-    case (#two(x, y)) ?(x, #one(y));
-    case (#three(x, y, z)) ?(x, #two(y, z));
-    case (#idles(l0, (r, nR))) {
-      let (x, (l, nL)) = Idle.pop(l0);
-      if (3 * nL >= nR) {
-        ?(x, #idles((l, nL), (r, nR)))
-      } else if (nL >= 1) {
+    case (#idles(l0, rnR)) {
+      let (x, lnL) = Idle.pop(l0);
+      if (3 * lnL.1 >= rnR.1) {
+        ?(x, #idles(lnL, rnR))
+      } else if (lnL.1 >= 1) {
+        let (l, nL) = lnL;
+        let (r, nR) = rnR;
         let targetSizeL = 2 * nL + 1;
         let targetSizeR = nR - nL - 1 : Nat;
         debug assert targetSizeL + targetSizeR == nL + nR;
@@ -353,7 +410,7 @@ module {
         let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
         ?(x, #rebal(states6))
       } else {
-        ?(x, Stacks.smallqueue(r))
+        ?(x, Stacks.smallqueue(rnR.0))
       }
     };
     case (#rebal((dir, big0, small0))) switch dir {
@@ -381,7 +438,11 @@ module {
           case _ ?(x, #rebal(states4))
         }
       }
-    }
+    };
+    case (#empty) null;
+    case (#one(x)) ?(x, #empty);
+    case (#two(x, y)) ?(x, #one(y));
+    case (#three(x, y, z)) ?(x, #two(y, z))
   };
 
   /// Remove the element on the back end of a queue.
@@ -406,9 +467,62 @@ module {
   /// Runtime: `O(1)` worst-case!
   ///
   /// Space: `O(1)` worst-case!
-  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) = do ? {
-    let (x, queue2) = popFront(reverse(queue))!;
-    (reverse(queue2), x)
+  public func popBack<T>(queue : Queue<T>) : ?(Queue<T>, T) = switch queue {
+    // Equivalent to:
+    // = do ? { let (x, queue2) = popFront(reverse(queue))!; (reverse(queue2), x) };
+    // Inlined for performance.
+    case (#idles(rnR, l0)) {
+      // ^ reversed input
+      let (x, lnL) = Idle.pop(l0);
+      if (3 * lnL.1 >= rnR.1) {
+        ?(#idles(rnR, lnL), x) // reversed output
+      } else if (lnL.1 >= 1) {
+        let (l, nL) = lnL;
+        let (r, nR) = rnR;
+        let targetSizeL = 2 * nL + 1;
+        let targetSizeR = nR - nL - 1 : Nat;
+        debug assert targetSizeL + targetSizeR == nL + nR;
+        let small = #small1(Current.new(l, targetSizeL), l, null);
+        let big = #big1(Current.new(r, targetSizeR), r, null, targetSizeR);
+        let states = (#right, big, small); // reversed output
+        let states6 = States.step(States.step(States.step(States.step(States.step(States.step(states))))));
+        ?(#rebal(states6), x)
+      } else {
+        ?(Stacks.smallqueueReversed(rnR.0), x) // reversed output
+      }
+    };
+    case (#rebal((dir, big0, small0))) switch dir {
+      case (#right) {
+        // ^ reversed input
+        let (x, small) = SmallState.pop(small0);
+        let states4 = States.step(States.step(States.step(States.step((#right, big0, small))))); // reversed output
+        debug assert states4.0 == #right;
+        switch states4 {
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(big, small);
+            ?(#idles(big, small), x) // reversed output
+          };
+          case _ ?(#rebal(states4), x)
+        }
+      };
+      case (#left) {
+        // ^ reversed input
+        let (x, big) = BigState.pop(big0);
+        let states4 = States.step(States.step(States.step(States.step((#left, big, small0))))); // reversed output
+        debug assert states4.0 == #left;
+        switch states4 {
+          case (_, #big2(#idle(_, big)), #small3(#idle(_, small))) {
+            debug assert idlesInvariant(small, big);
+            ?(#idles(small, big), x) // reversed output
+          };
+          case _ ?(#rebal(states4), x)
+        }
+      }
+    };
+    case (#empty) null;
+    case (#one(x)) ?(#empty, x);
+    case (#two(x, y)) ?(#one(x), y);
+    case (#three(x, y, z)) ?(#two(x, y), z)
   };
 
   /// Turn an iterator into a queue, consuming it.
@@ -741,13 +855,13 @@ module {
   ///
   /// Space: `O(1)`
   public func reverse<T>(queue : Queue<T>) : Queue<T> = switch queue {
+    case (#idles(l, r)) #idles(r, l);
+    case (#rebal(#left, big, small)) #rebal(#right, big, small);
+    case (#rebal(#right, big, small)) #rebal(#left, big, small);
     case (#empty) queue;
     case (#one(_)) queue;
     case (#two(x, y)) #two(y, x);
-    case (#three(x, y, z)) #three(z, y, x);
-    case (#idles(l, r)) #idles(r, l);
-    case (#rebal(#left, big, small)) #rebal(#right, big, small);
-    case (#rebal(#right, big, small)) #rebal(#left, big, small)
+    case (#three(x, y, z)) #three(z, y, x)
   };
 
   type Stacks<T> = (left : List<T>, right : List<T>);
@@ -789,6 +903,19 @@ module {
       case _ (trap "Queue.Stacks.smallqueue() impossible")
     };
 
+    public func smallqueueReversed<T>((left, right) : Stacks<T>) : Queue<T> = switch (left, right) {
+      case (null, null) #empty;
+      case (null, ?(x, null)) #one(x);
+      case (?(x, null), null) #one(x);
+      case (null, ?(x, ?(y, null))) #two(x, y);
+      case (?(x, null), ?(y, null)) #two(x, y);
+      case (?(x, ?(y, null)), null) #two(x, y);
+      case (null, ?(x, ?(y, ?(z, null)))) #three(x, y, z);
+      case (?(x, ?(y, ?(z, null))), null) #three(x, y, z);
+      case (?(x, ?(y, null)), ?(z, null)) #three(x, y, z);
+      case (?(x, null), ?(y, ?(z, null))) #three(x, y, z);
+      case _ (trap "Queue.Stacks.smallqueueReversed() impossible")
+    };
     public func map<T, U>((left, right) : Stacks<T>, f : T -> U) : Stacks<U> = (List.map(left, f), List.map(right, f))
   };
 

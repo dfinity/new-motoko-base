@@ -19,7 +19,7 @@ module {
   * Cons: In worst case, an operation can take `O(size)` time rebuilding the queue as demonstrated in the `Pop front 2 elements` scenario.
 - `pure/RealTimeQueue`
   * Pros: Every operation is guaranteed to take at most `O(1)` time and space.
-  * Cons: Poor amortized performance: Instruction cost is on average 4x for *pop* and 10x for *push* compared to `pure/Queue`.
+  * Cons: Poor amortized performance: Instruction cost is on average 3x for *pop* and 8x for *push* compared to `pure/Queue`.
 - mutable `Queue`
   * Pros: Also `O(1)` guarantees with a lower constant factor than `pure/RealTimeQueue`. Amortized performance is comparable to `pure/Queue`.
   * Cons: It is mutable and cannot be used in `shared` types (not shareable)_.");

@@ -972,12 +972,13 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// let array = [1, 1, 1];
   /// let iter = array.vals();
   ///
   /// let list = List.fromIter<Nat>(iter);
-  /// assert List.toText(list, Nat.toText) == "[1, 1, 1]";
+  /// assert Iter.toArray(List.values(list)) == [1, 1, 1];
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -993,13 +994,14 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// let array = [1, 1, 1];
   /// let iter = array.vals();
   /// let list = List.repeat<Nat>(2, 1);
   ///
   /// List.addAll<Nat>(list, iter);
-  /// assert List.toText(list, Nat.toText) == "[2, 1, 1, 1]";
+  /// assert Iter.toArray(List.values(list)) == [2, 1, 1, 1];
   /// ```
   ///
   /// Runtime: `O(size)`, where n is the size of iter.
@@ -1100,10 +1102,11 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// let array = [2, 3];
   /// let list = List.fromArray<Nat>(array);
-  /// assert List.toText(list, Nat.toText) == "[2, 3]";
+  /// assert Iter.toArray(List.values(list)) == [2, 3];
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1176,11 +1179,11 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// let array = [var 2, 3];
   /// let list = List.fromVarArray<Nat>(array);
-  ///
-  /// assert List.toText(list, Nat.toText) == "[2, 3]";
+  /// assert Iter.toArray(List.values(list)) == [2, 3];
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1718,11 +1721,12 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// let list = List.fromArray<Nat>([1,2,3]);
   ///
   /// List.reverseInPlace<Nat>(list);
-  /// assert List.toText<Nat>(list, Nat.toText) == "[3, 2, 1]";
+  /// assert Iter.toArray(List.values(list)) == [3, 2, 1];
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1749,11 +1753,12 @@ module {
   /// Example:
   /// ```motoko include=import
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// let list = List.fromArray<Nat>([1,2,3]);
   ///
   /// let rlist = List.reverse<Nat>(list);
-  /// assert List.toText<Nat>(rlist, Nat.toText) == "[3, 2, 1]";
+  /// assert Iter.toArray(List.values(rlist)) == [3, 2, 1];
   /// ```
   ///
   /// Runtime: `O(size)`

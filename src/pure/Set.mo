@@ -60,6 +60,7 @@ module {
   /// ```motoko
   /// import Set "mo:base/pure/Set";
   /// import Nat "mo:base/Nat";
+  /// import Iter "mo:base/Iter";
   ///
   /// persistent actor {
   ///   let set = Set.fromIter([3, 1, 2, 1].values(), Nat.compare);

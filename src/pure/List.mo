@@ -1001,7 +1001,7 @@ module {
   ///
   /// persistent actor {
   ///   let list = ?(1, ?(2, ?(3, null)));
-  ///   assert List.toText(list, Nat.toText) == "[1, 2, 3]";
+  ///   assert List.toText(list, Nat.toText) == "PureList[1, 2, 3]";
   /// }
   /// ```
   ///

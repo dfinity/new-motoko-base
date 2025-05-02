@@ -9,12 +9,18 @@ on:
       has_src_mo_changes:
         description: "Whether there are any Motoko file changes in src directory"
         value: ${{ jobs.check.outputs.has_src_mo_changes }}
+      src_mo_changed_files:
+        description: "List of Motoko files changed in src directory"
+        value: ${{ jobs.check.outputs.src_mo_changed_files }}
       has_changelog_changes:
         description: "Whether Changelog.md was modified"
         value: ${{ jobs.check.outputs.has_changelog_changes }}
       has_mops_dependency_changes:
         description: "Whether mops dependency versions were changed"
         value: ${{ jobs.check.outputs.has_mops_dependency_changes }}
+      has_mops_package_version_changes:
+        description: "Whether the version field in mops.toml was changed"
+        value: ${{ jobs.check.outputs.has_mops_package_version_changes }}
 
 jobs:
   check:
@@ -22,8 +28,10 @@ jobs:
     outputs:
       has_mo_changes: ${{ steps.check_mo_changes.outputs.has_mo_changes }}
       has_src_mo_changes: ${{ steps.check_mo_changes.outputs.has_src_mo_changes }}
+      src_mo_changed_files: ${{ steps.check_mo_changes.outputs.src_mo_changed_files }}
       has_changelog_changes: ${{ steps.check_mo_changes.outputs.has_changelog_changes }}
       has_mops_dependency_changes: ${{ steps.check_mo_changes.outputs.has_mops_dependency_changes }}
+      has_mops_package_version_changes: ${{ steps.check_mo_changes.outputs.has_mops_package_version_changes }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,7 +52,11 @@ jobs:
           fi
 
           # Check for src/*.mo changes
-          if [ -z "$(git diff --name-only $BASE_SHA $HEAD_SHA -- 'src/*.mo')" ]; then
+          src_mo_changed_files=$(git diff --name-only $BASE_SHA $HEAD_SHA -- 'src/*.mo')
+          echo "src_mo_changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$src_mo_changed_files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          if [ -z "$src_mo_changed_files" ]; then
             echo "has_src_mo_changes=false" >> $GITHUB_OUTPUT
             echo "No Motoko file changes in src directory detected"
           else
@@ -66,3 +78,12 @@ jobs:
           else
             echo "has_mops_dependency_changes=true" >> $GITHUB_OUTPUT
           fi
+
+          # Check for mops package version changes
+          if [ -z "$(git diff $BASE_SHA $HEAD_SHA -- mops.toml | grep '^[+-]\s*version\s*=')" ]; then
+            echo "has_mops_package_version_changes=false" >> $GITHUB_OUTPUT
+            echo "No mops package version changes detected"
+          else
+            echo "has_mops_package_version_changes=true" >> $GITHUB_OUTPUT
+          fi
+          

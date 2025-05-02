@@ -6,7 +6,7 @@ These operations are always constant time, <code>O(1)</code>, which eliminates s
 that are caused by the amortized nature of the <code>pure/Queue</code> implementation, which can lead to <code>O(n)</code> worst-case performance for a single operation.
 The spikes in performance can cause a single message to take multiple more rounds to complete than most other messages.</p>
 <p>However, the <code>O(1)</code> operations come at a cost of higher constant factor than the <code>pure/Queue</code> implementation:</p>
-<ul><li>'pop' operations are on average 4x more expensive</li><li>'push' operations are on average 10x more expensive</li></ul>
+<ul><li>'pop' operations are on average 3x more expensive</li><li>'push' operations are on average 8x more expensive</li></ul>
 
 <p>For better performance across multiple operations and when the spikes in single operations are not a problem, use <code>pure/Queue</code>.
 For guaranteed <code>O(1)</code> operations, use <code>pure/RealTimeQueue</code>.</p>

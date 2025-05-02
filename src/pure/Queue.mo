@@ -20,6 +20,10 @@
 ///
 /// `n` denotes the number of elements stored in the queue.
 ///
+/// Note that some operations that traverse the elements of the queue (e.g. `forEach`, `values`) preserve the order of the elements,
+/// whereas others (e.g. `map`, `contains`) do NOT guarantee that the elements are visited in any order.
+/// The order is undefined to avoid allocations, making these operations more efficient.
+///
 /// ```motoko name=import
 /// import Queue "mo:base/pure/Queue";
 /// ```

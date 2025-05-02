@@ -32,7 +32,7 @@
 /// Construction: Create a new queue with the `empty<T>()` function.
 ///
 /// Note that some operations that traverse the elements of the queue (e.g. `forEach`, `values`) preserve the order of the elements,
-/// whereas others (e.g. `map`, `contains`, `any`) do NOT guarantee that the elements are visited in any order.
+/// whereas others (e.g. `map`, `contains`) do NOT guarantee that the elements are visited in any order.
 /// The order is undefined to avoid allocations, making these operations more efficient.
 ///
 /// ```motoko name=import
@@ -128,9 +128,9 @@ module {
   /// Space: `O(1)`.
   public func size<T>(queue : Queue<T>) : Nat = switch queue {
     case (#empty) 0;
-    case (#one(_)) 1;
-    case (#two(_, _)) 2;
-    case (#three(_, _, _)) 3;
+    case (#one _) 1;
+    case (#two _) 2;
+    case (#three _) 3;
     case (#idles((l, nL), (r, nR))) {
       debug assert Stacks.size(l) == nL and Stacks.size(r) == nR;
       nL + nR
@@ -956,7 +956,7 @@ module {
         let (_, _, _, targetSize) = cur;
         norm(if (sizeOfNew < targetSize) #copy(cur, unsafeTail(aux), ?(unsafeHead(aux), new), 1 + sizeOfNew) else #copy copy)
       };
-      case (#idle(_, _)) common
+      case (#idle _) common
     };
 
     public func norm<T>(copy : CopyState<T>) : CommonState<T> {

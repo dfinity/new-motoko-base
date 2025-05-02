@@ -35,7 +35,7 @@ Instructions
 |                            | pure/Queue | pure/RealTimeQueue | mutable Queue |
 | :------------------------- | ---------: | -----------------: | ------------: |
 | Initialize with 2 elements |      3_571 |              2_934 |         3_401 |
-| Push 500 elements          |    103_492 |            979_856 |       243_585 |
+| Push 500 elements          |    103_492 |            966_398 |       243_585 |
 | Pop front 2 elements       |     98_792 |              5_009 |         4_326 |
 | Pop 150 front&back         |    106_545 |            394_667 |       140_211 |
 				
@@ -55,7 +55,7 @@ Garbage Collection
 |                            | pure/Queue | pure/RealTimeQueue | mutable Queue |
 | :------------------------- | ---------: | -----------------: | ------------: |
 | Initialize with 2 elements |      508 B |              472 B |         456 B |
-| Push 500 elements          |   10.1 KiB |         171.45 KiB |         344 B |
+| Push 500 elements          |   10.1 KiB |         166.63 KiB |         344 B |
 | Pop front 2 elements       |  12.19 KiB |              528 B |         424 B |
 | Pop 150 front&back         |  15.61 KiB |          60.38 KiB |      12.1 KiB |
 				

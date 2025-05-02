@@ -241,12 +241,13 @@ module {
   /// Space: `O(1)` worst-case!
   public func pushFront<T>(queue : Queue<T>, element : T) : Queue<T> = switch queue {
     case (#idles(l0, rnR)) {
-      let (l, nL) = Idle.push(l0, element); // enque the element to the left end
+      let lnL = Idle.push(l0, element); // enque the element to the left end
       // check if the size invariant still holds
-      if (3 * rnR.1 >= nL) {
-        debug assert 3 * nL >= rnR.1;
-        #idles((l, nL), rnR)
+      if (3 * rnR.1 >= lnL.1) {
+        debug assert 3 * lnL.1 >= rnR.1;
+        #idles(lnL, rnR)
       } else {
+        let (l, nL) = lnL;
         let (r, nR) = rnR;
         // initiate the rebalancing process
         let targetSizeL = nL - nR - 1 : Nat;

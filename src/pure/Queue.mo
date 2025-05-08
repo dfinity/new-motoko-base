@@ -20,6 +20,10 @@
 ///
 /// `n` denotes the number of elements stored in the queue.
 ///
+/// Note that some operations that traverse the elements of the queue (e.g. `forEach`, `values`) preserve the order of the elements,
+/// whereas others (e.g. `map`, `contains`) do NOT guarantee that the elements are visited in any order.
+/// The order is undefined to avoid allocations, making these operations more efficient.
+///
 /// ```motoko name=import
 /// import Queue "mo:base/pure/Queue";
 /// ```
@@ -115,9 +119,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(1)
+  /// Space: `O(1)`
   public func contains<T>(queue : Queue<T>, equal : (T, T) -> Bool, item : T) : Bool = List.contains(queue.0, equal, item) or List.contains(queue.2, equal, item);
 
   /// Inspect the optional element on the front end of a queue.
@@ -370,11 +374,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
+  /// Space: `O(size)` as the current implementation uses `values` to iterate over the queue.
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that the `predicate` runs in `O(1)` time and space.
   public func all<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     for (item in values queue) if (not (predicate item)) return false;
     return true
@@ -392,11 +396,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size) as the current implementation uses `values` to iterate over the queue.
+  /// Space: `O(size)` as the current implementation uses `values` to iterate over the queue.
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that the `predicate` runs in `O(1)` time and space.
   public func any<T>(queue : Queue<T>, predicate : T -> Bool) : Bool {
     for (item in values queue) if (predicate item) return true;
     return false
@@ -415,17 +419,18 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func forEach<T>(queue : Queue<T>, f : T -> ()) = for (item in values queue) f item;
 
   /// Call the given function `f` on each queue element and collect the results
   /// in a new queue.
   ///
   /// Note: The order of visiting elements is undefined with the current implementation.
+  ///
   /// Example:
   /// ```motoko include=import
   /// import Iter "mo:base/Iter";
@@ -438,10 +443,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func map<T1, T2>(queue : Queue<T1>, f : T1 -> T2) : Queue<T2> {
     let (fr, n, b) = queue;
     (List.map(fr, f), n, List.map(b, f))
@@ -461,13 +467,15 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
-  public func filter<T>(queue : Queue<T>, f : T -> Bool) : Queue<T> {
+  /// Space: `O(size)`
+  ///
+  /// *Runtime and space assumes that `predicate` runs in `O(1)` time and space.
+  public func filter<T>(queue : Queue<T>, predicate : T -> Bool) : Queue<T> {
     let (fr, _, b) = queue;
-    let front = List.filter(fr, f);
-    let back = List.filter(b, f);
+    let front = List.filter(fr, predicate);
+    let back = List.filter(b, predicate);
     check(front, List.size front + List.size back, back)
   };
 
@@ -488,11 +496,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  /// *Runtime and space assumes that `f` runs in `O(1)` time and space.
   public func filterMap<T, U>(queue : Queue<T>, f : T -> ?U) : Queue<U> {
     let (fr, _n, b) = queue;
     let front = List.filterMap(fr, f);
@@ -513,9 +521,9 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   public func toText<T>(queue : Queue<T>, f : T -> Text) : Text {
     var text = "PureQueue[";
     func add(item : T) {
@@ -540,11 +548,11 @@ module {
   /// }
   /// ```
   ///
-  /// Runtime: O(size)
+  /// Runtime: `O(size)`
   ///
-  /// Space: O(size)
+  /// Space: `O(size)`
   ///
-  /// *Runtime and space assumes that argument `compare` runs in O(1) time and space.
+  /// *Runtime and space assumes that argument `compareItem` runs in `O(1)` time and space.
   public func compare<T>(queue1 : Queue<T>, queue2 : Queue<T>, compareItem : (T, T) -> Order.Order) : Order.Order {
     let (i1, i2) = (values queue1, values queue2);
     loop switch (i1.next(), i2.next()) {
@@ -556,6 +564,23 @@ module {
       case (null, _) return #less;
       case (_, null) return #greater
     }
-  }
+  };
 
+  /// Reverse the order of elements in a queue.
+  /// This operation is cheap, it does NOT require copying the elements.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// persistent actor {
+  ///   let queue = Queue.fromIter([1, 2, 3].values());
+  ///   let reversed = Queue.reverse(queue);
+  ///   assert Queue.peekFront(reversed) == ?3;
+  ///   assert Queue.peekBack(reversed) == ?1;
+  /// }
+  /// ```
+  ///
+  /// Runtime: `O(1)`
+  ///
+  /// Space: `O(1)`
+  public func reverse<T>(queue : Queue<T>) : Queue<T> = (queue.2, queue.1, queue.0)
 }

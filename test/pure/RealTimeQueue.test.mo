@@ -1,33 +1,36 @@
 // @testmode wasi
 
-import Queue "../../src/pure/Queue";
+import Queue "../../src/pure/RealTimeQueue";
 import Array "../../src/Array";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";
 import Prim "mo:prim";
 import { suite; test; expect } "mo:test";
+import Text "../../src/Text";
 
-func iterateForward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> = Queue.values(queue);
+type Queue<T> = Queue.Queue<T>;
 
-func iterateBackward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> = Queue.values(Queue.reverse(queue));
+func iterateForward<T>(queue : Queue<T>) : Iter.Iter<T> = Queue.values(queue);
 
-func frontToText(t : (Nat, Queue.Queue<Nat>)) : Text {
+func iterateBackward<T>(queue : Queue<T>) : Iter.Iter<T> = Queue.values(Queue.reverse(queue));
+
+func frontToText(t : (Nat, Queue<Nat>)) : Text {
   "(" # Nat.toText(t.0) # ", " # Queue.toText(t.1, Nat.toText) # ")"
 };
 
-func frontEqual(t1 : (Nat, Queue.Queue<Nat>), t2 : (Nat, Queue.Queue<Nat>)) : Bool {
+func frontEqual(t1 : (Nat, Queue<Nat>), t2 : (Nat, Queue<Nat>)) : Bool {
   t1.0 == t2.0 and Queue.equal(t1.1, t2.1, Nat.equal)
 };
 
-func backToText(t : (Queue.Queue<Nat>, Nat)) : Text {
+func backToText(t : (Queue<Nat>, Nat)) : Text {
   "(" # Queue.toText(t.0, Nat.toText) # ", " # Nat.toText(t.1) # ")"
 };
 
-func backEqual(t1 : (Queue.Queue<Nat>, Nat), t2 : (Queue.Queue<Nat>, Nat)) : Bool {
+func backEqual(t1 : (Queue<Nat>, Nat), t2 : (Queue<Nat>, Nat)) : Bool {
   t1.1 == t2.1 and Queue.equal(t1.0, t2.0, Nat.equal)
 };
 
-func reduceFront<T>(queue : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
+func reduceFront<T>(queue : Queue<T>, amount : Nat) : Queue<T> {
   var current = queue;
   for (_ in Nat.range(0, amount)) {
     switch (Queue.popFront(current)) {
@@ -38,7 +41,7 @@ func reduceFront<T>(queue : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
   current
 };
 
-func reduceBack<T>(queue : Queue.Queue<T>, amount : Nat) : Queue.Queue<T> {
+func reduceBack<T>(queue : Queue<T>, amount : Nat) : Queue<T> {
   var current = queue;
   for (_ in Nat.range(0, amount)) {
     switch (Queue.popBack(current)) {
@@ -179,7 +182,7 @@ suite(
 
 let testSize = 100;
 
-func populateForward(from : Nat, to : Nat) : Queue.Queue<Nat> {
+func populateForward(from : Nat, to : Nat) : Queue<Nat> {
   var queue = Queue.empty<Nat>();
   for (number in Nat.range(from, to)) {
     queue := Queue.pushFront(queue, number)
@@ -276,7 +279,7 @@ suite(
   }
 );
 
-func populateBackward(from : Nat, to : Nat) : Queue.Queue<Nat> {
+func populateBackward(from : Nat, to : Nat) : Queue<Nat> {
   var queue = Queue.empty<Nat>();
   for (number in Nat.range(from, to)) {
     queue := Queue.pushBack(queue, number)
@@ -420,7 +423,7 @@ object Random {
   }
 };
 
-func randomPopulate(amount : Nat) : Queue.Queue<Nat> {
+func randomPopulate(amount : Nat) : Queue<Nat> {
   var current = Queue.empty<Nat>();
   for (number in Nat.range(0, amount)) {
     current := if (Random.next() % 2 == 0) {
@@ -432,13 +435,13 @@ func randomPopulate(amount : Nat) : Queue.Queue<Nat> {
   current
 };
 
-func isSorted(queue : Queue.Queue<Nat>) : Bool {
+func isSorted(queue : Queue<Nat>) : Bool {
   let array = Iter.toArray(iterateForward(queue));
   let sorted = Array.sort(array, Nat.compare);
   Array.equal(array, sorted, Nat.equal)
 };
 
-func randomRemoval(queue : Queue.Queue<Nat>, amount : Nat) : Queue.Queue<Nat> {
+func randomRemoval(queue : Queue<Nat>, amount : Nat) : Queue<Nat> {
   var current = queue;
   for (number in Nat.range(0, amount)) {
     current := if (Random.next() % 2 == 0) {
@@ -518,7 +521,7 @@ suite(
   }
 );
 
-func randomInsertionDeletion(steps : Nat) : Queue.Queue<Nat> {
+func randomInsertionDeletion(steps : Nat) : Queue<Nat> {
   var current = Queue.empty<Nat>();
   var size = 0;
   for (number in Nat.range(0, steps - 1)) {
@@ -571,6 +574,318 @@ suite(
       func() {
         expect.bool(isSorted(randomInsertionDeletion(1000))).isTrue()
       }
+    )
+  }
+);
+
+suite(
+  "code coverage",
+  func() {
+    test(
+      "singleton",
+      func() {
+        let q = Queue.singleton(1);
+        expect.bool(Queue.isEmpty(q)).isFalse();
+        expect.option(Queue.peekFront(q), Nat.toText, Nat.equal).equal(?1);
+        expect.option(Queue.peekBack(q), Nat.toText, Nat.equal).equal(?1)
+      }
+    );
+
+    test(
+      "all",
+      func() {
+        let testAll = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          expect.bool(Queue.all<Nat>(q, func n = n > 0)).isTrue();
+          expect.bool(Queue.all<Nat>(q, func n = n < 3)).isFalse()
+        };
+        testAll([4]);
+        testAll([1, 5]);
+        testAll([1, 2, 6]);
+        testAll([1, 2, 3, 4]);
+        testAll([1, 2, 2, 3, 3, 4]);
+        testAll([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "filterMap",
+      func() {
+        let testFilterMap = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          let mapped = Queue.filterMap<Nat, Text>(
+            q,
+            func n = if (n % 2 == 0) ?Nat.toText(n) else null
+          );
+          expect.array<Text>(
+            Iter.toArray(Queue.values(mapped)),
+            func t = t,
+            Text.equal
+          ).equal(Array.filterMap<Nat, Text>(testElements, func n = if (n % 2 == 0) ?Nat.toText(n) else null))
+        };
+        testFilterMap([]);
+        testFilterMap([1]);
+        testFilterMap([1, 2]);
+        testFilterMap([1, 2, 3]);
+        testFilterMap([1, 2, 3, 4]);
+        testFilterMap([1, 2, 2, 3, 3, 4]);
+        testFilterMap([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "forEach",
+      func() {
+        let testForEach = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          var result = "";
+          Queue.forEach<Nat>(
+            q,
+            func n {
+              result #= Nat.toText n
+            }
+          );
+          expect.text(result).equal(Array.foldLeft<Nat, Text>(testElements, "", func(acc, n) = acc # Nat.toText n))
+        };
+        testForEach([]);
+        testForEach([1]);
+        testForEach([1, 2]);
+        testForEach([1, 2, 3]);
+        testForEach([1, 2, 3, 4]);
+        testForEach([1, 2, 2, 3, 3, 4]);
+        testForEach([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "toText",
+      func() {
+        let testToText = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          expect.text(Queue.toText(q, Nat.toText)).equal("RealTimeQueue" # Array.toText<Nat>(testElements, Nat.toText))
+        };
+        testToText([]);
+        testToText([1]);
+        testToText([1, 2]);
+        testToText([1, 2, 3]);
+        testToText([1, 2, 3, 4]);
+        testToText([1, 2, 2, 3, 3, 4]);
+        testToText([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "size",
+      func() {
+        let testSize = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          expect.nat(Queue.size(q)).equal(testElements.size())
+        };
+        testSize([]);
+        testSize([1]);
+        testSize([1, 2]);
+        testSize([1, 2, 3]);
+        testSize([1, 2, 3, 4]);
+        testSize([1, 2, 2, 3, 3, 4]);
+        testSize([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "contains",
+      func() {
+        let testContains = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          let alwaysThere = 1;
+          let neverThere = 123;
+          expect.bool(Queue.contains(q, Nat.equal, alwaysThere)).equal(Array.find<Nat>(testElements, func n = Nat.equal(n, alwaysThere)) != null);
+          expect.bool(Queue.contains(q, Nat.equal, neverThere)).equal(Array.find<Nat>(testElements, func n = Nat.equal(n, neverThere)) != null)
+        };
+        testContains([]);
+        testContains([1]);
+        testContains([1, 2]);
+        testContains([1, 2, 3]);
+        testContains([1, 2, 3, 4]);
+        testContains([1, 2, 2, 3, 3, 4]);
+        testContains([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "any",
+      func() {
+        let testAny = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          expect.bool(Queue.any<Nat>(q, func n = n > 2)).equal(Array.any<Nat>(testElements, func n = n > 2));
+          expect.bool(Queue.any<Nat>(q, func n = n > 3)).equal(Array.any<Nat>(testElements, func n = n > 3))
+        };
+        testAny([]);
+        testAny([3]);
+        testAny([1, 3]);
+        testAny([1, 2, 3]);
+        testAny([1, 2, 3, 2]);
+        testAny([1, 2, 3, 2, 1]);
+        testAny([1, 2, 0, 2, 1, 3]);
+        testAny([1, 2, 0, 2, 1, 3, 1])
+      }
+    );
+
+    test(
+      "map",
+      func() {
+        let testMap = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          let mapped = Queue.map<Nat, Nat>(q, func n = n * 2);
+          expect.array(
+            Iter.toArray(Queue.values(mapped)),
+            Nat.toText,
+            Nat.equal
+          ).equal(Array.map<Nat, Nat>(testElements, func n = n * 2))
+        };
+        testMap([]);
+        testMap([1]);
+        testMap([1, 2]);
+        testMap([1, 2, 3]);
+        testMap([1, 2, 3, 4]);
+        testMap([1, 2, 2, 3, 3, 4]);
+        testMap([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "reverse",
+      func() {
+        let testReverse = func(testElements : [Nat]) {
+          let q = Queue.fromIter(testElements.vals());
+          let reversed = Queue.reverse(q);
+          expect.array(
+            Iter.toArray(Queue.values(reversed)),
+            Nat.toText,
+            Nat.equal
+          ).equal(Array.reverse(testElements))
+        };
+
+        testReverse([]);
+        testReverse([1]);
+        testReverse([1, 2]);
+        testReverse([1, 2, 3]);
+        testReverse([1, 2, 3, 4]);
+        testReverse([1, 2, 2, 3, 3, 4]);
+        testReverse([1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9])
+      }
+    );
+
+    test(
+      "compare",
+      func() {
+        let testCompare = func(testElements1 : [Nat], testElements2 : [Nat]) {
+          let q1 = Queue.fromIter(testElements1.vals());
+          let q2 = Queue.fromIter(testElements2.vals());
+          expect.bool(Queue.compare(q1, q2, Nat.compare) == Array.compare<Nat>(testElements1, testElements2, Nat.compare)).isTrue()
+        };
+
+        testCompare([], []);
+        testCompare([1], []);
+        testCompare([], [1]);
+        testCompare([1], [1]);
+        testCompare([1], [2]);
+        testCompare([1, 2], [1]);
+        testCompare([1], [1, 2]);
+        testCompare([1, 2], [1, 2]);
+        testCompare([1, 2], [2, 1]);
+        testCompare([1, 2, 4], [1, 2, 3]);
+        testCompare([1, 2, 3], [1, 2, 4]);
+        testCompare([1, 2, 3], [1, 3, 3]);
+        testCompare([1, 2, 3], [2, 2, 3]);
+        testCompare([1, 2, 3], [2, 3, 3]);
+        testCompare([1, 2, 3], [2, 3, 4])
+      }
+    )
+  }
+);
+
+suite(
+  "edge cases",
+  func() {
+    test(
+      "empty queue operations",
+      func() {
+        let q = Queue.empty<Nat>();
+        expect.bool(Queue.isEmpty(q)).isTrue();
+        expect.nat(Queue.size(q)).equal(0);
+        expect.option(Queue.peekFront(q), Nat.toText, Nat.equal).isNull();
+        expect.option(Queue.peekBack(q), Nat.toText, Nat.equal).isNull();
+        expect.option(
+          Queue.popFront(q),
+          frontToText,
+          frontEqual
+        ).isNull();
+        expect.option(
+          Queue.popBack(q),
+          backToText,
+          backEqual
+        ).isNull()
+      }
+    );
+
+    test(
+      "rebalancing threshold",
+      func() {
+        // Create a queue that's exactly at the rebalancing threshold
+        var q = Queue.empty<Nat>();
+        for (i in Nat.range(1, 4)) {
+          q := Queue.pushFront(q, i)
+        };
+        for (i in Nat.range(5, 12)) {
+          q := Queue.pushBack(q, i)
+        };
+        let #rebal(_) = q else Prim.trap "Should be in rebalancing state";
+        // Test operations during rebalancing
+        expect.text(Queue.toText(q, Nat.toText)).equal("RealTimeQueue[3, 2, 1, 5, 6, 7, 8, 9, 10, 11]");
+        q := Queue.pushFront(q, 0);
+        q := Queue.pushBack(q, 13);
+        expect.bool(Queue.isEmpty(q)).isFalse();
+        expect.option(Queue.peekFront(q), Nat.toText, Nat.equal).equal(?0);
+        expect.option(Queue.peekBack(q), Nat.toText, Nat.equal).equal(?13)
+      }
+    );
+
+    test(
+      "alternating operations",
+      func() {
+        var q = Queue.empty<Nat>();
+        // Alternating pushes
+        for (i in Nat.range(0, 5)) {
+          q := Queue.pushFront(q, i);
+          q := Queue.pushBack(q, i + 100)
+        };
+        // Mixed operations
+        expect.option(Queue.popFront(q), frontToText, frontEqual).equal(?(4, Queue.fromIter([3, 2, 1, 0, 100, 101, 102, 103, 104].vals())));
+        q := Queue.pushBack(q, 200);
+        expect.option(Queue.popBack(q), backToText, backEqual).equal(?(Queue.fromIter([4, 3, 2, 1, 0, 100, 101, 102, 103, 104].vals()), 200));
+        q := Queue.pushFront(q, 300);
+        // Verify order is maintained
+        expect.array(
+          Iter.toArray(Queue.values(q)),
+          Nat.toText,
+          Nat.equal
+        ).equal([300, 4, 3, 2, 1, 0, 100, 101, 102, 103, 104, 200])
+      }
+    )
+  }
+);
+
+suite(
+  "regression: stack overflow should not happen when iterating over large queues",
+  func() {
+    let queue = populateForward(1, 17_001);
+    let actual = Iter.toArray(iterateBackward(queue));
+    expect.array(
+      actual,
+      Nat.toText,
+      Nat.equal
+    ).equal(
+      Array.tabulate<Nat>(17_000, func i = i + 1)
     )
   }
 )

@@ -443,6 +443,8 @@ module {
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// assert List.removeLast(list) == ?11;
+  /// assert List.removeLast(list) == ?10;
+  /// assert List.removeLast(list) == null;
   /// ```
   ///
   /// Amortized Runtime: `O(1)`, Worst Case Runtime: `O(sqrt(n))`
@@ -610,6 +612,7 @@ module {
   /// List.add(list, 4);
   ///
   /// assert List.indexOf<Nat>(list, Nat.equal, 3) == ?2;
+  /// assert List.indexOf<Nat>(list, Nat.equal, 5) == null;
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -630,6 +633,7 @@ module {
   /// let list = List.fromArray<Nat>([1, 2, 3, 4, 2, 2]);
   ///
   /// assert List.lastIndexOf<Nat>(list, Nat.equal, 2) == ?5;
+  /// assert List.lastIndexOf<Nat>(list, Nat.equal, 5) == null;
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -652,6 +656,7 @@ module {
   /// List.add(list, 4);
   ///
   /// assert List.firstIndexWhere<Nat>(list, func(i) { i % 2 == 0 }) == ?1;
+  /// assert List.firstIndexWhere<Nat>(list, func(i) { i > 5 }) == null;
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -695,6 +700,7 @@ module {
   /// List.add(list, 4);
   ///
   /// assert List.lastIndexWhere<Nat>(list, func(i) { i % 2 == 0 }) == ?3;
+  /// assert List.lastIndexWhere<Nat>(list, func(i) { i > 5 }) == null;
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1227,24 +1233,23 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let list = List.repeat<Nat>(1, 10);
-  ///
-  /// assert List.first(list) == ?1;
+  /// assert List.first(List.fromArray<Nat>([1, 2, 3])) == ?1;
+  /// assert List.first(List.empty<Nat>()) == null;
   /// ```
   ///
   /// Runtime: `O(1)`
   ///
   /// Space: `O(1)`
   public func first<T>(list : List<T>) : ?T {
-    list.blocks[1][0]
+    if (isEmpty(list)) null else list.blocks[1][0]
   };
 
   /// Returns the last element of `list`. Traps if `list` is empty.
   ///
   /// Example:
   /// ```motoko include=import
-  /// let list = List.fromArray<Nat>([1, 2, 3]);
-  /// assert List.last(list) == ?3;
+  /// assert List.last(List.fromArray<Nat>([1, 2, 3])) == ?3;
+  /// assert List.last(List.empty<Nat>()) == null;
   /// ```
   ///
   /// Runtime: `O(1)`
@@ -1258,7 +1263,8 @@ module {
         case e { return e }
       }
     };
-    list.blocks[list.blockIndex - 1][0]
+    let b = list.blockIndex;
+    if (b == 1) null else list.blocks[b - 1][0]
   };
 
   /// Applies `f` to each element in `list`.
@@ -1490,6 +1496,7 @@ module {
   /// List.add(list, 2);
   ///
   /// assert List.max<Nat>(list, Nat.compare) == ?2;
+  /// assert List.max<Nat>(List.empty<Nat>(), Nat.compare) == null;
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1498,7 +1505,7 @@ module {
   ///
   /// *Runtime and space assumes that `compare` runs in O(1) time and space.
   public func max<T>(list : List<T>, compare : (T, T) -> Order.Order) : ?T {
-    if (size(list) == 0) return null;
+    if (isEmpty(list)) return null;
 
     var maxSoFar = get(list, 0);
     forEach<T>(
@@ -1524,6 +1531,7 @@ module {
   /// List.add(list, 2);
   ///
   /// assert List.min<Nat>(list, Nat.compare) == ?1;
+  /// assert List.min<Nat>(List.empty<Nat>(), Nat.compare) == null;
   /// ```
   ///
   /// Runtime: `O(size)`
@@ -1532,7 +1540,7 @@ module {
   ///
   /// *Runtime and space assumes that `compare` runs in O(1) time and space.
   public func min<T>(list : List<T>, compare : (T, T) -> Order.Order) : ?T {
-    if (size(list) == 0) return null;
+    if (isEmpty(list)) return null;
 
     var minSoFar = get(list, 0);
     forEach<T>(
@@ -1781,6 +1789,7 @@ module {
   /// ```motoko include=import
   /// let list = List.fromArray<Nat>([2,0,3]);
   /// assert not List.isEmpty<Nat>(list);
+  /// assert List.isEmpty<Nat>(List.empty<Nat>());
   /// ```
   ///
   /// Runtime: `O(1)`

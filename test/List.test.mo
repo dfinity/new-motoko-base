@@ -204,6 +204,10 @@ for (i in Nat.rangeInclusive(0, n)) {
   List.add(removed, unwrap(List.removeLast(list)))
 };
 
+let empty = List.empty<Nat>();
+let emptied = List.singleton<Nat>(0);
+let _ = List.removeLast(emptied);
+
 run(
   suite(
     "removeLast",
@@ -217,6 +221,16 @@ run(
         "elements",
         List.toArray(removed),
         M.equals(T.array(T.natTestable, Iter.toArray(Nat.rangeInclusive(0, n))))
+      ),
+      test(
+        "empty",
+        List.removeLast(List.empty<Nat>()),
+        M.equals(T.optional(T.natTestable, null : ?Nat))
+      ),
+      test(
+        "emptied",
+        List.removeLast(emptied),
+        M.equals(T.optional(T.natTestable, null : ?Nat))
       )
     ]
   )
@@ -249,6 +263,16 @@ run(
         M.equals(T.optional(T.natTestable, ?0))
       ),
       test(
+        "first empty",
+        List.first(empty),
+        M.equals(T.optional(T.natTestable, null : ?Nat))
+      ),
+      test(
+        "first emptied",
+        List.first(emptied),
+        M.equals(T.optional(T.natTestable, null : ?Nat))
+      ),
+      test(
         "last of len N",
         List.last(list),
         M.equals(T.optional(T.natTestable, ?n))
@@ -257,9 +281,41 @@ run(
         "last of len 1",
         List.last(List.repeat<Nat>(1, 1)),
         M.equals(T.optional(T.natTestable, ?1))
+      ),
+      test(
+        "last empty",
+        List.last(List.empty<Nat>()),
+        M.equals(T.optional(T.natTestable, null : ?Nat))
+      ),
+      test(
+        "last emptied",
+        List.last(emptied),
+        M.equals(T.optional(T.natTestable, null : ?Nat))
       )
     ]
   )
+);
+
+Test.suite(
+  "empty vs emptied",
+  func() {
+    Test.test(
+      "empty",
+      func() {
+        Test.expect.nat(empty.blockIndex).equal(1);
+        Test.expect.nat(empty.elementIndex).equal(0);
+        Test.expect.bool(empty.blocks.size() == 1).equal(true)
+      }
+    );
+    Test.test(
+      "emptied",
+      func() {
+        Test.expect.nat(emptied.blockIndex).equal(1);
+        Test.expect.nat(emptied.elementIndex).equal(0);
+        Test.expect.bool(emptied.blocks.size() > 1).equal(true)
+      }
+    )
+  }
 );
 
 var sumN = 0;
@@ -1217,6 +1273,54 @@ Test.suite(
           (768, 65_537)
         ];
         Test.expect.array<(Nat, Nat)>(List.toArray(sizes), Tuple2.makeToText(Nat.toText, Nat.toText), Tuple2.makeEqual<Nat, Nat>(Nat.equal, Nat.equal)).equal(expectedBlockResizes)
+      }
+    )
+  }
+);
+
+Test.suite(
+  "Null on empty",
+  func() {
+    Test.test(
+      "indexOf",
+      func() {
+        Test.expect.bool(List.indexOf(empty, Nat.equal, 0) == null).equal(true);
+        Test.expect.bool(List.indexOf(emptied, Nat.equal, 0) == null).equal(true)
+      }
+    );
+    Test.test(
+      "lastIndexOf",
+      func() {
+        Test.expect.bool(List.lastIndexOf(empty, Nat.equal, 0) == null).equal(true);
+        Test.expect.bool(List.lastIndexOf(emptied, Nat.equal, 0) == null).equal(true)
+      }
+    );
+    Test.test(
+      "firstIndexWhere",
+      func() {
+        Test.expect.bool(List.firstIndexWhere<Nat>(empty, func(x) = x == 0) == null).equal(true);
+        Test.expect.bool(List.firstIndexWhere<Nat>(emptied, func(x) = x == 0) == null).equal(true)
+      }
+    );
+    Test.test(
+      "lastIndexWhere",
+      func() {
+        Test.expect.bool(List.lastIndexWhere<Nat>(empty, func(x) = x == 0) == null).equal(true);
+        Test.expect.bool(List.lastIndexWhere<Nat>(emptied, func(x) = x == 0) == null).equal(true)
+      }
+    );
+    Test.test(
+      "max",
+      func() {
+        Test.expect.bool(List.max(empty, Nat.compare) == null).equal(true);
+        Test.expect.bool(List.max(emptied, Nat.compare) == null).equal(true)
+      }
+    );
+    Test.test(
+      "min",
+      func() {
+        Test.expect.bool(List.min(empty, Nat.compare) == null).equal(true);
+        Test.expect.bool(List.min(emptied, Nat.compare) == null).equal(true)
       }
     )
   }

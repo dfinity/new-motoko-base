@@ -2,6 +2,7 @@
 
 ## Next
 
+* Fix: `first` and `last` from `List` now return `null` on empty lists instead of trapping (#312).
 * Rename `Map.replaceIfExists()` to `Map.replace()` (#286).
 * Add `entriesFrom` and `reverseEntriesFrom` to `Map`, `valuesFrom` and `reverseValuesFrom` to `Set` and `Text.toText` (#272).
 * Update code examples in doc comments (#224, #282, #303).

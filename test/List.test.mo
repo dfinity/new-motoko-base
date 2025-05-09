@@ -1298,15 +1298,15 @@ Test.suite(
     Test.test(
       "firstIndexWhere",
       func() {
-        Test.expect.bool(List.firstIndexWhere<Nat>(empty, func(x) = x == 0) == null).equal(true);
-        Test.expect.bool(List.firstIndexWhere<Nat>(emptied, func(x) = x == 0) == null).equal(true)
+        Test.expect.bool(List.firstIndexWhere<Nat>(empty, func x = x == 0) == null).equal(true);
+        Test.expect.bool(List.firstIndexWhere<Nat>(emptied, func x = x == 0) == null).equal(true)
       }
     );
     Test.test(
       "lastIndexWhere",
       func() {
-        Test.expect.bool(List.lastIndexWhere<Nat>(empty, func(x) = x == 0) == null).equal(true);
-        Test.expect.bool(List.lastIndexWhere<Nat>(emptied, func(x) = x == 0) == null).equal(true)
+        Test.expect.bool(List.lastIndexWhere<Nat>(empty, func x = x == 0) == null).equal(true);
+        Test.expect.bool(List.lastIndexWhere<Nat>(emptied, func x = x == 0) == null).equal(true)
       }
     );
     Test.test(

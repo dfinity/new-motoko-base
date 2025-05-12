@@ -137,7 +137,9 @@ the list is empty.</p>
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
 List.add(list, 11);
-assert List.removeLast(list) == ?11;</code></pre>
+assert List.removeLast(list) == ?11;
+assert List.removeLast(list) == ?10;
+assert List.removeLast(list) == null;</code></pre>
 
 <p>Amortized Runtime: <code>O(1)</code>, Worst Case Runtime: <code>O(sqrt(n))</code></p>
 <p>Amortized Space: <code>O(1)</code>, Worst Case Space: <code>O(sqrt(n))</code></p>
@@ -201,7 +203,8 @@ List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
 
-assert List.indexOf&lt;Nat&gt;(list, Nat.equal, 3) == ?2;</code></pre>
+assert List.indexOf&lt;Nat&gt;(list, Nat.equal, 3) == ?2;
+assert List.indexOf&lt;Nat&gt;(list, Nat.equal, 5) == null;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>*Runtime and space assumes that <code>equal</code> runs in <code>O(1)</code> time and space.</p>
@@ -213,7 +216,8 @@ import Nat &quot;mo:base/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4, 2, 2]);
 
-assert List.lastIndexOf&lt;Nat&gt;(list, Nat.equal, 2) == ?5;</code></pre>
+assert List.lastIndexOf&lt;Nat&gt;(list, Nat.equal, 2) == ?5;
+assert List.lastIndexOf&lt;Nat&gt;(list, Nat.equal, 5) == null;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>*Runtime and space assumes that <code>equal</code> runs in <code>O(1)</code> time and space.</p>
@@ -227,7 +231,8 @@ List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
 
-assert List.firstIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }) == ?1;</code></pre>
+assert List.firstIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }) == ?1;
+assert List.firstIndexWhere&lt;Nat&gt;(list, func(i) { i &gt; 5 }) == null;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>*Runtime and space assumes that <code>predicate</code> runs in <code>O(1)</code> time and space.</p>
@@ -241,7 +246,8 @@ List.add(list, 2);
 List.add(list, 3);
 List.add(list, 4);
 
-assert List.lastIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }) == ?3;</code></pre>
+assert List.lastIndexWhere&lt;Nat&gt;(list, func(i) { i % 2 == 0 }) == ?3;
+assert List.lastIndexWhere&lt;Nat&gt;(list, func(i) { i &gt; 5 }) == null;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>*Runtime and space assumes that <code>predicate</code> runs in <code>O(1)</code> time and space.</p>
@@ -437,17 +443,16 @@ assert Iter.toArray(List.values(list)) == [2, 3];</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="first"><code><span class="keyword">public func </span><span class="fnname">first</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the first element of <code>list</code>, or <code>null</code> if the list is empty.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.repeat&lt;Nat&gt;(1, 10);
-
-assert List.first(list) == ?1;</code></pre>
+assert List.first(List.fromArray&lt;Nat&gt;([1, 2, 3])) == ?1;
+assert List.first(List.empty&lt;Nat&gt;()) == null;</code></pre>
 
 <p>Runtime: <code>O(1)</code></p>
 <p>Space: <code>O(1)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="last"><code><span class="keyword">public func </span><span class="fnname">last</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the last element of <code>list</code>. Traps if <code>list</code> is empty.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
-assert List.last(list) == ?3;</code></pre>
+assert List.last(List.fromArray&lt;Nat&gt;([1, 2, 3])) == ?3;
+assert List.last(List.empty&lt;Nat&gt;()) == null;</code></pre>
 
 <p>Runtime: <code>O(1)</code></p>
 <p>Space: <code>O(1)</code></p>
@@ -541,7 +546,8 @@ let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 
-assert List.max&lt;Nat&gt;(list, Nat.compare) == ?2;</code></pre>
+assert List.max&lt;Nat&gt;(list, Nat.compare) == ?2;
+assert List.max&lt;Nat&gt;(List.empty&lt;Nat&gt;(), Nat.compare) == null;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>Space: <code>O(1)</code></p>
@@ -556,7 +562,8 @@ let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
 List.add(list, 2);
 
-assert List.min&lt;Nat&gt;(list, Nat.compare) == ?1;</code></pre>
+assert List.min&lt;Nat&gt;(list, Nat.compare) == ?1;
+assert List.min&lt;Nat&gt;(List.empty&lt;Nat&gt;(), Nat.compare) == null;</code></pre>
 
 <p>Runtime: <code>O(size)</code></p>
 <p>Space: <code>O(1)</code></p>
@@ -667,7 +674,8 @@ assert Iter.toArray(List.values(rlist)) == [3, 2, 1];</code></pre>
 <p>Example:</p>
 <pre><code>motoko include=import
 let list = List.fromArray&lt;Nat&gt;([2,0,3]);
-assert not List.isEmpty&lt;Nat&gt;(list);</code></pre>
+assert not List.isEmpty&lt;Nat&gt;(list);
+assert List.isEmpty&lt;Nat&gt;(List.empty&lt;Nat&gt;());</code></pre>
 
 <p>Runtime: <code>O(1)</code></p>
 <p>Space: <code>O(1)</code></p>

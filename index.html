@@ -537,8 +537,37 @@ that are dynamically size-balanced by splitting.</p>
 <ul><li>Runtime: <code>O(1)</code> amortized costs, <code>O(size)</code> worst case cost per single call.</li><li>Space: <code>O(1)</code> amortized costs, <code>O(size)</code> worst case cost per single call.</li></ul>
 
 <p><code>n</code> denotes the number of elements stored in the queue.</p>
+<p>Note that some operations that traverse the elements of the queue (e.g. <code>forEach</code>, <code>values</code>) preserve the order of the elements,
+whereas others (e.g. <code>map</code>, <code>contains</code>) do NOT guarantee that the elements are visited in any order.
+The order is undefined to avoid allocations, making these operations more efficient.</p>
 <pre><code>motoko name=import
-import Queue &quot;mo:base/pure/Queue&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Pure (immutable) sets based on order/comparison of elements.
+import Queue &quot;mo:base/pure/Queue&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/RealTimeQueue.html">pure/RealTimeQueue</a><div class="index-item-comment"><p>Double-ended immutable queue with guaranteed <code>O(1)</code> push/pop operations (caveat: high constant factor).
+For a default immutable queue implementation, see <code>pure/Queue</code>.</p>
+<p>This module provides an alternative implementation with better worst-case performance for single operations, e.g. <code>pushBack</code> and <code>popFront</code>.
+These operations are always constant time, <code>O(1)</code>, which eliminates spikes in performance of <code>pure/Queue</code> operations
+that are caused by the amortized nature of the <code>pure/Queue</code> implementation, which can lead to <code>O(n)</code> worst-case performance for a single operation.
+The spikes in performance can cause a single message to take multiple more rounds to complete than most other messages.</p>
+<p>However, the <code>O(1)</code> operations come at a cost of higher constant factor than the <code>pure/Queue</code> implementation:</p>
+<ul><li>'pop' operations are on average 3x more expensive</li><li>'push' operations are on average 8x more expensive</li></ul>
+
+<p>For better performance across multiple operations and when the spikes in single operations are not a problem, use <code>pure/Queue</code>.
+For guaranteed <code>O(1)</code> operations, use <code>pure/RealTimeQueue</code>.</p>
+<p><hr/>The interface is purely functional, not imperative, and queues are immutable values.
+In particular, Queue operations such as push and pop do not update their input queue but, instead, return the
+value of the modified Queue, alongside any other data.
+The input queue is left unchanged.</p>
+<p>Examples of use-cases:</p>
+<ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code>.</li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li><li>Deque (double-ended queue) by using any combination of push/pop operations on either end.</li></ul>
+
+<p>A Queue is internally implemented as a real-time double-ended queue based on the paper
+&quot;Real-Time Double-Ended Queue Verified (Proof Pearl)&quot;. The implementation maintains
+worst-case constant time <code>O(1)</code> for push/pop operations through gradual rebalancing steps.</p>
+<p>Construction: Create a new queue with the <code>empty&lt;T&gt;()</code> function.</p>
+<p>Note that some operations that traverse the elements of the queue (e.g. <code>forEach</code>, <code>values</code>) preserve the order of the elements,
+whereas others (e.g. <code>map</code>, <code>contains</code>) do NOT guarantee that the elements are visited in any order.
+The order is undefined to avoid allocations, making these operations more efficient.</p>
+<pre><code>motoko name=import
+import Queue &quot;mo:base/pure/RealTimeQueue&quot;;</code></pre></div></li><li class="index-item"><a class="index-item-link" href="pure/Set.html">pure/Set</a><div class="index-item-comment"><p>Pure (immutable) sets based on order/comparison of elements.
 A set is a collection of elements without duplicates.
 The set data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>

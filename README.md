@@ -226,3 +226,60 @@ Garbage Collection: ${\color{gray}0\\%}$
 
 </details>
 Saving results to .bench/PureListStackSafety.bench.json
+
+<details>
+
+<summary>bench/Queues.bench.mo $({\color{gray}0\%})$</summary>
+
+### Different queue implementations
+
+_Compare the performance of the following queue implementations_:
+- `pure/Queue`: The default immutable double-ended queue implementation.
+  * Pros: Good amortized performance, meaning that the average cost of operations is low `O(1)`.
+  * Cons: In worst case, an operation can take `O(size)` time rebuilding the queue as demonstrated in the `Pop front 2 elements` scenario.
+- `pure/RealTimeQueue`
+  * Pros: Every operation is guaranteed to take at most `O(1)` time and space.
+  * Cons: Poor amortized performance: Instruction cost is on average 3x for *pop* and 8x for *push* compared to `pure/Queue`.
+- mutable `Queue`
+  * Pros: Also `O(1)` guarantees with a lower constant factor than `pure/RealTimeQueue`. Amortized performance is comparable to `pure/Queue`.
+  * Cons: It is mutable and cannot be used in `shared` types (not shareable)_._
+
+
+Instructions: ${\color{gray}0\\%}$
+Heap: ${\color{gray}0\\%}$
+Stable Memory: ${\color{gray}0\\%}$
+Garbage Collection: ${\color{gray}0\\%}$
+
+
+**Instructions**
+
+|                            | pure/Queue | pure/RealTimeQueue | mutable Queue |
+| :------------------------- | ---------: | -----------------: | ------------: |
+| Initialize with 2 elements |      3_571 |              2_592 |         3_401 |
+| Push 500 elements          |    103_492 |            867_120 |       243_585 |
+| Pop front 2 elements       |     98_792 |              5_009 |         4_326 |
+| Pop 150 front&back         |    106_545 |            350_417 |       140_211 |
+
+
+**Heap**
+
+|                            | pure/Queue | pure/RealTimeQueue | mutable Queue |
+| :------------------------- | ---------: | -----------------: | ------------: |
+| Initialize with 2 elements |      324 B |              300 B |         352 B |
+| Push 500 elements          |   8.08 KiB |           8.17 KiB |      19.8 KiB |
+| Pop front 2 elements       |      240 B |              240 B |         192 B |
+| Pop 150 front&back         |  -4.42 KiB |             -492 B |    -11.45 KiB |
+
+
+**Garbage Collection**
+
+|                            | pure/Queue | pure/RealTimeQueue | mutable Queue |
+| :------------------------- | ---------: | -----------------: | ------------: |
+| Initialize with 2 elements |      508 B |              444 B |         456 B |
+| Push 500 elements          |   10.1 KiB |         137.84 KiB |         344 B |
+| Pop front 2 elements       |  12.19 KiB |              528 B |         424 B |
+| Pop 150 front&back         |  15.61 KiB |          49.66 KiB |      12.1 KiB |
+
+
+</details>
+Saving results to .bench/Queues.bench.json

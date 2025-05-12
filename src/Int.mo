@@ -103,7 +103,7 @@ module {
     ?(if (isNegative) { -n } else { n })
   };
 
-  /// Converts an integer to a natural number. Returns `null` if the integer is negative.
+  /// Converts an integer to a natural number. Traps if the integer is negative.
   ///
   /// Example:
   /// ```motoko include=import

@@ -5,7 +5,7 @@
 * Fix: `first` and `last` from `List` now return `null` on empty lists instead of trapping (#312).
 * Add `reverse` function to the `pure/Queue` module (#229).
 * Add `pure/RealTimeQueue` module - an alternative immutable double-ended queue implementation with worst-case `O(1)` time complexity for all operations but worse amortized performance (#229).
-  - Refer to the `Queues.bench.mo` benchmark for comparison with other queue implementations.
+  * Refer to the `Queues.bench.mo` benchmark for comparison with other queue implementations.
 * Rename `Map.replaceIfExists()` to `Map.replace()` (#286).
 * Add `entriesFrom` and `reverseEntriesFrom` to `Map`, `valuesFrom` and `reverseValuesFrom` to `Set` and `Text.toText` (#272).
 * Update code examples in doc comments (#224, #282, #303).

@@ -18,7 +18,7 @@ if the input is not a valid integer.</p>
 begin with a '+' or '-' character.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-assert Int.fromText(&quot;-1234&quot;) == ?-1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="toNat"><code><span class="keyword">public func </span><span class="fnname">toNat</span>(<span class="parameter">int</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Nat</span></code></h4><p><p>Converts an integer to a natural number. Returns <code>null</code> if the integer is negative.</p>
+assert Int.fromText(&quot;-1234&quot;) == ?-1234;</code></pre></p></div><div class="declaration"><h4 class="function" id="toNat"><code><span class="keyword">public func </span><span class="fnname">toNat</span>(<span class="parameter">int</span> : <a href="#type.Int"><span class="type">Int</span></a>) : <span class="type">Nat</span></code></h4><p><p>Converts an integer to a natural number. Traps if the integer is negative.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
 import Debug &quot;mo:base/Debug&quot;;

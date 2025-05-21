@@ -12,6 +12,7 @@ Based on the paper &quot;Resizable Arrays in Optimal Time and Space&quot; by Bro
 Since this is internally a two-dimensional array the access times for put and get operations
 will naturally be 2x slower than Buffer and Array. However, Array is not resizable and Buffer
 has <code>O(size)</code> memory waste.</p>
+<p>The maximum number of elements in a <code>List</code> is 2^32.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new empty List for elements of type T.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -56,6 +57,7 @@ let list = List.fromPure&lt;Nat&gt;(pureList); // converts to mutable List</code
 let list = List.repeat&lt;Nat&gt;(2, 4); // [2, 2, 2, 2]
 List.addRepeat(list, 2, 1); // [2, 2, 2, 2, 1, 1]</code></pre>
 
+<p>The maximum number of elements in a <code>List</code> is 2^32.</p>
 <p>Runtime: <code>O(count)</code></p>
 </p></div><div class="declaration"><h4 class="function" id="clear"><code><span class="keyword">public func </span><span class="fnname">clear</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Resets the list to size 0, de-referencing all elements.</p>
 <p>Example:</p>
@@ -129,6 +131,7 @@ List.add(list, 2);
 List.add(list, 3);
 assert List.toArray(list) == [0, 1, 2, 3];</code></pre>
 
+<p>The maximum number of elements in a <code>List</code> is 2^32.</p>
 <p>Amortized Runtime: <code>O(1)</code>, Worst Case Runtime: <code>O(sqrt(n))</code></p>
 </p></div><div class="declaration"><h4 class="function" id="removeLast"><code><span class="keyword">public func </span><span class="fnname">removeLast</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Removes and returns the last item in the list or <code>null</code> if
 the list is empty.</p>
@@ -395,6 +398,7 @@ let list = List.repeat&lt;Nat&gt;(2, 1);
 List.addAll&lt;Nat&gt;(list, iter);
 assert Iter.toArray(List.values(list)) == [2, 1, 1, 1];</code></pre>
 
+<p>The maximum number of elements in a <code>List</code> is 2^32.</p>
 <p>Runtime: <code>O(size)</code>, where n is the size of iter.</p>
 </p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p><p>Creates a new immutable array containing all elements from the list.
 Elements appear in the same order as in the list.</p>

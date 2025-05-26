@@ -10,6 +10,10 @@
 * Add `entriesFrom` and `reverseEntriesFrom` to `Map`, `valuesFrom` and `reverseValuesFrom` to `Set` and `Text.toText` (#272).
 * Update code examples in doc comments (#224, #282, #303, #315).
 
+## 0.5.0
+
+* Add `concat` of slices function.
+
 ## 0.4.0
 
 * Add `isReplicated : () -> Bool` to `InternetComputer` (#213).

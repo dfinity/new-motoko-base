@@ -24,7 +24,7 @@ It's also possible to use both versions in parallel:
 
 ```toml
 base = "0.14.4"
-new-base = "0.4.0"
+new-base = "0.5.0"
 ```
 
 Since this is a preview release for community feedback, expect breaking changes.

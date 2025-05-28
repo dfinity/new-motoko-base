@@ -13,9 +13,9 @@ module {
 
     bench.rows([
       "while get",
-      "List.values_ |> while unsafe_next",
+      "List.values_ while unsafe_next",
       "while put",
-      "List.values_ |> while next_set"
+      "List.values_ while next_set"
     ]);
     bench.cols([
       "1000",
@@ -39,7 +39,7 @@ module {
               i += 1
             }
           };
-          case "List.values_ |> while unsafe_next" {
+          case "List.values_ while unsafe_next" {
             let unsafeIter = List.values_(list);
             var i = 0;
             while (i < size) {
@@ -54,7 +54,7 @@ module {
               i += 1
             }
           };
-          case "List.values_ |> while next_set" {
+          case "List.values_ while next_set" {
             let unsafeIter = List.values_(list);
             var i = 0;
             while (i < size) {

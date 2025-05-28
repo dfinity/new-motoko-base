@@ -183,6 +183,100 @@ module {
     }
   };
 
+  // TODO: refactor, extract common code from addRepeatInternal
+  public func addCount<T>(list : List<T>, iter : Iter.Iter<T>, count : Nat) {
+    let (blockIndex, elementIndex) = locate(size(list) + count);
+    let blocks = new_index_block_length(Nat32.fromNat(if (elementIndex == 0) { blockIndex - 1 } else blockIndex));
+
+    let old_blocks = list.blocks.size();
+    if (old_blocks < blocks) {
+      let old_data_blocks = list.blocks;
+      list.blocks := VarArray.repeat<[var ?T]>([var], blocks);
+      var i = 0;
+      while (i < old_blocks) {
+        list.blocks[i] := old_data_blocks[i];
+        i += 1
+      }
+    };
+
+    var cnt = count;
+    while (cnt > 0) {
+      let db_size = data_block_size(list.blockIndex);
+      if (list.elementIndex == 0 and db_size <= cnt) {
+        list.blocks[list.blockIndex] := VarArray.tabulate<?T>(db_size, func _ = iter.next());
+        cnt -= db_size;
+        list.blockIndex += 1
+      } else {
+        if (list.blocks[list.blockIndex].size() == 0) {
+          list.blocks[list.blockIndex] := VarArray.repeat<?T>(null, db_size)
+        };
+        let from = list.elementIndex;
+        let to = Nat.min(list.elementIndex + cnt, db_size);
+
+        let block = list.blocks[list.blockIndex];
+        var i = from;
+        while (i < to) {
+          block[i] := iter.next();
+          i += 1
+        };
+
+        list.elementIndex := to;
+        if (list.elementIndex == db_size) {
+          list.elementIndex := 0;
+          list.blockIndex += 1
+        };
+        cnt -= to - from
+      }
+    }
+  };
+
+  // TODO: refactor, extract common code from addRepeatInternal
+  public func addCount_<T>(list : List<T>, iter : UnsafeIter<T>, count : Nat) {
+    let (blockIndex, elementIndex) = locate(size(list) + count);
+    let blocks = new_index_block_length(Nat32.fromNat(if (elementIndex == 0) { blockIndex - 1 } else blockIndex));
+
+    let old_blocks = list.blocks.size();
+    if (old_blocks < blocks) {
+      let old_data_blocks = list.blocks;
+      list.blocks := VarArray.repeat<[var ?T]>([var], blocks);
+      var i = 0;
+      while (i < old_blocks) {
+        list.blocks[i] := old_data_blocks[i];
+        i += 1
+      }
+    };
+
+    var cnt = count;
+    while (cnt > 0) {
+      let db_size = data_block_size(list.blockIndex);
+      if (list.elementIndex == 0 and db_size <= cnt) {
+        list.blocks[list.blockIndex] := VarArray.tabulate<?T>(db_size, func _ = ?iter.unsafe_next());
+        cnt -= db_size;
+        list.blockIndex += 1
+      } else {
+        if (list.blocks[list.blockIndex].size() == 0) {
+          list.blocks[list.blockIndex] := VarArray.repeat<?T>(null, db_size)
+        };
+        let from = list.elementIndex;
+        let to = Nat.min(list.elementIndex + cnt, db_size);
+
+        let block = list.blocks[list.blockIndex];
+        var i = from;
+        while (i < to) {
+          block[i] := ?iter.unsafe_next_i(i);
+          i += 1
+        };
+
+        list.elementIndex := to;
+        if (list.elementIndex == db_size) {
+          list.elementIndex := 0;
+          list.blockIndex += 1
+        };
+        cnt -= to - from
+      }
+    }
+  };
+
   /// Add to list `count` copies of the initial value.
   ///
   /// ```motoko include=import
@@ -817,6 +911,8 @@ module {
   /// Runtime: `O(1)`
   public func values<T>(list : List<T>) : Iter.Iter<T> = values_(list);
 
+  public func valuesFrom<T>(list : List<T>, start : Nat) : Iter.Iter<T> = values_from_(start, list);
+
   /// Returns an Iterator (`Iter`) over the items (value-index pairs) in the list.
   /// Each item is a tuple of `(value, index)`. The iterator provides a single method
   /// `next()` which returns elements in order, or `null` when out of elements.
@@ -1041,19 +1137,16 @@ module {
   /// Runtime: `O(size)`
   public func toArray<T>(list : List<T>) : [T] = Array.tabulate<T>(size(list), values_(list).unsafe_next_i);
 
-  private func values_<T>(list : List<T>) : {
+  public type UnsafeIter<T> = {
     next : () -> ?T;
     unsafe_next : () -> T;
     unsafe_next_i : Nat -> T;
     next_set : T -> ()
-  } = values_from_(0, list);
+  };
 
-  private func values_from_<T>(start : Nat, list : List<T>) : {
-    next : () -> ?T;
-    unsafe_next : () -> T;
-    unsafe_next_i : Nat -> T;
-    next_set : T -> ()
-  } = object {
+  public func values_<T>(list : List<T>) : UnsafeIter<T> = values_from_(0, list);
+
+  public func values_from_<T>(start : Nat, list : List<T>) : UnsafeIter<T> = object {
     let blocks = list.blocks.size();
     var blockIndex = 0;
     var elementIndex = 0;
@@ -1903,4 +1996,8 @@ module {
     concatSlices<T>(Array.tabulate<(List<T>, Nat, Nat)>(lists.size(), func(i) = (lists[i], 0, size(lists[i]))))
   };
 
+  public func range<T>(list : List<T>, start : Nat, end : Nat) : Iter.Iter<T> {
+    let values = values_from_<T>(start, list);
+    Iter.take(values, end - start : Nat)
+  }
 }

@@ -505,7 +505,7 @@ module {
   ///
   /// ```motoko include=import
   /// let iter = ['A', 'B', 'C', 'D'].values();
-  /// let found = Iter.findIndex<Nat>(iter, func(x) { x == 'C' });
+  /// let found = Iter.findIndex<Char>(iter, func(x) { x == 'C' });
   /// assert found == ?2;
   /// ```
   /// Runtime: O(size)

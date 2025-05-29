@@ -1640,6 +1640,50 @@ module {
     Nat.compare(size1, size2)
   };
 
+  /// Returns the first value in `list` for which `predicate` returns true.
+  /// If no element satisfies the predicate, returns null.
+  ///
+  /// ```motoko include=import
+  /// let list = List.fromArray([1, 9, 4, 8]);
+  /// let found = List.find<Nat>(array, func x = x > 8);
+  /// assert found == ?9;
+  /// ```
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
+  public func find<T>(list : List<T>, predicate : T -> Bool) : ?T {
+    for (element in values(list)) {
+      if (predicate element) {
+        return ?element
+      }
+    };
+    null
+  };
+
+  /// Returns the first index in `list` for which `predicate` returns true.
+  /// If no element satisfies the predicate, returns null.
+  ///
+  /// ```motoko include=import
+  /// let list = List.fromArray(['A', 'B', 'C', 'D']);
+  /// let found = List.findIndex<Nat>(array, func(x) { x == 'C' });
+  /// assert found == ?2;
+  /// ```
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
+  public func findIndex<T>(list : List<T>, predicate : T -> Bool) : ?Nat {
+    for ((index, element) in enumerate(list)) {
+      if (predicate element) {
+        return ?index
+      }
+    };
+    null
+  };
+
   /// Creates a textual representation of `list`, using `toText` to recursively
   /// convert the elements into Text.
   ///

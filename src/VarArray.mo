@@ -161,6 +161,28 @@ module {
     null
   };
 
+  /// Returns the first index in `array` for which `predicate` returns true.
+  /// If no element satisfies the predicate, returns null.
+  ///
+  /// ```motoko include=import
+  /// let array = [var 1, 9, 4, 8];
+  /// let found = VarArray.findIndex<Nat>(array, func x = x > 8);
+  /// assert found == ?3;
+  /// ```
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
+  public func findIndex<T>(array : [var T], predicate : T -> Bool) : ?Nat {
+    for ((index, element) in enumerate(array)) {
+      if (predicate element) {
+        return ?index
+      }
+    };
+    null
+  };
+
   /// Create a new mutable array by concatenating the values of `array1` and `array2`.
   /// Note that `VarArray.concat` copies its arguments and has linear complexity.
   ///

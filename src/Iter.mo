@@ -500,6 +500,27 @@ module {
     null
   };
 
+  /// Returns the first index in `array` for which `predicate` returns true.
+  /// If no element satisfies the predicate, returns null.
+  ///
+  /// ```motoko include=import
+  /// let iter = [1, 2, 3, 4].values();
+  /// assert ?1 == Iter.findIndex<Nat>(iter, func (x) = x % 2 == 0);
+  /// ```
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `predicate` runs in O(1) time and space.
+  public func findIndex<T>(iter : Iter<T>, predicate : T -> Bool) : ?Nat {
+    for ((index, element) in enumerate(iter)) {
+      if (predicate element) {
+        return ?index
+      }
+    };
+    null
+  };
+
   /// Checks if an element is produced by an iterator.
   /// It stops consuming elements from the original iterator as soon as the predicate returns true.
   ///

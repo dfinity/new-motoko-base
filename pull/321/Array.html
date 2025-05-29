@@ -76,8 +76,8 @@ assert found == ?9;</code></pre><p>Runtime: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="findIndex"><code><span class="keyword">public func </span><span class="fnname">findIndex</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : ?<span class="type">Nat</span></code></h4><p><p>Returns the first index in <code>array</code> for which <code>predicate</code> returns true.
 If no element satisfies the predicate, returns null.</p>
 <pre><code>motoko include=import
-let array = ['a', 'b', 'c', 'd'];
-let found = Array.findIndex&lt;Nat&gt;(array, func(x) { x == 'c' });
+let array = ['A', 'B', 'C', 'D'];
+let found = Array.findIndex&lt;Char&gt;(array, func(x) { x == 'C' });
 assert found == ?2;</code></pre><p>Runtime: O(size)</p>
 <p>Space: O(1)</p>
 <p>*Runtime and space assumes that <code>predicate</code> runs in O(1) time and space.</p>

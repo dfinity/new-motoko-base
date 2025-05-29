@@ -568,8 +568,9 @@ module {
   /// import List "mo:base/pure/List";
   ///
   /// persistent actor {
-  ///   let list = ?(1, ?(2, ?(3, null)));
-  ///   assert List.find<Nat>(list, func n = n > 1) == ?2;
+  ///   let list = List.fromArray(['A', 'B', 'C', 'D']);
+  ///   let found = List.find<Nat>(list, func(x) { x == 'C' });
+  ///   assert found == ?2;
   /// }
   /// ```
   ///

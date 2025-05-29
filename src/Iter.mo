@@ -504,8 +504,9 @@ module {
   /// If no element satisfies the predicate, returns null.
   ///
   /// ```motoko include=import
-  /// let iter = [1, 2, 3, 4].values();
-  /// assert ?1 == Iter.findIndex<Nat>(iter, func (x) = x % 2 == 0);
+  /// let iter = ['A', 'B', 'C', 'D'].values();
+  /// let found = Iter.findIndex<Nat>(iter, func(x) { x == 'C' });
+  /// assert found == ?2;
   /// ```
   /// Runtime: O(size)
   ///

@@ -165,9 +165,9 @@ module {
   /// If no element satisfies the predicate, returns null.
   ///
   /// ```motoko include=import
-  /// let array = [var 1, 9, 4, 8];
-  /// let found = VarArray.findIndex<Nat>(array, func x = x > 8);
-  /// assert found == ?3;
+  /// let array = [var 'A', 'B', 'C', 'D'];
+  /// let found = VarArray.findIndex<Nat>(array, func(x) { x == 'C' });
+  /// assert found == ?2;
   /// ```
   /// Runtime: O(size)
   ///

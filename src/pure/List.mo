@@ -569,7 +569,7 @@ module {
   ///
   /// persistent actor {
   ///   let list = List.fromArray(['A', 'B', 'C', 'D']);
-  ///   let found = List.find<Char>(list, func(x) { x == 'C' });
+  ///   let found = List.findIndex<Char>(list, func(x) { x == 'C' });
   ///   assert found == ?2;
   /// }
   /// ```

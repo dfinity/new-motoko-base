@@ -313,7 +313,7 @@ If no element satisfies the predicate, returns null.</p>
 
 persistent actor {
   let list = List.fromArray(['A', 'B', 'C', 'D']);
-  let found = List.find&lt;Char&gt;(list, func(x) { x == 'C' });
+  let found = List.findIndex&lt;Char&gt;(list, func(x) { x == 'C' });
   assert found == ?2;
 }</code></pre>
 

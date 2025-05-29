@@ -984,6 +984,27 @@ let find = suite(
   ]
 );
 
+let findIndex = suite(
+  "findIndex",
+  [
+    test(
+      "findIndex",
+      List.findIndex<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func x = x == 9),
+      M.equals(T.optional(T.natTestable, ?1))
+    ),
+    test(
+      "findIndex fail",
+      List.findIndex<Nat>(?(1, ?(9, ?(4, ?(8, null)))), func _ = false),
+      M.equals(T.optional(T.natTestable, null : ?Nat))
+    ),
+    test(
+      "findIndex empty",
+      List.findIndex<Nat>(null, func _ = true),
+      M.equals(T.optional(T.natTestable, null : ?Nat))
+    )
+  ]
+);
+
 let all = suite(
   "all",
   [
@@ -1600,6 +1621,7 @@ run(
       foldLeft,
       foldRight,
       find,
+      findIndex,
       all,
       any,
       merge,

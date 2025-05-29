@@ -26,7 +26,7 @@
       "name": "ListLikeCollection",
       "extends": ["Collection"],
       "modules": ["pure/List"],
-      "functions": ["enumerate", "find", "findIndex"]
+      "functions": ["enumerate", "find", "findIndex", "reverse"]
     },
     {
       "name": "IndexedCollection",

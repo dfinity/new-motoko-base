@@ -93,7 +93,7 @@ let suite = Suite.suite(
     Suite.test(
       "findIndex",
       Array.findIndex<Nat>([1, 9, 4, 8], func x = x == 9),
-      M.equals(T.optional(T.natTestable, ?3))
+      M.equals(T.optional(T.natTestable, ?1))
     ),
     Suite.test(
       "findIndex fail",

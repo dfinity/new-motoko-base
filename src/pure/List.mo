@@ -921,6 +921,36 @@ module {
     }
   };
 
+  /// Returns an iterator to the `(index, element)` pairs in the list.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import List "mo:base/pure/List";
+  /// import Nat "mo:base/Nat";
+  ///
+  /// persistent actor {
+  ///   let list = List.fromArray([3, 1, 4]);
+  ///   var text = "";
+  ///   for ((index, element) in List.enumerate(list)) {
+  ///     text #= Nat.toText(index);
+  ///   };
+  ///   assert text == "012";
+  /// }
+  /// ```
+  public func enumerate<T>(list : List<T>) : Iter.Iter<(Nat, T)> = object {
+    var i = 0;
+    var l = list;
+    public func next() : ?(Nat, T) = switch l {
+      case null null;
+      case (?(h, t)) {
+        l := t;
+        let index = i;
+        i += 1;
+        ?(index, h)
+      }
+    }
+  };
+
   /// Convert an array into a list.
   ///
   /// Example:

@@ -579,12 +579,12 @@ module {
   ///
   /// *Runtime and space assumes that `f` runs in O(1) time and space.
   public func findIndex<T>(list : List<T>, f : T -> Bool) : ?Nat {
-    findIndexFrom(list, 0, f)
+    findIndex_(list, 0, f)
   };
 
-  func findIndexFrom<T>(list : List<T>, index : Nat, f : T -> Bool) : ?Nat = switch list {
+  private func findIndex_<T>(list : List<T>, index : Nat, f : T -> Bool) : ?Nat = switch list {
     case null null;
-    case (?(h, t)) if (f h) ?index else findIndexFrom(t, index + 1, f)
+    case (?(h, t)) if (f h) ?index else findIndex_(t, index + 1, f)
   };
 
   /// Return true if the given predicate `f` is true for all list

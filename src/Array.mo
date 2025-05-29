@@ -164,7 +164,7 @@ module {
   ///
   /// ```motoko include=import
   /// let array = ['A', 'B', 'C', 'D'];
-  /// let found = Array.findIndex<Nat>(array, func(x) { x == 'C' });
+  /// let found = Array.findIndex<Char>(array, func(x) { x == 'C' });
   /// assert found == ?2;
   /// ```
   /// Runtime: O(size)

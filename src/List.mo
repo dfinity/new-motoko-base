@@ -654,8 +654,8 @@ module {
   /// If no element satisfies the predicate, returns null.
   ///
   /// ```motoko include=import
-  /// let list = List.fromArray([1, 9, 4, 8]);
-  /// let found = List.find<Nat>(array, func x = x > 8);
+  /// let list = List.fromArray<Nat>([1, 9, 4, 8]);
+  /// let found = List.find<Nat>(list, func(x) { x > 8 });
   /// assert found == ?9;
   /// ```
   /// Runtime: O(size)

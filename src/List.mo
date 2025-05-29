@@ -812,8 +812,8 @@ module {
   /// Runtime: `O(1)`
   public func values<T>(list : List<T>) : Iter.Iter<T> = values_(list);
 
-  /// Returns an Iterator (`Iter`) over the items (value-index pairs) in the list.
-  /// Each item is a tuple of `(value, index)`. The iterator provides a single method
+  /// Returns an Iterator (`Iter`) over the items (index-value pairs) in the list.
+  /// Each item is a tuple of `(index, value)`. The iterator provides a single method
   /// `next()` which returns elements in order, or `null` when out of elements.
   ///
   /// ```motoko include=import
@@ -823,7 +823,7 @@ module {
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// List.add(list, 12);
-  /// assert Iter.toArray(List.entries(list)) == [(10, 0), (11, 1), (12, 2)];
+  /// assert Iter.toArray(List.enumerate(list)) == [(0, 10), (1, 11), (2, 12)];
   /// ```
   ///
   /// Note: This does not create a snapshot. If the returned iterator is not consumed at once,
@@ -832,8 +832,8 @@ module {
   ///
   /// Runtime: `O(1)`
   ///
-  /// Warning: Allocates memory on the heap to store ?(T, Nat).
-  public func entries<T>(list : List<T>) : Iter.Iter<(T, Nat)> = object {
+  /// Warning: Allocates memory on the heap to store ?(Nat, T).
+  public func enumerate<T>(list : List<T>) : Iter.Iter<(Nat, T)> = object {
     let blocks = list.blocks.size();
     var blockIndex = 0;
     var elementIndex = 0;
@@ -841,7 +841,7 @@ module {
     var db : [var ?T] = [var];
     var i = 0;
 
-    public func next() : ?(T, Nat) {
+    public func next() : ?(Nat, T) {
       if (elementIndex == size) {
         blockIndex += 1;
         if (blockIndex >= blocks) return null;
@@ -852,7 +852,7 @@ module {
       };
       switch (db[elementIndex]) {
         case (?x) {
-          let ret = ?(x, i);
+          let ret = ?(i, x);
           elementIndex += 1;
           i += 1;
           return ret
@@ -907,7 +907,7 @@ module {
     }
   };
 
-  /// Returns an Iterator (`Iter`) over the items in reverse order, i.e. pairs of value and index of a List.
+  /// Returns an Iterator (`Iter`) over the items in reverse order, i.e. pairs of index and value.
   /// Iterator provides a single method `next()`, which returns
   /// elements in reverse order, or `null` when out of elements to iterate over.
   ///
@@ -918,7 +918,7 @@ module {
   /// List.add(list, 10);
   /// List.add(list, 11);
   /// List.add(list, 12);
-  /// assert Iter.toArray(List.entriesRev(list)) == [(12, 2), (11, 1), (10, 0)];
+  /// assert Iter.toArray(List.enumerateRev(list)) == [(2, 12), (1, 11), (0, 10)];
   /// ```
   ///
   /// Note: This does not create a snapshot. If the returned iterator is not consumed at once,
@@ -928,7 +928,7 @@ module {
   /// Runtime: `O(1)`
   ///
   /// Warning: Allocates memory on the heap to store ?(T, Nat).
-  public func entriesRev<T>(list : List<T>) : Iter.Iter<(T, Nat)> = object {
+  public func enumerateRev<T>(list : List<T>) : Iter.Iter<(Nat, T)> = object {
     var i = size(list);
     var blockIndex = list.blockIndex;
     var elementIndex = list.elementIndex;
@@ -936,7 +936,7 @@ module {
       list.blocks[blockIndex]
     } else { [var] };
 
-    public func next() : ?(T, Nat) {
+    public func next() : ?(Nat, T) {
       if (blockIndex == 1) {
         return null
       };
@@ -950,7 +950,7 @@ module {
       switch (db[elementIndex]) {
         case (?x) {
           i -= 1;
-          return ?(x, i)
+          return ?(i, x)
         };
         case (_) Prim.trap(INTERNAL_ERROR)
       }

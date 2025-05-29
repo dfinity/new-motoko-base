@@ -103,6 +103,21 @@ let suite = Suite.suite(
       M.equals(T.optional(T.natTestable, null : ?Nat))
     ),
     Suite.test(
+      "findIndex",
+      VarArray.findIndex<Nat>([var 1, 9, 4, 8], func x = x == 9),
+      M.equals(T.optional(T.natTestable, ?1))
+    ),
+    Suite.test(
+      "findIndex fail",
+      VarArray.findIndex<Nat>([var 1, 9, 4, 8], func _ = false),
+      M.equals(T.optional(T.natTestable, null : ?Nat))
+    ),
+    Suite.test(
+      "findIndex empty",
+      VarArray.findIndex<Nat>([var], func _ = true),
+      M.equals(T.optional(T.natTestable, null : ?Nat))
+    ),
+    Suite.test(
       "concat",
       VarArray.concat<Int>([var 1, 2, 3], [var 4, 5, 6]),
       M.equals(varArray<Int>(T.intTestable, [var 1, 2, 3, 4, 5, 6]))

@@ -560,6 +560,34 @@ module {
     case (?(h, t)) if (f h) ?h else find(t, f)
   };
 
+  /// Return the first index for which the given predicate `f` is true.
+  /// If no element satisfies the predicate, returns null.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import List "mo:base/pure/List";
+  ///
+  /// persistent actor {
+  ///   let list = List.fromArray(['A', 'B', 'C', 'D']);
+  ///   let found = List.findIndex<Char>(list, func(x) { x == 'C' });
+  ///   assert found == ?2;
+  /// }
+  /// ```
+  ///
+  /// Runtime: O(size)
+  ///
+  /// Space: O(1)
+  ///
+  /// *Runtime and space assumes that `f` runs in O(1) time and space.
+  public func findIndex<T>(list : List<T>, f : T -> Bool) : ?Nat {
+    findIndex_(list, 0, f)
+  };
+
+  private func findIndex_<T>(list : List<T>, index : Nat, f : T -> Bool) : ?Nat = switch list {
+    case null null;
+    case (?(h, t)) if (f h) ?index else findIndex_(t, index + 1, f)
+  };
+
   /// Return true if the given predicate `f` is true for all list
   /// elements.
   ///

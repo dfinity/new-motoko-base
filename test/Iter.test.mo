@@ -738,6 +738,22 @@ suite(
 );
 
 suite(
+  "findIndex",
+  func() {
+    func mk(inputs : [Nat], expected : ?Nat, rest : [Nat]) {
+      let iter = inputs.vals();
+      let actual = Iter.findIndex<Nat>(iter, func(x) = x % 2 == 0);
+      expect.option(actual, Nat.toText, Nat.equal).equal(expected);
+      let remaining = Iter.toArray(iter);
+      expect.array<Nat>(remaining, Nat.toText, Nat.equal).equal(rest)
+    };
+    test("empty", func() = mk([], null, []));
+    test("some", func() = mk([1, 2, 3, 4], ?1, [3, 4]));
+    test("none", func() = mk([1, 3, 5], null, []))
+  }
+);
+
+suite(
   "contains",
   func() {
     func mk(inputs : [Nat], x : Nat, expected : Bool, rest : [Nat]) {

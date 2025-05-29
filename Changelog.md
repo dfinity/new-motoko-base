@@ -10,6 +10,7 @@
 * Add `entriesFrom()` and `reverseEntriesFrom()` to `Map`, `valuesFrom()` and `reverseValuesFrom()` to `Set` and `Text.toText()` (#272).
 * Update code examples in doc comments (#224, #282, #303, #315).
 * Add `findIndex()` function to modules with `find()` (#321).
+* Replace `entries()` and `entriesRev()` with `enumerate()` and `enumerateRev()` in the `List` module (#322).
 
 ## 0.4.0
 

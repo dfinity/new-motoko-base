@@ -165,7 +165,7 @@ assert ?2 == Iter.find&lt;Nat&gt;(iter, func (x) = x % 2 == 0);</code></pre></p>
 If no element satisfies the predicate, returns null.</p>
 <pre><code>motoko include=import
 let iter = ['A', 'B', 'C', 'D'].values();
-let found = Iter.findIndex&lt;Nat&gt;(iter, func(x) { x == 'C' });
+let found = Iter.findIndex&lt;Char&gt;(iter, func(x) { x == 'C' });
 assert found == ?2;</code></pre><p>Runtime: O(size)</p>
 <p>Space: O(1)</p>
 <p>*Runtime and space assumes that <code>predicate</code> runs in O(1) time and space.</p>

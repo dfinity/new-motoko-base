@@ -72,7 +72,7 @@ assert found == ?9;</code></pre><p>Runtime: O(size)</p>
 If no element satisfies the predicate, returns null.</p>
 <pre><code>motoko include=import
 let array = [var 'A', 'B', 'C', 'D'];
-let found = VarArray.findIndex&lt;Nat&gt;(array, func(x) { x == 'C' });
+let found = VarArray.findIndex&lt;Char&gt;(array, func(x) { x == 'C' });
 assert found == ?2;</code></pre><p>Runtime: O(size)</p>
 <p>Space: O(1)</p>
 <p>*Runtime and space assumes that <code>predicate</code> runs in O(1) time and space.</p>

@@ -3,7 +3,7 @@
   "specs": [
     {
       "name": "Collection",
-      "modules": ["Array", "List", "VarArray"],
+      "modules": [],
       "functions": [
         "empty",
         "isEmpty",
@@ -23,21 +23,33 @@
       ]
     },
     {
-      "name": "ImperativeCollection",
+      "name": "ListLikeCollection",
       "extends": ["Collection"],
-      "modules": ["Queue", "Set", "Stack"],
-      "functions": ["clear", "clone"]
+      "modules": ["pure/List"],
+      "functions": ["enumerate", "find", "findIndex", "reverse"]
+    },
+    {
+      "name": "IndexedCollection",
+      "extends": ["ListLikeCollection"],
+      "modules": ["Array", "VarArray", "List"],
+      "functions": ["keys", "indexOf"]
     },
     {
       "name": "KeyValueCollection",
       "extends": ["Collection"],
-      "modules": ["Map"],
+      "modules": ["Map", "pure/Map"],
       "functions": ["keys", "entries"]
+    },
+    {
+      "name": "ImperativeCollection",
+      "extends": ["Collection"],
+      "modules": ["List", "Queue", "Set", "Stack"],
+      "functions": ["clear", "clone"]
     },
     {
       "name": "PureCollection",
       "extends": ["Collection"],
-      "modules": ["pure/Queue", "pure/Set", "pure/List"],
+      "modules": ["pure/List", "pure/Queue", "pure/Set"],
       "functions": []
     }
   ]

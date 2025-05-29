@@ -164,6 +164,26 @@ do {
   }
 };
 
+do {
+  Debug.print("  enumerate");
+
+  let list : List.List<Nat> = ?(1, ?(2, ?(3, List.empty<Nat>())));
+  let items = List.enumerate<Nat>(list);
+  let actual = [var 0, 0, 0];
+  let expected = [1, 2, 3];
+
+  var i = 0;
+  for ((index, x) in items) {
+    assert i == index;
+    actual[i] := x;
+    i += 1
+  };
+
+  for (i in actual.keys()) {
+    assert (actual[i] == expected[i])
+  }
+};
+
 func makeNatural(x : Int) : Result.Result<Nat, Text> = if (x >= 0) {
   #ok(Int.abs(x))
 } else { #err(Int.toText(x) # " is not a natural number.") };

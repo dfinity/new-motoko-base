@@ -81,16 +81,19 @@ run(
   )
 );
 
+assert List.find(list, func(a : Nat) : Bool = a == 123456) == null;
+assert List.find(list, func(a : Nat) : Bool = a == 0) == ?0;
+
 assert List.indexOf(list, Nat.equal, n + 1) == null;
-assert List.firstIndexWhere(list, func(a : Nat) : Bool = a == n + 1) == null;
+assert List.findIndex(list, func(a : Nat) : Bool = a == n + 1) == null;
 assert List.indexOf(list, Nat.equal, n) == ?n;
-assert List.firstIndexWhere(list, func(a : Nat) : Bool = a == n) == ?n;
+assert List.findIndex(list, func(a : Nat) : Bool = a == n) == ?n;
 
 assert List.lastIndexOf(list, Nat.equal, n + 1) == null;
-assert List.lastIndexWhere(list, func(a : Nat) : Bool = a == n + 1) == null;
+assert List.findLastIndex(list, func(a : Nat) : Bool = a == n + 1) == null;
 
 assert List.lastIndexOf(list, Nat.equal, 0) == ?0;
-assert List.lastIndexWhere(list, func(a : Nat) : Bool = a == 0) == ?0;
+assert List.findLastIndex(list, func(a : Nat) : Bool = a == 0) == ?0;
 
 assert List.all(list, func(x : Nat) : Bool = 0 <= x and x <= n);
 assert List.any(list, func(x : Nat) : Bool = x == n / 2);
@@ -105,8 +108,8 @@ run(
         M.equals(T.array(T.natTestable, Iter.toArray(Nat.rangeInclusive(0, n))))
       ),
       test(
-        "valuesRev",
-        Iter.toArray(List.valuesRev(list)),
+        "reverseValues",
+        Iter.toArray(List.reverseValues(list)),
         M.equals(T.array(T.natTestable, Iter.toArray(Iter.reverse(Nat.rangeInclusive(0, n)))))
       ),
       test(
@@ -115,23 +118,23 @@ run(
         M.equals(T.array(T.natTestable, Iter.toArray(Nat.rangeInclusive(0, n))))
       ),
       test(
-        "entries1",
-        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.entries(list), func((a, b)) { a })),
+        "enumerate1",
+        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.enumerate(list), func((a, b)) { b })),
         M.equals(T.array(T.natTestable, Iter.toArray(Nat.rangeInclusive(0, n))))
       ),
       test(
-        "entries2",
-        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.entries(list), func((a, b)) { b })),
+        "enumerate2",
+        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.enumerate(list), func((a, b)) { a })),
         M.equals(T.array(T.natTestable, Iter.toArray(Nat.rangeInclusive(0, n))))
       ),
       test(
-        "entriesRev1",
-        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.entriesRev(list), func((a, b)) { a })),
+        "reverseEnumerate1",
+        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.reverseEnumerate(list), func((a, b)) { b })),
         M.equals(T.array(T.natTestable, Iter.toArray(Iter.reverse(Nat.rangeInclusive(0, n)))))
       ),
       test(
-        "entriesRev2",
-        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.entriesRev(list), func((a, b)) { b })),
+        "reverseEnumerate2",
+        Iter.toArray(Iter.map<(Nat, Nat), Nat>(List.reverseEnumerate(list), func((a, b)) { a })),
         M.equals(T.array(T.natTestable, Iter.toArray(Iter.reverse(Nat.rangeInclusive(0, n)))))
       )
     ]
@@ -321,7 +324,7 @@ Test.suite(
 var sumN = 0;
 List.forEach<Nat>(list, func(i) { sumN += i });
 var sumRev = 0;
-List.forEachRev<Nat>(list, func(i) { sumRev += i });
+List.reverseForEach<Nat>(list, func(i) { sumRev += i });
 var sum1 = 0;
 List.forEach<Nat>(List.repeat<Nat>(1, 1), func(i) { sum1 += i });
 var sum0 = 0;
@@ -1296,17 +1299,24 @@ Test.suite(
       }
     );
     Test.test(
-      "firstIndexWhere",
+      "find",
       func() {
-        Test.expect.bool(List.firstIndexWhere<Nat>(empty, func x = x == 0) == null).equal(true);
-        Test.expect.bool(List.firstIndexWhere<Nat>(emptied, func x = x == 0) == null).equal(true)
+        Test.expect.bool(List.find<Nat>(empty, func x = x == 0) == null).equal(true);
+        Test.expect.bool(List.find<Nat>(emptied, func x = x == 0) == null).equal(true)
       }
     );
     Test.test(
-      "lastIndexWhere",
+      "findIndex",
       func() {
-        Test.expect.bool(List.lastIndexWhere<Nat>(empty, func x = x == 0) == null).equal(true);
-        Test.expect.bool(List.lastIndexWhere<Nat>(emptied, func x = x == 0) == null).equal(true)
+        Test.expect.bool(List.findIndex<Nat>(empty, func x = x == 0) == null).equal(true);
+        Test.expect.bool(List.findIndex<Nat>(emptied, func x = x == 0) == null).equal(true)
+      }
+    );
+    Test.test(
+      "findLastIndex",
+      func() {
+        Test.expect.bool(List.findLastIndex<Nat>(empty, func x = x == 0) == null).equal(true);
+        Test.expect.bool(List.findLastIndex<Nat>(emptied, func x = x == 0) == null).equal(true)
       }
     );
     Test.test(

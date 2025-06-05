@@ -2,6 +2,7 @@
 
 ## Next
 
+* **Breaking:** Adjust `List` and `pure/List` APIs for consistency (#322).
 * Fix: `first()` and `last()` from `List` now return `null` on empty lists instead of trapping (#312).
 * Add `reverse()` function to the `pure/Queue` module (#229).
 * Add `pure/RealTimeQueue` module - an alternative immutable double-ended queue implementation with worst-case `O(1)` time complexity for all operations but worse amortized performance (#229).
@@ -10,7 +11,6 @@
 * Add `entriesFrom()` and `reverseEntriesFrom()` to `Map`, `valuesFrom()` and `reverseValuesFrom()` to `Set` and `Text.toText()` (#272).
 * Update code examples in doc comments (#224, #282, #303, #315).
 * Add `findIndex()` function to modules with `find()` (#321).
-* **Breaking:** Adjust `List` and `pure/List` APIs for consistency (#322).
 
 ## 0.4.0
 

@@ -9,6 +9,7 @@
 /// bp set -n breakpoint
 /// run
 /// bt
+/// list  Output: File not found: "<moc-asset>/prelude"
 /// thread step-in  Note: output seems to be wrong, points to a wrong line
 /// bt
 /// thread step-out

@@ -386,6 +386,20 @@ thread step-over  Note: correct line!
 thread step-over
 thread step-out
 local read  Output: 1  . list      : &quot;HeapAddress: 2133695, tagged: Object, I32&quot;</p>
+</div></li><li class="index-item"><a class="index-item-link" href="SimpleDebuggerTestWithBase.html">SimpleDebuggerTestWithBase</a><div class="index-item-comment"><p>Setup motoko debugger:</p>
+<ul><li>git clone https://github.com/scalebit/ic-sdk to ~/ic-sdk</li><li>cd ~/ic-sdk &amp;&amp; cargo build</li></ul>
+
+<p>Run:
+moc $(mops sources) -o MoDe.wasm -g src/SimpleDebuggerTestWithBase.mo &amp;&amp; ~/ic-sdk/target/debug/dfx debug MoDe.wasm</p>
+<p>Commands:
+bp set -n main
+run
+bt
+list  Output: File not found: &quot;./internals&quot;
+thread step-in  Note: wrong line?
+thread step-over  Output: File not found: &quot;./internals&quot;
+thread step-over  Output: File not found: &quot;./internals&quot;
+list  Output: File not found: &quot;./internals&quot;</p>
 </div></li><li class="index-item"><a class="index-item-link" href="Stack.html">Stack</a><div class="index-item-comment"><p>A mutable stack data structure.
 Elements can be pushed on top of the stack
 and removed from top of the stack (LIFO).</p>

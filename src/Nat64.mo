@@ -2,7 +2,7 @@
 ///
 /// Note that most operations are available as built-in operators (e.g. `1 + 1`).
 ///
-/// Import from the base library to use this module.
+/// Import from the core library to use this module.
 /// ```motoko name=import
 /// import Nat64 "mo:base/Nat64";
 /// ```

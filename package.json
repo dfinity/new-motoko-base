@@ -1,7 +1,7 @@
 {
-  "name": "@dfinity/new-motoko-base",
-  "version": "2.0.0",
-  "description": "Motoko base library",
+  "name": "@dfinity/motoko-core",
+  "version": "0.0.0",
+  "description": "Motoko core library",
   "private": true,
   "scripts": {
     "postinstall": "mops install",

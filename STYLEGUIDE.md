@@ -1,4 +1,4 @@
-# Base library style guide
+# Core library style guide
 
 ## Source code
 

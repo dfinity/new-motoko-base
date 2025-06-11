@@ -7,7 +7,6 @@ import Nat64 "Nat64";
 import Int "Int";
 import Nat "Nat";
 import Blob "Blob";
-import Iter "Iter";
 import Runtime "Runtime";
 
 module {
@@ -85,56 +84,37 @@ module {
   };
 
   public class Random<T>(state : State<T>, generator : () -> Blob) {
-    var iter : Iter.Iter<Nat8> = Iter.empty();
-    let bitIter : Iter.Iter<Bool> = object {
-      public func next() : ?Bool {
-        if (0 : Nat8 == state.bitMask) {
-          switch (iter.next()) {
-            case null null;
-            case (?w) {
-              state.bits := w;
-              state.bitMask := 0x40;
-              ?(0 : Nat8 != state.bits & (0x80 : Nat8))
-            }
-          }
-        } else {
-          let m = state.bitMask;
-          state.bitMask >>= (1 : Nat8);
-          ?(0 : Nat8 != state.bits & m)
-        }
+
+    func nextBit() : Bool {
+      if (0 : Nat8 == state.bitMask) {
+        state.bits := nat8();
+        state.bitMask := 0x40;
+        0 : Nat8 != state.bits & (0x80 : Nat8)
+      } else {
+        let m = state.bitMask;
+        state.bitMask >>= (1 : Nat8);
+        0 : Nat8 != state.bits & m
       }
     };
 
     /// Random choice between `true` and `false`.
     public func bool() : Bool {
-      switch (bitIter.next()) {
-        case (?bit) { bit };
-        case null {
-          iter := generator().vals();
-          switch (bitIter.next()) {
-            case (?bit) { bit };
-            case null {
-              Runtime.trap("Random.bool(): generator produced empty Blob")
-            }
-          }
-        }
-      }
+      nextBit()
     };
 
     /// Random `Nat8` value in the range [0, 256).
     public func nat8() : Nat8 {
-      switch (iter.next()) {
-        case (?byte) { byte };
-        case null {
-          iter := generator().vals();
-          switch (iter.next()) {
-            case (?byte) { byte };
-            case null {
-              Runtime.trap("Random.nat8(): generator produced empty Blob")
-            }
-          }
-        }
-      }
+      if (state.index >= state.bytes.size()) {
+        let newBytes = Blob.toArray(generator());
+        if (newBytes.size() == 0) {
+          Runtime.trap("Random: generator produced empty Blob")
+        };
+        state.bytes := newBytes;
+        state.index := 0
+      };
+      let byte = state.bytes[state.index];
+      state.index += 1;
+      byte
     };
 
     // Helper function which returns a uniformly sampled `Nat64` in the range `[0, max]`.
@@ -190,65 +170,44 @@ module {
     };
 
     public func intRange(fromInclusive : Int, toExclusive : Int) : Int {
-      switch (Nat.fromInt(toExclusive - fromInclusive - 1)) {
-        case null Runtime.trap("Random.intRange(): fromInclusive >= toExclusive");
-        case (?range) Nat64.toNat(uniform64(Nat64.fromNat(range))) + fromInclusive
-      }
+      let range = Nat.fromInt(toExclusive - fromInclusive - 1);
+      Nat64.toNat(uniform64(Nat64.fromNat(range))) + fromInclusive
     };
 
   };
 
   public class AsyncRandom<T>(state : State<T>, generator : () -> async* Blob) {
-    var iter = Iter.empty<Nat8>();
-    let bitIter : Iter.Iter<Bool> = object {
-      public func next() : ?Bool {
-        if (0 : Nat8 == state.bitMask) {
-          switch (iter.next()) {
-            case null { null };
-            case (?w) {
-              state.bits := w;
-              state.bitMask := 0x40;
-              ?(0 : Nat8 != state.bits & (0x80 : Nat8))
-            }
-          }
-        } else {
-          let m = state.bitMask;
-          state.bitMask >>= (1 : Nat8);
-          ?(0 : Nat8 != state.bits & m)
-        }
+
+    func nextBit() : async* Bool {
+      if (0 : Nat8 == state.bitMask) {
+        state.bits := await* nat8();
+        state.bitMask := 0x40;
+        0 : Nat8 != state.bits & (0x80 : Nat8)
+      } else {
+        let m = state.bitMask;
+        state.bitMask >>= (1 : Nat8);
+        0 : Nat8 != state.bits & m
       }
     };
 
     /// Random choice between `true` and `false`.
     public func bool() : async* Bool {
-      switch (bitIter.next()) {
-        case (?bit) { bit };
-        case null {
-          iter := (await* generator()).vals();
-          switch (bitIter.next()) {
-            case (?bit) { bit };
-            case null {
-              Runtime.trap("AsyncRandom.bool(): generator produced empty Blob")
-            }
-          }
-        }
-      }
+      await* nextBit()
     };
 
     /// Random `Nat8` value in the range [0, 256).
     public func nat8() : async* Nat8 {
-      switch (iter.next()) {
-        case (?byte) { byte };
-        case null {
-          iter := (await* generator()).vals();
-          switch (iter.next()) {
-            case (?byte) { byte };
-            case null {
-              Runtime.trap("AsyncRandom.byte(): generator produced empty Blob")
-            }
-          }
-        }
-      }
+      if (state.index >= state.bytes.size()) {
+        let newBytes = Blob.toArray(await* generator());
+        if (newBytes.size() == 0) {
+          Runtime.trap("AsyncRandom: generator produced empty Blob")
+        };
+        state.bytes := newBytes;
+        state.index := 0
+      };
+      let byte = state.bytes[state.index];
+      state.index += 1;
+      byte
     };
 
   };

@@ -75,6 +75,13 @@ module {
     cryptoFromState(emptyState(()))
   };
 
+  /// Initializes a cryptographic random number generator state.
+  /// This is used to create an `AsyncRandom` instance with a specific state.
+  /// The state is empty, but it can be reused after upgrading the canister.
+  public func cryptoState() : State<()> {
+    emptyState(())
+  };
+
   /// Creates a random number generator suitable for cryptography
   /// using entropy from the ICP management canister. Initializing
   /// from a state makes it possible to reuse entropy after

@@ -23,7 +23,7 @@
 ///
 /// Import from the core library to use this module.
 /// ```motoko name=import
-/// import Principal "mo:base/Principal";
+/// import Principal "mo:core/Principal";
 /// ```
 
 import Prim "mo:⛔";

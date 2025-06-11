@@ -2,7 +2,7 @@
 ///
 /// Import from the core library to use this module.
 /// ```motoko name=import
-/// import Debug "mo:base/Debug";
+/// import Debug "mo:core/Debug";
 /// ```
 
 import Prim "mo:⛔";

@@ -6,7 +6,7 @@
 /// Import from the core library to use this module.
 ///
 /// ```motoko name=import
-/// import Func = "mo:base/Func";
+/// import Func = "mo:core/Func";
 /// ```
 
 module {
@@ -15,8 +15,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Text "mo:base/Text";
-  /// import Char "mo:base/Char";
+  /// import Text "mo:core/Text";
+  /// import Char "mo:core/Char";
   ///
   /// let textFromNat32 = Func.compose(Text.fromChar, Char.fromNat32);
   /// assert textFromNat32(65) == "A";

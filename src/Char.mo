@@ -6,7 +6,7 @@
 ///
 /// Import from the core library to use this module.
 /// ```motoko name=import
-/// import Char "mo:base/Char";
+/// import Char "mo:core/Char";
 /// ```
 ///
 /// Some built in features not listed in this module:

@@ -6,7 +6,7 @@
 ///
 /// Import from the core library to use this module.
 /// ```motoko name=import
-/// import Result "mo:base/Result";
+/// import Result "mo:core/Result";
 /// ```
 
 import Order "Order";
@@ -19,7 +19,7 @@ module {
   /// The simplest way of working with Results is to pattern match on them.
   /// For example:
   /// ```motoko include=import
-  /// import Text "mo:base/Text";
+  /// import Text "mo:core/Text";
   ///
   /// type Email = Text;
   /// type ErrorMessage = Text;
@@ -49,8 +49,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Nat "mo:base/Nat";
-  /// import Text "mo:base/Text";
+  /// import Nat "mo:core/Nat";
+  /// import Text "mo:core/Text";
   ///
   /// let result1 = #ok 10;
   /// let result2 = #ok 10;
@@ -81,8 +81,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Nat "mo:base/Nat";
-  /// import Text "mo:base/Text";
+  /// import Nat "mo:core/Nat";
+  /// import Text "mo:core/Text";
   ///
   /// let result1 = #ok 5;
   /// let result2 = #ok 10;

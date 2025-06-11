@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 0.5.0
 
 * **Breaking:** Adjust `List` and `pure/List` APIs for consistency (#322).
 * Fix: `first()` and `last()` from `List` now return `null` on empty lists instead of trapping (#312).

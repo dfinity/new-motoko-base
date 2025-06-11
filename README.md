@@ -17,7 +17,7 @@ A preview of the core library is available via the [`new-base`](https://mops.one
 You can quickly try out the core library by making the following change to your `mops.toml` config file:
 
 ```toml
-core = "0.4.0"
+core = "0.5.0"
 ```
 
 It's also possible to use the latest changes in the GitHub repository:

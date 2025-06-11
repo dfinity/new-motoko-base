@@ -14,20 +14,30 @@ module {
   ///
   /// Example:
   /// ```motoko no-repl
-  /// import IC "mo:base/InternetComputer";
-  /// import Principal "mo:base/Principal";
+  /// import IC "mo:core/InternetComputer";
+  /// import Principal "mo:core/Principal";
   ///
-  /// let ledger = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai");
-  /// let method = "decimals";
-  /// let input = ();
-  /// type OutputType = { decimals : Nat32 };
+  /// persistent actor {
+  ///   type OutputType = { decimals : Nat32 };
   ///
-  /// let rawReply = await IC.call(ledger, method, to_candid(input)); // serialized Candid
-  /// let output : ?OutputType = from_candid(rawReply); // { decimals = 8 }
+  ///   public func example() : async ?OutputType {
+  ///     let ledger = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai");
+  ///     let method = "decimals";
+  ///     let input = ();
+  ///
+  ///     let rawReply = await IC.call(ledger, method, to_candid (input)); // serialized Candid
+  ///     let output : ?OutputType = from_candid (rawReply);
+  ///     assert output == ?{ decimals = 8 };
+  ///     output
+  ///   }
+  /// }
   /// ```
   ///
   /// [Learn more about Candid serialization](https://internetcomputer.org/docs/current/motoko/main/reference/language-manual#candid-serialization)
   public let call : (canister : Principal, name : Text, data : Blob) -> async (reply : Blob) = Prim.call_raw;
+
+  /// `isReplicated` is true for update messages and for queries that passed through consensus.
+  public let isReplicated : () -> Bool = Prim.isReplicatedExecution;
 
   /// Given computation, `comp`, counts the number of actual and (for IC system calls) notional WebAssembly
   /// instructions performed during the execution of `comp()`.
@@ -39,7 +49,7 @@ module {
   ///
   /// Example:
   /// ```motoko no-repl
-  /// import IC "mo:base/InternetComputer";
+  /// import IC "mo:core/InternetComputer";
   ///
   /// let count = IC.countInstructions(func() {
   ///   // ...
@@ -72,17 +82,20 @@ module {
   ///
   /// Example:
   /// ```motoko no-repl
-  /// import IC "mo:base/InternetComputer";
+  /// import IC "mo:core/InternetComputer";
   ///
   /// let c1 = IC.performanceCounter(1);
-  /// work();
+  /// // ...
   /// let diff : Nat64 = IC.performanceCounter(1) - c1;
   /// ```
   public let performanceCounter : (counter : Nat32) -> (value : Nat64) = Prim.performanceCounter;
 
   /// Returns the time (in nanoseconds from the epoch start) by when the update message should
   /// reply to the best effort message so that it can be received by the requesting canister.
-  /// Queries and non-best-effort update messages return zero.
-  public func replyDeadline() : Nat = Prim.nat64ToNat(Prim.replyDeadline());
+  /// Queries and unbounded-time update messages return null.
+  public func replyDeadline() : ?Nat {
+    let raw = Prim.replyDeadline();
+    if (raw == 0) null else ?Prim.nat64ToNat(raw)
+  };
 
 }

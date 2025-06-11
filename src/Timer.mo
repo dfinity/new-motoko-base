@@ -1,6 +1,10 @@
 /// Timers for one-off or periodic tasks. Applicable as part of the default mechanism.
 /// If `moc` is invoked with `-no-timer`, the importing will fail. Furthermore, if passed `--trap-on-call-error`, a congested canister send queue may prevent timer expirations to execute at runtime. It may also deactivate the global timer.
 ///
+/// ```motoko name=import
+/// import Timer "mo:core/Timer";
+/// ```
+///
 /// The resolution of the timers is similar to the block rate,
 /// so durations should be chosen well above that. For frequent
 /// canister wake-ups, consider using the [heartbeat](https://internetcomputer.org/docs/current/motoko/main/writing-motoko/heartbeats) mechanism; however, when possible, canisters should prefer timers.
@@ -31,13 +35,13 @@ module {
   /// Installs a one-off timer that upon expiration after given duration `d`
   /// executes the future `job()`.
   ///
-  /// ```motoko no-repl
-  /// let now = Time.now();
-  /// let thirtyMinutes = 1_000_000_000 * 60 * 30;
-  /// func alarmUser() : async () {
+  /// ```motoko include=import no-repl
+  /// import Int "mo:core/Int";
+  ///
+  /// func runIn30Minutes() : async () {
   ///   // ...
   /// };
-  /// appt.reminder = setTimer(#nanoseconds (Int.abs(appt.when - now - thirtyMinutes)), alarmUser);
+  /// let timerId = Timer.setTimer<system>(#minutes 30, runIn30Minutes);
   /// ```
   public func setTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId {
     setTimerNano<system>(Nat64.fromNat(Time.toNanoseconds duration), false, job)
@@ -48,11 +52,11 @@ module {
   ///
   /// Note: A duration of 0 will only expire once.
   ///
-  /// ```motoko no-repl
-  /// func checkAndWaterPlants() : async () {
+  /// ```motoko include=import no-repl
+  /// func runEvery30Minutes() : async () {
   ///   // ...
   /// };
-  /// let daily = recurringTimer(#seconds (24 * 60 * 60), checkAndWaterPlants);
+  /// let timerId = Timer.recurringTimer<system>(#minutes 30, runEvery30Minutes);
   /// ```
   public func recurringTimer<system>(duration : Time.Duration, job : () -> async ()) : TimerId {
     setTimerNano<system>(Nat64.fromNat(Time.toNanoseconds duration), true, job)
@@ -61,11 +65,19 @@ module {
   /// Cancels a still active timer with `(id : TimerId)`. For expired timers
   /// and not recognised `id`s nothing happens.
   ///
-  /// ```motoko no-repl
-  /// func deleteAppointment(appointment : Appointment) {
-  ///   cancelTimer (appointment.reminder);
-  ///   // ...
+  /// ```motoko include=import no-repl
+  /// var counter = 0;
+  /// var timerId : ?Timer.TimerId = null;
+  /// func runFiveTimes() : async () {
+  ///   counter += 1;
+  ///   if (counter == 5) {
+  ///     switch (timerId) {
+  ///       case (?id) { Timer.cancelTimer(id) };
+  ///       case null { assert false /* timer already cancelled */ };
+  ///     };
+  ///   }
   /// };
+  /// timerId := ?Timer.recurringTimer<system>(#minutes 30, runFiveTimes);
   /// ```
   public let cancelTimer : TimerId -> () = cancel;
 

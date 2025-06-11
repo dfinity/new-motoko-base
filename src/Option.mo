@@ -25,6 +25,7 @@
 /// with optionals that can be more succinct than using pattern matching.
 
 import Runtime "Runtime";
+import Types "Types";
 
 module {
 
@@ -44,7 +45,7 @@ module {
 
   /// Applies a function to the wrapped value. `null`'s are left untouched.
   /// ```motoko
-  /// import Option "mo:base/Option";
+  /// import Option "mo:core/Option";
   /// assert Option.map<Nat, Nat>(?42, func x = x + 1) == ?43;
   /// assert Option.map<Nat, Nat>(null, func x = x + 1) == null;
   /// ```
@@ -54,14 +55,14 @@ module {
   };
 
   /// Applies a function to the wrapped value, but discards the result. Use
-  /// `iterate` if you're only interested in the side effect `f` produces.
+  /// `forEach` if you're only interested in the side effect `f` produces.
   ///
   /// ```motoko
-  /// import Option "mo:base/Option";
+  /// import Option "mo:core/Option";
   /// var counter : Nat = 0;
-  /// Option.iterate(?5, func (x : Nat) { counter += x });
+  /// Option.forEach(?5, func (x : Nat) { counter += x });
   /// assert counter == 5;
-  /// Option.iterate(null, func (x : Nat) { counter += x });
+  /// Option.forEach(null, func (x : Nat) { counter += x });
   /// assert counter == 5;
   /// ```
   public func forEach<A>(x : ?A, f : A -> ()) = switch x {
@@ -89,7 +90,7 @@ module {
 
   /// Given an optional optional value, removes one layer of optionality.
   /// ```motoko
-  /// import Option "mo:base/Option";
+  /// import Option "mo:core/Option";
   /// assert Option.flatten(?(?(42))) == ?42;
   /// assert Option.flatten(?(null)) == null;
   /// assert Option.flatten(null) == null;
@@ -100,8 +101,8 @@ module {
 
   /// Creates an optional value from a definite value.
   /// ```motoko
-  /// import Option "mo:base/Option";
-  /// assert Option.make(42) == ?42;
+  /// import Option "mo:core/Option";
+  /// assert Option.some(42) == ?42;
   /// ```
   public func some<A>(x : A) : ?A = ?x;
 
@@ -122,12 +123,32 @@ module {
     case (_, _) { false }
   };
 
+  /// Compares two optional values using the provided comparison function.
+  ///
+  /// Returns:
+  /// - `#equal` if both values are `null`,
+  /// - `#less` if the first value is `null` and the second is not,
+  /// - `#greater` if the first value is not `null` and the second is,
+  /// - the result of the comparison function when both values are not `null`.
+  public func compare<A>(x : ?A, y : ?A, cmp : (A, A) -> Types.Order) : Types.Order = switch (x, y) {
+    case (null, null) #equal;
+    case (null, _) #less;
+    case (_, null) #greater;
+    case (?x_, ?y_) { cmp(x_, y_) }
+  };
+
   /// Unwraps an optional value, i.e. `unwrap(?x) = x`.
   ///
   /// `Option.unwrap()` fails if the argument is null. Consider using a `switch` or `do?` expression instead.
   public func unwrap<T>(x : ?T) : T = switch x {
     case null { Runtime.trap("Option.unwrap()") };
     case (?x_) { x_ }
+  };
+
+  /// Returns the textural representation of an optional value for debugging purposes.
+  public func toText<A>(x : ?A, toText : A -> Text) : Text = switch x {
+    case null { "null" };
+    case (?x_) { "?" # toText(x_) }
   };
 
 }

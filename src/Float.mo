@@ -2,6 +2,10 @@
 ///
 /// This module contains common floating-point constants and utility functions.
 ///
+/// ```motoko name=import
+/// import Float "mo:core/Float";
+/// ```
+///
 /// Notation for special values in the documentation below:
 /// `+inf`: Positive infinity
 /// `-inf`: Negative infinity
@@ -12,11 +16,11 @@
 ///
 /// Examples of numerical errors:
 ///   ```motoko
-///   0.1 + 0.1 + 0.1 == 0.3 // => false
+///   assert 0.1 + 0.1 + 0.1 != 0.3;
 ///   ```
 ///
 ///   ```motoko
-///  1e16 + 1.0 != 1e16 // => false
+///   assert not (1e16 + 1.0 != 1e16);
 ///   ```
 ///
 ///  (and many more cases)
@@ -27,12 +31,12 @@
 ///
 ///   Example:
 ///   ```motoko
-///   import Float "mo:base/Float";
+///   import Float "mo:core/Float";
 ///   let x = 0.1 + 0.1 + 0.1;
 ///   let y = 0.3;
 ///
 ///   let epsilon = 1e-6; // This depends on the application case (needs a numerical error analysis).
-///   Float.equal(x, y, epsilon) // => true
+///   assert Float.equal(x, y, epsilon);
 ///   ```
 ///
 /// * For absolute precision, it is recommened to encode the fraction number as a pair of a Nat for the base
@@ -44,6 +48,7 @@
 
 import Prim "mo:⛔";
 import Int "Int";
+import Order "Order";
 
 module {
 
@@ -65,10 +70,8 @@ module {
   ///   signalling and quiet NaNs, each with many different bit representations.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.isNaN(0.0/0.0) // => true
+  /// ```motoko include=import
+  /// assert Float.isNaN(0.0/0.0);
   /// ```
   public func isNaN(number : Float) : Bool {
     number != number
@@ -85,10 +88,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.abs(-1.2) // => 1.2
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.abs(-1.2), 1.2, epsilon);
   /// ```
   public let abs : (x : Float) -> Float = Prim.floatAbs;
 
@@ -103,10 +105,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.sqrt(6.25) // => 2.5
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.sqrt(6.25), 2.5, epsilon);
   /// ```
   public let sqrt : (x : Float) -> Float = Prim.floatSqrt;
 
@@ -122,10 +123,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.ceil(1.2) // => 2.0
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.ceil(1.2), 2.0, epsilon);
   /// ```
   public let ceil : (x : Float) -> Float = Prim.floatCeil;
 
@@ -141,10 +141,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.floor(1.2) // => 1.0
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.floor(1.2), 1.0, epsilon);
   /// ```
   public let floor : (x : Float) -> Float = Prim.floatFloor;
 
@@ -161,10 +160,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.trunc(2.75) // => 2.0
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.trunc(2.75), 2.0, epsilon);
   /// ```
   public let trunc : (x : Float) -> Float = Prim.floatTrunc;
 
@@ -182,10 +180,8 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.nearest(2.75) // => 3.0
+  /// ```motoko include=import
+  /// assert Float.nearest(2.75) == 3.0
   /// ```
   public let nearest : (x : Float) -> Float = Prim.floatNearest;
 
@@ -194,10 +190,9 @@ module {
   /// The sign bit of zero, infinity, and `NaN` is considered.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.copySign(1.2, -2.3) // => -1.2
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.copySign(1.2, -2.3), -1.2, epsilon);
   /// ```
   public let copySign : (x : Float, y : Float) -> Float = Prim.floatCopySign;
 
@@ -210,10 +205,8 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.min(1.2, -2.3) // => -2.3 (with numerical imprecision)
+  /// ```motoko include=import
+  /// assert Float.min(1.2, -2.3) == -2.3; // with numerical imprecision
   /// ```
   public let min : (x : Float, y : Float) -> Float = Prim.floatMin;
 
@@ -226,10 +219,8 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.max(1.2, -2.3) // => 1.2
+  /// ```motoko include=import
+  /// assert Float.max(1.2, -2.3) == 1.2;
   /// ```
   public let max : (x : Float, y : Float) -> Float = Prim.floatMax;
 
@@ -243,10 +234,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.sin(Float.pi / 2) // => 1.0
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.sin(Float.pi / 2), 1.0, epsilon);
   /// ```
   public let sin : (x : Float) -> Float = Prim.sin;
 
@@ -260,10 +250,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.cos(Float.pi / 2) // => 0.0 (with numerical imprecision)
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.cos(Float.pi / 2), 0.0, epsilon);
   /// ```
   public let cos : (x : Float) -> Float = Prim.cos;
 
@@ -277,10 +266,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.tan(Float.pi / 4) // => 1.0 (with numerical imprecision)
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.tan(Float.pi / 4), 1.0, epsilon);
   /// ```
   public let tan : (x : Float) -> Float = Prim.tan;
 
@@ -294,10 +282,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.arcsin(1.0) // => Float.pi / 2
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.arcsin(1.0), Float.pi / 2, epsilon);
   /// ```
   public let arcsin : (x : Float) -> Float = Prim.arcsin;
 
@@ -311,10 +298,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.arccos(1.0) // => 0.0
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.arccos(1.0), 0.0, epsilon);
   /// ```
   public let arccos : (x : Float) -> Float = Prim.arccos;
 
@@ -328,10 +314,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.arctan(1.0) // => Float.pi / 4
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.arctan(1.0), Float.pi / 4, epsilon);
   /// ```
   public let arctan : (x : Float) -> Float = Prim.arctan;
 
@@ -352,11 +337,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
+  /// ```motoko include=import
   /// let sqrt2over2 = Float.sqrt(2) / 2;
-  /// Float.arctan2(sqrt2over2, sqrt2over2) // => Float.pi / 4
+  /// assert Float.arctan2(sqrt2over2, sqrt2over2) == Float.pi / 4;
   /// ```
   public let arctan2 : (y : Float, x : Float) -> Float = Prim.arctan2;
 
@@ -370,10 +353,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.exp(1.0) // => Float.e
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.exp(1.0), Float.e, epsilon);
   /// ```
   public let exp : (x : Float) -> Float = Prim.exp;
 
@@ -389,10 +371,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.log(Float.e) // => 1.0
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.log(Float.e), 1.0, epsilon);
   /// ```
   public let log : (x : Float) -> Float = Prim.log;
 
@@ -408,15 +389,13 @@ module {
   /// Positive infinity is formatted as "inf".
   /// Negative infinity is formatted as "-inf".
   ///
-  /// Note: The numerical precision and the text format can vary between
+  /// The numerical precision and the text format can vary between
   /// Motoko versions and runtime configuration. Moreover, `NaN` can be printed
   /// differently, i.e. "NaN" or "nan", potentially omitting the `NaN` sign.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.format(#exp 3, 123.0) // => "1.230e+02"
+  /// ```motoko include=import no-validate
+  /// assert Float.format(#exp 3, 123.0) == "1.230e+02";
   /// ```
   public func format(fmt : { #fix : Nat8; #exp : Nat8; #gen : Nat8; #exact }, x : Float) : Text = switch fmt {
     case (#fix(prec)) { Prim.floatToFormattedText(x, prec, 0) };
@@ -432,11 +411,13 @@ module {
   /// Negative infinity is formatted as `-inf`.
   /// `NaN` is formatted as `NaN` or `-NaN` depending on its sign bit.
   ///
-  /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
+  /// The numerical precision and the text format can vary between
+  /// Motoko versions and runtime configuration. Moreover, `NaN` can be printed
+  /// differently, i.e. "NaN" or "nan", potentially omitting the `NaN` sign.
   ///
-  /// Float.toText(0.12) // => "0.12"
+  /// Example:
+  /// ```motoko include=import no-validate
+  /// assert Float.toText(1.2) == "1.2";
   /// ```
   public let toText : Float -> Text = Prim.floatToText;
 
@@ -446,10 +427,8 @@ module {
   /// Also traps for `inf`, `-inf`, and `NaN`.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.toInt64(-12.3) // => -12
+  /// ```motoko include=import
+  /// assert Float.toInt64(-12.3) == -12;
   /// ```
   public let toInt64 : Float -> Int64 = Prim.floatToInt64;
 
@@ -458,10 +437,8 @@ module {
   /// Note: The floating point number may be imprecise for large or small Int64.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.fromInt64(-42) // => -42.0
+  /// ```motoko include=import
+  /// assert Float.fromInt64(-42) == -42.0;
   /// ```
   public let fromInt64 : Int64 -> Float = Prim.int64ToFloat;
 
@@ -470,10 +447,8 @@ module {
   /// Traps for `inf`, `-inf`, and `NaN`.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.toInt(1.2e6) // => +1_200_000
+  /// ```motoko include=import
+  /// assert Float.toInt(1.2e6) == +1_200_000;
   /// ```
   public let toInt : Float -> Int = Prim.floatToInt;
 
@@ -484,10 +459,8 @@ module {
   /// Returns `-inf` if the integer is less than the minimum floating point number.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.fromInt(-123) // => -123.0
+  /// ```motoko include=import
+  /// assert Float.fromInt(-123) == -123.0;
   /// ```
   public let fromInt : Int -> Float = Prim.intToFloat;
 
@@ -508,11 +481,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
+  /// ```motoko include=import
   /// let epsilon = 1e-6;
-  /// Float.equal(-12.3, -1.23e1, epsilon) // => true
+  /// assert Float.equal(-12.3, -1.23e1, epsilon);
   /// ```
   public func equal(x : Float, y : Float, epsilon : Float) : Bool {
     if (not (epsilon >= 0.0)) {
@@ -539,11 +510,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
+  /// ```motoko include=import
   /// let epsilon = 1e-6;
-  /// Float.notEqual(-12.3, -1.23e1, epsilon) // => false
+  /// assert not Float.notEqual(-12.3, -1.23e1, epsilon);
   /// ```
   public func notEqual(x : Float, y : Float, epsilon : Float) : Bool {
     if (not (epsilon >= 0.0)) {
@@ -564,10 +533,8 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.less(Float.e, Float.pi) // => true
+  /// ```motoko include=import
+  /// assert Float.less(Float.e, Float.pi);
   /// ```
   public func less(x : Float, y : Float) : Bool { x < y };
 
@@ -582,10 +549,8 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.lessOrEqual(0.123, 0.1234) // => true
+  /// ```motoko include=import
+  /// assert Float.lessOrEqual(0.123, 0.1234);
   /// ```
   public func lessOrEqual(x : Float, y : Float) : Bool { x <= y };
 
@@ -600,10 +565,8 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.greater(Float.pi, Float.e) // => true
+  /// ```motoko include=import
+  /// assert Float.greater(Float.pi, Float.e);
   /// ```
   public func greater(x : Float, y : Float) : Bool { x > y };
 
@@ -618,10 +581,8 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.greaterOrEqual(0.1234, 0.123) // => true
+  /// ```motoko include=import
+  /// assert Float.greaterOrEqual(0.1234, 0.123);
   /// ```
   public func greaterOrEqual(x : Float, y : Float) : Bool { x >= y };
 
@@ -644,12 +605,10 @@ module {
   /// * positive NaN (no distinction between signalling and quiet positive NaN)
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.compare(0.123, 0.1234) // => #less
+  /// ```motoko include=import
+  /// assert Float.compare(0.123, 0.1234) == #less;
   /// ```
-  public func compare(x : Float, y : Float) : { #less; #equal; #greater } {
+  public func compare(x : Float, y : Float) : Order.Order {
     if (isNaN(x)) {
       if (isNegative(x)) {
         if (isNaN(y) and isNegative(y)) { #equal } else { #less }
@@ -686,10 +645,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.neg(1.23) // => -1.23
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.neg(1.23), -1.23, epsilon);
   /// ```
   public func neg(x : Float) : Float { -x };
 
@@ -707,10 +665,9 @@ module {
   /// The same cases apply commutatively, i.e. for `add(y, x)`.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.add(1.23, 0.123) // => 1.353
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.add(1.23, 0.123), 1.353, epsilon);
   /// ```
   public func add(x : Float, y : Float) : Float { x + y };
 
@@ -731,10 +688,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.sub(1.23, 0.123) // => 1.107
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.sub(1.23, 0.123), 1.107, epsilon);
   /// ```
   public func sub(x : Float, y : Float) : Float { x - y };
 
@@ -755,10 +711,9 @@ module {
   /// The same cases apply commutatively, i.e. for `mul(y, x)`.
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.mul(1.23, 1e2) // => 123.0
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.mul(1.23, 1e2), 123.0, epsilon);
   /// ```
   public func mul(x : Float, y : Float) : Float { x * y };
 
@@ -782,10 +737,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.div(1.23, 1e2) // => 0.0123
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.div(1.23, 1e2), 0.0123, epsilon);
   /// ```
   public func div(x : Float, y : Float) : Float { x / y };
 
@@ -808,10 +762,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.rem(7.2, 2.3) // => 0.3 (with numerical imprecision)
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.rem(7.2, 2.3), 0.3, epsilon);
   /// ```
   public func rem(x : Float, y : Float) : Float { x % y };
 
@@ -841,10 +794,9 @@ module {
   /// ```
   ///
   /// Example:
-  /// ```motoko
-  /// import Float "mo:base/Float";
-  ///
-  /// Float.pow(2.5, 2.0) // => 6.25
+  /// ```motoko include=import
+  /// let epsilon = 1e-6;
+  /// assert Float.equal(Float.pow(2.5, 2.0), 6.25, epsilon);
   /// ```
   public func pow(x : Float, y : Float) : Float { x ** y };
 

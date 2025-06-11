@@ -6,9 +6,9 @@
 /// If you would like to manipulate Blobs, it is recommended that you convert
 /// Blobs to `[var Nat8]` or `Buffer<Nat8>`, do the manipulation, then convert back.
 ///
-/// Import from the base library to use this module.
+/// Import from the core library to use this module.
 /// ```motoko name=import
-/// import Blob "mo:base/Blob";
+/// import Blob "mo:core/Blob";
 /// ```
 ///
 /// Some built in features not listed in this module:
@@ -19,27 +19,54 @@
 ///
 /// For example:
 /// ```motoko include=import
-/// import Debug "mo:base/Debug";
-/// import Nat8 "mo:base/Nat8";
+/// import Debug "mo:core/Debug";
+/// import Nat8 "mo:core/Nat8";
 ///
 /// let blob = "\00\00\00\ff" : Blob; // blob literals, where each byte is delimited by a back-slash and represented in hex
 /// let blob2 = "charsもあり" : Blob; // you can also use characters in the literals
-/// let numBytes = blob.size(); // => 4 (returns the number of bytes in the Blob)
-/// for (byte : Nat8 in blob.values()) { // iterator over the Blob
+/// let numBytes = blob.size();
+/// assert numBytes == 4; // returns the number of bytes in the Blob
+/// for (byte in blob.values()) { // iterator over the Blob
 ///   Debug.print(Nat8.toText(byte))
 /// }
 /// ```
 
 import Types "Types";
 import Prim "mo:⛔";
+import Order "Order";
 
 module {
 
   public type Blob = Prim.Types.Blob;
 
   /// Returns an empty `Blob` (equivalent to `""`).
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let emptyBlob = Blob.empty();
+  /// assert emptyBlob.size() == 0;
+  /// ```
   public func empty() : Blob = "";
 
+  /// Returns whether the given `Blob` is empty (has a size of zero).
+  ///
+  /// ```motoko include=import
+  /// let blob1 = "" : Blob;
+  /// let blob2 = "\FF\00" : Blob;
+  /// assert Blob.isEmpty(blob1);
+  /// assert not Blob.isEmpty(blob2);
+  /// ```
+  public func isEmpty(blob : Blob) : Bool = blob == "";
+
+  /// Returns the number of bytes in the given `Blob`.
+  /// This is equivalent to `blob.size()`.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let blob = "\FF\00\AA" : Blob;
+  /// assert Blob.size(blob) == 3;
+  /// assert blob.size() == 3;
+  /// ```
   public func size(blob : Blob) : Nat = blob.size();
 
   /// Creates a `Blob` from an array of bytes (`[Nat8]`), by copying each element.
@@ -47,7 +74,8 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let bytes : [Nat8] = [0, 255, 0];
-  /// let blob = Blob.fromArray(bytes); // => "\00\FF\00"
+  /// let blob = Blob.fromArray(bytes);
+  /// assert blob == "\00\FF\00";
   /// ```
   public func fromArray(bytes : [Nat8]) : Blob = Prim.arrayToBlob bytes;
 
@@ -56,7 +84,8 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let bytes : [var Nat8] = [var 0, 255, 0];
-  /// let blob = Blob.fromVarArray(bytes); // => "\00\FF\00"
+  /// let blob = Blob.fromVarArray(bytes);
+  /// assert blob == "\00\FF\00";
   /// ```
   public func fromVarArray(bytes : [var Nat8]) : Blob = Prim.arrayMutToBlob bytes;
 
@@ -65,7 +94,8 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let blob = "\00\FF\00" : Blob;
-  /// let bytes = Blob.toArray(blob); // => [0, 255, 0]
+  /// let bytes = Blob.toArray(blob);
+  /// assert bytes == [0, 255, 0];
   /// ```
   public func toArray(blob : Blob) : [Nat8] = Prim.blobToArray blob;
 
@@ -73,8 +103,12 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
+  /// import Nat8 "mo:core/Nat8";
+  /// import VarArray "mo:core/VarArray";
+  ///
   /// let blob = "\00\FF\00" : Blob;
-  /// let bytes = Blob.toVarArray(blob); // => [var 0, 255, 0]
+  /// let bytes = Blob.toVarArray(blob);
+  /// assert VarArray.equal<Nat8>(bytes, [var 0, 255, 0], Nat8.equal);
   /// ```
   public func toVarArray(blob : Blob) : [var Nat8] = Prim.blobToArrayMut blob;
 
@@ -83,7 +117,8 @@ module {
   /// Example:
   /// ```motoko include=import
   /// let blob = "\00\FF\00" : Blob;
-  /// Blob.hash(blob) // => 1_818_567_776
+  /// let h = Blob.hash(blob);
+  /// assert h == 1_818_567_776;
   /// ```
   public func hash(blob : Blob) : Types.Hash = Prim.hashBlob blob;
 
@@ -95,9 +130,10 @@ module {
   /// ```motoko include=import
   /// let blob1 = "\00\00\00" : Blob;
   /// let blob2 = "\00\FF\00" : Blob;
-  /// Blob.compare(blob1, blob2) // => #less
+  /// let result = Blob.compare(blob1, blob2);
+  /// assert result == #less;
   /// ```
-  public func compare(b1 : Blob, b2 : Blob) : { #less; #equal; #greater } {
+  public func compare(b1 : Blob, b2 : Blob) : Order.Order {
     let c = Prim.blobCompare(b1, b2);
     if (c < 0) #less else if (c == 0) #equal else #greater
   };
@@ -109,8 +145,7 @@ module {
   /// ```motoko include=import
   /// let blob1 = "\00\FF\00" : Blob;
   /// let blob2 = "\00\FF\00" : Blob;
-  /// ignore Blob.equal(blob1, blob2);
-  /// blob1 == blob2 // => true
+  /// assert Blob.equal(blob1, blob2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -119,11 +154,11 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
+  /// import List "mo:core/List";
   ///
-  /// let buffer1 = Buffer.Buffer<Blob>(3);
-  /// let buffer2 = Buffer.Buffer<Blob>(3);
-  /// Buffer.equal(buffer1, buffer2, Blob.equal) // => true
+  /// let list1 = List.singleton<Blob>("\00\FF\00");
+  /// let list2 = List.singleton<Blob>("\00\FF\00");
+  /// assert List.equal(list1, list2, Blob.equal);
   /// ```
   public func equal(blob1 : Blob, blob2 : Blob) : Bool { blob1 == blob2 };
 
@@ -134,8 +169,7 @@ module {
   /// ```motoko include=import
   /// let blob1 = "\00\AA\AA" : Blob;
   /// let blob2 = "\00\FF\00" : Blob;
-  /// ignore Blob.notEqual(blob1, blob2);
-  /// blob1 != blob2 // => true
+  /// assert Blob.notEqual(blob1, blob2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -150,8 +184,7 @@ module {
   /// ```motoko include=import
   /// let blob1 = "\00\AA\AA" : Blob;
   /// let blob2 = "\00\FF\00" : Blob;
-  /// ignore Blob.less(blob1, blob2);
-  /// blob1 < blob2 // => true
+  /// assert Blob.less(blob1, blob2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -166,8 +199,7 @@ module {
   /// ```motoko include=import
   /// let blob1 = "\00\AA\AA" : Blob;
   /// let blob2 = "\00\FF\00" : Blob;
-  /// ignore Blob.lessOrEqual(blob1, blob2);
-  /// blob1 <= blob2 // => true
+  /// assert Blob.lessOrEqual(blob1, blob2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -182,8 +214,7 @@ module {
   /// ```motoko include=import
   /// let blob1 = "\BB\AA\AA" : Blob;
   /// let blob2 = "\00\00\00" : Blob;
-  /// ignore Blob.greater(blob1, blob2);
-  /// blob1 > blob2 // => true
+  /// assert Blob.greater(blob1, blob2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -198,8 +229,7 @@ module {
   /// ```motoko include=import
   /// let blob1 = "\BB\AA\AA" : Blob;
   /// let blob2 = "\00\00\00" : Blob;
-  /// ignore Blob.greaterOrEqual(blob1, blob2);
-  /// blob1 >= blob2 // => true
+  /// assert Blob.greaterOrEqual(blob1, blob2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition

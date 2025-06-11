@@ -1,13 +1,14 @@
+// @testmode wasi
 import Suite "mo:matchers/Suite";
 import T "mo:matchers/Testable";
 import M "mo:matchers/Matchers";
+import Test "mo:test";
 import Set "../src/Set";
 import Iter "../src/Iter";
 import Nat "../src/Nat";
 import Int "../src/Int";
 import Runtime "../src/Runtime";
 import Array "../src/Array";
-import Debug "../src/Debug";
 
 let { run; test; suite } = Suite;
 
@@ -269,7 +270,7 @@ run(
           let set = Set.empty<Nat>();
           Set.toText<Nat>(set, Nat.toText)
         },
-        M.equals(T.text("{}"))
+        M.equals(T.text("Set{}"))
       ),
       test(
         "compare",
@@ -688,7 +689,7 @@ run(
           let set = Set.singleton<Nat>(1);
           Set.toText<Nat>(set, Nat.toText)
         },
-        M.equals(T.text("{1}"))
+        M.equals(T.text("Set{1}"))
       ),
       test(
         "compare less",
@@ -950,10 +951,10 @@ run(
           let copy = smallSet();
           let clone = Set.clone(original);
           let keys = Iter.toArray(Set.values(original));
-          for (key in keys.values()) {
+          for (key in keys.vals()) {
             Set.remove(original, Nat.compare, key)
           };
-          for (key in keys.values()) {
+          for (key in keys.vals()) {
             assert Set.contains(clone, Nat.compare, key) == Set.contains(copy, Nat.compare, key)
           };
           Set.size(clone)
@@ -1217,9 +1218,9 @@ run(
           Set.toText<Nat>(set, Nat.toText)
         },
         do {
-          var text = "{";
+          var text = "Set{";
           for (index in Nat.range(0, smallSize)) {
-            if (text != "{") {
+            if (text != "Set{") {
               text #= ", "
             };
             text #= Nat.toText(index)
@@ -1364,7 +1365,7 @@ run(
   )
 );
 
-// TODO: Use PRNG in new base library
+// TODO: Use PRNG in new core library
 class Random(seed : Nat) {
   var number = seed;
 
@@ -1908,4 +1909,83 @@ run(
 
     ]
   )
+);
+
+Test.suite(
+  "valuesFrom",
+  func() {
+    Test.test(
+      "Simple",
+      func() {
+        let set = Set.empty<Nat>();
+        Set.add(set, Nat.compare, 1);
+        Set.add(set, Nat.compare, 2);
+        Set.add(set, Nat.compare, 4);
+        func check(from : Nat, expected : [Nat]) {
+          let actual = Iter.toArray(Set.valuesFrom(set, Nat.compare, from));
+          Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+        };
+        check(0, [1, 2, 4]);
+        check(1, [1, 2, 4]);
+        check(2, [2, 4]);
+        check(3, [4]);
+        check(4, [4])
+      }
+    );
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let set = Set.empty<Nat>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Set.add(set, Nat.compare, i);
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Set.valuesFrom(set, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat)>(Set.values(set), func(k) = k < j));
+            Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+          }
+        }
+      }
+    )
+  }
+);
+
+Test.suite(
+  "reverseValuesFrom",
+  func() {
+    Test.test(
+      "Simple",
+      func() {
+        let set = Set.empty<Nat>();
+        Set.add(set, Nat.compare, 1);
+        Set.add(set, Nat.compare, 2);
+        Set.add(set, Nat.compare, 4);
+        func check(from : Nat, expected : [Nat]) {
+          let actual = Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, from));
+          Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+        };
+        check(0, []);
+        check(1, [1]);
+        check(2, [2, 1]);
+        check(3, [2, 1]);
+        check(4, [4, 2, 1]);
+        check(5, [4, 2, 1])
+      }
+    );
+    Test.test(
+      "Extensive 2D test",
+      func() {
+        let set = Set.empty<Nat>();
+        let n = 100;
+        for (i in Nat.rangeBy(1, n, 2)) {
+          Set.add(set, Nat.compare, i);
+          for (j in Nat.range(0, i + 2)) {
+            let actual = Iter.toArray(Set.reverseValuesFrom(set, Nat.compare, j));
+            let expected = Iter.toArray(Iter.dropWhile<(Nat)>(Set.reverseValues(set), func(k) = k > j));
+            Test.expect.array(actual, Nat.toText, Nat.equal).equal(expected)
+          }
+        }
+      }
+    )
+  }
 )

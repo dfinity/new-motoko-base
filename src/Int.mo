@@ -3,15 +3,16 @@
 /// Most operations on integer numbers (e.g. addition) are available as built-in operators (e.g. `-1 + 1`).
 /// This module provides equivalent functions and `Text` conversion.
 ///
-/// Import from the base library to use this module.
+/// Import from the core library to use this module.
 /// ```motoko name=import
-/// import Int "mo:base/Int";
+/// import Int "mo:core/Int";
 /// ```
 
 import Prim "mo:⛔";
 import Char "Char";
 import Runtime "Runtime";
 import Iter "Iter";
+import Order "Order";
 
 module {
 
@@ -22,7 +23,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.abs(-12) // => 12
+  /// assert Int.abs(-12) == 12;
   /// ```
   public func abs(x : Int) : Nat {
     Prim.abs(x)
@@ -33,7 +34,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.toText(-1234) // => "-1234"
+  /// assert Int.toText(-1234) == "-1234";
   /// ```
   public func toText(x : Int) : Text {
     if (x == 0) {
@@ -77,7 +78,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.fromText "-1234" // => ?-1234
+  /// assert Int.fromText("-1234") == ?-1234;
   /// ```
   public func fromText(text : Text) : ?Int {
     if (text == "") {
@@ -102,24 +103,26 @@ module {
     ?(if (isNegative) { -n } else { n })
   };
 
-  /// Converts an integer to a natural number. Returns `null` if the integer is negative.
+  /// Converts an integer to a natural number. Traps if the integer is negative.
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Int.toNat(-1)); // => null
-  /// Debug.print(debug_show Int.toNat(1234)); // => ?1234
+  /// import Debug "mo:core/Debug";
+  /// assert Int.toNat(1234 : Int) == (1234 : Nat);
   /// ```
-  public func toNat(int : Int) : ?Nat {
-    if (int < 0) { null } else { ?abs(int) }
+  public func toNat(int : Int) : Nat {
+    if (int < 0) {
+      Runtime.trap("Int.toNat(): negative input value")
+    } else {
+      abs(int)
+    }
   };
 
   /// Converts a natural number to an integer.
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Int.fromNat(1234)); // => 1234
+  /// assert Int.fromNat(1234 : Nat) == (1234 : Int);
   /// ```
   public func fromNat(nat : Nat) : Int {
     nat : Int
@@ -129,7 +132,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.min(2, -3) // => -3
+  /// assert Int.min(2, -3) == -3;
   /// ```
   public func min(x : Int, y : Int) : Int {
     if (x < y) { x } else { y }
@@ -139,7 +142,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.max(2, -3) // => 2
+  /// assert Int.max(2, -3) == 2;
   /// ```
   public func max(x : Int, y : Int) : Int {
     if (x < y) { y } else { x }
@@ -150,7 +153,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.equal(-1, -1); // => true
+  /// assert Int.equal(-1, -1);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -160,13 +163,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Int>(1);
-  /// buffer1.add(-3);
-  /// let buffer2 = Buffer.Buffer<Int>(1);
-  /// buffer2.add(-3);
-  /// Buffer.equal(buffer1, buffer2, Int.equal) // => true
+  /// let a : Int = 1;
+  /// let b : Int = -1;
+  /// assert not Int.equal(a, b);
   /// ```
   public func equal(x : Int, y : Int) : Bool { x == y };
 
@@ -175,7 +174,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.notEqual(-1, -2); // => true
+  /// assert Int.notEqual(-1, -2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -189,7 +188,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.less(-2, 1); // => true
+  /// assert Int.less(-2, 1);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -203,7 +202,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.lessOrEqual(-2, 1); // => true
+  /// assert Int.lessOrEqual(-2, 1);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -217,7 +216,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.greater(1, -2); // => true
+  /// assert Int.greater(1, -2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -231,7 +230,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.greaterOrEqual(1, -2); // => true
+  /// assert Int.greaterOrEqual(1, -2);
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -245,17 +244,17 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.compare(-3, 2) // => #less
+  /// assert Int.compare(-3, 2) == #less;
   /// ```
   ///
   /// This function can be used as value for a high order function, such as a sort function.
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.sort([1, -2, -3], Int.compare) // => [-3, -2, 1]
+  /// import Array "mo:core/Array";
+  /// assert Array.sort([1, -2, -3], Int.compare) == [-3, -2, 1];
   /// ```
-  public func compare(x : Int, y : Int) : { #less; #equal; #greater } {
+  public func compare(x : Int, y : Int) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 
@@ -263,7 +262,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.neg(123) // => -123
+  /// assert Int.neg(123) == -123;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -278,7 +277,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.add(1, -2); // => -1
+  /// assert Int.add(1, -2) == -1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -288,8 +287,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.foldLeft([1, -2, -3], 0, Int.add) // => -4
+  /// import Array "mo:core/Array";
+  /// assert Array.foldLeft([1, -2, -3], 0, Int.add) == -4;
   /// ```
   public func add(x : Int, y : Int) : Int { x + y };
 
@@ -299,7 +298,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.sub(1, 2); // => -1
+  /// assert Int.sub(1, 2) == -1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -309,8 +308,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.foldLeft([1, -2, -3], 0, Int.sub) // => 4
+  /// import Array "mo:core/Array";
+  /// assert Array.foldLeft([1, -2, -3], 0, Int.sub) == 4;
   /// ```
   public func sub(x : Int, y : Int) : Int { x - y };
 
@@ -320,7 +319,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.mul(-2, 3); // => -6
+  /// assert Int.mul(-2, 3) == -6;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -330,8 +329,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.foldLeft([1, -2, -3], 1, Int.mul) // => 6
+  /// import Array "mo:core/Array";
+  /// assert Array.foldLeft([1, -2, -3], 1, Int.mul) == 6;
   /// ```
   public func mul(x : Int, y : Int) : Int { x * y };
 
@@ -342,7 +341,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.div(6, -2); // => -3
+  /// assert Int.div(6, -2) == -3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -358,7 +357,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.rem(6, -4); // => 2
+  /// assert Int.rem(6, -4) == 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -374,7 +373,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Int.pow(-2, 3); // => -8
+  /// assert Int.pow(-2, 3) == -8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -384,22 +383,22 @@ module {
   public func pow(x : Int, y : Int) : Int { x ** y };
 
   /// Returns an iterator over the integers from the first to second argument with an exclusive upper bound.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Int.range(1, 4);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Int.range(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func range(fromInclusive : Int, toExclusive : Int) : Iter.Iter<Int> {
     object {
@@ -418,22 +417,22 @@ module {
 
   /// Returns an iterator over `Int` values from the first to second argument with an exclusive upper bound,
   /// incrementing by the specified step size.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// // Positive step
   /// let iter1 = Int.rangeBy(1, 7, 2);
-  /// assert(?1 == iter1.next());
-  /// assert(?3 == iter1.next());
-  /// assert(?5 == iter1.next());
-  /// assert(null == iter1.next());
+  /// assert iter1.next() == ?1;
+  /// assert iter1.next() == ?3;
+  /// assert iter1.next() == ?5;
+  /// assert iter1.next() == null;
   ///
   /// // Negative step
   /// let iter2 = Int.rangeBy(7, 1, -2);
-  /// assert(?7 == iter2.next());
-  /// assert(?5 == iter2.next());
-  /// assert(?3 == iter2.next());
-  /// assert(null == iter2.next());
+  /// assert iter2.next() == ?7;
+  /// assert iter2.next() == ?5;
+  /// assert iter2.next() == ?3;
+  /// assert iter2.next() == null;
   /// ```
   ///
   /// If `step` is 0 or if the iteration would not progress towards the bound, returns an empty iterator.
@@ -472,22 +471,22 @@ module {
   };
 
   /// Returns an iterator over the integers from the first to second argument, inclusive.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Int.rangeInclusive(1, 3);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Int.rangeInclusive(3, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func rangeInclusive(from : Int, to : Int) : Iter.Iter<Int> {
     object {
@@ -506,24 +505,24 @@ module {
 
   /// Returns an iterator over the integers from the first to second argument, inclusive,
   /// incrementing by the specified step size.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// // Positive step
   /// let iter1 = Int.rangeByInclusive(1, 7, 2);
-  /// assert(?1 == iter1.next());
-  /// assert(?3 == iter1.next());
-  /// assert(?5 == iter1.next());
-  /// assert(?7 == iter1.next());
-  /// assert(null == iter1.next());
+  /// assert iter1.next() == ?1;
+  /// assert iter1.next() == ?3;
+  /// assert iter1.next() == ?5;
+  /// assert iter1.next() == ?7;
+  /// assert iter1.next() == null;
   ///
   /// // Negative step
   /// let iter2 = Int.rangeByInclusive(7, 1, -2);
-  /// assert(?7 == iter2.next());
-  /// assert(?5 == iter2.next());
-  /// assert(?3 == iter2.next());
-  /// assert(?1 == iter2.next());
-  /// assert(null == iter2.next());
+  /// assert iter2.next() == ?7;
+  /// assert iter2.next() == ?5;
+  /// assert iter2.next() == ?3;
+  /// assert iter2.next() == ?1;
+  /// assert iter2.next() == null;
   /// ```
   ///
   /// If `from == to`, return an iterator which only returns that value.

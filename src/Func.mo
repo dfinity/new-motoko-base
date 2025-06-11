@@ -2,21 +2,23 @@
 ///
 /// (Most commonly used when programming in functional style using higher-order
 /// functions.)
+///
+/// Import from the core library to use this module.
+///
+/// ```motoko name=import
+/// import Func = "mo:core/Func";
+/// ```
 
 module {
-  /// Import from the base library to use this module.
-  ///
-  /// ```motoko name=import
-  /// import { compose; const; identity } = "mo:base/Func";
-  /// import Text = "mo:base/Text";
-  /// import Char = "mo:base/Char";
-  /// ```
 
   /// The composition of two functions `f` and `g` is a function that applies `g` and then `f`.
   ///
   /// Example:
   /// ```motoko include=import
-  /// let textFromNat32 = compose(Text.fromChar, Char.fromNat32);
+  /// import Text "mo:core/Text";
+  /// import Char "mo:core/Char";
+  ///
+  /// let textFromNat32 = Func.compose(Text.fromChar, Char.fromNat32);
   /// assert textFromNat32(65) == "A";
   /// ```
   public func compose<A, B, C>(f : B -> C, g : A -> B) : A -> C {
@@ -28,8 +30,8 @@ module {
   /// The `identity` function returns its argument.
   /// Example:
   /// ```motoko include=import
-  /// assert identity(10) == 10;
-  /// assert identity(true) == true;
+  /// assert Func.identity(10) == 10;
+  /// assert Func.identity(true) == true;
   /// ```
   public func identity<A>(x : A) : A = x;
 
@@ -39,8 +41,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// assert const<Nat, Text>(10)("hello") == 10;
-  /// assert const(true)(20) == true;
+  /// assert Func.const<Nat, Text>(10)("hello") == 10;
+  /// assert Func.const(true)(20) == true;
   /// ```
   public func const<A, B>(x : A) : B -> A = func _ = x
 }

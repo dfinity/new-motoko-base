@@ -6,20 +6,44 @@ on:
   pull_request:
 
 jobs:
-  validate:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-22.04]
-        node: [20]
+  check-motoko-changes:
+    uses: ./.github/workflows/check-motoko-changes.yml
+
+  validate-changelog:
+    needs: check-motoko-changes
+    if: github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'main'
+    continue-on-error: true
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npm run validate
+          setup-mops: false
+      - run: npm run validate:changelog
+      - name: Verify Changelog updated when Motoko source files changed
+        if: needs.check-motoko-changes.outputs.has_src_mo_changes == 'true'
+        run: |
+          if [ "${{ needs.check-motoko-changes.outputs.has_changelog_changes }}" != "true" ]; then
+            echo "Error: Motoko files were modified but Changelog.md was not updated"
+            exit 1
+          fi
+          echo "Changelog.md was updated"
+
+  validate-version:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          setup-mops: false
+      - run: npm run validate:version
+
+  validate-api:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - run: npm run validate:api
       - name: Check for API changes
         run: |
           DIFF=$(git diff -- validation/api)
@@ -32,33 +56,48 @@ jobs:
             exit 1
           fi
 
-  format:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-22.04]
-        node: [20]
+  validate-docs:
+    needs: check-motoko-changes
+    if: needs.check-motoko-changes.outputs.has_src_mo_changes == 'true' || needs.check-motoko-changes.outputs.has_mops_package_version_changes == 'true'
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
+      - uses: ./.github/actions/setup
+      - name: Validate docs for changed src/*.mo files
+        if: needs.check-motoko-changes.outputs.has_mops_package_version_changes == 'false'
+        run: |
+          echo "${{ needs.check-motoko-changes.outputs.src_mo_changed_files }}" | while read -r file; do
+            npm run validate:docs "$file"
+          done
+        env:
+          FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106
+      - name: Validate all docs on version change
+        if: needs.check-motoko-changes.outputs.has_mops_package_version_changes == 'true'
+        run: npm run validate:docs
+        env:
+          FORCE_COLOR: 2 # https://github.com/chalk/supports-color/issues/106
+
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - run: npm run format:check
 
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ubuntu-22.04]
-        node: [20]
+    needs: check-motoko-changes
+    if: needs.check-motoko-changes.outputs.has_mo_changes == 'true'
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npx mops toolchain init
+          fetch-depth: "0"
+      - name: Check for Motoko file changes in 'src' directory
+        id: check_mo_changes
+        run: |
+          if ! git diff --name-only ${{ github.event.pull_request.base.sha || 'origin/main' }} HEAD | grep -q '\.mo$'; then
+            echo "No Motoko file changes in src directory detected, skipping tests"
+            exit 0
+          fi
+      - uses: ./.github/actions/setup
       - run: npm test

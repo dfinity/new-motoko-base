@@ -1,0 +1,82 @@
+name: Benchmarks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-motoko-changes:
+    uses: ./.github/workflows/check-motoko-changes.yml
+
+  benchmark:
+    needs: check-motoko-changes
+    if: needs.check-motoko-changes.outputs.has_mo_changes == 'true' || needs.check-motoko-changes.outputs.has_mops_dependency_changes == 'true'
+    runs-on: ubuntu-24.04
+    name: Run Benchmarks and Comment on PR or Upload on push
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          setup-dfx: true
+
+      - name: Checkout out the branch with benchmark results
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          ref: benchmark-results
+          path: .benchmark-results-branch/
+      - name: Move Saved Benchmarks
+        if: github.event_name == 'pull_request'
+        run: mv .benchmark-results-branch/.bench .bench
+      - name: Benchmarks Table
+        if: github.event_name == 'pull_request'
+        id: benchmarks
+        run: |  # Make sure to use the same flags as in the `mops bench` command below!
+          set -o pipefail
+          npx mops bench --compare 2>&1 | tee benchmark_results.txt
+          echo "result<<EOF" >> $GITHUB_OUTPUT
+          cat benchmark_results.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Find Comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Benchmark Results
+      - name: Create or update comment
+        if: github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ${{ steps.benchmarks.outputs.result }}
+            
+            **Note**: Renamed benchmarks cannot be compared. Refer to the [current baseline](https://github.com/dfinity/motoko-core/tree/benchmark-results) for manual comparison.
+          edit-mode: replace
+
+      - name: Generate Benchmark Results
+        if: github.event_name != 'pull_request'
+        run: | # Make sure to use the same flags as in the `mops bench` command above!
+          set -o pipefail
+          npx mops bench --save 2>&1 | tee bench-results.md 
+      - name: Move Generated Results
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir .bench-br
+          mv .bench .bench-br/.bench
+          mv bench-results.md .bench-br/README.md
+      - name: Upload benchmark results
+        if: github.event_name != 'pull_request'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: benchmark-results
+          folder: .bench-br

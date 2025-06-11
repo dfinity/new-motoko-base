@@ -103,6 +103,21 @@ let suite = Suite.suite(
       M.equals(T.optional(T.natTestable, null : ?Nat))
     ),
     Suite.test(
+      "findIndex",
+      VarArray.findIndex<Nat>([var 1, 9, 4, 8], func x = x == 9),
+      M.equals(T.optional(T.natTestable, ?1))
+    ),
+    Suite.test(
+      "findIndex fail",
+      VarArray.findIndex<Nat>([var 1, 9, 4, 8], func _ = false),
+      M.equals(T.optional(T.natTestable, null : ?Nat))
+    ),
+    Suite.test(
+      "findIndex empty",
+      VarArray.findIndex<Nat>([var], func _ = true),
+      M.equals(T.optional(T.natTestable, null : ?Nat))
+    ),
+    Suite.test(
       "concat",
       VarArray.concat<Int>([var 1, 2, 3], [var 4, 5, 6]),
       M.equals(varArray<Int>(T.intTestable, [var 1, 2, 3, 4, 5, 6]))
@@ -241,19 +256,19 @@ let suite = Suite.suite(
     ),
     Suite.test(
       "flatMap",
-      VarArray.flatMap<Int, Int>([var 0, 1, 2], func x = [x, -x].values()),
+      VarArray.flatMap<Int, Int>([var 0, 1, 2], func x = [x, -x].vals()),
       M.equals(varArray<Int>(T.intTestable, [var 0, 0, 1, -1, 2, -2]))
     ),
     Suite.test(
       "flatMap empty",
-      VarArray.flatMap<Int, Int>([var], func x = [x, -x].values()),
+      VarArray.flatMap<Int, Int>([var], func x = [x, -x].vals()),
       M.equals(varArray<Int>(T.intTestable, [var]))
     ),
     Suite.test(
       "flatMap mix",
       VarArray.flatMap<Nat, Nat>(
         [var 1, 2, 1, 2, 3],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var 0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
@@ -261,7 +276,7 @@ let suite = Suite.suite(
       "flatMap mix empty right",
       VarArray.flatMap<Nat, Nat>(
         [var 0, 1, 2, 0, 1, 2, 3, 0],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var 0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
@@ -269,7 +284,7 @@ let suite = Suite.suite(
       "flatMap mix empties right",
       VarArray.flatMap<Nat, Nat>(
         [var 0, 1, 2, 0, 1, 2, 3, 0, 0, 0],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var 0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
@@ -277,7 +292,7 @@ let suite = Suite.suite(
       "flatMap mix empty left",
       VarArray.flatMap<Nat, Nat>(
         [var 0, 1, 2, 0, 1, 2, 3],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var 0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
@@ -285,7 +300,7 @@ let suite = Suite.suite(
       "flatMap mix empties left",
       VarArray.flatMap<Nat, Nat>(
         [var 0, 0, 0, 1, 2, 0, 1, 2, 3],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var 0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
@@ -293,7 +308,7 @@ let suite = Suite.suite(
       "flatMap mix empties middle",
       VarArray.flatMap<Nat, Nat>(
         [var 0, 1, 2, 0, 0, 0, 1, 2, 3],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var 0, 0, 1, 0, 0, 1, 0, 1, 2]))
     ),
@@ -301,7 +316,7 @@ let suite = Suite.suite(
       "flatMap mix empties",
       VarArray.flatMap<Nat, Nat>(
         [var 0, 0, 0],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var]))
     ),
@@ -309,7 +324,7 @@ let suite = Suite.suite(
       "flatMap mix empty",
       VarArray.flatMap<Nat, Nat>(
         [var],
-        func n = VarArray.tabulate<Nat>(n, func i = i).values()
+        func n = VarArray.tabulate<Nat>(n, func i = i).vals()
       ),
       M.equals(varArray<Nat>(T.natTestable, [var]))
     ),
@@ -527,6 +542,50 @@ let suite = Suite.suite(
       "Iter conversions empty",
       VarArray.fromIter<Nat>(VarArray.values([var])),
       M.equals(varArray<Nat>(T.natTestable, [var]))
+    ),
+    Suite.test(
+      "enumerate empty array",
+      do {
+        var hasItem = false;
+        for (_ in VarArray.enumerate([var])) {
+          hasItem := true
+        };
+        hasItem
+      },
+      M.equals(T.bool(false))
+    ),
+    Suite.test(
+      "enumerate non-empty array",
+      do {
+        var sum = 0;
+        for ((i, x) in VarArray.enumerate([var 10, 20, 30])) {
+          sum += i + x
+        };
+        sum // Should be (0+10) + (1+20) + (2+30) = 63
+      },
+      M.equals(T.nat(63))
+    ),
+    Suite.test(
+      "enumerate preserves indices",
+      do {
+        var indices = "";
+        for ((i, _) in VarArray.enumerate([var 'a', 'b', 'c'])) {
+          indices #= Nat.toText(i)
+        };
+        indices
+      },
+      M.equals(T.text("012"))
+    ),
+    Suite.test(
+      "enumerate preserves values",
+      do {
+        var values = "";
+        for ((_, x) in VarArray.enumerate([var 'a', 'b', 'c'])) {
+          values #= Char.toText(x)
+        };
+        values
+      },
+      M.equals(T.text("abc"))
     )
   ]
 );

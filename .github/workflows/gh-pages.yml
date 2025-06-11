@@ -8,27 +8,19 @@ on:
 
 jobs:
   deploy:
-    if: github.event.pull_request.head.repo.owner.login == 'dfinity'
-    strategy:
-      matrix:
-        node: [20]
+    if: github.repository_owner == 'dfinity'
     concurrency: gh-pages-${{ github.ref }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       PR_PATH: pull/${{github.event.number}}
     steps:
       - name: Checkout website repo
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: ./.github/actions/setup
         with:
-          node-version: ${{ matrix.node }}
-
-      - name: Setup dfx
-        uses: dfinity/setup-dfx@main
-
-      - run: dfx cache install
+          setup-mops: false
+          setup-dfx: true
 
       - name: Build docs
         run: npm run docs

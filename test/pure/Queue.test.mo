@@ -1,39 +1,15 @@
+// @testmode wasi
+
 import Queue "../../src/pure/Queue";
 import Array "../../src/Array";
 import Nat "../../src/Nat";
 import Iter "../../src/Iter";
 import Prim "mo:prim";
-import { suite; test; expect } = "mo:test";
+import { suite; test; expect } "mo:test";
 
-func iterateForward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> {
-  var current = queue;
-  object {
-    public func next() : ?T {
-      switch (Queue.popFront(current)) {
-        case null null;
-        case (?result) {
-          current := result.1;
-          ?result.0
-        }
-      }
-    }
-  }
-};
+func iterateForward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> = Queue.values(queue);
 
-func iterateBackward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> {
-  var current = queue;
-  object {
-    public func next() : ?T {
-      switch (Queue.popBack(current)) {
-        case null null;
-        case (?result) {
-          current := result.0;
-          ?result.1
-        }
-      }
-    }
-  }
-};
+func iterateBackward<T>(queue : Queue.Queue<T>) : Iter.Iter<T> = Queue.values(Queue.reverse(queue));
 
 func frontToText(t : (Nat, Queue.Queue<Nat>)) : Text {
   "(" # Nat.toText(t.0) # ", " # Queue.toText(t.1, Nat.toText) # ")"
@@ -403,6 +379,34 @@ suite(
       "empty after back removal",
       func() {
         expect.bool(Queue.isEmpty(reduceBack(queue, testSize))).isTrue()
+      }
+    )
+  }
+);
+
+queue := Queue.filter<Nat>(Queue.fromIter([1, 2, 3, 4, 5].vals()), func n = n < 3);
+
+suite(
+  "filter invariants",
+  func() {
+    test(
+      "not empty",
+      func() {
+        expect.bool(Queue.isEmpty(queue)).isFalse()
+      }
+    );
+
+    test(
+      "peek front",
+      func() {
+        expect.option(Queue.peekFront(queue), Nat.toText, Nat.equal).equal(?1)
+      }
+    );
+
+    test(
+      "peek back",
+      func() {
+        expect.option(Queue.peekBack(queue), Nat.toText, Nat.equal).equal(?2)
       }
     )
   }

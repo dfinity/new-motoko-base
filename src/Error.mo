@@ -38,7 +38,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Error "mo:base/Error";
+  /// import Error "mo:core/Error";
   ///
   /// Error.reject("Example error") // can be used as throw argument
   /// ```
@@ -48,7 +48,7 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Error "mo:base/Error";
+  /// import Error "mo:core/Error";
   ///
   /// let error = Error.reject("Example error");
   /// Error.code(error) // #canister_reject
@@ -59,12 +59,41 @@ module {
   ///
   /// Example:
   /// ```motoko
-  /// import Error "mo:base/Error";
-  /// import Debug "mo:base/Debug";
+  /// import Error "mo:core/Error";
   ///
   /// let error = Error.reject("Example error");
   /// Error.message(error) // "Example error"
   /// ```
   public let message : (error : Error) -> Text = Prim.errorMessage;
+
+  /// Returns whether retrying to send a message may result in success.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Error "mo:core/Error";
+  /// import Debug "mo:core/Debug";
+  ///
+  /// persistent actor {
+  ///   type CallableActor = actor {
+  ///     call : () -> async ()
+  ///   };
+  ///
+  ///   public func example(callableActor : CallableActor) {
+  ///     try {
+  ///       await (with timeout = 3) callableActor.call();
+  ///     }
+  ///     catch e {
+  ///       if (Error.isRetryPossible e) {
+  ///         Debug.print(Error.message e);
+  ///       }
+  ///     }
+  ///   }
+  /// }
+  ///
+  /// ```
+  public func isRetryPossible(error : Error) : Bool = switch (code error) {
+    case (#system_unknown or #system_transient) true;
+    case _ false
+  };
 
 }

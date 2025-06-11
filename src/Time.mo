@@ -3,11 +3,12 @@
 /// The following example illustrates using the system time:
 ///
 /// ```motoko
-/// import Int = "mo:base/Int";
-/// import Time = "mo:base/Time";
+/// import Int = "mo:core/Int";
+/// import Time = "mo:core/Time";
 ///
-/// actor {
+/// persistent actor {
 ///   var lastTime = Time.now();
+///
 ///   public func greet(name : Text) : async Text {
 ///     let now = Time.now();
 ///     let elapsedSeconds = (now - lastTime) / 1000_000_000;

@@ -1,15 +1,24 @@
 [package]
-name = "base"
-version = "1.0.0"
-description = "The Motoko base library"
-repository = "https://github.com/dfinity/motoko-base"
-keywords = [ "base" ]
+name = "core"
+version = "0.5.0"
+description = "The Motoko core library"
+repository = "https://github.com/dfinity/motoko-core"
+keywords = [
+  "core",
+  "base",
+  "data-structure",
+  "stable-memory",
+  "persistent",
+]
 license = "Apache-2.0"
 
 [dev-dependencies]
-matchers = "https://github.com/kritzcreek/motoko-matchers#v1.3.0@3dac8a071b69e4e651b25a7d9683fe831eb7cffd"
-test = "2.1.0"
+test = "2.1.1"
+bench = "1.0.0"
+fuzz = "0.2.1"
+matchers = "https://github.com/kritzcreek/motoko-matchers#v1.3.1@5ba5f52bd9a5649dedf5e2a1ccd55d98ed7ff982"
+base-0-14-8 = "https://github.com/dfinity/motoko-base#moc-0.14.8@9e6010595cb9bad5b637ab7438fd11dc79a21a06"
 
 [toolchain]
-moc = "0.14.1"
-wasmtime = "17.0.0"
+moc = "0.14.8"
+wasmtime = "21.0.0"

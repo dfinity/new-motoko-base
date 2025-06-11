@@ -3,15 +3,17 @@
 /// Most operations on natural numbers (e.g. addition) are available as built-in operators (e.g. `1 + 1`).
 /// This module provides equivalent functions and `Text` conversion.
 ///
-/// Import from the base library to use this module.
+/// Import from the core library to use this module.
 /// ```motoko name=import
-/// import Nat "mo:base/Nat";
+/// import Nat "mo:core/Nat";
 /// ```
 
 import Int "Int";
 import Prim "mo:⛔";
 import Char "Char";
 import Iter "Iter";
+import Runtime "Runtime";
+import Order "Order";
 
 module {
 
@@ -23,7 +25,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.toText 1234 // => "1234"
+  /// assert Nat.toText(1234) == "1234";
   /// ```
   public func toText(n : Nat) : Text = Int.toText n;
 
@@ -34,7 +36,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.fromText "1234" // => ?1234
+  /// assert Nat.fromText("1234") == ?1234;
   /// ```
   public func fromText(text : Text) : ?Nat {
     if (text == "") {
@@ -52,24 +54,25 @@ module {
     ?n
   };
 
-  /// Converts an integer to a natural number. Returns `null` if the integer is negative.
+  /// Converts an integer to a natural number. Traps if the integer is negative.
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Nat.fromInt(-1)); // => null
-  /// Debug.print(debug_show Nat.fromInt(1234)); // => ?1234
+  /// assert Nat.fromInt(1234) == (1234 : Nat);
   /// ```
-  public func fromInt(int : Int) : ?Nat {
-    if (int < 0) { null } else { ?Int.abs(int) }
+  public func fromInt(int : Int) : Nat {
+    if (int < 0) {
+      Runtime.trap("Nat.fromInt(): negative input value")
+    } else {
+      Int.abs(int)
+    }
   };
 
   /// Converts a natural number to an integer.
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Debug "mo:base/Debug";
-  /// Debug.print(debug_show Nat.toInt(1234)); // => 1234
+  /// assert Nat.toInt(1234) == 1234;
   /// ```
   public func toInt(nat : Nat) : Int {
     nat : Int
@@ -79,7 +82,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.min(1, 2) // => 1
+  /// assert Nat.min(1, 2) == 1;
   /// ```
   public func min(x : Nat, y : Nat) : Nat {
     if (x < y) { x } else { y }
@@ -89,7 +92,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.max(1, 2) // => 2
+  /// assert Nat.max(1, 2) == 2;
   /// ```
   public func max(x : Nat, y : Nat) : Nat {
     if (x < y) { y } else { x }
@@ -100,8 +103,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.equal(1, 1); // => true
-  /// 1 == 1 // => true
+  /// assert Nat.equal(1, 1);
+  /// assert 1 == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -111,11 +114,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Buffer "mo:base/Buffer";
-  ///
-  /// let buffer1 = Buffer.Buffer<Nat>(3);
-  /// let buffer2 = Buffer.Buffer<Nat>(3);
-  /// Buffer.equal(buffer1, buffer2, Nat.equal) // => true
+  /// let a = 111;
+  /// let b = 222;
+  /// assert not Nat.equal(a, b);
   /// ```
   public func equal(x : Nat, y : Nat) : Bool { x == y };
 
@@ -124,8 +125,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.notEqual(1, 2); // => true
-  /// 1 != 2 // => true
+  /// assert Nat.notEqual(1, 2);
+  /// assert 1 != 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -139,8 +140,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.less(1, 2); // => true
-  /// 1 < 2 // => true
+  /// assert Nat.less(1, 2);
+  /// assert 1 < 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -154,8 +155,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.lessOrEqual(1, 2); // => true
-  /// 1 <= 2 // => true
+  /// assert Nat.lessOrEqual(1, 2);
+  /// assert 1 <= 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -169,8 +170,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.greater(2, 1); // => true
-  /// 2 > 1 // => true
+  /// assert Nat.greater(2, 1);
+  /// assert 2 > 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -184,8 +185,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.greaterOrEqual(2, 1); // => true
-  /// 2 >= 1 // => true
+  /// assert Nat.greaterOrEqual(2, 1);
+  /// assert 2 >= 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -199,17 +200,17 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.compare(2, 3) // => #less
+  /// assert Nat.compare(2, 3) == #less;
   /// ```
   ///
   /// This function can be used as value for a high order function, such as a sort function.
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.sort([2, 3, 1], Nat.compare) // => [1, 2, 3]
+  /// import Array "mo:core/Array";
+  /// assert Array.sort([2, 3, 1], Nat.compare) == [1, 2, 3];
   /// ```
-  public func compare(x : Nat, y : Nat) : { #less; #equal; #greater } {
+  public func compare(x : Nat, y : Nat) : Order.Order {
     if (x < y) { #less } else if (x == y) { #equal } else { #greater }
   };
 
@@ -218,8 +219,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.add(1, 2); // => 3
-  /// 1 + 2 // => 3
+  /// assert Nat.add(1, 2) == 3;
+  /// assert 1 + 2 == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -229,8 +230,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.foldLeft([2, 3, 1], 0, Nat.add) // => 6
+  /// import Array "mo:core/Array";
+  /// assert Array.foldLeft([2, 3, 1], 0, Nat.add) == 6;
   /// ```
   public func add(x : Nat, y : Nat) : Nat { x + y };
 
@@ -239,9 +240,9 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.sub(2, 1); // => 1
+  /// assert Nat.sub(2, 1) == 1;
   /// // Add a type annotation to avoid a warning about the subtraction
-  /// 2 - 1 : Nat // => 1
+  /// assert 2 - 1 : Nat == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -251,8 +252,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.foldLeft([2, 3, 1], 10, Nat.sub) // => 4
+  /// import Array "mo:core/Array";
+  /// assert Array.foldLeft([2, 3, 1], 10, Nat.sub) == 4;
   /// ```
   public func sub(x : Nat, y : Nat) : Nat { x - y };
 
@@ -261,8 +262,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.mul(2, 3); // => 6
-  /// 2 * 3 // => 6
+  /// assert Nat.mul(2, 3) == 6;
+  /// assert 2 * 3 == 6;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -272,8 +273,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// import Array "mo:base/Array";
-  /// Array.foldLeft([2, 3, 1], 1, Nat.mul) // => 6
+  /// import Array "mo:core/Array";
+  /// assert Array.foldLeft([2, 3, 1], 1, Nat.mul) == 6;
   /// ```
   public func mul(x : Nat, y : Nat) : Nat { x * y };
 
@@ -285,8 +286,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.div(6, 2); // => 3
-  /// 6 / 2 // => 3
+  /// assert Nat.div(6, 2) == 3;
+  /// assert 6 / 2 == 3;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -300,8 +301,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.rem(6, 4); // => 2
-  /// 6 % 4 // => 2
+  /// assert Nat.rem(6, 4) == 2;
+  /// assert 6 % 4 == 2;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -315,8 +316,8 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// ignore Nat.pow(2, 3); // => 8
-  /// 2 ** 3 // => 8
+  /// assert Nat.pow(2, 3) == 8;
+  /// assert 2 ** 3 == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in addition
@@ -329,7 +330,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.bitshiftLeft(1, 3); // => 8
+  /// assert Nat.bitshiftLeft(1, 3) == 8;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in absence
@@ -344,7 +345,7 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// Nat.bitshiftRight(8, 3); // => 1
+  /// assert Nat.bitshiftRight(8, 3) == 1;
   /// ```
   ///
   /// Note: The reason why this function is defined in this library (in absence
@@ -357,21 +358,21 @@ module {
 
   /// Returns an iterator over `Nat` values from the first to second argument with an exclusive upper bound.
   /// ```motoko include=import
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Nat.range(1, 4);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Nat.range(4, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func range(fromInclusive : Nat, toExclusive : Nat) : Iter.Iter<Nat> = object {
     var n = fromInclusive;
@@ -388,21 +389,21 @@ module {
   /// Returns an iterator over `Nat` values from the first to second argument with an exclusive upper bound,
   /// incrementing by the specified step size. The step can be positive or negative.
   /// ```motoko include=import
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:core/Iter";
   ///
   /// // Positive step
   /// let iter1 = Nat.rangeBy(1, 7, 2);
-  /// assert(?1 == iter1.next());
-  /// assert(?3 == iter1.next());
-  /// assert(?5 == iter1.next());
-  /// assert(null == iter1.next());
+  /// assert iter1.next() == ?1;
+  /// assert iter1.next() == ?3;
+  /// assert iter1.next() == ?5;
+  /// assert iter1.next() == null;
   ///
   /// // Negative step
   /// let iter2 = Nat.rangeBy(7, 1, -2);
-  /// assert(?7 == iter2.next());
-  /// assert(?5 == iter2.next());
-  /// assert(?3 == iter2.next());
-  /// assert(null == iter2.next());
+  /// assert iter2.next() == ?7;
+  /// assert iter2.next() == ?5;
+  /// assert iter2.next() == ?3;
+  /// assert iter2.next() == null;
   /// ```
   ///
   /// If `step` is 0 or if the iteration would not progress towards the bound, returns an empty iterator.
@@ -444,21 +445,21 @@ module {
 
   /// Returns an iterator over the integers from the first to second argument, inclusive.
   /// ```motoko include=import
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Nat.rangeInclusive(1, 3);
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
-  /// assert(?3 == iter.next());
-  /// assert(null == iter.next());
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
+  /// assert iter.next() == ?3;
+  /// assert iter.next() == null;
   /// ```
   ///
   /// If the first argument is greater than the second argument, the function returns an empty iterator.
-  /// ```motoko
-  /// import Iter "mo:base/Iter";
+  /// ```motoko include=import
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Nat.rangeInclusive(3, 1);
-  /// assert(null == iter.next()); // empty iterator
+  /// assert iter.next() == null; // empty iterator
   /// ```
   public func rangeInclusive(from : Nat, to : Nat) : Iter.Iter<Nat> = object {
     var n = from;
@@ -475,23 +476,23 @@ module {
   /// Returns an iterator over the integers from the first to second argument, inclusive,
   /// incrementing by the specified step size. The step can be positive or negative.
   /// ```motoko include=import
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:core/Iter";
   ///
   /// // Positive step
   /// let iter1 = Nat.rangeByInclusive(1, 7, 2);
-  /// assert(?1 == iter1.next());
-  /// assert(?3 == iter1.next());
-  /// assert(?5 == iter1.next());
-  /// assert(?7 == iter1.next());
-  /// assert(null == iter1.next());
+  /// assert iter1.next() == ?1;
+  /// assert iter1.next() == ?3;
+  /// assert iter1.next() == ?5;
+  /// assert iter1.next() == ?7;
+  /// assert iter1.next() == null;
   ///
   /// // Negative step
   /// let iter2 = Nat.rangeByInclusive(7, 1, -2);
-  /// assert(?7 == iter2.next());
-  /// assert(?5 == iter2.next());
-  /// assert(?3 == iter2.next());
-  /// assert(?1 == iter2.next());
-  /// assert(null == iter2.next());
+  /// assert iter2.next() == ?7;
+  /// assert iter2.next() == ?5;
+  /// assert iter2.next() == ?3;
+  /// assert iter2.next() == ?1;
+  /// assert iter2.next() == null;
   /// ```
   ///
   /// If `from == to`, return an iterator which only
@@ -535,12 +536,12 @@ module {
 
   /// Returns an infinite iterator over all possible `Nat` values.
   /// ```motoko include=import
-  /// import Iter "mo:base/Iter";
+  /// import Iter "mo:core/Iter";
   ///
   /// let iter = Nat.allValues();
-  /// assert(?0 == iter.next());
-  /// assert(?1 == iter.next());
-  /// assert(?2 == iter.next());
+  /// assert iter.next() == ?0;
+  /// assert iter.next() == ?1;
+  /// assert iter.next() == ?2;
   /// // ...
   /// ```
   public func allValues() : Iter.Iter<Nat> = object {

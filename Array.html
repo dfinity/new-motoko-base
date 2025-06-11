@@ -6,9 +6,9 @@ immutable arrays are fixed once created.</p>
 <p>WARNING: If you are looking for a list that can grow and shrink in size,
 it is recommended you use <code>List</code> for those purposes.
 Arrays must be created with a fixed size.</p>
-<p>Import from the base library to use this module.</p>
+<p>Import from the core library to use this module.</p>
 <pre><code>motoko name=import
-import Array &quot;mo:base/Array&quot;;</code></pre><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : [<span class="type">T</span>]</code></h4><p><p>Creates an empty array (equivalent to <code>[]</code>).</p>
+import Array &quot;mo:core/Array&quot;;</code></pre><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : [<span class="type">T</span>]</code></h4><p><p>Creates an empty array (equivalent to <code>[]</code>).</p>
 <pre><code>motoko include=import
 let array = Array.empty&lt;Text&gt;();
 assert array == [];</code></pre>
@@ -42,8 +42,8 @@ assert array == [0, 1, 3];</code></pre>
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Transforms an immutable array into a mutable array.</p>
 <pre><code>motoko include=import
-import VarArray &quot;mo:base/VarArray&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+import VarArray &quot;mo:core/VarArray&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let array = [0, 1, 2];
 let varArray = Array.toVarArray&lt;Nat&gt;(array);
@@ -56,7 +56,7 @@ assert VarArray.equal(varArray, [var 0, 1, 3], Nat.equal);</code></pre>
 list of elements). Uses <code>equal</code> to compare elements in the arrays.</p>
 <pre><code>motoko include=import
 // Use the equal function from the Nat module to compare Nats
-import {equal} &quot;mo:base/Nat&quot;;
+import {equal} &quot;mo:core/Nat&quot;;
 
 let array1 = [0, 1, 2, 3];
 let array2 = [0, 1, 2, 3];
@@ -92,7 +92,7 @@ assert result == [1, 2, 3, 4, 5, 6];</code></pre><p>Runtime: O(size1 + size2)</p
 </p></div><div class="declaration"><h4 class="function" id="sort"><code><span class="keyword">public func </span><span class="fnname">sort</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : [<span class="type">T</span>]</code></h4><p><p>Sorts the elements in the array according to <code>compare</code>.
 Sort is deterministic and stable.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let array = [4, 2, 6];
 let sorted = Array.sort(array, Nat.compare);
@@ -142,7 +142,7 @@ assert evenElements == [4, 2, 6];</code></pre><p>Runtime: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="filterMap"><code><span class="keyword">public func </span><span class="fnname">filterMap</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">f</span> : <span class="type">T</span> -&gt; ?<span class="type">R</span>) : [<span class="type">R</span>]</code></h4><p><p>Creates a new array by applying <code>f</code> to each element in <code>array</code>,
 and keeping all non-null elements. The ordering is retained.</p>
 <pre><code>motoko include=import
-import {toText} &quot;mo:base/Nat&quot;;
+import {toText} &quot;mo:core/Nat&quot;;
 
 let array = [4, 2, 0, 1];
 let newArray =
@@ -193,7 +193,7 @@ assert newArray == [1, -1, 2, -2, 3, -3, 4, -4];</code></pre><p>Runtime: O(size)
 and progessively combining elements into <code>base</code> with <code>combine</code>. Iteration runs
 left to right.</p>
 <pre><code>motoko include=import
-import {add} &quot;mo:base/Nat&quot;;
+import {add} &quot;mo:core/Nat&quot;;
 
 let array = [4, 2, 0, 1];
 let sum =
@@ -211,7 +211,7 @@ assert sum == 7;</code></pre>
 and progessively combining elements into <code>base</code> with <code>combine</code>. Iteration runs
 right to left.</p>
 <pre><code>motoko include=import
-import {toText} &quot;mo:base/Nat&quot;;
+import {toText} &quot;mo:core/Nat&quot;;
 
 let array = [1, 9, 4, 8];
 let bookTitle = Array.foldRight&lt;Nat, Text&gt;(array, &quot;&quot;, func(x, acc) = toText(x) # acc);
@@ -312,7 +312,7 @@ assert Array.any&lt;Nat&gt;(array, func x = x &gt; 3);</code></pre>
 <p>*Runtime and space assumes that <code>predicate</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="indexOf"><code><span class="keyword">public func </span><span class="fnname">indexOf</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">element</span> : <span class="type">T</span>, <br/>  <span class="parameter">array</span> : [<span class="type">T</span>], <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : ?<span class="type">Nat</span></code></h4><p><p>Returns the index of the first <code>element</code> in the <code>array</code>.</p>
 <pre><code>motoko include=import
-import Char &quot;mo:base/Char&quot;;
+import Char &quot;mo:core/Char&quot;;
 let array = ['c', 'o', 'f', 'f', 'e', 'e'];
 assert Array.indexOf&lt;Char&gt;('c', array, Char.equal) == ?0;
 assert Array.indexOf&lt;Char&gt;('f', array, Char.equal) == ?2;
@@ -322,7 +322,7 @@ assert Array.indexOf&lt;Char&gt;('g', array, Char.equal) == null;</code></pre>
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="nextIndexOf"><code><span class="keyword">public func </span><span class="fnname">nextIndexOf</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">element</span> : <span class="type">T</span>, <br/>  <span class="parameter">array</span> : [<span class="type">T</span>], <br/>  <span class="parameter">fromInclusive</span> : <span class="type">Nat</span>, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : ?<span class="type">Nat</span></code></h4><p><p>Returns the index of the next occurence of <code>element</code> in the <code>array</code> starting from the <code>from</code> index (inclusive).</p>
 <pre><code>motoko include=import
-import Char &quot;mo:base/Char&quot;;
+import Char &quot;mo:core/Char&quot;;
 let array = ['c', 'o', 'f', 'f', 'e', 'e'];
 assert Array.nextIndexOf&lt;Char&gt;('c', array, 0, Char.equal) == ?0;
 assert Array.nextIndexOf&lt;Char&gt;('f', array, 0, Char.equal) == ?2;
@@ -334,7 +334,7 @@ assert Array.nextIndexOf&lt;Char&gt;('f', array, 4, Char.equal) == null;</code><
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="lastIndexOf"><code><span class="keyword">public func </span><span class="fnname">lastIndexOf</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">element</span> : <span class="type">T</span>, <br/>  <span class="parameter">array</span> : [<span class="type">T</span>], <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : ?<span class="type">Nat</span></code></h4><p><p>Returns the index of the last <code>element</code> in the <code>array</code>.</p>
 <pre><code>motoko include=import
-import Char &quot;mo:base/Char&quot;;
+import Char &quot;mo:core/Char&quot;;
 let array = ['c', 'o', 'f', 'f', 'e', 'e'];
 assert Array.lastIndexOf&lt;Char&gt;('c', array, Char.equal) == ?0;
 assert Array.lastIndexOf&lt;Char&gt;('f', array, Char.equal) == ?3;
@@ -348,7 +348,7 @@ assert Array.lastIndexOf&lt;Char&gt;('g', array, Char.equal) == null;</code></pr
 <p>If the indices are out of bounds, they are clamped to the array bounds.
 If the first index is greater than the second, the function returns an empty iterator.</p>
 <pre><code>motoko include=import
-import Char &quot;mo:base/Char&quot;;
+import Char &quot;mo:core/Char&quot;;
 let array = ['c', 'o', 'f', 'f', 'e', 'e'];
 assert Array.prevIndexOf&lt;Char&gt;('c', array, array.size(), Char.equal) == ?0;
 assert Array.prevIndexOf&lt;Char&gt;('e', array, array.size(), Char.equal) == ?5;
@@ -392,7 +392,7 @@ assert slice2 == [2, 3, 4];</code></pre>
 <p>Space: O(toExclusive - fromInclusive)</p>
 </p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>], <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Converts the array to its textual representation using <code>f</code> to convert each element to <code>Text</code>.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let array = [1, 2, 3];
 let text = Array.toText&lt;Nat&gt;(array, Nat.toText);
@@ -407,14 +407,14 @@ or greater than <code>array2</code> respectively.</p>
 <p>If arrays have different sizes but all elements up to the shorter length are equal,
 the shorter array is considered #less than the longer array.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let array1 = [1, 2, 3];
 let array2 = [1, 2, 4];
 assert Array.compare&lt;Nat&gt;(array1, array2, Nat.compare) == #less;</code></pre>
 
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let array3 = [1, 2];
 let array4 = [1, 2, 3];

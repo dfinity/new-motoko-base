@@ -8,7 +8,7 @@ They can be used to:</p>
 the Iterator that cannot be put back, so keep that in mind when sharing
 iterators between consumers.</p>
 <pre><code>motoko name=import
-import Iter &quot;mo:base/Iter&quot;;</code></pre>
+import Iter &quot;mo:core/Iter&quot;;</code></pre>
 
 <p>An iterator can be iterated over using a <code>for</code> loop:</p>
 <pre class="motoko"><code class="motoko">let iter = [1, 2, 3].values();
@@ -172,7 +172,7 @@ assert found == ?2;</code></pre><p>Runtime: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">value</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Checks if an element is produced by an iterator.
 It stops consuming elements from the original iterator as soon as the predicate returns true.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let iter = [1, 2, 3, 4].values();
 assert Iter.contains&lt;Nat&gt;(iter, Nat.equal, 2);</code></pre></p></div><div class="declaration"><h4 class="function" id="foldLeft"><code><span class="keyword">public func </span><span class="fnname">foldLeft</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<br/>  <span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">initial</span> : <span class="type">R</span>, <br/>  <span class="parameter">combine</span> : (<span class="type">R</span>, <span class="type">T</span>) -&gt; <span class="type">R</span><br/>) : <span class="type">R</span></code></h4><p><p>Reduces an iterator to a single value by applying a function to each element and an accumulator.
@@ -194,12 +194,12 @@ assert result == &quot;(A(B(CS)))&quot;;</code></pre></p></div><div class="decla
 The accumulator is initialized with the first element produced by the iterator.
 When the iterator is empty, it returns <code>null</code>.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let iter = [1, 2, 3].values();
 assert ?6 == Iter.reduce&lt;Nat&gt;(iter, Nat.add);</code></pre></p></div><div class="declaration"><h4 class="function" id="scanLeft"><code><span class="keyword">public func </span><span class="fnname">scanLeft</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<br/>  <span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">initial</span> : <span class="type">R</span>, <br/>  <span class="parameter">combine</span> : (<span class="type">R</span>, <span class="type">T</span>) -&gt; <span class="type">R</span><br/>) : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">R</span>&gt;</code></h4><p><p>Produces an iterator containing cumulative results of applying the <code>combine</code> operator going left to right, including the <code>initial</code> value.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let iter = [1, 2, 3].values();
 let scanned = Iter.scanLeft&lt;Nat, Nat&gt;(iter, 0, Nat.add);
@@ -209,7 +209,7 @@ assert result == [0, 1, 3, 6];</code></pre></p></div><div class="declaration"><h
 it has to materialize the entire iterator in memory to get to the last element to start applying the <code>combine</code> function.
 <strong>Use <code>scanLeft</code> when possible to avoid the extra memory overhead</strong>.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let iter = [1, 2, 3].values();
 let scanned = Iter.scanRight&lt;Nat, Nat&gt;(iter, 0, Nat.add);
@@ -222,13 +222,13 @@ let result = Iter.toArray(iter);
 assert result == [1, 2, 3];</code></pre></p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : ?<span class="type">T</span></code></h4><p><p>Consumes an iterator and returns the first maximum element produced by the iterator.
 If the iterator is empty, it returns <code>null</code>.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let iter = [1, 2, 3].values();
 assert ?3 == Iter.max&lt;Nat&gt;(iter, Nat.compare);</code></pre></p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : ?<span class="type">T</span></code></h4><p><p>Consumes an iterator and returns the first minimum element produced by the iterator.
 If the iterator is empty, it returns <code>null</code>.</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let iter = [1, 2, 3].values();
 assert ?1 == Iter.min&lt;Nat&gt;(iter, Nat.compare);</code></pre></p></div><div class="declaration"><h4 class="function" id="infinite"><code><span class="keyword">public func </span><span class="fnname">infinite</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>) : <a href="#type.Iter"><span class="type">Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates an iterator that produces an infinite sequence of <code>x</code>.</p>

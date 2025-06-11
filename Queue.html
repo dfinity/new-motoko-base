@@ -6,7 +6,7 @@ Elements can be added and removed at the two ends.</p>
 <ul><li>Queue (FIFO) by using <code>pushBack()</code> and <code>popFront()</code></li><li>Stack (LIFO) by using <code>pushFront()</code> and <code>popFront()</code>.</li></ul>
 
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let orders = Queue.empty&lt;Text&gt;();
@@ -24,7 +24,7 @@ persistent actor {
 <ul><li>Runtime: <code>O(1)</code> for push, pop, and peek operations.</li><li>Space: <code>O(n)</code>.
 <code>n</code> denotes the number of elements stored in the queue.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Queue.type.Queue"><span class="type">Types.Queue.Queue</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts a mutable queue to an immutable, purely functional queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -36,8 +36,8 @@ Space: O(n)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">pureQueue</span> : <a href="pure/Queue.html#type.Queue"><span class="type">PureQueue.Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts an immutable, purely functional queue to a mutable queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
-import PureQueue &quot;mo:base/pure/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
+import PureQueue &quot;mo:core/pure/Queue&quot;;
 
 persistent actor {
   let pureQueue = PureQueue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -49,7 +49,7 @@ Space: O(n)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty mutable double-ended queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.empty&lt;Text&gt;();
@@ -60,7 +60,7 @@ persistent actor {
 Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new queue with a single element.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.singleton&lt;Nat&gt;(123);
@@ -71,7 +71,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="clear"><code><span class="keyword">public func </span><span class="fnname">clear</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Removes all elements from the queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -83,7 +83,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="clone"><code><span class="keyword">public func </span><span class="fnname">clone</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a deep copy of the queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let original = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -98,7 +98,7 @@ Space: O(n)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Returns the number of elements in the queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Text&gt;([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;].values());
@@ -109,7 +109,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Bool</span></code></h4><p><p>Returns <code>true</code> if the queue contains no elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.empty&lt;Nat&gt;();
@@ -120,8 +120,8 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Checks if an element exists in the queue using the provided equality function.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -134,7 +134,7 @@ Space: O(1)
 </p></div><div class="declaration"><h4 class="function" id="peekFront"><code><span class="keyword">public func </span><span class="fnname">peekFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the first element in the queue without removing it.
 Returns null if the queue is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -146,7 +146,7 @@ Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="peekBack"><code><span class="keyword">public func </span><span class="fnname">peekBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the last element in the queue without removing it.
 Returns null if the queue is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -157,7 +157,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="pushFront"><code><span class="keyword">public func </span><span class="fnname">pushFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">element</span> : <span class="type">T</span>)</code></h4><p><p>Adds an element to the front of the queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.empty&lt;Nat&gt;();
@@ -169,7 +169,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="pushBack"><code><span class="keyword">public func </span><span class="fnname">pushBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">element</span> : <span class="type">T</span>)</code></h4><p><p>Adds an element to the back of the queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.empty&lt;Nat&gt;();
@@ -182,7 +182,7 @@ Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="popFront"><code><span class="keyword">public func </span><span class="fnname">popFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Removes and returns the first element in the queue.
 Returns null if the queue is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -195,7 +195,7 @@ Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="popBack"><code><span class="keyword">public func </span><span class="fnname">popBack</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Removes and returns the last element in the queue.
 Returns null if the queue is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -207,7 +207,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new queue from an iterator.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Text&gt;([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;].values());
@@ -220,7 +220,7 @@ Space: O(n)
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator over the elements in the queue.
 Iterates from front to back.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 persistent actor {
   let queue = Queue.fromIter&lt;Text&gt;([&quot;A&quot;, &quot;B&quot;, &quot;C&quot;].values());
   transient let iter = Queue.values(queue);
@@ -234,7 +234,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Tests whether all elements in the queue satisfy the given predicate.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([2, 4, 6].values());
@@ -245,7 +245,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Tests whether any element in the queue satisfies the given predicate.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -257,7 +257,7 @@ Space: O(1)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">operation</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Applies the given operation to all elements in the queue.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   var sum = 0;
@@ -271,7 +271,7 @@ Space: O(1)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T</span>, <span class="type">U</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">project</span> : <span class="type">T</span> -&gt; <span class="type">U</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">U</span>&gt;</code></h4><p><p>Creates a new queue by applying the given function to all elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -284,7 +284,7 @@ Space: O(n)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">criterion</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new queue containing only elements that satisfy the given predicate.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3, 4].values());
@@ -298,7 +298,7 @@ Space: O(n)
 </p></div><div class="declaration"><h4 class="function" id="filterMap"><code><span class="keyword">public func </span><span class="fnname">filterMap</span>&lt;<span class="type">T</span>, <span class="type">U</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">project</span> : <span class="type">T</span> -&gt; ?<span class="type">U</span>) : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">U</span>&gt;</code></h4><p><p>Creates a new queue by applying the given function to all elements
 and keeping only the non-null results.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3, 4].values());
@@ -316,8 +316,8 @@ Space: O(n)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Compares two queues for equality using the provided equality function.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue1 = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -330,8 +330,8 @@ Space: O(1)
 <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">format</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Converts a queue to its string representation using the provided element formatter.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -344,8 +344,8 @@ Space: O(n)
 </p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compareItem</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compares two queues using the provided comparison function.
 Returns #less, #equal, or #greater.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Queue &quot;mo:base/Queue&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Queue &quot;mo:core/Queue&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue1 = Queue.fromIter&lt;Nat&gt;([1, 2].values());

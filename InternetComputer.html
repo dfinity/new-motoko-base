@@ -7,8 +7,8 @@ Returns the response to the call, an IC <em>reply</em> or <em>reject</em>, as a 
 <p>Note: <code>call</code> is an asynchronous function and can only be applied in an asynchronous context.</p>
 <p>Example:</p>
 <pre><code>motoko no-repl
-import IC &quot;mo:base/InternetComputer&quot;;
-import Principal &quot;mo:base/Principal&quot;;
+import IC &quot;mo:core/InternetComputer&quot;;
+import Principal &quot;mo:core/Principal&quot;;
 
 persistent actor {
   type OutputType = { decimals : Nat32 };
@@ -34,7 +34,7 @@ instructions performed during the execution of <code>comp()</code>.</p>
 <p>NB: <code>countInstructions(comp)</code> will <em>not</em> account for any deferred garbage collection costs incurred by <code>comp()</code>.</p>
 <p>Example:</p>
 <pre><code>motoko no-repl
-import IC &quot;mo:base/InternetComputer&quot;;
+import IC &quot;mo:core/InternetComputer&quot;;
 
 let count = IC.countInstructions(func() {
   // ...
@@ -52,7 +52,7 @@ let count = IC.countInstructions(func() {
 <p>Consult <a href="https://internetcomputer.org/docs/current/references/ic-interface-spec#system-api-performance-counter">Performance Counter</a> for details.</p>
 <p>Example:</p>
 <pre><code>motoko no-repl
-import IC &quot;mo:base/InternetComputer&quot;;
+import IC &quot;mo:core/InternetComputer&quot;;
 
 let c1 = IC.performanceCounter(1);
 // ...

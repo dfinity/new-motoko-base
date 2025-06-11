@@ -3,8 +3,8 @@
 A set is a collection of elements without duplicates.
 The set data structure type is stable and can be used for orthogonal persistence.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([3, 1, 2, 3].vals(), Nat.compare);
@@ -19,10 +19,10 @@ persistent actor {
 <ul><li>Runtime: <code>O(log(n))</code> worst case cost per insertion, removal, and retrieval operation.</li><li>Space: <code>O(n)</code> for storing the entire tree,
 where <code>n</code> denotes the number of elements stored in the set.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Set"><span class="keyword">type </span><span class="type">Set</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#Set.type.Set"><span class="type">Types.Set.Set</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert the mutable set to an immutable, purely functional set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import PureSet &quot;mo:base/pure/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import PureSet &quot;mo:core/pure/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([0, 2, 1].values(), Nat.compare);
@@ -37,10 +37,10 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 <p>Note: Creates <code>O(n * log(n))</code> temporary objects that will be collected as garbage.</p>
 </p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="pure/Set.html#type.Set"><span class="type">PureSet.Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable, purely functional set to a mutable set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import PureSet &quot;mo:base/pure/Set&quot;;
-import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import PureSet &quot;mo:core/pure/Set&quot;;
+import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let pureSet = PureSet.fromIter([3, 1, 2].values(), Nat.compare);
@@ -54,8 +54,8 @@ where <code>n</code> denotes the number of elements stored in the set and
 assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
 </p></div><div class="declaration"><h4 class="function" id="clone"><code><span class="keyword">public func </span><span class="fnname">clone</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a copy of the mutable set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let originalSet = Set.fromIter([1, 2, 3].values(), Nat.compare);
@@ -70,8 +70,8 @@ Space: <code>O(n)</code>.
 where <code>n</code> denotes the number of elements stored in the set.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty mutable set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -82,7 +82,7 @@ persistent actor {
 Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new mutable set with a single element.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
 
 persistent actor {
   let cities = Set.singleton&lt;Text&gt;(&quot;Zurich&quot;);
@@ -93,8 +93,8 @@ persistent actor {
 Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="clear"><code><span class="keyword">public func </span><span class="fnname">clear</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Remove all the elements from the set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Text &quot;mo:base/Text&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Text &quot;mo:core/Text&quot;;
 
 persistent actor {
   let cities = Set.empty&lt;Text&gt;();
@@ -111,8 +111,8 @@ persistent actor {
 Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Bool</span></code></h4><p><p>Determines whether a set is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -129,8 +129,8 @@ persistent actor {
 Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Return the number of elements in a set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -146,8 +146,8 @@ Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Types.html#type.Order"><span class="type">Types.Order</span></a><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether two imperative sets are equal.
 Both sets have to be constructed by the same comparison function.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([1, 2].values(), Nat.compare);
@@ -161,8 +161,8 @@ persistent actor {
 Space: <code>O(1)</code>.</p>
 </p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Tests whether the set contains the provided element.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -181,9 +181,9 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 </p></div><div class="declaration"><h4 class="function" id="add"><code><span class="keyword">public func </span><span class="fnname">add</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>)</code></h4><p><p>Add a new element to a set.
 No effect if the element already exists in the set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -200,9 +200,9 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 </p></div><div class="declaration"><h4 class="function" id="insert"><code><span class="keyword">public func </span><span class="fnname">insert</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Insert a new element in the set.
 Returns true if the element is new, false if the element was already contained in the set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -218,9 +218,9 @@ where <code>n</code> denotes the number of elements stored in the set and
 assuming that the <code>compare</code> function implements an <code>O(1)</code> comparison.</p>
 </p></div><div class="declaration"><h4 class="function" id="remove"><code><span class="keyword">public func </span><span class="fnname">remove</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : ()</code></h4><p><p>Deletes an element from a set.
 Returns <code>true</code> if the element was contained in the set, <code>false</code> if not.</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
@@ -243,9 +243,9 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 Returns true if the element was contained in the set, false if not.
 Deletes an element from a set.
 Returns true if the element was contained in the set, false if not.</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
@@ -266,8 +266,8 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 </p></div><div class="declaration"><h4 class="function" id="max"><code><span class="keyword">public func </span><span class="fnname">max</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Retrieves the maximum element from the set.
 If the set is empty, returns <code>null</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -284,8 +284,8 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 </p></div><div class="declaration"><h4 class="function" id="min"><code><span class="keyword">public func </span><span class="fnname">min</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Retrieves the minimum element from the set.
 If the set is empty, returns <code>null</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.empty&lt;Nat&gt;();
@@ -302,8 +302,8 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator over the elements in the set,
 traversing the elements in the ascending order.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 2, 3, 1].values(), Nat.compare);
@@ -321,9 +321,9 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 </p></div><div class="declaration"><h4 class="function" id="valuesFrom"><code><span class="keyword">public func </span><span class="fnname">valuesFrom</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator over the elements in the set,
 starting from a given element in ascending order.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 3, 1].values(), Nat.compare);
@@ -337,8 +337,8 @@ where <code>n</code> denotes the number of key-value entries stored in the map.<
 </p></div><div class="declaration"><h4 class="function" id="reverseValues"><code><span class="keyword">public func </span><span class="fnname">reverseValues</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator over the elements in the set,
 traversing the elements in the descending order.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 2, 3, 1].values(), Nat.compare);
@@ -356,9 +356,9 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 </p></div><div class="declaration"><h4 class="function" id="reverseValuesFrom"><code><span class="keyword">public func </span><span class="fnname">reverseValuesFrom</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">element</span> : <span class="type">T</span><br/>) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator over the elements in the set,
 starting from a given element in descending order.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 1, 3].values(), Nat.compare);
@@ -373,9 +373,9 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 Potential duplicate elements in the iterator are ignored, i.e.
 multiple occurrence of an equal element only occur once in the set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([3, 1, 2, 1].values(), Nat.compare);
@@ -389,8 +389,8 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 </p></div><div class="declaration"><h4 class="function" id="isSubset"><code><span class="keyword">public func </span><span class="fnname">isSubset</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <span class="type">Bool</span></code></h4><p><p>Test whether <code>set1</code> is a sub-set of <code>set2</code>, i.e. each element in <code>set1</code> is
 also contained in <code>set2</code>. Returns <code>true</code> if both sets are equal.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([1, 2].values(), Nat.compare);
@@ -409,9 +409,9 @@ i.e. a new set that all the elements that exist in at least on of the two sets.
 Potential duplicates are ignored, i.e. if the same element occurs in both <code>set1</code>
 and <code>set2</code>, it only occurs once in the returned set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
@@ -427,9 +427,9 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 </p></div><div class="declaration"><h4 class="function" id="intersection"><code><span class="keyword">public func </span><span class="fnname">intersection</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new set that is the intersection of <code>set1</code> and <code>set2</code>,
 i.e. a new set that contains all the elements that exist in both sets.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([0, 1, 2].values(), Nat.compare);
@@ -445,9 +445,9 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 </p></div><div class="declaration"><h4 class="function" id="difference"><code><span class="keyword">public func </span><span class="fnname">difference</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set1</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">set2</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new set that is the difference between <code>set1</code> and <code>set2</code> (<code>set1</code> minus <code>set2</code>),
 i.e. a new set that contains all the elements of <code>set1</code> that do not exist in <code>set2</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
@@ -463,9 +463,9 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 </p></div><div class="declaration"><h4 class="function" id="addAll"><code><span class="keyword">public func </span><span class="fnname">addAll</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a>, <br/>  <span class="parameter">iter</span> : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;<br/>)</code></h4><p><p>Adds all elements from <code>iter</code> to the specified <code>set</code>.
 This is equivalent to <code>Set.union()</code> but modifies the set in place.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([1, 2, 3].values(), Nat.compare);
@@ -481,9 +481,9 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 Returns <code>true</code> if any value was present in the set, otherwise false.
 The return value indicates whether the size of the set has changed.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 1, 2].values(), Nat.compare);
@@ -499,9 +499,9 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 Returns true if any value was not contained in the original set, otherwise false.
 The return value indicates whether the size of the set has changed.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 1, 2].values(), Nat.compare);
@@ -518,9 +518,9 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 Returns <code>true</code> if and only if the size of the set has changed.
 Modifies the set in place.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set = Set.fromIter([3, 1, 2].values(), Nat.compare);
@@ -531,8 +531,8 @@ persistent actor {
 }</code></pre></p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">operation</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Apply an operation on each element contained in the set.
 The operation is applied in ascending order of the elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
@@ -552,9 +552,9 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 Create a copy of the mutable set that only contains the elements
 that fulfil the criterion function.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let numbers = Set.fromIter([0, 3, 1, 2].values(), Nat.compare);
@@ -573,10 +573,10 @@ assuming that the <code>compare</code> function implements an <code>O(1)</code> 
 Apply a mapping function to each element in the set and
 collect the mapped elements in a new mutable set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Text &quot;mo:base/Text&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Text &quot;mo:core/Text&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let numbers = Set.fromIter([3, 1, 2].values(), Nat.compare);
@@ -596,10 +596,10 @@ Apply a mapping function <code>project</code> to all elements in the set and col
 elements, for which the function returns a non-null new element. Collect all
 non-discarded new elements in a new mutable set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Text &quot;mo:base/Text&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Text &quot;mo:core/Text&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let numbers = Set.fromIter([3, 0, 2, 1].values(), Nat.compare);
@@ -621,8 +621,8 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 </p></div><div class="declaration"><h4 class="function" id="foldLeft"><code><span class="keyword">public func </span><span class="fnname">foldLeft</span>&lt;<span class="type">T</span>, <span class="type">A</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">base</span> : <span class="type">A</span>, <br/>  <span class="parameter">combine</span> : (<span class="type">A</span>, <span class="type">T</span>) -&gt; <span class="type">A</span><br/>) : <span class="type">A</span></code></h4><p><p>Iterate all elements in ascending order,
 and accumulate the elements by applying the combine function, starting from a base value.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 3, 2, 1].values(), Nat.compare);
@@ -644,8 +644,8 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 </p></div><div class="declaration"><h4 class="function" id="foldRight"><code><span class="keyword">public func </span><span class="fnname">foldRight</span>&lt;<span class="type">T</span>, <span class="type">A</span>&gt;(<br/>  <span class="parameter">set</span> : <a href="#type.Set"><span class="type">Set</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">base</span> : <span class="type">A</span>, <br/>  <span class="parameter">combine</span> : (<span class="type">T</span>, <span class="type">A</span>) -&gt; <span class="type">A</span><br/>) : <span class="type">A</span></code></h4><p><p>Iterate all elements in descending order,
 and accumulate the elements by applying the combine function, starting from a base value.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter([0, 3, 2, 1].values(), Nat.compare);
@@ -670,9 +670,9 @@ Any duplicates are ignored, i.e. if an element occurs
 in several of the iterated sets, it only occurs once in the result set.</p>
 <p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([1, 2, 3].values(), Nat.compare);
@@ -692,10 +692,10 @@ Any duplicates are ignored, i.e. if the same element occurs in multiple element 
 it only occurs once in the result set.</p>
 <p>Assumes all sets are ordered by <code>compare</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Order &quot;mo:base/Order&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Order &quot;mo:core/Order&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   func setCompare(first: Set.Set&lt;Nat&gt;, second: Set.Set&lt;Nat&gt;) : Order.Order {
@@ -718,8 +718,8 @@ and assuming that the <code>compare</code> function implements an <code>O(1)</co
 the <code>predicate</code> function returns <code>true</code> for all elements in the set.
 Returns <code>true</code> for an empty set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
@@ -738,8 +738,8 @@ where <code>n</code> denotes the number of elements stored in the set.</p>
 the <code>predicate</code> function returns <code>true</code> for at least one element in the set.
 Returns <code>false</code> for an empty set.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
@@ -761,8 +761,8 @@ Traps if the internal set structure is invalid.</p>
 Primarily to be used for testing and debugging.
 The elements are formatted according to <code>elementFormat</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set = Set.fromIter&lt;Nat&gt;([0, 3, 1, 2].values(), Nat.compare);
@@ -790,8 +790,8 @@ Greater:
 <code>set1</code> is neither less nor equal <code>set2</code>.</li></ul>
 
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Set &quot;mo:base/Set&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Set &quot;mo:core/Set&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let set1 = Set.fromIter([0, 1].values(), Nat.compare);

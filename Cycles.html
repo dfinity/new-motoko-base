@@ -13,7 +13,7 @@ If this total exceeds <code>balance()</code>, the caller traps, aborting the cal
 Note that attaching cycles to a call to a local function call or <code>async</code> expression just transfers cycles from the current actor to itself.</p>
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
-import Cycles &quot;mo:base/Cycles&quot;;
+import Cycles &quot;mo:core/Cycles&quot;;
 
 persistent actor {
   public func main() : async () {
@@ -34,7 +34,7 @@ persistent actor {
 }</code></pre><div class="declaration"><h4 class="function" id="balance"><code><span class="keyword">public func </span><span class="fnname">balance</span>() : (<span class="parameter">amount</span> : <span class="type">Nat</span>)</code></h4><p><p>Returns the actor's current balance of cycles as <code>amount</code>.</p>
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
-import Cycles &quot;mo:base/Cycles&quot;;
+import Cycles &quot;mo:core/Cycles&quot;;
 
 persistent actor {
   public func main() : async() {
@@ -48,7 +48,7 @@ On exit from the current shared function or async expression via <code>return</c
 any remaining available amount is automatically refunded to the caller/context.</p>
 <p>Example for use on the ICP:</p>
 <pre><code>motoko no-repl
-import Cycles &quot;mo:base/Cycles&quot;;
+import Cycles &quot;mo:core/Cycles&quot;;
 
 persistent actor {
   public func main() : async() {
@@ -60,7 +60,7 @@ Returns the amount actually transferred, which may be less than
 requested, for example, if less is available, or if canister balance limits are reached.</p>
 <p>Example for use on the ICP (for simplicity, only transferring cycles to itself):</p>
 <pre><code>motoko no-repl
-import Cycles &quot;mo:base/Cycles&quot;;
+import Cycles &quot;mo:core/Cycles&quot;;
 
 persistent actor {
   public func main() : async() {
@@ -78,7 +78,7 @@ Instead, refunds are automatically added to the current balance,
 whether or not <code>refunded</code> is used to observe them.</p>
 <p>Example for use on the ICP (for simplicity, only transferring cycles to itself):</p>
 <pre><code>motoko no-repl
-import Cycles &quot;mo:base/Cycles&quot;;
+import Cycles &quot;mo:core/Cycles&quot;;
 
 persistent actor {
   func operation() : async() {
@@ -94,7 +94,7 @@ cycle balance. The burned cycles are irrevocably lost and not available to any
 other principal either.</p>
 <p>Example for use on the IC:</p>
 <pre><code>motoko no-repl
-import Cycles &quot;mo:base/Cycles&quot;;
+import Cycles &quot;mo:core/Cycles&quot;;
 
 actor {
   public func main() : async() {

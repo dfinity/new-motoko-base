@@ -24,22 +24,22 @@ The <code>Error</code> type is opaque.</p>
   #call_error : { err_code :  Nat32 }
 };</code></pre></p></div><div class="declaration"><h4 class="function" id="reject"><code><span class="keyword">public func </span><span class="fnname">reject</span>(<span class="parameter">message</span> : <span class="type">Text</span>) : <a href="#type.Error"><span class="type">Error</span></a></code></h4><p><p>Create an error from the message with the code <code>#canister_reject</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Error &quot;mo:base/Error&quot;;
+<pre class="motoko"><code class="motoko">import Error &quot;mo:core/Error&quot;;
 
 Error.reject(&quot;Example error&quot;) // can be used as throw argument</code></pre></p></div><div class="declaration"><h4 class="function" id="code"><code><span class="keyword">public func </span><span class="fnname">code</span>(<span class="parameter">error</span> : <a href="#type.Error"><span class="type">Error</span></a>) : <a href="#type.ErrorCode"><span class="type">ErrorCode</span></a></code></h4><p><p>Returns the code of an error.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Error &quot;mo:base/Error&quot;;
+<pre class="motoko"><code class="motoko">import Error &quot;mo:core/Error&quot;;
 
 let error = Error.reject(&quot;Example error&quot;);
 Error.code(error) // #canister_reject</code></pre></p></div><div class="declaration"><h4 class="function" id="message"><code><span class="keyword">public func </span><span class="fnname">message</span>(<span class="parameter">error</span> : <a href="#type.Error"><span class="type">Error</span></a>) : <span class="type">Text</span></code></h4><p><p>Returns the message of an error.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Error &quot;mo:base/Error&quot;;
+<pre class="motoko"><code class="motoko">import Error &quot;mo:core/Error&quot;;
 
 let error = Error.reject(&quot;Example error&quot;);
 Error.message(error) // &quot;Example error&quot;</code></pre></p></div><div class="declaration"><h4 class="function" id="isRetryPossible"><code><span class="keyword">public func </span><span class="fnname">isRetryPossible</span>(<span class="parameter">error</span> : <a href="#type.Error"><span class="type">Error</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns whether retrying to send a message may result in success.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Error &quot;mo:base/Error&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+<pre class="motoko"><code class="motoko">import Error &quot;mo:core/Error&quot;;
+import Debug &quot;mo:core/Debug&quot;;
 
 persistent actor {
   type CallableActor = actor {

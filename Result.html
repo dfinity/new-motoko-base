@@ -3,13 +3,13 @@
 <p>The Result type is used for returning and propagating errors. It has two variants:
 <code>#ok(Ok)</code>, representing success and containing a value, and <code>#err(Err)</code>, representing
 error and containing an error value.</p>
-<p>Import from the base library to use this module.</p>
+<p>Import from the core library to use this module.</p>
 <pre><code>motoko name=import
-import Result &quot;mo:base/Result&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Result"><span class="keyword">type </span><span class="type">Result</span>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt; = <a href="Types.html#type.Result"><span class="type">Types.Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;</h4><p><p>The Result type used for returning and propagating errors.</p>
+import Result &quot;mo:core/Result&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Result"><span class="keyword">type </span><span class="type">Result</span>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt; = <a href="Types.html#type.Result"><span class="type">Types.Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;</h4><p><p>The Result type used for returning and propagating errors.</p>
 <p>The simplest way of working with Results is to pattern match on them.
 For example:</p>
 <pre><code>motoko include=import
-import Text &quot;mo:base/Text&quot;;
+import Text &quot;mo:core/Text&quot;;
 
 type Email = Text;
 type ErrorMessage = Text;
@@ -34,8 +34,8 @@ assert validateEmail(&quot;@domain.com&quot;) == #err(&quot;Username cannot be e
 assert validateEmail(&quot;user@invalid&quot;) == #err(&quot;Invalid domain format&quot;);</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;(<br/>  <span class="parameter">result1</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;, <br/>  <span class="parameter">result2</span> : <a href="#type.Result"><span class="type">Result</span></a>&lt;<span class="type">Ok</span>, <span class="type">Err</span>&gt;, <br/>  <span class="parameter">equalOk</span> : (<span class="type">Ok</span>, <span class="type">Ok</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">equalErr</span> : (<span class="type">Err</span>, <span class="type">Err</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Compares two Results for equality.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Text &quot;mo:base/Text&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Text &quot;mo:core/Text&quot;;
 
 let result1 = #ok 10;
 let result2 = #ok 10;
@@ -46,8 +46,8 @@ assert not Result.equal&lt;Nat, Text&gt;(result1, result3, Nat.equal, Text.equal
 arbitrary, but it lets you for example use Results as keys in ordered maps.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Text &quot;mo:base/Text&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Text &quot;mo:core/Text&quot;;
 
 let result1 = #ok 5;
 let result2 = #ok 10;

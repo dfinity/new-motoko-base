@@ -15,10 +15,10 @@ assert iter.next() == null;
 let concat = text # &quot; 👋&quot;;
 assert concat == &quot;Hello! 👋&quot;;</code></pre>
 
-<p>The <code>&quot;mo:base/Text&quot;</code> module defines additional operations on <code>Text</code> values.</p>
-<p>Import the module from the base library:</p>
+<p>The <code>&quot;mo:core/Text&quot;</code> module defines additional operations on <code>Text</code> values.</p>
+<p>Import the module from the core library:</p>
 <pre><code>motoko name=import
-import Text &quot;mo:base/Text&quot;;</code></pre>
+import Text &quot;mo:core/Text&quot;;</code></pre>
 
 <p>Note: <code>Text</code> values are represented as ropes of UTF-8 character sequences with O(1) concatenation.</p>
 <div class="declaration"><h4 class="type-declaration" id="type.Text"><span class="keyword">type </span><span class="type">Text</span> = <span class="type">Prim.Types.Text</span></h4><p><p>The type corresponding to primitive <code>Text</code> values.</p>
@@ -59,8 +59,8 @@ Space: O(t.size())</p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>(<span class="parameter">t</span> : <a href="#type.Text"><span class="type">Text</span></a>) : [<span class="keyword">var </span><span class="type">Char</span>]</code></h4><p><p>Creates a new mutable <code>Array</code> containing characters of the given <code>Text</code>.</p>
 <p>Equivalent to <code>Iter.toArrayMut(t.chars())</code>.</p>
 <pre><code>motoko include=import
-import VarArray &quot;mo:base/VarArray&quot;;
-import Char &quot;mo:base/Char&quot;;
+import VarArray &quot;mo:core/VarArray&quot;;
+import Char &quot;mo:core/Char&quot;;
 
 assert VarArray.equal(Text.toVarArray(&quot;Café&quot;), [var 'C', 'a', 'f', 'é'], Char.equal);</code></pre>
 
@@ -88,28 +88,28 @@ let withSpace = a # &quot; &quot; # b;
 assert withSpace == &quot;Hello There&quot;;
 let togetherAgain = Text.concat(a, b);
 assert togetherAgain == &quot;HelloThere&quot;;</code></pre></p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>(<span class="parameter">t1</span> : <a href="#type.Text"><span class="type">Text</span></a>, <span class="parameter">t2</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns true if two text values are equal.</p>
-<pre class="motoko"><code class="motoko">import Text &quot;mo:base/Text&quot;;
+<pre class="motoko"><code class="motoko">import Text &quot;mo:core/Text&quot;;
 
 assert Text.equal(&quot;hello&quot;, &quot;hello&quot;);
 assert not Text.equal(&quot;hello&quot;, &quot;world&quot;);</code></pre></p></div><div class="declaration"><h4 class="function" id="notEqual"><code><span class="keyword">public func </span><span class="fnname">notEqual</span>(<span class="parameter">t1</span> : <a href="#type.Text"><span class="type">Text</span></a>, <span class="parameter">t2</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns true if two text values are not equal.</p>
-<pre class="motoko"><code class="motoko">import Text &quot;mo:base/Text&quot;;
+<pre class="motoko"><code class="motoko">import Text &quot;mo:core/Text&quot;;
 
 assert Text.notEqual(&quot;hello&quot;, &quot;world&quot;);
 assert not Text.notEqual(&quot;hello&quot;, &quot;hello&quot;);</code></pre></p></div><div class="declaration"><h4 class="function" id="less"><code><span class="keyword">public func </span><span class="fnname">less</span>(<span class="parameter">t1</span> : <a href="#type.Text"><span class="type">Text</span></a>, <span class="parameter">t2</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns true if the first text value is lexicographically less than the second.</p>
-<pre class="motoko"><code class="motoko">import Text &quot;mo:base/Text&quot;;
+<pre class="motoko"><code class="motoko">import Text &quot;mo:core/Text&quot;;
 
 assert Text.less(&quot;apple&quot;, &quot;banana&quot;);
 assert not Text.less(&quot;banana&quot;, &quot;apple&quot;);</code></pre></p></div><div class="declaration"><h4 class="function" id="lessOrEqual"><code><span class="keyword">public func </span><span class="fnname">lessOrEqual</span>(<span class="parameter">t1</span> : <a href="#type.Text"><span class="type">Text</span></a>, <span class="parameter">t2</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns true if the first text value is lexicographically less than or equal to the second.</p>
-<pre class="motoko"><code class="motoko">import Text &quot;mo:base/Text&quot;;
+<pre class="motoko"><code class="motoko">import Text &quot;mo:core/Text&quot;;
 
 assert Text.lessOrEqual(&quot;apple&quot;, &quot;banana&quot;);
 assert Text.lessOrEqual(&quot;apple&quot;, &quot;apple&quot;);
 assert not Text.lessOrEqual(&quot;banana&quot;, &quot;apple&quot;);</code></pre></p></div><div class="declaration"><h4 class="function" id="greater"><code><span class="keyword">public func </span><span class="fnname">greater</span>(<span class="parameter">t1</span> : <a href="#type.Text"><span class="type">Text</span></a>, <span class="parameter">t2</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns true if the first text value is lexicographically greater than the second.</p>
-<pre class="motoko"><code class="motoko">import Text &quot;mo:base/Text&quot;;
+<pre class="motoko"><code class="motoko">import Text &quot;mo:core/Text&quot;;
 
 assert Text.greater(&quot;banana&quot;, &quot;apple&quot;);
 assert not Text.greater(&quot;apple&quot;, &quot;banana&quot;);</code></pre></p></div><div class="declaration"><h4 class="function" id="greaterOrEqual"><code><span class="keyword">public func </span><span class="fnname">greaterOrEqual</span>(<span class="parameter">t1</span> : <a href="#type.Text"><span class="type">Text</span></a>, <span class="parameter">t2</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <span class="type">Bool</span></code></h4><p><p>Returns true if the first text value is lexicographically greater than or equal to the second.</p>
-<pre class="motoko"><code class="motoko">import Text &quot;mo:base/Text&quot;;
+<pre class="motoko"><code class="motoko">import Text &quot;mo:core/Text&quot;;
 
 assert Text.greaterOrEqual(&quot;banana&quot;, &quot;apple&quot;);
 assert Text.greaterOrEqual(&quot;apple&quot;, &quot;apple&quot;);
@@ -191,7 +191,7 @@ assert trimmed == &quot;xyz&quot;;</code></pre></p></div><div class="declaration
 let trimmed = Text.trim(&quot;---abcxyz---&quot;, #char '-');
 assert trimmed == &quot;abcxyz&quot;;</code></pre></p></div><div class="declaration"><h4 class="function" id="compareWith"><code><span class="keyword">public func </span><span class="fnname">compareWith</span>(<br/>  <span class="parameter">t1</span> : <a href="#type.Text"><span class="type">Text</span></a>, <br/>  <span class="parameter">t2</span> : <a href="#type.Text"><span class="type">Text</span></a>, <br/>  <span class="parameter">cmp</span> : (<span class="type">Char</span>, <span class="type">Char</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compares <code>t1</code> and <code>t2</code> using the provided character-wise comparison function.</p>
 <pre><code>motoko include=import
-import Char &quot;mo:base/Char&quot;;
+import Char &quot;mo:core/Char&quot;;
 
 assert Text.compareWith(&quot;abc&quot;, &quot;ABC&quot;, func(c1, c2) { Char.compare(c1, c2) }) == #greater;</code></pre></p></div><div class="declaration"><h4 class="function" id="encodeUtf8"><code><span class="keyword">public func </span><span class="fnname">encodeUtf8</span>(<span class="parameter">_</span> : <a href="#type.Text"><span class="type">Text</span></a>) : <span class="type">Blob</span></code></h4><p><p>Returns a UTF-8 encoded <code>Blob</code> from the given <code>Text</code>.</p>
 <pre><code>motoko include=import

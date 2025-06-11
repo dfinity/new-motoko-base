@@ -3,9 +3,9 @@
 A list of type <code>List&lt;T&gt;</code> is either <code>null</code> or an optional pair of a value of type <code>T</code> and a tail, itself of type <code>List&lt;T&gt;</code>.</p>
 <p>To use this library, import it using:</p>
 <pre><code>motoko name=import
-import List &quot;mo:base/pure/List&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.List"><span class="keyword">type </span><span class="type">List</span>&lt;<span class="type">T</span>&gt; = <a href="../Types.html#Pure.type.List"><span class="type">Types.Pure.List</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create an empty list.</p>
+import List &quot;mo:core/pure/List&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.List"><span class="keyword">type </span><span class="type">List</span>&lt;<span class="type">T</span>&gt; = <a href="../Types.html#Pure.type.List"><span class="type">Types.Pure.List</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create an empty list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   assert List.empty&lt;Nat&gt;() == null;
@@ -15,7 +15,7 @@ persistent actor {
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Bool</span></code></h4><p><p>Check whether a list is empty and return true if the list is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   assert List.isEmpty(null);
@@ -26,7 +26,7 @@ persistent actor {
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Return the length of the list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, null));
@@ -37,8 +37,8 @@ persistent actor {
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span>, <br/>  <span class="parameter">item</span> : <span class="type">T</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Check whether the list contains a given value. Uses the provided equality function to compare values.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -53,7 +53,7 @@ persistent actor {
 indication that a list might not be the best data structure
 to use.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, null));
@@ -64,7 +64,7 @@ persistent actor {
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="pushFront"><code><span class="keyword">public func </span><span class="fnname">pushFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">item</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Add <code>item</code> to the head of <code>list</code>, and return the new list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   assert List.pushFront(null, 0) == ?(0, null);
@@ -74,7 +74,7 @@ persistent actor {
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="last"><code><span class="keyword">public func </span><span class="fnname">last</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Return the last element of the list, if present.
 Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, null));
@@ -86,7 +86,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="popFront"><code><span class="keyword">public func </span><span class="fnname">popFront</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : (?<span class="type">T</span>, <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Remove the head of the list, returning the optioned head and the tail of the list in a pair.
 Returns <code>(null, null)</code> if the list is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, null));
@@ -97,7 +97,7 @@ persistent actor {
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="reverse"><code><span class="keyword">public func </span><span class="fnname">reverse</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Reverses the list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -108,7 +108,7 @@ persistent actor {
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Call the given function for its side effect, with each list element in turn.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -123,8 +123,8 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T1</span>, <span class="type">T2</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T1</span>&gt;, <span class="parameter">f</span> : <span class="type">T1</span> -&gt; <span class="type">T2</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T2</span>&gt;</code></h4><p><p>Call the given function <code>f</code> on each list element and collect the results
 in a new list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -137,7 +137,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new list with only those elements of the original list for which
 the given function (often called the <em>predicate</em>) returns true.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -149,7 +149,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="filterMap"><code><span class="keyword">public func </span><span class="fnname">filterMap</span>&lt;<span class="type">T</span>, <span class="type">R</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ?<span class="type">R</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">R</span>&gt;</code></h4><p><p>Call the given function on each list element, and collect the non-null results
 in a new list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -165,7 +165,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="mapResult"><code><span class="keyword">public func </span><span class="fnname">mapResult</span>&lt;<span class="type">T</span>, <span class="type">R</span>, <span class="type">E</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <a href="../Result.html#type.Result"><span class="type">Result.Result</span></a>&lt;<span class="type">R</span>, <span class="type">E</span>&gt;) : <a href="../Result.html#type.Result"><span class="type">Result.Result</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">R</span>&gt;, <span class="type">E</span>&gt;</code></h4><p><p>Maps a <code>Result</code>-returning function <code>f</code> over a <code>List</code> and returns either
 the first error or a list of successful values.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -183,7 +183,7 @@ The first list only includes the elements for which the given
 function <code>f</code> returns true and the second list only includes
 the elements for which the function returns false.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -195,7 +195,7 @@ persistent actor {
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="concat"><code><span class="keyword">public func </span><span class="fnname">concat</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Append the elements from one list to another list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list1 = ?(0, ?(1, ?(2, null)));
@@ -207,8 +207,8 @@ persistent actor {
 <p>Space: O(size(l))</p>
 </p></div><div class="declaration"><h4 class="function" id="join"><code><span class="keyword">public func </span><span class="fnname">join</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Flatten, or repatedly concatenate, an iterator of lists as a list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let lists = [ ?(0, ?(1, ?(2, null))),
@@ -220,7 +220,7 @@ persistent actor {
 <p>Space: O(size*size)</p>
 </p></div><div class="declaration"><h4 class="function" id="flatten"><code><span class="keyword">public func </span><span class="fnname">flatten</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Flatten, or repatedly concatenate, a list of lists as a list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let lists = ?(?(0, ?(1, ?(2, null))),
@@ -235,7 +235,7 @@ persistent actor {
 If the given list has fewer than <code>n</code> elements, this function returns
 a copy of the full input list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -246,7 +246,7 @@ persistent actor {
 <p>Space: O(n)</p>
 </p></div><div class="declaration"><h4 class="function" id="drop"><code><span class="keyword">public func </span><span class="fnname">drop</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Drop the first <code>n</code> elements from the given list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -259,8 +259,8 @@ persistent actor {
 and progessively combining elements into <code>base</code> with <code>combine</code>. Iteration runs
 left to right.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -278,8 +278,8 @@ persistent actor {
 and progessively combining elements into <code>base</code> with <code>combine</code>. Iteration runs
 right to left.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -296,7 +296,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="find"><code><span class="keyword">public func </span><span class="fnname">find</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : ?<span class="type">T</span></code></h4><p><p>Return the first element for which the given predicate <code>f</code> is true,
 if such an element exists.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -309,7 +309,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="findIndex"><code><span class="keyword">public func </span><span class="fnname">findIndex</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : ?<span class="type">Nat</span></code></h4><p><p>Return the first index for which the given predicate <code>f</code> is true.
 If no element satisfies the predicate, returns null.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = List.fromArray(['A', 'B', 'C', 'D']);
@@ -323,7 +323,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if the given predicate <code>f</code> is true for all list
 elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -336,7 +336,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Return true if there exists a list element for which
 the given predicate <code>f</code> is true.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));
@@ -350,8 +350,8 @@ persistent actor {
 This function requires both list to be ordered as specified
 by the given relation <code>compare</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list1 = ?(1, ?(2, ?(4, null)));
@@ -364,8 +364,8 @@ persistent actor {
 <p>*Runtime and space assumes that <code>lessThanOrEqual</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equalItem</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Check if two lists are equal using the given equality function to compare elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list1 = ?(1, ?(2, null));
@@ -378,8 +378,8 @@ persistent actor {
 <p>*Runtime and space assumes that <code>equalItem</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">list1</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">list2</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compareItem</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compare two lists using lexicographic ordering specified by argument function <code>compareItem</code>.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list1 = ?(1, ?(2, null));
@@ -393,7 +393,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="tabulate"><code><span class="keyword">public func </span><span class="fnname">tabulate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">n</span> : <span class="type">Nat</span>, <span class="parameter">f</span> : <span class="type">Nat</span> -&gt; <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Generate a list based on a length and a function that maps from
 a list index to a list element.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = List.tabulate&lt;Nat&gt;(3, func n = n * 2);
@@ -405,7 +405,7 @@ persistent actor {
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a list with exactly one element.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   assert List.singleton(0) == ?(0, null);
@@ -415,7 +415,7 @@ persistent actor {
 <p>Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="repeat"><code><span class="keyword">public func </span><span class="fnname">repeat</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">item</span> : <span class="type">T</span>, <span class="parameter">n</span> : <span class="type">Nat</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a list of the given length with the same value in each position.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = List.repeat('a', 3);
@@ -428,7 +428,7 @@ persistent actor {
 <p>If the given lists have different lengths, then the created list will have a
 length equal to the length of the smaller list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list1 = ?(0, ?(1, ?(2, null)));
@@ -443,9 +443,9 @@ occuring at the same position in list <code>xs</code> and list <code>ys</code>.<
 <p>If the given lists have different lengths, then the created list will have a
 length equal to the length of the smaller list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Char &quot;mo:base/Char&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Char &quot;mo:core/Char&quot;;
 
 persistent actor {
   let list1 = ?(0, ?(1, ?(2, null)));
@@ -462,7 +462,7 @@ persistent actor {
 <p>*Runtime and space assumes that <code>f</code> runs in O(1) time and space.</p>
 </p></div><div class="declaration"><h4 class="function" id="split"><code><span class="keyword">public func </span><span class="fnname">split</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">n</span> : <span class="type">Nat</span>) : (<a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Split the given list at the given zero-based index.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, null)));
@@ -475,7 +475,7 @@ persistent actor {
 The last chunk will be shorter if the length of the given list
 does not divide by <code>n</code> evenly. Traps if <code>n</code> = 0.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = ?(0, ?(1, ?(2, ?(3, ?(4, null)))));
@@ -486,8 +486,8 @@ persistent actor {
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator to the elements in the list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list = List.fromArray([3, 1, 4]);
@@ -498,8 +498,8 @@ persistent actor {
   assert text == &quot;314&quot;;
 }</code></pre></p></div><div class="declaration"><h4 class="function" id="enumerate"><code><span class="keyword">public func </span><span class="fnname">enumerate</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;(<span class="type">Nat</span>, <span class="type">T</span>)&gt;</code></h4><p><p>Returns an iterator to the <code>(index, element)</code> pairs in the list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list = List.fromArray([3, 1, 4]);
@@ -510,7 +510,7 @@ persistent actor {
   assert text == &quot;012&quot;;
 }</code></pre></p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an array into a list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = List.fromArray([0, 1, 2, 3, 4]);
@@ -521,7 +521,7 @@ persistent actor {
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="fromVarArray"><code><span class="keyword">public func </span><span class="fnname">fromVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="keyword">var </span><span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a mutable array into a list.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = List.fromVarArray([var 0, 1, 2, 3, 4]);
@@ -532,9 +532,9 @@ persistent actor {
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="toArray"><code><span class="keyword">public func </span><span class="fnname">toArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="type">T</span>]</code></h4><p><p>Create an array from a list.
 Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Array &quot;mo:base/Array&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Array &quot;mo:core/Array&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let array = List.toArray(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
@@ -545,9 +545,9 @@ persistent actor {
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : [<span class="keyword">var </span><span class="type">T</span>]</code></h4><p><p>Create a mutable array from a list.
 Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Array &quot;mo:base/Array&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Array &quot;mo:core/Array&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let array = List.toVarArray&lt;Nat&gt;(?(0, ?(1, ?(2, ?(3, ?(4, null))))));
@@ -558,7 +558,7 @@ persistent actor {
 <p>Space: O(size)</p>
 </p></div><div class="declaration"><h4 class="function" id="fromIter"><code><span class="keyword">public func </span><span class="fnname">fromIter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">iter</span> : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Turn an iterator into a list, consuming it.
 Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
 
 persistent actor {
   let list = List.fromIter([0, 1, 2, 3, 4].vals());
@@ -570,8 +570,8 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Convert a list to a text representation using the provided function to convert each element to text.
 The resulting text will be in the format &quot;[element1, element2, ...]&quot;.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import List &quot;mo:base/pure/List&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import List &quot;mo:core/pure/List&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let list = ?(1, ?(2, ?(3, null)));

@@ -25,7 +25,7 @@ worst-case constant time <code>O(1)</code> for push/pop operations through gradu
 whereas others (e.g. <code>map</code>, <code>contains</code>) do NOT guarantee that the elements are visited in any order.
 The order is undefined to avoid allocations, making these operations more efficient.</p>
 <pre><code>motoko name=import
-import Queue &quot;mo:base/pure/RealTimeQueue&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = {#empty; #one : <span class="type">T</span>; #two : (<span class="type">T</span>, <span class="type">T</span>); #three : (<span class="type">T</span>, <span class="type">T</span>, <span class="type">T</span>); #idles : (<a href="#type.Idle"><span class="type">Idle</span></a>&lt;<span class="type">T</span>&gt;, <a href="#type.Idle"><span class="type">Idle</span></a>&lt;<span class="type">T</span>&gt;); #rebal : <a href="#type.States"><span class="type">States</span></a>&lt;<span class="type">T</span>&gt;}</h4><p><p>The real-time queue data structure can be in one of the following states:</p>
+import Queue &quot;mo:core/pure/RealTimeQueue&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = {#empty; #one : <span class="type">T</span>; #two : (<span class="type">T</span>, <span class="type">T</span>); #three : (<span class="type">T</span>, <span class="type">T</span>, <span class="type">T</span>); #idles : (<a href="#type.Idle"><span class="type">Idle</span></a>&lt;<span class="type">T</span>&gt;, <a href="#type.Idle"><span class="type">Idle</span></a>&lt;<span class="type">T</span>&gt;); #rebal : <a href="#type.States"><span class="type">States</span></a>&lt;<span class="type">T</span>&gt;}</h4><p><p>The real-time queue data structure can be in one of the following states:</p>
 <ul><li><code>#empty</code>: the queue is empty</li><li><code>#one</code>: the queue contains a single element</li><li><code>#two</code>: the queue contains two elements</li><li><code>#three</code>: the queue contains three elements</li><li><code>#idles</code>: the queue is in the idle state, where <code>l</code> and <code>r</code> are non-empty stacks of elements fulfilling the size invariant</li><li><code>#rebal</code>: the queue is in the rebalancing state</li></ul></p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty queue.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -73,7 +73,7 @@ Returns true if the queue contains the item, otherwise false.</p>
 <p>Note: The order in which elements are visited is undefined, for performance reasons.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.pushBack(Queue.pushBack(Queue.empty&lt;Nat&gt;(), 1), 2);
@@ -135,7 +135,7 @@ Returns <code>null</code> if <code>queue</code> is empty. Otherwise, it returns 
 the first element and a new queue that contains all the remaining elements of <code>queue</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Runtime &quot;mo:base/Runtime&quot;;
+import Runtime &quot;mo:core/Runtime&quot;;
 
 persistent actor {
   do {
@@ -154,7 +154,7 @@ a new queue that contains the remaining elements of <code>queue</code>
 and, as the second pair item, the removed back element.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Runtime &quot;mo:base/Runtime&quot;;
+import Runtime &quot;mo:core/Runtime&quot;;
 
 persistent actor {
   do {
@@ -182,7 +182,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;) : <a href="../Iter.html#type.Iter"><span class="type">Iter.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create an iterator over the elements in the queue. The order of the elements is from front to back.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Iter &quot;mo:base/Iter&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -195,7 +195,7 @@ persistent actor {
 Two queues are considered equal if they contain the same elements in the same order.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue1 = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -211,7 +211,7 @@ persistent actor {
 Returns <code>#less</code> if <code>queue1</code> is lexicographically less than <code>queue2</code>, <code>#equal</code> if they are equal, and <code>#greater</code> otherwise.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue1 = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -248,7 +248,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Call the given function for its side effect on each queue element in order: from front to back.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 persistent actor {
   var text = &quot;&quot;;
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -263,7 +263,7 @@ persistent actor {
 <p>Note: The order of visiting elements is undefined with the current implementation.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -309,7 +309,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">queue</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Create a <code>Text</code> representation of a queue for debugging purposes.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter&lt;Nat&gt;([1, 2, 3].values());

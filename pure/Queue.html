@@ -18,7 +18,7 @@ that are dynamically size-balanced by splitting.</p>
 whereas others (e.g. <code>map</code>, <code>contains</code>) do NOT guarantee that the elements are visited in any order.
 The order is undefined to avoid allocations, making these operations more efficient.</p>
 <pre><code>motoko name=import
-import Queue &quot;mo:base/pure/Queue&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = <a href="../Types.html#Pure.type.Queue"><span class="type">Types.Pure.Queue</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p>Double-ended queue data type.</p>
+import Queue &quot;mo:core/pure/Queue&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Queue"><span class="keyword">type </span><span class="type">Queue</span>&lt;<span class="type">T</span>&gt; = <a href="../Types.html#Pure.type.Queue"><span class="type">Types.Pure.Queue</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p>Double-ended queue data type.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty queue.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
@@ -65,7 +65,7 @@ Returns true if the queue contains an element equal to <code>item</code> accordi
 <p>Note: The order in which elements are visited is undefined, for performance reasons.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter([1, 2, 3].values());
@@ -132,7 +132,7 @@ the first element and a new queue that contains all the remaining elements of <c
 <p>This may involve dynamic rebalancing of the two, internally used lists.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Runtime &quot;mo:base/Runtime&quot;;
+import Runtime &quot;mo:core/Runtime&quot;;
 
 persistent actor {
   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
@@ -156,7 +156,7 @@ and, as the second pair item, the removed back element.</p>
 <p>This may involve dynamic rebalancing of the two, internally used lists.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Runtime &quot;mo:base/Runtime&quot;;
+import Runtime &quot;mo:core/Runtime&quot;;
 
 persistent actor {
   let initial = Queue.pushBack(Queue.pushBack(Queue.empty(), 1), 2);
@@ -190,7 +190,7 @@ persistent actor {
 <p>Performance note: Creating the iterator needs <code>O(size)</code> runtime and space!</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Iter &quot;mo:base/Iter&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let queue = Queue.fromIter([1, 2, 3].values());
@@ -202,7 +202,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Compare two queues for equality using the provided equality function.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue1 = Queue.fromIter([1, 2].values());
@@ -259,8 +259,8 @@ in a new queue.</p>
 <p>Note: The order of visiting elements is undefined with the current implementation.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Iter &quot;mo:base/Iter&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter([0, 1, 2].values());
@@ -306,7 +306,7 @@ persistent actor {
 This function is meant to be used for debugging and testing purposes.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue = Queue.fromIter([1, 2, 3].values());
@@ -318,7 +318,7 @@ persistent actor {
 </p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">queue1</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">queue2</span> : <a href="#type.Queue"><span class="type">Queue</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compareItem</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="../Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compare two queues using lexicographic ordering specified by argument function <code>compareItem</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let queue1 = Queue.fromIter([1, 2].values());

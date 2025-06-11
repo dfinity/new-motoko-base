@@ -4,17 +4,17 @@
 <p>Byte sequences are also often represented as <code>[Nat8]</code>, i.e. an array of bytes, but this representation is currently much less compact than <code>Blob</code>, taking 4 physical bytes to represent each logical byte in the sequence.
 If you would like to manipulate Blobs, it is recommended that you convert
 Blobs to <code>[var Nat8]</code> or <code>Buffer&lt;Nat8&gt;</code>, do the manipulation, then convert back.</p>
-<p>Import from the base library to use this module.</p>
+<p>Import from the core library to use this module.</p>
 <pre><code>motoko name=import
-import Blob &quot;mo:base/Blob&quot;;</code></pre>
+import Blob &quot;mo:core/Blob&quot;;</code></pre>
 
 <p>Some built in features not listed in this module:</p>
 <ul><li>You can create a <code>Blob</code> literal from a <code>Text</code> literal, provided the context expects an expression of type <code>Blob</code>.</li><li><code>b.size() : Nat</code> returns the number of bytes in the blob <code>b</code>;</li><li><code>b.values() : Iter.Iter&lt;Nat8&gt;</code> returns an iterator to enumerate the bytes of the blob <code>b</code>.</li></ul>
 
 <p>For example:</p>
 <pre><code>motoko include=import
-import Debug &quot;mo:base/Debug&quot;;
-import Nat8 &quot;mo:base/Nat8&quot;;
+import Debug &quot;mo:core/Debug&quot;;
+import Nat8 &quot;mo:core/Nat8&quot;;
 
 let blob = &quot;\00\00\00\ff&quot; : Blob; // blob literals, where each byte is delimited by a back-slash and represented in hex
 let blob2 = &quot;charsもあり&quot; : Blob; // you can also use characters in the literals
@@ -55,8 +55,8 @@ let bytes = Blob.toArray(blob);
 assert bytes == [0, 255, 0];</code></pre></p></div><div class="declaration"><h4 class="function" id="toVarArray"><code><span class="keyword">public func </span><span class="fnname">toVarArray</span>(<span class="parameter">blob</span> : <a href="#type.Blob"><span class="type">Blob</span></a>) : [<span class="keyword">var </span><span class="type">Nat8</span>]</code></h4><p><p>Converts a <code>Blob</code> to a mutable array of bytes (<code>[var Nat8]</code>), by copying each element.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat8 &quot;mo:base/Nat8&quot;;
-import VarArray &quot;mo:base/VarArray&quot;;
+import Nat8 &quot;mo:core/Nat8&quot;;
+import VarArray &quot;mo:core/VarArray&quot;;
 
 let blob = &quot;\00\FF\00&quot; : Blob;
 let bytes = Blob.toVarArray(blob);
@@ -86,7 +86,7 @@ to the existing <code>==</code> operator) is so that you can use it as a functio
 to pass to a higher order function.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import List &quot;mo:base/List&quot;;
+import List &quot;mo:core/List&quot;;
 
 let list1 = List.singleton&lt;Blob&gt;(&quot;\00\FF\00&quot;);
 let list2 = List.singleton&lt;Blob&gt;(&quot;\00\FF\00&quot;);

@@ -34,7 +34,7 @@ increase <code>--max-stable-pages</code> as desired, approaching the IC maximum 
 All applications should reserve at least one page for stable variable data, even when no stable variables are used.</p>
 <p>Usage:</p>
 <pre><code>motoko no-repl name=import
-import Region &quot;mo:base/Region&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Region"><span class="keyword">type </span><span class="type">Region</span> = <span class="type">Prim.Types.Region</span></h4><p><p>A stateful handle to an isolated region of IC stable memory.
+import Region &quot;mo:core/Region&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.Region"><span class="keyword">type </span><span class="type">Region</span> = <span class="type">Prim.Types.Region</span></h4><p><p>A stateful handle to an isolated region of IC stable memory.
 <code>Region</code> is a stable type and regions can be stored in stable variables.</p>
 </p></div><div class="declaration"><h4 class="function" id="new"><code><span class="keyword">public func </span><span class="fnname">new</span>() : <a href="#type.Region"><span class="type">Region</span></a></code></h4><p><p>Allocate a new, isolated Region of size 0.</p>
 <p>Example:</p>
@@ -80,7 +80,7 @@ Function <code>grow</code> is capped by a soft limit on <code>size</code> contro
  <code>--max-stable-pages &lt;n&gt;</code> (the default is 65536, or 4GiB).</p>
 <p>Example:</p>
 <pre><code>motoko no-repl include=import
-import Error &quot;mo:base/Error&quot;;
+import Error &quot;mo:core/Error&quot;;
 
 persistent actor {
   public func example() : async () {
@@ -312,7 +312,7 @@ persistent actor {
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
 <pre><code>motoko no-repl include=import
-import Blob &quot;mo:base/Blob&quot;;
+import Blob &quot;mo:core/Blob&quot;;
 
 persistent actor {
   public func example() : async () {
@@ -327,7 +327,7 @@ persistent actor {
 Traps on an out-of-bounds access.</p>
 <p>Example:</p>
 <pre><code>motoko no-repl include=import
-import Blob &quot;mo:base/Blob&quot;;
+import Blob &quot;mo:core/Blob&quot;;
 
 persistent actor {
   public func example() : async () {

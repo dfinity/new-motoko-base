@@ -3,9 +3,9 @@
 <p>Characters in Motoko represent Unicode code points
 in the range 0 to 0x10FFFF, excluding the surrogate code points
 (0xD800 through 0xDFFF).</p>
-<p>Import from the base library to use this module.</p>
+<p>Import from the core library to use this module.</p>
 <pre><code>motoko name=import
-import Char &quot;mo:base/Char&quot;;</code></pre>
+import Char &quot;mo:core/Char&quot;;</code></pre>
 
 <p>Some built in features not listed in this module:</p>
 <ul><li>You can create a <code>Char</code> literal using single quotes, e.g. 'A', '1', '漢'</li><li>You can compare characters using <code>&lt;</code>, <code>&lt;=</code>, <code>==</code>, <code>!=</code>, <code>&gt;=</code>, <code>&gt;</code> operators</li><li>You can convert a single-character <code>Text</code> to a <code>Char</code> using <code>:Char</code> type annotation</li></ul>

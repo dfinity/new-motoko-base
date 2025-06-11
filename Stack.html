@@ -3,8 +3,8 @@
 Elements can be pushed on top of the stack
 and removed from top of the stack (LIFO).</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Debug &quot;mo:core/Debug&quot;;
 
 persistent actor {
   let levels = Stack.empty&lt;Text&gt;();
@@ -23,9 +23,9 @@ persistent actor {
 <code>n</code> denotes the number of elements stored on the stack.</li></ul><div class="declaration"><h4 class="type-declaration" id="type.Stack"><span class="keyword">type </span><span class="type">Stack</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.Stack"><span class="type">Types.Stack</span></a>&lt;<span class="type">T</span>&gt;</h4><p></p></div><div class="declaration"><h4 class="function" id="toPure"><code><span class="keyword">public func </span><span class="fnname">toPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert a mutable stack to an immutable, purely functional list.
 Please note that functional lists are ordered like stacks (FIFO).</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import PureList &quot;mo:base/pure/List&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import PureList &quot;mo:core/pure/List&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let mutableStack = Stack.empty&lt;Nat&gt;();
@@ -42,9 +42,9 @@ where <code>n</code> denotes the number of elements stored in the stack.</p>
 </p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Convert an immutable, purely functional list to a mutable stack.
 Please note that functional lists are ordered like stacks (FIFO).</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import PureList &quot;mo:base/pure/List&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import PureList &quot;mo:core/pure/List&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let immutableList = PureList.fromIter&lt;Nat&gt;([1, 2, 3].values());
@@ -57,8 +57,8 @@ Space: <code>O(n)</code>.
 where <code>n</code> denotes the number of elements stored in the queue.</p>
 </p></div><div class="declaration"><h4 class="function" id="empty"><code><span class="keyword">public func </span><span class="fnname">empty</span>&lt;<span class="type">T</span>&gt;() : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Create a new empty mutable stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Text&gt;();
@@ -71,8 +71,8 @@ Space: <code>O(1)</code>.</p>
 Elements are pushed in ascending index order.
 Which means that the generated element with the index <code>0</code> will be at the bottom of the stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let stack = Stack.tabulate&lt;Nat&gt;(3, func(i) { 2 * i });
@@ -85,7 +85,7 @@ where <code>n</code> denotes the number of elements stored on the stack and
 assuming that <code>generator</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new stack containing a single element.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.singleton&lt;Text&gt;(&quot;motoko&quot;);
@@ -96,7 +96,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="clear"><code><span class="keyword">public func </span><span class="fnname">clear</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Removes all elements from the stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -108,8 +108,8 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="clone"><code><span class="keyword">public func </span><span class="fnname">clone</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a deep copy of the stack with the same elements in the same order.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let original = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -122,7 +122,7 @@ Space: O(n)
 where <code>n</code> denotes the number of elements stored on the stack.</p>
 </p></div><div class="declaration"><h4 class="function" id="isEmpty"><code><span class="keyword">public func </span><span class="fnname">isEmpty</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Bool</span></code></h4><p><p>Returns true if the stack contains no elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -133,7 +133,7 @@ persistent actor {
 Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="size"><code><span class="keyword">public func </span><span class="fnname">size</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : <span class="type">Nat</span></code></h4><p><p>Returns the number of elements on the stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -145,8 +145,8 @@ Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="contains"><code><span class="keyword">public func </span><span class="fnname">contains</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">element</span> : <span class="type">T</span>, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Returns true if the stack contains the specified element.
 Uses the provided equality function to compare elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -159,7 +159,7 @@ where <code>n</code> denotes the number of elements stored on the stack and assu
 that <code>equal</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="push"><code><span class="keyword">public func </span><span class="fnname">push</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">value</span> : <span class="type">T</span>)</code></h4><p><p>Pushes a new element onto the top of the stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -172,7 +172,7 @@ Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="peek"><code><span class="keyword">public func </span><span class="fnname">peek</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Returns the top element of the stack without removing it.
 Returns null if the stack is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -187,7 +187,7 @@ Space: O(1)</p>
 </p></div><div class="declaration"><h4 class="function" id="pop"><code><span class="keyword">public func </span><span class="fnname">pop</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : ?<span class="type">T</span></code></h4><p><p>Removes and returns the top element of the stack.
 Returns null if the stack is empty.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -206,7 +206,7 @@ Space: O(1)</p>
 Returns null if position is out of bounds.
 Position 0 is the top of the stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Char&gt;();
@@ -224,7 +224,7 @@ Space: O(1)
 where <code>n</code> denotes the number of elements stored on the stack.</p>
 </p></div><div class="declaration"><h4 class="function" id="reverse"><code><span class="keyword">public func </span><span class="fnname">reverse</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Reverses the order of elements in the stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -243,9 +243,9 @@ Space: O(n)
 where <code>n</code> denotes the number of elements stored on the stack.</p>
 </p></div><div class="declaration"><h4 class="function" id="values"><code><span class="keyword">public func </span><span class="fnname">values</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;) : <a href="Types.html#type.Iter"><span class="type">Types.Iter</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns an iterator over the elements in the stack, from top to bottom.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -260,7 +260,7 @@ Space: O(1)
 where <code>n</code> denotes the number of elements stored on the stack.</p>
 </p></div><div class="declaration"><h4 class="function" id="all"><code><span class="keyword">public func </span><span class="fnname">all</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Returns true if all elements in the stack satisfy the predicate.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([2, 4, 6].values());
@@ -273,7 +273,7 @@ where <code>n</code> denotes the number of elements stored on the stack and
 assuming that <code>predicate</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="any"><code><span class="keyword">public func </span><span class="fnname">any</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <span class="type">Bool</span></code></h4><p><p>Returns true if any element in the stack satisfies the predicate.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -286,9 +286,9 @@ where <code>n</code> denotes the number of elements stored on the stack and
 assuming <code>predicate</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">operation</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Applies the operation to each element in the stack, from top to bottom.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Debug &quot;mo:core/Debug&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -307,8 +307,8 @@ assuming that <code>operation</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="map"><code><span class="keyword">public func </span><span class="fnname">map</span>&lt;<span class="type">T</span>, <span class="type">U</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">project</span> : <span class="type">T</span> -&gt; <span class="type">U</span>) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">U</span>&gt;</code></h4><p><p>Creates a new stack by applying the projection function to each element.
 Maintains the original order of elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -329,7 +329,7 @@ assuming that <code>project</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="filter"><code><span class="keyword">public func </span><span class="fnname">filter</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">predicate</span> : <span class="type">T</span> -&gt; <span class="type">Bool</span>) : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a new stack containing only elements that satisfy the predicate.
 Maintains the relative order of elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -351,7 +351,7 @@ assuming <code>predicate</code> has O(1) costs.</p>
 and keeping only the successful results (where project returns ?value).
 Maintains the relative order of elements.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
 
 persistent actor {
   let stack = Stack.empty&lt;Nat&gt;();
@@ -377,8 +377,8 @@ where <code>n</code> denotes the number of elements stored on the stack and
 assuming that <code>project</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="equal"><code><span class="keyword">public func </span><span class="fnname">equal</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">stack1</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">stack2</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">equal</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <span class="type">Bool</span><br/>) : <span class="type">Bool</span></code></h4><p><p>Compares two stacks for equality using the provided equality function.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let stack1 = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -394,8 +394,8 @@ assuming that <code>equal</code> has O(1) costs.</p>
 Elements are pushed in iteration order. Which means that the last element
 of the iterator will be the first element on top of the stack.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -408,8 +408,8 @@ where <code>n</code> denotes the number of iterated elements.</p>
 </p></div><div class="declaration"><h4 class="function" id="toText"><code><span class="keyword">public func </span><span class="fnname">toText</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">stack</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">format</span> : <span class="type">T</span> -&gt; <span class="type">Text</span>) : <span class="type">Text</span></code></h4><p><p>Converts the stack to its string representation using the provided
 element formatting function.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let stack = Stack.fromIter&lt;Nat&gt;([3, 2, 1].values());
@@ -422,8 +422,8 @@ where <code>n</code> denotes the number of elements stored on the stack and
 assuming that <code>format</code> has O(1) costs.</p>
 </p></div><div class="declaration"><h4 class="function" id="compare"><code><span class="keyword">public func </span><span class="fnname">compare</span>&lt;<span class="type">T</span>&gt;(<br/>  <span class="parameter">stack1</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">stack2</span> : <a href="#type.Stack"><span class="type">Stack</span></a>&lt;<span class="type">T</span>&gt;, <br/>  <span class="parameter">compare</span> : (<span class="type">T</span>, <span class="type">T</span>) -&gt; <a href="Order.html#type.Order"><span class="type">Order.Order</span></a><br/>) : <a href="Order.html#type.Order"><span class="type">Order.Order</span></a></code></h4><p><p>Compares two stacks lexicographically using the provided comparison function.</p>
 <p>Example:</p>
-<pre class="motoko"><code class="motoko">import Stack &quot;mo:base/Stack&quot;;
-import Nat &quot;mo:base/Nat&quot;;
+<pre class="motoko"><code class="motoko">import Stack &quot;mo:core/Stack&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 persistent actor {
   let stack1 = Stack.fromIter&lt;Nat&gt;([2, 1].values());

@@ -7,7 +7,7 @@ Can be declared <code>stable</code> for orthogonal persistence.</p>
 Main author: Andrii Stepanov
 Contributors: Timo Hanke (timohanke), Andy Gura (andygura), react0r-com</p>
 <pre><code>motoko name=import
-import List &quot;mo:base/List&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.List"><span class="keyword">type </span><span class="type">List</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.List"><span class="type">Types.List</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p><code>List&lt;T&gt;</code> provides a mutable list of elements of type <code>T</code>.
+import List &quot;mo:core/List&quot;;</code></pre><div class="declaration"><h4 class="type-declaration" id="type.List"><span class="keyword">type </span><span class="type">List</span>&lt;<span class="type">T</span>&gt; = <a href="Types.html#type.List"><span class="type">Types.List</span></a>&lt;<span class="type">T</span>&gt;</h4><p><p><code>List&lt;T&gt;</code> provides a mutable list of elements of type <code>T</code>.
 Based on the paper &quot;Resizable Arrays in Optimal Time and Space&quot; by Brodnik, Carlsson, Demaine, Munro and Sedgewick (1999).
 Since this is internally a two-dimensional array the access times for put and get operations
 will naturally be 2x slower than Buffer and Array. However, Array is not resizable and Buffer
@@ -19,7 +19,7 @@ has <code>O(size)</code> memory waste.</p>
 let list = List.empty&lt;Nat&gt;(); // Creates a new List</code></pre></p></div><div class="declaration"><h4 class="function" id="singleton"><code><span class="keyword">public func </span><span class="fnname">singleton</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">element</span> : <span class="type">T</span>) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new list with capacity and size 1, containing <code>element</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.singleton&lt;Nat&gt;(1);
 assert List.toText&lt;Nat&gt;(list, Nat.toText) == &quot;List[1]&quot;;</code></pre>
@@ -45,7 +45,7 @@ let pureList = List.toPure&lt;Nat&gt;(list); // converts to immutable PureList</
 </p></div><div class="declaration"><h4 class="function" id="fromPure"><code><span class="keyword">public func </span><span class="fnname">fromPure</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">pure</span> : <a href="pure/List.html#type.List"><span class="type">PureList.List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Converts a purely functional <code>List</code> to a mutable <code>List</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import PureList &quot;mo:base/pure/List&quot;;
+import PureList &quot;mo:core/pure/List&quot;;
 
 let pureList = PureList.fromArray&lt;Nat&gt;([1, 2, 3]);
 let list = List.fromPure&lt;Nat&gt;(pureList); // converts to mutable List</code></pre>
@@ -84,7 +84,7 @@ assert List.toArray(clone) == [1];</code></pre>
 The resulting list has the same size as the input list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.singleton&lt;Nat&gt;(123);
 let textList = List.map&lt;Nat, Text&gt;(list, Nat.toText);
@@ -182,7 +182,7 @@ assert List.toArray(list) == [20];</code></pre>
 Sort is deterministic, stable, and in-place.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 3);
@@ -198,7 +198,7 @@ assert List.toArray(list) == [1, 2, 3];</code></pre>
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
@@ -215,7 +215,7 @@ assert List.indexOf&lt;Nat&gt;(list, Nat.equal, 5) == null;</code></pre>
 by <code>equal</code>. Returns <code>null</code> if <code>element</code> is not found.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3, 4, 2, 2]);
 
@@ -313,7 +313,7 @@ List, then this may lead to unexpected results.</p>
 Each item is a tuple of <code>(index, value)</code>. The iterator provides a single method
 <code>next()</code> which returns elements in order, or <code>null</code> when out of elements.</p>
 <pre><code>motoko include=import
-import Iter &quot;mo:base/Iter&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
@@ -349,7 +349,7 @@ List, then this may lead to unexpected results.</p>
 Iterator provides a single method <code>next()</code>, which returns
 elements in reverse order, or <code>null</code> when out of elements to iterate over.</p>
 <pre><code>motoko include=import
-import Iter &quot;mo:base/Iter&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 10);
@@ -366,7 +366,7 @@ List, then this may lead to unexpected results.</p>
 The iterator provides a single method <code>next()</code> which returns indices
 from 0 to size-1, or <code>null</code> when out of elements.</p>
 <pre><code>motoko include=import
-import Iter &quot;mo:base/Iter&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let list = List.empty&lt;Text&gt;();
 List.add(list, &quot;A&quot;);
@@ -382,8 +382,8 @@ List, then this may lead to unexpected results.</p>
 Elements are added in the order they are returned by the iterator.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let array = [1, 1, 1];
 let iter = array.vals();
@@ -396,8 +396,8 @@ assert Iter.toArray(List.values(list)) == [1, 1, 1];</code></pre>
 Elements are added in the order they are returned by the iterator.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let array = [1, 1, 1];
 let iter = array.vals();
@@ -420,8 +420,8 @@ assert List.toArray&lt;Nat&gt;(list) == [1, 2, 3];</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="fromArray"><code><span class="keyword">public func </span><span class="fnname">fromArray</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">array</span> : [<span class="type">T</span>]) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Creates a List containing elements from an Array.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let array = [2, 3];
 let list = List.fromArray&lt;Nat&gt;(array);
@@ -432,7 +432,7 @@ assert Iter.toArray(List.values(list)) == [2, 3];</code></pre>
 Elements appear in the same order as in the list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Array &quot;mo:base/Array&quot;;
+import Array &quot;mo:core/Array&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
 
@@ -444,8 +444,8 @@ assert Array.fromVarArray(varArray) == [1, 2, 3];</code></pre>
 Elements appear in the same order as in the array.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let array = [var 2, 3];
 let list = List.fromVarArray&lt;Nat&gt;(array);
@@ -471,8 +471,8 @@ assert List.last(List.empty&lt;Nat&gt;()) == null;</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="forEach"><code><span class="keyword">public func </span><span class="fnname">forEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Applies <code>f</code> to each element in <code>list</code>.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Debug &quot;mo:core/Debug&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
 
@@ -487,8 +487,8 @@ List.forEach&lt;Nat&gt;(list, func(x) {
 and <code>x</code> is the value.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Debug &quot;mo:core/Debug&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
 
@@ -504,8 +504,8 @@ List.forEachEntry&lt;Nat&gt;(list, func (i,x) {
 from end to beginning.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Debug &quot;mo:core/Debug&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
 
@@ -520,8 +520,8 @@ List.reverseForEachEntry&lt;Nat&gt;(list, func (i,x) {
 </p></div><div class="declaration"><h4 class="function" id="reverseForEach"><code><span class="keyword">public func </span><span class="fnname">reverseForEach</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;, <span class="parameter">f</span> : <span class="type">T</span> -&gt; ())</code></h4><p><p>Applies <code>f</code> to each element in <code>list</code> in reverse order.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Debug &quot;mo:base/Debug&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Debug &quot;mo:core/Debug&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1, 2, 3]);
 
@@ -536,7 +536,7 @@ List.reverseForEach&lt;Nat&gt;(list, func (x) {
 equality function. Uses the provided <code>equal</code> function to compare elements.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 2);
@@ -552,7 +552,7 @@ assert List.contains&lt;Nat&gt;(list, Nat.equal, 2);</code></pre>
 Returns <code>null</code> if the list is empty.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
@@ -568,7 +568,7 @@ assert List.max&lt;Nat&gt;(List.empty&lt;Nat&gt;(), Nat.compare) == null;</code>
 Returns <code>null</code> if the list is empty.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.empty&lt;Nat&gt;();
 List.add(list, 1);
@@ -585,7 +585,7 @@ Returns true if and only if both lists have the same size and all corresponding 
 are equal according to the provided function.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list1 = List.fromArray&lt;Nat&gt;([1,2]);
 let list2 = List.empty&lt;Nat&gt;();
@@ -602,7 +602,7 @@ Elements are compared pairwise until a difference is found or one list ends.
 If all elements compare equal, the shorter list is considered less than the longer list.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list1 = List.fromArray&lt;Nat&gt;([0, 1]);
 let list2 = List.fromArray&lt;Nat&gt;([2]);
@@ -619,7 +619,7 @@ assert List.compare&lt;Nat&gt;(list2, list3, Nat.compare) == #greater;</code></p
 convert the elements into Text.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3,4]);
 
@@ -633,7 +633,7 @@ and progessively combining elements into <code>base</code> with <code>combine</c
 left to right.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
 
@@ -647,7 +647,7 @@ and progessively combining elements into <code>base</code> with <code>combine</c
 right to left.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
+import Nat &quot;mo:core/Nat&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
 
@@ -659,8 +659,8 @@ assert List.foldRight&lt;Nat, Text&gt;(list, &quot;&quot;, func (x, acc) { Nat.t
 </p></div><div class="declaration"><h4 class="function" id="reverseInPlace"><code><span class="keyword">public func </span><span class="fnname">reverseInPlace</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;)</code></h4><p><p>Reverses the order of elements in <code>list</code> by overwriting in place.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
 
@@ -672,8 +672,8 @@ assert Iter.toArray(List.values(list)) == [3, 2, 1];</code></pre>
 </p></div><div class="declaration"><h4 class="function" id="reverse"><code><span class="keyword">public func </span><span class="fnname">reverse</span>&lt;<span class="type">T</span>&gt;(<span class="parameter">list</span> : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;) : <a href="#type.List"><span class="type">List</span></a>&lt;<span class="type">T</span>&gt;</code></h4><p><p>Returns a new List with the elements from <code>list</code> in reverse order.</p>
 <p>Example:</p>
 <pre><code>motoko include=import
-import Nat &quot;mo:base/Nat&quot;;
-import Iter &quot;mo:base/Iter&quot;;
+import Nat &quot;mo:core/Nat&quot;;
+import Iter &quot;mo:core/Iter&quot;;
 
 let list = List.fromArray&lt;Nat&gt;([1,2,3]);
 

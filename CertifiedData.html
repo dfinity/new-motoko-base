@@ -12,8 +12,8 @@ calls to your canister tamperproof.</p>
 Must be passed a blob of at most 32 bytes, else traps.</p>
 <p>Example:</p>
 <pre><code>motoko no-repl
-import CertifiedData &quot;mo:base/CertifiedData&quot;;
-import Blob &quot;mo:base/Blob&quot;;
+import CertifiedData &quot;mo:core/CertifiedData&quot;;
+import Blob &quot;mo:core/Blob&quot;;
 
 // Must be in an update call
 
@@ -28,7 +28,7 @@ update call or inter-canister call. This returns a non-<code>null</code> value o
 when processing a query call.</p>
 <p>Example:</p>
 <pre><code>motoko no-repl
-import CertifiedData &quot;mo:base/CertifiedData&quot;;
+import CertifiedData &quot;mo:core/CertifiedData&quot;;
 // Must be in a query call
 
 CertifiedData.getCertificate();</code></pre><p>See a full example on how to use certified variables here: https://github.com/dfinity/examples/tree/master/motoko/cert-var</p>

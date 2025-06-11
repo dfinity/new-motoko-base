@@ -9,26 +9,52 @@ import Nat "Nat";
 import Blob "Blob";
 import Iter "Iter";
 import Runtime "Runtime";
-import PRNG "internal/PRNG";
-import { todo } "Debug";
 
 module {
+
+  public type State<T> = {
+    var bytes : [Nat8];
+    var index : Nat;
+    var bits : Nat8;
+    var bitMask : Nat8;
+    inner : T
+  };
+
+  public func emptyState<T>(inner : T) : State<T> = {
+    var bytes = [];
+    var index = 0;
+    var bits = 0x00;
+    var bitMask = 0x00;
+    inner
+  };
 
   let rawRand = (actor "aaaaa-aa" : actor { raw_rand : () -> async Blob }).raw_rand;
 
   public let blob : shared () -> async Blob = rawRand;
 
-  /// Creates a fast pseudo-random number generator using the SFC64 algorithm.
+  /// Creates a pseudo-random number generator from a 64-bit seed.
+  /// The seed is used to initialize the PRNG state.
+  /// This is suitable for simulations and testing, but not for cryptographic purposes.
+  public func fast(seed : Nat64) : Random<PRNG.State> {
+    fastFromState(seedState(seed))
+  };
+
+  /// Initializes a pseudo-random number generator state with a 64-bit seed.
+  /// This is used to create a `Random` instance with a specific seed.
+  /// The seed is used to initialize the PRNG state.
+  public func seedState(seed : Nat64) : State<PRNG.State> {
+    emptyState(PRNG.init(seed))
+  };
+
+  /// Creates a pseudo-random number generator with the given state.
   /// This provides statistical randomness suitable for simulations and testing,
   /// but should not be used for cryptographic purposes.
-  /// The seed blob's first 8 bytes are used to initialize the PRNG.
-  public func fast(seed : Nat64) : Random {
-    let prng = PRNG.sfc64a();
-    prng.init(seed);
+  public func fastFromState(state : State<PRNG.State>) : Random<PRNG.State> {
     Random(
-      func() {
+      state,
+      func() : Blob {
         // Generate 8 bytes directly from a single 64-bit number
-        let n = prng.next();
+        let n = PRNG.next(state.inner);
         // TODO: optimize using Array.tabulate or even better: a new primitive
         let bytes = VarArray.repeat<Nat8>(0, 8);
         bytes[0] := Nat8.fromNat(Nat64.toNat(n & 0xFF));
@@ -44,31 +70,37 @@ module {
     )
   };
 
-  /// Creates a random number generator suitable for cryptography
-  /// using entropy from the ICP management canister with automatic resupply.
-  public func crypto() : AsyncRandom {
-    AsyncRandom(func() : async* Blob { await rawRand() })
+  /// Initializes a cryptographic random number generator with a 64-bit seed
+  /// using entropy from the ICP management canister.
+  public func crypto() : AsyncRandom<()> {
+    cryptoFromState(emptyState(()))
   };
 
-  public class Random(generator : () -> Blob) {
+  /// Creates a random number generator suitable for cryptography
+  /// using entropy from the ICP management canister. Initializing
+  /// from a state makes it possible to reuse entropy after
+  /// upgrading the canister.
+  public func cryptoFromState(state : State<()>) : AsyncRandom<()> {
+    AsyncRandom(state, func() : async* Blob { await rawRand() })
+  };
+
+  public class Random<T>(state : State<T>, generator : () -> Blob) {
     var iter : Iter.Iter<Nat8> = Iter.empty();
     let bitIter : Iter.Iter<Bool> = object {
-      var mask = 0x00 : Nat8;
-      var byte = 0x00 : Nat8;
       public func next() : ?Bool {
-        if (0 : Nat8 == mask) {
+        if (0 : Nat8 == state.bitMask) {
           switch (iter.next()) {
             case null null;
             case (?w) {
-              byte := w;
-              mask := 0x40;
-              ?(0 : Nat8 != byte & (0x80 : Nat8))
+              state.bits := w;
+              state.bitMask := 0x40;
+              ?(0 : Nat8 != state.bits & (0x80 : Nat8))
             }
           }
         } else {
-          let m = mask;
-          mask >>= (1 : Nat8);
-          ?(0 : Nat8 != byte & m)
+          let m = state.bitMask;
+          state.bitMask >>= (1 : Nat8);
+          ?(0 : Nat8 != state.bits & m)
         }
       }
     };
@@ -166,25 +198,23 @@ module {
 
   };
 
-  public class AsyncRandom(generator : () -> async* Blob) {
+  public class AsyncRandom<T>(state : State<T>, generator : () -> async* Blob) {
     var iter = Iter.empty<Nat8>();
     let bitIter : Iter.Iter<Bool> = object {
-      var mask = 0x00 : Nat8;
-      var byte = 0x00 : Nat8;
       public func next() : ?Bool {
-        if (0 : Nat8 == mask) {
+        if (0 : Nat8 == state.bitMask) {
           switch (iter.next()) {
             case null { null };
             case (?w) {
-              byte := w;
-              mask := 0x40;
-              ?(0 : Nat8 != byte & (0x80 : Nat8))
+              state.bits := w;
+              state.bitMask := 0x40;
+              ?(0 : Nat8 != state.bits & (0x80 : Nat8))
             }
           }
         } else {
-          let m = mask;
-          mask >>= (1 : Nat8);
-          ?(0 : Nat8 != byte & m)
+          let m = state.bitMask;
+          state.bitMask >>= (1 : Nat8);
+          ?(0 : Nat8 != state.bits & m)
         }
       }
     };
@@ -222,5 +252,43 @@ module {
     };
 
   };
+
+  // Derived from https://github.com/research-ag/prng
+  module PRNG {
+    let p : Nat64 = 24;
+    let q : Nat64 = 11;
+    let r : Nat64 = 3;
+
+    public type State = {
+      var a : Nat64;
+      var b : Nat64;
+      var c : Nat64;
+      var d : Nat64
+    };
+
+    public func init(seed : Nat64) : State {
+      init3(seed, seed, seed)
+    };
+
+    public func init3(seed1 : Nat64, seed2 : Nat64, seed3 : Nat64) : State {
+      let state : State = {
+        var a = seed1;
+        var b = seed2;
+        var c = seed3;
+        var d = 1
+      };
+      for (_ in Nat.range(0, 11)) ignore next(state);
+      state
+    };
+
+    public func next(state : State) : Nat64 {
+      let tmp = state.a +% state.b +% state.d;
+      state.a := state.b ^ (state.b >> q);
+      state.b := state.c +% (state.c << r);
+      state.c := (state.c <<> p) +% tmp;
+      state.d +%= 1;
+      tmp
+    }
+  }
 
 }

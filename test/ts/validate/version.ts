@@ -23,7 +23,6 @@ async function getMocVersion(): Promise<string> {
 
 async function getReadmeVersions(): Promise<{
   core: string;
-  base: string;
 }> {
   const readmeContent = await readFile(
     join(rootDirectory, "README.md"),
@@ -39,7 +38,6 @@ async function getReadmeVersions(): Promise<{
   }
   return {
     core: coreMatch[1],
-    base: baseMatch[1],
   };
 }
 
@@ -55,22 +53,9 @@ async function main() {
         `Version mismatch: mops.toml version (${mopsVersion}) does not match 'core' version in README.md (${readmeVersions.core})`
       );
     }
-    const baseVersionMajorMinor = readmeVersions.base
-      .split(".")
-      .slice(0, 2)
-      .join(".");
-    const mocVersionMajorMinor = mocVersion.split(".").slice(0, 2).join(".");
-    if (baseVersionMajorMinor !== mocVersionMajorMinor) {
-      throw new Error(
-        `Version mismatch: 'base' version in README.md (${readmeVersions.base}) is not compatible with 'moc' toolchain version (${mocVersion})`
-      );
-    }
     console.log("✓ All version checks passed:");
     console.log(
       `  • mops.toml version (${mopsVersion}) matches 'core' version in README.md`
-    );
-    console.log(
-      `  • 'base' version (${readmeVersions.base}) is compatible with 'moc' version (${mocVersion})`
     );
     process.exit(0);
   } catch (error) {

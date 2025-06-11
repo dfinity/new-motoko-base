@@ -32,10 +32,6 @@ async function getReadmeVersions(): Promise<{
   if (!coreMatch) {
     throw new Error("Could not find 'core' version in README.md");
   }
-  const baseMatch = readmeContent.match(/base\s*=\s*"(\d+\.\d+\.\d+)"/);
-  if (!baseMatch) {
-    throw new Error("Could not find 'base' version in README.md");
-  }
   return {
     core: coreMatch[1],
   };

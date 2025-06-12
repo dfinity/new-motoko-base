@@ -42,11 +42,11 @@ module {
   ///
   /// Example:
   /// ```motoko include=import
-  /// let random = Random.fast(123);
+  /// let random = Random.seed(123);
   /// let coin = random.bool(); // true or false
   /// ```
-  public func fast(seed : Nat64) : Random<PRNG.State> {
-    fastFromState(seedState(seed))
+  public func seed(seed : Nat64) : Random<PRNG.State> {
+    seedFromState(seedState(seed))
   };
 
   /// Initializes a pseudo-random number generator state with a 64-bit seed.
@@ -60,7 +60,7 @@ module {
   /// persistent actor {
   ///   let state = Random.seedState(123);
   ///   public func main() : async () {
-  ///     let random = Random.fastFromState(state);
+  ///     let random = Random.seedFromState(state);
   ///     let coin = random.bool(); // true or false
   ///   }
   /// }
@@ -81,12 +81,12 @@ module {
   ///   let state = Random.seedState(123);
   ///
   ///   public func main() : async () {
-  ///     let random = Random.fastFromState(state);
+  ///     let random = Random.seedFromState(state);
   ///     let coin = random.bool(); // true or false
   ///   }
   /// }
   /// ```
-  public func fastFromState(state : State<PRNG.State>) : Random<PRNG.State> {
+  public func seedFromState(state : State<PRNG.State>) : Random<PRNG.State> {
     Random(
       state,
       func() : Blob {
@@ -186,7 +186,7 @@ module {
     ///
     /// Example:
     /// ```motoko include=import
-    /// let random = Random.fast(42);
+    /// let random = Random.seed(42);
     /// let coin = random.bool(); // true or false
     /// ```
     public func bool() : Bool {
@@ -197,7 +197,7 @@ module {
     ///
     /// Example:
     /// ```motoko include=import
-    /// let random = Random.fast(42);
+    /// let random = Random.seed(42);
     /// let byte = random.nat8(); // 0 to 255
     /// ```
     public func nat8() : Nat8 {
@@ -252,7 +252,7 @@ module {
     ///
     /// Example:
     /// ```motoko include=import
-    /// let random = Random.fast(42);
+    /// let random = Random.seed(42);
     /// let number = random.nat64(); // 0 to 18446744073709551615
     /// ```
     public func nat64() : Nat64 {
@@ -263,7 +263,7 @@ module {
     ///
     /// Example:
     /// ```motoko include=import
-    /// let random = Random.fast(42);
+    /// let random = Random.seed(42);
     /// let dice = random.nat64Range(1, 7); // 1 to 6
     /// ```
     public func nat64Range(fromInclusive : Nat64, toExclusive : Nat64) : Nat64 {
@@ -277,7 +277,7 @@ module {
     ///
     /// Example:
     /// ```motoko include=import
-    /// let random = Random.fast(42);
+    /// let random = Random.seed(42);
     /// let index = random.natRange(0, 10); // 0 to 9
     /// ```
     public func natRange(fromInclusive : Nat, toExclusive : Nat) : Nat {

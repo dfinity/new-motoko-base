@@ -2,7 +2,7 @@
 
 ## Next
 
-* Enable persistence of `Random` and `AsyncRandom` state in stable memory.
+* Enable persistence of `Random` and `AsyncRandom` state in stable memory (#329).
 
 ## 0.5.0
 

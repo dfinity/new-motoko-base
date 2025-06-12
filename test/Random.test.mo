@@ -233,7 +233,7 @@ suite(
         assert state1.inner.a == state2.inner.a;
         assert state1.inner.b == state2.inner.b;
         assert state1.inner.c == state2.inner.c;
-        assert state1.inner.d == state2.inner.d;
+        assert state1.inner.d == state2.inner.d
       }
     );
     test(

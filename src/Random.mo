@@ -34,8 +34,8 @@ module {
   /// Creates a pseudo-random number generator from a 64-bit seed.
   /// The seed is used to initialize the PRNG state.
   /// This is suitable for simulations and testing, but not for cryptographic purposes.
-  public func fast(seed : Nat64) : Random<PRNG.State> {
-    fastFromState(seedState(seed))
+  public func seed(seed : Nat64) : Random<PRNG.State> {
+    seedFromState(seedState(seed))
   };
 
   /// Initializes a pseudo-random number generator state with a 64-bit seed.
@@ -48,7 +48,7 @@ module {
   /// Creates a pseudo-random number generator with the given state.
   /// This provides statistical randomness suitable for simulations and testing,
   /// but should not be used for cryptographic purposes.
-  public func fastFromState(state : State<PRNG.State>) : Random<PRNG.State> {
+  public func seedFromState(state : State<PRNG.State>) : Random<PRNG.State> {
     Random(
       state,
       func() : Blob {

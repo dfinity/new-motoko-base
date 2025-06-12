@@ -33,7 +33,7 @@ persistent actor {
     let random = Random.fastFromState(state);
     let coin = random.bool(); // true or false
   }
-}</code></pre></p></div><div class="declaration"><h4 class="function" id="crypto"><code><span class="keyword">public func </span><span class="fnname">crypto</span>() : <a href="#type.AsyncRandom"><span class="type">AsyncRandom</span></a>&lt;()&gt;</code></h4><p><p>Initializes a cryptographic random number generator 
+}</code></pre></p></div><div class="declaration"><h4 class="function" id="crypto"><code><span class="keyword">public func </span><span class="fnname">crypto</span>() : <a href="#type.AsyncRandom"><span class="type">AsyncRandom</span></a>&lt;()&gt;</code></h4><p><p>Initializes a cryptographic random number generator
 using entropy from the ICP management canister.</p>
 <p>Example:</p>
 <pre class="motoko"><code class="motoko">import Random &quot;mo:core/Random&quot;;

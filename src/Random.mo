@@ -1,4 +1,9 @@
 /// Random number generation.
+///
+/// Import from the core library to use this module.
+/// ```motoko name=import
+/// import Random "mo:core/Random";
+/// ```
 
 import Array "Array";
 import VarArray "VarArray";
@@ -34,6 +39,12 @@ module {
   /// Creates a pseudo-random number generator from a 64-bit seed.
   /// The seed is used to initialize the PRNG state.
   /// This is suitable for simulations and testing, but not for cryptographic purposes.
+  ///
+  /// Example:
+  /// ```motoko include=import
+  /// let random = Random.fast(123);
+  /// let coin = random.bool(); // true or false
+  /// ```
   public func fast(seed : Nat64) : Random<PRNG.State> {
     fastFromState(seedState(seed))
   };
@@ -41,6 +52,19 @@ module {
   /// Initializes a pseudo-random number generator state with a 64-bit seed.
   /// This is used to create a `Random` instance with a specific seed.
   /// The seed is used to initialize the PRNG state.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Random "mo:core/Random";
+  /// 
+  /// persistent actor {
+  ///   let state = Random.seedState(123);
+  ///   public func main() : async () {
+  ///     let random = Random.fastFromState(state);
+  ///     let coin = random.bool(); // true or false
+  ///   }
+  /// }
+  /// ```
   public func seedState(seed : Nat64) : State<PRNG.State> {
     emptyState(PRNG.init(seed))
   };
@@ -48,6 +72,20 @@ module {
   /// Creates a pseudo-random number generator with the given state.
   /// This provides statistical randomness suitable for simulations and testing,
   /// but should not be used for cryptographic purposes.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Random "mo:core/Random";
+  /// 
+  /// persistent actor {
+  ///   let state = Random.seedState(123);
+  ///
+  ///   public func main() : async () {
+  ///     let random = Random.fastFromState(state);
+  ///     let coin = random.bool(); // true or false
+  ///   }
+  /// }
+  /// ```
   public func fastFromState(state : State<PRNG.State>) : Random<PRNG.State> {
     Random(
       state,
@@ -69,8 +107,20 @@ module {
     )
   };
 
-  /// Initializes a cryptographic random number generator with a 64-bit seed
+  /// Initializes a cryptographic random number generator 
   /// using entropy from the ICP management canister.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Random "mo:core/Random";
+  ///
+  /// persistent actor {
+  ///   public func main() : async () {
+  ///     let random = Random.crypto();
+  ///     let coin = await* random.bool(); // true or false
+  ///   }
+  /// }
+  /// ```
   public func crypto() : AsyncRandom<()> {
     cryptoFromState(cryptoState())
   };
@@ -78,6 +128,20 @@ module {
   /// Initializes a cryptographic random number generator state.
   /// This is used to create an `AsyncRandom` instance with a specific state.
   /// The state is empty, but it can be reused after upgrading the canister.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Random "mo:core/Random";
+  /// 
+  /// persistent actor {
+  ///   let state = Random.cryptoState();
+  ///
+  ///   public func main() : async () {
+  ///     let random = Random.cryptoFromState(state);
+  ///     let coin = await* random.bool(); // true or false
+  ///   }
+  /// }
+  /// ```
   public func cryptoState() : State<()> {
     emptyState(())
   };
@@ -86,6 +150,20 @@ module {
   /// using entropy from the ICP management canister. Initializing
   /// from a state makes it possible to reuse entropy after
   /// upgrading the canister.
+  ///
+  /// Example:
+  /// ```motoko
+  /// import Random "mo:core/Random";
+  /// 
+  /// persistent actor {
+  ///   let state = Random.cryptoState();
+  ///
+  ///   func example() : async () {
+  ///     let random = Random.cryptoFromState(state);
+  ///     let coin = await* random.bool(); // true or false
+  ///   }
+  /// }
+  /// ```
   public func cryptoFromState(state : State<()>) : AsyncRandom<()> {
     AsyncRandom(state, func() : async* Blob { await rawRand() })
   };
@@ -105,11 +183,23 @@ module {
     };
 
     /// Random choice between `true` and `false`.
+    ///
+    /// Example:
+    /// ```motoko include=import
+    /// let random = Random.fast(42);
+    /// let coin = random.bool(); // true or false
+    /// ```
     public func bool() : Bool {
       nextBit()
     };
 
     /// Random `Nat8` value in the range [0, 256).
+    ///
+    /// Example:
+    /// ```motoko include=import
+    /// let random = Random.fast(42);
+    /// let byte = random.nat8(); // 0 to 255
+    /// ```
     public func nat8() : Nat8 {
       if (state.index >= state.bytes.size()) {
         let newBytes = Blob.toArray(generator());
@@ -158,10 +248,24 @@ module {
       }
     };
 
+    /// Random `Nat64` value in the range [0, 2^64).
+    ///
+    /// Example:
+    /// ```motoko include=import
+    /// let random = Random.fast(42);
+    /// let number = random.nat64(); // 0 to 18446744073709551615
+    /// ```
     public func nat64() : Nat64 {
       (Nat64.fromNat(Nat8.toNat(nat8())) << 56) | (Nat64.fromNat(Nat8.toNat(nat8())) << 48) | (Nat64.fromNat(Nat8.toNat(nat8())) << 40) | (Nat64.fromNat(Nat8.toNat(nat8())) << 32) | (Nat64.fromNat(Nat8.toNat(nat8())) << 24) | (Nat64.fromNat(Nat8.toNat(nat8())) << 16) | (Nat64.fromNat(Nat8.toNat(nat8())) << 8) | Nat64.fromNat(Nat8.toNat(nat8()))
     };
 
+    /// Random `Nat64` value in the range [fromInclusive, toExclusive).
+    ///
+    /// Example:
+    /// ```motoko include=import
+    /// let random = Random.fast(42);
+    /// let dice = random.nat64Range(1, 7); // 1 to 6
+    /// ```
     public func nat64Range(fromInclusive : Nat64, toExclusive : Nat64) : Nat64 {
       if (fromInclusive >= toExclusive) {
         Runtime.trap("Random.nat64Range(): fromInclusive >= toExclusive")
@@ -169,6 +273,13 @@ module {
       uniform64(toExclusive - fromInclusive - 1) + fromInclusive
     };
 
+    /// Random `Nat` value in the range [fromInclusive, toExclusive).
+    ///
+    /// Example:
+    /// ```motoko include=import
+    /// let random = Random.fast(42);
+    /// let index = random.natRange(0, 10); // 0 to 9
+    /// ```
     public func natRange(fromInclusive : Nat, toExclusive : Nat) : Nat {
       if (fromInclusive >= toExclusive) {
         Runtime.trap("Random.natRange(): fromInclusive >= toExclusive")

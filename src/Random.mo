@@ -56,7 +56,7 @@ module {
   /// Example:
   /// ```motoko
   /// import Random "mo:core/Random";
-  /// 
+  ///
   /// persistent actor {
   ///   let state = Random.seedState(123);
   ///   public func main() : async () {
@@ -76,7 +76,7 @@ module {
   /// Example:
   /// ```motoko
   /// import Random "mo:core/Random";
-  /// 
+  ///
   /// persistent actor {
   ///   let state = Random.seedState(123);
   ///
@@ -107,7 +107,7 @@ module {
     )
   };
 
-  /// Initializes a cryptographic random number generator 
+  /// Initializes a cryptographic random number generator
   /// using entropy from the ICP management canister.
   ///
   /// Example:
@@ -132,7 +132,7 @@ module {
   /// Example:
   /// ```motoko
   /// import Random "mo:core/Random";
-  /// 
+  ///
   /// persistent actor {
   ///   let state = Random.cryptoState();
   ///
@@ -154,7 +154,7 @@ module {
   /// Example:
   /// ```motoko
   /// import Random "mo:core/Random";
-  /// 
+  ///
   /// persistent actor {
   ///   let state = Random.cryptoState();
   ///

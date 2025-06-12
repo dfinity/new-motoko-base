@@ -935,6 +935,7 @@
       "public let blob : shared () -> async Blob",
       "public func crypto() : AsyncRandom<()>",
       "public func cryptoFromState(state : State<()>) : AsyncRandom<()>",
+      "public func cryptoState() : State<()>",
       "public func emptyState<T>(inner : T) : State<T>",
       "public func fast(seed : Nat64) : Random<PRNG.State>",
       "public func fastFromState(state : State<PRNG.State>) : Random<PRNG.State>",

@@ -219,6 +219,84 @@ suite(
           assert count2 > 0
         }
       }
+    );
+    test(
+      "seedState() creates consistent state",
+      func() {
+        let seed : Nat64 = 42;
+        let state1 = Random.seedState(seed);
+        let state2 = Random.seedState(seed);
+        ignore Random.fastFromState(state1).nat8();
+        ignore Random.fastFromState(state2).nat8();
+
+        // States should have the same inner PRNG state
+        assert state1.inner.a == state2.inner.a;
+        assert state1.inner.b == state2.inner.b;
+        assert state1.inner.c == state2.inner.c;
+        assert state1.inner.d == state2.inner.d;
+      }
+    );
+    test(
+      "fastFromState() produces same sequence as fast() with same seed",
+      func() {
+        let seed : Nat64 = 123456789;
+        let state = Random.seedState(seed);
+        let random1 = Random.fast(seed);
+        let random2 = Random.fastFromState(state);
+
+        // Should produce identical sequences
+        for (_ in Nat.range(0, 10)) {
+          assert random1.nat8() == random2.nat8()
+        };
+
+        // Reset and test again with bool()
+        let state2 = Random.seedState(seed);
+        let random3 = Random.fast(seed);
+        let random4 = Random.fastFromState(state2);
+
+        for (_ in Nat.range(0, 10)) {
+          assert random3.bool() == random4.bool()
+        }
+      }
+    );
+    test(
+      "fastFromState() allows state reuse",
+      func() {
+        let seed : Nat64 = 987654321;
+        let state = Random.seedState(seed);
+        let random1 = Random.fastFromState(state);
+
+        // Generate some numbers to advance the state
+        let val1 = random1.nat64();
+        let val2 = random1.nat64();
+
+        // Create new Random with same state (should continue from where we left off)
+        let random2 = Random.fastFromState(state);
+        let val3 = random2.nat64();
+
+        // Should be different from the first values since state has advanced
+        assert val3 != val1;
+        assert val3 != val2
+      }
+    );
+    test(
+      "State mutation consistency",
+      func() {
+        let seed : Nat64 = 555;
+        let state = Random.seedState(seed);
+        let random = Random.fastFromState(state);
+
+        // Check initial state
+        let initialIndex = state.index;
+        let initialBytesSize = state.bytes.size();
+
+        // Generate a byte, which should populate the bytes array
+        let _ = random.nat8();
+
+        // State should have been mutated
+        assert state.bytes.size() > initialBytesSize;
+        assert state.index > initialIndex
+      }
     )
   }
 )

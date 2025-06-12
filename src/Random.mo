@@ -72,7 +72,7 @@ module {
   /// Initializes a cryptographic random number generator with a 64-bit seed
   /// using entropy from the ICP management canister.
   public func crypto() : AsyncRandom<()> {
-    cryptoFromState(emptyState(()))
+    cryptoFromState(cryptoState())
   };
 
   /// Initializes a cryptographic random number generator state.
